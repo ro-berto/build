@@ -25,6 +25,7 @@ DEPS = [
   'v8',
 ]
 
+GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
 BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
@@ -107,17 +108,14 @@ def RunSteps(api):
   bot_config = BOT_CONFIGS[api.buildbucket.builder_name]
 
   # Bail out on existing roll. Needs to be manually closed.
-  # TODO(machenbach): Add auto-abandon on stale roll.
-  push_account = (
-      # TODO(sergiyb): Replace with api.service_account.default().get_email()
-      # when https://crbug.com/846923 is resolved.
-      'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
-      if api.runtime.is_luci else 'v8-autoroll@chromium.org')
   commits = api.gerrit.get_changes(
-      'https://chromium-review.googlesource.com',
+      GERRIT_BASE_URL,
       query_params=[
           ('project', 'v8/v8'),
-          ('owner', push_account),
+          # TODO(sergiyb): Use api.service_account.default().get_email() when
+          # https://crbug.com/846923 is resolved.
+          ('owner', 'v8-ci-autoroll-builder@'
+                    'chops-service-accounts.iam.gserviceaccount.com'),
           ('status', 'open'),
       ],
       limit=20,
@@ -126,8 +124,8 @@ def RunSteps(api):
   for commit in commits:
     # The auto-roller might have a CL open for a particular roll config.
     if commit['subject'] == bot_config['subject']:
-      api.step('Existing rolls found.', cmd=None)
-      return
+      api.gerrit.abandon_change(
+          GERRIT_BASE_URL, commit['_number'], 'stale roll')
 
   api.gclient.set_config('v8')
   api.gclient.apply_config('chromium')
@@ -236,22 +234,19 @@ def RunSteps(api):
 
   # Commit deps change and send to CQ.
   if diff:
-    if api.runtime.is_experimental:
-      api.step('fake commit and send to CQ', cmd=None)
-    else:
-      args = ['commit', '-a', '-m', bot_config['subject']]
-      for message in commit_message:
-        args.extend(['-m', message])
-      args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
-      kwargs = {'stdout': api.raw_io.output_text()}
-      with api.context(
-          cwd=api.path['checkout'],
-          env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-        api.git(*args, **kwargs)
-        api.git(
-            'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-            '--gerrit', '--send-mail',
-        )
+    args = ['commit', '-a', '-m', bot_config['subject']]
+    for message in commit_message:
+      args.extend(['-m', message])
+    args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
+    kwargs = {'stdout': api.raw_io.output_text()}
+    with api.context(
+        cwd=api.path['checkout'],
+        env_prefixes={'PATH': [api.v8.depot_tools_path]}):
+      api.git(*args, **kwargs)
+      api.git(
+          'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
+          '--gerrit', '--send-mail',
+      )
 
   if failed_deps:
     raise api.step.StepFailure(
@@ -297,7 +292,8 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
         api.override_step_data(
             'git diff',
             api.raw_io.stream_output('some difference', stream='stdout'),
-        )
+        ) +
+        api.runtime(is_luci=True, is_experimental=False)
     )
 
   yield (
@@ -335,12 +331,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
       api.override_step_data(
           'gerrit changes', api.json.output(
               [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +
-      api.post_process(MustRun, 'Existing rolls found.') +
-      api.post_process(DoesNotRun, 'look up build') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.post_process(MustRun, 'gerrit abandon') +
       api.post_process(DropExpectation)
-  )
-
-  yield (
-      template('experimental_roll_v8_deps', 'Auto-roll - v8 deps') +
-      api.runtime(is_luci=True, is_experimental=True)
   )

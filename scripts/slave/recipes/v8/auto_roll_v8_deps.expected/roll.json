@@ -14,7 +14,7 @@
       "-p",
       "project=v8/v8",
       "-p",
-      "owner=v8-autoroll@chromium.org",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "-p",
       "status=open"
     ],
@@ -38,7 +38,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/Auto_roll___v8_deps"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -61,8 +61,8 @@
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -212,10 +212,10 @@
       "-f",
       "origin/master"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -228,10 +228,10 @@
       "-D",
       "roll"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -243,10 +243,10 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -258,10 +258,10 @@
       "new-branch",
       "roll"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -278,7 +278,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'src','url':'https://chromium.googlesource.com/chromium/src','deps_file':'DEPS'}]"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -310,7 +310,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'v8','url':'https://chromium.googlesource.com/v8/v8','deps_file':'DEPS'}]"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -340,7 +340,7 @@
       "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
       "HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "look up base_trace_event_common",
     "stdout": "/path/to/tmp/",
@@ -357,7 +357,7 @@
       "-r",
       "v8/base/trace_event/common@deadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -376,7 +376,7 @@
       "https://chromium.googlesource.com/chromium/src/build.git",
       "HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "look up build",
     "stdout": "/path/to/tmp/",
@@ -393,7 +393,7 @@
       "-r",
       "v8/build@deadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -418,7 +418,7 @@
       "-r",
       "v8/tools/gyp@e7079f0e0e14108ab0dba58728ff219637458563"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -436,7 +436,7 @@
       "-r",
       "v8/tools/luci-go:infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -454,7 +454,7 @@
       "-r",
       "v8/tools/swarming_client@380e32662312eb107f06fcba6409b0409f8fe001"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -468,7 +468,7 @@
       "git",
       "diff"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "git diff",
     "stdout": "/path/to/tmp/",
@@ -495,10 +495,10 @@
       "-m",
       "TBR=machenbach@chromium.org,hablich@chromium.org,sergiyb@chromium.org"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -516,10 +516,10 @@
       "--gerrit",
       "--send-mail"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
