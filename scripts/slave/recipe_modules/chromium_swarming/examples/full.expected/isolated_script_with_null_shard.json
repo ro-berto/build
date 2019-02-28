@@ -473,7 +473,7 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [null, {\\\"internal_failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LINK@shard #0 had an internal swarming failure@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 failed without producing output.json@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/120100@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
@@ -481,9 +481,9 @@
   {
     "failure": {
       "failure": {
-        "step": "Shard #0 failed: Internal swarming failure"
+        "step": "Shard #0 failed: Details unknown (missing shard results)"
       },
-      "humanReason": "Step('Shard #0 failed: Internal swarming failure') failed with return_code 0"
+      "humanReason": "Step('Shard #0 failed: Details unknown (missing shard results)') failed with return_code 0"
     },
     "name": "$result"
   }

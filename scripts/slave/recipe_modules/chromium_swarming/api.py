@@ -1408,7 +1408,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and shard.get('deduped_from'):
         display_text += ' (deduped)'
 
-      if not shard or shard.get('internal_failure'):
+      if not shard:
+        display_text = 'shard #%d failed without producing output.json' % index
+        infra_failures.append(
+            (index, 'Details unknown (missing shard results)'))
+        exist_failure = True
+      elif shard.get('internal_failure'):
         display_text = (
           'shard #%d had an internal swarming failure' % index)
         infra_failures.append((index, 'Internal swarming failure'))
