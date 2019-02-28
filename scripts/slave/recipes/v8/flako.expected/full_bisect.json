@@ -187,8 +187,7 @@
     "name": "calibration attempt 1.check mjsunit/foobar at #1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@2 failures@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@2 failures@@@"
     ]
   },
   {
@@ -609,15 +608,17 @@
   },
   {
     "cmd": [],
-    "name": "calibration attempt 2"
+    "name": "calibration attempt 2",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@successfully reproduced flaky test@@@"
+    ]
   },
   {
     "cmd": [],
     "name": "calibration attempt 2.check mjsunit/foobar at #1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@5 failures@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@5 failures@@@"
     ]
   },
   {
@@ -1372,8 +1373,7 @@
     "cmd": [],
     "name": "check mjsunit/foobar at #2",
     "~followup_annotations": [
-      "@@@STEP_TEXT@3 failures@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@3 failures@@@"
     ]
   },
   {
@@ -2216,7 +2216,10 @@
   },
   {
     "cmd": [],
-    "name": "check mjsunit/foobar at #5"
+    "name": "check mjsunit/foobar at #5",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0 failures@@@"
+    ]
   },
   {
     "cmd": [
@@ -3012,8 +3015,7 @@
     "cmd": [],
     "name": "check mjsunit/foobar at #3",
     "~followup_annotations": [
-      "@@@STEP_TEXT@3 failures@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@3 failures@@@"
     ]
   },
   {

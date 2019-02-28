@@ -297,16 +297,18 @@ class Runner(object):
     """
     for i in range(self.max_calibration_attempts):
       # Nest to disambiguate step names during calibration.
-      with self.api.step.nest('calibration attempt %d' % (i + 1)):
+      with self.api.step.nest('calibration attempt %d' % (i + 1)) as parent:
         num_failures = self.check_num_flakes(offset)
-      if (self.repro_only and num_failures or
-          num_failures >= MIN_FLAKE_THRESHOLD):
-        return True
-      if self.num_shards < MAX_SWARMING_SHARDS:
-        # First double the swarming shards until reaching the maximum.
-        self.num_shards = min(self.num_shards * 2, MAX_SWARMING_SHARDS)
-      else:
-        self.multiplier *= 2
+        if (self.repro_only and num_failures or
+            num_failures >= MIN_FLAKE_THRESHOLD):
+          parent.presentation.step_text = 'successfully reproduced flaky test'
+          return True
+        if self.num_shards < MAX_SWARMING_SHARDS:
+          # First double the swarming shards until reaching the maximum.
+          self.num_shards = min(self.num_shards * 2, MAX_SWARMING_SHARDS)
+        else:
+          self.multiplier *= 2
+    parent.presentation.step_text = 'failed to reproduce the flaky test'
     return False
 
   def _default_task_pass_test_data(self):
@@ -419,9 +421,7 @@ class Runner(object):
             # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
             # should be used throughout.
             break
-        if num_failures:
-          parent.presentation.status = self.api.step.FAILURE
-          parent.presentation.step_text = '%d failures' % num_failures
+        parent.presentation.step_text = '%d failures' % num_failures
         return num_failures
 
 
@@ -566,31 +566,33 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
       # We treat it as an error if a flake belived to repro, doesn't repro.
       raise api.step.StepFailure('Could not reproduce flake.')
 
-  # Generate config for flakes.pyl.
-  config = api.json.dumps([{
-    'bisect_mastername': bisect_mastername,
-    'bisect_buildername': bisect_buildername,
-    'build_config': build_config,
-    'isolated_name': isolated_name,
-    'test_name': test_name,
-    'variant': variant,
-    'extra_args': extra_args,
-    'swarming_dimensions': swarming_dimensions,
-    'timeout_sec': timeout_sec,
-    'num_shards': runner.num_shards,
-    # TODO(sergiyb): Drop total_timeout_sec here and just rely on repetitions,
-    # which is more reliable on Windows. Right now, however, we can't use it as
-    # it's not correctly calibrated when total_timeout_sec is used. We should
-    # only implement this suggestion once we can extract the actual number of
-    # repetitions used from the test launcher after the calibration is done.
-    'total_timeout_sec': total_timeout_sec * runner.multiplier,
-    'repetitions': repetitions * runner.multiplier,
-    'bug_url': '<bug-url>',
-  }], indent=2, separators=(',', ': '), sort_keys=True)
-  log = re.sub(
-      r'([^,])(?=\n\s*[\}\]])', r'\1,', config,  # add trailing commas
-      flags=re.MULTILINE).splitlines()           # split by line
-  api.step('flakes.pyl entry', cmd=None).presentation.logs['config'] = log
+  if could_reproduce:
+    # Generate config for flakes.pyl.
+    config = api.json.dumps([{
+      'bisect_mastername': bisect_mastername,
+      'bisect_buildername': bisect_buildername,
+      'build_config': build_config,
+      'isolated_name': isolated_name,
+      'test_name': test_name,
+      'variant': variant,
+      'extra_args': extra_args,
+      'swarming_dimensions': swarming_dimensions,
+      'timeout_sec': timeout_sec,
+      'num_shards': runner.num_shards,
+      # TODO(sergiyb): Drop total_timeout_sec here and just rely on repetitions,
+      # which is more reliable on Windows. Right now, however, we can't use it
+      # as it's not correctly calibrated when total_timeout_sec is used. We
+      # should only implement this suggestion once we can extract the actual
+      # number of repetitions used from the test launcher after the calibration
+      # is done.
+      'total_timeout_sec': total_timeout_sec * runner.multiplier,
+      'repetitions': repetitions * runner.multiplier,
+      'bug_url': '<bug-url>',
+    }], indent=2, separators=(',', ': '), sort_keys=True)
+    log = re.sub(
+        r'([^,])(?=\n\s*[\}\]])', r'\1,', config,  # add trailing commas
+        flags=re.MULTILINE).splitlines()           # split by line
+    api.step('flakes.pyl entry', cmd=None).presentation.logs['config'] = log
 
   if not could_reproduce:
     raise api.step.StepFailure('Could not reach enough confidence.')

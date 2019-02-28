@@ -34,8 +34,8 @@ RELEASE_BRANCH_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 # Regular expressions for getting target bits from gn args.
 TARGET_CPU_RE = re.compile(r'.*target_cpu\s+=\s+"([^"]*)".*')
 
-# With more than 23 letters, labels are to big for buildbot's popup boxes.
-MAX_LABEL_SIZE = 23
+# With too many letters, labels are to big and stretch the UI.
+MAX_LABEL_SIZE = 35
 
 # Make sure that a step is not flooded with log lines.
 MAX_FAILURE_LOGS = 10
@@ -1158,17 +1158,21 @@ class V8Api(recipe_api.RecipeApi):
       lines.extend(self._duration_results_text(test))
     presentation.logs['durations'] = lines
 
+  def ui_test_label(self, full_test_name):
+    # Use test base name as UI label (without suite and directory names).
+    label = full_test_name.split('/')[-1]
+    # Truncate the label if it is still too long.
+    if len(label) > MAX_LABEL_SIZE:
+      label = label[:MAX_LABEL_SIZE - 3] + '...'
+    return label
+
   def _get_failure_logs(self, output, failure_factory):
     if not output['results']:
       return {}, [], {}, []
 
     unique_results = defaultdict(list)
     for result in output['results']:
-      # Use test base name as UI label (without suite and directory names).
-      label = result['name'].split('/')[-1]
-      # Truncate the label if it is still too long.
-      if len(label) > MAX_LABEL_SIZE:
-        label = label[:MAX_LABEL_SIZE - 2] + '..'
+      label = self.ui_test_label(result['name'])
       # Group tests with the same label (usually the same test that ran under
       # different configurations).
       unique_results[label].append(result)
@@ -1177,7 +1181,7 @@ class V8Api(recipe_api.RecipeApi):
     flake_log = {}
     failures = []
     flakes = []
-    for label in sorted(unique_results.keys()[:MAX_FAILURE_LOGS]):
+    for label in sorted(unique_results.keys())[:MAX_FAILURE_LOGS]:
       failure_lines = []
       flake_lines = []
 
@@ -1212,7 +1216,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if failures:
       # Number of failures.
-      presentation.step_text += ('failures: %d<br/>' % len(failures))
+      presentation.step_text += 'failures: %d<br/>' % len(failures)
 
   @property
   def extra_flags(self):

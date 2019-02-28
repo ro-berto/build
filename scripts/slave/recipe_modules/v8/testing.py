@@ -5,7 +5,19 @@
 import itertools
 import json
 import re
+import urllib
 from recipe_engine.types import freeze
+
+
+MONORAIL_SEARCH_FLAKY_BUGS_TEMPLATE = (
+    'https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Flake+%(name)s')
+
+MONORAIL_FILE_FLAKY_BUG_TEMPLATE = (
+    'https://bugs.chromium.org/p/v8/issues/entry?template=Report+flaky+test&'
+    'summary=%(name)s+starts+flaking&description=Failing+test:+%(name)s%%0A'
+    'Failure+link:+%(build_link)s%%0ALink+to+Flako+run:+%%3Cinsert%%3E')
+
+MAX_FLAKE_LINKS = 5
 
 
 # pylint: disable=abstract-method
@@ -409,10 +421,28 @@ class V8Test(BaseTest):
       step_result.presentation.status = self.api.step.FAILURE
       self.api.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
+      self._add_flake_links(flakes, step_result.presentation)
 
     coverage_context.post_run()
 
     return TestResults(failures, flakes, infra_failures)
+
+  def _add_flake_links(self, flakes, presentation):
+    """Adds links to search/file bugs for up to MAX_FLAKE_LINKS flaky tests."""
+    for flake in flakes[:MAX_FLAKE_LINKS]:
+      test_name = flake.results[0]['name']
+      ui_label = self.api.v8.ui_test_label(test_name)
+      link_params = {
+        'name': test_name,
+        'build_link': urllib.quote(self.api.buildbucket.build_url()),
+      }
+      presentation.links['%s (bugs)' % ui_label] = (
+          MONORAIL_SEARCH_FLAKY_BUGS_TEMPLATE % link_params)
+      presentation.links['%s (new)' % ui_label] = (
+          MONORAIL_FILE_FLAKY_BUG_TEMPLATE % link_params)
+    if len(flakes) > MAX_FLAKE_LINKS:  # pragma: no cover
+      presentation.step_text += (
+          'too many flakes, only showing some links below<br/>')
 
   def _setup_rerun_config(self, failure_dict):
     """Return: A test config that reproduces a specific failure."""

@@ -26,6 +26,26 @@ DEPS = [
 
 MAX_CONFIGS = 16
 
+TEST_CONFIG = [{
+  'bisect_buildername': 'V8 Linux64 - debug builder',
+  'bisect_mastername': 'client.v8',
+  'bug_url': 'https://crbug.com/v8/8744',
+  'build_config': 'Debug',
+  'extra_args': [],
+  'isolated_name': 'bot_default',
+  'num_shards': 2,
+  'repetitions': 5000,
+  'swarming_dimensions': [
+    'cpu:x86-64-avx2',
+    'gpu:none',
+    'os:Ubuntu-14.04',
+    'pool:Chrome'
+  ],
+  'test_name': 'cctest/test-cpu-profiler/FunctionCallSample',
+  'timeout_sec': 60,
+  'total_timeout_sec': 120,
+  'variant': 'interpreted_regexp'
+}]
 
 def RunSteps(api):
   configs = ast.literal_eval(api.gitiles.download_file(
@@ -60,11 +80,19 @@ def RunSteps(api):
 
   results = []
   for index, build in enumerate(builds):
-    results.append(api.buildbucket.collect_build(
-        int(build.id), step_name='build %s' % build.id,
-        mirror_status=True, timeout=4*3600).status)
+    label = api.v8.ui_test_label(configs[index]['test_name'])
+    build = api.buildbucket.collect_build(
+        int(build.id), step_name=label, mirror_status=True, timeout=4*3600)
+    api.step.active_result.presentation.links['build %s' % build.id] = (
+        api.buildbucket.build_url(build.id))
     api.step.active_result.presentation.logs['flake config'] = api.json.dumps(
         configs[index], indent=2).splitlines()
+    if build.status == api.buildbucket.common_pb2.FAILURE:
+      api.step.active_result.presentation.step_text = (
+          'failed to reproduce<br/>please consider re-enabling this test')
+    else:
+      api.step.active_result.presentation.step_text = 'reproduced'
+    results.append(build.status)
 
   if api.buildbucket.common_pb2.INFRA_FAILURE in results:
     raise api.step.InfraFailure('Some builds failed to execute')
@@ -75,12 +103,12 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def test(name, results):
+  def test(name, results, ui_test_name=None):
     return (
         api.test(name) +
         api.step_data(
             'read flake config',
-            api.gitiles.make_encoded_file("[{'foo': 'bar',},]")) +
+            api.gitiles.make_encoded_file(api.json.dumps(TEST_CONFIG))) +
         api.step_data(
             'read V8 ToT revision',
             api.gitiles.make_log_test_data('deadbeef')) +
@@ -90,7 +118,7 @@ def GenTests(api):
         api.buildbucket.simulated_collect_output(
             [api.buildbucket.ci_build_message(build_id=123, status=result)
              for result in results],
-            step_name='build 123')
+            step_name=ui_test_name or 'FunctionCallSample')
     )
 
   yield (
@@ -121,11 +149,11 @@ def GenTests(api):
   )
 
   yield (
-      test('too_many_flakes', ['SUCCESS'] * 20) +
+      test('too_many_flakes', ['SUCCESS'] * 20, ui_test_name='baz') +
       api.override_step_data(
           'read flake config',
           api.gitiles.make_encoded_file(api.json.dumps(
-            [{'foo': 'bar'}] * 20))) +
+            [{'test_name': 'foo/bar/baz'}] * 20))) +
       api.post_process(MustRun, 'Too many flake configs') +
       api.post_process(DropExpectation)
   )

@@ -186,9 +186,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'run': 1,
         'stdout': 'Some output\nwith\nmore\nlines.',
         'stderr': 'Some errput.',
-        'name': 'other-suite/dir/other-test-very-long-name%d' % i,
-        'command': ('out/theMode/d8 --other '
-                    'test/other-suite/dir/other-test-very-long-name.js'),
+        'name': 'other-suite/dir/other-test-very-very-very-long-name%d' % i,
+        'command': (
+          'out/theMode/d8 --other test/other-suite/dir/other-test-very-very-'
+          'very-long-name.js'),
         'exit_code': 1,
       })
 
