@@ -1,7 +1,8 @@
 /__init__.py recipes
 /env.py recipes
 
-/archive_utils.py  recipes
-/chromium_utils.py recipes
-/gtest_utils.py    recipes
-/url_helper.py     recipes
+/archive_utils.py    recipes
+/chromium_utils.py   recipes
+/find_depot_tools.py recipes
+/gtest_utils.py      recipes
+/url_helper.py       recipes
