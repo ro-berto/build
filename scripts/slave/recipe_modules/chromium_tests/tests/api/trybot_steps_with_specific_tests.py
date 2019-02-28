@@ -168,9 +168,35 @@ def GenTests(api):
       api.override_step_data(
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(passing=False))
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.StepFailure,
+          'base_unittests (with patch)') +
+      api.post_process(post_process.DropExpectation)
   )
 
+  # If a test fails in 'with patch', it should be marked as a failing step.
+  yield (
+      api.test('recipe_step_is_failure_for_failing_test') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.StepFailure,
+          'base_unittests (with patch)') +
+      api.post_process(post_process.DropExpectation)
+  )
 
   yield (
       api.test('retry_with_patch_failure') +
