@@ -343,7 +343,7 @@ BUILDERS = freeze({
         },
         'ios_testing': {
           'device type': 'iPhone 7',
-          'os': '12.1.3',
+          'os': '12.1.4',
           'bot id': 'build15-a7',
           'pool': 'WebRTC',
           'max runtime seconds': '7200',
