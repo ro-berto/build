@@ -2856,11 +2856,11 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#328)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#329)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#350)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#351)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2893,7 +2893,7 @@ them. If some expected targets are missing, will abort the build.
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#143)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#144)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2916,14 +2916,14 @@ Args:
     suffix: suffix of isolate_tests step.
         e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#291)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#292)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#313)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#314)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 

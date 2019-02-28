@@ -120,7 +120,8 @@ class IsolateApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.FAILURE
         step_result.presentation.logs['missing.isolates'] = (
             ['Failed to find *.isolated files:'] + list(expected - found))
-    step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
+    if len(self._isolated_tests) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH:
+      step_result.presentation.properties['swarm_hashes'] = self._isolated_tests
     # No isolated files found? That looks suspicious, emit warning.
     if (not self._isolated_tests and
         step_result.presentation.status != self.m.step.FAILURE):
