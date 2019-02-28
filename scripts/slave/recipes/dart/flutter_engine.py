@@ -61,7 +61,7 @@ def AnalyzeDartUI(api, checkout_dir):
 
 
 def TestEngine(api, checkout_dir):
-  with api.context(cwd=checkout_dir):
+  with api.context(cwd=checkout_dir), api.depot_tools.on_path():
     api.step('test engine', ['/bin/bash', 'flutter/testing/run_tests.sh'])
 
 

@@ -1316,6 +1316,11 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "test engine"
   },
   {
