@@ -476,8 +476,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       flaky_tests = potential_test_flakes & retry_with_patch_successes
       if flaky_tests:
-        step_layer_flakiness[test_suite.step_name('with patch')] = sorted(
-            flaky_tests)
+        step_name = test_suite.name_of_step_for_suffix('with patch')
+        step_layer_flakiness[step_name] = sorted(flaky_tests)
 
     potential_build_flakiness = {}
     for test_suite in test_suites:
@@ -494,8 +494,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
               potential_test_flakes - retry_with_patch_successes)
 
       if potential_test_flakes:
-        potential_build_flakiness[test_suite.step_name('with patch')] = sorted(
-            potential_test_flakes)
+        step_name = test_suite.name_of_step_for_suffix('with patch')
+        potential_build_flakiness[step_name] = sorted(potential_test_flakes)
 
     if step_layer_flakiness or potential_build_flakiness:
       output = { 'Step Layer Flakiness' : step_layer_flakiness,

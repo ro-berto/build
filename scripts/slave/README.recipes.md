@@ -1202,6 +1202,9 @@ Args:
     in.
   **kwargs: Kwargs for python and gsutil steps.
 
+Returns:
+  step_result: The recipe result from generating the coverage report.
+
 &mdash; **def [create\_adb\_symlink](/scripts/slave/recipe_modules/chromium_android/api.py#342)(self):**
 
 &mdash; **def [create\_result\_details](/scripts/slave/recipe_modules/chromium_android/api.py#1026)(self, step_name, json_results_file):**
@@ -1234,7 +1237,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1537)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1542)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1245,13 +1248,13 @@ coverage directory.
 
 &mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#199)(self, commitrefs=None, step_test_data=None, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1598)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1603)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
 &mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#405)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1466)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1471)(self):**
 
 Creates an incremental code coverage report.
 
@@ -1335,7 +1338,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1578)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1583)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1351,7 +1354,7 @@ Creates a .size file for the given .apk or .minimal.apks.
 
 &mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1203)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1621)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1626)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 

@@ -131,7 +131,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
 
   def _run_test(self, cfg, **kwargs):
     """Runs test from config and return results."""
-    all_values = self.m.bisect_tester.run_test(
+    all_values, _ = self.m.bisect_tester.run_test(
         cfg, **kwargs)
     overall_success = True
     if (not kwargs.get('allow_flakes', True) and

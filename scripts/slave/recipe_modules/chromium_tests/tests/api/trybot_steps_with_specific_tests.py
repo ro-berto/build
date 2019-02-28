@@ -33,6 +33,9 @@ def RunSteps(api):
   else:
     test = api.chromium_tests.steps.BlinkTest()
 
+  if api.properties.get('use_custom_dimensions', False):
+    api.chromium_swarming.set_default_dimension('os', 'Windows-10')
+
   if api.properties.get('disable_retry_with_patch'):
     test._should_retry_with_patch = False
 
@@ -218,6 +221,36 @@ def GenTests(api):
           'FindIt Flakiness', ['blink_web_tests (with patch)']) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('findit_step_layer_flakiness_swarming_custom_dimensions') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          use_gtest=True,
+          use_custom_dimensions=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch) on Windows-10',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch) on Windows-10',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch) on Windows-10',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch) on Windows-10']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
 
   def generate_single_failing_gtest_json(status):
     cur_iteration_data = {

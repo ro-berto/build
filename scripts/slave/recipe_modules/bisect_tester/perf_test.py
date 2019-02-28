@@ -138,7 +138,8 @@ def run_perf_test(api, test_config, **kwargs):
     if api.m.platform.is_linux:
       os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
-    out, _, retcode = _run_command(api, command, step_name, **kwargs)
+    out, _, retcode, command_step_result = _run_command(
+        api, command, step_name, **kwargs)
     results['output'].append(out or '')
     if out:
       # Write stdout to a local temp location for possible buildbot parsing
@@ -170,7 +171,7 @@ def run_perf_test(api, test_config, **kwargs):
           if step_result.json.output:
             results['valueset_paths'].append(valueset_path)
     results['retcodes'].append(retcode)
-  return results
+  return results, command_step_result
 
 def _rebase_path(api, file_path):
   """Attempts to make an absolute path for the command.
@@ -244,6 +245,6 @@ def _run_command(api, command, step_name, **kwargs):
         sf.result.stderr).splitlines()
     return (
         sf.result.raw_io.output_texts.get('stdout_proxy'),
-        sf.result.stderr, sf.result.retcode)
+        sf.result.stderr, sf.result.retcode, sf.result)
   return (step_result.raw_io.output_texts.get('stdout_proxy'),
-          step_result.stderr, step_result.retcode)
+          step_result.stderr, step_result.retcode, step_result)

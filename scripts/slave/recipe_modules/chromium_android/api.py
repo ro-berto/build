@@ -1432,11 +1432,14 @@ class AndroidApi(recipe_api.RecipeApi):
       upload: Uploads EMMA HTML report to storage bucket unless False is passed
         in.
       **kwargs: Kwargs for python and gsutil steps.
+
+    Returns:
+      step_result: The recipe result from generating the coverage report.
     """
     assert self.c.coverage or self.c.incremental_coverage, (
         'Trying to generate coverage report but coverage is not enabled')
 
-    self.m.python(
+    step_result = self.m.python(
         'Generate coverage report',
         self.m.path['checkout'].join(
             'build', 'android', 'generate_emma_html.py'),
@@ -1462,6 +1465,8 @@ class AndroidApi(recipe_api.RecipeApi):
           name='upload coverage report',
           link_name='Coverage report',
           **kwargs)
+
+    return step_result
 
   def incremental_coverage_report(self):
     """Creates an incremental code coverage report.

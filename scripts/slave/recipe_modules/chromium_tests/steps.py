@@ -202,6 +202,13 @@ class Test(object):
     self._target_name = target_name
     self._override_isolate_target = override_isolate_target
 
+    # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
+    # step that was invoked in run(). This makes the assumption that run() only
+    # emits a single recipe engine step, and that the recipe engine step is the
+    # one that best represents the run of the tests. This is used by FindIt to
+    # look up the failing step for a test suite from buildbucket.
+    self._suffix_step_name_map = {}
+
     # Most test suites have a lot of flaky tests. Since we don't rerun passing
     # tests, it's also very easy to introduce new flaky tests. The point of
     # 'retry with patch' is to prevent false rejects by adding another layer of
@@ -280,6 +287,10 @@ class Test(object):
 
   def run(self, api, suffix):  # pragma: no cover
     """Run the test.
+
+    Implementations of this method must populate
+    self._suffix_step_name_map[suffix] with the name of the recipe engine step
+    that best represents the work performed by this Test.
 
     suffix is 'with patch', 'without patch' or 'retry with patch'.
     """
@@ -379,6 +390,23 @@ class Test(object):
       if fail_count > 0 and success_count == 0:
         deterministic_failures.append(test_name)
     return deterministic_failures
+
+  def name_of_step_for_suffix(self, suffix):
+    """Returns the name of the step most relevant to the given suffix run.
+
+    Most Tests will run multiple recipe engine steps. The name of the most
+    relevant step is stored in  self._suffix_step_name_map. This method returns
+    that step.
+
+    This method should only be called if the suffix is known to have run.
+
+    Returns:
+      step_name: The name of the step that best represents 'running' the test.
+
+    Raises:
+      KeyError if the name is not present for the given suffix.
+    """
+    return self._suffix_step_name_map[suffix]
 
   @property
   def uses_isolate(self):
@@ -757,7 +785,9 @@ class SizesStep(Test):
     self.perf_id = perf_id
 
   def run(self, api, suffix):
-    return api.chromium.sizes(self.results_url, self.perf_id)
+    step_result = api.chromium.sizes(self.results_url, self.perf_id)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
+    return step_result
 
   def compile_targets(self, _):
     return ['chrome']
@@ -860,6 +890,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
               {'valid': True, 'failures': []}))
     finally:
       result = api.step.active_result
+      self._suffix_step_name_map[suffix] = result.step['name']
 
       failures = result.json.output.get('failures')
       if failures is None:
@@ -1026,6 +1057,7 @@ class LocalGTestTest(Test):
       # JSON files. crbug.com/584469
     finally:
       step_result = api.step.active_result
+      self._suffix_step_name_map[suffix] = step_result.step['name']
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
         self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       else:
@@ -1616,6 +1648,7 @@ class SwarmingTest(Test):
       api.chromium_swarming.collect_task(self._tasks[suffix])
     finally:
       step_result = api.step.active_result
+      self._suffix_step_name_map[suffix] = step_result.step['name']
 
       step_result.presentation.logs['step_metadata'] = (
           json.dumps(self.step_metadata(api, suffix), sort_keys=True,
@@ -1707,6 +1740,7 @@ class SwarmingGTestTest(SwarmingTest):
       super(SwarmingGTestTest, self).run(api, suffix)
     finally:
       step_result = api.step.active_result
+      self._suffix_step_name_map[suffix] = step_result.step['name']
       if (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
         gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
@@ -1841,6 +1875,7 @@ class LocalIsolatedScriptTest(Test):
       # to that of SwarmingIsolatedScriptTest. They probably should be shared
       # between the two.
       step_result = api.step.active_result
+      self._suffix_step_name_map[suffix] = step_result.step['name']
       results = step_result.json.output
       presentation = step_result.presentation
 
@@ -1983,6 +2018,7 @@ class PythonBasedTest(Test):
         cmd_args,
         step_test_data=default_factory_for_tests,
         ok_ret='any')
+    self._suffix_step_name_map[suffix] = step_result.step['name']
     test_results = step_result.test_utils.test_results
     presentation = step_result.presentation
 
@@ -2031,8 +2067,10 @@ class BisectTest(Test):
                                   api.properties.get('bisect_config')))
 
   def run(self, api, suffix):
-    self.run_results = api.bisect_tester.run_test(
+    results, step_result = api.bisect_tester.run_test(
         self.test_config, **self.kwargs)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self.run_results = results
     self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
@@ -2064,8 +2102,10 @@ class BisectTestStaging(Test):
                                   api.properties.get('bisect_config')))
 
   def run(self, api, suffix):
-    self.run_results = api.bisect_tester_staging.run_test(
+    results, step_result = api.bisect_tester_staging.run_test(
         self.test_config, **self.kwargs)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
+    self.run_results = results
     self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
@@ -2098,6 +2138,7 @@ class AndroidTest(Test):
       step_result = f.result
       raise
     finally:
+      self._suffix_step_name_map[suffix] = step_result.step['name']
       self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
@@ -2326,6 +2367,7 @@ class BlinkTest(Test):
         step_result.presentation.status = api.step.WARNING
     finally:
       step_result = api.step.active_result
+      self._suffix_step_name_map[suffix] = step_result.step['name']
 
       # TODO(dpranke): crbug.com/357866 - note that all comparing against
       # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
@@ -2424,7 +2466,8 @@ class IncrementalCoverageTest(Test):
     return []
 
   def run(self, api, suffix):
-    api.chromium_android.coverage_report(upload=False)
+    step_result = api.chromium_android.coverage_report(upload=False)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
 
@@ -2456,11 +2499,12 @@ class FindAnnotatedTest(Test):
       args.extend(
           ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
       with api.context(cwd=api.path['checkout']):
-        api.python(
+        step_result = api.python(
             'run find_annotated_tests.py',
             api.path['checkout'].join(
                 'tools', 'android', 'find_annotated_tests.py'),
             args=args)
+        self._suffix_step_name_map[suffix] = step_result.step['name']
       api.gsutil.upload(
           temp_output_dir.join(
               '%s-android-chrome.json' % timestamp_string),
@@ -2567,7 +2611,9 @@ class MockTest(Test):
 
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('%s%s' % (self.name, self._mock_suffix(suffix)), None)
+      step_result = api.step(
+          '%s%s' % (self.name, self._mock_suffix(suffix)), None)
+      self._suffix_step_name_map[suffix] = step_result.step['name']
 
   def has_valid_results(self, api, suffix):
     api.step(
