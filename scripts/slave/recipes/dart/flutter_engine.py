@@ -111,6 +111,10 @@ def TestObservatory(api, checkout_dir):
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   src_cfg.target_os = set(['android'])
+  engine_rev = (api.properties.get('rev_engine') or
+               api.properties.get('revision') or 'HEAD')
+  flutter_rev = api.properties.get('rev_flutter') or 'HEAD'
+  sdk_rev = api.properties.get('rev_sdk') or 'HEAD'
   if api.runtime.is_luci:
     commits = json.loads(api.gitiles.download_file(
         'https://dart.googlesource.com/linear_sdk_flutter_engine',
@@ -118,18 +122,15 @@ def GetCheckout(api):
         api.buildbucket.gitiles_commit.id,
         step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
             json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
-    src_cfg.revisions = {
-      'src/flutter': commits.get(ENGINE_REPO, 'HEAD'),
-      'src/third_party/dart': commits.get(SDK_REPO, 'HEAD'),
-      'flutter': commits.get(FLUTTER_REPO, 'HEAD'),
-    }
-  else:
-    src_cfg.revisions = {
-      'src/flutter': api.properties.get('rev_engine') or
-                    api.properties.get('revision') or 'HEAD',
-      'src/third_party/dart': api.properties.get('rev_sdk') or 'HEAD',
-      'flutter': api.properties.get('rev_flutter') or 'HEAD',
-    }
+    engine_rev = commits.get(ENGINE_REPO, 'HEAD')
+    flutter_rev = commits.get(FLUTTER_REPO, 'HEAD')
+    sdk_rev = commits.get(SDK_REPO, 'HEAD')
+
+  src_cfg.revisions = {
+    'src/flutter': engine_rev,
+    'src/third_party/dart': sdk_rev,
+    'flutter': flutter_rev,
+  }
 
   soln = src_cfg.solutions.add()
   soln.name = 'src/flutter'
@@ -142,13 +143,20 @@ def GetCheckout(api):
       'https://dart.googlesource.com/%s' % FLUTTER_REPO
 
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(ignore_input_commit=api.runtime.is_luci)
+  api.bot_update.ensure_checkout(ignore_input_commit=api.runtime.is_luci,
+      update_presentation=api.runtime.is_luci)
+  if api.runtime.is_luci:
+    properties = api.step.active_result.presentation.properties
+    properties['rev_engine'] = engine_rev
+    properties['rev_flutter'] = flutter_rev
+    properties['rev_sdk'] = sdk_rev
+    properties['got_revision'] = api.buildbucket.gitiles_commit.id
+
   api.gclient.runhooks()
 
   api.step('3xHEAD Flutter Hooks',
       ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
 
-  flutter_rev = src_cfg.revisions['flutter']
   return flutter_rev
 
 

@@ -78,7 +78,11 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"ffffffff\"@@@",
+      "@@@SET_BUILD_PROPERTY@rev_engine@\"bar\"@@@",
+      "@@@SET_BUILD_PROPERTY@rev_flutter@\"HEAD\"@@@",
+      "@@@SET_BUILD_PROPERTY@rev_sdk@\"foo\"@@@"
     ]
   },
   {
