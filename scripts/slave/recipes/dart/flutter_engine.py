@@ -2,13 +2,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/gitiles',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -17,12 +23,20 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+
+COMMITS_JSON = 'commits.json'
+ENGINE_REPO = 'external/github.com/flutter/engine'
+FLUTTER_REPO = 'external/github.com/flutter/flutter'
+SDK_REPO = 'sdk'
+
+
 def KillTasks(api, checkout_dir, ok_ret='any'):
   """Kills leftover tasks from previous runs or steps."""
   dart_sdk_dir = checkout_dir.join('third_party', 'dart')
   api.python('kill processes',
                dart_sdk_dir.join('tools', 'task_kill.py'),
                ok_ret=ok_ret)
+
 
 def Build(api, checkout_dir, config, *targets):
   build_dir = checkout_dir.join('out/%s' % config)
@@ -32,6 +46,7 @@ def Build(api, checkout_dir, config, *targets):
     name='build %s' % ' '.join([config] + list(targets)),
     ninja_command=ninja_cmd)
 
+
 def RunGN(api, checkout_dir, *args):
   gn_cmd = [checkout_dir.join('flutter/tools/gn')]
   gn_cmd.extend(args)
@@ -39,18 +54,22 @@ def RunGN(api, checkout_dir, *args):
   with api.depot_tools.on_path():
     api.step('gn %s' % ' '.join(args), gn_cmd)
 
+
 def AnalyzeDartUI(api, checkout_dir):
   with api.context(cwd=checkout_dir):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
+
 
 def TestEngine(api, checkout_dir):
   with api.context(cwd=checkout_dir):
     api.step('test engine', ['/bin/bash', 'flutter/testing/run_tests.sh'])
 
+
 def BuildLinuxAndroidx86(api, checkout_dir):
   for x86_variant in ['x64', 'x86']:
     RunGN(api, checkout_dir, '--android', '--android-cpu=' + x86_variant)
     Build(api, checkout_dir, 'android_debug_' + x86_variant)
+
 
 def BuildLinuxAndroidArm(api, checkout_dir):
   RunGN(api, checkout_dir, '--android')
@@ -67,6 +86,7 @@ def BuildLinuxAndroidArm(api, checkout_dir):
     RunGN(api, checkout_dir, '--android', '--runtime-mode=' + runtime_mode)
     Build(api, checkout_dir, build_output_dir)
 
+
 def BuildLinux(api, checkout_dir):
   RunGN(api, checkout_dir)
   Build(api, checkout_dir, 'host_debug')
@@ -77,6 +97,7 @@ def BuildLinux(api, checkout_dir):
   # analyze step needs dart ui sources
   Build(api, checkout_dir, 'host_debug_unopt', 'generate_dart_ui')
 
+
 def TestObservatory(api, checkout_dir):
   flutter_tester_path = checkout_dir.join('out/host_debug/flutter_tester')
   empty_main_path = checkout_dir.join(
@@ -86,32 +107,50 @@ def TestObservatory(api, checkout_dir):
   with api.context(cwd=checkout_dir):
     api.step('test observatory and service protocol', test_cmd)
 
+
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   src_cfg.target_os = set(['android'])
-  src_cfg.revisions = {
-    'src/flutter': api.properties.get('rev_engine') or
-                   api.properties.get('revision') or 'HEAD',
-    'src/third_party/dart': api.properties.get('rev_sdk') or 'HEAD',
-    'flutter': api.properties.get('rev_flutter') or 'HEAD',
-  }
+  if api.runtime.is_luci:
+    commits = json.loads(api.gitiles.download_file(
+        'https://dart.googlesource.com/linear_sdk_flutter_engine',
+        COMMITS_JSON,
+        api.buildbucket.gitiles_commit.id,
+        step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
+            json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
+    src_cfg.revisions = {
+      'src/flutter': commits.get(ENGINE_REPO, 'HEAD'),
+      'src/third_party/dart': commits.get(SDK_REPO, 'HEAD'),
+      'flutter': commits.get(FLUTTER_REPO, 'HEAD'),
+    }
+  else:
+    src_cfg.revisions = {
+      'src/flutter': api.properties.get('rev_engine') or
+                    api.properties.get('revision') or 'HEAD',
+      'src/third_party/dart': api.properties.get('rev_sdk') or 'HEAD',
+      'flutter': api.properties.get('rev_flutter') or 'HEAD',
+    }
 
   soln = src_cfg.solutions.add()
   soln.name = 'src/flutter'
   soln.url = \
-      'https://chromium.googlesource.com/external/github.com/flutter/engine'
+      'https://dart.googlesource.com/%s' % ENGINE_REPO
 
   soln = src_cfg.solutions.add()
   soln.name = 'flutter'
   soln.url = \
-      'https://chromium.googlesource.com/external/github.com/flutter/flutter'
+      'https://dart.googlesource.com/%s' % FLUTTER_REPO
 
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout()
+  api.bot_update.ensure_checkout(ignore_input_commit=api.runtime.is_luci)
   api.gclient.runhooks()
 
   api.step('3xHEAD Flutter Hooks',
       ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
+
+  flutter_rev = src_cfg.revisions['flutter']
+  return flutter_rev
+
 
 def CopyArtifacts(api, engine_src, cached_dest, file_paths):
   for path in file_paths:
@@ -124,6 +163,7 @@ def CopyArtifacts(api, engine_src, cached_dest, file_paths):
     api.file.remove('remove %s' % target, cached_dest.join(target))
     api.file.copy('copy %s' % target, engine_src.join(source),
                   cached_dest.join(target))
+
 
 def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
@@ -171,7 +211,7 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   api.file.symlink('make cached dart-sdk point to just built dart sdk',
     engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
   api.file.symlink(
-      'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
+    'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
     engine_src.join('out', 'host_debug', 'flutter_patched_sdk'),
     flutter_patched_sdk)
 
@@ -182,6 +222,7 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   api.step('cleanup', [
     '/bin/bash', '-c', 'if [ -f "%(file)s" ]; then rm "%(file)s"; fi' %
     {'file': flutter_tools_snapshot}])
+
 
 def TestFlutter(api, start_dir, just_built_dart_sdk):
   engine_src = start_dir.join('src')
@@ -213,6 +254,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
         just_built_dart_sdk], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=120*60) # 2 hours
 
+
 def RunSteps(api):
   if api.runtime.is_luci:
     start_dir = api.path['cache'].join('builder')
@@ -224,19 +266,20 @@ def RunSteps(api):
     # 'in'
     if 'clobber' in api.properties:
       api.file.rmcontents('everything', start_dir)
-    GetCheckout(api)
+    flutter_rev = GetCheckout(api)
 
   api.goma.ensure_goma()
 
   checkout_dir = start_dir.join('src')
   KillTasks(api, checkout_dir)
   try:
-    BuildAndTest(api, start_dir, checkout_dir)
+    BuildAndTest(api, start_dir, checkout_dir, flutter_rev)
   finally:
     # TODO(aam): Go back to `ok_ret={0}` once dartbug.com/35549 is fixed
     KillTasks(api, checkout_dir, ok_ret='any')
 
-def BuildAndTest(api, start_dir, checkout_dir):
+
+def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
   run_env = {
     'GOMA_DIR':api.goma.goma_dir,
     # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
@@ -258,8 +301,8 @@ def BuildAndTest(api, start_dir, checkout_dir):
       # Prevent test.dart from using git merge-base to determine a fork point.
       # git merge-base doesn't work without a FETCH_HEAD, which isn't available
       # on the first run of a bot. The builder tests a single revision, so use
-      # rev_flutter.
-      'TEST_COMMIT_RANGE': api.properties.get('rev_flutter') or 'HEAD'
+      # flutter_rev.
+      'TEST_COMMIT_RANGE': flutter_rev
     }
 
     with api.step.defer_results():
@@ -274,16 +317,18 @@ def BuildAndTest(api, start_dir, checkout_dir):
       with api.context(env=flutter_env):
         TestFlutter(api, start_dir, just_built_dart_sdk)
 
+
 def GenTests(api):
   yield (api.test('flutter-engine-linux-buildbot') + api.platform('linux', 64)
       + api.properties(mastername='client.dart.internal',
-            buildername='flutter-engine-linux',
-            bot_id='fake-m1', clobber='',
-            rev_sdk='foo', rev_engine='bar')
+          buildername='flutter-engine-linux',
+          bot_id='fake-m1', clobber='',
+          rev_sdk='foo', rev_engine='bar')
       + api.runtime(is_luci=False, is_experimental=False))
   yield (api.test('flutter-engine-linux') + api.platform('linux', 64)
-      + api.properties(mastername='client.dart.internal',
-            buildername='flutter-engine-linux',
-            bot_id='fake-m1', clobber='',
-            rev_sdk='foo', rev_engine='bar')
+      + api.buildbucket.ci_build(
+          builder='flutter-engine-linux',
+          git_repo='https://dart.googlesource.com/linear_sdk_flutter_engine',
+          revision='f' * 8)
+      + api.properties(bot_id='fake-m1', clobber='')
       + api.runtime(is_luci=True, is_experimental=False))
