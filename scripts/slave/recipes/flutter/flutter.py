@@ -40,7 +40,6 @@ def _PlatformSDK(api):
     if api.platform.is_win:
       with api.windows_sdk():
         with InstallOpenJDK(api):
-          with Install7za(api):
             yield
     elif api.platform.is_mac:
       with api.osx_sdk('ios'):
@@ -56,16 +55,19 @@ def _PlatformSDK(api):
   else:
     yield
 
+@contextmanager
 def Install7za(api):
-  sevenzip_cache_dir = api.path['cache'].join('builder', '7za')
-  api.cipd.ensure(sevenzip_cache_dir, api.cipd.EnsureFile()
-    .add_package(
-      'flutter_internal/tools/7za/${platform}',
-      'version:19.00')
-  )
-  return api.context(
-    env_prefixes={'PATH': [sevenzip_cache_dir]}
-  )
+  if api.platform.is_win:
+    sevenzip_cache_dir = api.path['cache'].join('builder', '7za')
+    api.cipd.ensure(sevenzip_cache_dir, api.cipd.EnsureFile()
+      .add_package(
+        'flutter_internal/tools/7za/${platform}',
+        'version:19.00')
+    )
+    with api.context(env_prefixes={'PATH': [sevenzip_cache_dir]}):
+      yield
+  else:
+    yield
 
 def InstallOpenJDK(api):
   java_cache_dir = api.path['cache'].join('java')
@@ -319,18 +321,18 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
   api.step('download dependencies', [flutter_executable, 'update-packages'])
   api.file.rmtree('clean archive work directory', work_dir)
   api.file.ensure_directory('(re)create archive work directory', work_dir)
-  with api.context(cwd=api.path['start_dir']):
-    step_args = [
-        dart_executable,
-        prepare_script,
-        '--temp_dir=%s' % work_dir,
-        '--revision=%s' % git_hash,
-        '--branch=%s' % branch
-    ]
-    if not api.runtime.is_experimental:
-      step_args.append('--publish')
-    api.step('prepare, create and publish a flutter archive', step_args)
-
+  with Install7za(api):
+    with api.context(cwd=api.path['start_dir']):
+      step_args = [
+          dart_executable,
+          prepare_script,
+          '--temp_dir=%s' % work_dir,
+          '--revision=%s' % git_hash,
+          '--branch=%s' % branch
+      ]
+      if not api.runtime.is_experimental:
+        step_args.append('--publish')
+      api.step('prepare, create and publish a flutter archive', step_args)
 
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'

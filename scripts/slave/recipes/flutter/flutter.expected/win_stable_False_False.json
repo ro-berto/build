@@ -387,6 +387,46 @@
   },
   {
     "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\builder\\7za",
+      "-ensure-file",
+      "flutter_internal/tools/7za/${platform} version:19.00",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]\\flutter\\bin",
+        "[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin",
+        "[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin",
+        "%(PROGRAMFILES)s\\7-Zip-A\\x64"
+      ]
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-version:19.00---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"flutter_internal/tools/7za/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "dart.exe",
       "[START_DIR]\\flutter\\dev\\bots\\prepare_package.dart",
       "--temp_dir=[START_DIR]\\archive",
@@ -401,6 +441,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[CACHE]\\builder\\7za",
         "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\flutter\\bin",
         "[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin",
