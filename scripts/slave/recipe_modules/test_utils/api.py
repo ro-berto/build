@@ -340,8 +340,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # from 'with patch'.
       ignored_failures = set()
 
-    valid_results, failures = test_suite.failures_or_invalid_results(
-        caller_api, 'with patch')
+    valid_results, failures = test_suite.with_patch_failures(caller_api)
     if valid_results:
       new_failures = failures - ignored_failures
     else:
@@ -361,8 +360,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       there are tests that failed in 'with patch' and 'retry with patch', but
       not in 'without patch'.
     """
-    valid_results, new_failures = test_suite.failures_or_invalid_results(
-        caller_api, 'retry with patch')
+    valid_results, _, new_failures = test_suite.retry_with_patch_results(
+        caller_api)
 
     # We currently do not attempt to recover from invalid test results on the
     # retry. Record a failing step with INVALID_RESULTS_MAGIC, which
@@ -373,8 +372,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Assuming both 'with patch' and 'retry with patch' produced valid results,
     # look for the intersection of failures.
-    valid_results, initial_failures = test_suite.failures_or_invalid_results(
-        caller_api, 'with patch')
+    valid_results, initial_failures = test_suite.with_patch_failures(caller_api)
     if valid_results:
       repeated_failures = new_failures & initial_failures
     else:
@@ -383,7 +381,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # Assuming 'without patch' produced valid results, subtract those from
     # repeated failures, as they're likely problems with tip of tree.
     valid_results, without_patch_failures = (
-        test_suite.failures_or_invalid_results(caller_api, 'without patch'))
+        test_suite.without_patch_failures_to_ignore(caller_api))
     if valid_results:
       new_failures = repeated_failures - without_patch_failures
       ignored_failures = without_patch_failures
@@ -399,8 +397,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
-    valid_results, new_failures = test_suite.failures_or_invalid_results(
-        caller_api, 'with patch')
+    valid_results, new_failures = test_suite.with_patch_failures(caller_api)
 
     if not valid_results: # pragma: nocover
       self.m.python.infra_failing_step(
@@ -472,8 +469,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # We only want to consider tests that failed in 'with patch' and succeeded
       # in 'retry with patch'. If a test didn't run in both of these steps, then
       # we ignore it.
-      valid_results, retry_with_patch_successes = (
-          test_suite.retry_with_patch_successes(caller_api))
+      valid_results, retry_with_patch_successes, _ = (
+          test_suite.retry_with_patch_results(caller_api))
       if not valid_results:
         continue
 
@@ -490,8 +487,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # If the test suite was supposed to run retry with patch, then exclude all
       # tests that passed in retry with patch.
       if test_suite.should_retry_with_patch:
-        valid_results, retry_with_patch_successes = (
-            test_suite.retry_with_patch_successes(caller_api))
+        valid_results, retry_with_patch_successes, _ = (
+            test_suite.retry_with_patch_results(caller_api))
         if valid_results:
           potential_test_flakes = (
               potential_test_flakes - retry_with_patch_successes)

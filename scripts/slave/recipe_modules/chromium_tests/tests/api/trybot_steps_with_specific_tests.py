@@ -519,6 +519,61 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  def generate_blink_results(test_output):
+    results = {'version': 3}
+    results['tests'] = {'random_test_name':{
+        'expected':'PASS', 'actual':test_output}}
+    return json.dumps(results)
+
+  # This test confirms that generate_blink_results() generates valid results.
+  yield (
+      api.test('blink_pass') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          use_gtest=False,
+          swarm_hashes={
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'blink_web_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.gtest_results(generate_blink_results('PASS'))) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  # If a blink layout test times out, then passes in 'retry with patch', then
+  # the build should be marked as a failure.
+  yield (
+      api.test('retry_with_patch_blink_timeout_then_pass') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          use_gtest=False,
+          swarm_hashes={
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'blink_web_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.test_results(generate_blink_results('FAIL'))) +
+      api.override_step_data(
+          'blink_web_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.test_results(generate_blink_results('PASS'))) +
+      api.override_step_data(
+          'blink_web_tests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.test_results(generate_blink_results('TIMEOUT PASS'))) +
+      api.post_process(post_process.MustRun,
+          'blink_web_tests (retry with patch summary)') +
+      api.post_process(post_process.AnnotationContains,
+          'blink_web_tests (retry with patch summary)', ['STEP_FAILURE']) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   yield (
       api.test('disable_deapply_patch_affected_files') +
       api.properties.tryserver(

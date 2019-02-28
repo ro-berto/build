@@ -3184,7 +3184,7 @@
       "python",
       "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
-      "{\"failures\": [], \"ignored\": []}",
+      "{\"failures\": [], \"ignored\": [\"test_common.Test1\"]}",
       "--build-number",
       "0",
       "--builder-name",
@@ -3212,7 +3212,11 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "blink_web_tests (retry with patch summary)"
+    "name": "blink_web_tests (retry with patch summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Tests ignored as they succeeded on retry:<br/>test_common.Test1<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [

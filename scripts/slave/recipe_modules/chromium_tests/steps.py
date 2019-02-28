@@ -454,7 +454,8 @@ class Test(object):
     """Returns test failures that should be ignored.
 
     Tests that fail in 'without patch' should be ignored, since they're failing
-    without the CL patched in.
+    without the CL patched in. If a test is flaky, it is treated as a failing
+    test.
 
     Returns: A tuple (valid_results, failures_to_ignore).
       valid_results: A Boolean indicating whether failures_to_ignore is valid.
@@ -472,28 +473,32 @@ class Test(object):
         ignored_failures.add(test_name)
     return (True, ignored_failures)
 
-  def retry_with_patch_successes(self, api):
-    """Returns tests that passed in the 'retry with patch' step.
+  def retry_with_patch_results(self, api):
+    """Returns passing and failing tests in the 'retry with patch' step.
 
     The 'retry with patch' step only considers tests to be successes if every
     test run passes. Flaky tests are considered failures.
 
-    Returns: A tuple (valid_results, passing_tests).
+    Returns: A tuple (valid_results, passing_tests, failing_tests).
       valid_results: A Boolean indicating whether results are present and valid.
       passing_tests: A set of strings. Only valid if valid_results is True.
+      failing_tests: A set of strings. Only valid if valid_results is True.
     """
     suffix = 'retry with patch'
     if not self.has_valid_results(api, suffix):
-      return (False, None)
+      return (False, None, None)
 
     passing_tests = set()
+    failing_tests = set()
     for test_name, result in (
         self.pass_fail_counts(api, 'retry with patch').iteritems()):
       success_count = result['pass_count']
       fail_count = result['fail_count']
       if fail_count == 0 and success_count > 0:
         passing_tests.add(test_name)
-    return (True, passing_tests)
+      else:
+        failing_tests.add(test_name)
+    return (True, passing_tests, failing_tests)
 
   def tests_to_retry(self, api, suffix):
     """Computes the tests to run on an invocation of the test suite.

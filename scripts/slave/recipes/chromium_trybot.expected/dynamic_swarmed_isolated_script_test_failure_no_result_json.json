@@ -3039,7 +3039,12 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "telemetry_gpu_unittests (retry with patch summary)"
+    "name": "telemetry_gpu_unittests (retry with patch summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Failed with patch twice, succeeded without patch:<br/>test1.Test3<br/><br/>Tests ignored as they succeeded on retry:<br/>test_common.Test1<br/>@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
+    ]
   },
   {
     "cmd": [
@@ -3056,11 +3061,17 @@
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 3@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:34.500000 @@@",
       "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_LOG_END@detailed stats@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"c62e199db9fb729d6b1a62571cdf0e4f3b2c43f5\"@@@"
     ]
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "telemetry_gpu_unittests failed."
+    },
     "name": "$result"
   }
 ]
