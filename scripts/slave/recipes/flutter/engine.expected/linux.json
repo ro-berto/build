@@ -3,19 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmcontents",
-      "[START_DIR]"
-    ],
-    "infra_step": true,
-    "name": "everything"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/flutter', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
@@ -30,7 +17,7 @@
       "--revision",
       "src/flutter@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -134,8 +121,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --unoptimized"
@@ -393,6 +384,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -475,8 +467,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug"
@@ -495,8 +491,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized"
@@ -515,8 +515,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --dynamic"
@@ -536,8 +540,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --enable-vulkan"
@@ -794,6 +802,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -1099,6 +1108,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -1404,6 +1414,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -1709,6 +1720,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -2157,8 +2169,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=arm"
@@ -2415,6 +2431,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -2609,8 +2626,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=arm64"
@@ -2867,6 +2888,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -3061,8 +3083,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=x86"
@@ -3319,6 +3345,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -3513,8 +3540,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=x64"
@@ -3771,6 +3802,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -3967,8 +3999,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --dynamic --runtime-mode=profile --android-cpu=arm"
@@ -4225,6 +4261,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -4485,8 +4522,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --dynamic --runtime-mode=release --android-cpu=arm"
@@ -4743,6 +4784,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -5003,8 +5045,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --dynamic --runtime-mode=profile --android-cpu=arm64"
@@ -5261,6 +5307,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -5521,8 +5568,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --dynamic --runtime-mode=release --android-cpu=arm64"
@@ -5779,6 +5830,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -6038,8 +6090,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=profile --android-cpu=arm"
@@ -6296,6 +6352,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -6555,8 +6612,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=release --android-cpu=arm"
@@ -6813,6 +6874,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -7142,8 +7204,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
@@ -7400,6 +7466,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -7659,8 +7726,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=release --android-cpu=arm64"
@@ -7917,6 +7988,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",
@@ -8485,6 +8557,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.flutter\", \"builder\": \"Linux Engine\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine",
       "--buildbot-mastername",

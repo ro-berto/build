@@ -258,7 +258,7 @@
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]/java",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
-      "SHARD": "coverage"
+      "SHARD": "tests"
     },
     "env_prefixes": {
       "PATH": [
@@ -268,7 +268,89 @@
         "[CACHE]/java/bin"
       ]
     },
-    "name": "run test.dart for coverage shard"
+    "name": "run test.dart for tests shard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/flutter/examples/stocks/android/gradle/wrapper/gradle-wrapper.properties",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "read gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/flutter/examples/stocks/android/gradle/wrapper/gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "name": "flutter build apk stocks"
   },
   {
     "cmd": [
@@ -279,8 +361,8 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
-      "gs://flutter_infra/flutter/experimental/coverage/lcov.info"
+      "[START_DIR]/flutter/examples/stocks/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/experimental/deadbeef/examples/Stocks.apk"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -298,40 +380,21 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload coverage data",
+    "name": "gsutil upload Stocks.apk",
     "~followup_annotations": [
-      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/experimental/coverage/lcov.info@@@"
+      "@@@STEP_LINK@Stocks.apk@https://storage.cloud.google.com/flutter_infra/flutter/experimental/deadbeef/examples/Stocks.apk@@@"
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "JAVA_HOME": "[CACHE]/java",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
-        "[CACHE]/java/bin"
-      ]
-    },
-    "name": "ensure_cloudkms"
-  },
-  {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/cipd/cloudkms",
-      "-ensure-file",
-      "infra/tools/luci/cloudkms/${platform} latest",
-      "-json-output",
-      "/path/to/tmp/json"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/flutter/examples/flutter_gallery/android/gradle/wrapper/gradle-wrapper.properties",
+      "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -349,99 +412,93 @@
       ]
     },
     "infra_step": true,
-    "name": "ensure_cloudkms.ensure_installed",
+    "name": "read gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/flutter/examples/flutter_gallery/android/gradle/wrapper/gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "name": "flutter build apk flutter_gallery"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/examples/flutter_gallery/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/experimental/deadbeef/examples/Gallery.apk"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[CACHE]/java/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload Gallery.apk",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/cloudkms/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LINK@Gallery.apk@https://storage.cloud.google.com/flutter_infra/flutter/experimental/deadbeef/examples/Gallery.apk@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd/cloudkms/cloudkms",
-      "decrypt",
-      "-input",
-      "RECIPE[build::flutter/flutter].resources/coveralls-token.enc",
-      "-output",
-      "[START_DIR]/flutter/packages/flutter/.coveralls.yml",
-      "projects/flutter-infra/locations/global/keyRings/luci/cryptoKeys/coveralls"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "JAVA_HOME": "[CACHE]/java",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
-        "[CACHE]/java/bin"
-      ]
-    },
-    "name": "decrypt coveralls token"
-  },
-  {
-    "cmd": [
-      "pub",
-      "global",
-      "activate",
-      "coveralls",
-      "5.1.0",
-      "--no-executables"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "JAVA_HOME": "[CACHE]/java",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
-        "[CACHE]/java/bin"
-      ]
-    },
-    "name": "pub global activate coveralls"
-  },
-  {
-    "cmd": [
-      "pub",
-      "global",
-      "run",
-      "coveralls:main",
-      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
-    ],
-    "cwd": "[START_DIR]/flutter/packages/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "JAVA_HOME": "[CACHE]/java",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
-        "[CACHE]/java/bin"
-      ]
-    },
-    "name": "upload to coveralls"
   },
   {
     "jsonResult": null,

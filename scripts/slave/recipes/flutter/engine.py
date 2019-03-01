@@ -346,30 +346,11 @@ def TestObservatory(api):
 #  with api.context(cwd=checkout):
 #    api.step('engine unit tests', test_cmd)
 
-
-def RunFindXcode(api, ios_tools_path, target_version):
-  """Locates and switches to a version of Xcode matching target_version."""
-  args = [
-      '--json-file', api.json.output(),
-      '--version', target_version,
-  ]
-  result = api.build.python(
-      'set_xcode_version',
-      ios_tools_path.join('build', 'bots', 'scripts', 'find_xcode.py'),
-      args)
-  return result.json.output
-
 @contextmanager
 def SetupXcode(api):
-  if api.runtime.is_luci:
-    with api.osx_sdk('ios'):
-      yield
-  else:
-    ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
-    target_version = '9.0.1'
-    xcode_json = RunFindXcode(api, ios_tools_path, target_version)
-    if not xcode_json['matches']:
-      raise api.step.StepFailure('Xcode %s not found' % target_version)
+  # See cr-buildbucket.cfg for how the version is passed in.
+  # https://github.com/flutter/infra/blob/master/config/cr-buildbucket.cfg#L148
+  with api.osx_sdk('ios'):
     yield
 
 def BuildMac(api):
@@ -660,17 +641,14 @@ def BuildJavadoc(api):
 
 @contextmanager
 def InstallJazzy(api):
-  if api.runtime.is_luci:
-    gem_dir = api.path['start_dir'].join('gems')
-    api.file.ensure_directory('mkdir gems', gem_dir)
-    with api.context(cwd=gem_dir):
-      api.step('install gems', [
-          'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
-          '--install-dir', '.'])
-    with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
-        'PATH': [gem_dir.join('bin')]}):
-      yield
-  else:
+  gem_dir = api.path['start_dir'].join('gems')
+  api.file.ensure_directory('mkdir gems', gem_dir)
+  with api.context(cwd=gem_dir):
+    api.step('install gems', [
+        'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
+        '--install-dir', '.'])
+  with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
+      'PATH': [gem_dir.join('bin')]}):
     yield
 
 def BuildObjcDoc(api):
@@ -705,10 +683,6 @@ def GetCheckout(api):
   api.gclient.runhooks()
 
 def RunSteps(api):
-  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
-  if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['start_dir'])
-
   GetCheckout(api)
 
   checkout = api.path['start_dir'].join('src')
@@ -742,49 +716,30 @@ def RunSteps(api):
     if api.platform.is_win:
       BuildWindows(api)
 
-
+# pylint: disable=line-too-long
+# See https://chromium.googlesource.com/infra/luci/recipes-py/+/refs/heads/master/doc/user_guide.md
+# The tests in here make sure that every line of code is used and does not fail.
+# pylint: enable=line-too-long
 def GenTests(api):
-  # A valid commit to flutter/engine, to make the gsutil urls look real.
-  for platform in ('mac', 'linux', 'win', 'mac_luci', 'linux_luci', 'win_luci'):
-    platform_name = platform.replace('_luci', '')
-    test = (api.test(platform) + api.platform(platform_name, 64)
+  for platform in ('mac', 'linux', 'win'):
+    test = (api.test(platform) + api.platform(platform, 64)
         + api.properties(mastername='client.flutter',
-              buildername='%s Engine' % platform_name.capitalize(),
-              bot_id='fake-m1', clobber=''))
-    if platform.endswith('luci'):
-      test += (api.runtime(is_luci=True, is_experimental=True))
-      if platform_name == 'mac':
-        test += (api.properties(jazzy_version='0.8.4'))
-    if platform_name == 'mac' and not platform.endswith('luci'):
-      test += (
-        api.step_data('set_xcode_version', api.json.output({
-          'matches': {
-            '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
-          }
-        }))
-      )
+              buildername='%s Engine' % platform.capitalize(),
+              bot_id='fake-m1')
+        + api.runtime(is_luci=True, is_experimental=False))
+    if platform == 'mac':
+      test += (api.properties(jazzy_version='0.8.4'))
     yield test
-
-  yield (
-    api.test('mac_cannot_find_xcode') +
-    api.platform('mac', 64) +
-    api.properties(revision='a' * 40) +
-    api.properties(clobber='') +
-    api.properties(buildername='Mac Engine') +
-    api.step_data('set_xcode_version', api.json.output({
-      'matches': {}
-    }))
-  )
 
   yield (
     api.test('linux_on_alternate_branch') +
     api.properties(mastername='client.flutter', buildername='Linux Engine',
-                   bot_id='fake-m1', clobber='', branch='some_branch')
+                   bot_id='fake-m1', branch='some_branch')
   )
 
   yield (
-    api.test('linux_on_master_luci') +
+    api.test('experimental') +
     api.properties(mastername='client.flutter', buildername='Linux Engine',
-                   bot_id='fake-m1', clobber='', branch='refs/heads/master') +
+                   bot_id='fake-m1', branch='some_branch') +
     api.runtime(is_luci=True, is_experimental=True)
   )

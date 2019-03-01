@@ -1,0 +1,688 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/flutter",
+      "--url",
+      "https://chromium.googlesource.com/external/github.com/flutter/flutter"
+    ],
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "master",
+      "--recurse-submodules",
+      "--progress",
+      "--tags"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"deadbeef\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "infra_step": true,
+    "name": "submodule update"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "doctor"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin"
+      ]
+    },
+    "name": "flutter doctor"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "update-packages"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin"
+      ]
+    },
+    "name": "download dependencies"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9c40b",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "install xcode"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "select XCode"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/gems"
+    ],
+    "infra_step": true,
+    "name": "mkdir gems"
+  },
+  {
+    "cmd": [
+      "gem",
+      "install",
+      "-V",
+      "cocoapods:1.5.3",
+      "--install-dir",
+      "."
+    ],
+    "cwd": "[START_DIR]/gems",
+    "name": "install cocoapods"
+  },
+  {
+    "cmd": [
+      "pod",
+      "setup",
+      "--verbose"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "pod setup"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/flutter/dev/bots/download_android_tools.py",
+      "-t",
+      "sdk"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download android tools"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://services.gradle.org/distributions/gradle-4.10.2-all.zip",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download gradle"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/unzip.py"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "unzip gradle",
+    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip\"}"
+  },
+  {
+    "cmd": [
+      "sh",
+      "-c",
+      "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "print installed android SDK components"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
+      "SHARD": "tests"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "run test.dart for tests shard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/flutter/examples/stocks/android/gradle/wrapper/gradle-wrapper.properties",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "read gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/flutter/examples/stocks/android/gradle/wrapper/gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build apk stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--no-codesign"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--no-codesign",
+      "--debug"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios debug stocks"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--simulator"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios simulator stocks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/flutter/examples/flutter_gallery/android/gradle/wrapper/gradle-wrapper.properties",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "read gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/flutter/examples/flutter_gallery/android/gradle/wrapper/gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "apk"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build apk flutter_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--no-codesign"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios flutter_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--no-codesign",
+      "--debug"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios debug flutter_gallery"
+  },
+  {
+    "cmd": [
+      "flutter",
+      "-v",
+      "build",
+      "ios",
+      "--simulator"
+    ],
+    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
+        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "flutter build ios simulator flutter_gallery"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--reset"
+    ],
+    "infra_step": true,
+    "name": "reset XCode"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

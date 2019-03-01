@@ -36,24 +36,25 @@ DEFAULT_GRADLE_DIST_URL = \
 
 @contextmanager
 def _PlatformSDK(api):
-  if api.runtime.is_luci:
-    if api.platform.is_win:
-      with api.windows_sdk():
-        with InstallOpenJDK(api):
-            yield
-    elif api.platform.is_mac:
-      with api.osx_sdk('ios'):
-        with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
-          with api.context(env={
-            'CP_REPOS_DIR': api.path['cache'].join('cocoapods', 'repos')
-          }):
-            api.step('pod setup', ['pod', 'setup', '--verbose'])
-            yield
-    elif api.platform.is_linux:
+  if api.platform.is_win:
+    with api.windows_sdk():
       with InstallOpenJDK(api):
+        yield
+  elif api.platform.is_mac:
+    # pylint: disable=line-too-long
+    # See https://github.com/flutter/infra/blob/master/config/cr-buildbucket.cfg#L138
+    # for how the version is passed in.
+    # pylint: enable=line-too-long
+    with api.osx_sdk('ios'):
+      with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
+        with api.context(env={
+          'CP_REPOS_DIR': api.path['cache'].join('cocoapods', 'repos')
+        }):
+          api.step('pod setup', ['pod', 'setup', '--verbose'])
           yield
-  else:
-    yield
+  elif api.platform.is_linux:
+    with InstallOpenJDK(api):
+        yield
 
 @contextmanager
 def Install7za(api):
@@ -113,15 +114,6 @@ def DecryptKMS(api, step_name, crypto_key_path, ciphertext_file,
       '-output', plaintext_file,
       crypto_key_path,
   ])
-
-def GetPuppetApiTokenPath(api, token_name):
-  """Returns the path to a the token file
-
-  The file is located where ChromeOps Puppet drops generic secrets."""
-  return api.path.join(
-      api.path.abspath(api.path.sep), 'creds', 'generic',
-      'generic-%s' % token_name)
-
 
 def GetCloudPath(api, git_hash, path):
   if api.runtime.is_experimental:
@@ -190,49 +182,15 @@ def BuildExamples(api, git_hash, flutter_executable):
   # clean up.
   # This might fail if there's not actually a process running, which is fine.
   # If it actually fails to kill the task, the job will just fail anyway.
-  if api.platform.is_win and api.runtime.is_luci:
+  if api.platform.is_win:
     def KillAll(name, exe_name):
       api.step(name, ['taskkill', '/f', '/im', exe_name, '/t'], ok_ret='any')
     KillAll('stop gradle daemon', 'java.exe')
     KillAll('stop dart', 'dart.exe')
     KillAll('stop adb', 'adb.exe')
 
-
-def RunFindXcode(api, ios_tools_path, target_version):
-  """Locates and switches to a version of Xcode matching target_version."""
-  args = [
-      '--json-file',
-      api.json.output(),
-      '--version',
-      target_version,
-  ]
-  result = api.build.python('set_xcode_version',
-                            ios_tools_path.join('build', 'bots', 'scripts',
-                                                'find_xcode.py'), args)
-  return result.json.output
-
-
-def SetupXcode(api):
-  # Clone the chromium iOS tools to ios/ subdir.
-  # NOTE: nothing special about the ref other than to pin for stability.
-  ios_tools_path = api.path['start_dir'].join('ios')
-  api.git.checkout(
-      'https://chromium.googlesource.com/chromium/src/ios',
-      ref='69b7c1b160e7107a6a98d948363772dc9caea46f',
-      dir_path=ios_tools_path,
-      recursive=True,
-      step_suffix='ios_tools')
-
-  target_version = '9.0.1'
-  xcode_json = RunFindXcode(api, ios_tools_path, target_version)
-  if not xcode_json['matches']:
-    raise api.step.StepFailure('Xcode %s not found' % target_version)
-
 def GetGradleDistributionUrl(api):
-  if api.runtime.is_luci:
-    return api.properties['gradle_dist_url']
-  else:
-    return DEFAULT_GRADLE_DIST_URL
+  return api.properties['gradle_dist_url']
 
 def GetGradleZipFileName(api):
   url = urlparse(GetGradleDistributionUrl(api))
@@ -274,30 +232,18 @@ def UploadFlutterCoverage(api):
       link_name='lcov.info',
       name='upload coverage data')
 
-  if api.runtime.is_luci:
-    token_path = flutter_package_dir.join('.coveralls.yml')
-    DecryptKMS(api, 'decrypt coveralls token',
-            'projects/flutter-infra/locations/global' \
-            '/keyRings/luci/cryptoKeys/coveralls',
-            api.resource('coveralls-token.enc'),
-            token_path)
-    pub_executable = 'pub' if not api.platform.is_win else 'pub.exe'
-    api.step('pub global activate coveralls', [pub_executable, 'global',
-             'activate', 'coveralls', '5.1.0', '--no-executables'])
-    with api.context(cwd=flutter_package_dir):
-      api.step('upload to coveralls', [pub_executable, 'global',
-               'run', 'coveralls:main', coverage_path])
-
-  else:
-    token_path = GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token')
-    with api.context(cwd=checkout.join('packages', 'flutter')):
-      api.build.python(
-          'upload coverage data to Coveralls',
-          api.resource('upload_to_coveralls.py'),
-          ['--token-file=%s' % token_path,
-          '--coverage-path=%s' % coverage_path])
-
-
+  token_path = flutter_package_dir.join('.coveralls.yml')
+  DecryptKMS(api, 'decrypt coveralls token',
+          'projects/flutter-infra/locations/global' \
+          '/keyRings/luci/cryptoKeys/coveralls',
+          api.resource('coveralls-token.enc'),
+          token_path)
+  pub_executable = 'pub' if not api.platform.is_win else 'pub.exe'
+  api.step('pub global activate coveralls', [pub_executable, 'global',
+           'activate', 'coveralls', '5.1.0', '--no-executables'])
+  with api.context(cwd=flutter_package_dir):
+    api.step('upload to coveralls', [pub_executable, 'global',
+             'run', 'coveralls:main', coverage_path])
 
 def CreateAndUploadFlutterPackage(api, git_hash, branch):
   """Prepares, builds, and uploads an all-inclusive archive package."""
@@ -335,10 +281,6 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
       api.step('prepare, create and publish a flutter archive', step_args)
 
 def RunSteps(api):
-  # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
-  if 'clobber' in api.properties:
-    api.file.rmcontents('everything', api.path['start_dir'])
-
   git_ref = api.buildbucket.gitiles_commit.ref
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
@@ -358,11 +300,6 @@ def RunSteps(api):
     dart_bin,
     gradle_bin,
   ]
-  if api.platform.is_win and not api.runtime.is_luci:
-    # To get 7-Zip into the PATH for use by the packaging script.
-    # TODO(dnfield): This no longer applies on LUCI. Remove when we get rid of
-    # is_luci logic.
-    path_prefixes.append(api.path.join('%(PROGRAMFILES)s', '7-Zip-A', 'x64'))
 
   env_prefixes = {'PATH': path_prefixes}
 
@@ -398,10 +335,6 @@ def RunSteps(api):
     api.step('download dependencies', [flutter_executable, 'update-packages'])
 
   with _PlatformSDK(api):
-    # LUCI method of getting Xcode uses CIPD and already validates the version.
-    # See the properties_j for the Mac builder in cr-buildbucket.cfg
-    if api.platform.is_mac and not api.runtime.is_luci:
-      SetupXcode(api)
     with api.depot_tools.on_path():
       api.python('download android tools',
                  checkout.join('dev', 'bots', 'download_android_tools.py'),
@@ -409,79 +342,36 @@ def RunSteps(api):
       InstallGradle(api, checkout)
 
     with api.context(env=env, env_prefixes=env_prefixes, cwd=checkout):
-      if api.runtime.is_luci:
-        shard = api.properties['shard']
-        shard_env = env
-        shard_env['SHARD'] = shard
-        with api.context(env=shard_env):
-          api.step('run test.dart for %s shard' % shard,
-                  [dart_executable,
-                    checkout.join('dev', 'bots', 'test.dart')])
-        if shard == 'coverage':
-          UploadFlutterCoverage(api)
-        elif shard == 'tests':
-          BuildExamples(api, git_hash, flutter_executable)
-      else:
-        shards = ['tests'] if not api.platform.is_linux \
-                           else ['tests', 'coverage']
-        for shard in shards:
-          shard_env = env
-          shard_env['SHARD'] = shard
-          with api.context(env=shard_env):
-            api.step('run test.dart for %s shard' % shard,
-                    [dart_executable,
-                      checkout.join('dev', 'bots', 'test.dart')])
-          if shard == 'coverage':
-            UploadFlutterCoverage(api)
+      shard = api.properties['shard']
+      shard_env = env
+      shard_env['SHARD'] = shard
+      with api.context(env=shard_env):
+        api.step('run test.dart for %s shard' % shard,
+                [dart_executable,
+                  checkout.join('dev', 'bots', 'test.dart')])
+      if shard == 'coverage':
+        UploadFlutterCoverage(api)
+      elif shard == 'tests':
         BuildExamples(api, git_hash, flutter_executable)
 
-
 def GenTests(api):
-  for luci in (True, False):
-    for experimental in (True, False):
-      for platform in ('mac', 'linux', 'win'):
-        for branch in ('master', 'dev', 'beta', 'stable'):
-          git_ref = 'refs/heads/' + branch
-          test = (
-              api.test('%s_%s_%s_%s' % (platform, branch, luci, experimental)) +
-                api.platform(platform, 64) +
-              api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-              api.properties(clobber='', shard='tests',
-                             cocoapods_version='1.5.3',
-                             gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
-              api.runtime(is_luci=luci, is_experimental=experimental))
-          if platform == 'mac' and branch == 'master' and not luci:
-            test += (
-                api.step_data('set_xcode_version',
-                              api.json.output({
-                                  'matches': {
-                                      '/Applications/Xcode9.0.app':
-                                      '9.0.1 (9A1004)'
-                                  }
-                              })))
-          if platform == 'linux' and branch == 'master' and not luci:
-            test += (
-                api.override_step_data('upload coverage data to Coveralls',
-                                      api.raw_io.output('')))
-          yield test
+  for experimental in (True, False):
+    for platform in ('mac', 'linux', 'win'):
+      for branch in ('master', 'dev', 'beta', 'stable'):
+        git_ref = 'refs/heads/' + branch
+        test = (
+            api.test('%s_%s%s' % (platform, branch,
+                                  '_experimental' if experimental else '')) +
+            api.platform(platform, 64) +
+            api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
+            api.properties(shard='tests',
+                            cocoapods_version='1.5.3',
+                            gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
+            api.runtime(is_luci=True, is_experimental=experimental))
+        yield test
 
   yield (api.test('linux_master_coverage') +
-         api.runtime(is_luci=False, is_experimental=True) +
-         api.properties(clobber='', shard='coverage',
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
-         api.override_step_data('upload coverage data to Coveralls',
-                                      api.raw_io.output('')))
-
-  yield (api.test('linux_master_coverage_luci') +
          api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(clobber='', shard='coverage',
+         api.properties(shard='coverage',
                         coveralls_lcov_version='5.1.0',
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
-
-
-  yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
-         api.properties(clobber='', shard='tests',
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
-         api.step_data('set_xcode_version', api.json.output({
-             'matches': {}
-         })))
