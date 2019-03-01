@@ -84,8 +84,11 @@ def _extract_coverage_info(segments):
 
     line_starts_new_region = any(
         [_is_start_of_region(segment) for segment in current_line_segments])
-    is_coverable = ((wrap_segment and _has_count(wrap_segment)) or
-                    line_starts_new_region)
+    is_start_of_skipped_region = (
+        current_line_segments and not _has_count(current_line_segments[0]) and
+        _is_region_entry(current_line_segments[0]))
+    is_coverable = not is_start_of_skipped_region and (
+        (wrap_segment and _has_count(wrap_segment)) or line_starts_new_region)
     if not is_coverable:
       continue
 

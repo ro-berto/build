@@ -63,6 +63,33 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertDictEqual(expected_line_data, line_data)
     self.assertDictEqual(expected_block_data, block_data)
 
+  # This test uses the following code, and the segments are based on execution
+  # on Linux platform.
+  #
+  #  1|       |#include "testing/gtest/include/gtest/gtest.h"
+  #  2|       |
+  #  3|      0|TEST(GUIDTest, DISABLED_GUIDGeneratesAllZeroes) {
+  #  4|      0|
+  #  5|       |  #if defined(OS_ANDROID) || defined(OS_CHROMEOS)
+  #  6|       |    EXPECT_EQ(1, 1);
+  #  7|       |  #else
+  #  8|      0|    EXPECT_EQ(2, 2);
+  #  9|      0|  #endif
+  # 10|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
+  def test_parse_exported_coverage_json_uncovered_macros(self):
+    segments = [[3, 49, 0, True, True], [5, 3, 0, False, True],
+                [8, 1, 0, True, False], [8, 5, 0, True, True],
+                [8, 14, 0, True, False], [10, 2, 0, False, False]]
+
+    expected_line_data = dict([(3, 0), (4, 0), (8, 0), (9, 0), (10, 0)])
+    expected_block_data = {}
+    line_data, block_data = generator._extract_coverage_info(segments)
+    self.assertDictEqual(expected_line_data, line_data)
+    self.assertDictEqual(expected_block_data, block_data)
+
   # This test uses the following code:
   # 1|      1|int main() {
   # 2|      1|  if ((2 > 1) || (3 > 2)) {
