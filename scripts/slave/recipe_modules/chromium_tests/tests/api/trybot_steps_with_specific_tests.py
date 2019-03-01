@@ -21,6 +21,9 @@ def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
       bot_config['bot_ids'])
   api.chromium_tests.configure_build(bot_config_object)
+
+  api.chromium_swarming.configure_swarming('chromium', precommit=True)
+
   update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
 
   if api.properties.get('use_gtest', True):
@@ -195,6 +198,45 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.StepFailure,
           'base_unittests (with patch)') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  # 'retry with patch' and 'retry without ptach' should dispatch higher priority
+  # swarming tasks than 'with patch'.
+  yield (
+      api.test('retry_swarming_priority') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run (with patch).[trigger] base_unittests (with patch)',
+          ['--priority', '30']) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run (without patch).[trigger] base_unittests '
+          '(without patch)',
+          ['--priority', '29']) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run (retry with patch).[trigger] base_unittests '
+          '(retry with patch)',
+          ['--priority', '29']) +
       api.post_process(post_process.DropExpectation)
   )
 

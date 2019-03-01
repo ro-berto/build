@@ -1352,6 +1352,9 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
 
 class SwarmingTest(Test):
+  # Some suffixes should have marginally higher priority. See crbug.com/937151.
+  SUFFIXES_TO_INCREASE_PRIORITY = [ 'without patch', 'retry with patch' ]
+
   def __init__(self, name, dimensions=None, target_name=None,
                extra_suffix=None, expiration=None, hard_timeout=None,
                io_timeout=None, waterfall_mastername=None,
@@ -1545,6 +1548,9 @@ class SwarmingTest(Test):
         trigger_script=self._trigger_script,
         service_account=self._service_account,
     )
+
+    if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
+      task.priority -= 1
 
     if self._expiration:
       task.expiration = self._expiration
