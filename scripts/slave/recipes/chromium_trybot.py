@@ -307,7 +307,6 @@ def GenTests(api):
                       'test': 'gl_tests',
                       'swarming': {
                         'can_use_on_swarming_builders': True,
-                        'priority_adjustment': 'higher',
                         'expiration': 7200,
                         'hard_timeout': 1800,
                       },
@@ -386,7 +385,7 @@ def GenTests(api):
           'git diff to analyze patch',
           api.raw_io.stream_output('foo.cc\ntesting/buildbot/bar.json')) +
     api.post_process(StatusSuccess) +
-    api.post_process(Filter('gl_tests (retry with patch)')) 
+    api.post_process(Filter('gl_tests (retry with patch)'))
   )
 
   yield (
@@ -613,7 +612,7 @@ def GenTests(api):
       'analyze',
       api.json.output({'status': 'Found dependency',
                        'test_targets': ['browser_tests', 'base_unittests'],
-                       'compile_targets': ['base_unittests']})) + 
+                       'compile_targets': ['base_unittests']})) +
     api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 
@@ -633,7 +632,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.json.output({'invalid_targets': ['invalid target', 'another one']})) + 
+      api.json.output({'invalid_targets': ['invalid target', 'another one']})) +
     api.post_process(Filter('analyze', '$result')) +
     api.post_process(StatusFailure)
   )

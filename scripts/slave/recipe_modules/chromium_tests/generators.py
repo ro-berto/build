@@ -139,7 +139,6 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     kwargs['expiration'] = swarming_spec.get('expiration')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
-    kwargs['priority'] = swarming_spec.get('priority_adjustment')
     kwargs['shards'] = swarming_spec.get('shards', 1)
 
     packages = swarming_spec.get('cipd_packages')

@@ -1352,20 +1352,13 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
 
 class SwarmingTest(Test):
-  PRIORITY_ADJUSTMENTS = {
-    'higher': -10,
-    'normal': 0,
-    'lower': +10,
-  }
-
   def __init__(self, name, dimensions=None, target_name=None,
-               extra_suffix=None, priority=None, expiration=None,
-               hard_timeout=None, io_timeout=None,
-               waterfall_mastername=None, waterfall_buildername=None,
-               set_up=None, tear_down=None, optional_dimensions=None,
-               service_account=None, isolate_coverage_data=None, merge=None,
-               ignore_task_failure=None, shards=1,
-               **kwargs):
+               extra_suffix=None, expiration=None, hard_timeout=None,
+               io_timeout=None, waterfall_mastername=None,
+               waterfall_buildername=None, set_up=None, tear_down=None,
+               optional_dimensions=None, service_account=None,
+               isolate_coverage_data=None, merge=None, ignore_task_failure=None,
+               shards=1, **kwargs):
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
@@ -1375,7 +1368,6 @@ class SwarmingTest(Test):
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions
     self._extra_suffix = extra_suffix
-    self._priority = priority
     self._expiration = expiration
     self._hard_timeout = hard_timeout
     self._io_timeout = io_timeout
@@ -1554,9 +1546,6 @@ class SwarmingTest(Test):
         service_account=self._service_account,
     )
 
-    if self._priority in self.PRIORITY_ADJUSTMENTS:
-      task.priority += self.PRIORITY_ADJUSTMENTS[self._priority]
-
     if self._expiration:
       task.expiration = self._expiration
 
@@ -1679,15 +1668,15 @@ class SwarmingTest(Test):
 
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
-               dimensions=None, extra_suffix=None, priority=None,
-               expiration=None, hard_timeout=None, io_timeout=None,
+               dimensions=None, extra_suffix=None, expiration=None,
+               hard_timeout=None, io_timeout=None,
                override_compile_targets=None, override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
                optional_dimensions=None, service_account=None):
     super(SwarmingGTestTest, self).__init__(
-        name, dimensions, target_name, extra_suffix, priority, expiration,
+        name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
@@ -1898,7 +1887,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, extra_suffix=None,
-               ignore_task_failure=False, priority=None, expiration=None,
+               ignore_task_failure=False, expiration=None,
                hard_timeout=None, override_compile_targets=None, perf_id=None,
                results_url=None, perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
@@ -1907,7 +1896,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                cipd_packages=None, isolate_coverage_data=False,
                optional_dimensions=None, service_account=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
-        name, dimensions, target_name, extra_suffix, priority, expiration,
+        name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
