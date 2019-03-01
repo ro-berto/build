@@ -2138,30 +2138,13 @@
   {
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
-      "[CACHE]\\builder\\sdk\\tools\\bots\\extend_results.dart",
-      "",
-      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "",
-      "[CACHE]\\builder\\sdk\\LATEST\\flaky.json",
-      "vm-kernel-win-release-x64",
-      "1357",
-      "1234567",
-      "3456abce78ef",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "add fields to result records"
-  },
-  {
-    "cmd": [
-      "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "",
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--changed",
       "--failing",
@@ -2184,7 +2167,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--logs",
       "",
@@ -2208,7 +2191,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--changed",
       "--passing",
@@ -2231,7 +2214,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--unapproved",
       "--failing"
@@ -2252,7 +2235,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--logs",
       "",
@@ -2276,7 +2259,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--unapproved",
       "--passing"
@@ -2297,7 +2280,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--logs",
       "",
@@ -2320,7 +2303,7 @@
       "--human",
       "--verbose",
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
       "--failing",
       "--unapproved"
@@ -2328,8 +2311,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "name": "test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}@@@",
-      "@@@STEP_LOG_LINE@results.json@{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}@@@",
+      "@@@STEP_LOG_LINE@results.json@@@@",
       "@@@STEP_LOG_END@results.json@@@"
     ]
   },
@@ -2387,7 +2369,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
+      "",
       "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
@@ -2496,55 +2478,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/latest@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd.bat",
-      "ensure",
-      "-root",
-      "[CACHE]\\builder\\sdk\\bqupload",
-      "-ensure-file",
-      "infra/tools/bqupload/${platform} latest",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "upload new results.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/bqupload/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "upload new results.upload test results to big query",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]\\builder\\sdk\\bqupload\\bqupload",
-      "dart-ci.results.results"
-    ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "infra_step": true,
-    "name": "upload new results.upload test results to big query.upload results chunk to big query",
-    "stdin": "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

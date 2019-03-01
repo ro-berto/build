@@ -1014,23 +1014,6 @@
   {
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "[CACHE]/builder/sdk/tools/bots/extend_results.dart",
-      "",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/flaky.json",
-      "dart2js-win-debug-x64-firefox-try",
-      "0",
-      "1234567",
-      "3456abcd78ef",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "add fields to result records"
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "",

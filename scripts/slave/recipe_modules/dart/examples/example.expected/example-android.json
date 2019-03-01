@@ -1291,7 +1291,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n"
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (android)",
@@ -1514,7 +1514,7 @@
       "8945511751514863184",
       "--commit",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n"
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1525,30 +1525,13 @@
   {
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "[CACHE]/builder/sdk/tools/bots/extend_results.dart",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/flaky.json",
-      "example-android",
-      "0",
-      "1234567",
-      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "add fields to result records"
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "",
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--failing",
@@ -1571,7 +1554,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
@@ -1595,7 +1578,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--passing",
@@ -1618,7 +1601,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--unapproved",
       "--failing"
@@ -1639,7 +1622,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
@@ -1663,7 +1646,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--unapproved",
       "--passing"
@@ -1684,7 +1667,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
@@ -1707,7 +1690,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--failing",
       "--unapproved"
@@ -1715,7 +1698,10 @@
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
       "@@@STEP_LOG_END@results.json@@@"
     ]
   },
@@ -1773,7 +1759,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "gs://dart-test-results/builders/example-android/0/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1882,6 +1868,55 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/example-android/latest@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/builder/sdk/bqupload",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "upload new results.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/bqupload/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "upload new results.upload test results to big query",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/bqupload/bqupload",
+      "dart-ci.results.results"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "upload new results.upload test results to big query.upload results chunk to big query",
+    "stdin": "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
