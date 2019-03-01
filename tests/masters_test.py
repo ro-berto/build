@@ -220,7 +220,6 @@ def main(argv):
       'master.chromium.clang': 'ChromiumClang',
       'master.chromium.perf': 'ChromiumPerf',
       'master.client.art': 'ART',
-      'master.client.dart': 'Dart',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
