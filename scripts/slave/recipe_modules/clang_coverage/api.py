@@ -217,6 +217,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
           binaries, merged_profdata)
 
+      if not binaries:
+        self.m.python.succeeding_step(
+            'skip processing coverage data because no data is found', '')
+        return
+
       self._generate_and_upload_metadata(binaries, merged_profdata)
       self._generate_and_upload_html_report_on_trybot(binaries, merged_profdata)
     except self.m.step.StepFailure:

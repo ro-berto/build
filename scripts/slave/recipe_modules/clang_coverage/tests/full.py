@@ -142,6 +142,29 @@ def GenTests(api):
   )
 
   yield (
+    api.test('skip processing coverage data if not data is found')
+    + api.properties.generic(
+        mastername='tryserver.chromium.linux',
+        buildername='linux-coverage-rel',
+        buildnumber=54)
+    + api.properties(
+        files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+        ])
+    + api.buildbucket.try_build(
+        project='chromium', builder='linux-coverage-rel')
+    + api.override_step_data(
+      'get binaries with valid coverage data',
+      step_test_data=lambda: self.m.json.test_api.output([]))
+    + api.post_process(
+        post_process.MustRun,
+        'skip processing coverage data because no data is found')
+    + api.post_process(post_process.DoesNotRunRE, 'generate metadata .*')
+    + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('raise failure')
       + api.properties.generic(
           mastername='chromium.fyi',
