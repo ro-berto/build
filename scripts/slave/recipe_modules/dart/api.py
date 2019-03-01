@@ -284,7 +284,7 @@ class DartApi(recipe_api.RecipeApi):
     builder = self.m.buildbucket.builder_name
     if builder.endswith('-try'):
       builder = builder[:-4]
-    return builder
+    return str(builder)
 
 
   def _download_results(self, latest):
@@ -355,7 +355,6 @@ class DartApi(recipe_api.RecipeApi):
     build_revision = str(self.m.buildbucket.gitiles_commit.id)
     build_number = str(self.m.buildbucket.build.number)
 
-
     self._upload_result(builder, build_number, 'revision', build_revision)
     self._upload_result(builder, build_number, 'logs.json', logs_str)
     self._upload_result(builder, build_number, 'results.json', results_str)
@@ -382,11 +381,36 @@ class DartApi(recipe_api.RecipeApi):
 
   def _upload_result(self, builder, build_number, filename, result_str):
     self.m.gsutil.upload(
-      self.m.raw_io.input_text(result_str, name=filename),
+      self.m.raw_io.input_text(str(result_str), name=filename),
       'dart-test-results',
       'builders/%s/%s/%s' % (builder, build_number, filename),
       name='upload %s' % filename, ok_ret='any'
       if self._report_new_results() else {0})
+
+
+  def _extend_results_records(
+      self, results_str,
+      prior_results_path,
+      flaky_json_str,
+      prior_flaky_path,
+      builder_name,
+      build_number,
+      commit_time,
+      commit_hash):
+    return self.m.step(
+        'add fields to result records',
+        [self.dart_executable(),
+         self.m.path['checkout'].join('tools', 'bots', 'extend_results.dart'),
+         self.m.raw_io.input_text(results_str, name='results.json'),
+         prior_results_path,
+         self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
+         prior_flaky_path,
+         builder_name,
+         build_number,
+         commit_time,
+         commit_hash,
+         self.m.raw_io.output_text()
+        ]).raw_io.output_text
 
 
   def _present_results(self, logs_str, results_str, flaky_json_str):
@@ -640,7 +664,7 @@ class DartApi(recipe_api.RecipeApi):
                    'checked_in_sdk_version': checked_in_sdk_version,
                    'co19_version': co19_version}
     environment['commit'] = {
-      'commit_hash': self.m.buildbucket.gitiles_commit.id,
+      'commit_hash': str(self.m.buildbucket.gitiles_commit.id),
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
     }
     # Linux and vm-*-win builders should use copy-coredumps
@@ -723,6 +747,16 @@ class DartApi(recipe_api.RecipeApi):
         results_str = ''.join(
             (step.results.results for step in steps))
         flaky_json_str = self._update_flakiness_information(results_str)
+        commit = steps[0].environment['commit'];
+        results_str = self._extend_results_records(
+            results_str,
+            self.m.path['checkout'].join('LATEST', 'results.json'),
+            flaky_json_str,
+            self.m.path['checkout'].join('LATEST', 'flaky.json'),
+            self.m.buildbucket.builder_name,
+            self.m.buildbucket.build.number,
+            commit['commit_time'],
+            commit['commit_hash'])
         try:
           self._present_results(logs_str, results_str, flaky_json_str)
         finally:
@@ -1016,18 +1050,12 @@ class StepResults:
     self.results = ''
     self.runs = ''
     self.commit = commit
-    self.builder_name = str(m.buildbucket.builder_name)
+    self.builder_name = str(m.buildbucket.builder_name) # Returned as unicode
     self.build_number = str(m.buildbucket.build.number)
 
 
-  TEMPLATE = (',"commit_time":%s,"commit_hash":"%s",' +
-      '"build_number":%s,"builder_name":"%s","bot_name":"%s"}\n')
-
-
   def add_results(self, bot_name, results_str):
-    extra = self.TEMPLATE % (str(self.commit['commit_time']),
-        str(self.commit['commit_hash']), self.build_number,
-        self.builder_name, bot_name)
+    extra = ',"bot_name":"%s"}\n' % bot_name
     all_matches = re.finditer(r'(^{.*)(?:})', results_str, flags=re.MULTILINE)
     all_chunks = (chunk for match in all_matches for chunk in (
         match.group(1), extra))
