@@ -37,7 +37,8 @@ def RunSteps(api):
     login = [
       '/bin/bash',
       '-c',
-      '/usr/bin/docker login --username dartbot -p $(cat %s)' % dockerhub_key]
+      'cat %s | /usr/bin/docker login --username dartbot --password-stdin'
+      % dockerhub_key]
     api.step('docker login', login)
 
   env_prefixes = {

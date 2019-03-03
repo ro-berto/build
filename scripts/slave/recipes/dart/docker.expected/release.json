@@ -185,7 +185,7 @@
     "cmd": [
       "/bin/bash",
       "-c",
-      "/usr/bin/docker login --username dartbot -p $(cat [CLEANUP]/dockerhub.key)"
+      "cat [CLEANUP]/dockerhub.key | /usr/bin/docker login --username dartbot --password-stdin"
     ],
     "cwd": "[CLEANUP]",
     "env": {
