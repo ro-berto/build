@@ -11,6 +11,8 @@ failed, which can then be used to alert sheriffs via a gatekeeper rule.
 
 import ast
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
 from recipe_engine.post_process import (
     DropExpectation, MustRun, ResultReasonRE, StatusException, StatusFailure,
     StatusSuccess)
@@ -87,16 +89,16 @@ def RunSteps(api):
         api.buildbucket.build_url(build.id))
     api.step.active_result.presentation.logs['flake config'] = api.json.dumps(
         configs[index], indent=2).splitlines()
-    if build.status == api.buildbucket.common_pb2.FAILURE:
+    if build.status == common_pb2.FAILURE:
       api.step.active_result.presentation.step_text = (
           'failed to reproduce<br/>please consider re-enabling this test')
     else:
       api.step.active_result.presentation.step_text = 'reproduced'
     results.append(build.status)
 
-  if api.buildbucket.common_pb2.INFRA_FAILURE in results:
+  if common_pb2.INFRA_FAILURE in results:
     raise api.step.InfraFailure('Some builds failed to execute')
-  elif api.buildbucket.common_pb2.FAILURE in results:
+  elif common_pb2.FAILURE in results:
     raise api.step.StepFailure('Some flakes failed to reproduce')
   else:
     api.step('All flakes still reproduce', cmd=None)
