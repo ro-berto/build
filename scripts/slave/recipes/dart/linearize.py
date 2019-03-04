@@ -30,7 +30,9 @@ def RunSteps(api):
 
   url = 'https://%s/%s' % (commit.host, commit.project)
   commit_log = api.gitiles.commit_log(url, commit_hash)
+  commit_url = '%s/+/%s' % (url, commit_hash)
   message = commit_log['message']
+  message = '%s\n%s\n' % (message, commit_url)
   commit_author = commit_log['author']
   author = '%s <%s>' % (commit_author['name'], commit_author['email'])
   author_date = commit_author['time']

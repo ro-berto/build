@@ -238,7 +238,7 @@
       "--author=Test Author <testauthor@fake.chromium.org>",
       "--date=Mon Jan 01 00:00:00 2015",
       "-m",
-      "Subject\n\nMessage\n"
+      "Subject\n\nMessage\n\nhttps://dart.googlesource.com/repo/+/deadbeef\n"
     ],
     "cwd": "[CLEANUP]",
     "infra_step": true,
