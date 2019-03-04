@@ -292,7 +292,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 6s',
@@ -315,7 +314,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 6s',
@@ -339,7 +337,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 7',
@@ -371,7 +368,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 6s',
@@ -394,7 +390,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 6s',
@@ -417,7 +412,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'bucket': 'chromium-webrtc',
-          'device check': False,
         },
         'ios_testing': {
           'device type': 'iPhone 7',
