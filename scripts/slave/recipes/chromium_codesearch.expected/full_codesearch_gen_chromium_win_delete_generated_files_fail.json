@@ -709,10 +709,12 @@
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/win-Debug/chromium_win.kzip",
       "--corpus",
-      "chromium",
+      "chromium.googlesource.com/chromium/src",
       "--verbose",
       "--root",
       "chromium-win",
+      "--build-config",
+      "win",
       "--out_dir",
       "src/out/win-Debug"
     ],

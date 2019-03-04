@@ -701,10 +701,12 @@
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/android-Debug/chromium_android.kzip",
       "--corpus",
-      "chromium",
+      "chromium.googlesource.com/chromium/src",
       "--verbose",
       "--root",
       "chromium-android",
+      "--build-config",
+      "android",
       "--out_dir",
       "src/out/android-Debug"
     ],

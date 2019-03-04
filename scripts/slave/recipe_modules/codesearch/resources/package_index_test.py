@@ -37,9 +37,11 @@ MOJOM_COMPILE_ARGUMENTS = [
 TEST_MOJOM_GEN_H_FILE_CONTENT = ('#ifndef TEST_MOJOM_H\n#define '
                                  'TEST_MOJOM_H\n#endif\n')
 
-# Test values for corpus, root, and out dir
+# Test values for corpus, root, build config, and out dir
+LEGACY_CORPUS = 'chromium'
 CORPUS = 'chromium-test'
 VNAME_ROOT = 'linux'
+BUILD_CONFIG = 'linux'
 OUT_DIR = 'src/out/chromium-linux/Debug'
 
 class PackageIndexTest(unittest.TestCase):
@@ -118,6 +120,7 @@ class PackageIndexTest(unittest.TestCase):
         os.path.realpath(self.gn_targets_file.name),
         corpus=CORPUS,
         root=VNAME_ROOT,
+        build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)
     self.assertTrue(os.path.exists(self.index_pack.index_directory))
@@ -173,10 +176,11 @@ class PackageIndexTest(unittest.TestCase):
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the two unit files for the two compilation units in
-    # our test compilation database and gn target list.
+    # our test compilation database and gn target list, plus an extra one for
+    # the legacy C++ unit.
     units_dir = os.path.join(self.index_pack.index_directory, 'units')
     unit_files = os.listdir(units_dir)
-    self.assertEqual(2, len(unit_files))
+    self.assertEqual(3, len(unit_files))
     for unit_file_name in unit_files:
       with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
@@ -192,10 +196,25 @@ class PackageIndexTest(unittest.TestCase):
       language = compilation_unit_dictionary['v_name']['language']
 
       if language == 'c++':
-        self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
-                          CORPUS)
-        self.assertEquals(compilation_unit_dictionary['v_name']['root'],
-                          VNAME_ROOT)
+        corpus = compilation_unit_dictionary['v_name']['corpus']
+        if corpus == LEGACY_CORPUS:
+          self.assertEquals(compilation_unit_dictionary['v_name'],
+                            {
+                                'corpus': LEGACY_CORPUS,
+                                'root': VNAME_ROOT,
+                                'language': 'c++',
+                            })
+        else:
+          self.assertEquals(compilation_unit_dictionary['v_name'],
+                            {
+                                'corpus': CORPUS,
+                                'language': 'c++',
+                            })
+          self.assertEquals(compilation_unit_dictionary['details'],
+              [{
+                  '@type': 'kythe.io/proto/kythe.proto.BuildDetails',
+                  'build_config': BUILD_CONFIG,
+              }])
 
         self.assertEquals(compilation_unit_dictionary['source_file'],
                           ['../../../test.cc'])
@@ -207,25 +226,55 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(test_cc_entry['info']['digest'],
                           hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
         self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
-        self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
-        self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
+        if corpus == LEGACY_CORPUS:
+          self.assertEquals(test_cc_entry['v_name'],
+                            {
+                                'path': 'src/test.cc',
+                                'corpus': LEGACY_CORPUS,
+                                'root': VNAME_ROOT,
+                            })
+        else:
+          self.assertEquals(test_cc_entry['v_name'],
+                            {
+                                'path': 'src/test.cc',
+                                'corpus': CORPUS,
+                            })
 
         test_h_entry = compilation_unit_dictionary['required_input'][1]
         self.assertEquals(test_h_entry['info']['digest'],
                           hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
         self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
-        self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
-        self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
+        if corpus == LEGACY_CORPUS:
+          self.assertEquals(test_h_entry['v_name'],
+                            {
+                                'path': 'src/test.h',
+                                'corpus': LEGACY_CORPUS,
+                                'root': VNAME_ROOT,
+                            })
+        else:
+          self.assertEquals(test_h_entry['v_name'],
+                            {
+                                'path': 'src/test.h',
+                                'corpus': CORPUS,
+                            })
 
         test2_h_entry = compilation_unit_dictionary['required_input'][2]
         self.assertEquals(test2_h_entry['info']['digest'],
                           hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
         self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
-        self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
-        self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
+        if corpus == LEGACY_CORPUS:
+          self.assertEquals(test2_h_entry['v_name'],
+                            {
+                                'path': 'src/test2.h',
+                                'corpus': LEGACY_CORPUS,
+                                'root': VNAME_ROOT,
+                            })
+        else:
+          self.assertEquals(test2_h_entry['v_name'],
+                            {
+                                'path': 'src/test2.h',
+                                'corpus': CORPUS,
+                            })
 
         expected_compile_arguments = [
             u'clang++', u'-fsyntax-only', u'-DFOO="foo bar"', u'-std=c++11',
@@ -236,8 +285,11 @@ class PackageIndexTest(unittest.TestCase):
       elif language == 'mojom':
         self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
                           CORPUS)
-        self.assertEquals(compilation_unit_dictionary['v_name']['root'],
-                          VNAME_ROOT)
+        self.assertEquals(compilation_unit_dictionary['details'],
+            [{
+                '@type': 'kythe.io/proto/kythe.proto.BuildDetails',
+                'build_config': BUILD_CONFIG,
+            }])
 
         self.assertEquals(compilation_unit_dictionary['source_file'],
                           ['../../../test.mojom'])
@@ -254,7 +306,6 @@ class PackageIndexTest(unittest.TestCase):
                           '../../../test.mojom')
         self.assertEquals(test_mojom_entry['v_name']['path'], 'src/test.mojom')
         self.assertEquals(test_mojom_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_mojom_entry['v_name']['root'], VNAME_ROOT)
 
         test_mojom_gen_h_entry = compilation_unit_dictionary['required_input'][
             1]
@@ -266,7 +317,6 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(test_mojom_gen_h_entry['v_name']['path'],
                           'src/out/chromium-linux/Debug/gen/test.mojom.h')
         self.assertEquals(test_mojom_gen_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_mojom_gen_h_entry['v_name']['root'], VNAME_ROOT)
 
         expected_compile_arguments = [
             '--use_bundled_pylibs', 'generate', '-d', '../../', '-I', '../../',
@@ -308,6 +358,7 @@ class PackageIndexTest(unittest.TestCase):
         os.path.realpath(self.gn_targets_file.name),
         corpus=CORPUS,
         root=VNAME_ROOT,
+        build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)
 
@@ -330,10 +381,11 @@ class PackageIndexTest(unittest.TestCase):
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the two unit files for the two compilation units in
-    # our test compilation database and gn target list.
+    # our test compilation database and gn target list, plus an extra one for
+    # the legacy C++ unit.
     units_dir = os.path.join(self.index_pack.index_directory, 'units')
     unit_files = os.listdir(units_dir)
-    self.assertEqual(2, len(unit_files))
+    self.assertEqual(3, len(unit_files))
     for unit_file_name in unit_files:
       with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
@@ -349,25 +401,16 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(test_cc_entry['info']['digest'],
                           hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
         self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
-        self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
-        self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
 
         test_h_entry = compilation_unit_dictionary['required_input'][1]
         self.assertEquals(test_h_entry['info']['digest'],
                           hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
         self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
-        self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
-        self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
 
         test2_h_entry = compilation_unit_dictionary['required_input'][2]
         self.assertEquals(test2_h_entry['info']['digest'],
                           hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
         self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
-        self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
-        self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
 
         expected_compile_arguments = [
             u'clang-cl.exe', u'--driver-mode=cl', u'/c', u'test.cc',

@@ -706,6 +706,8 @@
       "--corpus",
       "chromium-win",
       "--verbose",
+      "--build-config",
+      "win",
       "--out_dir",
       "src/out/win-Debug"
     ],
