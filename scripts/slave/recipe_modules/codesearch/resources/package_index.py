@@ -87,8 +87,10 @@ class IndexPack(object):
       # We only care about certain mojom targets. Filter it down here so we
       # don't need to do so both times we iterate over it.
       self.mojom_targets = [
-          dict(target, imported_files=self._FindMojomImports(target))
-          for target in gn_targets_dict.itervalues()
+          dict(target,
+               args=_MergeFeatureArgs(gn_targets_dict, target_name, target),
+               imported_files=self._FindMojomImports(target))
+          for target_name, target in gn_targets_dict.iteritems()
           if self._IsMojomTarget(target)
       ]
 
@@ -594,6 +596,30 @@ class IndexPack(object):
 
 def _ReplaceSuffix(string, curr_suffix, new_suffix):
   return string[:len(string) - len(curr_suffix)] + new_suffix
+
+def _MergeFeatureArgs(gn_targets_dict, target_name, target):
+  """Adds --enable_feature args from the parser target to the generator target.
+
+  The Mojom toolchain works in two phases, first parsing the file with one tool
+  which dumps the AST, then feeding the AST into the bindings generator. The
+  Kythe indexer, however, works in one phase, and hence needs some arguments
+  from each of these tools. In particular, definitions gated on disabled
+  features are removed from the AST directly by the parser tool.
+
+  Args:
+    gn_targets_dict: The full parsed JSON dict containing 'gn desc' output for
+      the whole compile.
+    target_name: The name of the Mojom generator target to merge args into.
+    target: gn_targets_dict[target_name]
+  """
+
+  parser_target = _ReplaceSuffix(target_name, '__generator', '__parser')
+  parser_args = gn_targets_dict[parser_target]['args']
+  feature_args = [arg
+                  for i in range(len(parser_args) - 1)
+                  for arg in parser_args[i:i+2]
+                  if parser_args[i] == '--enable_feature']
+  return target['args'] + feature_args
 
 
 WARNING_SWITCH_RE = re.compile(r'\s[-/][Ww]\S+')

@@ -29,11 +29,15 @@ TEST_MOJOM_FILE_CONTENT = 'module test.mojom;\nimport "test2.mojom"'
 TEST2_MOJOM_FILE_CONTENT = 'module test2.mojom; interface TheOtherInterface {};'
 # These are a list rather than a string as that's the format that gn desc spits
 # them out in.
-MOJOM_COMPILE_ARGUMENTS = [
+MOJOM_GEN_ARGUMENTS = [
     '--use_bundled_pylibs', 'generate', '-d', '../../', '-I', '../../../', '-o',
     'gen', '--bytecode_path', 'gen/bindings',
     '--filelist={{response_file_name}}', '-g', 'c++', '--typemap',
     'gen/mojo_bindings__type_mappings'
+]
+MOJOM_PARSE_ARGUMENTS = [
+    'parse', '--filelist={{response_file_name}}', '-o', 'gen', '-d', '../../',
+    '--enable_feature', 'ipc_logging'
 ]
 TEST_MOJOM_GEN_H_FILE_CONTENT = ('#ifndef TEST_MOJOM_H\n#define '
                                  'TEST_MOJOM_H\n#endif\n')
@@ -110,16 +114,28 @@ class PackageIndexTest(unittest.TestCase):
 
     gn_dictionary = {
         "//:test_mojom__generator": {
-            "args": MOJOM_COMPILE_ARGUMENTS,
+            "args": MOJOM_GEN_ARGUMENTS,
             "script": "//mojo/mojom_bindings_generator.py",
             "sources": ["//test.mojom"],
             "outputs": ["//out/chromium-linux/Debug/gen/test.mojom.h"],
         },
+        "//:test_mojom__parser": {
+            "args": MOJOM_PARSE_ARGUMENTS,
+            "script": "//mojo/mojom_bindings_generator.py",
+            "sources": ["//test.mojom"],
+            "outputs": ["//out/chromium-linux/Debug/gen/test.p"],
+        },
         "//:test_mojom2__generator": {
-            "args": MOJOM_COMPILE_ARGUMENTS,
+            "args": MOJOM_GEN_ARGUMENTS,
             "script": "//mojo/mojom_bindings_generator.py",
             "sources": ["//test2.mojom"],
             "outputs": ["//out/chromium-linux/Debug/gen/test2.mojom.h"],
+        },
+        "//:test_mojom2__parser": {
+            "args": MOJOM_PARSE_ARGUMENTS,
+            "script": "//mojo/mojom_bindings_generator.py",
+            "sources": ["//test2.mojom"],
+            "outputs": ["//out/chromium-linux/Debug/gen/test2.p"],
         },
     }
     with tempfile.NamedTemporaryFile(
@@ -358,7 +374,7 @@ class PackageIndexTest(unittest.TestCase):
               '--use_bundled_pylibs', 'generate', '-d', '../../', '-I',
               '../../../', '-o', 'gen', '--bytecode_path', 'gen/bindings', '-g',
               'c++', '--typemap', 'gen/mojo_bindings__type_mappings',
-              '../../../test.mojom'
+              '--enable_feature', 'ipc_logging', '../../../test.mojom'
           ]
           self.assertEquals(compilation_unit_dictionary['argument'],
                             expected_compile_arguments)
@@ -394,7 +410,7 @@ class PackageIndexTest(unittest.TestCase):
               '--use_bundled_pylibs', 'generate', '-d', '../../', '-I',
               '../../../', '-o', 'gen', '--bytecode_path', 'gen/bindings', '-g',
               'c++', '--typemap', 'gen/mojo_bindings__type_mappings',
-              '../../../test2.mojom'
+              '--enable_feature', 'ipc_logging', '../../../test2.mojom'
           ]
           self.assertEquals(compilation_unit_dictionary['argument'],
                             expected_compile_arguments)
