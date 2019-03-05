@@ -226,6 +226,23 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Chromium Android ARM 32-bit Goma RBE ToT (ATS)': {
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'goma_arbitrary_toolchain_support', 'goma_rbe_tot',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Chromium Android ARM 32-bit Goma RBE Staging': {
       'chromium_config': 'android',
       'chromium_apply_config': ['goma_mixer_staging'],
