@@ -781,8 +781,14 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--nocolor', '--log-level=debug',
         '--cache-dir', self.m.path['checkout'].join('build', 'cros_cache')]
     wrapper += self.c.cros_sdk.args
+    # With neither arg, the cros chrome-sdk will try external configs but
+    # fallback to internal configs if none are available. Avoid that fallback
+    # behavior on the bots by explicitly using either external or internal
+    # configs.
     if self.c.cros_sdk.external:
       wrapper += ['--use-external-config']
+    else:
+      wrapper += ['--internal']
     if self.c.compile_py.goma_dir:
       wrapper += ['--gomadir', self.c.compile_py.goma_dir]
       # Since we are very sure api.chromium.compile starts compiler_proxy,

@@ -9,6 +9,8 @@ DEPS = [
   'recipe_engine/runtime',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   api.chromium.set_config(
@@ -65,6 +67,16 @@ def GenTests(api):
           buildername='test_buildername',
           target_platform='chromeos',
           target_cros_board='x86-generic')
+  )
+
+  yield (
+      api.test('chromeos_official') +
+      api.properties(
+          buildername='test_buildername',
+          target_platform='chromeos',
+          target_cros_board='x86-generic',
+          chromium_apply_config=['official']) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

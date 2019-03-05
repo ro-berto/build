@@ -8,6 +8,23 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 
 SPEC = {
   'builders': {
+    'chromeos-amd64-generic-google-rel': {
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+          'chrome_internal', 'chromeos_amd64_generic'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'intel',
+        'TARGET_BITS': 64,
+        'TARGET_CROS_BOARD': 'amd64-generic',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Google Chrome ChromeOS': {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
       # that's fixed to set the correct mb_config.pyl path.

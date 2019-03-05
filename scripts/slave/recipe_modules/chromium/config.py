@@ -385,6 +385,7 @@ def clobber(c):
 @config_ctx(includes=['clobber'])
 def official(c):
   c.compile_py.mode = 'official'
+  c.cros_sdk.external = False
 
 @config_ctx(deps=['compiler'])
 def analysis(c):
