@@ -2068,7 +2068,7 @@ Collects the results of a sharded test run.
 
 Returns the path to the checked-in SDK dart executable.
 
-&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#511)(self):**
+&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#535)(self):**
 
 Deletes the debug log file
 
@@ -2082,7 +2082,7 @@ Decrypts the specified secret and returns the location of the result
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#499)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#523)(self):**
 
 Reads the debug log file
 
@@ -2091,7 +2091,7 @@ Reads the debug log file
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#517)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#541)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.
@@ -5108,7 +5108,7 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#9): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#170)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#196)(api):**
 ### *recipes* / [dart:examples/example-get\_secret](/scripts/slave/recipe_modules/dart/examples/example-get_secret.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example-get_secret.py#7): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]

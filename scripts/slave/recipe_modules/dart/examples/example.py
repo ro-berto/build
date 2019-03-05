@@ -166,6 +166,32 @@ TEST_MATRIX = {
   ]
 }
 
+RESULT_DATA = (
+    '{"name":"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01"'
+    ',"configuration":"dartk-linux-product-x64","suite":"co19_2",'
+    '"test_name":"Language/Classes/Abstract_Instance_Members/inherited_t01",'
+    '"time_ms":451,"result":"CompileTimeError","expected":"CompileTimeError",'
+    '"matches":true,"commit_time":1551185312,'
+    '"commit_hash":"f0042a32250a8a6193e6d07e2b6508b13f43c864",'
+    '"build_number":"2404","builder_name":"vm-kernel-linux-product-x64",'
+    '"bot_name":"trusty-dart-68765ebb-us-central1-b-2ls0","flaky":false,'
+    '"previous_flaky":false,"previous_result":"CompileTimeError",'
+    '"previous_commit_hash":"f0042a32250a8a6193e6d07e2b6508b13f43c864",'
+    '"previous_commit_time":1551185312,"previous_build_number":2403,'
+    '"changed":false}\n' +
+    '{"name":"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02"'
+    ',"configuration":"dartk-linux-product-x64","suite":"co19_2",'
+    '"test_name":"Language/Classes/Abstract_Instance_Members/inherited_t02",'
+    '"time_ms":496,"result":"CompileTimeError","expected":"CompileTimeError",'
+    '"matches":true,"commit_time":1551185312,'
+    '"commit_hash":"f0042a32250a8a6193e6d07e2b6508b13f43c864",'
+    '"build_number":"2404","builder_name":"vm-kernel-linux-product-x64",'
+    '"bot_name":"trusty-dart-68765ebb-us-central1-b-2ls0","flaky":false,'
+    '"previous_flaky":false,"previous_result":"CompileTimeError",'
+    '"previous_commit_hash":"f0042a32250a8a6193e6d07e2b6508b13f43c864",'
+    '"previous_commit_time":1551185312,"previous_build_number":2403,'
+    '"changed":false}\n')
+
 
 def RunSteps(api):
   api.dart.checkout('clobber' in api.properties)
@@ -214,7 +240,9 @@ def GenTests(api):
       api.step_data('upload testing fileset test',
           stdout=api.raw_io.output('test_hash')) +
       api.step_data('download previous results.gsutil find latest build',
-          api.raw_io.output_text('123', name='latest')))
+          api.raw_io.output_text('123', name='latest')) +
+      api.step_data('add fields to result records',
+          api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('analyzer-none-linux-release-be') +
       api.properties(
@@ -233,7 +261,9 @@ def GenTests(api):
       api.step_data('upload testing fileset trigger',
                     stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)))
+                    stdout=api.json.output(TRIGGER_RESULT)) +
+      api.step_data('add fields to result records',
+          api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('build-failure-in-matrix') +
       api.buildbucket.ci_build(revision = '3456abce78ef',
@@ -275,7 +305,9 @@ def GenTests(api):
       api.step_data('upload testing fileset trigger',
                     stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)))
+                    stdout=api.json.output(TRIGGER_RESULT)) +
+      api.step_data('add fields to result records',
+          api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('basic-mac') + api.platform('mac', 64) +
       api.buildbucket.ci_build(revision='a' * 40,
@@ -290,7 +322,9 @@ def GenTests(api):
       api.step_data('upload testing fileset trigger',
                     stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)))
+                    stdout=api.json.output(TRIGGER_RESULT)) +
+      api.step_data('add fields to result records',
+          api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('example-mac') + api.platform('mac', 64) +
       api.buildbucket.ci_build(builder='example-mac',
