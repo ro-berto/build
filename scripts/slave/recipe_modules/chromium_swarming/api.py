@@ -678,30 +678,16 @@ class SwarmingApi(recipe_api.RecipeApi):
     return self.m.swarming_client.ensure_script_version(
         'swarming.py', MINIMAL_SWARMING_VERSION, step_test_data)
 
-  def trigger_task(self, task, **kwargs):
-    """Triggers one task.
+  def generate_trigger_task_shard_args(self, task, **kwargs):
+    """Generates the arguments for triggered shards.
 
-    It the task is sharded, will trigger all shards. This steps justs posts
-    the task and immediately returns. Use 'collect_task' to wait for a task to
-    finish and grab its result.
+    This generates all arguments other than sharding parameters.
 
-    Behaves as a regular recipe step: returns StepData with step results
-    on success or raises StepFailure if step fails.
-
-    Args:
-      task: SwarmingTask instance.
-      kwargs: passed to recipe step constructor as-is.
-    Returns:
-      A list of StepResults. If shards are triggered in separate steps, then
-      each StepResult is returned. If shards are triggered in a single step,
-      then a single StepResult is returned.
+    Returns: (script, pre_trigger_args, post_trigger_args)
+      script: The script to invoke
+      pre_trigger_args: All arguments up to and including 'trigger'
+      post_triggers_args: All arguments following 'trigger'
     """
-    assert isinstance(task, SwarmingTask)
-    assert task.task_name not in self._pending_tasks, (
-        'Triggered same task twice: %s' % task.task_name)
-    assert 'os' in task.dimensions, task.dimensions
-    self._pending_tasks.add(task.task_name)
-
     # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
     # always access them on $PATH.
     cipd_packages = list(task.cipd_packages or ())
@@ -742,27 +728,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       env_prefixes.setdefault(k, [path])
 
     # Trigger parameters.
+    pre_trigger_args = ['trigger']
     args = [
-      'trigger',
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
       '--priority', str(task.priority),
-    ]
-
-    # Trigger a specific shard rather than all shards.
-    if task.shard_index is not None:
-      # We must use different logic for swarming.py vs. custom trigger script.
-      if task.trigger_script:
-        args += ['--shard-index', str(task.shard_index)]
-        args += ['--shards', str(task.shards)]
-      else:
-        args += ['--env', 'GTEST_SHARD_INDEX', str(task.shard_index)]
-        args += ['--env', 'GTEST_TOTAL_SHARDS', str(task.shards)]
-    else:
-      args += ['--shards', str(task.shards)]
-
-    # More trigger parameters.
-    args += [
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),
       '--expiration', str(task.expiration),
@@ -857,7 +827,51 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.trigger_script:
       script = task.trigger_script['script']
       if task.trigger_script.get('args'):
-        args = task.trigger_script['args'] + args
+        pre_trigger_args = task.trigger_script['args'] + pre_trigger_args
+
+    return script, pre_trigger_args, args
+
+  def trigger_task(self, task, **kwargs):
+    """Triggers one task.
+
+    It the task is sharded, will trigger all shards. This steps justs posts
+    the task and immediately returns. Use 'collect_task' to wait for a task to
+    finish and grab its result.
+
+    Behaves as a regular recipe step: returns StepData with step results
+    on success or raises StepFailure if step fails.
+
+    Args:
+      task: SwarmingTask instance.
+      kwargs: passed to recipe step constructor as-is.
+    Returns:
+      A list of StepResults. If shards are triggered in separate steps, then
+      each StepResult is returned. If shards are triggered in a single step,
+      then a single StepResult is returned.
+    """
+    assert isinstance(task, SwarmingTask)
+    assert task.task_name not in self._pending_tasks, (
+        'Triggered same task twice: %s' % task.task_name)
+    assert 'os' in task.dimensions, task.dimensions
+    self._pending_tasks.add(task.task_name)
+
+    script, pre_trigger_args, post_trigger_args = (
+        self.generate_trigger_task_shard_args(task, **kwargs))
+
+    # Trigger a specific shard rather than all shards.
+    if task.shard_index is not None:
+      # We must use different logic for swarming.py vs. custom trigger script.
+      if task.trigger_script:
+        pre_trigger_args += ['--shard-index', str(task.shard_index)]
+        pre_trigger_args += ['--shards', str(task.shards)]
+      else:
+        pre_trigger_args += [
+            '--env', 'GTEST_SHARD_INDEX', str(task.shard_index)]
+        pre_trigger_args += ['--env', 'GTEST_TOTAL_SHARDS', str(task.shards)]
+    else:
+      pre_trigger_args += ['--shards', str(task.shards)]
+
+    args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
     try:
