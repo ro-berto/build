@@ -162,7 +162,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome"
+      "[CACHE]/goma/data/dart2js_strong_mac_x64_chrome"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -189,7 +189,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_strong_mac_x64_chrome",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -287,7 +287,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_strong_mac_x64_chrome",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -326,7 +326,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_strong_mac_x64_chrome",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -354,7 +354,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_strong_mac_x64_chrome",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -401,9 +401,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"dart2js-mac-debug-x64-chrome\", \"project\": \"dart\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"dart2js-strong-mac-x64-chrome\", \"project\": \"dart\"}",
       "--buildbot-buildername",
-      "dart2js-mac-debug-x64-chrome"
+      "dart2js-strong-mac-x64-chrome"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -484,17 +484,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win-debug-x64-firefox\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-mac-debug-x64-chrome\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"analyzer-none-linux-release\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-win-release-x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--arch=x64\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"runtime\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"build\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
@@ -502,7 +499,7 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndartk-${system}-${mode}-${arch}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"language_2\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19_2\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--exclude_suite=co19\"@@@",
@@ -516,7 +513,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndartk-${system}-${mode}-${arch}\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"test2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
@@ -538,9 +535,9 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndartk-${system}-${mode}-${arch}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-rfirefox\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"test3\", @@@",
@@ -550,12 +547,62 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-linux-release-chrome\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"analyzer-linux-release\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-nunittest-asserts-${mode}-${system}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndartk-${system}-${mode}-${arch}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"trigger\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"trigger\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"trigger\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo-builder\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"bar-builder\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-nanalyzer-asserts-${system}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-strong-mac-x64-chrome\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-strong-linux-x64-firefox\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-strong-win-x64-chrome\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndart2js-${system}-${runtime}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-e co19, language_2\"@@@",
@@ -576,6 +623,7 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndart2js-${system}-${runtime}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
@@ -586,7 +634,7 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"example-mac\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-mac-release-x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
@@ -608,11 +656,14 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"example-android\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-precomp-android-release-arm\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-ndartkp-android-${mode}-${arch}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"android\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
@@ -770,388 +821,10 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True",
-      "--kill_vsbuild=True"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "kill processes (3)"
-  },
-  {
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "preprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
-      "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/build.py",
-      "-ax64",
-      "-mdebug",
-      "foo",
-      "--bar",
-      "--no-start-goma",
-      "-j200"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "build",
-    "timeout": 1200
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.goma_jsonstatus (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.goma_stat (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_mac_debug_x64_chrome",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.stop_goma (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--log-url-json-file",
-      "/path/to/tmp/json",
-      "--gsutil-py-path",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
-      "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
-      "--build-exit-status",
-      "0",
-      "--goma-stats-file",
-      "[TMP_BASE]/goma_stats",
-      "--goma-counterz-file",
-      "[TMP_BASE]/goma_counterz",
-      "--goma-crash-report-id-file",
-      "[TMP_BASE]/crash_report_id",
-      "--build-id",
-      "8945511751514863184",
-      "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"dart2js-mac-debug-x64-chrome\", \"project\": \"dart\"}",
-      "--buildbot-buildername",
-      "dart2js-mac-debug-x64-chrome"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.upload_log (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",
-      "archive",
-      "--blacklist=(^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](clang_\\w*[/\\\\])?(generated_tests|obj)[/\\\\])|(^tools[/\\\\]sdks)",
-      "--ignore_broken_items",
-      "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/trigger",
-      "-s[CACHE]/builder/sdk/trigger.isolated"
-    ],
-    "name": "upload testing fileset trigger",
-    "stdout": "/path/to/tmp/out",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: trigger_hash@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1175,7 +848,7 @@
       "--shards",
       "1",
       "--task-name",
-      "test1_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357",
+      "test1_shard_1/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1199,7 +872,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:dart2js-mac-debug-x64-chrome",
+      "buildername:dart2js-strong-mac-x64-chrome",
       "--tag",
       "buildnumber:1357",
       "--tag",
@@ -1207,15 +880,13 @@
       "--tag",
       "name:test1_shard_1",
       "--tag",
-      "spec_name:dart.ci:dart2js-mac-debug-x64-chrome",
+      "spec_name:dart.ci:dart2js-strong-mac-x64-chrome",
       "--tag",
       "stepname:test1_shard_1",
       "--cipd-package",
       "browsers:dart/browsers/chrome/${platform}:version:66.0.3359.139",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      "tests/co19_2/src:dart/third_party/co19:",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -1244,11 +915,10 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "-ndart2js-mac-chrome",
       "foo",
-      "-nchrome-foo-debug-x64-bar",
-      "language_2",
-      "co19_2",
-      "--exclude_suite=co19",
+      "--bar",
+      "-e co19, language_2",
       "--copy-coredumps",
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
       "--shards=2",
@@ -1257,7 +927,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1270,9 +940,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_1/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_1/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1298,7 +968,7 @@
       "--shards",
       "1",
       "--task-name",
-      "test1_shard_2/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357",
+      "test1_shard_2/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1322,7 +992,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:dart2js-mac-debug-x64-chrome",
+      "buildername:dart2js-strong-mac-x64-chrome",
       "--tag",
       "buildnumber:1357",
       "--tag",
@@ -1330,15 +1000,13 @@
       "--tag",
       "name:test1_shard_2",
       "--tag",
-      "spec_name:dart.ci:dart2js-mac-debug-x64-chrome",
+      "spec_name:dart.ci:dart2js-strong-mac-x64-chrome",
       "--tag",
       "stepname:test1_shard_2",
       "--cipd-package",
       "browsers:dart/browsers/chrome/${platform}:version:66.0.3359.139",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      "tests/co19_2/src:dart/third_party/co19:",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -1367,11 +1035,10 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "-ndart2js-mac-chrome",
       "foo",
-      "-nchrome-foo-debug-x64-bar",
-      "language_2",
-      "co19_2",
-      "--exclude_suite=co19",
+      "--bar",
+      "-e co19, language_2",
       "--copy-coredumps",
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
       "--shards=2",
@@ -1380,7 +1047,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1393,9 +1060,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_2/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_2/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_2/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_2/Mac/isolate_ha/dart2js-strong-mac-x64-chrome/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1410,6 +1077,26 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/custom_thing.py",
+      "foo",
+      "--bar",
+      "--buildername"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "custom"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--progress=status",
       "--report",
@@ -1417,9 +1104,10 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "-ndart2js-mac-chrome",
       "foo",
       "--bar",
-      "-nchrome-foo-debug-x64-bar",
+      "co19",
       "--copy-coredumps",
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
       "--output_directory",
@@ -1427,7 +1115,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1435,254 +1123,6 @@
       ]
     },
     "name": "test2"
-  },
-  {
-    "cmd": [
-      "buildbucket",
-      "put",
-      "-host",
-      "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-mac-debug-x64-chrome\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-mac-debug-x64-chrome\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-mac-debug-x64-chrome\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-mac-debug-x64-chrome\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "buildbucket.put",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@trigger@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039183808\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-linux-release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        ], @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039183808\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039836208\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-strong-linux-release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        ], @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039836208\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8963024236039228096\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"builder:analyzer-analysis-server-linux\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"parent_buildername:dart-sdk-linux\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        ], @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://ci.chromium.org/p/dart/builds/b8963024236039228096\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@analyzer-linux-release@https://ci.chromium.org/p/dart/builds/b8963024236039183808@@@",
-      "@@@STEP_LINK@analyzer-strong-linux-release@https://ci.chromium.org/p/dart/builds/b8963024236039836208@@@",
-      "@@@STEP_LINK@analyzer-analysis-server-linux@https://ci.chromium.org/p/dart/builds/b8963024236039228096@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/xcodebuild/ReleaseX64/dart",
-      "--bar",
-      "foo.dart"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "dart"
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "trigger shards for test3"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
-      "trigger",
-      "--swarming",
-      "https://chromium-swarm.appspot.com",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--priority",
-      "25",
-      "--shards",
-      "1",
-      "--task-name",
-      "test3_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--expiration",
-      "3600",
-      "--io-timeout",
-      "1200",
-      "--hard-timeout",
-      "3600",
-      "--dimension",
-      "cpu",
-      "x86-64",
-      "--dimension",
-      "os",
-      "Mac",
-      "--dimension",
-      "pool",
-      "dart.tests",
-      "--named-cache",
-      "swarming_module_cache_vpython",
-      ".swarming_module_cache/vpython",
-      "--tag",
-      "build_is_experimental:false",
-      "--tag",
-      "buildername:dart2js-mac-debug-x64-chrome",
-      "--tag",
-      "buildnumber:1357",
-      "--tag",
-      "data:isolate_hash_123",
-      "--tag",
-      "name:test3_shard_1",
-      "--tag",
-      "spec_name:dart.ci:dart2js-mac-debug-x64-chrome",
-      "--tag",
-      "stepname:test3_shard_1",
-      "--cipd-package",
-      "browsers:dart/browsers/firefox/${platform}:version:61",
-      "--cipd-package",
-      "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
-      "--cipd-package",
-      ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
-      "--cipd-package",
-      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
-      "--cipd-package",
-      ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
-      "--env-prefix",
-      "PATH",
-      ".swarming_module",
-      "--env-prefix",
-      "PATH",
-      ".swarming_module/bin",
-      "--env-prefix",
-      "VPYTHON_VIRTUALENV_ROOT",
-      ".swarming_module_cache/vpython",
-      "--isolated",
-      "isolate_hash_123",
-      "--raw-cmd",
-      "--",
-      "tools/test.py",
-      "-ax64",
-      "-mdebug",
-      "--progress=status",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-results",
-      "--write-logs",
-      "foo",
-      "--bar",
-      "-rfirefox",
-      "--copy-coredumps",
-      "--firefox=browsers/Firefox.app/Contents/MacOS/firefox",
-      "--shards=2",
-      "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "trigger shards for test3.[trigger] test3_shard_1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test3_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test3_shard_1/Mac/isolate_ha/dart2js-mac-debug-x64-chrome/1357\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/test.py",
-      "-ax64",
-      "-mdebug",
-      "--progress=status",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-results",
-      "--write-logs",
-      "foo",
-      "--bar",
-      "-rfirefox",
-      "--copy-coredumps",
-      "--firefox=browsers/Firefox.app/Contents/MacOS/firefox",
-      "--shards=2",
-      "--shard=2",
-      "--output_directory",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-mac-debug-x64-chrome-be"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "test3_shard_2"
   },
   {
     "cmd": [],
@@ -1871,83 +1311,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "/path/to/tmp/",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://chromium-swarm.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/swarming_client"
-      ]
-    },
-    "name": "test3_shard_1",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
-    ]
-  },
-  {
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "name": "download previous results"
@@ -1961,7 +1324,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/latest",
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/latest",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -2054,7 +1417,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results-approved-results/builders/dart2js-mac-debug-x64-chrome/approved_results.json",
+      "gs://dart-test-results-approved-results/builders/dart2js-strong-mac-x64-chrome/approved_results.json",
       "LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -2116,28 +1479,6 @@
   {
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "LATEST/flaky.json",
-      "--changed",
-      "--passing",
-      "--failing",
-      "--count",
-      "50",
-      "LATEST/results.json",
-      ""
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflaking.list tests to deflake (test3)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/bots/update_flakiness.dart",
       "-i",
       "LATEST/flaky.json",
@@ -2163,7 +1504,7 @@
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
       "[CACHE]/builder/sdk/LATEST/flaky.json",
-      "dart2js-mac-debug-x64-chrome",
+      "dart2js-strong-mac-x64-chrome",
       "1357",
       "1234567",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -2368,14 +1709,14 @@
       "----",
       "cp",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/revision"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/revision"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/revision@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/revision@@@"
     ]
   },
   {
@@ -2388,14 +1729,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/logs.json"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/logs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload logs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/logs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/logs.json@@@"
     ]
   },
   {
@@ -2408,14 +1749,14 @@
       "----",
       "cp",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/results.json"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/results.json@@@"
     ]
   },
   {
@@ -2428,14 +1769,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/flaky.json"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/flaky.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload flaky.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/flaky.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/flaky.json@@@"
     ]
   },
   {
@@ -2448,14 +1789,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-mac-debug-x64-chrome.json"
+      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-strong-mac-x64-chrome.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "upload new results.gsutil upload flaky_current_dart2js-mac-debug-x64-chrome.json",
+    "name": "upload new results.gsutil upload flaky_current_dart2js-strong-mac-x64-chrome.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-mac-debug-x64-chrome.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-strong-mac-x64-chrome.json@@@"
     ]
   },
   {
@@ -2468,14 +1809,14 @@
       "----",
       "cp",
       "LATEST/approved_results.json",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/approved_results.json"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/approved_results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/approved_results.json@@@"
     ]
   },
   {
@@ -2488,14 +1829,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/runs.json"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/runs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload runs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/1357/runs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/runs.json@@@"
     ]
   },
   {
@@ -2508,14 +1849,14 @@
       "----",
       "cp",
       "1357",
-      "gs://dart-test-results/builders/dart2js-mac-debug-x64-chrome/latest"
+      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/latest"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil update \"latest\" reference",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-mac-debug-x64-chrome/latest@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/latest@@@"
     ]
   },
   {
@@ -2571,7 +1912,7 @@
       "tools/approve_results.dart",
       "--automated-approver",
       "-b",
-      "dart2js-mac-debug-x64-chrome",
+      "dart2js-strong-mac-x64-chrome",
       "--successes-only",
       "-y"
     ],

@@ -81,27 +81,23 @@ TEST_MATRIX = {
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win-debug-x64-firefox",
-        "dart2js-mac-debug-x64-chrome",
-        "analyzer-none-linux-release",
         "vm-kernel-win-release-x64",
       ],
       "meta": {},
       "steps": [{
         "name": "build",
         "script": "tools/build.py",
-        "arguments": ["foo", "--bar"]
+        "arguments": ["--arch=x64", "runtime"]
       }, {
         "name": "test1",
         "script": "tools/test.py",
-        "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar",
+        "arguments": ["foo", "-ndartk-${system}-${mode}-${arch}",
                       "language_2", "co19_2", "--exclude_suite=co19"],
         "shards": 2,
         "fileset": "test"
       }, {
         "name": "test2",
-        "arguments": ["foo", "--bar",
-                      "-n${runtime}-foo-${mode}-${arch}-bar"],
+        "arguments": ["foo", "--bar", "-ndartk-${system}-${mode}-${arch}"],
       }, {
         "name": "trigger",
         "fileset": "trigger",
@@ -112,20 +108,51 @@ TEST_MATRIX = {
         "arguments": ["--bar", "foo.dart"]
       }, {
         "name": "test3",
-        "arguments": ["foo", "--bar", "-rfirefox"],
+        "arguments": ["-ndartk-${system}-${mode}-${arch}", "foo", "--bar"],
         "fileset": "test",
         "shards": 2
       }]
     },
     {
       "builders": [
-        "dart2js-linux-release-chrome"
+        "analyzer-linux-release",
+      ],
+      "meta": {},
+      "steps": [{
+        "name": "build",
+        "script": "tools/build.py"
+      }, {
+        "name": "test1",
+        "script": "tools/test.py",
+        "fileset": "test",
+        "shards": 2,
+        "arguments": ["-nunittest-asserts-${mode}-${system}"]
+      }, {
+        "name": "test2",
+        "arguments": ["foo", "--bar", "-ndartk-${system}-${mode}-${arch}"],
+      }, {
+        "name": "trigger",
+        "fileset": "trigger",
+        "trigger": ["foo-builder", "bar-builder"]
+      }, {
+        "name": "test3",
+        "arguments": ["-nanalyzer-asserts-${system}", "foo", "--bar"],
+        "fileset": "test",
+        "shards": 2
+      }]
+    },
+    {
+      "builders": [
+        "dart2js-strong-mac-x64-chrome",
+        "dart2js-strong-linux-x64-firefox",
+        "dart2js-strong-win-x64-chrome"
       ],
       "meta": {},
       "steps": [{
         "name": "test1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--bar", "-e co19, language_2"],
+        "arguments": ["-ndart2js-${system}-${runtime}", "foo", "--bar",
+                      "-e co19, language_2"],
         "shards": 2,
         "fileset": "test"
       }, {
@@ -134,12 +161,12 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "test2",
-        "arguments": ["foo", "--bar", "co19"],
+        "arguments": ["-ndart2js-${system}-${runtime}", "foo", "--bar", "co19"],
       }]
     },
     {
       "builders": [
-        "example-mac"
+        "vm-kernel-mac-release-x64"
       ],
       "meta": {},
       "steps": [{
@@ -154,13 +181,14 @@ TEST_MATRIX = {
     },
     {
       "builders": [
-        "example-android"
+        "vm-kernel-precomp-android-release-arm"
       ],
       "meta": {},
       "steps": [{
         "name": "android",
         "shards": 2,
-        "fileset": "test"
+        "fileset": "test",
+        "arguments": ["-ndartkp-android-${mode}-${arch}"]
       }]
     }
   ]
@@ -232,7 +260,7 @@ def GenTests(api):
           new_workflow_enabled=True) +
       api.buildbucket.try_build(revision = '3456abce78ef',
           build_number=1357,
-          builder='dart2js-linux-release-chrome-try',
+          builder='dart2js-strong-linux-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       _canned_step(api, 'test1', 2, False) +
@@ -244,13 +272,13 @@ def GenTests(api):
       api.step_data('add fields to result records',
           api.raw_io.output_text(RESULT_DATA)))
 
-  yield (api.test('analyzer-none-linux-release-be') +
+  yield (api.test('analyzer-linux-release') +
       api.properties(
           bot_id='trusty-dart-123',
           new_workflow_enabled=True) +
       api.buildbucket.ci_build(revision = '3456abce78ef',
           build_number=1357,
-          builder='analyzer-none-linux-release-be',
+          builder='analyzer-linux-release',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       _canned_step(api, 'test1', 2, False) +
@@ -268,7 +296,7 @@ def GenTests(api):
   yield (api.test('build-failure-in-matrix') +
       api.buildbucket.ci_build(revision = '3456abce78ef',
           build_number=1357,
-          builder='analyzer-none-linux-release-be',
+          builder='analyzer-linux-release',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       api.step_data('build', retcode=1) +
@@ -312,27 +340,23 @@ def GenTests(api):
   yield (api.test('basic-mac') + api.platform('mac', 64) +
       api.buildbucket.ci_build(revision='a' * 40,
           build_number=1357,
-          builder='dart2js-mac-debug-x64-chrome',
+          builder='dart2js-strong-mac-x64-chrome',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       api.properties(
           clobber='True',
           parent_fileset='isolate_hash_123',
           parent_fileset_name='test') +
-      api.step_data('upload testing fileset trigger',
-                    stdout=api.raw_io.output('trigger_hash')) +
-      api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)) +
       api.step_data('add fields to result records',
           api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('example-mac') + api.platform('mac', 64) +
-      api.buildbucket.ci_build(builder='example-mac',
+      api.buildbucket.ci_build(builder='vm-kernel-mac-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'))
 
   yield (api.test('example-android') + api.platform('linux', 64) +
-      api.buildbucket.ci_build(builder='example-android',
+      api.buildbucket.ci_build(builder='vm-kernel-precomp-android-release-arm',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       _canned_step(api, 'android', 2, False, ' on Android') +

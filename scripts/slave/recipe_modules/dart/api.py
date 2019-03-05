@@ -622,14 +622,6 @@ class DartApi(recipe_api.RecipeApi):
     return self._get_specific_argument(arguments, options) is not None
 
 
-  def _replace_specific_argument(self, arguments, options, replacement):
-    for index,arg in enumerate(arguments):
-      for option in options:
-        if arg.startswith(option):
-          arguments[index] = replacement
-          return None
-
-
   def _run_steps(self, config, isolate_hashes, builder_name, global_config):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
@@ -872,20 +864,6 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-logs']
     if self._report_new_results() or deflake_list:
       test_args.append('--clean-exit')
-    template = self._get_specific_argument(args, ['-n'])
-    if template is not None:
-      for term in ['runtime', 'system', 'mode', 'arch']:
-        if '${%s}' % term in template:
-          template = template.replace('${%s}' % term, environment.get(term, ''))
-      self._replace_specific_argument(args, ['-n'], "-n%s" % template)
-    else:
-      if not self._has_specific_argument(args, ['-m', '--mode']):
-        test_args = ['-m%s' % environment['mode']] + test_args
-      if not self._has_specific_argument(args, ['-a', '--arch']):
-        test_args = ['-a%s' % environment['arch']] + test_args
-      if 'runtime' in environment and not self._has_specific_argument(
-          args, ['-r', '--runtime']):
-        test_args = test_args + ['-r%s' % environment['runtime']]
     args = test_args + args
     if environment['copy-coredumps']:
       args = args + ['--copy-coredumps']
@@ -951,9 +929,7 @@ class DartApi(recipe_api.RecipeApi):
           environment['co19_version']))
 
     ok_ret = 'any' if ignore_failure else {0}
-    runtime = self._get_specific_argument(args, ['-r', '--runtime'])
-    if runtime is None:
-      runtime = environment.get('runtime', None)
+    runtime = environment.get('runtime', None)
     use_xvfb = (runtime in ['chrome', 'firefox'] and
                 environment['system'] == 'linux')
     script = step.script
@@ -1044,6 +1020,13 @@ class DartApi(recipe_api.RecipeApi):
       # Enable Crashpad integration if a Windows bot wants to copy coredumps.
       if self.environment['copy-coredumps'] and self.m.platform.name == 'win':
         self.environment_variables['DART_USE_CRASHPAD'] = '1'
+
+      def _expand_environment(arg):
+        for k, v in environment.iteritems():
+          arg = arg.replace('${%s}' % k, str(v))
+        return arg
+
+      self.args = [_expand_environment(arg) for arg in self.args]
 
 
 class StepResults:
