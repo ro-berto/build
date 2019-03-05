@@ -509,7 +509,9 @@ class DartApi(recipe_api.RecipeApi):
 
   def _approve_successes(self):
     builder_name = self.m.buildbucket.builder_name
-    if builder_name.endswith('-try'):
+    if (builder_name.endswith('-try') or
+        builder_name.endswith('-dev') or
+        builder_name.endswith('-stable')):
       return;
     args = [self.dart_executable(),
             "tools/approve_results.dart",
