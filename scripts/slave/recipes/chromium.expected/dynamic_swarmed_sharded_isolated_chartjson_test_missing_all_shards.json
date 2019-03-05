@@ -36,7 +36,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}, {\"task_id\": \"120100\"}]}"
+      "{\"tasks\": [{\"task_id\": \"10000\"}, {\"task_id\": \"10100\"}]}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -149,7 +149,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"120100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
@@ -158,7 +158,7 @@
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/120100@@@",
+      "@@@STEP_LINK@shard #1 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_FAILURE@@@"
     ]
   }

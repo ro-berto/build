@@ -225,7 +225,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return per_shard_results
 
   def canned_isolated_script_output(self, passing, is_win=False, swarming=False,
-                                    shards=1, shard_indices=None,
+                                    shards=1, shard_index=None,
                                     swarming_internal_failure=False,
                                     isolated_script_passing=True,
                                     isolated_script_retcode=None,
@@ -247,7 +247,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       empty_shards = []
     per_shard_results = []
     per_shard_chartjson_results = []
-    shard_indices = range(shards) if shard_indices is None else shard_indices
+    shard_indices = range(shards) if shard_index is None else [shard_index]
     for i in shard_indices:
       if output_histograms:
         histogramish_results = []

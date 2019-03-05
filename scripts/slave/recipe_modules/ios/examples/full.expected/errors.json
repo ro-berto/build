@@ -942,6 +942,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Run on OS: 'iOS-8.1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake test 4 (iPhone 5s iOS 8.1)/iOS-8.1/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
@@ -953,6 +954,7 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

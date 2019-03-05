@@ -466,7 +466,7 @@ def GenTests(api):
           post_process.StepCommandContains,
           'test_pre_run (without patch)' +
           '.[trigger] base_unittests (without patch)',
-          ['--env', 'GTEST_TOTAL_SHARDS', '3']) +
+          ['--shards', '3']) +
       api.post_process(post_process.DropExpectation)
   )
 
