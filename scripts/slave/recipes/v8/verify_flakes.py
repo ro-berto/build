@@ -12,6 +12,7 @@ failed, which can then be used to alert sheriffs via a gatekeeper rule.
 import ast
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 
 from recipe_engine.post_process import (
     DropExpectation, MustRun, ResultReasonRE, StatusException, StatusFailure,
@@ -115,7 +116,9 @@ def GenTests(api):
             'read V8 ToT revision',
             api.gitiles.make_log_test_data('deadbeef')) +
         api.buildbucket.simulated_schedule_output(
-            {'responses': [{'scheduleBuild': {'id': '123'}}]},
+            rpc_pb2.BatchResponse(
+                responses=[dict(schedule_build=dict(id=123))],
+            ),
             step_name='trigger flako builds') +
         api.buildbucket.simulated_collect_output(
             [api.buildbucket.ci_build_message(build_id=123, status=result)

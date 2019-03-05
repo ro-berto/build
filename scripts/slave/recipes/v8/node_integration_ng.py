@@ -7,6 +7,9 @@
 from recipe_engine.recipe_api import Property
 from recipe_engine.post_process import Filter
 
+from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
+from PB.google.rpc import code as rpc_code_pb2
+
 
 DEPS = [
   'commit_position',
@@ -199,7 +202,12 @@ def GenTests(api):
           triggers=['v8_foobar_perf'],
           v8_tot=True,
       ) + api.buildbucket.simulated_schedule_output(
-          {'responses': [{'error': {'code': 42, 'message': 'foobar'}}]},
+          rpc_pb2.BatchResponse(
+              responses=[dict(error=dict(
+                  code=rpc_code_pb2.PERMISSION_DENIED,
+                  message='foobar',
+              ))],
+          ),
           step_name='trigger',
       ) +
       api.post_process(Filter('trigger', '$result'))
