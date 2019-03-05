@@ -501,7 +501,7 @@ SPEC = {
           'add_tests_as_compile_targets': False,
         },
         ['goma_latest_client']),
-    'chromeos-amd64-generic-rel-goma-latest-client': chromium_apply_configs(
+    'chromeos-amd64-generic-rel-goma-latest': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][
             'chromeos-amd64-generic-rel'],
         ['goma_latest_client']),
