@@ -354,6 +354,31 @@ def GenTests(api):
   )
 
   yield (
+      api.test('trigger_script_simultaneous_shard_dispatch') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'trigger_script': {
+                  'script': '//perf_device_trigger.py',
+                  'requires_simultaneous_shard_dispatch': True,
+              },
+              'swarming': {
+                'can_use_on_swarming_builders': True,
+                'shards': 5
+              },
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      ) +
+      api.post_process(post_process.Filter('[trigger] base_unittests'))
+  )
+
+  yield (
       api.test('trigger_script_invalid') +
       api.properties(
           single_spec={
