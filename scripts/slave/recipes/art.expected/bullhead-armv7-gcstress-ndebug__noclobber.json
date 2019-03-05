@@ -14,7 +14,8 @@
   {
     "cmd": [
       "RECIPE_REPO[depot_tools]/repo",
-      "sync"
+      "sync",
+      "-f"
     ],
     "infra_step": true,
     "name": "repo sync"

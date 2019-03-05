@@ -59,12 +59,12 @@ _TARGET_DEVICE_MAP = {
 def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master-art')
-  api.repo.sync()
+  api.repo.sync("-f")
 
 def full_checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master')
-  api.repo.sync()
+  api.repo.sync("-f")
 
 def clobber(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
