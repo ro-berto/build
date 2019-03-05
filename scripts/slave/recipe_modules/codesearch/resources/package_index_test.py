@@ -25,17 +25,20 @@ CC_COMPILE_ARGUMENTS = (r'clang++ -fsyntax-only -DFOO=\"foo\ bar\" -std=c++11 '
 CC_COMPILE_ARGUMENTS_WIN = ('clang-cl.exe --driver-mode=cl /c test.cc '
                             '/Fotest.obj')
 
-TEST_MOJOM_FILE_CONTENT = 'module test.mojom; interface TheInterface {};'
+TEST_MOJOM_FILE_CONTENT = 'module test.mojom;\nimport "test2.mojom"'
+TEST2_MOJOM_FILE_CONTENT = 'module test2.mojom; interface TheOtherInterface {};'
 # These are a list rather than a string as that's the format that gn desc spits
 # them out in.
 MOJOM_COMPILE_ARGUMENTS = [
-    '--use_bundled_pylibs', 'generate', '-d', '../../', '-I', '../../', '-o',
+    '--use_bundled_pylibs', 'generate', '-d', '../../', '-I', '../../../', '-o',
     'gen', '--bytecode_path', 'gen/bindings',
     '--filelist={{response_file_name}}', '-g', 'c++', '--typemap',
     'gen/mojo_bindings__type_mappings'
 ]
 TEST_MOJOM_GEN_H_FILE_CONTENT = ('#ifndef TEST_MOJOM_H\n#define '
                                  'TEST_MOJOM_H\n#endif\n')
+TEST2_MOJOM_GEN_H_FILE_CONTENT = ('#ifndef TEST2_MOJOM_H\n#define '
+                                  'TEST2_MOJOM_H\n#endif\n')
 
 # Test values for corpus, root, build config, and out dir
 LEGACY_CORPUS = 'chromium'
@@ -73,9 +76,17 @@ class PackageIndexTest(unittest.TestCase):
     self.test_mojom_file_name = os.path.join(src_dir, 'test.mojom')
     set_content(self.test_mojom_file_name, TEST_MOJOM_FILE_CONTENT)
 
+    self.test2_mojom_file_name = os.path.join(src_dir, 'test2.mojom')
+    set_content(self.test2_mojom_file_name, TEST2_MOJOM_FILE_CONTENT)
+
     self.test_mojom_gen_h_file_name = os.path.join(self.build_dir,
                                                    'gen/test.mojom.h')
     set_content(self.test_mojom_gen_h_file_name, TEST_MOJOM_GEN_H_FILE_CONTENT)
+
+    self.test2_mojom_gen_h_file_name = os.path.join(self.build_dir,
+                                                    'gen/test2.mojom.h')
+    set_content(self.test2_mojom_gen_h_file_name,
+                TEST2_MOJOM_GEN_H_FILE_CONTENT)
 
     compdb_dictionary = {
         'directory': self.build_dir,
@@ -98,12 +109,18 @@ class PackageIndexTest(unittest.TestCase):
       ]))
 
     gn_dictionary = {
-        "//:test_mojo_bindings__generator": {
+        "//:test_mojom__generator": {
             "args": MOJOM_COMPILE_ARGUMENTS,
             "script": "//mojo/mojom_bindings_generator.py",
             "sources": ["//test.mojom"],
             "outputs": ["//out/chromium-linux/Debug/gen/test.mojom.h"],
-        }
+        },
+        "//:test_mojom2__generator": {
+            "args": MOJOM_COMPILE_ARGUMENTS,
+            "script": "//mojo/mojom_bindings_generator.py",
+            "sources": ["//test2.mojom"],
+            "outputs": ["//out/chromium-linux/Debug/gen/test2.mojom.h"],
+        },
     }
     with tempfile.NamedTemporaryFile(
         suffix='.json', delete=False) as self.gn_targets_file:
@@ -167,20 +184,24 @@ class PackageIndexTest(unittest.TestCase):
             hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest(),
         self.test_mojom_file_name:
             hashlib.sha256(TEST_MOJOM_FILE_CONTENT).hexdigest(),
+        self.test2_mojom_file_name:
+            hashlib.sha256(TEST2_MOJOM_FILE_CONTENT).hexdigest(),
         self.test_mojom_gen_h_file_name:
             hashlib.sha256(TEST_MOJOM_GEN_H_FILE_CONTENT).hexdigest(),
+        self.test2_mojom_gen_h_file_name:
+            hashlib.sha256(TEST2_MOJOM_GEN_H_FILE_CONTENT).hexdigest(),
     }
 
     # Now _GenerateUnitFiles() can be called.
     self.index_pack._GenerateUnitFiles()
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
-    # should only contain the two unit files for the two compilation units in
-    # our test compilation database and gn target list, plus an extra one for
+    # should only contain the three unit files for the three compilation units
+    # in our test compilation database and gn target list, plus an extra one for
     # the legacy C++ unit.
     units_dir = os.path.join(self.index_pack.index_directory, 'units')
     unit_files = os.listdir(units_dir)
-    self.assertEqual(3, len(unit_files))
+    self.assertEqual(4, len(unit_files))
     for unit_file_name in unit_files:
       with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
@@ -291,41 +312,95 @@ class PackageIndexTest(unittest.TestCase):
                 'build_config': BUILD_CONFIG,
             }])
 
-        self.assertEquals(compilation_unit_dictionary['source_file'],
-                          ['../../../test.mojom'])
-        self.assertEquals(compilation_unit_dictionary['output_key'],
-                          'gen/test.mojom.h')
-
-        # Expect 2 entries: the file itself and its generated header.
-        self.assertEquals(len(compilation_unit_dictionary['required_input']), 2)
-
-        test_mojom_entry = compilation_unit_dictionary['required_input'][0]
-        self.assertEquals(test_mojom_entry['info']['digest'],
-                          hashlib.sha256(TEST_MOJOM_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_mojom_entry['info']['path'],
-                          '../../../test.mojom')
-        self.assertEquals(test_mojom_entry['v_name']['path'], 'src/test.mojom')
-        self.assertEquals(test_mojom_entry['v_name']['corpus'], CORPUS)
-
-        test_mojom_gen_h_entry = compilation_unit_dictionary['required_input'][
-            1]
-        self.assertEquals(
-            test_mojom_gen_h_entry['info']['digest'],
-            hashlib.sha256(TEST_MOJOM_GEN_H_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_mojom_gen_h_entry['info']['path'],
-                          'gen/test.mojom.h')
-        self.assertEquals(test_mojom_gen_h_entry['v_name']['path'],
-                          'src/out/chromium-linux/Debug/gen/test.mojom.h')
-        self.assertEquals(test_mojom_gen_h_entry['v_name']['corpus'], CORPUS)
-
-        expected_compile_arguments = [
-            '--use_bundled_pylibs', 'generate', '-d', '../../', '-I', '../../',
-            '-o', 'gen', '--bytecode_path', 'gen/bindings', '-g', 'c++',
-            '--typemap', 'gen/mojo_bindings__type_mappings',
+        if compilation_unit_dictionary['source_file'] == [
             '../../../test.mojom'
-        ]
-        self.assertEquals(compilation_unit_dictionary['argument'],
-                          expected_compile_arguments)
+        ]:
+          self.assertEquals(compilation_unit_dictionary['output_key'],
+                            'gen/test.mojom.h')
+
+          # Expect 3 entries: the file itself, its generated header, and the
+          # other Mojom file that it depends on.
+          self.assertEquals(
+              len(compilation_unit_dictionary['required_input']), 3)
+
+          test_mojom_entry = compilation_unit_dictionary['required_input'][0]
+          self.assertEquals(test_mojom_entry['info']['digest'],
+                            hashlib.sha256(TEST_MOJOM_FILE_CONTENT).hexdigest())
+          self.assertEquals(test_mojom_entry['info']['path'],
+                            '../../../test.mojom')
+          self.assertEquals(test_mojom_entry['v_name']['path'],
+                            'src/test.mojom')
+          self.assertEquals(test_mojom_entry['v_name']['corpus'], CORPUS)
+
+          test_mojom_gen_h_entry = compilation_unit_dictionary[
+              'required_input'][1]
+          self.assertEquals(
+              test_mojom_gen_h_entry['info']['digest'],
+              hashlib.sha256(TEST_MOJOM_GEN_H_FILE_CONTENT).hexdigest())
+          self.assertEquals(test_mojom_gen_h_entry['info']['path'],
+                            'gen/test.mojom.h')
+          self.assertEquals(test_mojom_gen_h_entry['v_name']['path'],
+                            'src/out/chromium-linux/Debug/gen/test.mojom.h')
+          self.assertEquals(test_mojom_gen_h_entry['v_name']['corpus'], CORPUS)
+
+          test2_mojom_entry = compilation_unit_dictionary[
+              'required_input'][2]
+          self.assertEquals(
+              test2_mojom_entry['info']['digest'],
+              hashlib.sha256(TEST2_MOJOM_FILE_CONTENT).hexdigest())
+          self.assertEquals(test2_mojom_entry['info']['path'],
+                            '../../../test2.mojom')
+          self.assertEquals(test2_mojom_entry['v_name']['path'],
+                            'src/test2.mojom')
+          self.assertEquals(test_mojom_gen_h_entry['v_name']['corpus'], CORPUS)
+
+          expected_compile_arguments = [
+              '--use_bundled_pylibs', 'generate', '-d', '../../', '-I',
+              '../../../', '-o', 'gen', '--bytecode_path', 'gen/bindings', '-g',
+              'c++', '--typemap', 'gen/mojo_bindings__type_mappings',
+              '../../../test.mojom'
+          ]
+          self.assertEquals(compilation_unit_dictionary['argument'],
+                            expected_compile_arguments)
+        elif compilation_unit_dictionary['source_file'] == [
+            '../../../test2.mojom'
+        ]:
+          # Expect 2 entries: the file itself and its generated header.
+          self.assertEquals(
+              len(compilation_unit_dictionary['required_input']), 2)
+
+          test_mojom_entry = compilation_unit_dictionary['required_input'][0]
+          self.assertEquals(
+              test_mojom_entry['info']['digest'],
+              hashlib.sha256(TEST2_MOJOM_FILE_CONTENT).hexdigest())
+          self.assertEquals(test_mojom_entry['info']['path'],
+                            '../../../test2.mojom')
+          self.assertEquals(test_mojom_entry['v_name']['path'],
+                            'src/test2.mojom')
+          self.assertEquals(test_mojom_entry['v_name']['corpus'], CORPUS)
+
+          test2_mojom_gen_h_entry = compilation_unit_dictionary[
+              'required_input'][1]
+          self.assertEquals(
+              test2_mojom_gen_h_entry['info']['digest'],
+              hashlib.sha256(TEST2_MOJOM_GEN_H_FILE_CONTENT).hexdigest())
+          self.assertEquals(test2_mojom_gen_h_entry['info']['path'],
+                            'gen/test2.mojom.h')
+          self.assertEquals(test2_mojom_gen_h_entry['v_name']['path'],
+                            'src/out/chromium-linux/Debug/gen/test2.mojom.h')
+          self.assertEquals(test2_mojom_gen_h_entry['v_name']['corpus'], CORPUS)
+
+          expected_compile_arguments = [
+              '--use_bundled_pylibs', 'generate', '-d', '../../', '-I',
+              '../../../', '-o', 'gen', '--bytecode_path', 'gen/bindings', '-g',
+              'c++', '--typemap', 'gen/mojo_bindings__type_mappings',
+              '../../../test2.mojom'
+          ]
+          self.assertEquals(compilation_unit_dictionary['argument'],
+                            expected_compile_arguments)
+        else:
+          self.fail('Expected only test.mojom and test2.mojom, got %r' %
+                    compilation_unit_dictionary['source_file'])
       else:
         self.fail(
             'Expected only c++ and mojom compilation units, got %s' % language)
@@ -380,12 +455,12 @@ class PackageIndexTest(unittest.TestCase):
     self.index_pack._GenerateUnitFiles()
 
     # Because we only called _GenerateUnitFiles(), the index pack directory
-    # should only contain the two unit files for the two compilation units in
-    # our test compilation database and gn target list, plus an extra one for
+    # should only contain the three unit files for the three compilation units
+    # in our test compilation database and gn target list, plus an extra one for
     # the legacy C++ unit.
     units_dir = os.path.join(self.index_pack.index_directory, 'units')
     unit_files = os.listdir(units_dir)
-    self.assertEqual(3, len(unit_files))
+    self.assertEqual(4, len(unit_files))
     for unit_file_name in unit_files:
       with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
@@ -419,6 +494,8 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(compilation_unit_dictionary['argument'],
                           expected_compile_arguments)
       else:
+        # There's nothing different about the Mojom units between platforms, so
+        # don't bother repeating the tests from above.
         self.assertEquals(compilation_unit_dictionary['v_name']['language'],
                           'mojom')
 

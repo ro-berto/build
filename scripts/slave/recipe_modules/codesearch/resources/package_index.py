@@ -24,6 +24,12 @@ import zipfile
 from contextlib import closing
 from windows_shell_split import WindowsShellSplit
 
+# Used for finding required_input for a Mojom target, by finding the imports in
+# its source.
+# This could possibly have false positives (e.g. if there's an import in a
+# C-style multiline comment), but it shouldn't have any false negatives, which
+# is more important here.
+MOJOM_IMPORT_RE = re.compile(r'^\s*import\s*"([^"]*)"', re.MULTILINE)
 
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
@@ -50,24 +56,6 @@ class IndexPack(object):
     if corpus is None:
       raise Exception('ERROR: --corpus required')
 
-    with open(compdb_path, 'rb') as json_commands_file:
-      # The list of JSON dictionaries, each describing one compilation unit.
-      self.compdb = json.load(json_commands_file)
-    with open(gn_targets_path, 'rb') as json_gn_targets_file:
-      gn_targets_dict = json.load(json_gn_targets_file)
-
-      # We only care about certain mojom targets. Filter it down here so we
-      # don't need to do so both times we iterate over it.
-      self.mojom_targets = [
-          # Flatten targets with multiple sources. Invoking the bindings
-          # generator with multiple files is equivalent to invoking it on each
-          # of those files individually in sequence.
-          dict(gn_target, sources=[source])
-          for gn_target in gn_targets_dict.itervalues()
-          if self._IsMojomTarget(gn_target)
-          for source in gn_target['sources']
-      ]
-
     self.root_dir = root_dir
     self.corpus = corpus
     self.root = root
@@ -90,6 +78,20 @@ class IndexPack(object):
     os.makedirs(self.files_directory)
     os.makedirs(self.units_directory)
 
+    with open(compdb_path, 'rb') as json_commands_file:
+      # The list of JSON dictionaries, each describing one compilation unit.
+      self.compdb = json.load(json_commands_file)
+    with open(gn_targets_path, 'rb') as json_gn_targets_file:
+      gn_targets_dict = json.load(json_gn_targets_file)
+
+      # We only care about certain mojom targets. Filter it down here so we
+      # don't need to do so both times we iterate over it.
+      self.mojom_targets = [
+          dict(target, imported_files=self._FindMojomImports(target))
+          for target in gn_targets_dict.itervalues()
+          if self._IsMojomTarget(target)
+      ]
+
   def _IsMojomTarget(self, gn_target):
     """Predicate to check if a GN target is a Mojom target.
 
@@ -108,6 +110,46 @@ class IndexPack(object):
         any(gn_target['args'][i:i + 2] == ['-g', 'c++']
             for i in range(len(gn_target['args']) - 1)) and
         '--generate_message_ids' not in gn_target['args'])
+
+  def _FindMojomImports(self, gn_target):
+    """Find the direct imports of a Mojom target.
+
+    We do this by using a quick and dirty regex to extract files that are
+    actually imported, rather than using the gn dependency structure. A Mojom
+    file is allowed to import any file it transitively depends on, which usually
+    includes way more files than it actually includes.
+
+    Args:
+      gn_target: The GN target for the file to analyse.
+    """
+    args = gn_target['args']
+    import_paths = [
+        args[i + 1] for i in range(len(args) - 1) if args[i] == '-I'
+    ]
+
+    imports = []
+    for source in gn_target['sources']:
+      path = os.path.join(self.root_dir, self.out_dir,
+                          self._ConvertGnPath(source))
+      with open(path, 'r') as f:
+        contents = f.read()
+
+      for imp in re.findall(MOJOM_IMPORT_RE, contents):
+        for import_path in import_paths:
+          out_relative_path = os.path.join(import_path, imp)
+          if os.path.exists(
+              os.path.join(self.root_dir, self.out_dir, out_relative_path)):
+            # Don't include a file multiple times if it's imported by different
+            # files in the same compilation unit.
+            if out_relative_path not in imports:
+              imports.append(out_relative_path)
+            break
+        else:
+          # Just print a warning, don't fail completely.
+          print "couldn't resolve import %s" % imp
+
+    return imports
+
 
   def close(self):
     """Cleans up any temporary dirs created in the constructor."""
@@ -170,15 +212,14 @@ class IndexPack(object):
 
     return os.path.normpath(os.path.join(self.out_dir, path))
 
-  def _CorrespondingGeneratedHeader(self, gn_target):
-    """Given a mojom gn target, return the corresponding generated header
+  def _CorrespondingGeneratedHeader(self, source_target):
+    """Given a mojom file target, return the corresponding generated header
     filename.
 
     e.g. //foo/bar.mojom -> gen/foo/bar.mojom.h
     """
 
-    source_mojom = gn_target['sources'][0]
-    return 'gen/%s.h' % source_mojom[len('//'):]
+    return 'gen/%s.h' % source_target[len('//'):]
 
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
@@ -225,17 +266,19 @@ class IndexPack(object):
           self._AddDataFile(fname)
 
     for target in self.mojom_targets:
-      # Add the .mojom file itself.
-      self._AddDataFile(
-          os.path.join(self.root_dir, self.out_dir,
-                       self._ConvertGnPath(target['sources'][0])))
+      for source in target['sources']:
+        # Add the .mojom file itself.
+        self._AddDataFile(
+            os.path.join(self.root_dir, self.out_dir,
+                         self._ConvertGnPath(source)))
 
-      # Add the C++ header file generated from this mojom file. The Kythe mojom
-      # analyser can't generate this itself, so it needs it supplied in order to
-      # wire up the mojom identifiers to their generated C++ counterparts.
-      self._AddDataFile(
-          os.path.join(self.root_dir, self.out_dir,
-                       self._CorrespondingGeneratedHeader(target)))
+        # Add the C++ header file generated from this mojom file. The Kythe
+        # mojom analyser can't generate this itself, so it needs it supplied in
+        # order to wire up the mojom identifiers to their generated C++
+        # counterparts.
+        self._AddDataFile(
+            os.path.join(self.root_dir, self.out_dir,
+                         self._CorrespondingGeneratedHeader(source)))
 
   def _GenerateUnitFiles(self):
     """Produces the unit files for the index pack.
@@ -293,17 +336,26 @@ class IndexPack(object):
     for target in self.mojom_targets:
       unit_dictionary = {}
 
-      source_file = self._ConvertGnPath(target['sources'][0])
-      unit_dictionary['source_file'] = [source_file]
-      generated_header = self._CorrespondingGeneratedHeader(target)
-      unit_dictionary['output_key'] = generated_header
+      source_files = [
+          self._ConvertGnPath(source) for source in target['sources']
+      ]
+      unit_dictionary['source_file'] = source_files
+      generated_headers = [
+          self._CorrespondingGeneratedHeader(source)
+          for source in target['sources']
+      ]
+      # If this compilation unit includes multiple output files, we don't have
+      # anything sensible to use as the output_key. But it's fine to leave this
+      # empty if so.
+      if len(generated_headers) == 1:
+        unit_dictionary['output_key'] = generated_headers[0]
 
       # gn produces an unsubstituted {{response_file_name}} for filelist. We
-      # can't work with this, so we remove it and add the source file as a
+      # can't work with this, so we remove it and add the source files as a
       # positional argument instead.
       unit_dictionary['argument'] = [
           arg for arg in target['args'] if not arg.startswith('--filelist=')
-      ] + [source_file]
+      ] + source_files
 
       unit_dictionary['v_name'] = {
           'corpus': self.corpus,
@@ -315,11 +367,14 @@ class IndexPack(object):
             'build_config': self.build_config,
         }]
 
-      # TODO(orodley): In order to do name resolution we'll need to add all the
-      # files that are directly referenced (not the full transitive closure
-      # though).
+      # Files in a module might import other files in the same module. Don't
+      # include the file twice if so.
+      imported_files = [
+          imp for imp in target['imported_files'] if imp not in source_files
+      ]
+
       required_inputs = []
-      for required_file in [source_file, generated_header]:
+      for required_file in source_files + generated_headers + imported_files:
         path = os.path.normpath(
             os.path.join(self.root_dir, self.out_dir, required_file))
         # We don't want to fail completely if the file doesn't exist.
@@ -536,6 +591,9 @@ class IndexPack(object):
           index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
           rel_path = os.path.relpath(abs_path, index_parent)
           archive.write(abs_path, rel_path)
+
+def _ReplaceSuffix(string, curr_suffix, new_suffix):
+  return string[:len(string) - len(curr_suffix)] + new_suffix
 
 
 WARNING_SWITCH_RE = re.compile(r'\s[-/][Ww]\S+')
