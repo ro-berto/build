@@ -500,6 +500,8 @@ class DartApi(recipe_api.RecipeApi):
       judgement_args += ["--failing", "--unapproved"]
     with self.m.step.defer_results():
       self.m.step('test results', judgement_args)
+      doc_url = 'https://goto.google.com/dart-status-file-free-workflow';
+      self.m.step.active_result.presentation.links['Documentation'] = doc_url
       # Show only the links with non-empty output (something happened).
       for link, contents in links.iteritems():
         if contents != '': # pragma: no cover

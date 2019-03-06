@@ -1163,7 +1163,8 @@
     "name": "test results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@results.json@@@@",
-      "@@@STEP_LOG_END@results.json@@@"
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LINK@Documentation@https://goto.google.com/dart-status-file-free-workflow@@@"
     ]
   },
   {
