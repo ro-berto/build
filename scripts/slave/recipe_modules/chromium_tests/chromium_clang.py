@@ -49,6 +49,12 @@ def config(name,
 
   if official:
       cfg['gclient_apply_config'] = ['chrome_internal']
+      cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
+      cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
+      cfg['swarming_dimensions'] = {
+        'pool': 'chrome.tests',
+        'os': 'Ubuntu-14.04',
+      }
 
   return name, cfg
 
