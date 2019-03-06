@@ -246,23 +246,6 @@ SPEC = {
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
     },
-    'CrWinAsanCov': {
-      'chromium_config': 'chromium_win_clang_asan_tot',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'compile_targets': [ 'chromium_builder_asan' ],
-      # add_tests_as_compile_targets not needed for the asan bot, it doesn't
-      # build everything.
-    },
     'ToTAndroidASan': {
       'chromium_config': 'clang_tot_android_asan',
       'chromium_apply_config': ['mb'],
