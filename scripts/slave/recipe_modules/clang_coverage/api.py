@@ -404,10 +404,10 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       temp_dir = self.m.path.mkdtemp()
       self.m.gsutil.download(
           _BUCKET_NAME,
-          'llvm_cov_multithread',
+          'llvm_cov_optimized',
           temp_dir,
           name='download llvm-cov')
-      llvm_cov = temp_dir.join('llvm_cov_multithread')
+      llvm_cov = temp_dir.join('llvm_cov_optimized')
 
     args = [
         '--src-path',
