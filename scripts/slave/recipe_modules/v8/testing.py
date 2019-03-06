@@ -822,7 +822,8 @@ class Failure(object):
                     list(self.test_step_config.test_args),
     }
     return (
-        'echo \'%s\' | buildbucket.py put -b luci.v8.try -n v8_flako -p -'
+        'echo \'%s\' | '
+        'buildbucket.py put -b luci.v8.try.triggered -n v8_flako -p -'
         % json.dumps(properties, sort_keys=True)
     )
 
