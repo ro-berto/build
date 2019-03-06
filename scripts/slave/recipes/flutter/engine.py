@@ -13,6 +13,7 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/osx_sdk',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -28,9 +29,10 @@ DEPS = [
 BUCKET_NAME = 'flutter_infra'
 GOMA_JOBS = '200'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
+GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
 
 def GetCloudPath(api, path):
-  git_hash = api.properties.get('revision')
+  git_hash = api.buildbucket.gitiles_commit.id
   if api.runtime.is_experimental:
     return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
@@ -673,10 +675,13 @@ def GetCheckout(api):
   soln.name = 'src/flutter'
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
-  soln.revision = api.properties.get('revision')
+  soln.revision = api.buildbucket.gitiles_commit.id
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
+  src_cfg.repo_path_map[
+    'https://chromium.googlesource.com/external/github.com/flutter/flutter'
+  ] = ('src/flutter', 'HEAD')
   api.gclient.c = src_cfg
   api.gclient.c.got_revision_mapping['src/flutter'] = 'got_engine_revision'
   api.bot_update.ensure_checkout()
@@ -722,24 +727,24 @@ def RunSteps(api):
 # pylint: enable=line-too-long
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
-    test = (api.test(platform) + api.platform(platform, 64)
-        + api.properties(mastername='client.flutter',
-              buildername='%s Engine' % platform.capitalize(),
-              bot_id='fake-m1')
-        + api.runtime(is_luci=True, is_experimental=False))
+    test = (
+      api.test(platform) + api.platform(platform, 64) +
+      api.buildbucket.ci_build(
+        builder='%s Engine' % platform.capitalize(),
+        git_repo=GIT_REPO,
+        project='flutter',
+      )
+    )
     if platform == 'mac':
       test += (api.properties(jazzy_version='0.8.4'))
     yield test
 
   yield (
-    api.test('linux_on_alternate_branch') +
-    api.properties(mastername='client.flutter', buildername='Linux Engine',
-                   bot_id='fake-m1', branch='some_branch')
-  )
-
-  yield (
     api.test('experimental') +
-    api.properties(mastername='client.flutter', buildername='Linux Engine',
-                   bot_id='fake-m1', branch='some_branch') +
+    api.buildbucket.ci_build(
+        builder='Linux Engine',
+        git_repo=GIT_REPO,
+        project='flutter',
+    ) +
     api.runtime(is_luci=True, is_experimental=True)
   )
