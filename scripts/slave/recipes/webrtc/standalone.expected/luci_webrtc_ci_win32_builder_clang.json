@@ -593,7 +593,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"swarm_hashes\": {\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"swarm_hashes\": {\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/0\"}}], \"timestamp\": 1337000003000000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@input {",
@@ -625,7 +625,7 @@
       "                    ]",
       "                }, ",
       "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
-      "                \"title\": \"Win32 Builder (Clang)/1337\"",
+      "                \"title\": \"Win32 Builder (Clang)/0\"",
       "            }",
       "        }",
       "    ], ",
