@@ -322,7 +322,7 @@
     "cmd": [
       "[BUILDER_CACHE]/node-ci/out/Release/node_cctest"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "run cctest"
   },
   {
@@ -336,11 +336,13 @@
       "--mode=release",
       "--flaky-tests",
       "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
       "--test-root",
       "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
       "addons"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "test addons"
   },
   {
@@ -354,9 +356,11 @@
       "--mode=release",
       "--flaky-tests",
       "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "test default"
   },
   {
@@ -370,11 +374,13 @@
       "--mode=release",
       "--flaky-tests",
       "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
       "--test-root",
       "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
       "js-native-api"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "test js-native-api"
   },
   {
@@ -388,11 +394,13 @@
       "--mode=release",
       "--flaky-tests",
       "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
       "--test-root",
       "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
       "node-api"
     ],
-    "cwd": "[BUILDER_CACHE]/node-ci",
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "test node-api"
   },
   {

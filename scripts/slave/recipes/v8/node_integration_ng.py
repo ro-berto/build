@@ -112,7 +112,7 @@ def RunSteps(api, triggers, v8_tot):
           bucket='ci')
 
   # Run tests.
-  with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout'].join('node')):
     api.step('run cctest', [build_output_path.join('node_cctest')])
 
     suites = [
@@ -127,6 +127,7 @@ def RunSteps(api, triggers, v8_tot):
         '-j8',
         '--mode=%s' % api.chromium.c.build_config_fs.lower(),
         '--flaky-tests', 'run',
+        '--shell', build_output_path.join('node'),
       ]
       if use_test_root:
         args += ['--test-root', build_output_path.join('gen', 'node', 'test')]
