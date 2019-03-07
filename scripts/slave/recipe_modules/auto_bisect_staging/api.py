@@ -283,7 +283,8 @@ class AutoBisectStagingApi(recipe_api.RecipeApi):
     if not tests:  # pragma: no cover
       return
     self.m.chromium_swarming.configure_swarming(
-        'chromium', precommit=False, mastername=mastername)
+        'chromium', precommit=False, mastername=mastername,
+        path_to_testing_dir=self.m.path['checkout'].join('testing'))
     test_runner = self.m.chromium_tests.create_test_runner(tests)
 
     with self.m.chromium_tests.wrap_chromium_tests(bot_config, tests):

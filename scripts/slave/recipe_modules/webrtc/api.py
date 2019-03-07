@@ -273,7 +273,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
-        mastername=self.mastername)
+        mastername=self.mastername, path_to_testing_dir=self.m.path.join(
+            self._working_dir, 'src', 'testing'))
     self.m.chromium_swarming.set_default_dimension(
         'os',
         self.m.chromium_swarming.prefered_os_dimension(

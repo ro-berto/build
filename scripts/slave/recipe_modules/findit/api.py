@@ -337,8 +337,6 @@ class FinditApi(recipe_api.RecipeApi):
       for key, value in tester_config.get('swarming_dimensions', {}
                                           ).iteritems():
         api.chromium_swarming.set_default_dimension(key, value)
-    # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
-    api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
     # Record the current revision of the checkout and HEAD of the git cache.
     checked_out_revision, cached_revision = self.record_previous_revision(
@@ -348,6 +346,9 @@ class FinditApi(recipe_api.RecipeApi):
     api.chromium_tests.prepare_checkout(
         bot_config,
         root_solution_revision=revision)
+
+    # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
+    api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
     api.step.active_result.presentation.properties['target_buildername'] = (
         target_buildername)

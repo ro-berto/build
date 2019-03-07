@@ -6,6 +6,9 @@ import json
 
 DEPS = [
   'isolate',
+  'chromium_checkout',
+  'chromium_swarming',
+  'depot_tools/gclient',
   'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -15,7 +18,6 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
-  'chromium_swarming',
   'swarming_client',
   'test_utils',
 ]
@@ -43,6 +45,10 @@ def RunSteps(api, platforms, custom_trigger_script,
              named_caches, service_account, wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
+
+  bot_config = {}
+  api.gclient.set_config('chromium')
+  api.chromium_checkout.ensure_checkout(bot_config)
 
   # Ensure swarming_client version is fresh enough.
   api.chromium_swarming.check_client_version(step_test_data=(0, 8, 6))

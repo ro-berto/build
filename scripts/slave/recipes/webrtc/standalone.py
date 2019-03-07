@@ -39,11 +39,13 @@ def RunSteps(api):
     step_result.presentation.status = api.step.WARNING
     return
 
+
+  webrtc.checkout()
+
   webrtc.configure_swarming()
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  webrtc.checkout()
   if webrtc.should_download_audio_quality_tools:
     webrtc.download_audio_quality_tools()
   if webrtc.should_download_video_quality_tools:

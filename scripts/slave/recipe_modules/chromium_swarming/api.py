@@ -219,6 +219,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     self._task_output_stdout = 'all'
 
+    # Path to chromium source testing directory.
+    self._path_to_testing_dir = None
+
   def initialize(self):
     self.add_default_tag(
         'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
@@ -459,6 +462,14 @@ class SwarmingApi(recipe_api.RecipeApi):
       'win': 'Windows-7-SP1',
     }[platform]
 
+  def merge_script_path(self, name):
+    """Returns the path to a merge script.
+
+    This assumes that a chromium checkout exists, and the chromium module is
+    configured correctly.
+    """
+    return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
+
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            shard_indices=None, task_output_dir=None, extra_args=None,
            idempotent=None, cipd_packages=None, build_properties=None,
@@ -624,7 +635,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     extra_args.append(
         '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json')
 
-    merge = merge or {'script': self.resource('standard_gtest_merge.py')}
+    merge = merge or {'script': self.merge_script_path(
+        'standard_gtest_merge.py')}
 
     # Make a task, configure it to be collected through shim script.
     task = self.task(title, isolated_hash, extra_args=extra_args,
@@ -673,7 +685,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'perftest-output.json')
 
     merge = merge or {
-      'script': self.resource('standard_isolated_script_merge.py')
+      'script': self.merge_script_path('standard_isolated_script_merge.py')
     }
 
     task = self.task(title, isolated_hash, extra_args=extra_args,
@@ -1121,6 +1133,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     ]
 
     merge_script = (task.merge.get('script')
+                    # This script still exists here, since there are many
+                    # clients which depend on this module which don't
+                    # necessarily have a chromium checkout (it's hard to verify
+                    # they do via expectations). Leave this here for now, since
+                    # this is a sane default to ship with the module.
                     or self.resource('noop_merge.py'))
     merge_args = (task.merge.get('args') or [])
 
@@ -1595,7 +1612,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     })
 
   def configure_swarming(self, project_name, precommit, mastername=None,
-                         default_priority=None):
+                         default_priority=None, path_to_testing_dir=None):
     """Configures default swarming dimensions and tags.
 
     Uses the 'chromium' global config to determine target platform defaults,
@@ -1610,6 +1627,10 @@ class SwarmingApi(recipe_api.RecipeApi):
           default priority of swarming tasks.
       default_priority: optional default_priority to use. Will override the
           priority name inherited from the mastername (or the global default).
+      path_to_testing_dir: The path to a local directory mirroring
+          https://chromium.googlesource.com/chromium/src/+/master/testing. This
+          is needed to access merge and trigger scripts. If unset, this module
+          will look at self.m.chromium_checkout.working_dir.
     """
 
     # Set platform-specific default dims.
@@ -1660,6 +1681,14 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # TODO(tikuta): Remove this (crbug.com/894045).
     self.use_go_client = True # pylint: disable=attribute-defined-outside-init
+
+    if path_to_testing_dir:
+      self._path_to_testing_dir = path_to_testing_dir
+    else:
+      # TODO(martiniss): Assert that working_dir is not None once the
+      # auto_bisect module is deleted.
+      self._path_to_testing_dir = self.m.chromium_checkout.working_dir.join(
+          'src', 'testing')
 
 
 class SwarmingTask(object):

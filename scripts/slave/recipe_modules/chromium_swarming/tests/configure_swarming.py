@@ -8,6 +8,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_swarming',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/runtime',
 ]
@@ -19,7 +20,9 @@ def RunSteps(api):
   api.chromium_swarming.configure_swarming(
       'chromium',
       precommit=api.properties['precommit'],
-      default_priority=api.properties.get('default_priority'))
+      default_priority=api.properties.get('default_priority'),
+      # Fake path to make tests pass.
+      path_to_testing_dir=api.path['start_dir'].join('checkout'))
 
 
 def GenTests(api):

@@ -474,13 +474,13 @@ Args:
 Returns:
   An instance of bisector.Bisector.
 
-&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#312)(self, deploy_script, deploy_apks, deploy_args):**
+&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#313)(self, deploy_script, deploy_apks, deploy_args):**
 
 Installs apk on the android device.
 
 &mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/auto_bisect/api.py#204)(self, \*args, \*\*kwargs):**
 
-&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#320)(self, deploy_script, args=None):**
+&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#321)(self, deploy_script, args=None):**
 
 Install android-chrome apk on device.
 
@@ -531,7 +531,7 @@ Sets SVN repo url for triggering build jobs.
 
 &mdash; **def [start\_test\_run\_for\_bisect](/scripts/slave/recipe_modules/auto_bisect/api.py#231)(self, update_step, bot_db, test_config_params, skip_download=False, \*\*kwargs):**
 
-&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect/api.py#338)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
+&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect/api.py#339)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
 
 Starts a recipe bisect job, perf test run, or legacy bisect run.
 
@@ -550,7 +550,7 @@ Args:
   bot_db: A BotConfigAndTestDB object, used for some job types.
   kwargs: Args to use only for legacy bisect.
 
-&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect/api.py#395)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
+&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect/api.py#396)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
 
 Compares samples using catapult's statistics implementation.
 
@@ -594,13 +594,13 @@ Args:
 Returns:
   An instance of bisector.Bisector.
 
-&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#312)(self, deploy_script, deploy_apks, deploy_args):**
+&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#313)(self, deploy_script, deploy_apks, deploy_args):**
 
 Installs apk on the android device.
 
 &mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#204)(self, \*args, \*\*kwargs):**
 
-&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#320)(self, deploy_script, args=None):**
+&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#321)(self, deploy_script, args=None):**
 
 Install android-chrome apk on device.
 
@@ -651,7 +651,7 @@ Sets SVN repo url for triggering build jobs.
 
 &mdash; **def [start\_test\_run\_for\_bisect](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#231)(self, update_step, bot_db, test_config_params, skip_download=False, \*\*kwargs):**
 
-&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#338)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
+&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#339)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
 
 Starts a recipe bisect job, perf test run, or legacy bisect run.
 
@@ -670,7 +670,7 @@ Args:
   bot_db: A BotConfigAndTestDB object, used for some job types.
   kwargs: Args to use only for legacy bisect.
 
-&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#395)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
+&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#396)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
 
 Compares samples using catapult's statistics implementation.
 
@@ -1421,7 +1421,7 @@ Args:
   name: The name of the step.
 ### *recipe_modules* / [chromium\_swarming](/scripts/slave/recipe_modules/chromium_swarming)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [SwarmingApi](/scripts/slave/recipe_modules/chromium_swarming/api.py#157)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1443,7 +1443,7 @@ General usage:
 
 See also example.py for concrete code.
 
-&mdash; **def [add\_default\_tag](/scripts/slave/recipe_modules/chromium_swarming/api.py#415)(self, tag):**
+&mdash; **def [add\_default\_tag](/scripts/slave/recipe_modules/chromium_swarming/api.py#418)(self, tag):**
 
 Adds a tag to the Swarming tasks triggered.
 
@@ -1452,11 +1452,11 @@ tasks run for a day to calculate the cost of a type of type (CQ, ASAN, etc).
 
 Tags can be added per individual task.
 
-&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/chromium_swarming/api.py#684)(self, step_test_data=None):**
+&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/chromium_swarming/api.py#696)(self, step_test_data=None):**
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1012)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1024)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -1468,7 +1468,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1597)(self, project_name, precommit, mastername=None, default_priority=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1614)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1484,8 +1484,12 @@ Args:
       default priority of swarming tasks.
   default_priority: optional default_priority to use. Will override the
       priority name inherited from the mastername (or the global default).
+  path_to_testing_dir: The path to a local directory mirroring
+      https://chromium.googlesource.com/chromium/src/+/master/testing. This
+      is needed to access merge and trigger scripts. If unset, this module
+      will look at self.m.chromium_checkout.working_dir.
 
-&emsp; **@property**<br>&mdash; **def [default\_dimensions](/scripts/slave/recipe_modules/chromium_swarming/api.py#350)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_dimensions](/scripts/slave/recipe_modules/chromium_swarming/api.py#353)(self):**
 
 Returns a copy of the default Swarming dimensions to run task on.
 
@@ -1498,7 +1502,7 @@ Example:
 
 This value can be changed per individual task.
 
-&emsp; **@property**<br>&mdash; **def [default\_env](/scripts/slave/recipe_modules/chromium_swarming/api.py#373)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_env](/scripts/slave/recipe_modules/chromium_swarming/api.py#376)(self):**
 
 Returns a copy of the default environment variable to run tasks with.
 
@@ -1507,19 +1511,19 @@ variables can be specified for each task.
 
 This value can be changed per individual task.
 
-&emsp; **@default_expiration.setter**<br>&mdash; **def [default\_expiration](/scripts/slave/recipe_modules/chromium_swarming/api.py#273)(self, value):**
+&emsp; **@default_expiration.setter**<br>&mdash; **def [default\_expiration](/scripts/slave/recipe_modules/chromium_swarming/api.py#276)(self, value):**
 
-&emsp; **@default_hard_timeout.setter**<br>&mdash; **def [default\_hard\_timeout](/scripts/slave/recipe_modules/chromium_swarming/api.py#290)(self, value):**
+&emsp; **@default_hard_timeout.setter**<br>&mdash; **def [default\_hard\_timeout](/scripts/slave/recipe_modules/chromium_swarming/api.py#293)(self, value):**
 
-&emsp; **@default_idempotent.setter**<br>&mdash; **def [default\_idempotent](/scripts/slave/recipe_modules/chromium_swarming/api.py#329)(self, value):**
+&emsp; **@default_idempotent.setter**<br>&mdash; **def [default\_idempotent](/scripts/slave/recipe_modules/chromium_swarming/api.py#332)(self, value):**
 
-&emsp; **@default_io_timeout.setter**<br>&mdash; **def [default\_io\_timeout](/scripts/slave/recipe_modules/chromium_swarming/api.py#309)(self, value):**
+&emsp; **@default_io_timeout.setter**<br>&mdash; **def [default\_io\_timeout](/scripts/slave/recipe_modules/chromium_swarming/api.py#312)(self, value):**
 
-&emsp; **@default_priority.setter**<br>&mdash; **def [default\_priority](/scripts/slave/recipe_modules/chromium_swarming/api.py#400)(self, value):**
+&emsp; **@default_priority.setter**<br>&mdash; **def [default\_priority](/scripts/slave/recipe_modules/chromium_swarming/api.py#403)(self, value):**
 
-&emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#345)(self, value):**
+&emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#348)(self, value):**
 
-&mdash; **def [generate\_trigger\_task\_shard\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#761)(self, task, \*\*kwargs):**
+&mdash; **def [generate\_trigger\_task\_shard\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#773)(self, task, \*\*kwargs):**
 
 Generates the arguments for triggered shards.
 
@@ -1530,11 +1534,11 @@ Returns: (script, pre_trigger_args, post_trigger_args)
   pre_trigger_args: All arguments up to and including 'trigger'
   post_triggers_args: All arguments following 'trigger'
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1548)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1565)(self, task):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1438)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1455)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1547,7 +1551,7 @@ Args:
 Returns:
   '[<prefix>] <task title> on <OS>'
 
-&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#603)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
+&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#614)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -1558,9 +1562,9 @@ results from multiple shards and place it in path provided by
 
 For meaning of the rest of the arguments see 'task' method.
 
-&mdash; **def [initialize](/scripts/slave/recipe_modules/chromium_swarming/api.py#222)(self):**
+&mdash; **def [initialize](/scripts/slave/recipe_modules/chromium_swarming/api.py#225)(self):**
 
-&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#649)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
+&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#661)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -1573,7 +1577,14 @@ can be passed to merge the collected results and post-process them.
 
 For meaning of the rest of the arguments see 'task' method.
 
-&emsp; **@staticmethod**<br>&mdash; **def [prefered\_os\_dimension](/scripts/slave/recipe_modules/chromium_swarming/api.py#444)(platform):**
+&mdash; **def [merge\_script\_path](/scripts/slave/recipe_modules/chromium_swarming/api.py#465)(self, name):**
+
+Returns the path to a merge script.
+
+This assumes that a chromium checkout exists, and the chromium module is
+configured correctly.
+
+&emsp; **@staticmethod**<br>&mdash; **def [prefered\_os\_dimension](/scripts/slave/recipe_modules/chromium_swarming/api.py#447)(platform):**
 
 Given a platform name returns the prefered Swarming OS dimension.
 
@@ -1585,29 +1596,29 @@ Recipes are free to use other OS dimension if there's a need for it. For
 example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
 dimension.
 
-&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1040)(self):**
+&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1052)(self):**
 
 Report statistics on all tasks ran so far.
 
-&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/chromium_swarming/api.py#235)(self, value):**
+&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/chromium_swarming/api.py#238)(self, value):**
 
 Service account json to use for swarming.
 
-&mdash; **def [set\_default\_dimension](/scripts/slave/recipe_modules/chromium_swarming/api.py#365)(self, key, value):**
+&mdash; **def [set\_default\_dimension](/scripts/slave/recipe_modules/chromium_swarming/api.py#368)(self, key, value):**
 
-&mdash; **def [set\_default\_env](/scripts/slave/recipe_modules/chromium_swarming/api.py#384)(self, key, value):**
+&mdash; **def [set\_default\_env](/scripts/slave/recipe_modules/chromium_swarming/api.py#387)(self, key, value):**
 
-&emsp; **@show_outputs_ref_in_collect_step.setter**<br>&mdash; **def [show\_outputs\_ref\_in\_collect\_step](/scripts/slave/recipe_modules/chromium_swarming/api.py#431)(self, value):**
+&emsp; **@show_outputs_ref_in_collect_step.setter**<br>&mdash; **def [show\_outputs\_ref\_in\_collect\_step](/scripts/slave/recipe_modules/chromium_swarming/api.py#434)(self, value):**
 
-&emsp; **@show_shards_in_collect_step.setter**<br>&mdash; **def [show\_shards\_in\_collect\_step](/scripts/slave/recipe_modules/chromium_swarming/api.py#440)(self, value):**
+&emsp; **@show_shards_in_collect_step.setter**<br>&mdash; **def [show\_shards\_in\_collect\_step](/scripts/slave/recipe_modules/chromium_swarming/api.py#443)(self, value):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [summary](/scripts/slave/recipe_modules/chromium_swarming/api.py#226)(self):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [summary](/scripts/slave/recipe_modules/chromium_swarming/api.py#229)(self):**
 
-&emsp; **@swarming_server.setter**<br>&mdash; **def [swarming\_server](/scripts/slave/recipe_modules/chromium_swarming/api.py#245)(self, value):**
+&emsp; **@swarming_server.setter**<br>&mdash; **def [swarming\_server](/scripts/slave/recipe_modules/chromium_swarming/api.py#248)(self, value):**
 
 Changes URL of Swarming server to use.
 
-&mdash; **def [task](/scripts/slave/recipe_modules/chromium_swarming/api.py#462)(self, title, isolated_hash, ignore_task_failure=False, shards=1, shard_indices=None, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, builder_name=None, build_number=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None, task_to_retry=None):**
+&mdash; **def [task](/scripts/slave/recipe_modules/chromium_swarming/api.py#473)(self, title, isolated_hash, ignore_task_failure=False, shards=1, shard_indices=None, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, builder_name=None, build_number=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None, task_to_retry=None):**
 
 Returns a new SwarmingTask instance to run an isolated executable on
 Swarming.
@@ -1691,9 +1702,9 @@ Args:
       successful shards from 'task_to_retry' will be merged with the new
       shards in this task.
 
-&emsp; **@task_output_stdout.setter**<br>&mdash; **def [task\_output\_stdout](/scripts/slave/recipe_modules/chromium_swarming/api.py#410)(self, value):**
+&emsp; **@task_output_stdout.setter**<br>&mdash; **def [task\_output\_stdout](/scripts/slave/recipe_modules/chromium_swarming/api.py#413)(self, value):**
 
-&mdash; **def [trigger\_all\_task\_shards](/scripts/slave/recipe_modules/chromium_swarming/api.py#914)(self, task, shard_indices, \*\*kwargs):**
+&mdash; **def [trigger\_all\_task\_shards](/scripts/slave/recipe_modules/chromium_swarming/api.py#926)(self, task, shard_indices, \*\*kwargs):**
 
 Triggers all shards as a single step.
 
@@ -1703,7 +1714,7 @@ task._trigger_output.
 Returns:
   StepResult from the step.
 
-&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#689)(self, task, \*\*kwargs):**
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#701)(self, task, \*\*kwargs):**
 
 Triggers one task.
 
@@ -1721,7 +1732,7 @@ Args:
 Returns:
   A list of StepResults, one for each shard triggered.
 
-&mdash; **def [trigger\_task\_shard](/scripts/slave/recipe_modules/chromium_swarming/api.py#958)(self, task, shard_index, \*\*kwargs):**
+&mdash; **def [trigger\_task\_shard](/scripts/slave/recipe_modules/chromium_swarming/api.py#970)(self, task, shard_index, \*\*kwargs):**
 
 Triggers a single shard for a task.
 
@@ -1732,11 +1743,11 @@ Returns: (step_result, json_output)
 Raises:
   InfraFailure if shard cannot be triggered.
 
-&emsp; **@verbose.setter**<br>&mdash; **def [verbose](/scripts/slave/recipe_modules/chromium_swarming/api.py#255)(self, value):**
+&emsp; **@verbose.setter**<br>&mdash; **def [verbose](/scripts/slave/recipe_modules/chromium_swarming/api.py#258)(self, value):**
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1337)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1354)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 
@@ -2383,7 +2394,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#357)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#358)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 
@@ -4079,49 +4090,49 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#205)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#477)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#478)(self):**
 
 &emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#213)(self):**
 
 &emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#209)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#368)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#369)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#308)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#309)(self, \*\*kwargs):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#410)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#411)(self, phase=None):**
 
 &mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#251)(self, phase=None):**
 
 &mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#268)(self):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#340)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#341)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#348)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#349)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#372)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#373)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#422)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#423)(self, files=None, base_dir=None):**
 
 &mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#221)(self, bucketname, buildername):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#418)(self):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#419)(self):**
 
 &emsp; **@property**<br>&mdash; **def [master\_config](/scripts/slave/recipe_modules/webrtc/api.py#224)(self):**
 
 &emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#228)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#461)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#462)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#518)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#519)(self):**
 
 &mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#232)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#377)(self, phase=None):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#378)(self, phase=None):**
 
-&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#395)(self):**
+&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#396)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#438)(self, phase=None):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#439)(self, phase=None):**
 
 Add a suite of test steps.
 
@@ -4132,7 +4143,7 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#244)(self):**
 
-&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#534)(self, name, step_result):**
+&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#535)(self, name, step_result):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -4641,14 +4652,14 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_trybot.py#62)(api):**
 ### *recipes* / [chromium\_swarming:examples/full](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#40)(api, platforms, custom_trigger_script, show_outputs_ref_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, wait_for_tasks):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#42)(api, platforms, custom_trigger_script, show_outputs_ref_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, wait_for_tasks):**
 ### *recipes* / [chromium\_swarming:tests/configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#8): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#8): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#16)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#17)(api):**
 ### *recipes* / [chromium\_swarming:tests/shards\_to\_retry](/scripts/slave/recipe_modules/chromium_swarming/tests/shards_to_retry.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/shards_to_retry.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4761,9 +4772,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#77)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps\_with\_specific\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#10): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#10): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#53)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#54)(api, mastername, buildername):**
 ### *recipes* / [chromium\_tests:tests/api/wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

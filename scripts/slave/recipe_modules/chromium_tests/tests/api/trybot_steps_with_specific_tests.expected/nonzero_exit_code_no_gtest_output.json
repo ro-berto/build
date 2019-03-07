@@ -486,7 +486,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/standard_gtest_merge.py",
+      "[START_DIR]/checkout/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",

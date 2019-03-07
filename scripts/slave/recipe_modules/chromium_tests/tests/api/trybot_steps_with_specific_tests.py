@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
     'test_utils',
@@ -66,7 +67,10 @@ def RunSteps(api, mastername, buildername):
 
   api.chromium_tests.configure_build(bot_config_object)
 
-  api.chromium_swarming.configure_swarming('chromium', precommit=True)
+  api.chromium_swarming.configure_swarming(
+      'chromium', precommit=True,
+      # Fake path to make tests pass.
+      path_to_testing_dir=api.path['start_dir'].join('checkout'))
 
   update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
 

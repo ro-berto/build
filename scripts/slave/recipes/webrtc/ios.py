@@ -430,9 +430,9 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
 
-  webrtc.configure_swarming()
-
   webrtc.checkout()
+
+  webrtc.configure_swarming()
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()

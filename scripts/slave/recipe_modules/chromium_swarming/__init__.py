@@ -5,6 +5,7 @@
 DEPS = [
   'build',
   'chromium',
+  'chromium_checkout',
   'isolate',
   'recipe_engine/buildbucket',
   'recipe_engine/context',

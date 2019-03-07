@@ -1283,14 +1283,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Applies build/test configurations from bot_config_object.
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
-    self.m.chromium_swarming.configure_swarming(
-      'chromium', precommit=True)
-
     self.m.chromium.apply_config('trybot_flavor')
 
     # This rolls chromium checkout, applies the patch, runs gclient sync to
     # update all DEPS.
     bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
+
+    self.m.chromium_swarming.configure_swarming(
+      'chromium', precommit=True)
 
     # Determine the tests that would be run if this were a CI tester.
     # Tests are instances of class(Test) from chromium_tests/steps.py. These
