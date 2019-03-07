@@ -14,6 +14,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
+    'test_utils',
 ]
 
 
@@ -27,6 +28,14 @@ _TEST_BUILDERS = {
       'staging-chromium-test-rel': {
         'gclient_config': 'chromium',
         'chromium_tests_apply_config': ['staging'],
+      },
+      'retry-shards': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'retry_failed_shards': True,
+      },
+      'retry-shards-test': {
+        'bot_type': 'tester',
       },
     },
   },
@@ -42,6 +51,15 @@ _TEST_BUILDERS = {
 _TEST_TRYBOTS = {
   'tryserver.chromium.test': {
     'builders': {
+      'retry-shards': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.test',
+            'buildername': 'retry-shards',
+            'tester': 'retry-shards-test',
+          },
+        ],
+      },
       'staging-chromium-rel': {
         'bot_ids': [
           {
@@ -243,3 +261,217 @@ def GenTests(api):
           post_process.DoesNotRun, 'isolate base_unittests') +
       api.post_process(post_process.DropExpectation)
     )
+
+
+  CUSTOM_PROPS = api.properties.tryserver(
+      mastername='tryserver.chromium.test',
+      buildername='retry-shards',
+      builders=_TEST_BUILDERS,
+      trybots=_TEST_TRYBOTS,
+      swarm_hashes={
+        'base_unittests':
+        '[dummy hash for base_unittests]'
+      },
+      path_config='kitchen')
+
+  yield (
+      api.test('retry_shards') +
+      CUSTOM_PROPS +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (retry shards with patch)') +
+      api.post_process(
+          post_process.DoesNotRun, 'base_unittests (without patch)') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('retry_shards_without_patch') +
+      CUSTOM_PROPS +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (retry shards with patch)') +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (without patch)') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('retry_shards_invalid') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='retry-shards',
+          builders=_TEST_BUILDERS,
+          trybots=_TEST_TRYBOTS,
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.gtest_results('invalid_results', 1)) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (retry shards with patch)') +
+      api.post_process(
+          post_process.DoesNotRun, 'base_unittests (without patch)') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('retry_shards_invalid_retry') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='retry-shards',
+          builders=_TEST_BUILDERS,
+          trybots=_TEST_TRYBOTS,
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.gtest_results('invalid results', 1)) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (with patch)') +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (retry shards with patch)') +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (without patch)') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('retry_shards_all_invalid_results') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='retry-shards',
+          builders=_TEST_BUILDERS,
+          trybots=_TEST_TRYBOTS,
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [
+                      {
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.gtest_results('invalid results', 1)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.gtest_results('invalid results', 1)) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (with patch)') +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (retry shards with patch)') +
+      api.post_process(
+          post_process.MustRun, 'base_unittests (without patch)') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )

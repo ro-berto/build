@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import copy
 import datetime
 import functools
 import hashlib
@@ -464,7 +465,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            builder_name=None, build_number=None,
            merge=None, trigger_script=None, named_caches=None,
            service_account=None, raw_cmd=None, env_prefixes=None, env=None,
-           optional_dimensions=None):
+           optional_dimensions=None, task_to_retry=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -542,6 +543,10 @@ class SwarmingApi(recipe_api.RecipeApi):
           dimensions that specify on what Swarming slaves tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions.
+      * task_to_retry: Task object. If set, indicates that this task is a
+          (potentially partial) retry of another task. When collecting, the
+          successful shards from 'task_to_retry' will be merged with the new
+          shards in this task.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -592,6 +597,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         raw_cmd=raw_cmd,
         env_prefixes=env_prefixes,
         optional_dimensions=optional_dimensions,
+        task_to_retry=task_to_retry,
     )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
@@ -1459,6 +1465,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # We store this now, and add links to all shards first, before failing the
     # build. Format is tuple of (error message, shard that failed)
     infra_failures = []
+    failed_shards = []
     exist_failure = False
 
     links = step_result.presentation.links
@@ -1506,6 +1513,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         else:
           display_text = 'shard #%d (failed)' % index
         exist_failure = True
+        failed_shards.append(index)
 
       if shard and self.show_outputs_ref_in_collect_step:
         outputs_ref = shard.get('outputs_ref')
@@ -1517,6 +1525,11 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       if url and self.show_shards_in_collect_step:
         links[display_text] = url
+
+    # Keep track of this in case we want to retry failed shards later. Clients
+    # will decide if they want to retry, we just keep track of failed shards
+    # here.
+    task.failed_shards = failed_shards
 
     self._display_pending(summary.get('shards', []), step_result.presentation)
 
@@ -1550,7 +1563,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       '-verbose',
     ]
 
-    args.extend(('-requests-json', self.m.json.input(task.trigger_output)))
+    args.extend(('-requests-json', self.m.json.input(task.collect_cmd_input())))
     if self.service_account_json:
       args.extend(['-service-account-json', self.service_account_json])
     return args
@@ -1658,7 +1671,8 @@ class SwarmingTask(object):
                idempotent, extra_args, collect_step, task_output_dir,
                cipd_packages=None, build_properties=None, merge=None,
                trigger_script=None, named_caches=None, service_account=None,
-               raw_cmd=None, env_prefixes=None, optional_dimensions=None):
+               raw_cmd=None, env_prefixes=None, optional_dimensions=None,
+               task_to_retry=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1748,6 +1762,9 @@ class SwarmingTask(object):
           dimensions that specify on what Swarming slaves tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions.
+      * task_to_retry: Task object. If set, indicates that this task is a
+          (potentially partial) retry of another task. When collecting, should
+          re-use some shards from the retried task.
     """
 
     self._trigger_output = None
@@ -1785,6 +1802,10 @@ class SwarmingTask(object):
     else:
       self.optional_dimensions = None
     self.wait_for_capacity = False
+    self.task_to_retry = task_to_retry
+    # Specific shards which failed. Used to decide which shards to retry by
+    # clients.
+    self.failed_shards = []
 
   @property
   def task_name(self):
@@ -1806,15 +1827,33 @@ class SwarmingTask(object):
     # This is used for isolated script tasks.
     tasks = sorted(self._trigger_output['tasks'].values(),
                    key=lambda x: x['shard_index'])
+    if self.task_to_retry:
+      old_tasks = copy.deepcopy(self.task_to_retry.trigger_output['tasks'])
+
+      # Overwrite old task outputs with new ones.
+      for task in tasks:
+        old_tasks[task['shard_index']] = task
+
+      tasks = old_tasks.values()
+
     return {
-      'tasks': [{'task_id': task['task_id']} for task in tasks],
+        'tasks': {task['shard_index']: task for task in tasks},
+    }
+
+  def collect_cmd_input(self):
+    """Returns a list of tasks.
+
+    Intended to be passed as an argument to `swarming collect`.
+    """
+    return {
+        'tasks': [{
+            'task_id': task['task_id']
+        } for task in self.trigger_output['tasks'].values()]
     }
 
   def get_task_shard_output_dirs(self):
     """Return the directory of each task shard outputs."""
-    tasks = sorted(self._trigger_output['tasks'].values(),
-                   key=lambda x: x['shard_index'])
-    return [task['task_id'] for task in tasks]
+    return self.get_task_ids()
 
   def get_shard_view_url(self, index, trigger_output=None):
     """Returns URL of HTML page with shard details or None if not available.
@@ -1826,7 +1865,7 @@ class SwarmingTask(object):
       trigger_output: The JSON output of the triggered swarming task.
     """
     if trigger_output is None:
-      trigger_output = self._trigger_output
+      trigger_output = self.trigger_output
     if trigger_output and trigger_output.get('tasks'):
       for shard_dict in trigger_output['tasks'].itervalues():
         if shard_dict['shard_index'] == index:
@@ -1838,7 +1877,7 @@ class SwarmingTask(object):
     Works only after the task has been successfully triggered.
     """
     task_ids = []
-    if self._trigger_output and self._trigger_output.get('tasks'):
-      for shard_dict in self._trigger_output['tasks'].itervalues():
+    if self.trigger_output and self.trigger_output.get('tasks'):
+      for shard_dict in self.trigger_output['tasks'].itervalues():
         task_ids.append(shard_dict['task_id'])
     return task_ids

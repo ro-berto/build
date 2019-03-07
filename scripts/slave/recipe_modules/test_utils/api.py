@@ -227,12 +227,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_tests
 
-  def run_tests_with_patch(self, caller_api, tests):
+  def run_tests_with_patch(self, caller_api, tests, retry_failed_shards=False):
     """Run tests and returns failures.
 
     Args:
       caller_api: The api object given by the caller of this module.
       tests: A list of test suites to run with the patch.
+      retry_failed_shards: If true, attempts to retry failed shards of swarming
+                           tests.
 
     Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       invalid_test_suites: Test suites that do not have valid test results.
@@ -242,17 +244,44 @@ class TestUtilsApi(recipe_api.RecipeApi):
           otherwise unspecified reasons. This is a superset of
           invalid_test_suites.
     """
-    invalid_test_suites, all_failing_tests = self.run_tests(
+    invalid_test_suites, all_failing_test_suites = self.run_tests(
         caller_api, tests, 'with patch', sort_by_shard=True)
 
     for t in invalid_test_suites:
+      # No need to re-add a test_suite that is already in the list.
+      if t not in all_failing_test_suites:
+        all_failing_test_suites.append(t)
+
+    if retry_failed_shards:
+      # Assume that non swarming test retries probably won't help.
+      swarming_test_suites = []
+      for test_suite in all_failing_test_suites:
+        if test_suite.runs_on_swarming:
+          swarming_test_suites.append(test_suite)
+
+      if swarming_test_suites:
+        new_invalid, _ = self.run_tests(
+            caller_api, swarming_test_suites, 'retry shards with patch',
+            sort_by_shard=True)
+        # If we have valid test results from one of the runs of a test suite,
+        # then that test suite by definition doesn't have invalid test results.
+        invalid_test_suites = list(set(invalid_test_suites).intersection(
+            set(new_invalid)))
+
+        # Some suites might be passing now, since we retried some tests. Remove
+        # any suites which are now fully passing.
+        # with_patch_failures_including_retry appropriately takes 'retry shards
+        # with patch' and 'with patch' runs into account.
+        for t in all_failing_test_suites:
+          valid, failures = t.with_patch_failures_including_retry(caller_api)
+          if valid and not failures:
+            all_failing_test_suites.remove(t)
+
+    # Set metadata about invalid test suites.
+    for t in invalid_test_suites:
       self._invalid_test_results(t)
 
-      # No need to re-add a test_suite that is already in the list.
-      if t not in all_failing_tests:
-        all_failing_tests.append(t)
-
-    return (invalid_test_suites, all_failing_tests)
+    return (invalid_test_suites, all_failing_test_suites)
 
   def _invalid_test_results(self, test):
     """Marks test results as invalid.
@@ -340,7 +369,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # from 'with patch'.
       ignored_failures = set()
 
-    valid_results, failures = test_suite.with_patch_failures(caller_api)
+    valid_results, failures = test_suite.with_patch_failures_including_retry(
+        caller_api)
     if valid_results:
       new_failures = failures - ignored_failures
     else:
@@ -372,7 +402,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Assuming both 'with patch' and 'retry with patch' produced valid results,
     # look for the intersection of failures.
-    valid_results, initial_failures = test_suite.with_patch_failures(caller_api)
+    valid_results, initial_failures = (
+        test_suite.with_patch_failures_including_retry(caller_api))
     if valid_results:
       repeated_failures = new_failures & initial_failures
     else:
@@ -397,7 +428,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
-    valid_results, new_failures = test_suite.with_patch_failures(caller_api)
+    valid_results, new_failures = (
+        test_suite.with_patch_failures_including_retry(caller_api))
 
     if not valid_results: # pragma: nocover
       self.m.python.infra_failing_step(
@@ -416,31 +448,43 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """Returns test failures that FindIt views as potential flakes.
 
     This method returns tests that:
-      * Failed in 'with patch', but not because of UNKNOWN/NOTRUN
+      * Failed in 'with patch' or 'retry shards with patch', but not because of
+        UNKNOWN/NOTRUN
       * Succeeded in 'without patch'
+
+    Test failures in 'retry shards with patch' can be considered as valid
+    flakes, even if 'with patch' has no valid results'.
 
     Returns:
       findit_potential_flakes: A set of test names that should be considered
                                candidates as flaky tests.
     """
-    valid_results, with_patch_failures = (
-        test_suite.with_patch_failures(caller_api))
-    if not valid_results:
+    valid_results = test_suite.has_valid_results(caller_api, 'with patch')
+    valid_retry_shards_results = test_suite.has_valid_results(
+        caller_api, 'retry shards with patch')
+    if not (valid_results or valid_retry_shards_results):
       return set()
+
+    suffix = 'with patch' if valid_results else 'retry shards with patch'
+    with_patch_failures = set(test_suite.deterministic_failures(
+        caller_api, suffix))
 
     # FindIt wants to ignore failures that have status UNKNOWN/NOTRUN. This
     # logic will eventually live in FindIt, but for now, is implemented here.
-    with_patch_not_run = test_suite.findit_notrun(caller_api, 'with patch')
-    with_patch_failures = with_patch_failures - with_patch_not_run
+    not_run = test_suite.findit_notrun(caller_api, suffix)
+    with_patch_failures = with_patch_failures - not_run
 
     # To reduce false positives, FindIt only wants tests to be marked as
     # potentially flaky if the the test passed in 'without patch'.
     valid_results, ignored_failures = (
         test_suite.without_patch_failures_to_ignore(caller_api))
-    if not valid_results:
+    # If we've retried a shard, and we didn't run 'without patch', then the
+    # tests passed the second time, and there wasn't a need to run the tests
+    # without the patch. Only give up if 'without patch' never runs.
+    if not (valid_results or valid_retry_shards_results):
       return set()
 
-    return with_patch_failures - ignored_failures
+    return with_patch_failures - (ignored_failures or set())
 
   def summarize_findit_flakiness(self, caller_api, test_suites):
     """Exports a summary of flakiness for post-processing by FindIt.
@@ -466,15 +510,24 @@ class TestUtilsApi(recipe_api.RecipeApi):
       potential_test_flakes = self._findit_potential_test_flakes(caller_api,
                                                                  test_suite)
 
-      # We only want to consider tests that failed in 'with patch' and succeeded
-      # in 'retry with patch'. If a test didn't run in both of these steps, then
-      # we ignore it.
-      valid_results, retry_with_patch_successes, _ = (
+      # We only want to consider tests that failed in 'with patch' but succeeded
+      # when retried, either by 'retry shards with patch' or 'retry with patch'.
+      # If a test didn't run in either of these steps, then we ignore it.
+      valid_retry_with_patch_results, retry_with_patch_successes, _ = (
           test_suite.retry_with_patch_results(caller_api))
-      if not valid_results:
+      valid_retry_shards_results, retry_shards_successes, _ = (
+          test_suite.shard_retry_with_patch_results(caller_api))
+      if not (valid_retry_shards_results or valid_retry_with_patch_results):
         continue
 
-      flaky_tests = potential_test_flakes & retry_with_patch_successes
+      flaky_tests = set()
+      if valid_retry_shards_results:
+        flaky_tests = flaky_tests.union(
+            potential_test_flakes & retry_shards_successes)
+      if valid_retry_with_patch_results:
+        flaky_tests = flaky_tests.union(
+            potential_test_flakes & retry_with_patch_successes)
+
       if flaky_tests:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         step_layer_flakiness[step_name] = sorted(flaky_tests)
@@ -493,10 +546,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
           potential_test_flakes = (
               potential_test_flakes - retry_with_patch_successes)
 
+      valid_retry_shards_results, retry_shards_successes, _ = (
+          test_suite.shard_retry_with_patch_results(caller_api))
+      if valid_retry_shards_results:
+        potential_test_flakes = (
+            potential_test_flakes - retry_shards_successes)
+
       if potential_test_flakes:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         potential_build_flakiness[step_name] = sorted(potential_test_flakes)
 
+    # TODO(crbug.com/939063): Surface information about retried shards.
     if step_layer_flakiness or potential_build_flakiness:
       output = { 'Step Layer Flakiness' : step_layer_flakiness,
                  'Failing With Patch Tests That Caused Build Failure' :

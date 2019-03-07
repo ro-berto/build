@@ -5,6 +5,7 @@
 import json
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import Property
 
 DEPS = [
     'chromium_swarming',
@@ -14,12 +15,55 @@ DEPS = [
     'test_utils',
 ]
 
+TEST_BUILDERS = {
+    'chromium.test': {
+        'builders': {
+            'retry-failed-shards': {
+                'chromium_config': 'chromium',
+                'gclient_config': 'chromium',
+                'retry_failed_shards': True,
+            },
+        },
+    },
+}
 
-def RunSteps(api):
-  bot_config = api.chromium_tests.trybots[
-      api.properties['mastername']]['builders'][api.properties['buildername']]
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_config['bot_ids'])
+
+
+_TEST_TRYBOTS = {
+  'tryserver.chromium.test': {
+    'builders': {
+      'retry-failed-shards': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.test',
+            'buildername': 'retry-failed-shards',
+          },
+        ],
+      },
+    },
+  },
+
+}
+PROPERTIES = {
+  'mastername': Property(default=None, kind=str),
+  'buildername': Property(default=None, kind=str),
+}
+
+
+def RunSteps(api, mastername, buildername):
+  trybots = api.chromium_tests.trybots
+  if buildername in _TEST_TRYBOTS.get(mastername, {}).get('builders', {}):
+    trybots = _TEST_TRYBOTS
+
+  bot_config = trybots[mastername]['builders'][buildername]
+
+  if buildername in TEST_BUILDERS['chromium.test']['builders']:
+    bot_config_object = api.chromium_tests.create_bot_config_object(
+        bot_config['bot_ids'], builders=TEST_BUILDERS)
+  else:
+    bot_config_object = api.chromium_tests.create_bot_config_object(
+        bot_config['bot_ids'])
+
   api.chromium_tests.configure_build(bot_config_object)
 
   api.chromium_swarming.configure_swarming('chromium', precommit=True)
@@ -319,6 +363,28 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  yield (
+      api.test('findit_step_layer_flakiness_retry_shards') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='retry-failed-shards',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(post_process.DropExpectation)
+  )
 
   def generate_single_failing_gtest_json(status):
     cur_iteration_data = {

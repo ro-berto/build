@@ -906,7 +906,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
       invalid_test_suites, failing_tests = (
-          self.m.test_utils.run_tests_with_patch(self.m, tests))
+          self.m.test_utils.run_tests_with_patch(
+              self.m, tests, retry_failed_shards=bot_config.get(
+                  'retry_failed_shards')))
 
       # An invalid result is unrecoverable if and only if we are not going to
       # run 'retry with patch'.

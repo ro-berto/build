@@ -448,20 +448,41 @@ class Test(object):
       return (True, set(self.failures(api, suffix)))
     return (False, None)
 
-  def with_patch_failures(self, api):
-    """Returns test failures from the 'with patch' step.
+  def with_patch_failures_including_retry(self, api):
+    """Returns test failures with the patch applied.
 
-    The 'with_patch' step only considers tests to be failures if every test run
-    fails. Flaky tests are considered successes.
+    This method only considers tests to be failures if every test run fails.
+    Flaky tests are considered successes.
+
+    It also considers retried shards when determining if a test failed.
 
     Returns: A tuple (valid_results, failures).
       valid_results: A Boolean indicating whether results are valid.
       failures: A set of strings. Only valid if valid_results is True.
     """
-    suffix = 'with patch'
-    if self.has_valid_results(api, suffix):
-      return (True, set(self.deterministic_failures(api, suffix)))
-    return (False, None)
+    with_patch_valid = self.has_valid_results(
+        api, 'with patch')
+    if with_patch_valid:
+      failures = self.deterministic_failures(api, 'with patch')
+    retry_shards_valid = self.has_valid_results(
+        api, 'retry shards with patch')
+    if retry_shards_valid:
+      retry_shards_failures = self.deterministic_failures(
+            api, 'retry shards with patch')
+
+    if with_patch_valid and retry_shards_valid:
+      # TODO(martiniss): Maybe change this behavior? This allows for failures
+      # in 'retry shards with patch' which might not be reported to devs, which
+      # may confuse them.
+      return True, set(failures).intersection(set(retry_shards_failures))
+
+    if with_patch_valid:
+      return True, set(failures)
+
+    if retry_shards_valid:
+      return True, set(retry_shards_failures)
+
+    return False, None
 
   def findit_notrun(self, api, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
@@ -502,24 +523,31 @@ class Test(object):
     return (True, ignored_failures)
 
   def retry_with_patch_results(self, api):
-    """Returns passing and failing tests in the 'retry with patch' step.
+    """Returns results from the tests ran for 'retry with patch'."""
+    return self._results_for_suffix(api, 'retry with patch')
 
-    The 'retry with patch' step only considers tests to be successes if every
-    test run passes. Flaky tests are considered failures.
+  def shard_retry_with_patch_results(self, api):
+    """Returns results from the tests ran for 'retry shards with patch'."""
+    return self._results_for_suffix(api, 'retry shards with patch')
 
-    Returns: A tuple (valid_results, passing_tests, failing_tests).
+  def _results_for_suffix(self, api, suffix):
+    """Returns passing and failing tests from the tests ran for 'suffix'.
+
+    Only considers tests to be successes if every test run passes. Flaky tests
+    are considered failures.
+
+    Returns: A tuple (valid_results, passing_tests).
       valid_results: A Boolean indicating whether results are present and valid.
       passing_tests: A set of strings. Only valid if valid_results is True.
       failing_tests: A set of strings. Only valid if valid_results is True.
     """
-    suffix = 'retry with patch'
     if not self.has_valid_results(api, suffix):
       return (False, None, None)
 
     passing_tests = set()
     failing_tests = set()
     for test_name, result in (
-        self.pass_fail_counts(api, 'retry with patch').iteritems()):
+        self.pass_fail_counts(api, suffix).iteritems()):
       success_count = result['pass_count']
       fail_count = result['fail_count']
       if fail_count == 0 and success_count > 0:
@@ -538,8 +566,10 @@ class Test(object):
     Returns:
       A list of tests to retry. Returning None means all tests should be run.
     """
-    # For the initial invocation, run every test in the test suite.
-    if suffix == 'with patch':
+    # For the initial invocation, run every test in the test suite. Also run
+    # every test when retrying shards, as we explicitly want to run every test
+    # when retrying a shard.
+    if suffix in ('with patch', 'retry shards with patch'):
       return None
 
     # For the second invocation, run previously failing tests.
@@ -1520,13 +1550,13 @@ class SwarmingTest(Test):
 
         shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
 
-    env = None
+    kwargs = {}
     if self._isolate_coverage_data:
       # Targets built with 'use_clang_coverage' will look at this environment
       # variable to determine where to write the profile dumps. The %Nm syntax
       # is understood by this instrumentation, see:
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      env = {
+      kwargs['env'] = {
           'LLVM_PROFILE_FILE':
               '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
@@ -1535,10 +1565,17 @@ class SwarmingTest(Test):
         self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
             self.step_name(suffix))
 
+    if suffix == 'retry shards with patch':
+      kwargs['task_to_retry'] = self._tasks['with patch']
+      assert kwargs['task_to_retry'], (
+          '\'retry_shards_with_patch\' expects that the \'with patch\' phase '
+          'has already run, but it apparently hasn\'t.')
+      kwargs['shard_indices'] = kwargs['task_to_retry'].failed_shards
+      kwargs['idempotent'] = False
+
     task = task_func(
         build_properties=api.chromium.build_properties,
         cipd_packages=self._cipd_packages,
-        env=env,
         extra_args=args,
         ignore_task_failure=self._ignore_task_failure,
         isolated_hash=isolated_hash,
@@ -1547,6 +1584,7 @@ class SwarmingTest(Test):
         title=self.step_name(suffix),
         trigger_script=self._trigger_script,
         service_account=self._service_account,
+        **kwargs
     )
 
     if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
@@ -2573,17 +2611,26 @@ class MockTest(Test):
 
   def __init__(self, name='MockTest', target_name=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               abort_on_failure=False, has_valid_results=True, failures=None):
+               abort_on_failure=False, has_valid_results=True, failures=None,
+               runs_on_swarming=False, per_suffix_failures=None,
+               per_suffix_valid=None):
     super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
     self._target_name = target_name
     self._abort_on_failure = abort_on_failure
     self._failures = failures or []
     self._has_valid_results = has_valid_results
+    self._per_suffix_failures = per_suffix_failures or {}
+    self._per_suffix_valid = per_suffix_valid or {}
     self._name = name
+    self._runs_on_swarming = runs_on_swarming
 
   @property
   def name(self):
     return self._name
+
+  @property
+  def runs_on_swarming(self): # pragma: no cover
+    return self._runs_on_swarming
 
   @contextlib.contextmanager
   def _mock_exit_codes(self, api):
@@ -2613,10 +2660,14 @@ class MockTest(Test):
   def has_valid_results(self, api, suffix):
     api.step(
         'has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
+    if suffix in self._per_suffix_valid: # pragma: no cover
+      return self._per_suffix_valid[suffix]
     return self._has_valid_results
 
   def failures(self, api, suffix):
     api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
+    if suffix in self._per_suffix_failures: # pragma: no cover
+      return self._per_suffix_failures[suffix]
     return self._failures
 
   def deterministic_failures(self, api, suffix):
