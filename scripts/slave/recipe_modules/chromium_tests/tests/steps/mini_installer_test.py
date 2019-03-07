@@ -70,8 +70,7 @@ def GenTests(api):
           'test_installer',
           api.test_utils.test_results(example_failure_results, retcode=1)) +
       api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.AnnotationContains,
-          'test_installer', ['STEP_FAILURE']) +
+      api.post_process(post_process.StepFailure, 'test_installer') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -81,8 +80,7 @@ def GenTests(api):
           'test_installer',
           api.test_utils.test_results('{}', retcode=1)) +
       api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.AnnotationContains,
-          'test_installer', ['STEP_EXCEPTION']) +
+      api.post_process(post_process.StepException, 'test_installer') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -92,7 +90,6 @@ def GenTests(api):
           'test_installer',
           api.test_utils.test_results('{', retcode=1)) +
       api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.AnnotationContains,
-          'test_installer', ['STEP_EXCEPTION']) +
+      api.post_process(post_process.StepException, 'test_installer') +
       api.post_process(post_process.DropExpectation)
   )
