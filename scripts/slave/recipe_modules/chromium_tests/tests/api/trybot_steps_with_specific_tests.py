@@ -390,6 +390,44 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  # This tests the following sequence of events:
+  # 1) 'with patch' produces invalid results
+  # 2) 'retry shards with patch' has a failing test
+  # 3) 'without patch' has a passing test.
+  # 4) 'retry with patch' has a passing test
+  # We expect to have FindIt flakiness metadata emitted for the flaky test,
+  # using the 'retry shards with patch' as the name of the failing step.
+  yield (
+      api.test('findit_step_layer_flakiness_retry_shards_actual_flake') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='retry-failed-shards',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.gtest_results('invalid', retcode=1)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (retry shards with patch)']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   def generate_single_failing_gtest_json(status):
     cur_iteration_data = {
       'Test.Two': [

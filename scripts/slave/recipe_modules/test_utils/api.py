@@ -529,7 +529,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
             potential_test_flakes & retry_with_patch_successes)
 
       if flaky_tests:
-        step_name = test_suite.name_of_step_for_suffix('with patch')
+        suffix = 'with patch'
+        # If we have invalid results on the initial run, but had valid results
+        # on the retries, count the retried shards as flaky.
+        if (not test_suite.has_valid_results(caller_api, 'with patch') and
+            valid_retry_with_patch_results and valid_retry_shards_results):
+          suffix = 'retry shards with patch'
+
+        step_name = test_suite.name_of_step_for_suffix(suffix)
         step_layer_flakiness[step_name] = sorted(flaky_tests)
 
     potential_build_flakiness = {}
