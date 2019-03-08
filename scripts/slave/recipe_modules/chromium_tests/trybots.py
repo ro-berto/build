@@ -604,12 +604,12 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
+            'buildername': 'GPU FYI Linux Builder DEPS ANGLE',
             'tester': 'Optional Linux Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
+            'buildername': 'GPU FYI Linux Builder DEPS ANGLE',
             'tester': 'Optional Linux Release (Intel HD 630)',
           },
         ],
@@ -751,17 +751,17 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
+            'buildername': 'GPU FYI Mac Builder DEPS ANGLE',
             'tester': 'Optional Mac Release (Intel)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
+            'buildername': 'GPU FYI Mac Builder DEPS ANGLE',
             'tester': 'Optional Mac Retina Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
+            'buildername': 'GPU FYI Mac Builder DEPS ANGLE',
             'tester': 'Optional Mac Retina Release (AMD)',
           },
         ],
@@ -900,12 +900,12 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
+            'buildername': 'GPU FYI Win Builder DEPS ANGLE',
             'tester': 'Optional Win10 Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
+            'buildername': 'GPU FYI Win Builder DEPS ANGLE',
             'tester': 'Optional Win10 Release (Intel HD 630)',
           },
         ],

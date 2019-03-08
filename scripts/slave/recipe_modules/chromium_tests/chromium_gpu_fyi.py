@@ -27,6 +27,23 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
+    'GPU FYI Win Builder DEPS ANGLE': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'checkout_dir': 'win',
+    },
     'GPU FYI Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -366,6 +383,23 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
+    'GPU FYI Linux Builder DEPS ANGLE': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'GPU FYI Linux Ozone Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -582,6 +616,23 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
                                'dawn_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'mac',
+      },
+      'checkout_dir': 'mac',
+    },
+    'GPU FYI Mac Builder DEPS ANGLE': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
