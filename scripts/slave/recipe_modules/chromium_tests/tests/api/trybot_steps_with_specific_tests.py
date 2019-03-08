@@ -16,35 +16,6 @@ DEPS = [
     'test_utils',
 ]
 
-TEST_BUILDERS = {
-    'chromium.test': {
-        'builders': {
-            'retry-failed-shards': {
-                'chromium_config': 'chromium',
-                'gclient_config': 'chromium',
-                'retry_failed_shards': True,
-            },
-        },
-    },
-}
-
-
-
-_TEST_TRYBOTS = {
-  'tryserver.chromium.test': {
-    'builders': {
-      'retry-failed-shards': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.test',
-            'buildername': 'retry-failed-shards',
-          },
-        ],
-      },
-    },
-  },
-
-}
 PROPERTIES = {
   'mastername': Property(default=None, kind=str),
   'buildername': Property(default=None, kind=str),
@@ -53,17 +24,9 @@ PROPERTIES = {
 
 def RunSteps(api, mastername, buildername):
   trybots = api.chromium_tests.trybots
-  if buildername in _TEST_TRYBOTS.get(mastername, {}).get('builders', {}):
-    trybots = _TEST_TRYBOTS
-
   bot_config = trybots[mastername]['builders'][buildername]
-
-  if buildername in TEST_BUILDERS['chromium.test']['builders']:
-    bot_config_object = api.chromium_tests.create_bot_config_object(
-        bot_config['bot_ids'], builders=TEST_BUILDERS)
-  else:
-    bot_config_object = api.chromium_tests.create_bot_config_object(
-        bot_config['bot_ids'])
+  bot_config_object = api.chromium_tests.create_bot_config_object(
+      bot_config['bot_ids'])
 
   api.chromium_tests.configure_build(bot_config_object)
 
@@ -92,10 +55,13 @@ def RunSteps(api, mastername, buildername):
 
   affected_files = api.properties.get('affected_files', [])
 
+  retry_failed_shards = api.properties.get('retry_failed_shards', False)
+
   # Override _trybot_steps_internal to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
-    return (bot_config_object, update_step, affected_files, [test])
+    return (bot_config_object, update_step, affected_files, [test],
+            retry_failed_shards)
   api.chromium_tests._trybot_steps_internal = config_override
 
   api.chromium_tests.trybot_steps()
@@ -370,8 +336,9 @@ def GenTests(api):
   yield (
       api.test('findit_step_layer_flakiness_retry_shards') +
       api.properties.tryserver(
-          mastername='tryserver.chromium.test',
-          buildername='retry-failed-shards',
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -400,8 +367,9 @@ def GenTests(api):
   yield (
       api.test('findit_step_layer_flakiness_retry_shards_actual_flake') +
       api.properties.tryserver(
-          mastername='tryserver.chromium.test',
-          buildername='retry-failed-shards',
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +

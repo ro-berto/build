@@ -32,7 +32,6 @@ _TEST_BUILDERS = {
       'retry-shards': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
-        'retry_failed_shards': True,
       },
       'retry-shards-test': {
         'bot_type': 'tester',
@@ -52,6 +51,7 @@ _TEST_TRYBOTS = {
   'tryserver.chromium.test': {
     'builders': {
       'retry-shards': {
+        'retry_failed_shards': True,
         'bot_ids': [
           {
             'mastername': 'chromium.test',

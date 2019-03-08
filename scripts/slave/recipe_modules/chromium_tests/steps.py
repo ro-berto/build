@@ -1383,7 +1383,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 
 class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
-  SUFFIXES_TO_INCREASE_PRIORITY = [ 'without patch', 'retry with patch' ]
+  SUFFIXES_TO_INCREASE_PRIORITY = [
+      'without patch', 'retry with patch', 'retry shards with patch' ]
 
   def __init__(self, name, dimensions=None, target_name=None,
                extra_suffix=None, expiration=None, hard_timeout=None,
