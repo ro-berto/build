@@ -17,130 +17,17 @@
   # This is sorted first alphabetically by slave pool, and then alphabetically
   # by builder name
   "builders": {
-    "android_compile_x64_dbg": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_optional_bots"],
-      "slavebuilddir": "android_compile_x64_dbg",
-    },
-    "android_compile_x86_dbg": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_optional_bots"],
-      "slavebuilddir": "android_compile_x86_dbg",
-    },
-    "android_archive_rel_ng": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_bots_cq"],
-    },
-    'android_cfi_rel_ng': {
-      'builder_timeout_s': 14400, # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_highmem_bots"],
-    },
     "android_cronet_tester": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "cronet",
       "scheduler": None,
       "slave_pools": ["slaves_with_n5s"],
     },
-    "linux_android_dbg_ng": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_n5s"],
-    },
-    "android_mojo": {
-      "builder_timeout_s": 10800,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["ccompute_optional_bots_2"],
-    },
   },
 
   "schedulers": { },
 
   "slave_pools": {
-    "ccompute_highmem_bots": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave400-c4",
-      ],
-    },
-    "ccompute_optional_bots": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave131-c4",
-        "slave132-c4",
-        "slave133-c4",
-        "slave134-c4",
-      ],
-    },
-    "ccompute_optional_bots_2": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave1398-c4",
-      ],
-    },
-    "ccompute_bots_cq": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave941-c4",
-        "slave942-c4",
-        "slave943-c4",
-        "slave944-c4",
-        "slave945-c4",
-        "slave946-c4",
-        "slave947-c4",
-        "slave948-c4",
-        "slave949-c4",
-        "slave1049-c4",
-        "slave1050-c4",
-        "slave1051-c4",
-        "slave1052-c4",
-        "slave1053-c4",
-        "slave1054-c4",
-        "slave1055-c4",
-        "slave1056-c4",
-        "slave1057-c4",
-        "slave1058-c4",
-        "slave1059-c4",
-        "slave1060-c4",
-        "slave1061-c4",
-        "slave1062-c4",
-        "slave1063-c4",
-        "slave1064-c4",
-      ],
-    },
     "slaves_with_n5s": {
       "slave_data": {
         "os": "linux",

@@ -21,7 +21,6 @@ MAIN_WATERFALL_MASTERS = [
 
 
 TRYSERVER_MASTERS = [
-    'master.tryserver.chromium.android',
     'master.tryserver.chromium.mac',
     'master.tryserver.chromium.win',
 ]
@@ -188,35 +187,6 @@ FAKE_BUILDERS = {
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-dcheck-off-rel',
         'linux-jumbo-rel',
-    ],
-    'master.tryserver.chromium.android': [
-        # These have been migrated to LUCI.
-        'android-kitkat-arm-rel',
-        'android-marshmallow-arm64-rel',
-        'android_arm64_dbg_recipe',
-        'android_clang_dbg_recipe',
-        'android_compile_dbg',
-        'android_cronet',
-        'android_n5x_swarming_dbg',
-        'android_optional_gpu_tests_rel',
-        'android_unswarmed_pixel_aosp',
-        'cast_shell_android',
-        'gpu-manual-try-android-l-nexus-5-32',
-        'gpu-manual-try-android-l-nexus-6-32',
-        'gpu-manual-try-android-m-nexus-6p-64',
-        'gpu-manual-try-android-m-nexus-9-64',
-        'gpu-manual-try-android-n-nvidia-shield-tv-64',
-        'gpu-manual-try-android-p-pixel-2-32',
-        'gpu-manual-try-android-p-pixel-2-32-deqp',
-        'gpu-manual-try-android-p-pixel-2-64',
-        'gpu-manual-try-android-p-pixel-2-64-deqp',
-        'gpu-manual-try-android-p-pixel-xl-32',
-        'gpu-manual-try-android-p-pixel-xl-32-deqp',
-        'gpu-manual-try-android-p-pixel-xl-64',
-        'gpu-manual-try-android-p-pixel-xl-64-deqp',
-        'try-nougat-phone-tester',
-        # Deleted. Remove with the recipe removal.
-        'android_blink_rel',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.
