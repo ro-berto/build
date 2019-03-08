@@ -453,7 +453,8 @@ class V8Api(recipe_api.RecipeApi):
         self.m.chromium_swarming.add_default_tag(
             'patch_project:%s' % changes[0].project)
     else:
-      if self.m.properties['mastername'] in ['client.v8', 'client.v8.ports']:
+      if self.m.properties['mastername'] in [
+          'client.v8', 'client.v8.branches', 'client.v8.ports']:
         self.m.chromium_swarming.default_priority = 25
       else:
         # This should be lower than the CQ.
