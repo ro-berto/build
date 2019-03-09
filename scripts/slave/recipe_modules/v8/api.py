@@ -1379,7 +1379,8 @@ class V8Api(recipe_api.RecipeApi):
             [(builder_name, dict(
               trigger_props,
               **test_spec.as_properties_dict(builder_name)
-            )) for builder_name in triggers]
+            )) for builder_name in triggers],
+            bucket='try.triggered',
         ))
       else:
         ci_properties = dict(properties)
