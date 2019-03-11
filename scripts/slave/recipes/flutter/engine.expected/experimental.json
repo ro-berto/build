@@ -459,7 +459,8 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--runtime-mode",
-      "debug"
+      "debug",
+      "--full-dart-sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -474,7 +475,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --runtime-mode debug"
+    "name": "gn --runtime-mode debug --full-dart-sdk"
   },
   {
     "cmd": [

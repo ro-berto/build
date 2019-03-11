@@ -296,7 +296,7 @@ def BuildLinuxAndroid(api):
 
 
 def BuildLinux(api):
-  RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
@@ -356,7 +356,7 @@ def SetupXcode(api):
     yield
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'debug', '--no-lto')
+  RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
   RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
   RunGN(api, '--runtime-mode', 'profile', '--android')
@@ -545,7 +545,7 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
-  RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'profile', '--android')

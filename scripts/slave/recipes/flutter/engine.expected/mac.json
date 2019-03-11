@@ -191,7 +191,8 @@
       "--goma",
       "--runtime-mode",
       "debug",
-      "--no-lto"
+      "--no-lto",
+      "--full-dart-sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -202,7 +203,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode debug --no-lto"
+    "name": "gn --runtime-mode debug --no-lto --full-dart-sdk"
   },
   {
     "cmd": [
