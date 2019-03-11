@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import (
-    DoesNotRun, DropExpectation, Filter, StatusFailure)
+from recipe_engine.post_process import DoesNotRun, Filter, StatusFailure
 
 DEPS = [
   'recipe_engine/raw_io',
@@ -18,7 +17,11 @@ def RunSteps(api):
     api.step('log version', cmd=None).presentation.step_text = version
   api.docker.login()
   api.docker.run(
-      'testimage', cmd_args=['test', 'cmd'], dir_mapping=[('/foo', '/bar')])
+      'testimage',
+      cmd_args=['test', 'cmd'],
+      dir_mapping=[('/foo', '/bar')],
+      env={'var1': '1', 'var2': '2'},
+  )
   api.docker(
       'push', 'gcr.io/chromium-container-registry/image:2018-11-16-01-25')
 

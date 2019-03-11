@@ -2185,7 +2185,7 @@ Returns:
 
 Provides steps to connect and run Docker images.
 
-&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#114)(self, \*args, \*\*kwargs):**
+&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#118)(self, \*args, \*\*kwargs):**
 
 Executes specified docker command.
 
@@ -2222,19 +2222,20 @@ Args:
       associated service account.
   step_name: Override step name. Default is 'docker login'.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#81)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
+&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#81)(self, image, step_name=None, cmd_args=None, dir_mapping=None, env=None, \*\*kwargs):**
 
 Run a command in a Docker image as the current user:group.
 
 Args:
   image: Name of the image to run.
+  step_name: Override step name. Default is 'docker run'.
   cmd_args: Used to specify command to run in an image as a list of
       arguments. If not specified, then the default command embedded into
       the image is executed.
   dir_mapping: List of tuples (host_dir, docker_dir) mapping host
       directories to directories in a Docker container. Directories are
       mapped as read-write.
-  step_name: Override step name. Default is 'docker run'.
+  env: dict of env variables.
 ### *recipe_modules* / [emulator](/scripts/slave/recipe_modules/emulator)
 
 [DEPS](/scripts/slave/recipe_modules/emulator/__init__.py#5): [build](#recipe_modules-build), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5186,9 +5187,9 @@ Kills leftover tasks from previous runs or steps.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/disk/examples/full.py#15)(api):**
 ### *recipes* / [docker:examples/full](/scripts/slave/recipe_modules/docker/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/docker/examples/full.py#8): [docker](#recipe_modules-docker), [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/docker/examples/full.py#7): [docker](#recipe_modules-docker), [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/docker/examples/full.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/docker/examples/full.py#13)(api):**
 ### *recipes* / [emulator](/scripts/slave/recipes/emulator.py)
 
 [DEPS](/scripts/slave/recipes/emulator.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

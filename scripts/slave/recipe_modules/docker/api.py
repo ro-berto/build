@@ -79,18 +79,19 @@ class DockerApi(recipe_api.RecipeApi):
         **kwargs)
 
   def run(self, image, step_name=None, cmd_args=None, dir_mapping=None,
-          **kwargs):
+          env=None, **kwargs):
     """Run a command in a Docker image as the current user:group.
 
     Args:
       image: Name of the image to run.
+      step_name: Override step name. Default is 'docker run'.
       cmd_args: Used to specify command to run in an image as a list of
           arguments. If not specified, then the default command embedded into
           the image is executed.
       dir_mapping: List of tuples (host_dir, docker_dir) mapping host
           directories to directories in a Docker container. Directories are
           mapped as read-write.
-      step_name: Override step name. Default is 'docker run'.
+      env: dict of env variables.
     """
     assert self._config_file, 'Did you forget to call docker.login?'
     args = [
@@ -101,6 +102,9 @@ class DockerApi(recipe_api.RecipeApi):
     if dir_mapping:
       for host_dir, docker_dir in dir_mapping:
         args.extend(['--dir-map', host_dir, docker_dir])
+
+    for k, v in sorted((env or {}).iteritems()):
+      args.extend(['-e', '%s=%s' % (k, v)])
 
     if cmd_args:
       args.append('--')
