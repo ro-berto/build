@@ -1,0 +1,50 @@
+[
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-scopes",
+      "https://www.googleapis.com/auth/cloud-platform",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_login.py",
+      "--server",
+      "gcr.io",
+      "--service-account-token-file",
+      "extra.secret.token.should.not.be.logged",
+      "--config-file",
+      "[CLEANUP]/.docker"
+    ],
+    "name": "docker login"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_run.py",
+      "--config-file",
+      "[CLEANUP]/.docker",
+      "--image",
+      "gcr.io/chromium-container-registry/my-image",
+      "-e",
+      "k=v",
+      "--",
+      "echo",
+      "x"
+    ],
+    "name": "docker run"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]
