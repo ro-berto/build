@@ -27,10 +27,9 @@ def main():
       action='append', default=[],
       help='Environment variable strings, e.g. foo=bar')
 
-  # Extract command specified after -- before parsing script args.
-  script_args = sys.argv[1:sys.argv.index('--')]
-  command = sys.argv[sys.argv.index('--') + 1:]
-  args = parser.parse_args(script_args)
+  args, command = parser.parse_known_args()
+  if command and command[0] == '--':
+    command = command[1:]
 
   cmd = [
     'docker',
