@@ -1,0 +1,69 @@
+{
+  "unit": {
+    "argument": [
+      "--use_bundled_pylibs",
+      "generate",
+      "-d",
+      "../",
+      "-I",
+      "../../",
+      "-o",
+      "gen",
+      "--bytecode_path",
+      "gen/bindings",
+      "-g",
+      "c++",
+      "--typemap",
+      "gen/mojo_bindings__type_mappings",
+      "--enable_feature",
+      "ipc_logging",
+      "../../test.mojom"
+    ],
+    "source_file": [
+      "../../test.mojom"
+    ],
+    "details": [
+      {
+        "build_config": "linux",
+        "@type": "kythe.io/proto/kythe.proto.BuildDetails"
+      }
+    ],
+    "v_name": {
+      "corpus": "chromium-test",
+      "language": "mojom"
+    },
+    "required_input": [
+      {
+        "info": {
+          "path": "../../test.mojom",
+          "digest": "5e0f9b7ac5db656839eafac76e6d3c940b489b1d51b6657cde2819cc3111cd92"
+        },
+        "v_name": {
+          "path": "src/test.mojom",
+          "corpus": "chromium-test"
+        }
+      },
+      {
+        "info": {
+          "path": "gen/test.mojom.h",
+          "digest": "007042887be3748cff91dcec2f0228e46203c9fa472db2c2d7d1b231ef214aca"
+        },
+        "v_name": {
+          "path": "src/out/Debug/gen/test.mojom.h",
+          "corpus": "chromium-test"
+        }
+      },
+      {
+        "info": {
+          "path": "../../test2.mojom",
+          "digest": "3dd104b0998f09bcf6716c4a79ed43d16554cbf8d61bdd5fd32dfab442e16759"
+        },
+        "v_name": {
+          "path": "src/test2.mojom",
+          "corpus": "chromium-test"
+        }
+      }
+    ],
+    "output_key": "gen/test.mojom.h"
+  }
+}

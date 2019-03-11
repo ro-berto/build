@@ -1,0 +1,7 @@
+[
+  {
+    "directory": "package_index_testdata/input/src/out/Debug",
+    "command": "clang-cl.exe --driver-mode=cl /c test.cc /Fotest.obj",
+    "file": "../../test.cc"
+  }
+]
