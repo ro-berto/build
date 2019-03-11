@@ -99,6 +99,15 @@
   {
     "cmd": [
       "git",
+      "fetch"
+    ],
+    "cwd": "[BUILDER_CACHE]/v8",
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
       "checkout",
       "-f",
       "FETCH_HEAD"

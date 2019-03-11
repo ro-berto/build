@@ -99,6 +99,15 @@
   {
     "cmd": [
       "git",
+      "fetch"
+    ],
+    "cwd": "[BUILDER_CACHE]/v8",
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
       "checkout",
       "-f",
       "FETCH_HEAD"
@@ -271,7 +280,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git fetch"
+    "name": "git fetch (2)"
   },
   {
     "cmd": [
@@ -305,7 +314,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git fetch (2)"
+    "name": "git fetch (3)"
   },
   {
     "cmd": [
@@ -339,7 +348,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git fetch (3)"
+    "name": "git fetch (4)"
   },
   {
     "cmd": [
@@ -373,7 +382,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git fetch (4)"
+    "name": "git fetch (5)"
   },
   {
     "cmd": [
@@ -407,7 +416,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git fetch (5)"
+    "name": "git fetch (6)"
   },
   {
     "cmd": [

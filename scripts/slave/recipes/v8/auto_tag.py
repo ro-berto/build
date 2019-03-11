@@ -49,6 +49,7 @@ PUSH_ACCOUNT = (
 def InitClean(api):
   """Ensures a clean state of the git checkout."""
   with api.context(cwd=api.path['checkout']):
+    api.git('fetch')
     api.git('checkout', '-f', 'FETCH_HEAD')
     api.git('branch', '-D', 'work', ok_ret='any')
     api.git('clean', '-ffd')
