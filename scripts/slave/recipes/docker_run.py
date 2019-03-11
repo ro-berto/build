@@ -16,13 +16,13 @@ DEPS = [
 PROPERTIES=dict(
   server=Property(
     kind=Single(basestring),
-    help='GCP docker server to connect to',
     default='gcr.io',
+    help='GCP container registry to pull images from',
   ),
   project=Property(
     kind=Single(basestring),
-    help='Cloud project containing the image',
     default='chromium-container-registry',
+    help='Cloud project containing the image',
   ),
   image=Property(
     kind=Single(basestring),
@@ -30,13 +30,20 @@ PROPERTIES=dict(
   ),
   cmd_args=Property(
     kind=List(basestring),
-    help='Docker command args',
     default=None,
+    help='Docker command args',
   ),
   env=Property(
     kind=Dict(value_type=basestring),
-    help='Dictionary of env for the container',
     default=None,
+    help='Dictionary of env for the container',
+  ),
+  inherit_luci_context=Property(
+    kind=Dict(value_type=bool),
+    default=False,
+    help='Inherit current LUCI Context (including auth). '
+         'CAUTION: removes network isolation between the container and the '
+         'docker host. Read more https://docs.docker.com/network/host/'
   ),
 )
 
@@ -52,5 +59,6 @@ def GenTests(api):
           image='my-image',
           cmd_args=['echo', 'x'],
           env=dict(k='v'),
+          inherit_luci_context=True,
       )
   )

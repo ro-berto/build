@@ -51,7 +51,7 @@ class DockerApi(recipe_api.RecipeApi):
     requires authentication.
 
     Args:
-      server: Docker server to connect to.
+      server: GCP container registry to pull images from. Defaults to 'gcr.io'.
       project: Name of the Cloud project where Docker images are hosted.
       service_account: service_account.api.ServiceAccount used for
           authenticating with the container registry. Defaults to the task's
@@ -79,7 +79,7 @@ class DockerApi(recipe_api.RecipeApi):
         **kwargs)
 
   def run(self, image, step_name=None, cmd_args=None, dir_mapping=None,
-          env=None, **kwargs):
+          env=None, inherit_luci_context=False, **kwargs):
     """Run a command in a Docker image as the current user:group.
 
     Args:
@@ -92,6 +92,9 @@ class DockerApi(recipe_api.RecipeApi):
           directories to directories in a Docker container. Directories are
           mapped as read-write.
       env: dict of env variables.
+      inherit_luci_context: Inherit current LUCI Context (including auth).
+          CAUTION: removes network isolation between the container and the
+          docker host. Read more https://docs.docker.com/network/host/.
     """
     assert self._config_file, 'Did you forget to call docker.login?'
     args = [
@@ -105,6 +108,9 @@ class DockerApi(recipe_api.RecipeApi):
 
     for k, v in sorted((env or {}).iteritems()):
       args.extend(['--env', '%s=%s' % (k, v)])
+
+    if inherit_luci_context:
+      args.append('--inherit-luci-context')
 
     if cmd_args:
       args.append('--')

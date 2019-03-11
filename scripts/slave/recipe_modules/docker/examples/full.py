@@ -21,6 +21,7 @@ def RunSteps(api):
       cmd_args=['test', 'cmd'],
       dir_mapping=[('/foo', '/bar')],
       env={'var1': '1', 'var2': '2'},
+      inherit_luci_context=True,
   )
   api.docker(
       'push', 'gcr.io/chromium-container-registry/image:2018-11-16-01-25')

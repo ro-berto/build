@@ -67,6 +67,7 @@
       "var1=1",
       "--env",
       "var2=2",
+      "--inherit-luci-context",
       "--",
       "test",
       "cmd"

@@ -2187,7 +2187,7 @@ Returns:
 
 Provides steps to connect and run Docker images.
 
-&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#118)(self, \*args, \*\*kwargs):**
+&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#124)(self, \*args, \*\*kwargs):**
 
 Executes specified docker command.
 
@@ -2224,7 +2224,7 @@ Args:
       associated service account.
   step_name: Override step name. Default is 'docker login'.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#81)(self, image, step_name=None, cmd_args=None, dir_mapping=None, env=None, \*\*kwargs):**
+&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#81)(self, image, step_name=None, cmd_args=None, dir_mapping=None, env=None, inherit_luci_context=False, \*\*kwargs):**
 
 Run a command in a Docker image as the current user:group.
 
@@ -2238,6 +2238,9 @@ Args:
       directories to directories in a Docker container. Directories are
       mapped as read-write.
   env: dict of env variables.
+  inherit_luci_context: Inherit current LUCI Context (including auth).
+      CAUTION: removes network isolation between the container and the
+      docker host. Read more https://docs.docker.com/network/host/.
 ### *recipe_modules* / [emulator](/scripts/slave/recipe_modules/emulator)
 
 [DEPS](/scripts/slave/recipe_modules/emulator/__init__.py#5): [build](#recipe_modules-build), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5200,7 +5203,7 @@ Kills leftover tasks from previous runs or steps.
 
 A generic recipe that runs a given docker container and exits.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/docker_run.py#43)(api, server, project, image, cmd_args, env):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/docker_run.py#50)(api, server, project, image, cmd_args, env):**
 ### *recipes* / [emulator](/scripts/slave/recipes/emulator.py)
 
 [DEPS](/scripts/slave/recipes/emulator.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
