@@ -104,7 +104,7 @@ class DockerApi(recipe_api.RecipeApi):
         args.extend(['--dir-map', host_dir, docker_dir])
 
     for k, v in sorted((env or {}).iteritems()):
-      args.extend(['-e', '%s=%s' % (k, v)])
+      args.extend(['--env', '%s=%s' % (k, v)])
 
     if cmd_args:
       args.append('--')

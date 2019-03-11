@@ -4,7 +4,6 @@
 
 import argparse
 import os
-import re
 import subprocess
 import sys
 
@@ -23,6 +22,10 @@ def main():
       help='Directories to be mapped in host_path:docker_path. Host paths '
            'that do not exist will be created before running docker to make '
            'sure that they are owned by current user.')
+  parser.add_argument(
+      '--env',
+      action='append', default=[],
+      help='Environment variable strings, e.g. foo=bar')
 
   # Extract command specified after -- before parsing script args.
   script_args = sys.argv[1:sys.argv.index('--')]
@@ -44,6 +47,9 @@ def main():
     elif not os.path.isdir(host_path):
       parser.error('Cannot map non-directory host path: %s' % host_path)
     cmd.extend(['--volume', '%s:%s' % (host_path, docker_path)])
+
+  for var in args.env:
+    cmd.extend(['--env', var])
 
   cmd.append(args.image)
   cmd.extend(command)

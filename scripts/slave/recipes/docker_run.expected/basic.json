@@ -35,7 +35,7 @@
       "[CLEANUP]/.docker",
       "--image",
       "gcr.io/chromium-container-registry/my-image",
-      "-e",
+      "--env",
       "k=v",
       "--",
       "echo",
