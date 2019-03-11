@@ -190,6 +190,25 @@ TEST_MATRIX = {
         "fileset": "test",
         "arguments": ["-ndartkp-android-${mode}-${arch}"]
       }]
+    },
+    {
+      "builders": [
+        "fuzz-linux"
+      ],
+      "steps": [{
+        "name": "make a fuzz",
+        "script": "out/ReleaseX64/dart",
+        "arguments": [
+          "runtime/tools/dartfuzz/dartfuzz_test.dart",
+          "--isolates",
+          "8",
+          "--no-show-stats",
+          "--time",
+          "2700"
+        ],
+        "shards": 2,
+        "fileset": "test"
+      }]
     }
   ]
 }
@@ -362,3 +381,10 @@ def GenTests(api):
       _canned_step(api, 'android', 2, False, ' on Android') +
       api.step_data('upload testing fileset test',
                     stdout=api.raw_io.output('test_hash')))
+
+  yield (api.test('fuzz-test') +
+      api.step_data('upload testing fileset test',
+                    stdout=api.raw_io.output('test_hash')) +
+      api.buildbucket.ci_build(builder='fuzz-linux',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'))

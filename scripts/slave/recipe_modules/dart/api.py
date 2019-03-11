@@ -673,7 +673,8 @@ class DartApi(recipe_api.RecipeApi):
       environment['runtime'] = runtime
       if runtime == 'chrome' or runtime == 'firefox':
         self._download_browser(runtime, global_config[runtime])
-    steps = []
+    test_steps = []
+    sharded_steps = []
     with self.m.step.defer_results():
       for index,step_json in enumerate(config['steps']):
         step = self.TestMatrixStep(self.m, builder_name, config, step_json,
@@ -685,16 +686,18 @@ class DartApi(recipe_api.RecipeApi):
           step.isolate_hash = isolate_hashes[step.fileset]
 
         if not step.is_trigger and self._is_test_py_step(step.script):
-          steps.append(step)
+          test_steps.append(step)
+        if step.isolate_hash and not (step.local_shard and step.shards < 2):
+          sharded_steps.append(step)
         self._run_step(step, global_config)
-      self.collect_all(steps)
+      self.collect_all(sharded_steps)
       # TODO(athom): remove this when the new workflow is fully rolled out.
       # Old workflow test.py steps throw on failing tests and results need to
       # be processed in the defer_results block.
       if not self._report_new_results():
-        self._process_test_results(steps, global_config)
+        self._process_test_results(test_steps, global_config)
     if self._report_new_results():
-      self._process_test_results(steps, global_config)
+      self._process_test_results(test_steps, global_config)
 
 
   @recipe_api.non_step
