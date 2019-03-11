@@ -25,7 +25,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Google Chrome ChromeOS': {
+    'linux-chromeos-google-rel': {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
       # that's fixed to set the correct mb_config.pyl path.
       'chromium_config': 'chromium_official',
@@ -48,7 +48,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Google Chrome Linux x64': {
+    'linux-google-rel': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
@@ -64,10 +64,10 @@ SPEC = {
         'platform': 'linux',
       },
       'tests': {
-        steps.SizesStep(RESULTS_URL, 'Google Chrome Linux x64')
+        steps.SizesStep(RESULTS_URL, 'linux-google-rel')
       },
     },
-    'Google Chrome Mac': {
+    'mac-google-rel': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
@@ -83,10 +83,10 @@ SPEC = {
         'platform': 'mac',
       },
       'tests': {
-        steps.SizesStep(RESULTS_URL, 'Google Chrome Mac')
+        steps.SizesStep(RESULTS_URL, 'mac-google-rel')
       },
     },
-    'Google Chrome Win': {
+    'win-google-rel': {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
@@ -103,7 +103,7 @@ SPEC = {
         'platform': 'win',
       },
       'tests': {
-        steps.SizesStep(RESULTS_URL, 'Google Chrome Win')
+        steps.SizesStep(RESULTS_URL, 'win-google-rel')
       },
     },
   },

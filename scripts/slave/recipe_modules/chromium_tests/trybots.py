@@ -376,7 +376,7 @@ TRYBOTS = freeze({
     'builders': {
         'linux-chromeos-chrome': simple_bot({
           'mastername': 'chromium.chrome',
-          'buildername': 'Google Chrome ChromeOS',
+          'buildername': 'linux-chromeos-google-rel',
         }),
     },
   },
@@ -801,7 +801,7 @@ TRYBOTS = freeze({
       # Optional Official trybot.
       'win_chrome_official': simple_bot({
         'mastername': 'chromium.chrome',
-        'buildername': 'Google Chrome Win',
+        'buildername': 'win-google-rel',
       }),
     },
   },
