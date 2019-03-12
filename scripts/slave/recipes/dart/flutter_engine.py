@@ -154,7 +154,7 @@ def GetCheckout(api):
 
   api.gclient.runhooks()
 
-  with api.depot_tools.on_path():
+  with api.depot_tools.on_path(), api.context(env={'DEPOT_TOOLS_UPDATE': 0}):
     api.step('3xHEAD Flutter Hooks',
         ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
 
