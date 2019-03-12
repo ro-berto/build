@@ -1,5 +1,46 @@
 [
   {
+    "cmd": [],
+    "name": "make archive (ref)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
+      "--dir",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "--platform",
+      "linux",
+      "--type",
+      "ref",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "make archive (ref).filter build files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "name": "make archive (ref).zipping",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -14,7 +55,7 @@
       "gs://chromium-v8/official/refbuild/v8-linux64-rel.zip"
     ],
     "infra_step": true,
-    "name": "make archive.gsutil update refbuild binaries",
+    "name": "make archive (ref).gsutil update refbuild binaries",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/refbuild/v8-linux64-rel.zip@@@"
@@ -28,7 +69,7 @@
       "cr-buildbucket.appspot.com"
     ],
     "infra_step": true,
-    "name": "make archive.trigger refbuild bundler",
+    "name": "make archive (ref).trigger refbuild bundler",
     "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"v8_refbuild_bundler\", \"project\": \"v8-internal\"}, \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"project\": \"v8/v8\", \"ref\": \"refs/branch-heads/3.4\"}, \"properties\": {\"platform\": \"linux64\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [

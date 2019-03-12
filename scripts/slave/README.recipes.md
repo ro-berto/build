@@ -5824,7 +5824,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 Recipe for archiving officially tagged v8 builds.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#138)(api, build_config, target_arch, target_bits, target_platform):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#137)(api, build_config, target_arch, target_bits, target_platform):**
 
 &mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#52)(api, ref, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)

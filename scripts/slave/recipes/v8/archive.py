@@ -74,13 +74,35 @@ def make_archive(api, ref, version, archive_type, step_suffix='',
     map(package.add_file, map(api.path.abs_to_path, file_list))
     package.zip('zipping')
 
-    # Upload to google storage bucket.
     if api.chromium.c.TARGET_ARCH != 'intel':
       # Only disambiguate non-intel architectures. This is closest to our naming
       # conventions.
       arch_name = '-%s' % api.chromium.c.TARGET_ARCH
     else:
       arch_name = ''
+
+    # Upload refbuild and trigger refbuild bundler.
+    if archive_type == 'ref':
+      platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
+                               api.chromium.c.TARGET_BITS, archive_suffix)
+      api.gsutil.upload(
+          zip_file,
+          'chromium-v8/official/refbuild',
+          'v8-%s-rel.zip' % platform,
+          args=['-a', 'public-read'],
+          name='update refbuild binaries',
+      )
+      api.v8.buildbucket_trigger(
+          [('v8_refbuild_bundler', {
+              'revision': api.v8.revision,
+              'platform': platform,
+          })],
+          project='v8-internal',
+          bucket='ci',
+          step_name='trigger refbuild bundler')
+      return
+
+    # Upload to google storage bucket.
     build_config = 'rel' if api.chromium.c.BUILD_CONFIG == 'Release' else 'dbg'
     archive_prefix = (
         'v8-%s%s%s%s-%s' %
@@ -107,29 +129,6 @@ def make_archive(api, ref, version, archive_type, step_suffix='',
           args=['-a', 'public-read'],
           name='upload json',
       )
-
-    # Upload first build for the latest milestone to a known location. We use
-    # these binaries for running reference perf tests.
-    if (RELEASE_BRANCH_RE.match(ref) and
-        FIRST_BUILD_IN_MILESTONE_RE.match(version) and
-        archive_type == 'exe'):
-      platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
-                               api.chromium.c.TARGET_BITS, archive_suffix)
-      api.gsutil.upload(
-          zip_file,
-          'chromium-v8/official/refbuild',
-          'v8-%s-rel.zip' % platform,
-          args=['-a', 'public-read'],
-          name='update refbuild binaries',
-      )
-      api.v8.buildbucket_trigger(
-          [('v8_refbuild_bundler', {
-              'revision': api.v8.revision,
-              'platform': platform,
-          })],
-          project='v8-internal',
-          bucket='ci',
-          step_name='trigger refbuild bundler')
 
     parent.presentation.links['download'] = (
         ARCHIVE_LINK % (gs_path_suffix, archive_name))
@@ -197,6 +196,11 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
     make_archive(api, ref, version, 'exe')
     make_archive(api, ref, version, 'lib', ' (libs)', '-libs')
 
+    # Upload first build for the latest milestone to a known location. We use
+    # these binaries for running reference perf tests.
+    if (RELEASE_BRANCH_RE.match(ref) and
+        FIRST_BUILD_IN_MILESTONE_RE.match(version)):
+      make_archive(api, ref, version, 'ref', ' (ref)')
 
 
 def GenTests(api):
@@ -363,7 +367,7 @@ def GenTests(api):
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
-      api.post_process(Filter().include_re('.*refbuild.*'))
+      api.post_process(Filter().include_re('.*ref.*'))
   )
 
   # Test canary upload.
