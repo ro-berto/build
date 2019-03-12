@@ -313,7 +313,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@stdout@version:{'MAJOR': '123', 'BUILD': '9876', 'MINOR': '1', 'PATCH': '2'}@@@",
       "@@@STEP_LOG_LINE@stdout@android_version_name:123.1.9876.2@@@",
-      "@@@STEP_LOG_LINE@stdout@android_version_code:9876002@@@",
+      "@@@STEP_LOG_LINE@stdout@android_version_code:987600200@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
   },
@@ -331,7 +331,7 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--android-version-code=9876002",
+      "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2"
     ],
     "cwd": "[START_DIR]/src",
@@ -360,7 +360,7 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--android-version-code=9876002",
+      "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2",
       "//out/Debug"
     ],

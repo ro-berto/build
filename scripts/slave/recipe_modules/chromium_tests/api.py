@@ -343,6 +343,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = bot_config.get_compile_targets(self, bot_db, tests)
     return sorted(set(compile_targets))
 
+  _ARCHITECTURE_DIGIT_MAP = {
+      ('arm', 32): 0,
+      ('arm', 64): 5,
+      ('intel', 32): 1,
+      ('intel', 64): 6,
+      ('mips', 32): 2,
+  }
+
   def get_android_version_details(self, bot_config, log_details=False):
     version = bot_config.get('android_version')
     if not version:
@@ -351,10 +359,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     version = self.m.chromium.get_version_from_file(
         self.m.path['checkout'].join(version))
 
+    chromium_config = self.m.chromium.c
+    arch_id = chromium_config.TARGET_ARCH, chromium_config.TARGET_BITS
+    arch_digit = self._ARCHITECTURE_DIGIT_MAP.get(arch_id, None)
+    assert arch_digit is not None, (
+        'Architecture and bits (%r) does not have a version digit assigned'
+        % arch_id)
+
     android_version_name = '%(MAJOR)s.%(MINOR)s.%(BUILD)s.%(PATCH)s' % version
-    # TODO: Consider CPU architecture
-    android_version_code = '%d%03d' % (int(version['BUILD']),
-                                       int(version['PATCH']))
+    android_version_code = '%d%03d%d0' % (int(version['BUILD']),
+                                          int(version['PATCH']),
+                                          arch_digit)
     if log_details:
       self.log('version:%s' % version)
       self.log('android_version_name:%s' % android_version_name)
