@@ -4,9 +4,6 @@
 
 import collections
 
-from . import canonical
-
-
 def convert_trie_to_flat_paths(trie, prefix, sep):
   # Cloned from webkitpy.layout_tests.layout_package.json_results_generator
   # so that this code can stand alone.
@@ -70,7 +67,21 @@ class TestResults(object):
         "non-None value when the constructor returns.")
 
   def canonical_result_format(self):
-    """Returns a dictionary with results in canonical format."""
+    """Returns a dictionary with results in canonical format.
+
+    Keys:
+      'valid': A Boolean indicating whether the test run was valid.
+      'failures': An iterable of strings -- each the name of a test that
+      failed.
+      'total_tests_ran': The total number of tests that were run.
+      'pass_fail_counts': A dictionary that provides the number of passes and
+      failures for each test. e.g.
+        {
+          'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
+        }
+      'findit_notrun': A temporary field for FindIt. Lists tests for which every
+      test run had result NOTRUN or UNKNOWN.
+    """
     unreliable = False
     if self.raw:
       global_tags = self.raw.get('global_tags', [])
@@ -81,12 +92,13 @@ class TestResults(object):
     if self.interrupted or unreliable:
       valid = False
 
-    return canonical.result_format(
-        valid=valid,
-        failures=self.unexpected_failures,
-        total_tests_ran=self.total_test_runs,
-        pass_fail_counts=self.pass_fail_counts,
-        findit_notrun=self.findit_notrun)
+    return {
+      'valid': valid,
+      'failures': self.unexpected_failures,
+      'total_tests_ran': self.total_test_runs,
+      'pass_fail_counts': self.pass_fail_counts,
+      'findit_notrun': self.findit_notrun
+    }
 
   @property
   def total_test_runs(self):
@@ -321,25 +333,22 @@ class GTestResults(object):
         failures.add(test_name)
     return failures
 
-  @property
-  def deterministic_failures(self):
-    return canonical.deterministic_failures(self.canonical_result_format())
-
   def _compress_list(self, lines):
     if len(lines) > self.MAX_LOG_LINES: # pragma: no cover
       remove_from_start = self.MAX_LOG_LINES / 2
       return (lines[:remove_from_start] +
               ['<truncated>'] +
-              lines[len(lines) - (self.Max_loG_LINES - remove_from_start):])
+              lines[len(lines) - (self.MAX_LOG_LINES - remove_from_start):])
     return lines
 
   def canonical_result_format(self):
     """Returns a dictionary with results in canonical format."""
     global_tags = self.raw.get('global_tags')
     unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
-    return canonical.result_format(
-        valid=self.valid and not unreliable,
-        failures=sorted(self.unique_failures),
-        total_tests_ran=self.total_tests_ran,
-        pass_fail_counts=self.pass_fail_counts,
-        findit_notrun=self.findit_notrun)
+    return {
+      'valid': self.valid and not unreliable,
+      'failures': sorted(self.unique_failures),
+      'total_tests_ran': self.total_tests_ran,
+      'pass_fail_counts': self.pass_fail_counts,
+      'findit_notrun': self.findit_notrun
+    }

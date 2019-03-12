@@ -20,14 +20,14 @@ def RunSteps(api):
 
   test = api.chromium_tests.steps.BisectTestStaging()
 
-  test.pre_run(api.chromium_tests.m, '')
+  test.pre_run(api, '')
 
   try:
-    test.run(api.chromium_tests.m, '')
+    test.run(api, '')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: %r' % test.compile_targets(api.chromium_tests.m),
+        'compile_targets: %r' % test.compile_targets(api),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 

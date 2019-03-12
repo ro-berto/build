@@ -53,7 +53,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@valid: True@@@",
-      "@@@STEP_LOG_LINE@details@unexpected_failures: []@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: {}@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },

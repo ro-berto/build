@@ -308,7 +308,6 @@
   * [swarming_heartbeat:examples/full](#recipes-swarming_heartbeat_examples_full)
   * [tar:examples/full](#recipes-tar_examples_full)
   * [test_results:examples/full](#recipes-test_results_examples_full)
-  * [test_utils:tests/present_gtest_failures](#recipes-test_utils_tests_present_gtest_failures)
   * [test_utils:tests/run_tests](#recipes-test_utils_tests_run_tests)
   * [test_utils:tests/run_tests_include_swarming](#recipes-test_utils_tests_run_tests_include_swarming)
   * [test_utils:tests/run_tests_with_patch](#recipes-test_utils_tests_run_tests_with_patch)
@@ -3530,7 +3529,7 @@ Returns:
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/__init__.py#4): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#28)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 This class helps run tests and parse results.
 
@@ -3548,11 +3547,9 @@ Finally, we roll the checkout and reapply the patch, and then rerun the
 failing tests. This helps confirm whether the failures were flakes or
 deterministic errors.
 
-&emsp; **@property**<br>&mdash; **def [canonical](/scripts/slave/recipe_modules/test_utils/api.py#58)(self):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#592)(self, data):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#598)(self, data):**
-
-&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#89)(data):**
+&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#84)(data):**
 
 Returns string suitable for use in a followup function's step result's
 presentation step text.
@@ -3565,7 +3562,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#611)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#605)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3575,7 +3572,7 @@ Provides the --test-launcher-summary-output flag since --flag=value
 
 The test_results will be an instance of the GTestResults class.
 
-&mdash; **def [limit\_failures](/scripts/slave/recipe_modules/test_utils/api.py#62)(self, failures, limit=None):**
+&mdash; **def [limit\_failures](/scripts/slave/recipe_modules/test_utils/api.py#57)(self, failures, limit=None):**
 
 Limit failures of a step to prevent large results JSON.
 
@@ -3592,7 +3589,7 @@ Returns:
        *failures* contains more elements than *limit*, it will contain an
        element indicating the number of additional failures.
 
-&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#119)(self, step_result, presentation=None):**
+&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#114)(self, step_result, presentation=None):**
 
 Update a step result's presentation with details of gtest failures.
 
@@ -3613,7 +3610,7 @@ Returns:
   The gtest_results object if it is present in the step result, otherwise
   None.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#170)(self, caller_api, tests, suffix, sort_by_shard=False):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#164)(self, caller_api, tests, suffix, sort_by_shard=False):**
 
 Utility function for running a list of tests and returning the failed tests.
 
@@ -3635,7 +3632,7 @@ Returns:
   A tuple of (list of tests with invalid results,
               list of tests which failed)
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#236)(self, caller_api, tests, retry_failed_shards=False):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#230)(self, caller_api, tests, retry_failed_shards=False):**
 
 Run tests and returns failures.
 
@@ -3653,11 +3650,11 @@ Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       otherwise unspecified reasons. This is a superset of
       invalid_test_suites.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#435)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#429)(self, caller_api, test_suite):**
 
 Summarizes a failing test suite that is not going to be retried.
 
-&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#495)(self, caller_api, test_suites):**
+&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#489)(self, caller_api, test_suites):**
 
 Exports a summary of flakiness for post-processing by FindIt.
 
@@ -3677,7 +3674,7 @@ This function emits a step with a fixed name, and metadata for FindIt.
 Before making changes to this function, check with the FindIt team to ensure
 that their post-processing will still work correctly.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#354)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#348)(self, caller_api, test_suite):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3692,7 +3689,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#391)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#385)(self, caller_api, test_suite):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3701,7 +3698,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#601)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#595)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -5786,11 +5783,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#23)(api, warning, server_config):**
-### *recipes* / [test\_utils:tests/present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/tests/present_gtest_failures.py)
-
-[DEPS](/scripts/slave/recipe_modules/test_utils/tests/present_gtest_failures.py#9): [test\_utils](#recipe_modules-test_utils), [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/present_gtest_failures.py#15)(api):**
 ### *recipes* / [test\_utils:tests/run\_tests](/scripts/slave/recipe_modules/test_utils/tests/run_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/run_tests.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

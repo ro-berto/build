@@ -8,7 +8,6 @@ import json
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-from . import canonical
 from .util import GTestResults, TestResults
 
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
@@ -54,10 +53,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def __init__(self, max_reported_failures, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
     self._max_reported_failures = int(max_reported_failures)
-
-  @property
-  def canonical(self):
-    return canonical
 
   def limit_failures(self, failures, limit=None):
     """Limit failures of a step to prevent large results JSON.
@@ -141,8 +136,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if r and r.valid:
       p = presentation or step_result.presentation
-
-      failures, text_failures = self.limit_failures(r.deterministic_failures)
+      failures, text_failures = self.limit_failures(r.unique_failures)
       for f in failures:
         # FIXME: We could theoretically split up each run more. This would
         # require some refactoring in util.py to store each individual run's

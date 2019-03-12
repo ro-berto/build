@@ -21,6 +21,15 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 # total run time, which we want to keep low.
 REPEAT_COUNT_FOR_FAILING_TESTS = 10
 
+def _create_test_run_invalid_dictionary():
+  """Returns the dictionary for an invalid test run."""
+  return {
+    'valid': False,
+    'failures': [],
+    'total_tests_ran': 0,
+    'pass_fail_counts': {},
+    'findit_notrun': set()
+  }
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -373,8 +382,14 @@ class Test(object):
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
 
-    return api.test_utils.canonical.deterministic_failures(
-        self._test_runs[suffix])
+    deterministic_failures = []
+    for test_name, result in (
+        self._test_runs[suffix]['pass_fail_counts'].iteritems()):
+      success_count = result['pass_count']
+      fail_count = result['fail_count']
+      if fail_count > 0 and success_count == 0:
+        deterministic_failures.append(test_name)
+    return deterministic_failures
 
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
@@ -909,7 +924,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       failures = result.json.output.get('failures')
       if failures is None:
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
         api.python.failing_step(
             '%s with suffix %s had an invalid result' % (self.name, suffix),
             'The recipe expected the result to contain the key \'failures\'.'
@@ -1074,7 +1089,7 @@ class LocalGTestTest(Test):
       step_result = api.step.active_result
       self._suffix_step_name_map[suffix] = step_result.step['name']
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       else:
         gtest_results = step_result.test_utils.gtest_results
         self._test_runs[suffix] = gtest_results.canonical_result_format()
@@ -1278,7 +1293,7 @@ class FakeCustomResultsHandler(ResultsHandler):
   """Result handler just used for testing."""
 
   def validate_results(self, api, results):
-    invalid_dictionary = api.test_utils.canonical.result_format()
+    invalid_dictionary = _create_test_run_invalid_dictionary()
     invalid_dictionary['valid'] = True
     return invalid_dictionary
 
@@ -2052,7 +2067,7 @@ class PythonBasedTest(Test):
       if failures:
         presentation.status = api.step.FAILURE
     else:
-      self._test_runs[suffix] = api.test_utils.canonical.result_format()
+      self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
@@ -2090,7 +2105,7 @@ class BisectTest(Test):
         self.test_config, **self.kwargs)
     self._suffix_step_name_map[suffix] = step_result.step['name']
     self.run_results = results
-    self._test_runs[suffix] = api.test_utils.canonical.result_format()
+    self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
@@ -2125,7 +2140,7 @@ class BisectTestStaging(Test):
         self.test_config, **self.kwargs)
     self._suffix_step_name_map[suffix] = step_result.step['name']
     self.run_results = results
-    self._test_runs[suffix] = api.test_utils.canonical.result_format()
+    self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
@@ -2158,7 +2173,7 @@ class AndroidTest(Test):
       raise
     finally:
       self._suffix_step_name_map[suffix] = step_result.step['name']
-      self._test_runs[suffix] = api.test_utils.canonical.result_format()
+      self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
@@ -2396,7 +2411,7 @@ class BlinkTest(Test):
       # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
       # which case the retcode is actually 130
       if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       else:
         self._test_runs[suffix] = (step_result.test_utils.test_results.
             canonical_result_format())
