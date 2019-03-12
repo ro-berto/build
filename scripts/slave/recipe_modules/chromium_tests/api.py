@@ -343,15 +343,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = bot_config.get_compile_targets(self, bot_db, tests)
     return sorted(set(compile_targets))
 
-  def _get_android_version_details(self, bot_config, log_details=False):
+  def get_android_version_details(self, bot_config, log_details=False):
     version = bot_config.get('android_version')
     if not version:
       return None, None
 
-    version = self._convert_version(self.m.file.read_text(
-        'get version',
-        self.m.path['checkout'].join(version),
-        test_data='MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n'))
+    version = self.m.chromium.get_version_from_file(
+        self.m.path['checkout'].join(version))
+
     android_version_name = '%(MAJOR)s.%(MINOR)s.%(BUILD)s.%(PATCH)s' % version
     # TODO: Consider CPU architecture
     android_version_code = '%d%03d' % (int(version['BUILD']),
@@ -412,7 +411,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       try:
         android_version_name, android_version_code = (
-            self._get_android_version_details(bot_config, log_details=True))
+            self.get_android_version_details(bot_config, log_details=True))
 
         self.run_mb_and_compile(compile_targets, isolated_targets,
                                 name_suffix=name_suffix,
@@ -1101,7 +1100,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           builders=builders)
       parent_chromium_config = self._chromium_config(parent_bot_config)
       android_version_name, android_version_code = (
-          self._get_android_version_details(parent_bot_config))
+          self.get_android_version_details(parent_bot_config))
       self.m.chromium.mb_lookup(parent_mastername, parent_buildername,
                                 mb_config_path=mb_config_path,
                                 chromium_config=parent_chromium_config,
@@ -1436,11 +1435,3 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
-
-  def _convert_version(self, version):
-    """ Convert the version string to a dict. """
-    output = {}
-    for line in version.splitlines():
-      [k,v] = line.split('=', 1)
-      output[k] = v
-    return output

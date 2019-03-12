@@ -141,29 +141,33 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return the path to the built executable directory."""
     return self.c.build_dir.join(self.c.build_config_fs)
 
-  @property
-  def version(self):
-    """Returns a version dictionary (after get_version()), e.g.
+  def get_version(self):
+    """Returns a dictionary describing the version.
 
+    The dictionary will map the name of the portion of the version to its
+    numeric value e.g.
     { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
     """
-    text = self._version
-    output = {}
+    if self._version is None:
+      self._version = self.get_version_from_file(
+          self.m.path['checkout'].join('chrome', 'VERSION'))
+    return self._version
+
+  def get_version_from_file(self, version_file_path, step_name='get version'):
+    """Returns the version information from a specified file.
+
+    The dictionary will map the name of the portion of the version to its
+    numeric value e.g.
+    { 'MAJOR'": '51', 'MINOR': '0', 'BUILD': '2704', 'PATCH': '0' }
+    """
+    text = self.m.file.read_text(
+        step_name, version_file_path,
+        test_data="MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n")
+    version = {}
     for line in text.splitlines():
       [k,v] = line.split('=', 1)
-      output[k] = v
-    return output
-
-  def get_version(self):
-    if self._version is None:
-      self.reload_version()
-    return self.version
-
-  def reload_version(self):
-    self._version = self.m.file.read_text(
-        'get version',
-        self.m.path['checkout'].join('chrome', 'VERSION'),
-        test_data="MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n")
+      version[k] = v
+    return version
 
   def set_build_properties(self, props):
     self._build_properties = props

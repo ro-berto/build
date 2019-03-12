@@ -6,19 +6,21 @@ from recipe_engine import post_process
 
 DEPS = [
   'chromium',
-  'recipe_engine/python',
+  'recipe_engine/assertions',
 ]
 
 def RunSteps(api):
   version = api.chromium.get_version()
-  api.python.succeeding_step(
-      'chromium version: {MAJOR}.{MINOR}.{BUILD}.{PATCH}'.format(**version),
-      '')
+  api.assertions.assertEqual(version, {
+      'MAJOR': '123',
+      'MINOR': '1',
+      'BUILD': '9876',
+      'PATCH': '2',
+  })
 
 def GenTests(api):
   yield (
       api.test('override_version') +
       api.chromium.override_version(
           major=123, minor=1, build=9876, patch=2) +
-      api.post_process(post_process.MustRun, 'chromium version: 123.1.9876.2') +
       api.post_process(post_process.DropExpectation))
