@@ -154,8 +154,9 @@ def GetCheckout(api):
 
   api.gclient.runhooks()
 
-  api.step('3xHEAD Flutter Hooks',
-      ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
+  with api.depot_tools.on_path():
+    api.step('3xHEAD Flutter Hooks',
+        ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
 
   return flutter_rev
 

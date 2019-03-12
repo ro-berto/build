@@ -82,6 +82,11 @@
     "cmd": [
       "src/third_party/dart/tools/3xhead_flutter_hooks.sh"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "3xHEAD Flutter Hooks"
   },
   {
