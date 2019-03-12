@@ -67,7 +67,7 @@ class CronetApi(recipe_api.RecipeApi):
     if not mastername:
       mastername=self.m.properties['mastername']
     if not buildername:
-      buildername=self.m.properties['buildername']
+      buildername=self.m.buildbucket.builder_name
     if use_goma:
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks()
@@ -209,8 +209,8 @@ class CronetApi(recipe_api.RecipeApi):
         '--results-url', self.DASHBOARD_UPLOAD_URL,
         '--name', 'cronet_perf_tests',
         '--output-json-file', self.m.json.output(),
-        '--buildername', self.m.properties['buildername'],
-        '--buildnumber', self.m.properties['buildnumber'],
+        '--buildername', self.m.buildbucket.builder_name,
+        '--buildnumber', self.m.buildbucket.build.number,
         '--chromium-checkout-dir', self.m.path['start_dir'],
         '--build-dir', self.m.chromium.c.build_dir,
         '--send-as-histograms',
