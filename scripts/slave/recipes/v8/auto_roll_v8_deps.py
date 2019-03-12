@@ -50,6 +50,7 @@ BOT_CONFIGS = {
       'test/mozilla/data',
       'test/simdjs/data',
       'test/test262/data',
+      'test/wasm-js/data',
       'testing/gtest',
       'third_party/WebKit/Source/platform/inspector_protocol',
       'third_party/blink/renderer/platform/inspector_protocol',
@@ -58,6 +59,17 @@ BOT_CONFIGS = {
       'machenbach@chromium.org',
       'hablich@chromium.org',
       'sergiyb@chromium.org',
+    ],
+  },
+  'Auto-roll - wasm-spec': {
+    'subject': 'Update wasm-spec.',
+    'whitelist': [
+      # Only roll these dependencies (list without solution name prefix).
+      'test/wasm-js/data',
+    ],
+    'reviewers': [
+      'ahaas@chromium.org',
+      'clemensh@chromium.org',
     ],
   },
 }
@@ -311,6 +323,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       )
   )
+
   yield (
       template('test262', 'Auto-roll - test262') +
       api.override_step_data(
