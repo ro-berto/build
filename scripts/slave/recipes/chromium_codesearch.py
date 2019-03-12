@@ -134,6 +134,7 @@ SPEC = freeze({
       'corpus': 'chromium.googlesource.com/chromium/src',
       'build_config': 'win',
       'root': 'chromium-win',
+      'experimental': True,
     },
   },
 })
