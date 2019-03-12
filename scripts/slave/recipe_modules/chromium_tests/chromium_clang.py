@@ -333,6 +333,33 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ToTMacOfficial': {
+      'chromium_config': 'clang_tot_mac',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_dimensions': {
+        'pool': 'chrome.tests',
+      },
+      'chromium_apply_config': ['mb'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'mac', },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'ToTMacOfficial')
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ToTMac (dbg)': {
       'chromium_config': 'clang_tot_mac',
       'chromium_apply_config': ['mb'],
