@@ -2908,7 +2908,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@0122012201",
+    "name": "Bisecting revision (2).Wiggling revision chromium@0122012201",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2925,7 +2925,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@0122012201.gsutil ls",
+    "name": "Bisecting revision (2).Wiggling revision chromium@0122012201.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2943,7 +2943,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@0122012201.gsutil ls (2)",
+    "name": "Bisecting revision (2).Wiggling revision chromium@0122012201.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -2960,7 +2960,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (2)",
+    "name": "Bisecting revision (2).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -3135,7 +3135,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (2)",
+    "name": "Bisecting revision (2).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3152,7 +3152,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"0122012201220122012201220122012201220122\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (2)",
+    "name": "Bisecting revision (2).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3170,7 +3170,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (2)",
+    "name": "Bisecting revision (2).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3187,7 +3187,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_0122012201220122012201220122012201220122.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (2)",
+    "name": "Bisecting revision (2).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3199,7 +3199,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (2)",
+    "name": "Bisecting revision (2).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3221,7 +3221,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (2)",
+    "name": "Bisecting revision (2).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3243,7 +3243,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef",
+    "name": "Bisecting revision (3).Wiggling revision chromium@ef20ef20ef",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3260,7 +3260,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef.gsutil ls",
+    "name": "Bisecting revision (3).Wiggling revision chromium@ef20ef20ef.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3278,7 +3278,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@ef20ef20ef.gsutil ls (2)",
+    "name": "Bisecting revision (3).Wiggling revision chromium@ef20ef20ef.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3295,7 +3295,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (3)",
+    "name": "Bisecting revision (3).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -3470,7 +3470,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (3)",
+    "name": "Bisecting revision (3).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3487,7 +3487,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (3)",
+    "name": "Bisecting revision (3).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3505,7 +3505,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (3)",
+    "name": "Bisecting revision (3).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3522,7 +3522,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ef20ef20ef20ef20ef20ef20ef20ef20ef20ef20.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (3)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3534,7 +3534,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (3)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3556,7 +3556,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (3)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3578,7 +3578,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@1223122312",
+    "name": "Bisecting revision (4).Wiggling revision chromium@1223122312",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3595,7 +3595,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@1223122312.gsutil ls",
+    "name": "Bisecting revision (4).Wiggling revision chromium@1223122312.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3613,7 +3613,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@1223122312.gsutil ls (2)",
+    "name": "Bisecting revision (4).Wiggling revision chromium@1223122312.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3630,7 +3630,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (4)",
+    "name": "Bisecting revision (4).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -3805,7 +3805,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (4)",
+    "name": "Bisecting revision (4).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -3822,7 +3822,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"1223122312231223122312231223122312231223\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (4)",
+    "name": "Bisecting revision (4).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3840,7 +3840,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (4)",
+    "name": "Bisecting revision (4).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3857,7 +3857,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_1223122312231223122312231223122312231223.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (4)",
+    "name": "Bisecting revision (4).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3869,7 +3869,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (4)",
+    "name": "Bisecting revision (4).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -3891,7 +3891,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (4)",
+    "name": "Bisecting revision (4).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3913,7 +3913,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@de19de19de",
+    "name": "Bisecting revision (5).Wiggling revision chromium@de19de19de",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3930,7 +3930,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@de19de19de.gsutil ls",
+    "name": "Bisecting revision (5).Wiggling revision chromium@de19de19de.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -3947,7 +3947,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (5)",
+    "name": "Bisecting revision (5).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -4122,7 +4122,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (5)",
+    "name": "Bisecting revision (5).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -4139,7 +4139,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"de19de19de19de19de19de19de19de19de19de19\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (5)",
+    "name": "Bisecting revision (5).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4157,7 +4157,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (5)",
+    "name": "Bisecting revision (5).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4174,7 +4174,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_de19de19de19de19de19de19de19de19de19de19.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (5)",
+    "name": "Bisecting revision (5).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4186,7 +4186,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (5)",
+    "name": "Bisecting revision (5).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4208,7 +4208,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (5)",
+    "name": "Bisecting revision (5).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4230,7 +4230,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@2324232423",
+    "name": "Bisecting revision (6).Wiggling revision chromium@2324232423",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4247,7 +4247,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@2324232423.gsutil ls",
+    "name": "Bisecting revision (6).Wiggling revision chromium@2324232423.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4264,7 +4264,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (6)",
+    "name": "Bisecting revision (6).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -4439,7 +4439,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (6)",
+    "name": "Bisecting revision (6).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -4456,7 +4456,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"2324232423242324232423242324232423242324\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (6)",
+    "name": "Bisecting revision (6).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4474,7 +4474,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (6)",
+    "name": "Bisecting revision (6).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4491,7 +4491,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_2324232423242324232423242324232423242324.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (6)",
+    "name": "Bisecting revision (6).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4503,7 +4503,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (6)",
+    "name": "Bisecting revision (6).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4525,7 +4525,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (6)",
+    "name": "Bisecting revision (6).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4547,7 +4547,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@cd18cd18cd",
+    "name": "Bisecting revision (7).Wiggling revision chromium@cd18cd18cd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4564,7 +4564,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@cd18cd18cd.gsutil ls",
+    "name": "Bisecting revision (7).Wiggling revision chromium@cd18cd18cd.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4581,7 +4581,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (7)",
+    "name": "Bisecting revision (7).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -4756,7 +4756,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (7)",
+    "name": "Bisecting revision (7).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -4773,7 +4773,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (7)",
+    "name": "Bisecting revision (7).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4791,7 +4791,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (7)",
+    "name": "Bisecting revision (7).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4808,7 +4808,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_cd18cd18cd18cd18cd18cd18cd18cd18cd18cd18.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (7)",
+    "name": "Bisecting revision (7).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4820,7 +4820,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (7)",
+    "name": "Bisecting revision (7).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -4842,7 +4842,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (7)",
+    "name": "Bisecting revision (7).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4864,7 +4864,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@3425342534",
+    "name": "Bisecting revision (8).Wiggling revision chromium@3425342534",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4881,7 +4881,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Wiggling revision chromium@3425342534.gsutil ls",
+    "name": "Bisecting revision (8).Wiggling revision chromium@3425342534.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -4898,7 +4898,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (8)",
+    "name": "Bisecting revision (8).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -5073,7 +5073,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (8)",
+    "name": "Bisecting revision (8).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -5090,7 +5090,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"3425342534253425342534253425342534253425\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (8)",
+    "name": "Bisecting revision (8).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5108,7 +5108,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (8)",
+    "name": "Bisecting revision (8).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5125,7 +5125,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_3425342534253425342534253425342534253425.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (8)",
+    "name": "Bisecting revision (8).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -5137,7 +5137,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (8)",
+    "name": "Bisecting revision (8).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5159,7 +5159,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (8)",
+    "name": "Bisecting revision (8).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5181,7 +5181,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@bc17bc17bc",
+    "name": "Bisecting revision (9).Wiggling revision chromium@bc17bc17bc",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5197,7 +5197,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (9)",
+    "name": "Bisecting revision (9).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -5372,7 +5372,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (9)",
+    "name": "Bisecting revision (9).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -5389,7 +5389,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (9)",
+    "name": "Bisecting revision (9).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5407,7 +5407,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (9)",
+    "name": "Bisecting revision (9).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5424,7 +5424,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_bc17bc17bc17bc17bc17bc17bc17bc17bc17bc17.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (9)",
+    "name": "Bisecting revision (9).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -5436,7 +5436,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (9)",
+    "name": "Bisecting revision (9).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5458,7 +5458,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (9)",
+    "name": "Bisecting revision (9).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5480,7 +5480,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@dcdcdc0ff1",
+    "name": "Bisecting revision (10).Wiggling revision chromium@dcdcdc0ff1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5496,7 +5496,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (10)",
+    "name": "Bisecting revision (10).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -5671,7 +5671,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (10)",
+    "name": "Bisecting revision (10).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -5688,7 +5688,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"dcdcdc0ff1122212323134879ddceeb1240b0988\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (10)",
+    "name": "Bisecting revision (10).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5706,7 +5706,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (10)",
+    "name": "Bisecting revision (10).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5723,7 +5723,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (10)",
+    "name": "Bisecting revision (10).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -5735,7 +5735,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (10)",
+    "name": "Bisecting revision (10).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5757,7 +5757,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (10)",
+    "name": "Bisecting revision (10).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5788,7 +5788,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (11)",
+    "name": "Bisecting revision (11).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -5963,7 +5963,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (11)",
+    "name": "Bisecting revision (11).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -5980,7 +5980,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put (11)",
+    "name": "Bisecting revision (11).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5998,7 +5998,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build (11)",
+    "name": "Bisecting revision (11).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6015,7 +6015,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_ab16ab16ab16ab16ab16ab16ab16ab16ab16ab16.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (11)",
+    "name": "Bisecting revision (11).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -6027,7 +6027,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (11)",
+    "name": "Bisecting revision (11).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6049,7 +6049,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (11)",
+    "name": "Bisecting revision (11).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",

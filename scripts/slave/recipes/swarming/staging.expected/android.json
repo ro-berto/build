@@ -369,10 +369,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Android_N5_Swarm/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -503,10 +499,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Android_N5_Swarm/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -672,10 +664,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Android_N5_Swarm",
-    "env": {
-      "PATH": "[BUILDER_CACHE]/Android_N5_Swarm/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_N5_Swarm/src/build/android:<PATH>"
-    },
     "name": "test_pre_run"
   },
   {

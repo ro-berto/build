@@ -715,10 +715,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r0.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -860,10 +856,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r0.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1033,10 +1025,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test r0.test_pre_run (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

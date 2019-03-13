@@ -184,7 +184,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "ensure_goma"
   },
   {
@@ -292,10 +291,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -425,10 +420,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -632,7 +623,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "test_pre_run (with patch)"
   },
   {
@@ -1581,7 +1571,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "ensure swarming"
   },
   {

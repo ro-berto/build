@@ -165,9 +165,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {
@@ -219,9 +216,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "system_python"
   },
   {
@@ -390,9 +384,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "system_python (2)"
   },
   {
@@ -411,7 +402,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_dir (2)",
+    "name": "system_python (2).create_dir",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -430,7 +421,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (3)",
+    "name": "system_python (2).remove_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -449,7 +440,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (4)",
+    "name": "system_python (2).remove_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -469,7 +460,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (3)",
+    "name": "system_python (2).create_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -489,7 +480,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (4)",
+    "name": "system_python (2).create_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -542,9 +533,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "system_python (3)"
   },
   {
@@ -563,7 +551,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_dir (3)",
+    "name": "system_python (3).create_dir",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -582,7 +570,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (5)",
+    "name": "system_python (3).remove_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -601,7 +589,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (6)",
+    "name": "system_python (3).remove_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -621,7 +609,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (5)",
+    "name": "system_python (3).create_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -641,7 +629,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (6)",
+    "name": "system_python (3).create_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -691,9 +679,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "system_python (4)"
   },
   {
@@ -712,7 +697,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_dir (4)",
+    "name": "system_python (4).create_dir",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -731,7 +716,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (7)",
+    "name": "system_python (4).remove_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -750,7 +735,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.remove_link (8)",
+    "name": "system_python (4).remove_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -770,7 +755,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (7)",
+    "name": "system_python (4).create_link",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -790,7 +775,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "system_python.create_link (8)",
+    "name": "system_python (4).create_link (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

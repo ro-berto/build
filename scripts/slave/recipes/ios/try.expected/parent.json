@@ -523,7 +523,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "bootstrap swarming"
   },
   {
@@ -543,7 +542,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "isolate"
   },
   {
@@ -725,7 +723,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "trigger"
   },
   {
@@ -841,7 +838,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios/src",
     "name": "ensure swarming"
   },
   {

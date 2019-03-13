@@ -697,7 +697,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "Running WITH patch"
   },
   {
@@ -1034,12 +1033,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "De-applying patch"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "Running WITHOUT patch"
   },
   {
@@ -1548,7 +1545,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>",
@@ -1598,7 +1594,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus7_perf_bisect",
     "name": "Notify dashboard"
   },
   {

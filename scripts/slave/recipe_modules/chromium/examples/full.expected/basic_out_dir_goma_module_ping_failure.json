@@ -165,9 +165,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {
@@ -337,10 +334,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_EXCEPTION@@@"

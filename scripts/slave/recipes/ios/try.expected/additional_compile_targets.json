@@ -502,7 +502,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "bootstrap swarming"
   },
   {
@@ -522,7 +521,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "isolate"
   },
   {
@@ -592,7 +590,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "name": "trigger"
   },
   {

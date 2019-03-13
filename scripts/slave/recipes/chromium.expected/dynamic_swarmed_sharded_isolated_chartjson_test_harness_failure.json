@@ -188,9 +188,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {
@@ -382,10 +379,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test_pre_run"
   },
   {
@@ -622,10 +615,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure swarming"
   },
   {

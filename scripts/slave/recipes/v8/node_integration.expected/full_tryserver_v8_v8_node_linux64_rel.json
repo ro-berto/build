@@ -178,7 +178,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/v8_node_linux64_rel/node.js",
     "name": "build"
   },
   {

@@ -8,7 +8,7 @@
       "climate": "rainy",
       "mood": "excellent"
     },
-    "name": "grandparent.mom.child"
+    "name": "grandparentmomchild"
   },
   {
     "cmd": [
@@ -19,7 +19,7 @@
       "climate": "cloudy",
       "mood": "excellent"
     },
-    "name": "grandparent.dad.child"
+    "name": "grandparentdadchild"
   },
   {
     "cmd": [
@@ -30,7 +30,7 @@
       "climate": "sunny",
       "mood": "excellent"
     },
-    "name": "grandparent.aunt"
+    "name": "grandparentaunt"
   },
   {
     "jsonResult": null,

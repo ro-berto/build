@@ -184,15 +184,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -308,15 +299,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "postprocess_for_goma"
   },
   {

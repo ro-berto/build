@@ -174,15 +174,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -298,15 +289,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -894,15 +876,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "trigger shards for test1"
   },
   {
@@ -1423,7 +1396,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "download previous results"
   },
   {
@@ -1580,7 +1552,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking"
   },
   {
@@ -1609,7 +1580,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.trigger shards for test1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2072,7 +2042,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "upload new results"
   },
   {

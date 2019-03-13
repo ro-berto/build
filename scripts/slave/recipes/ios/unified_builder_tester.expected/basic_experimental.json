@@ -427,7 +427,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
     "name": "bootstrap swarming"
   },
   {
@@ -447,7 +446,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
     "name": "isolate"
   },
   {
@@ -789,7 +787,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
     "name": "trigger"
   },
   {
@@ -1127,7 +1124,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
     "name": "ensure swarming"
   },
   {

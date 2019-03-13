@@ -305,21 +305,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "JAVA_HOME": "[CACHE]/java",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
-        "[CACHE]/java/bin"
-      ]
-    },
     "name": "ensure_cloudkms"
   },
   {

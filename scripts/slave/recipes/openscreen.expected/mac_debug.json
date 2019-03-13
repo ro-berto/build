@@ -209,7 +209,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/openscreen",
     "name": "preprocess_for_goma"
   },
   {
@@ -297,7 +296,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/openscreen",
     "name": "postprocess_for_goma"
   },
   {

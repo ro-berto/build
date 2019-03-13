@@ -690,7 +690,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Clearing results directory"
   },
   {
@@ -935,7 +934,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Expanding reference range",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Range: 0000000000000000000000000000000000000000:fc6dfc7ff5b1073408499478969261b826441144 (1 commits)<br/>@@@",
@@ -1062,7 +1060,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Gathering reference values"
   },
   {
@@ -1356,9 +1353,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Gathering reference values.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2324,9 +2318,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Gathering reference values.test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3061,12 +3052,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range.Retesting GOOD revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3325,9 +3314,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -3730,7 +3716,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range.Retesting BAD revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3989,9 +3974,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Re-testing reference range.Retesting BAD revision.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -4394,7 +4376,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range.Retesting GOOD revision (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4430,7 +4411,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.bot_update (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -4594,7 +4575,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.build directory (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4613,7 +4594,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.gsutil download_build_product (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4626,7 +4607,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4646,17 +4627,14 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4677,7 +4655,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4724,7 +4702,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4747,7 +4725,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4763,7 +4741,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4788,7 +4766,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4835,7 +4813,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4858,7 +4836,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4874,7 +4852,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4899,7 +4877,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4946,7 +4924,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4969,7 +4947,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4985,7 +4963,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5010,7 +4988,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5057,7 +5035,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5080,7 +5058,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5096,7 +5074,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5121,7 +5099,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5168,7 +5146,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5191,7 +5169,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5207,7 +5185,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5226,7 +5204,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.test_report (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).test_report",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -5280,7 +5258,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range.Retesting BAD revision (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5316,7 +5293,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.bot_update (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -5480,7 +5457,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.build directory (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5499,7 +5476,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.gsutil download_build_product (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5512,7 +5489,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.unzip_build_product (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5532,17 +5509,14 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.install ChromePublic.apk (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "name": "Re-testing reference range.Retesting BAD revision.test_pre_run (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5563,7 +5537,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5610,7 +5584,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5633,7 +5607,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5649,7 +5623,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5674,7 +5648,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5721,7 +5695,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5744,7 +5718,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5760,7 +5734,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5785,7 +5759,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5832,7 +5806,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5855,7 +5829,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5871,7 +5845,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5896,7 +5870,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5943,7 +5917,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 4 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5966,7 +5940,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5982,7 +5956,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6007,7 +5981,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6054,7 +6028,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 5 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6077,7 +6051,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6093,7 +6067,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6112,7 +6086,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.test_report (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).test_report",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -6166,7 +6140,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Re-testing reference range.Retesting GOOD revision (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -6202,7 +6175,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.bot_update (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -6366,7 +6339,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.build directory (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6385,7 +6358,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.gsutil download_build_product (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).gsutil download_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6398,7 +6371,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.unzip_build_product (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).unzip_build_product",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6418,17 +6391,14 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.install ChromePublic.apk (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).install ChromePublic.apk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
-    "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6449,7 +6419,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6496,7 +6466,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6519,7 +6489,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6535,7 +6505,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6560,7 +6530,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6607,7 +6577,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6630,7 +6600,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6646,7 +6616,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6671,7 +6641,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6718,7 +6688,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6741,7 +6711,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6757,7 +6727,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6782,7 +6752,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6829,7 +6799,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6852,7 +6822,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6868,7 +6838,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6893,7 +6863,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6940,7 +6910,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -6963,7 +6933,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -6979,7 +6949,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7004,7 +6974,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -7051,7 +7021,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 6 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -7074,7 +7044,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -7090,7 +7060,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7115,7 +7085,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -7162,7 +7132,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 7 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -7185,7 +7155,7 @@
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -7201,7 +7171,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7220,7 +7190,7 @@
     "env": {
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.test_report (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).test_report",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -7274,7 +7244,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Bisecting revision",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Revision: chromium@e28dc0d49c<br/>@@@"
@@ -7656,9 +7625,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Bisecting revision.test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8443,9 +8409,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Bisecting revision.test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -8887,9 +8850,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Bisecting revision.test_pre_run (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -9553,9 +9513,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "Bisecting revision.test_pre_run (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -10441,7 +10398,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Check bisect finished on revision chromium@e28dc0d49c"
   },
   {
@@ -10462,7 +10418,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Resolving hashes"
   },
   {

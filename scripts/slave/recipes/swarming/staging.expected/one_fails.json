@@ -359,10 +359,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux_Swarm/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -492,10 +488,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux_Swarm/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -713,7 +705,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux_Swarm",
     "name": "test_pre_run"
   },
   {
@@ -932,7 +923,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Linux_Swarm",
     "name": "ensure swarming"
   },
   {

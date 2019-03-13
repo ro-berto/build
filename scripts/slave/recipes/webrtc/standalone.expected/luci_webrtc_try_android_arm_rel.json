@@ -257,10 +257,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -425,10 +421,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -4509,7 +4501,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "name": "ensure_goma (2)"
   },
   {
@@ -4527,7 +4518,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "ensure_goma.ensure_installed (2)",
+    "name": "ensure_goma (2).ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4543,7 +4534,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -4560,7 +4550,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (2)",
+    "name": "preprocess_for_goma (2).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4583,7 +4573,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (2)",
+    "name": "preprocess_for_goma (2).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
@@ -4609,7 +4599,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (2)",
+    "name": "preprocess_for_goma (2).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4635,7 +4625,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -4656,7 +4645,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (2)",
+    "name": "postprocess_for_goma (2).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4689,7 +4678,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "postprocess_for_goma.goma_stat (2)",
+    "name": "postprocess_for_goma (2).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4711,7 +4700,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "name": "postprocess_for_goma.stop_goma (2)",
+    "name": "postprocess_for_goma (2).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4757,7 +4746,7 @@
       "bot_id"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "postprocess_for_goma.upload_log (2)",
+    "name": "postprocess_for_goma (2).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4783,14 +4772,13 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (2)",
+    "name": "postprocess_for_goma (2).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "name": "ensure swarming"
   },
   {

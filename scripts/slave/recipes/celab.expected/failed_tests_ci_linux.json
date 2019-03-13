@@ -282,7 +282,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "test summary",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@exception 3rd test@Error(\"Step('read logs') failed 'EEXIST' with: file command encountered system error EEXIST\",)@@@",
@@ -321,7 +320,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "test summary.1st test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -386,7 +384,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "test summary.2nd test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -416,7 +413,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "test summary.3rd test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

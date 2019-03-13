@@ -774,10 +774,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r2.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -919,10 +915,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r2.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1127,10 +1119,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test r2.test_pre_run (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1251,10 +1239,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test r2.ensure swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1848,10 +1832,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r3.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1993,10 +1973,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r3.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2201,10 +2177,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test r3.test_pre_run (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2879,10 +2851,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r4.preprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3024,10 +2992,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r4.postprocess_for_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3232,10 +3196,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test r4.test_pre_run (r4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

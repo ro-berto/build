@@ -8392,7 +8392,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Wiggling revision chromium@a6298e4afe,v8@003",
+    "name": "Bisecting revision (2).Wiggling revision chromium@a6298e4afe,v8@003",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8408,7 +8408,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (2)",
+    "name": "Bisecting revision (2).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -8505,7 +8505,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_0194835e28136368fca22ecdf9cdd462d414688c.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (2)",
+    "name": "Bisecting revision (2).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8537,7 +8537,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Bisecting revision.bot_update (8)",
+    "name": "Bisecting revision (2).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -8701,7 +8701,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.build directory (8)",
+    "name": "Bisecting revision (2).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8732,7 +8732,7 @@
       "571"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.extract build (8)",
+    "name": "Bisecting revision (2).extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8749,7 +8749,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.read GN args (8)",
+    "name": "Bisecting revision (2).read GN args",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -8757,7 +8757,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (9)",
+    "name": "Bisecting revision (2).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8775,7 +8775,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (38)",
+    "name": "Bisecting revision (2).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8817,7 +8817,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8837,7 +8837,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (38)",
+    "name": "Bisecting revision (2).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8850,7 +8850,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (38)",
+    "name": "Bisecting revision (2).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8872,7 +8872,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (39)",
+    "name": "Bisecting revision (2).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8914,7 +8914,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -8934,7 +8934,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (39)",
+    "name": "Bisecting revision (2).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8947,7 +8947,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (39)",
+    "name": "Bisecting revision (2).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8969,7 +8969,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (40)",
+    "name": "Bisecting revision (2).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9011,7 +9011,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9031,7 +9031,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (40)",
+    "name": "Bisecting revision (2).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9044,7 +9044,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (40)",
+    "name": "Bisecting revision (2).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9066,7 +9066,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (41)",
+    "name": "Bisecting revision (2).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9108,7 +9108,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9128,7 +9128,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (41)",
+    "name": "Bisecting revision (2).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9141,7 +9141,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (41)",
+    "name": "Bisecting revision (2).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9163,7 +9163,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (42)",
+    "name": "Bisecting revision (2).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9205,7 +9205,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9225,7 +9225,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (42)",
+    "name": "Bisecting revision (2).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9238,7 +9238,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (42)",
+    "name": "Bisecting revision (2).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9260,7 +9260,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (43)",
+    "name": "Bisecting revision (2).results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9302,7 +9302,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 6 of 6 (2)",
+    "name": "Bisecting revision (2).Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9322,7 +9322,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (43)",
+    "name": "Bisecting revision (2).write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9335,7 +9335,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (43)",
+    "name": "Bisecting revision (2).Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9354,7 +9354,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (17)",
+    "name": "Bisecting revision (2).Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9392,7 +9392,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (18)",
+    "name": "Bisecting revision (2).Compare samples (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9422,7 +9422,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (10)",
+    "name": "Bisecting revision (2).test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9440,7 +9440,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (44)",
+    "name": "Bisecting revision (2).results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9482,7 +9482,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 3 (4)",
+    "name": "Bisecting revision (2).Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9502,7 +9502,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (44)",
+    "name": "Bisecting revision (2).write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9515,7 +9515,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (44)",
+    "name": "Bisecting revision (2).Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9537,7 +9537,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (45)",
+    "name": "Bisecting revision (2).results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9579,7 +9579,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 3 (4)",
+    "name": "Bisecting revision (2).Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9599,7 +9599,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (45)",
+    "name": "Bisecting revision (2).write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9612,7 +9612,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (45)",
+    "name": "Bisecting revision (2).Reading valueset results (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9634,7 +9634,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (46)",
+    "name": "Bisecting revision (2).results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9676,7 +9676,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 3 (4)",
+    "name": "Bisecting revision (2).Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9696,7 +9696,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (46)",
+    "name": "Bisecting revision (2).write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9709,7 +9709,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (46)",
+    "name": "Bisecting revision (2).Reading valueset results (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9728,7 +9728,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (19)",
+    "name": "Bisecting revision (2).Compare samples (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9766,7 +9766,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (20)",
+    "name": "Bisecting revision (2).Compare samples (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9796,7 +9796,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (11)",
+    "name": "Bisecting revision (2).test_pre_run (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9814,7 +9814,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (47)",
+    "name": "Bisecting revision (2).results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9856,7 +9856,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 5 (4)",
+    "name": "Bisecting revision (2).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9876,7 +9876,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (47)",
+    "name": "Bisecting revision (2).write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9889,7 +9889,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (47)",
+    "name": "Bisecting revision (2).Reading valueset results (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -9911,7 +9911,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (48)",
+    "name": "Bisecting revision (2).results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9953,7 +9953,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 5 (4)",
+    "name": "Bisecting revision (2).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -9973,7 +9973,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (48)",
+    "name": "Bisecting revision (2).write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -9986,7 +9986,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (48)",
+    "name": "Bisecting revision (2).Reading valueset results (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10008,7 +10008,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (49)",
+    "name": "Bisecting revision (2).results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10050,7 +10050,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 5 (4)",
+    "name": "Bisecting revision (2).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10070,7 +10070,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (49)",
+    "name": "Bisecting revision (2).write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10083,7 +10083,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (49)",
+    "name": "Bisecting revision (2).Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10105,7 +10105,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (50)",
+    "name": "Bisecting revision (2).results directory (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10147,7 +10147,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 5 (4)",
+    "name": "Bisecting revision (2).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10167,7 +10167,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (50)",
+    "name": "Bisecting revision (2).write buildbot output to disk (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10180,7 +10180,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (50)",
+    "name": "Bisecting revision (2).Reading valueset results (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10202,7 +10202,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (51)",
+    "name": "Bisecting revision (2).results directory (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10244,7 +10244,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 5 (4)",
+    "name": "Bisecting revision (2).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10264,7 +10264,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (51)",
+    "name": "Bisecting revision (2).write buildbot output to disk (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10277,7 +10277,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (51)",
+    "name": "Bisecting revision (2).Reading valueset results (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10296,7 +10296,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (21)",
+    "name": "Bisecting revision (2).Compare samples (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10334,7 +10334,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (22)",
+    "name": "Bisecting revision (2).Compare samples (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10364,7 +10364,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (12)",
+    "name": "Bisecting revision (2).test_pre_run (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10382,7 +10382,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (52)",
+    "name": "Bisecting revision (2).results directory (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10424,7 +10424,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10444,7 +10444,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (52)",
+    "name": "Bisecting revision (2).write buildbot output to disk (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10457,7 +10457,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (52)",
+    "name": "Bisecting revision (2).Reading valueset results (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10479,7 +10479,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (53)",
+    "name": "Bisecting revision (2).results directory (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10521,7 +10521,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10541,7 +10541,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (53)",
+    "name": "Bisecting revision (2).write buildbot output to disk (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10554,7 +10554,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (53)",
+    "name": "Bisecting revision (2).Reading valueset results (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10576,7 +10576,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (54)",
+    "name": "Bisecting revision (2).results directory (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10618,7 +10618,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10638,7 +10638,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (54)",
+    "name": "Bisecting revision (2).write buildbot output to disk (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10651,7 +10651,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (54)",
+    "name": "Bisecting revision (2).Reading valueset results (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10673,7 +10673,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (55)",
+    "name": "Bisecting revision (2).results directory (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10715,7 +10715,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10735,7 +10735,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (55)",
+    "name": "Bisecting revision (2).write buildbot output to disk (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10748,7 +10748,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (55)",
+    "name": "Bisecting revision (2).Reading valueset results (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10770,7 +10770,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (56)",
+    "name": "Bisecting revision (2).results directory (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10812,7 +10812,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10832,7 +10832,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (56)",
+    "name": "Bisecting revision (2).write buildbot output to disk (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10845,7 +10845,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (56)",
+    "name": "Bisecting revision (2).Reading valueset results (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10867,7 +10867,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (57)",
+    "name": "Bisecting revision (2).results directory (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10909,7 +10909,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 6 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -10929,7 +10929,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (57)",
+    "name": "Bisecting revision (2).write buildbot output to disk (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -10942,7 +10942,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (57)",
+    "name": "Bisecting revision (2).Reading valueset results (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -10964,7 +10964,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (58)",
+    "name": "Bisecting revision (2).results directory (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -11006,7 +11006,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 7 of 7 (2)",
+    "name": "Bisecting revision (2).Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -11026,7 +11026,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (58)",
+    "name": "Bisecting revision (2).write buildbot output to disk (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -11039,7 +11039,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (58)",
+    "name": "Bisecting revision (2).Reading valueset results (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -11058,7 +11058,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (23)",
+    "name": "Bisecting revision (2).Compare samples (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -11096,7 +11096,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (24)",
+    "name": "Bisecting revision (2).Compare samples (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -11142,7 +11142,7 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Post bisect results (3)",
+    "name": "Bisecting revision (3).Post bisect results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
@@ -11241,7 +11241,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.gsutil ls (3)",
+    "name": "Bisecting revision (3).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1"
@@ -11258,7 +11258,7 @@
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip\\\", \\\"clobber\\\": true, \\\"deps_revision_overrides\\\": {\\\"src/v8\\\": \\\"002\\\"}, \\\"parent_got_revision\\\": \\\"a6298e4afedbf2cd461755ea6f45b0ad64222222\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.buildbucket.put",
+    "name": "Bisecting revision (3).buildbucket.put",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -11276,7 +11276,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.Waiting for build",
+    "name": "Bisecting revision (3).Waiting for build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -11293,7 +11293,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11305,7 +11305,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping",
+    "name": "Bisecting revision (3).Waiting for build.sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11327,7 +11327,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11352,7 +11352,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (2)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11364,7 +11364,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (2)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11386,7 +11386,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (2)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11411,7 +11411,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (3)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11423,7 +11423,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (3)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11445,7 +11445,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (3)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11470,7 +11470,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (4)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11482,7 +11482,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (4)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11504,7 +11504,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (4)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11529,7 +11529,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (5)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11541,7 +11541,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (5)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11563,7 +11563,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (5)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11588,7 +11588,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (6)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11600,7 +11600,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (6)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11622,7 +11622,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (6)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11647,7 +11647,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (7)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11659,7 +11659,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (7)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11681,7 +11681,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (7)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11706,7 +11706,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (8)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11718,7 +11718,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (8)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11740,7 +11740,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (8)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11765,7 +11765,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (9)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -11777,7 +11777,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Bisecting revision.Waiting for build.sleeping (9)",
+    "name": "Bisecting revision (3).Waiting for build.sleeping (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -11799,7 +11799,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.buildbucket.get (9)",
+    "name": "Bisecting revision (3).Waiting for build.buildbucket.get (9)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -11824,7 +11824,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_a6298e4afedbf2cd461755ea6f45b0ad64222222_f41fbceab5ec5a7ca71875623f52647197f4f39b.zip"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.Waiting for build.gsutil ls (10)",
+    "name": "Bisecting revision (3).Waiting for build.gsutil ls (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -11856,7 +11856,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Bisecting revision.bot_update (9)",
+    "name": "Bisecting revision (3).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -12020,7 +12020,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.build directory (9)",
+    "name": "Bisecting revision (3).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12051,7 +12051,7 @@
       "571"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.extract build (9)",
+    "name": "Bisecting revision (3).extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12068,7 +12068,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.read GN args (9)",
+    "name": "Bisecting revision (3).read GN args",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -12076,7 +12076,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (13)",
+    "name": "Bisecting revision (3).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12094,7 +12094,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (59)",
+    "name": "Bisecting revision (3).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12136,7 +12136,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 1 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12156,7 +12156,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (59)",
+    "name": "Bisecting revision (3).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12169,7 +12169,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (59)",
+    "name": "Bisecting revision (3).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12191,7 +12191,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (60)",
+    "name": "Bisecting revision (3).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12233,7 +12233,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 2 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12253,7 +12253,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (60)",
+    "name": "Bisecting revision (3).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12266,7 +12266,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (60)",
+    "name": "Bisecting revision (3).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12288,7 +12288,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (61)",
+    "name": "Bisecting revision (3).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12330,7 +12330,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 3 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12350,7 +12350,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (61)",
+    "name": "Bisecting revision (3).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12363,7 +12363,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (61)",
+    "name": "Bisecting revision (3).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12385,7 +12385,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (62)",
+    "name": "Bisecting revision (3).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12427,7 +12427,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 4 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12447,7 +12447,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (62)",
+    "name": "Bisecting revision (3).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12460,7 +12460,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (62)",
+    "name": "Bisecting revision (3).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12482,7 +12482,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (63)",
+    "name": "Bisecting revision (3).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12524,7 +12524,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 5 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12544,7 +12544,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (63)",
+    "name": "Bisecting revision (3).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12557,7 +12557,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (63)",
+    "name": "Bisecting revision (3).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12579,7 +12579,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (64)",
+    "name": "Bisecting revision (3).results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12621,7 +12621,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 6 of 6 (3)",
+    "name": "Bisecting revision (3).Performance Test 6 of 6",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12641,7 +12641,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (64)",
+    "name": "Bisecting revision (3).write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12654,7 +12654,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (64)",
+    "name": "Bisecting revision (3).Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12673,7 +12673,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (25)",
+    "name": "Bisecting revision (3).Compare samples",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12711,7 +12711,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (26)",
+    "name": "Bisecting revision (3).Compare samples (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12741,7 +12741,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (14)",
+    "name": "Bisecting revision (3).test_pre_run (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12759,7 +12759,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (65)",
+    "name": "Bisecting revision (3).results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12801,7 +12801,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 3 (5)",
+    "name": "Bisecting revision (3).Performance Test 1 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12821,7 +12821,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (65)",
+    "name": "Bisecting revision (3).write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12834,7 +12834,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (65)",
+    "name": "Bisecting revision (3).Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12856,7 +12856,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (66)",
+    "name": "Bisecting revision (3).results directory (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12898,7 +12898,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 3 (5)",
+    "name": "Bisecting revision (3).Performance Test 2 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -12918,7 +12918,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (66)",
+    "name": "Bisecting revision (3).write buildbot output to disk (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12931,7 +12931,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (66)",
+    "name": "Bisecting revision (3).Reading valueset results (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -12953,7 +12953,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (67)",
+    "name": "Bisecting revision (3).results directory (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12995,7 +12995,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 3 (5)",
+    "name": "Bisecting revision (3).Performance Test 3 of 3",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13015,7 +13015,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (67)",
+    "name": "Bisecting revision (3).write buildbot output to disk (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13028,7 +13028,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (67)",
+    "name": "Bisecting revision (3).Reading valueset results (9)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13047,7 +13047,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (27)",
+    "name": "Bisecting revision (3).Compare samples (3)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13085,7 +13085,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (28)",
+    "name": "Bisecting revision (3).Compare samples (4)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13115,7 +13115,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (15)",
+    "name": "Bisecting revision (3).test_pre_run (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13133,7 +13133,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (68)",
+    "name": "Bisecting revision (3).results directory (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13175,7 +13175,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 5 (5)",
+    "name": "Bisecting revision (3).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13195,7 +13195,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (68)",
+    "name": "Bisecting revision (3).write buildbot output to disk (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13208,7 +13208,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (68)",
+    "name": "Bisecting revision (3).Reading valueset results (10)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13230,7 +13230,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (69)",
+    "name": "Bisecting revision (3).results directory (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13272,7 +13272,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 5 (5)",
+    "name": "Bisecting revision (3).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13292,7 +13292,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (69)",
+    "name": "Bisecting revision (3).write buildbot output to disk (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13305,7 +13305,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (69)",
+    "name": "Bisecting revision (3).Reading valueset results (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13327,7 +13327,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (70)",
+    "name": "Bisecting revision (3).results directory (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13369,7 +13369,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 5 (5)",
+    "name": "Bisecting revision (3).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13389,7 +13389,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (70)",
+    "name": "Bisecting revision (3).write buildbot output to disk (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13402,7 +13402,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (70)",
+    "name": "Bisecting revision (3).Reading valueset results (12)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13424,7 +13424,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (71)",
+    "name": "Bisecting revision (3).results directory (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13466,7 +13466,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 5 (5)",
+    "name": "Bisecting revision (3).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13486,7 +13486,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (71)",
+    "name": "Bisecting revision (3).write buildbot output to disk (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13499,7 +13499,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (71)",
+    "name": "Bisecting revision (3).Reading valueset results (13)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13521,7 +13521,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (72)",
+    "name": "Bisecting revision (3).results directory (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13563,7 +13563,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 5 (5)",
+    "name": "Bisecting revision (3).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13583,7 +13583,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (72)",
+    "name": "Bisecting revision (3).write buildbot output to disk (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13596,7 +13596,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (72)",
+    "name": "Bisecting revision (3).Reading valueset results (14)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13615,7 +13615,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (29)",
+    "name": "Bisecting revision (3).Compare samples (5)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13653,7 +13653,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (30)",
+    "name": "Bisecting revision (3).Compare samples (6)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13683,7 +13683,7 @@
   },
   {
     "cmd": [],
-    "name": "Bisecting revision.test_pre_run (16)",
+    "name": "Bisecting revision (3).test_pre_run (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13701,7 +13701,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (73)",
+    "name": "Bisecting revision (3).results directory (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13743,7 +13743,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 1 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13763,7 +13763,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (73)",
+    "name": "Bisecting revision (3).write buildbot output to disk (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13776,7 +13776,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (73)",
+    "name": "Bisecting revision (3).Reading valueset results (15)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13798,7 +13798,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (74)",
+    "name": "Bisecting revision (3).results directory (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13840,7 +13840,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 2 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13860,7 +13860,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (74)",
+    "name": "Bisecting revision (3).write buildbot output to disk (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13873,7 +13873,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (74)",
+    "name": "Bisecting revision (3).Reading valueset results (16)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13895,7 +13895,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (75)",
+    "name": "Bisecting revision (3).results directory (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13937,7 +13937,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 3 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -13957,7 +13957,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (75)",
+    "name": "Bisecting revision (3).write buildbot output to disk (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -13970,7 +13970,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (75)",
+    "name": "Bisecting revision (3).Reading valueset results (17)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -13992,7 +13992,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (76)",
+    "name": "Bisecting revision (3).results directory (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14034,7 +14034,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 4 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -14054,7 +14054,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (76)",
+    "name": "Bisecting revision (3).write buildbot output to disk (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14067,7 +14067,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (76)",
+    "name": "Bisecting revision (3).Reading valueset results (18)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -14089,7 +14089,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (77)",
+    "name": "Bisecting revision (3).results directory (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14131,7 +14131,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 5 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -14151,7 +14151,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (77)",
+    "name": "Bisecting revision (3).write buildbot output to disk (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14164,7 +14164,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (77)",
+    "name": "Bisecting revision (3).Reading valueset results (19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -14186,7 +14186,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (78)",
+    "name": "Bisecting revision (3).results directory (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14228,7 +14228,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 6 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -14248,7 +14248,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (78)",
+    "name": "Bisecting revision (3).write buildbot output to disk (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14261,7 +14261,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (78)",
+    "name": "Bisecting revision (3).Reading valueset results (20)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -14283,7 +14283,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.results directory (79)",
+    "name": "Bisecting revision (3).results directory (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14325,7 +14325,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Bisecting revision.Performance Test 7 of 7 (3)",
+    "name": "Bisecting revision (3).Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -14345,7 +14345,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Bisecting revision.write buildbot output to disk (79)",
+    "name": "Bisecting revision (3).write buildbot output to disk (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -14358,7 +14358,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Bisecting revision.Reading valueset results (79)",
+    "name": "Bisecting revision (3).Reading valueset results (21)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -14377,7 +14377,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (31)",
+    "name": "Bisecting revision (3).Compare samples (7)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -14415,7 +14415,7 @@
       "mean_input_event_latency/mean_input_event_latency",
       "--valueset"
     ],
-    "name": "Bisecting revision.Compare samples (32)",
+    "name": "Bisecting revision (3).Compare samples (8)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

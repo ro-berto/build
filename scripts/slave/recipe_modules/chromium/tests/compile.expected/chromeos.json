@@ -60,9 +60,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "system_python"
   },
   {
@@ -166,15 +163,6 @@
   },
   {
     "cmd": [],
-    "cwd": "None",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -337,15 +325,6 @@
   },
   {
     "cmd": [],
-    "cwd": "None",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
-    },
     "name": "postprocess_for_goma"
   },
   {

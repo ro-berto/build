@@ -419,17 +419,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -556,17 +545,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -823,7 +801,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "download previous results"
   },
   {
@@ -940,7 +917,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking"
   },
   {
@@ -1169,7 +1145,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
     "name": "upload new results"
   },
   {

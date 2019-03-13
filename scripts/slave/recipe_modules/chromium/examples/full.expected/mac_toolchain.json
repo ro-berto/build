@@ -165,9 +165,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {
@@ -203,9 +200,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure xcode",
     "~followup_annotations": [
       "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_mac_9c40b.app@@@"

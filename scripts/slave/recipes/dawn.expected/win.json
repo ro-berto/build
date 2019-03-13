@@ -104,9 +104,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "ensure_goma"
   },
   {
@@ -158,9 +155,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -250,9 +244,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
     "name": "postprocess_for_goma"
   },
   {

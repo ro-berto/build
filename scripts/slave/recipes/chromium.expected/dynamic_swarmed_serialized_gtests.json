@@ -188,9 +188,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {
@@ -398,10 +395,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test_pre_run"
   },
   {
@@ -517,10 +510,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure swarming"
   },
   {
@@ -696,10 +685,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test_pre_run (2)"
   },
   {
@@ -795,7 +780,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] browser_tests on NVIDIA GPU on Linux",
+    "name": "test_pre_run (2).[trigger] browser_tests on NVIDIA GPU on Linux",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",

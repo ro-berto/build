@@ -584,7 +584,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]\\builder",
     "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

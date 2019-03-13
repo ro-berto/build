@@ -133,7 +133,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
     "name": "build"
   },
   {

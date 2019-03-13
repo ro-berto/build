@@ -715,9 +715,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "PATH": "[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5X_perf_bisect/src/build/android:<PATH>"
-    },
     "name": "test_pre_run"
   },
   {

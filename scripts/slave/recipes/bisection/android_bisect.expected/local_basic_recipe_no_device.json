@@ -552,7 +552,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Clearing results directory"
   },
   {

@@ -341,7 +341,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
     "name": "bootstrap swarming"
   },
   {
@@ -361,7 +360,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
     "name": "isolate"
   },
   {
@@ -431,7 +429,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
     "name": "trigger"
   },
   {

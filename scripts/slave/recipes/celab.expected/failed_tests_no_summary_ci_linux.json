@@ -282,7 +282,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "test summary"
   },
   {

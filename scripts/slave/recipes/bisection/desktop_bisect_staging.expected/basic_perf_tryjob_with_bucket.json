@@ -398,7 +398,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITH patch"
   },
   {
@@ -638,7 +637,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "De-applying patch"
   },
   {
@@ -826,7 +824,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Running WITHOUT patch"
   },
   {
@@ -1072,12 +1069,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Results"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "name": "Notify dashboard"
   },
   {

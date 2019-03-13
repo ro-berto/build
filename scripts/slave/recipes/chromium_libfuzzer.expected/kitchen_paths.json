@@ -415,10 +415,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -553,10 +549,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "postprocess_for_goma"
   },
   {

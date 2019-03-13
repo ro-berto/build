@@ -228,10 +228,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "ensure_goma"
   },
   {

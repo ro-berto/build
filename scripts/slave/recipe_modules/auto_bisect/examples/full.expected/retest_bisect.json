@@ -3437,7 +3437,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.bot_update (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -3600,7 +3600,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.build directory (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3631,7 +3631,7 @@
       "571"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.extract build (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3648,7 +3648,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.read GN args (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).read GN args",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -3656,7 +3656,7 @@
   },
   {
     "cmd": [],
-    "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (2)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3674,7 +3674,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3716,7 +3716,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3736,7 +3736,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3749,7 +3749,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (4)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3771,7 +3771,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3813,7 +3813,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3833,7 +3833,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3846,7 +3846,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (5)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3868,7 +3868,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3910,7 +3910,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3930,7 +3930,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3943,7 +3943,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (6)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3965,7 +3965,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4007,7 +4007,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4027,7 +4027,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4040,7 +4040,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (7)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4062,7 +4062,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4104,7 +4104,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 5",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4124,7 +4124,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4137,7 +4137,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (8)",
+    "name": "Re-testing reference range.Retesting GOOD revision (2).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4226,7 +4226,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.bot_update (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -4389,7 +4389,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.build directory (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4420,7 +4420,7 @@
       "571"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.extract build (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4437,7 +4437,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.read GN args (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).read GN args",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -4445,7 +4445,7 @@
   },
   {
     "cmd": [],
-    "name": "Re-testing reference range.Retesting BAD revision.test_pre_run (2)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4463,7 +4463,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4505,7 +4505,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 1 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 1 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4525,7 +4525,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4538,7 +4538,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (4)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4560,7 +4560,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4602,7 +4602,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 2 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 2 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4622,7 +4622,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4635,7 +4635,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (5)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4657,7 +4657,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4699,7 +4699,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 3 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 3 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4719,7 +4719,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4732,7 +4732,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (6)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4754,7 +4754,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4796,7 +4796,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 4 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 4 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4816,7 +4816,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4829,7 +4829,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (7)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4851,7 +4851,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.results directory (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4893,7 +4893,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting BAD revision.Performance Test 5 of 5",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Performance Test 5 of 5",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4913,7 +4913,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting BAD revision.write buildbot output to disk (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4926,7 +4926,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting BAD revision.Reading valueset results (8)",
+    "name": "Re-testing reference range.Retesting BAD revision (2).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5017,7 +5017,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.bot_update (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).bot_update",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Some step text@@@",
@@ -5180,7 +5180,7 @@
       "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.build directory (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5211,7 +5211,7 @@
       "571"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.extract build (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5228,7 +5228,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.read GN args (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).read GN args",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -5236,7 +5236,7 @@
   },
   {
     "cmd": [],
-    "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run (3)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).test_pre_run",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5254,7 +5254,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5296,7 +5296,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 1 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 1 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5316,7 +5316,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5329,7 +5329,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (9)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5351,7 +5351,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5393,7 +5393,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 2 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 2 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5413,7 +5413,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5426,7 +5426,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (10)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5448,7 +5448,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5490,7 +5490,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 3 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 3 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5510,7 +5510,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5523,7 +5523,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (11)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5545,7 +5545,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5587,7 +5587,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 4 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 4 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5607,7 +5607,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5620,7 +5620,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (12)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5642,7 +5642,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5684,7 +5684,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 5 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 5 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5704,7 +5704,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5717,7 +5717,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (13)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5739,7 +5739,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5781,7 +5781,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 6 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 6 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5801,7 +5801,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5814,7 +5814,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (14)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5836,7 +5836,7 @@
       "[START_DIR]/bisect_results/dummy"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.results directory (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).results directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5878,7 +5878,7 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "Re-testing reference range.Retesting GOOD revision.Performance Test 7 of 7",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Performance Test 7 of 7",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -5898,7 +5898,7 @@
       "[START_DIR]/bisect_results/dummy/results.txt"
     ],
     "infra_step": true,
-    "name": "Re-testing reference range.Retesting GOOD revision.write buildbot output to disk (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).write buildbot output to disk (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -5911,7 +5911,7 @@
       "[START_DIR]/bisect_results/dummy/results-valueset.json",
       "/path/to/tmp/json"
     ],
-    "name": "Re-testing reference range.Retesting GOOD revision.Reading valueset results (15)",
+    "name": "Re-testing reference range.Retesting GOOD revision (3).Reading valueset results (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

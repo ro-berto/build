@@ -1505,7 +1505,7 @@
       "gs://chrome-perf/Linux Builder/full-build-linux_dcdcdc0ff1122212323134879ddceeb1240b0988.zip"
     ],
     "infra_step": true,
-    "name": "Gathering reference values.Waiting for build.gsutil ls (3)",
+    "name": "Gathering reference values.Waiting for build (2).gsutil ls",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "step returned non-zero exit code: 1"
@@ -1517,7 +1517,7 @@
       "-u",
       "\nimport sys\nimport time\ntime.sleep(5*60)\nsys.exit(0)\n"
     ],
-    "name": "Gathering reference values.Waiting for build.sleeping (2)",
+    "name": "Gathering reference values.Waiting for build (2).sleeping",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
@@ -1539,7 +1539,7 @@
       "1201331270"
     ],
     "infra_step": true,
-    "name": "Gathering reference values.Waiting for build.buildbucket.get (2)",
+    "name": "Gathering reference values.Waiting for build (2).buildbucket.get",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1561,7 +1561,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
-    "name": "Gathering reference values.Waiting for build.resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
+    "name": "Gathering reference values.Waiting for build (2).resolving hash dcdcdc0ff1122212323134879ddceeb1240b0988",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",

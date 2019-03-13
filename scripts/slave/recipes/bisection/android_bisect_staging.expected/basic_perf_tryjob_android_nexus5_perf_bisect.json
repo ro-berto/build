@@ -664,7 +664,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
     "name": "Running WITH patch"
   },
   {
@@ -984,7 +983,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
     "name": "De-applying patch"
   },
   {
@@ -1173,7 +1171,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
     "name": "Running WITHOUT patch"
   },
   {
@@ -1481,7 +1478,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
     "name": "Results",
     "~followup_annotations": [
       "@@@STEP_LINK@HTML Results@https://console.developers.google.com/m/cloudstorage/b/chromium-telemetry/o/html-results/results-without#r=TOT&s=%25\u0394avg@@@"
@@ -1489,7 +1485,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect",
     "name": "Notify dashboard"
   },
   {

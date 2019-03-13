@@ -122,7 +122,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_baseline/node.js",
     "name": "build"
   },
   {

@@ -133,14 +133,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma"
   },
   {
@@ -251,14 +243,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma"
   },
   {
@@ -551,14 +535,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (2)"
   },
   {
@@ -582,7 +558,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (2)",
+    "name": "preprocess_for_goma (2).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -610,7 +586,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (2)",
+    "name": "preprocess_for_goma (2).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
@@ -643,7 +619,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (2)",
+    "name": "preprocess_for_goma (2).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -668,14 +644,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (2)"
   },
   {
@@ -701,7 +669,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (2)",
+    "name": "postprocess_for_goma (2).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -739,7 +707,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (2)",
+    "name": "postprocess_for_goma (2).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -766,7 +734,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (2)",
+    "name": "postprocess_for_goma (2).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -816,7 +784,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (2)",
+    "name": "postprocess_for_goma (2).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -849,21 +817,13 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (2)",
+    "name": "postprocess_for_goma (2).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (3)"
   },
   {
@@ -887,7 +847,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (3)",
+    "name": "preprocess_for_goma (3).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -915,7 +875,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (3)",
+    "name": "preprocess_for_goma (3).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:24.500000@@@"
@@ -948,7 +908,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (3)",
+    "name": "preprocess_for_goma (3).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -973,14 +933,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (3)"
   },
   {
@@ -1006,7 +958,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (3)",
+    "name": "postprocess_for_goma (3).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1044,7 +996,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (3)",
+    "name": "postprocess_for_goma (3).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1071,7 +1023,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (3)",
+    "name": "postprocess_for_goma (3).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1121,7 +1073,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (3)",
+    "name": "postprocess_for_goma (3).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1154,21 +1106,13 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (3)",
+    "name": "postprocess_for_goma (3).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (4)"
   },
   {
@@ -1192,7 +1136,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (4)",
+    "name": "preprocess_for_goma (4).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1220,7 +1164,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (4)",
+    "name": "preprocess_for_goma (4).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:26@@@"
@@ -1253,7 +1197,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (4)",
+    "name": "preprocess_for_goma (4).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1278,14 +1222,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (4)"
   },
   {
@@ -1311,7 +1247,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (4)",
+    "name": "postprocess_for_goma (4).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1349,7 +1285,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (4)",
+    "name": "postprocess_for_goma (4).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1376,7 +1312,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (4)",
+    "name": "postprocess_for_goma (4).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1426,7 +1362,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (4)",
+    "name": "postprocess_for_goma (4).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1459,21 +1395,13 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (4)",
+    "name": "postprocess_for_goma (4).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (5)"
   },
   {
@@ -1497,7 +1425,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (5)",
+    "name": "preprocess_for_goma (5).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1525,7 +1453,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (5)",
+    "name": "preprocess_for_goma (5).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:27.500000@@@"
@@ -1558,7 +1486,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (5)",
+    "name": "preprocess_for_goma (5).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1583,14 +1511,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (5)"
   },
   {
@@ -1616,7 +1536,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (5)",
+    "name": "postprocess_for_goma (5).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1654,7 +1574,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (5)",
+    "name": "postprocess_for_goma (5).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1681,7 +1601,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (5)",
+    "name": "postprocess_for_goma (5).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1731,7 +1651,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (5)",
+    "name": "postprocess_for_goma (5).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1764,7 +1684,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (5)",
+    "name": "postprocess_for_goma (5).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2177,14 +2097,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (6)"
   },
   {
@@ -2208,7 +2120,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (6)",
+    "name": "preprocess_for_goma (6).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2236,7 +2148,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (6)",
+    "name": "preprocess_for_goma (6).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:29@@@"
@@ -2269,7 +2181,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (6)",
+    "name": "preprocess_for_goma (6).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2294,14 +2206,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (6)"
   },
   {
@@ -2327,7 +2231,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (6)",
+    "name": "postprocess_for_goma (6).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2365,7 +2269,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (6)",
+    "name": "postprocess_for_goma (6).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2392,7 +2296,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (6)",
+    "name": "postprocess_for_goma (6).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2442,7 +2346,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (6)",
+    "name": "postprocess_for_goma (6).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2475,7 +2379,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (6)",
+    "name": "postprocess_for_goma (6).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2633,14 +2537,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (7)"
   },
   {
@@ -2664,7 +2560,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (7)",
+    "name": "preprocess_for_goma (7).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2692,7 +2588,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (7)",
+    "name": "preprocess_for_goma (7).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:30.500000@@@"
@@ -2725,7 +2621,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (7)",
+    "name": "preprocess_for_goma (7).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2750,14 +2646,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (7)"
   },
   {
@@ -2783,7 +2671,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (7)",
+    "name": "postprocess_for_goma (7).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2821,7 +2709,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (7)",
+    "name": "postprocess_for_goma (7).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2848,7 +2736,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (7)",
+    "name": "postprocess_for_goma (7).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2898,7 +2786,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (7)",
+    "name": "postprocess_for_goma (7).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2931,7 +2819,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (7)",
+    "name": "postprocess_for_goma (7).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3089,14 +2977,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (8)"
   },
   {
@@ -3120,7 +3000,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (8)",
+    "name": "preprocess_for_goma (8).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3148,7 +3028,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (8)",
+    "name": "preprocess_for_goma (8).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:32@@@"
@@ -3181,7 +3061,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (8)",
+    "name": "preprocess_for_goma (8).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3206,14 +3086,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (8)"
   },
   {
@@ -3239,7 +3111,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (8)",
+    "name": "postprocess_for_goma (8).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3277,7 +3149,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (8)",
+    "name": "postprocess_for_goma (8).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3304,7 +3176,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (8)",
+    "name": "postprocess_for_goma (8).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3354,7 +3226,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (8)",
+    "name": "postprocess_for_goma (8).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3387,7 +3259,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (8)",
+    "name": "postprocess_for_goma (8).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3545,14 +3417,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (9)"
   },
   {
@@ -3576,7 +3440,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (9)",
+    "name": "preprocess_for_goma (9).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3604,7 +3468,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (9)",
+    "name": "preprocess_for_goma (9).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:33.500000@@@"
@@ -3637,7 +3501,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (9)",
+    "name": "preprocess_for_goma (9).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3662,14 +3526,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (9)"
   },
   {
@@ -3695,7 +3551,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (9)",
+    "name": "postprocess_for_goma (9).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3733,7 +3589,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (9)",
+    "name": "postprocess_for_goma (9).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3760,7 +3616,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (9)",
+    "name": "postprocess_for_goma (9).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3810,7 +3666,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (9)",
+    "name": "postprocess_for_goma (9).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3843,7 +3699,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (9)",
+    "name": "postprocess_for_goma (9).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4003,14 +3859,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (10)"
   },
   {
@@ -4034,7 +3882,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (10)",
+    "name": "preprocess_for_goma (10).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4062,7 +3910,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (10)",
+    "name": "preprocess_for_goma (10).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:35@@@"
@@ -4095,7 +3943,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (10)",
+    "name": "preprocess_for_goma (10).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4120,14 +3968,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (10)"
   },
   {
@@ -4153,7 +3993,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (10)",
+    "name": "postprocess_for_goma (10).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4191,7 +4031,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (10)",
+    "name": "postprocess_for_goma (10).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4218,7 +4058,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (10)",
+    "name": "postprocess_for_goma (10).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4268,7 +4108,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (10)",
+    "name": "postprocess_for_goma (10).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4301,7 +4141,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (10)",
+    "name": "postprocess_for_goma (10).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4525,14 +4365,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (11)"
   },
   {
@@ -4556,7 +4388,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (11)",
+    "name": "preprocess_for_goma (11).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4584,7 +4416,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (11)",
+    "name": "preprocess_for_goma (11).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:36.500000@@@"
@@ -4617,7 +4449,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (11)",
+    "name": "preprocess_for_goma (11).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4642,14 +4474,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (11)"
   },
   {
@@ -4675,7 +4499,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (11)",
+    "name": "postprocess_for_goma (11).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4713,7 +4537,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (11)",
+    "name": "postprocess_for_goma (11).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4740,7 +4564,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (11)",
+    "name": "postprocess_for_goma (11).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4790,7 +4614,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (11)",
+    "name": "postprocess_for_goma (11).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4823,7 +4647,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (11)",
+    "name": "postprocess_for_goma (11).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5047,14 +4871,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (12)"
   },
   {
@@ -5078,7 +4894,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (12)",
+    "name": "preprocess_for_goma (12).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5106,7 +4922,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (12)",
+    "name": "preprocess_for_goma (12).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:38@@@"
@@ -5139,7 +4955,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (12)",
+    "name": "preprocess_for_goma (12).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5164,14 +4980,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (12)"
   },
   {
@@ -5197,7 +5005,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (12)",
+    "name": "postprocess_for_goma (12).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5235,7 +5043,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (12)",
+    "name": "postprocess_for_goma (12).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5262,7 +5070,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (12)",
+    "name": "postprocess_for_goma (12).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5312,7 +5120,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (12)",
+    "name": "postprocess_for_goma (12).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5345,7 +5153,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (12)",
+    "name": "postprocess_for_goma (12).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5569,14 +5377,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (13)"
   },
   {
@@ -5600,7 +5400,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (13)",
+    "name": "preprocess_for_goma (13).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5628,7 +5428,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (13)",
+    "name": "preprocess_for_goma (13).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:39.500000@@@"
@@ -5661,7 +5461,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (13)",
+    "name": "preprocess_for_goma (13).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5686,14 +5486,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (13)"
   },
   {
@@ -5719,7 +5511,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (13)",
+    "name": "postprocess_for_goma (13).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5757,7 +5549,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (13)",
+    "name": "postprocess_for_goma (13).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5784,7 +5576,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (13)",
+    "name": "postprocess_for_goma (13).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5834,7 +5626,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (13)",
+    "name": "postprocess_for_goma (13).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5867,7 +5659,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (13)",
+    "name": "postprocess_for_goma (13).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6090,14 +5882,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (14)"
   },
   {
@@ -6121,7 +5905,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (14)",
+    "name": "preprocess_for_goma (14).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6149,7 +5933,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (14)",
+    "name": "preprocess_for_goma (14).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:41@@@"
@@ -6182,7 +5966,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (14)",
+    "name": "preprocess_for_goma (14).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6207,14 +5991,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (14)"
   },
   {
@@ -6240,7 +6016,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (14)",
+    "name": "postprocess_for_goma (14).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6278,7 +6054,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (14)",
+    "name": "postprocess_for_goma (14).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6305,7 +6081,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (14)",
+    "name": "postprocess_for_goma (14).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6355,7 +6131,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (14)",
+    "name": "postprocess_for_goma (14).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6388,7 +6164,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (14)",
+    "name": "postprocess_for_goma (14).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6611,14 +6387,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (15)"
   },
   {
@@ -6642,7 +6410,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (15)",
+    "name": "preprocess_for_goma (15).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6670,7 +6438,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (15)",
+    "name": "preprocess_for_goma (15).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:42.500000@@@"
@@ -6703,7 +6471,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (15)",
+    "name": "preprocess_for_goma (15).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6728,14 +6496,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (15)"
   },
   {
@@ -6761,7 +6521,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (15)",
+    "name": "postprocess_for_goma (15).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6799,7 +6559,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (15)",
+    "name": "postprocess_for_goma (15).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6826,7 +6586,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (15)",
+    "name": "postprocess_for_goma (15).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6876,7 +6636,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (15)",
+    "name": "postprocess_for_goma (15).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6909,7 +6669,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (15)",
+    "name": "postprocess_for_goma (15).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7202,14 +6962,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (16)"
   },
   {
@@ -7233,7 +6985,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (16)",
+    "name": "preprocess_for_goma (16).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7261,7 +7013,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (16)",
+    "name": "preprocess_for_goma (16).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:44@@@"
@@ -7294,7 +7046,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (16)",
+    "name": "preprocess_for_goma (16).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7319,14 +7071,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (16)"
   },
   {
@@ -7352,7 +7096,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (16)",
+    "name": "postprocess_for_goma (16).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7390,7 +7134,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (16)",
+    "name": "postprocess_for_goma (16).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7417,7 +7161,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (16)",
+    "name": "postprocess_for_goma (16).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7467,7 +7211,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (16)",
+    "name": "postprocess_for_goma (16).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7500,7 +7244,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (16)",
+    "name": "postprocess_for_goma (16).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7723,14 +7467,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (17)"
   },
   {
@@ -7754,7 +7490,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (17)",
+    "name": "preprocess_for_goma (17).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7782,7 +7518,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (17)",
+    "name": "preprocess_for_goma (17).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:45.500000@@@"
@@ -7815,7 +7551,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (17)",
+    "name": "preprocess_for_goma (17).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7840,14 +7576,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (17)"
   },
   {
@@ -7873,7 +7601,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (17)",
+    "name": "postprocess_for_goma (17).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -7911,7 +7639,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (17)",
+    "name": "postprocess_for_goma (17).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7938,7 +7666,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (17)",
+    "name": "postprocess_for_goma (17).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -7988,7 +7716,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (17)",
+    "name": "postprocess_for_goma (17).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8021,7 +7749,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (17)",
+    "name": "postprocess_for_goma (17).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8290,14 +8018,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "preprocess_for_goma (18)"
   },
   {
@@ -8321,7 +8041,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (18)",
+    "name": "preprocess_for_goma (18).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8349,7 +8069,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (18)",
+    "name": "preprocess_for_goma (18).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:47@@@"
@@ -8382,7 +8102,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (18)",
+    "name": "preprocess_for_goma (18).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8408,14 +8128,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
     "name": "postprocess_for_goma (18)"
   },
   {
@@ -8441,7 +8153,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_jsonstatus (18)",
+    "name": "postprocess_for_goma (18).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8479,7 +8191,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.goma_stat (18)",
+    "name": "postprocess_for_goma (18).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8506,7 +8218,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.stop_goma (18)",
+    "name": "postprocess_for_goma (18).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -8556,7 +8268,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "postprocess_for_goma.upload_log (18)",
+    "name": "postprocess_for_goma (18).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -8589,7 +8301,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (18)",
+    "name": "postprocess_for_goma (18).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
