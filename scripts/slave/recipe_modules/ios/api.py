@@ -795,6 +795,7 @@ class iOSApi(recipe_api.RecipeApi):
       # contents of a directory.
       '<(app_path)/',
       '%s/' % scripts_dir,
+      'src/.vpython',
     ]
     if self.__config.get('additional files'):
       files.extend(self.__config.get('additional files'))
