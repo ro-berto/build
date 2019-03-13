@@ -5046,14 +5046,14 @@ Buildbot recipe definition for the various Crashpad continuous builders.
 Generates the sequence of steps that will be run by the slave.
 ### *recipes* / [cronet](/scripts/slave/recipes/cronet.py)
 
-[DEPS](/scripts/slave/recipes/cronet.py#8): [cronet](#recipe_modules-cronet), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/cronet.py#8): [cronet](#recipe_modules-cronet), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cronet.py#164)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cronet.py#160)(api):**
 ### *recipes* / [cronet:examples/full](/scripts/slave/recipe_modules/cronet/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/cronet/examples/full.py#8): [chromium](#recipe_modules-chromium), [cronet](#recipe_modules-cronet), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/cronet/examples/full.py#8): [chromium](#recipe_modules-chromium), [cronet](#recipe_modules-cronet), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/cronet/examples/full.py#51)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/cronet/examples/full.py#47)(api):**
 ### *recipes* / [cronet:tests/run\_tests](/scripts/slave/recipe_modules/cronet/tests/run_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/cronet/tests/run_tests.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [cronet](#recipe_modules-cronet), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

@@ -7,6 +7,7 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'cronet',
+  'recipe_engine/buildbucket',
   'recipe_engine/path',
   'recipe_engine/properties',
 ]
@@ -156,13 +157,8 @@ BUILDERS = freeze({
 })
 
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-
-def RunSteps(api, buildername):
-  builder_config = BUILDERS.get(buildername, {})
+def RunSteps(api):
+  builder_config = BUILDERS.get(api.buildbucket.builder_name, {})
   recipe_config = builder_config['recipe_config']
   kwargs = builder_config.get('kwargs', {})
   cronet_kwargs = builder_config.get('cronet_kwargs', {})
