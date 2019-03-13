@@ -366,6 +366,7 @@ class DartApi(recipe_api.RecipeApi):
       'LATEST/approved_results.json',
       'dart-test-results',
       'builders/%s/%s/approved_results.json' % (builder, build_number),
+      name='upload approved_results.json',
       ok_ret='any' if self._report_new_results() else {0})
     self._upload_result(builder, build_number, 'runs.json', runs_str)
     # Update "latest" file
