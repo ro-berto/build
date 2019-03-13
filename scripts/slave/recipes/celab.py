@@ -10,9 +10,11 @@ DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
+  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/python',
+  'recipe_engine/step',
   'recipe_engine/time',
   'zip',
 ]
@@ -108,26 +110,27 @@ def RunSteps(api):
 
 def _RunTests(api, checkout, pool_name, pool_size):
   host_dir = api.path['start_dir'].join('hosts')
-  error_logs_dir = api.path['start_dir'].join('logs')
-  api.file.ensure_directory('init host_dir if not exists', host_dir)
-  api.file.ensure_directory('init error_logs_dir if not exists', error_logs_dir)
+  logs_dir = api.path['start_dir'].join('logs')
+  with api.step.nest('setup tests'):
+    api.file.ensure_directory('init host_dir if not exists', host_dir)
+    api.file.ensure_directory('init logs_dir if not exists', logs_dir)
 
-  # Get a unique storage prefix for these tests (diff runs share the bucket)
-  storage_prefix = 'test-run-%s' % api.buildbucket.build.id
+    # Get a unique storage prefix for these tests (diff runs share the bucket)
+    storage_prefix = 'test-run-%s' % api.buildbucket.build.id
 
-  # Generate the host files that we'll use in ./run_tests.py.
-  with api.context(cwd=checkout.join('scripts', 'tests')):
-    api.python('generate host files',
-      'generate_host_files.py',
-      [
-        '--template', '../../examples/schema/host/example.host.textpb',
-        '--projects', ';'.join(["%s-%03d" % (pool_name, i) for i in xrange(
-            1, pool_size + 1)]),
-        '--storage_bucket', '%s-assets' % pool_name,
-        '--storage_prefix', storage_prefix,
-        '--destination_dir', host_dir
-      ],
-      venv=True)
+    # Generate the host files that we'll use in ./run_tests.py.
+    with api.context(cwd=checkout.join('scripts', 'tests')):
+      api.python('generate host files',
+        'generate_host_files.py',
+        [
+          '--template', '../../examples/schema/host/example.host.textpb',
+          '--projects', ';'.join(["%s-%03d" % (pool_name, i) for i in xrange(
+              1, pool_size + 1)]),
+          '--storage_bucket', '%s-assets' % pool_name,
+          '--storage_prefix', storage_prefix,
+          '--destination_dir', host_dir
+        ],
+        venv=True)
 
   # Run our tests and catch test failures.
   with api.context(cwd=checkout):
@@ -137,34 +140,98 @@ def _RunTests(api, checkout, pool_name, pool_size):
         [
           '--hosts', host_dir,
           '--shared_provider_storage', '%s-assets' % pool_name,
-          '--error_logs_dir', error_logs_dir,
+          '--error_logs_dir', logs_dir,
           '--noprogress', '-vv'
         ],
         venv=True)
     except:
-      # Save the error logs in our logs bucket.
-      zip_out = api.path['start_dir'].join('logs.zip')
-      pkg = api.zip.make_package(error_logs_dir, zip_out)
-      pkg.add_directory(error_logs_dir)
-      pkg.zip('zip logs archive')
+      storage_logs = '%s-logs' % pool_name
 
-      today = api.time.utcnow().date()
-      gs_dest = '%s/%s/%s/logs.zip' % (
-        api.buildbucket.builder_name,
-        today.strftime('%Y/%m/%d'),
-        api.buildbucket.build.id)
-      api.gsutil.upload(
-        source=zip_out,
-        bucket='%s-logs' % pool_name,
-        dest=gs_dest,
-        name='upload CELab test logs',
-        link_name='Test logs')
+      try:
+        # Parse the test summary file and organize results in a readable way.
+        _ParseTestSummary(api, storage_logs, logs_dir)
+      except:
+        raise
+      finally:
+        # We upload *all* logs here (including those already uploaded).
+        # It's better to upload (small) logs twice than to not upload them at
+        # all. They are automatically deleted after 30 days (bucket policy).
+        _ZipAndUploadDirectory(
+          api,
+          storage_logs,
+          logs_dir,
+          'all_logs.zip',
+          'CELab Test Logs')
 
       raise
     finally:
       # TODO: Clean up storage prefix when the test run ends.
       #       It's already automatically deleted after 1 day.
       pass
+
+
+# Zips the content of a directory and uploads the zip file to a given bucket.
+def _ZipAndUploadDirectory(api, bucket, directory, zip_filename, display_name):
+  zip_out = api.path['start_dir'].join(zip_filename)
+  pkg = api.zip.make_package(directory, zip_out)
+  pkg.add_directory(directory)
+  pkg.zip('zip logs archive')
+
+  today = api.time.utcnow().date()
+  gs_dest = '%s/%s/%s/%s' % (
+    api.buildbucket.builder_name,
+    today.strftime('%Y/%m/%d'),
+    api.buildbucket.build.id,
+    zip_filename)
+  return api.gsutil.upload(
+    source=zip_out,
+    bucket=bucket,
+    dest=gs_dest,
+    name='upload %s' % display_name,
+    link_name=display_name)
+
+
+# Parses the summary.json file created by run_tests.py, organizes the steps
+# presentation of tests and creates separate zips for each test logs.
+def _ParseTestSummary(api, storage_logs, logs_dir):
+  summary_path = logs_dir.join("summary.json")
+
+  with api.step.nest('test summary') as summary_step:
+    summary_presentation = summary_step.presentation
+    tests_summary = api.json.read('parse summary', summary_path).json.output
+
+    for test in tests_summary:
+      try:
+        with api.step.nest(test) as test_step:
+          test_presentation = test_step.presentation
+          result = tests_summary[test]
+
+          test_presentation.status = api.step.SUCCESS
+
+          if not result['success']:
+            test_presentation.status = api.step.FAILURE
+            summary_presentation.status = api.step.FAILURE
+
+          if 'output' in result:
+            logs = api.file.read_text('read logs', result['output'])
+            test_presentation.logs["test.py output"] = logs.splitlines()
+
+          # Upload logs if they exist (when test fails after Deployment starts)
+          compute_logs_dir = logs_dir.join(test)
+          if api.path.exists(compute_logs_dir):
+            upload_step = _ZipAndUploadDirectory(
+              api,
+              storage_logs,
+              compute_logs_dir,
+              test + '.zip',
+              'Compute logs')
+
+            # Merge the gsutil links in the Test step.
+            upload_presentation = upload_step.presentation
+            for link in upload_presentation.links:
+              test_presentation.links[link] = upload_presentation.links[link]
+      except Exception as e:
+        summary_presentation.logs["exception %s" % test] = repr(e).splitlines()
 
 
 def GenTests(api):
@@ -196,5 +263,25 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.buildbucket.ci_build(project='celab', bucket='ci',
                                git_repo=CELAB_REPO) +
-      api.step_data('run all tests', retcode=1)
+      api.step_data('run all tests', retcode=1) +
+      api.step_data('test summary.parse summary',
+                    api.json.output({
+                      '1st test': {'success': False, 'output': '/some/file'},
+                      '2nd test': {'success': True, 'output': '/other/file'},
+                      '3rd test': {'success': True, 'output': '/missing'}})) +
+      api.step_data('test summary.1st test.read logs',
+            api.file.read_text('first\ntest\nlogs')) +
+      api.step_data('test summary.2nd test.read logs',
+            api.file.read_text('second\ntest\nlogs')) +
+      api.step_data('test summary.3rd test.read logs',
+            api.file.errno('EEXIST')) +
+      api.path.exists(api.path['start_dir'].join('logs', '1st test'))
+  )
+  yield (
+      api.test('failed_tests_no_summary_ci_linux') +
+      api.platform('linux', 64) +
+      api.buildbucket.ci_build(project='celab', bucket='ci',
+                               git_repo=CELAB_REPO) +
+      api.step_data('run all tests', retcode=1) +
+      api.step_data('test summary.parse summary', retcode=1)
   )

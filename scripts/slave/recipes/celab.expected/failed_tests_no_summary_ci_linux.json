@@ -18,51 +18,9 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]/gerrit_client.py",
-      "changes",
-      "--host",
-      "https://chromium-review.googlesource.com",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--limit",
-      "1",
-      "-p",
-      "change=123456",
-      "-o",
-      "ALL_REVISIONS",
-      "-o",
-      "DOWNLOAD_COMMANDS"
-    ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
-    "env": {
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gerrit fetch current CL info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'cel', 'url': 'https://chromium.googlesource.com/enterprise/cel.git'}]",
-      "--patch_root",
-      "cel",
       "--revision_mapping_file",
       "{\"got_revision\": \"cel\"}",
       "--git-cache-dir",
@@ -71,10 +29,8 @@
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--patch_ref",
-      "https://chromium.googlesource.com/enterprise/cel@refs/changes/56/123456/7",
       "--revision",
-      "cel@HEAD"
+      "cel@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
     "env_prefixes": {
@@ -89,7 +45,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"cel\": {@@@",
@@ -215,6 +171,33 @@
     "name": "build"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "name": "zip archive",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl\", \"type\": \"file\"}, {\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/resources\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/cel.zip",
+      "gs://celab/builder/2012/05/14/8945511751514863184/cel.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload CELab binaries",
+    "~followup_annotations": [
+      "@@@STEP_LINK@CELab binaries@https://storage.cloud.google.com/celab/builder/2012/05/14/8945511751514863184/cel.zip@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "setup tests"
   },
@@ -262,9 +245,9 @@
       "--template",
       "../../examples/schema/host/example.host.textpb",
       "--projects",
-      "celab-try-001;celab-try-002;celab-try-003;celab-try-004;celab-try-005",
+      "celab-ci-001;celab-ci-002;celab-ci-003;celab-ci-004;celab-ci-005",
       "--storage_bucket",
-      "celab-try-assets",
+      "celab-ci-assets",
       "--storage_prefix",
       "test-run-8945511751514863184",
       "--destination_dir",
@@ -284,17 +267,79 @@
       "--hosts",
       "[START_DIR]/hosts",
       "--shared_provider_storage",
-      "celab-try-assets",
+      "celab-ci-assets",
       "--error_logs_dir",
       "[START_DIR]/logs",
       "--noprogress",
       "-vv"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
-    "name": "run all tests"
+    "name": "run all tests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
-    "jsonResult": null,
+    "cmd": [],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/logs/summary.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary.parse summary",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "zip logs archive",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/all_logs.zip\", \"root\": \"[START_DIR]/logs\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/all_logs.zip",
+      "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "gsutil upload CELab Test Logs",
+    "~followup_annotations": [
+      "@@@STEP_LINK@CELab Test Logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": "test summary.parse summary"
+      },
+      "humanReason": "Step('test summary.parse summary') failed with return_code 1"
+    },
     "name": "$result"
   }
 ]

@@ -198,6 +198,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "setup tests"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -210,7 +214,10 @@
       "[START_DIR]/hosts"
     ],
     "infra_step": true,
-    "name": "init host_dir if not exists"
+    "name": "setup tests.init host_dir if not exists",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -225,7 +232,10 @@
       "[START_DIR]/logs"
     ],
     "infra_step": true,
-    "name": "init error_logs_dir if not exists"
+    "name": "setup tests.init logs_dir if not exists",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -244,7 +254,10 @@
       "[START_DIR]/hosts"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/scripts/tests",
-    "name": "generate host files"
+    "name": "setup tests.generate host files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -268,14 +281,88 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@exception 3rd test@Error(\"Step('read logs') failed 'EEXIST' with: file command encountered system error EEXIST\",)@@@",
+      "@@@STEP_LOG_END@exception 3rd test@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/logs/summary.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary.parse summary",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"1st test\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"/some/file\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"success\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"2nd test\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"/other/file\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"success\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"3rd test\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"/missing\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"success\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary.1st test",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@test.py output@first@@@",
+      "@@@STEP_LOG_LINE@test.py output@test@@@",
+      "@@@STEP_LOG_LINE@test.py output@logs@@@",
+      "@@@STEP_LOG_END@test.py output@@@",
+      "@@@STEP_LINK@Compute logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/1st test.zip@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "/some/file",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "test summary.1st test.read logs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
-    "name": "zip logs archive",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/logs.zip\", \"root\": \"[START_DIR]/logs\"}"
+    "name": "test summary.1st test.zip logs archive",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs/1st test\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/1st test.zip\", \"root\": \"[START_DIR]/logs/1st test\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
   },
   {
     "cmd": [
@@ -286,14 +373,102 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/logs.zip",
-      "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/logs.zip"
+      "[START_DIR]/1st test.zip",
+      "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/1st test.zip"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "infra_step": true,
-    "name": "gsutil upload CELab test logs",
+    "name": "test summary.1st test.gsutil upload Compute logs",
     "~followup_annotations": [
-      "@@@STEP_LINK@Test logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/logs.zip@@@"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LINK@Compute logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/1st test.zip@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary.2nd test",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@test.py output@second@@@",
+      "@@@STEP_LOG_LINE@test.py output@test@@@",
+      "@@@STEP_LOG_LINE@test.py output@logs@@@",
+      "@@@STEP_LOG_END@test.py output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "/other/file",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "test summary.2nd test.read logs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "test summary.3rd test",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "/missing",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "test summary.3rd test.read logs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@file command encountered system error EEXIST@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "zip logs archive",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/all_logs.zip\", \"root\": \"[START_DIR]/logs\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/all_logs.zip",
+      "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "gsutil upload CELab Test Logs",
+    "~followup_annotations": [
+      "@@@STEP_LINK@CELab Test Logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip@@@"
     ]
   },
   {
