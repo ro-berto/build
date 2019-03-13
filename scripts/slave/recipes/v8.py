@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/swarming',
   'recipe_engine/url',
   'swarming_client',
   'recipe_engine/time',
@@ -103,7 +104,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       api.swarming_client.checkout()
 
       # This is to install golang swarming client via CIPD.
-      with api.swarming_client.on_path():
+      with api.swarming.on_path():
         pass
 
       # Simulate a v8 update on slim swarming testers. The revision

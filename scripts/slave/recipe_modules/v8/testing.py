@@ -533,7 +533,7 @@ class V8SwarmingTest(V8Test):
     args.append('--')
     args.extend(self.api.chromium_swarming.get_collect_cmd_args(task))
 
-    with self.api.swarming_client.on_path():
+    with self.api.swarming.on_path():
       return self.api.build.python(
           name=self.test['name'] + self.test_step_config.step_name_suffix,
           script=self.api.v8.resource('collect_v8_task.py'),

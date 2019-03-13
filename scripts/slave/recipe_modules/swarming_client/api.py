@@ -125,11 +125,3 @@ class SwarmingClientApi(recipe_api.RecipeApi):
       text = '%s is too old' % script
       # Throws a step failure
       self.m.python.failing_step(text, abort_reason)
-
-  @contextlib.contextmanager
-  def on_path(self):
-    """This is wrapper for recipe_engine/swarming.on_path, this should only be
-    used from swarming module.
-    """
-    with self.m.swarming.on_path():
-      yield

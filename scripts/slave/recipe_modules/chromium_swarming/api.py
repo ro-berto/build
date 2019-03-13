@@ -1187,7 +1187,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         'Successfully merged all data'))
 
     try:
-      with self.m.swarming_client.on_path():
+      with self.m.swarming.on_path():
         with self.m.context(cwd=self.m.path['start_dir']):
           return self.m.build.python(
               name=name or self.get_step_name('', task),

@@ -17,6 +17,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
+  'recipe_engine/swarming',
   'swarming_client',
   'test_utils',
   'traceback',
