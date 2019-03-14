@@ -51,9 +51,11 @@ _DIFF_PLUS_LINE_PREFIX = '+'
 _DIFF_WHITESPACE_LINE_PREFIX = ' '
 
 
-# TODO(crbug.com/927941): Remove once the Gerrit side fix is live in prod.
 def fetch_diff(host, project, change, patchset):
   """Fetches diff of the patch from Gerrit.
+
+  The main use case is to figure out incremental coverage percentage of newly
+  added lines by the patch.
 
   Args:
     host (str): The url of the host.
@@ -106,11 +108,12 @@ def fetch_diff(host, project, change, patchset):
   return diff
 
 
-# TODO(crbug.com/927941): Remove once the Gerrit side fix is live in prod.
 def parse_added_line_num_from_git_diff(diff):
   """Parses the 'git diff' output and returns the line number of added lines.
 
-  Note that this method *only* cares about the added lines.
+  Note that this method *only* cares about the added lines, and the main use
+  case is to figure out incremental coverage percentage of newly added lines by
+  the patch.
 
   Args:
     diff (list of str): Output produced by running 'git diff'.

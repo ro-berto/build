@@ -22,7 +22,7 @@ import gerrit_util
 class GerritUtilTest(unittest.TestCase):
 
   @mock.patch('gerrit_util.urllib2.urlopen')
-  def test_fetch_diff_from_gerrit(self, mock_urlopen):
+  def test_fetch_file_content_from_gerrit(self, mock_urlopen):
     revisions = {
         'revisions': {
             'da745617c0329e2a5faf53cbd577047d789e909d': {
@@ -126,6 +126,120 @@ class GerritUtilTest(unittest.TestCase):
         13: (12, 'line 13'),
         15: (14, 'line 15')
     }, line_num_mapping)
+
+  @mock.patch('gerrit_util.urllib2.urlopen')
+  def test_fetch_diff_from_gerrit(self, mock_urlopen):
+    revisions = {
+        'revisions': {
+            'da745617c0329e2a5faf53cbd577047d789e909d': {
+                '_number': 1
+            }
+        }
+    }
+    gerrit_diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test.txt\n'
+                   '+++ b/path/test.txt\n'
+                   '@@ -10,2 +10,3 @@\n'
+                   ' Line 10\n'
+                   '-Line 11\n'
+                   '+A different line 11\n'
+                   '+A newly added line 12\n')
+
+    mock_urlopen().getcode.side_effect = [404, 200, 404, 200]
+    mock_urlopen().read.side_effect = [
+        ')]}\n' + json.dumps(revisions),
+        base64.b64encode(gerrit_diff)
+    ]
+    result = gerrit_util.fetch_diff('chromium-review.googlesource.com',
+                                    'chromium/src', 123456, 1)
+    self.assertEqual(gerrit_diff, result)
+
+  def test_added_lines_of_one_file_one_diff_section(self):
+    diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+            'index 0719398930..4a2b716881 100644\n'
+            '--- a/path/test.txt\n'
+            '+++ b/path/test.txt\n'
+            '@@ -10,2 +10,3 @@\n'
+            ' Line 10\n'
+            '-Line 11\n'
+            '+A different line 11\n'
+            '+A newly added line 12\n')
+
+    expected_result = {'path/test.txt': set([11, 12])}
+    result = gerrit_util.parse_added_line_num_from_git_diff(diff.splitlines())
+    self.assertDictEqual(expected_result, result)
+
+  def test_added_lines_one_file_multiple_sections(self):
+    diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+            'index 0719398930..4a2b716881 100644\n'
+            '--- a/path/test.txt\n'
+            '+++ b/path/test.txt\n'
+            '@@ -10,2 +10,3 @@\n'
+            ' Line 10\n'
+            '-Line 11\n'
+            '+A different line 11\n'
+            '+A newly added line 12\n'
+            '@@ -20,1 +21,1 @@\n'
+            '-Line 20\n'
+            '+A different line 21\n')
+
+    expected_result = {'path/test.txt': set([11, 12, 21])}
+    result = gerrit_util.parse_added_line_num_from_git_diff(diff.splitlines())
+    self.assertDictEqual(expected_result, result)
+
+  def test_added_lines_multiple_files_multiple_sections(self):
+    diff = ('diff --git a/path/test1.txt b/path/test1.txt\n'
+            'index 0719398930..4a2b716881 100644\n'
+            '--- a/path/test1.txt\n'
+            '+++ b/path/test1.txt\n'
+            '@@ -10,2 +10,3 @@\n'
+            ' Line 10\n'
+            '-Line 11\n'
+            '+A different line 11\n'
+            '+A newly added line 12\n'
+            'diff --git a/path/test2.txt b/path/test2.txt\n'
+            'index 0719398930..4a2b716881 100644\n'
+            '--- a/path/test2.txt\n'
+            '+++ b/path/test2.txt\n'
+            '@@ -10,2 +10,3 @@\n'
+            ' Line 10\n'
+            '-Line 11\n'
+            '+A different line 11\n'
+            '+A newly added line 12\n'
+            '@@ -20,1 +21,1 @@\n'
+            '-Line 20\n'
+            '+A different line 21\n')
+
+    expected_result = {
+        'path/test1.txt': set([11, 12]),
+        'path/test2.txt': set([11, 12, 21])
+    }
+    result = gerrit_util.parse_added_line_num_from_git_diff(diff.splitlines())
+    self.assertEqual(expected_result, result)
+
+  # This test tests that the calculating added lines correctly handles newlines
+  # in all following 3 scerios:
+  # 1. If a newline is added, the diff is: '+\n'.
+  # 2. If a newline is unchanged, the diff is: '\n'. (without prefix whitespace)
+  # 3. If a newline is deleted, the diff is: '-\n'.
+  def test_new_line_behaviors(self):
+    diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+            'index 0719398930..4a2b716881 100644\n'
+            '--- a/path/test.txt\n'
+            '+++ b/path/test.txt\n'
+            '@@ -10,3 +10,4 @@\n'
+            ' Line 10\n'
+            '\n'
+            '-\n'
+            '+A different line 11\n'
+            '+\n')
+
+    expected_result = {
+        'path/test.txt': set([12, 13]),
+    }
+    result = gerrit_util.parse_added_line_num_from_git_diff(diff.splitlines())
+    self.assertEqual(expected_result, result)
 
 
 if __name__ == '__main__':
