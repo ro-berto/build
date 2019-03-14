@@ -56,10 +56,6 @@ def RunHostTests(api, out_dir, exe_extension=''):
     flow_gold_args = ["--gtest_filter=-PerformanceOverlayLayer.Gold"]
     if api.platform.is_linux:
       flow_gold_args = [
-        # Disable the test first so we can guarantee that landing the
-        # flutter/engine commit won't break the Liux bot. We'll create another
-        # CL to enable and test it in pre-submit checks.
-        '--gtest_filter=-PerformanceOverlayLayer.Gold',
         '--golden-dir=%s' %
           api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
         '--font-file=%s' %
