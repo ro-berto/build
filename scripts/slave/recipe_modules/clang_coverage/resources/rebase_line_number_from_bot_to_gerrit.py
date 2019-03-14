@@ -126,29 +126,6 @@ def _parse_args():
   return arg_parser.parse_args()
 
 
-# TODO(crbug.com/927941): Remove once the Gerrit side fix is live in prod.
-def _filter_out_unchanged_lines(file_to_line_num_mapping, host, project, change,
-                                patchset):
-  gerrit_diff = gerrit_util.fetch_diff(host, project, change, patchset)
-  file_to_added_lines = gerrit_util.parse_added_line_num_from_git_diff(
-      gerrit_diff.splitlines())
-
-  filtered_file_to_line_num_mapping = {}
-  for file_path in file_to_line_num_mapping:
-    if file_path not in file_to_added_lines:
-      filtered_file_to_line_num_mapping[file_path] = {}
-      continue
-
-    filtered_file_to_line_num_mapping[file_path] = {}
-    for bot_line_num in file_to_line_num_mapping[file_path]:
-      gerrit_line_num, line = file_to_line_num_mapping[file_path][bot_line_num]
-      if gerrit_line_num in file_to_added_lines[file_path]:
-        filtered_file_to_line_num_mapping[file_path][bot_line_num] = (
-            gerrit_line_num, line)
-
-  return filtered_file_to_line_num_mapping
-
-
 def main():
   args = _parse_args()
 
@@ -160,10 +137,6 @@ def main():
   file_to_line_num_mapping = rebase_line_number(args.host, args.project,
                                                 args.change, args.patchset,
                                                 args.src_path, args.sources)
-  file_to_line_num_mapping = _filter_out_unchanged_lines(
-      file_to_line_num_mapping, args.host, args.project, args.change,
-      args.patchset)
-
   json_mapping = json.dumps(file_to_line_num_mapping)
   with open(args.output_file, 'w') as f:
     f.write(json_mapping)
