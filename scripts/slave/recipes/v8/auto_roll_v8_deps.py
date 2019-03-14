@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gerrit',
   'depot_tools/git',
+  'depot_tools/gitiles',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
@@ -22,6 +23,7 @@ DEPS = [
   'recipe_engine/runtime',
   'recipe_engine/service_account',
   'recipe_engine/step',
+  'recipe_engine/url',
   'v8',
 ]
 
@@ -30,6 +32,7 @@ BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
 LOG_TEMPLATE = 'Rolling v8/%s: %s/+log/%s..%s'
+MAX_COMMIT_LOG_ENTRIES = 8
 
 BOT_CONFIGS = {
   'Auto-roll - test262': {
@@ -42,6 +45,7 @@ BOT_CONFIGS = {
       'adamk@chromium.org',
       'gsathya@chromium.org',
     ],
+    'show_commit_log': True,
   },
   'Auto-roll - v8 deps': {
     'subject': 'Update V8 DEPS.',
@@ -60,6 +64,7 @@ BOT_CONFIGS = {
       'hablich@chromium.org',
       'sergiyb@chromium.org',
     ],
+    'show_commit_log': False,
   },
   'Auto-roll - wasm-spec': {
     'subject': 'Update wasm-spec.',
@@ -71,6 +76,7 @@ BOT_CONFIGS = {
       'ahaas@chromium.org',
       'clemensh@chromium.org',
     ],
+    'show_commit_log': True,
   },
 }
 
@@ -113,6 +119,45 @@ def GetDEPS(api, name, repo):
   step_result.presentation.logs['deps'] = api.json.dumps(
       deps, indent=2).splitlines()
   return deps
+
+
+def commit_messages_log_entries(api, repo, from_commit, to_commit):
+  """Returns list of log entries to be added to commit message.
+
+  Args:
+    api: Recipes api.
+    repo: Gitiles url to rolled repository.
+    from_commit: Parent of first rolled commit.
+    to_commit: Newest rolled commit.
+  """
+  step_test_data = lambda: api.json.test_api.output({
+    'log': [
+      {
+        'commit': 'deadbeef',
+        'author': {'name': 'Tex'},
+        'message': 'Commit 1\n\nsecond line',
+      },
+      {
+        'commit': 'beefdead',
+        'author': {'name': 'Mex'},
+        'message': 'Commit 0\n\nsecond line',
+      },
+    ],
+  })
+  commits, _ = api.gitiles.log(
+      url=repo,
+      ref='%s..%s' % (from_commit, to_commit),
+      step_test_data=step_test_data,
+  )
+  # Format commit log as:
+  # <first line of commit message> (<author name>)
+  # <url with short hash>
+  commit_log = lambda commit: '%s (%s)\n%s' % (
+      commit['message'].splitlines()[0],
+      commit['author']['name'],
+      api.url.join(repo, '+/%s' % commit['commit'][:7]))
+  ellipse = [] if len(commits) < MAX_COMMIT_LOG_ENTRIES else ['...']
+  return [commit_log(c) for c in commits[:MAX_COMMIT_LOG_ENTRIES]] + ellipse
 
 
 def RunSteps(api):
@@ -235,6 +280,9 @@ def RunSteps(api):
         repo = v8_repo[:-len('.git')] if v8_repo.endswith('.git') else v8_repo
         commit_message.append(LOG_TEMPLATE % (
             name, repo, v8_rev[:7], new_rev[:7]))
+        if bot_config['show_commit_log']:
+          commit_message.extend(commit_messages_log_entries(
+              api, repo, v8_rev, new_rev))
       else:
         step_result.presentation.status = api.step.WARNING
 

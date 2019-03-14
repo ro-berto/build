@@ -9,6 +9,10 @@
       "-m",
       "Rolling v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39/test262/+log/29c2384..deadbee",
       "-m",
+      "Commit 1 (Tex)\nhttps://chromium.googlesource.com/external/github.com/tc39/test262/+/deadbee",
+      "-m",
+      "Commit 0 (Mex)\nhttps://chromium.googlesource.com/external/github.com/tc39/test262/+/beefdea",
+      "-m",
       "TBR=adamk@chromium.org,gsathya@chromium.org"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
