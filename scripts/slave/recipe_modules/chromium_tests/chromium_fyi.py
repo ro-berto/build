@@ -968,6 +968,25 @@ SPEC = {
       },
     },
 
+    'linux-chromeos-code-coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'intel',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': {},
+    },
+
     'mac-autofill-captured-sites-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
