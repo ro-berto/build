@@ -415,7 +415,12 @@
     ]
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['telemetry_gpu_unittests']"
+    },
     "name": "$result"
   }
 ]

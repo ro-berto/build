@@ -313,10 +313,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       failed_tests = []
       for tl in tests_list:
-        _, failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
-        failed_tests.extend(failed_ts)
-        # TODO(https://crbug.com/932316): Automatically count invalid test
-        # results as failed tests.
+        invalid_ts, failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
+        failed_tests = list(set(failed_tests).union(
+            set(failed_ts).union(set(invalid_ts))))
 
       self.m.chromium_swarming.report_stats()
 
