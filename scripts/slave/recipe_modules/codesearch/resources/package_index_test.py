@@ -73,12 +73,12 @@ class PackageIndexTest(unittest.TestCase):
     # Check the filenames match.
     actual_files = os.listdir(out_dir)
     golden_files = os.listdir(golden_dir)
-    self.assertEquals(set(actual_files), set(golden_files))
+    self.assertEqual(set(golden_files), set(actual_files))
 
     for filename in actual_files:
       with open(os.path.join(out_dir, filename), 'r') as actual_file:
         with open(os.path.join(golden_dir, filename), 'r') as golden_file:
-          self.assertEquals(actual_file.read(), golden_file.read())
+          self.assertEqual(golden_file.read(), actual_file.read())
 
   def _GetDictOfUnitFilesInDir(self, units_dir):
     """Parses all JSON files in a dir and returns them in a dict.
@@ -108,13 +108,13 @@ class PackageIndexTest(unittest.TestCase):
     """
     actual_files = os.listdir(out_dir)
     golden_files = os.listdir(golden_dir)
-    self.assertEquals(len(actual_files), len(golden_files))
+    self.assertEqual(len(golden_files), len(actual_files))
 
     actual_dicts = self._GetDictOfUnitFilesInDir(out_dir)
     golden_dicts = self._GetDictOfUnitFilesInDir(golden_dir)
     for key, unit_dict in actual_dicts.iteritems():
       self.assertIn(key, golden_dicts.keys())
-      self.assertEquals(unit_dict, golden_dicts[key])
+      self.assertEqual(golden_dicts[key], unit_dict)
 
   def testGenerateDataFiles(self):
     self.index_pack._GenerateDataFiles()
@@ -189,7 +189,7 @@ class PackageIndexTest(unittest.TestCase):
                       if 'files' in path
                       and os.path.basename(path) != '']
     golden_filenames = os.listdir(os.path.join(TEST_DATA_DIR, 'expected_files'))
-    self.assertEquals(set(data_filenames), set(golden_filenames))
+    self.assertEqual(set(golden_filenames), set(data_filenames))
 
 if __name__ == '__main__':
   unittest.main()
