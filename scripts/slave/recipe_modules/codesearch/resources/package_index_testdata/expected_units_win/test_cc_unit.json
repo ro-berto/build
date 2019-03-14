@@ -20,7 +20,7 @@
       {
         "info": {
           "path": "../../test.cc",
-          "digest": "4249e2182118c06d44d65ce81d16a1067e665df473f36971847c8427370b68a0"
+          "digest": "5c441f31fbcdfdf56cef22dcf78c09ec9c94135cc9801cd5e79936c8043dde4c"
         },
         "v_name": {
           "path": "src/test.cc",
@@ -45,6 +45,16 @@
         "v_name": {
           "path": "src/test2.h",
           "corpus": "chromium-test"
+        }
+      },
+      {
+        "info": {
+          "path": "../../third_party/depot_tools/win_toolchain/sdk_header.h",
+          "digest": "d00a30539b38a598d89f113998c1f2fa7924052a4b11b88ef7ead3692576d81d"
+        },
+        "v_name": {
+          "path": "src/third_party/depot_tools/win_toolchain/sdk_header.h",
+          "corpus": "winsdk"
         }
       }
     ],

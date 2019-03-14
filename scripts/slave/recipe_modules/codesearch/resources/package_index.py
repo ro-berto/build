@@ -31,6 +31,10 @@ from windows_shell_split import WindowsShellSplit
 # is more important here.
 MOJOM_IMPORT_RE = re.compile(r'^\s*import\s*"([^"]*)"', re.MULTILINE)
 
+# A separate corpus name used for Windows SDK sources, so they can be filtered
+# out by Kythe if necessary.
+WIN_SDK_CORPUS = 'winsdk'
+
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
@@ -496,7 +500,7 @@ class IndexPack(object):
           normalized_fname = normalized_fname.replace('\\', '/')
         required_input = {
             'v_name': {
-                'corpus': corpus,
+                'corpus': _CorpusForFile(normalized_fname, corpus),
                 'path': normalized_fname,
             }
         }
@@ -518,7 +522,7 @@ class IndexPack(object):
     unit_dictionary['source_file'] = [filename]
     unit_dictionary['output_key'] = output_file
     unit_dictionary['v_name'] = {
-        'corpus': corpus,
+        'corpus': _CorpusForFile(filename, corpus),
         'language': 'c++',
     }
     # Add the VName root only if it was specified.
@@ -591,8 +595,26 @@ class IndexPack(object):
           rel_path = os.path.relpath(abs_path, index_parent)
           archive.write(abs_path, rel_path)
 
+
+def _CorpusForFile(filepath, default_corpus):
+  """Returns the appropriate corpus name for a file path.
+
+  Specifically, this checks if the file should be put in a special corpus
+  (e.g. the one for the Windows SDK). If not, returns default_corpus.
+
+  Args:
+    filepath: A normalized path to a file, using '/' as the path separator.
+    default_corpus: The corpus to use if no special corpus is required.
+  """
+  assert '\\' not in filepath
+  if 'third_party/depot_tools/win_toolchain' in filepath:
+    return WIN_SDK_CORPUS
+  return default_corpus
+
+
 def _ReplaceSuffix(string, curr_suffix, new_suffix):
   return string[:len(string) - len(curr_suffix)] + new_suffix
+
 
 def _MergeFeatureArgs(gn_targets_dict, target_name, target):
   """Adds --enable_feature args from the parser target to the generator target.
