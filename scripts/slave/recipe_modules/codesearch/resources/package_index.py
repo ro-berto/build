@@ -214,14 +214,16 @@ class IndexPack(object):
 
     return os.path.normpath(os.path.join(self.out_dir, path))
 
-  def _CorrespondingGeneratedHeader(self, source_target):
-    """Given a mojom file target, return the corresponding generated header
-    filename.
+  def _CorrespondingGeneratedHeaders(self, source_target):
+    """Given a mojom file target, return a list of the corresponding generated
+    header filenames.
 
-    e.g. //foo/bar.mojom -> gen/foo/bar.mojom.h
+    e.g. //foo/bar.mojom -> [gen/foo/bar.mojom.h, gen/foo/bar.mojom-forward.h]
     """
 
-    return 'gen/%s.h' % source_target[len('//'):]
+    return [
+        s % source_target[len('//'):] for s in ['gen/%s.h', 'gen/%s-forward.h']
+    ]
 
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
@@ -274,13 +276,12 @@ class IndexPack(object):
             os.path.join(self.root_dir, self.out_dir,
                          self._ConvertGnPath(source)))
 
-        # Add the C++ header file generated from this mojom file. The Kythe
-        # mojom analyser can't generate this itself, so it needs it supplied in
-        # order to wire up the mojom identifiers to their generated C++
+        # Add the C++ header files generated from this mojom file. The Kythe
+        # mojom analyser can't generate these itself, so it needs them supplied
+        # in order to wire up the mojom identifiers to their generated C++
         # counterparts.
-        self._AddDataFile(
-            os.path.join(self.root_dir, self.out_dir,
-                         self._CorrespondingGeneratedHeader(source)))
+        for header in self._CorrespondingGeneratedHeaders(source):
+          self._AddDataFile(os.path.join(self.root_dir, self.out_dir, header))
 
   def _GenerateUnitFiles(self):
     """Produces the unit files for the index pack.
@@ -343,14 +344,10 @@ class IndexPack(object):
       ]
       unit_dictionary['source_file'] = source_files
       generated_headers = [
-          self._CorrespondingGeneratedHeader(source)
+          header
           for source in target['sources']
+          for header in self._CorrespondingGeneratedHeaders(source)
       ]
-      # If this compilation unit includes multiple output files, we don't have
-      # anything sensible to use as the output_key. But it's fine to leave this
-      # empty if so.
-      if len(generated_headers) == 1:
-        unit_dictionary['output_key'] = generated_headers[0]
 
       # gn produces an unsubstituted {{response_file_name}} for filelist. We
       # can't work with this, so we remove it and add the source files as a

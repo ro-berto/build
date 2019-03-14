@@ -55,6 +55,16 @@
       },
       {
         "info": {
+          "path": "gen/test.mojom-forward.h",
+          "digest": "6a9375164d923728f68d25636d106e804463fee9b7827e02bef16212b24e86cb"
+        },
+        "v_name": {
+          "path": "src/out/Debug/gen/test.mojom-forward.h",
+          "corpus": "chromium-test"
+        }
+      },
+      {
+        "info": {
           "path": "../../test2.mojom",
           "digest": "3dd104b0998f09bcf6716c4a79ed43d16554cbf8d61bdd5fd32dfab442e16759"
         },
@@ -63,7 +73,6 @@
           "corpus": "chromium-test"
         }
       }
-    ],
-    "output_key": "gen/test.mojom.h"
+    ]
   }
 }

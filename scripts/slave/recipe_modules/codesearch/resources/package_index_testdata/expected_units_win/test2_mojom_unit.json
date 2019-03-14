@@ -52,8 +52,17 @@
           "path": "src/out/Debug/gen/test2.mojom.h",
           "corpus": "chromium-test"
         }
+      },
+      {
+        "info": {
+          "path": "gen/test2.mojom-forward.h",
+          "digest": "1841943b755530f47d397d1f67e9723e19646182befbb0660117273310c7f8f2"
+        },
+        "v_name": {
+          "path": "src/out/Debug/gen/test2.mojom-forward.h",
+          "corpus": "chromium-test"
+        }
       }
-    ],
-    "output_key": "gen/test2.mojom.h"
+    ]
   }
 }
