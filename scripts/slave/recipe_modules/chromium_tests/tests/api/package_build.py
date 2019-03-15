@@ -36,10 +36,3 @@ def GenTests(api):
           mastername='chromium.perf',
           buildername='linux-builder-perf')
   )
-
-  yield (
-      api.test('linux_perf_bisect_builder') +
-      api.properties.tryserver(
-          mastername='tryserver.chromium.perf',
-          buildername='linux_perf_bisect_builder')
-  )

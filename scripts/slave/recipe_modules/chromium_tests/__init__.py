@@ -5,8 +5,6 @@
 DEPS = [
   'adb',
   'archive',
-  'bisect_tester',
-  'bisect_tester_staging',
   'build',
   'chromium',
   'chromium_android',

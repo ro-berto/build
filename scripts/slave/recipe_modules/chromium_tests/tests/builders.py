@@ -44,8 +44,6 @@ VALIDATORS = {
 
 def validate_tester_config(api, mastername, buildername, bot_config):
   parent_buildername = bot_config.get('parent_buildername')
-  if parent_buildername == 'dummy':
-    return
 
   parent_mastername = bot_config.get('parent_mastername', mastername)
   parent_bot_config = api.chromium_tests.create_bot_config_object(

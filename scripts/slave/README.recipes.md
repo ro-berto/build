@@ -5,10 +5,6 @@
 **[Recipe Modules](#Recipe-Modules)**
   * [adb](#recipe_modules-adb)
   * [archive](#recipe_modules-archive)
-  * [auto_bisect](#recipe_modules-auto_bisect) &mdash; API for the bisect recipe module.
-  * [auto_bisect_staging](#recipe_modules-auto_bisect_staging) &mdash; API for the bisect recipe module.
-  * [bisect_tester](#recipe_modules-bisect_tester)
-  * [bisect_tester_staging](#recipe_modules-bisect_tester_staging)
   * [build](#recipe_modules-build)
   * [chromedriver](#recipe_modules-chromedriver)
   * [chromite](#recipe_modules-chromite)
@@ -43,8 +39,6 @@
   * [math_utils](#recipe_modules-math_utils) &mdash; General statistical or mathematical functions.
   * [ndk](#recipe_modules-ndk)
   * [perf_dashboard](#recipe_modules-perf_dashboard)
-  * [perf_try](#recipe_modules-perf_try) &mdash; API for the perf try job recipe module.
-  * [perf_try_staging](#recipe_modules-perf_try_staging) &mdash; API for the perf try job recipe module.
   * [puppet_service_account](#recipe_modules-puppet_service_account) &mdash; **[DEPRECATED]** API for generating OAuth2 access tokens from service account keys predeployed to Chrome Ops bots via Puppet.
   * [repo](#recipe_modules-repo) &mdash; Common steps for recipes that use repo for source control.
   * [swarming_client](#recipe_modules-swarming_client)
@@ -67,13 +61,7 @@
   * [archive:tests/download_and_unzip_build](#recipes-archive_tests_download_and_unzip_build)
   * [archive:tests/zip_and_upload_build](#recipes-archive_tests_zip_and_upload_build)
   * [art](#recipes-art)
-  * [auto_bisect:examples/full](#recipes-auto_bisect_examples_full)
-  * [auto_bisect_staging:examples/full](#recipes-auto_bisect_staging_examples_full)
   * [binary_size_trybot](#recipes-binary_size_trybot)
-  * [bisection/android_bisect](#recipes-bisection_android_bisect)
-  * [bisection/android_bisect_staging](#recipes-bisection_android_bisect_staging)
-  * [bisection/desktop_bisect](#recipes-bisection_desktop_bisect)
-  * [bisection/desktop_bisect_staging](#recipes-bisection_desktop_bisect_staging)
   * [blink_downstream](#recipes-blink_downstream) &mdash; This recipe can be used by components like v8 to verify blink tests with a low false positive rate.
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
@@ -165,8 +153,6 @@
   * [chromium_tests:tests/configs](#recipes-chromium_tests_tests_configs)
   * [chromium_tests:tests/steps/android_instrumentation_test](#recipes-chromium_tests_tests_steps_android_instrumentation_test)
   * [chromium_tests:tests/steps/android_junit_test](#recipes-chromium_tests_tests_steps_android_junit_test)
-  * [chromium_tests:tests/steps/bisect_test](#recipes-chromium_tests_tests_steps_bisect_test)
-  * [chromium_tests:tests/steps/bisect_test_staging](#recipes-chromium_tests_tests_steps_bisect_test_staging)
   * [chromium_tests:tests/steps/blink_test](#recipes-chromium_tests_tests_steps_blink_test)
   * [chromium_tests:tests/steps/experimental_test](#recipes-chromium_tests_tests_steps_experimental_test)
   * [chromium_tests:tests/steps/find_annotated_test](#recipes-chromium_tests_tests_steps_find_annotated_test)
@@ -448,280 +434,6 @@ inserted into the URL.
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
-### *recipe_modules* / [auto\_bisect](/scripts/slave/recipe_modules/auto_bisect)
-
-[DEPS](/scripts/slave/recipe_modules/auto_bisect/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try](#recipe_modules-perf_try), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-API for the bisect recipe module.
-
-This API is meant to enable the bisect recipe to bisect any chromium-supported
-platform for any test that can be run via buildbot, perf or otherwise.
-
-#### **class [AutoBisectStagingApi](/scripts/slave/recipe_modules/auto_bisect/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-A module for bisect specific functions.
-
-&mdash; **def [create\_bisector](/scripts/slave/recipe_modules/auto_bisect/api.py#76)(self, bisect_config_dict, dummy_mode=False, \*\*flags):**
-
-Passes the api and the config dictionary to the Bisector constructor.
-
-For details about the keys in the bisect config dictionary go to:
-http://chromium.org/developers/speed-infra/perf-try-bots-bisect-bots/config
-
-Args:
-  bisect_config_dict (dict): Contains the configuration for the bisect job.
-  dummy_mode (bool): In dummy mode we prevent the bisector for expanding
-    the revision range at construction, to avoid the need for lots of step
-    data when performing certain tests (such as results output).
-
-Returns:
-  An instance of bisector.Bisector.
-
-&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#313)(self, deploy_script, deploy_apks, deploy_args):**
-
-Installs apk on the android device.
-
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/auto_bisect/api.py#204)(self, \*args, \*\*kwargs):**
-
-&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect/api.py#321)(self, deploy_script, args=None):**
-
-Install android-chrome apk on device.
-
-&mdash; **def [gsutil\_file\_exists](/scripts/slave/recipe_modules/auto_bisect/api.py#120)(self, path, \*\*kwargs):**
-
-Returns True if a file exists at the given GS path.
-
-&mdash; **def [query\_revision\_info](/scripts/slave/recipe_modules/auto_bisect/api.py#131)(self, revision):**
-
-Gathers information on a particular revision.
-
-Args:
-  revision (str): A git commit hash.
-
-Returns:
-  A dict with the keys "author", "email", "date", "subject" and "body",
-  as output by fetch_revision_info.py.
-
-&mdash; **def [run\_local\_test\_run](/scripts/slave/recipe_modules/auto_bisect/api.py#187)(self, test_config_params, skip_download=False, \*\*kwargs):**
-
-Starts a test run on the same machine.
-
-This is for the merged director/tester flow.
-
-&mdash; **def [set\_additional\_depot\_info](/scripts/slave/recipe_modules/auto_bisect/api.py#108)(self, depot_info):**
-
-Adds additional depot info to the global depot variables.
-
-&mdash; **def [set\_builder\_bot](/scripts/slave/recipe_modules/auto_bisect/api.py#100)(self, builder_bot):**
-
-Sets builder name for building binaries.
-
-&mdash; **def [set\_deploy\_script](/scripts/slave/recipe_modules/auto_bisect/api.py#112)(self, path):**
-
-Sets apk deployment script path for android-chrome.
-
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/auto_bisect/api.py#104)(self):**
-
-Sets bisector as internal only to process android-chrome.
-
-&mdash; **def [set\_platform\_gs\_prefix](/scripts/slave/recipe_modules/auto_bisect/api.py#96)(self, gs_url):**
-
-Sets GS path for the platform.
-
-&mdash; **def [set\_svn\_repo](/scripts/slave/recipe_modules/auto_bisect/api.py#116)(self, svn_repo_url):**
-
-Sets SVN repo url for triggering build jobs.
-
-&mdash; **def [start\_test\_run\_for\_bisect](/scripts/slave/recipe_modules/auto_bisect/api.py#231)(self, update_step, bot_db, test_config_params, skip_download=False, \*\*kwargs):**
-
-&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect/api.py#339)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
-
-Starts a recipe bisect job, perf test run, or legacy bisect run.
-
-This function is an entry point for:
-  1. A legacy bisect job run (in this case, there will be a patch
-     with a bisect config file).
-  2. A recipe bisect job run (in this case, there will be a property
-     called bisect_config which contains the config parameters).
-  3. A single test run for a recipe bisect job (there will be a
-     bisect_config property but it won't contain good/bad revisions).
-  4. A perf try job run.
-
-Args:
-  api: The recipe api object.
-  update_step: Extra update_step to, used for some job types.
-  bot_db: A BotConfigAndTestDB object, used for some job types.
-  kwargs: Args to use only for legacy bisect.
-
-&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect/api.py#396)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
-
-Compares samples using catapult's statistics implementation.
-
-Args:
-  values_a, values_b: lists of paths to the json files containing the values
-    produced by the test.
-  metric: the name of the metric as sent by dashboard.
-  output_format: 'chartjson', 'valueset' or 'buildbot'
-
-Returns:
-  a dict containing 'result' which may be True, False or 'needMoreData', as
-  well as details about each sample ('debug_values', 'mean' and 'std_dev').
-
-&emsp; **@property**<br>&mdash; **def [working\_dir](/scripts/slave/recipe_modules/auto_bisect/api.py#70)(self):**
-### *recipe_modules* / [auto\_bisect\_staging](/scripts/slave/recipe_modules/auto_bisect_staging)
-
-[DEPS](/scripts/slave/recipe_modules/auto_bisect_staging/__init__.py#1): [adb](#recipe_modules-adb), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [crrev](#recipe_modules-crrev), [goma](#recipe_modules-goma), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [perf\_try\_staging](#recipe_modules-perf_try_staging), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-API for the bisect recipe module.
-
-This API is meant to enable the bisect recipe to bisect any chromium-supported
-platform for any test that can be run via buildbot, perf or otherwise.
-
-#### **class [AutoBisectStagingApi](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-A module for bisect specific functions.
-
-&mdash; **def [create\_bisector](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#76)(self, bisect_config_dict, dummy_mode=False, \*\*flags):**
-
-Passes the api and the config dictionary to the Bisector constructor.
-
-For details about the keys in the bisect config dictionary go to:
-http://chromium.org/developers/speed-infra/perf-try-bots-bisect-bots/config
-
-Args:
-  bisect_config_dict (dict): Contains the configuration for the bisect job.
-  dummy_mode (bool): In dummy mode we prevent the bisector for expanding
-    the revision range at construction, to avoid the need for lots of step
-    data when performing certain tests (such as results output).
-
-Returns:
-  An instance of bisector.Bisector.
-
-&mdash; **def [deploy\_apk\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#313)(self, deploy_script, deploy_apks, deploy_args):**
-
-Installs apk on the android device.
-
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#204)(self, \*args, \*\*kwargs):**
-
-&mdash; **def [full\_deploy\_on\_device](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#321)(self, deploy_script, args=None):**
-
-Install android-chrome apk on device.
-
-&mdash; **def [gsutil\_file\_exists](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#120)(self, path, \*\*kwargs):**
-
-Returns True if a file exists at the given GS path.
-
-&mdash; **def [query\_revision\_info](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#131)(self, revision):**
-
-Gathers information on a particular revision.
-
-Args:
-  revision (str): A git commit hash.
-
-Returns:
-  A dict with the keys "author", "email", "date", "subject" and "body",
-  as output by fetch_revision_info.py.
-
-&mdash; **def [run\_local\_test\_run](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#187)(self, test_config_params, skip_download=False, \*\*kwargs):**
-
-Starts a test run on the same machine.
-
-This is for the merged director/tester flow.
-
-&mdash; **def [set\_additional\_depot\_info](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#108)(self, depot_info):**
-
-Adds additional depot info to the global depot variables.
-
-&mdash; **def [set\_builder\_bot](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#100)(self, builder_bot):**
-
-Sets builder name for building binaries.
-
-&mdash; **def [set\_deploy\_script](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#112)(self, path):**
-
-Sets apk deployment script path for android-chrome.
-
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#104)(self):**
-
-Sets bisector as internal only to process android-chrome.
-
-&mdash; **def [set\_platform\_gs\_prefix](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#96)(self, gs_url):**
-
-Sets GS path for the platform.
-
-&mdash; **def [set\_svn\_repo](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#116)(self, svn_repo_url):**
-
-Sets SVN repo url for triggering build jobs.
-
-&mdash; **def [start\_test\_run\_for\_bisect](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#231)(self, update_step, bot_db, test_config_params, skip_download=False, \*\*kwargs):**
-
-&mdash; **def [start\_try\_job](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#339)(self, api, update_step=None, bot_db=None, \*\*kwargs):**
-
-Starts a recipe bisect job, perf test run, or legacy bisect run.
-
-This function is an entry point for:
-  1. A legacy bisect job run (in this case, there will be a patch
-     with a bisect config file).
-  2. A recipe bisect job run (in this case, there will be a property
-     called bisect_config which contains the config parameters).
-  3. A single test run for a recipe bisect job (there will be a
-     bisect_config property but it won't contain good/bad revisions).
-  4. A perf try job run.
-
-Args:
-  api: The recipe api object.
-  update_step: Extra update_step to, used for some job types.
-  bot_db: A BotConfigAndTestDB object, used for some job types.
-  kwargs: Args to use only for legacy bisect.
-
-&mdash; **def [stat\_compare](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#396)(self, values_a, values_b, metric, output_format='chartjson', \*\*kwargs):**
-
-Compares samples using catapult's statistics implementation.
-
-Args:
-  values_a, values_b: lists of paths to the json files containing the values
-    produced by the test.
-  metric: the name of the metric as sent by dashboard.
-  output_format: 'chartjson', 'valueset' or 'buildbot'
-
-Returns:
-  a dict containing 'result' which may be True, False or 'needMoreData', as
-  well as details about each sample ('debug_values', 'mean' and 'std_dev').
-
-&emsp; **@property**<br>&mdash; **def [working\_dir](/scripts/slave/recipe_modules/auto_bisect_staging/api.py#70)(self):**
-### *recipe_modules* / [bisect\_tester](/scripts/slave/recipe_modules/bisect_tester)
-
-[DEPS](/scripts/slave/recipe_modules/bisect_tester/__init__.py#1): [chromium](#recipe_modules-chromium), [math\_utils](#recipe_modules-math_utils), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [BisectTesterApi](/scripts/slave/recipe_modules/bisect_tester/api.py#15)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-A module for the bisect tester bot using the chromium recipe.
-
-&emsp; **@device_to_test.setter**<br>&mdash; **def [device\_to\_test](/scripts/slave/recipe_modules/bisect_tester/api.py#26)(self, value):**
-
-&mdash; **def [load\_config\_from\_dict](/scripts/slave/recipe_modules/bisect_tester/api.py#30)(self, bisect_config):**
-
-Copies the required configuration keys to a new dict.
-
-&mdash; **def [run\_test](/scripts/slave/recipe_modules/bisect_tester/api.py#41)(self, test_config, \*\*kwargs):**
-
-Exposes perf tests implementation.
-### *recipe_modules* / [bisect\_tester\_staging](/scripts/slave/recipe_modules/bisect_tester_staging)
-
-[DEPS](/scripts/slave/recipe_modules/bisect_tester_staging/__init__.py#1): [adb](#recipe_modules-adb), [chromium](#recipe_modules-chromium), [math\_utils](#recipe_modules-math_utils), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [BisectTesterApi](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#15)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-A module for the bisect tester bot using the chromium recipe.
-
-&emsp; **@device_to_test.setter**<br>&mdash; **def [device\_to\_test](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#26)(self, value):**
-
-&mdash; **def [load\_config\_from\_dict](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#30)(self, bisect_config):**
-
-Copies the required configuration keys to a new dict.
-
-&mdash; **def [run\_test](/scripts/slave/recipe_modules/bisect_tester_staging/api.py#41)(self, test_config, \*\*kwargs):**
-
-Exposes perf tests implementation.
 ### *recipe_modules* / [build](/scripts/slave/recipe_modules/build)
 
 [DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1776,7 +1488,7 @@ Returns:
 Uses the 'get_states' endpoint on the swarming server.
 ### *recipe_modules* / [chromium\_tests](/scripts/slave/recipe_modules/chromium_tests)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#5): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [bisect\_tester](#recipe_modules-bisect_tester), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [clang\_coverage](#recipe_modules-clang_coverage), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [gn](#recipe_modules-gn), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/__init__.py#5): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [clang\_coverage](#recipe_modules-clang_coverage), [commit\_position](#recipe_modules-commit_position), [filter](#recipe_modules-filter), [gn](#recipe_modules-gn), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 #### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1851,11 +1563,11 @@ Returns:
 
 &mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#353)(self, bot_config, log_details=False):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1030)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1026)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#338)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1064)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1060)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1892,7 +1604,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#79)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1096)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1092)(self, mb_config_path=None, builders=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#474)(self, mastername, buildername, update_step, bot_db):**
 
@@ -1935,7 +1647,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#564)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1220)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1216)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#68)(self):**
 
@@ -3203,13 +2915,13 @@ Args:
 
 &mdash; **def [add\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#66)(self, data, halt_on_failure=False, name=None, \*\*kwargs):**
 
-&mdash; **def [get\_change\_info](/scripts/slave/recipe_modules/perf_dashboard/api.py#89)(self, commits):**
+&mdash; **def [get\_change\_info](/scripts/slave/recipe_modules/perf_dashboard/api.py#83)(self, commits):**
 
 &mdash; **def [get\_skeleton\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#20)(self, test, revision, value, bot=None):**
 
-&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#146)(self, step_result, reason):**
+&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#137)(self, step_result, reason):**
 
-&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#110)(self, name, url, data, halt_on_failure, debug_info=None, \*\*kwargs):**
+&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#104)(self, name, url, data, halt_on_failure, \*\*kwargs):**
 
 Send a POST request to a URL with a payload.
 
@@ -3222,71 +2934,11 @@ Args:
   debug_info (list[str]|None): An optional list of log lines to add to the
       post step as debugging information.
 
-&mdash; **def [post\_bisect\_results](/scripts/slave/recipe_modules/perf_dashboard/api.py#70)(self, data, halt_on_failure=False, \*\*kwargs):**
-
-Posts bisect results to Perf Dashboard.
-
 &mdash; **def [set\_default\_config](/scripts/slave/recipe_modules/perf_dashboard/api.py#62)(self):**
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#76)(self, builder_name, change, isolate_server, isolate_map, halt_on_failure=False, \*\*kwargs):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#70)(self, builder_name, change, isolate_server, isolate_map, halt_on_failure=False, \*\*kwargs):**
 
-&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#151)(self, step_result, reason):**
-### *recipe_modules* / [perf\_try](/scripts/slave/recipe_modules/perf_try)
-
-[DEPS](/scripts/slave/recipe_modules/perf_try/__init__.py#1): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-API for the perf try job recipe module.
-
-This API is meant to enable the perf try job recipe on any chromium-supported
-platform for any test that can be run via buildbot, perf or otherwise.
-
-#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try/api.py#333)(self, config, results_without_patch, results_with_patch, labels):**
-
-Returns the results as a dict.
-
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try/api.py#322)(self, output):**
-
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try/api.py#421)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
-
-Parse the values for a given metric for the given results.
-
-This is meant to be used by tryjobs with a metric.
-
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try/api.py#42)(self):**
-
-&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try/api.py#45)(self, api, affected_files, bot_update_step, bot_db):**
-
-Entry point pert tryjob or CQ tryjob.
-### *recipe_modules* / [perf\_try\_staging](/scripts/slave/recipe_modules/perf_try_staging)
-
-[DEPS](/scripts/slave/recipe_modules/perf_try_staging/__init__.py#1): [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-API for the perf try job recipe module.
-
-This API is meant to enable the perf try job recipe on any chromium-supported
-platform for any test that can be run via buildbot, perf or otherwise.
-
-#### **class [PerfTryJobApi](/scripts/slave/recipe_modules/perf_try_staging/api.py#36)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [get\_result](/scripts/slave/recipe_modules/perf_try_staging/api.py#333)(self, config, results_without_patch, results_with_patch, labels):**
-
-Returns the results as a dict.
-
-&mdash; **def [parse\_cloud\_links](/scripts/slave/recipe_modules/perf_try_staging/api.py#322)(self, output):**
-
-&mdash; **def [parse\_values](/scripts/slave/recipe_modules/perf_try_staging/api.py#421)(self, results_a, results_b, metric, output_format, \*\*kwargs):**
-
-Parse the values for a given metric for the given results.
-
-This is meant to be used by tryjobs with a metric.
-
-&mdash; **def [set\_internal](/scripts/slave/recipe_modules/perf_try_staging/api.py#42)(self):**
-
-&mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try_staging/api.py#45)(self, api, affected_files, bot_update_step, bot_db):**
-
-Entry point pert tryjob or CQ tryjob.
+&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#142)(self, step_result, reason):**
 ### *recipe_modules* / [puppet\_service\_account](/scripts/slave/recipe_modules/puppet_service_account)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
@@ -4264,41 +3916,11 @@ Checks that properties get to recipes from annotated_run properly
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#74)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
 &mdash; **def [setup\_target](/scripts/slave/recipes/art.py#232)(api, serial, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
-### *recipes* / [auto\_bisect:examples/full](/scripts/slave/recipe_modules/auto_bisect/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/auto_bisect/examples/full.py#7): [auto\_bisect](#recipe_modules-auto_bisect), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/auto_bisect/examples/full.py#26)(api):**
-### *recipes* / [auto\_bisect\_staging:examples/full](/scripts/slave/recipe_modules/auto_bisect_staging/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/auto_bisect_staging/examples/full.py#7): [auto\_bisect\_staging](#recipe_modules-auto_bisect_staging), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/auto_bisect_staging/examples/full.py#26)(api):**
 ### *recipes* / [binary\_size\_trybot](/scripts/slave/recipes/binary_size_trybot.py)
 
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#8): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_trybot.py#69)(api, analyze_targets, compile_targets, apk_name):**
-### *recipes* / [bisection/android\_bisect](/scripts/slave/recipes/bisection/android_bisect.py)
-
-[DEPS](/scripts/slave/recipes/bisection/android_bisect.py#9): [auto\_bisect](#recipe_modules-auto_bisect), [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/bisection/android_bisect.py#86)(api, mastername, buildername):**
-### *recipes* / [bisection/android\_bisect\_staging](/scripts/slave/recipes/bisection/android_bisect_staging.py)
-
-[DEPS](/scripts/slave/recipes/bisection/android_bisect_staging.py#9): [auto\_bisect\_staging](#recipe_modules-auto_bisect_staging), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/bisection/android_bisect_staging.py#86)(api, mastername, buildername):**
-### *recipes* / [bisection/desktop\_bisect](/scripts/slave/recipes/bisection/desktop_bisect.py)
-
-[DEPS](/scripts/slave/recipes/bisection/desktop_bisect.py#5): [auto\_bisect](#recipe_modules-auto_bisect), [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/bisection/desktop_bisect.py#21)(api):**
-### *recipes* / [bisection/desktop\_bisect\_staging](/scripts/slave/recipes/bisection/desktop_bisect_staging.py)
-
-[DEPS](/scripts/slave/recipes/bisection/desktop_bisect_staging.py#5): [auto\_bisect\_staging](#recipe_modules-auto_bisect_staging), [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/bisection/desktop_bisect_staging.py#21)(api):**
 ### *recipes* / [blink\_downstream](/scripts/slave/recipes/blink_downstream.py)
 
 [DEPS](/scripts/slave/recipes/blink_downstream.py#31): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4379,11 +4001,11 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromite/examples/full.py#30)(api):**
 ### *recipes* / [chromium](/scripts/slave/recipes/chromium.py)
 
-[DEPS](/scripts/slave/recipes/chromium.py#5): [adb](#recipe_modules-adb), [bisect\_tester](#recipe_modules-bisect_tester), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipes/chromium.py#5): [adb](#recipe_modules-adb), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.py#41)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.py#40)(api):**
 
-&mdash; **def [ignore\_undumpable](/scripts/slave/recipes/chromium.py#34)(obj):**
+&mdash; **def [ignore\_undumpable](/scripts/slave/recipes/chromium.py#33)(obj):**
 ### *recipes* / [chromium.chromedriver.recipe\_autogen](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4802,7 +4424,7 @@ Each entry in the BUILDERS dict will be checked to ensure
 chromium_tests.configure_build can be called with a BotConfig for that builder
 without error.
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#76)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#74)(api, mastername, buildername):**
 
 &mdash; **def [validate\_tester\_config](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#45)(api, mastername, buildername, bot_config):**
 ### *recipes* / [chromium\_tests:tests/configs](/scripts/slave/recipe_modules/chromium_tests/tests/configs.py)
@@ -4820,16 +4442,6 @@ without error.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#18)(api):**
-### *recipes* / [chromium\_tests:tests/steps/bisect\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py#5): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py#15)(api):**
-### *recipes* / [chromium\_tests:tests/steps/bisect\_test\_staging](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test_staging.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test_staging.py#5): [bisect\_tester\_staging](#recipe_modules-bisect_tester_staging), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test_staging.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/blink\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/blink_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/blink_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

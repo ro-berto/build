@@ -618,25 +618,6 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd_options=args, step_name='device_status',  py_script=True,
       factory_properties=factory_properties, alwaysRun=True)
 
-  def AddBisectTest(self):
-    """Adds a step to the factory to run a bisection on a range of revisions
-    to investigate performance regressions."""
-
-    # Need to run this in advance to create the depot and sync
-    # the appropriate directories so that apache will launch correctly.
-    cmd_name = self.PathJoin('src', 'tools',
-                             'prepare-bisect-perf-regression.py')
-    cmd = [self._python, cmd_name, '-w', '.']
-    self.AddTestStep(chromium_step.AnnotatedCommand, 'Preparing for Bisection',
-                     cmd, timeout=60*60, max_time=4*60*60)
-
-    cmd_name = self.PathJoin('src', 'tools', 'run-bisect-perf-regression.py')
-    cmd_args = ['-w', '.', '-p', self.PathJoin('..', '..', '..', 'goma')]
-    cmd_args = self.AddBuildProperties(cmd_args)
-    cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
-    self.AddTestStep(chromium_step.AnnotatedCommand, 'Running Bisection',
-        cmd, timeout=60*60, max_time=24*60*60)
-
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
     cmd = [self._python, self._lint_test_files_tool,

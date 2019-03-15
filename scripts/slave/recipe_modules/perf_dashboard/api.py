@@ -67,12 +67,6 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     return self.post(name or 'perf dashboard post', '%s/add_point' % _BASE_URL,
                      {'data': json.dumps(data)}, halt_on_failure, **kwargs)
 
-  def post_bisect_results(self, data, halt_on_failure=False, **kwargs):
-    """Posts bisect results to Perf Dashboard."""
-    return self.post('Post bisect results',
-                     '%s/post_bisect_results' % _BASE_URL,
-                     {'data': json.dumps(data)}, halt_on_failure, **kwargs)
-
   def upload_isolate(self, builder_name, change, isolate_server,
                      isolate_map, halt_on_failure=False, **kwargs):
     data = {
@@ -107,7 +101,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
     return change
 
-  def post(self, name, url, data, halt_on_failure, debug_info=None, **kwargs):
+  def post(self, name, url, data, halt_on_failure, **kwargs):
     """Send a POST request to a URL with a payload.
 
     Args:
@@ -127,9 +121,6 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     step_result = self.m.python(
         name=name, script=self.resource('post_json.py'), args=post_json_args,
         **kwargs)
-
-    if debug_info:
-      step_result.presentation.logs['Debug Info'] = debug_info
 
     response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover

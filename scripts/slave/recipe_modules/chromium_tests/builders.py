@@ -31,7 +31,6 @@ from . import client_v8_fyi
 from . import tryserver_chromium_android
 from . import tryserver_chromium_linux
 from . import tryserver_chromium_mac
-from . import tryserver_chromium_perf
 from . import tryserver_webrtc
 
 BUILDERS = freeze({
@@ -62,7 +61,6 @@ BUILDERS = freeze({
   'tryserver.chromium.android': tryserver_chromium_android.SPEC,
   'tryserver.chromium.linux': tryserver_chromium_linux.SPEC,
   'tryserver.chromium.mac': tryserver_chromium_mac.SPEC,
-  'tryserver.chromium.perf': tryserver_chromium_perf.SPEC,
   'tryserver.webrtc': tryserver_webrtc.SPEC,
 
   # Additional build configurations to test against for coverage. This is useful

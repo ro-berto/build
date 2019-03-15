@@ -34,43 +34,6 @@
     ]
   },
   {
-    "cmd": [
-      "luci-auth",
-      "token",
-      "-lifetime",
-      "3m"
-    ],
-    "infra_step": true,
-    "name": "get access token for default account (2)",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://chromeperf.appspot.com/post_bisect_results",
-      "-i",
-      "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"try_job_id\\\": 1}\"}",
-      "-o",
-      "/path/to/tmp/json",
-      "-t",
-      "extra.secret.token.should.not.be.logged"
-    ],
-    "name": "Post bisect results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"post_data\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"status\": \"completed\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"try_job_id\": 1@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"text\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "jsonResult": null,
     "name": "$result"
   }

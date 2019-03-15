@@ -646,10 +646,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('buildrunner_tests'):
       f.AddBuildStep(factory_properties, name='buildrunner_tests')
 
-    # Add bisection test (if this is specified, it should be the only test)
-    if R('bisect_revisions'):
-      f.AddBisectTest()
-
     # Add an optional set of annotated steps.
     # NOTE: This really should go last as it can be confusing if the annotator
     # isn't the last thing to run.

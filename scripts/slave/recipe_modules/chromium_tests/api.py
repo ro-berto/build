@@ -1018,10 +1018,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return self.m.archive.legacy_upload_url(
           master_config.get('build_gs_bucket'),
           extra_url_components=None)
-    elif (mastername == 'tryserver.chromium.perf' or
-          (mastername == 'tryserver.chromium.linux' and
-           buildername == 'linux_full_bisect_builder')):
-      return None
     else:
       return self.m.archive.legacy_upload_url(
           master_config.get('build_gs_bucket'),

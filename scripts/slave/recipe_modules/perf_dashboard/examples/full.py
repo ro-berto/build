@@ -40,22 +40,8 @@ def RunSteps(api):
       bot='bot_name',
   )
 
-  bisect_results = {
-      'try_job_id': 1,
-      'status': 'completed'
-  }
-  api.perf_dashboard.post_bisect_results(bisect_results)
-
 
 def GenTests(api):
-  bisect_response = {
-      'post_data': {
-          'try_job_id': 1,
-          'status': 'completed'
-      },
-      'text': '',
-      'status_code': 200
-  }
   for platform in ('linux', 'win', 'mac'):
     yield (api.test(platform) +
            api.platform.name(platform) +
@@ -63,6 +49,4 @@ def GenTests(api):
                           buildername='multivm-windows-perf-be',
                           buildnumber=75,
                           mastername='client.dart.fyi') +
-           api.runtime(is_luci=True, is_experimental=False) +
-           api.step_data('Post bisect results',
-                         api.json.output(bisect_response)))
+           api.runtime(is_luci=True, is_experimental=False))
