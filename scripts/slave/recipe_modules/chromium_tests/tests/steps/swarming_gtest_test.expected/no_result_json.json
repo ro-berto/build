@@ -175,6 +175,7 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 1, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": true, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
@@ -229,9 +230,9 @@
   {
     "failure": {
       "failure": {
-        "step": "base_unittests"
+        "step": "There are failed tasks."
       },
-      "humanReason": "Step('base_unittests') failed with return_code 1"
+      "humanReason": "Step('There are failed tasks.') failed with return_code 1"
     },
     "name": "$result"
   }

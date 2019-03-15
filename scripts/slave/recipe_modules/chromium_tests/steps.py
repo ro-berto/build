@@ -1559,6 +1559,20 @@ class SwarmingTest(Test):
       kwargs['shard_indices'] = kwargs['task_to_retry'].failed_shards
       kwargs['idempotent'] = False
 
+      # Test suite failure is determined by merging and examining the JSON
+      # output from the shards. Failed shards are determined by looking at the
+      # swarming output [retcode !=0 or state != 'SUCCESS']. It is possible that
+      # these are not in sync. This will cause no tasks to be dispatched for
+      # 'retry shards with patch'. This error has graceful recovery: 'retry
+      # shards with patch' will simply reuse results from 'with patch'.
+      # Regardless, we want to emit a failing step so that the error is not
+      # overlooked.
+      if len(kwargs['task_to_retry'].failed_shards) == 0: # pragma: no cover
+        api.python.failing_step(
+          'missing failed shards',
+          "Retry shards with patch is being run on a test that has no failed "
+          "shards.")
+
     task = task_func(
         build_properties=api.chromium.build_properties,
         cipd_packages=self._cipd_packages,

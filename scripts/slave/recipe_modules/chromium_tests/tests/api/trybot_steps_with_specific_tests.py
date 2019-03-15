@@ -279,6 +279,50 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  def generate_one_failed_shard_raw():
+    shard_zero = api.chromium_swarming.canned_summary_output_raw(
+        shard_indices=[0], failure=False)
+    shard_one = api.chromium_swarming.canned_summary_output_raw(
+        shard_indices=[1], failure=True)
+    shards = [shard_zero['shards'][0], shard_one['shards'][0]]
+    shards[1]['state'] = 'EXPIRED'
+    return {'shards': shards}
+
+  # If one shard fails or expires, retry shards with patch should retry just
+  # that failed/expired shard.
+  for failure_type in ['failed', 'expired']:
+    test_name = 'retry_shards_with_patch_wait_for_task_' + failure_type
+    swarming_summary = generate_one_failed_shard_raw()
+    if failure_type == 'expired':
+      swarming_summary['shards'][1]['state'] = 'EXPIRED'
+    retry_shards_step_name = (
+        'test_pre_run (retry shards with patch).[trigger] base_unittests '
+        '(retry shards with patch)')
+    yield (
+        api.test(test_name) +
+        api.properties.tryserver(
+            mastername='tryserver.chromium.linux',
+            buildername='linux-rel',
+            retry_failed_shards=True,
+            shards=2,
+            swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+            }) +
+        api.override_step_data(
+            'base_unittests (with patch)',
+            api.chromium_swarming.summary(swarming_summary) +
+            api.test_utils.canned_gtest_output(passing=False)) +
+        api.post_process(post_process.StepCommandContains,
+            retry_shards_step_name,
+            ['--env', 'GTEST_SHARD_INDEX', '1']) +
+        api.post_process(post_process.StepCommandContains,
+            retry_shards_step_name,
+            ['--env', 'GTEST_TOTAL_SHARDS', '2']) +
+        api.post_process(post_process.AnnotationContains,
+            retry_shards_step_name, ['"shard_index": 1']) +
+        api.post_process(post_process.DropExpectation)
+    )
+
   yield (
       api.test('findit_step_layer_flakiness') +
       api.properties.tryserver(

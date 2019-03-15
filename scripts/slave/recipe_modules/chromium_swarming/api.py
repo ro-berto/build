@@ -1530,6 +1530,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         else:
           display_text = 'shard #%d (failed)' % index
         exist_failure = True
+
+      if exist_failure:
         failed_shards.append(index)
 
       if shard and self.show_outputs_ref_in_collect_step:
