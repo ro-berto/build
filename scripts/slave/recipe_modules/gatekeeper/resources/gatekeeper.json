@@ -639,10 +639,6 @@
           }
         },
 
-        "categories": [
-          "chromium_perf_steps"
-        ],
-
         "builders": {
           "*": {}
         }
@@ -1014,12 +1010,6 @@
     "chromium_archive_build": {
       "forgiving_optional": [
         "archive_build"
-      ]
-    },
-
-    "chromium_perf_steps": {
-      "closing_optional": [
-        "*"
       ]
     },
 
