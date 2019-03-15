@@ -105,7 +105,8 @@ def TestObservatory(api, checkout_dir):
   test_path = checkout_dir.join('flutter/shell/testing/observatory/test.dart')
   test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
   with api.context(cwd=checkout_dir):
-    api.step('test observatory and service protocol', test_cmd)
+    # Timeout after 5 minutes, this step is prone to hang
+    api.step('test observatory and service protocol', test_cmd, timeout=5*60)
 
 
 def GetCheckout(api):
