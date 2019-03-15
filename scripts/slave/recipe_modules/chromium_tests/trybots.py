@@ -179,6 +179,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (NVIDIA Shield TV)',
       }),
+      'gpu-manual-try-android-p-pixel-2-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Pixel 2)',
+      }),
       'gpu-manual-try-android-p-pixel-2-32-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 Vk Release (Pixel 2)',

@@ -1055,6 +1055,20 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
+    'Android FYI Release (Pixel 2)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'android',
+    },
     'Android FYI dEQP Release (Nexus 5X)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
