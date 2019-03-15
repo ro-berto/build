@@ -142,12 +142,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if r and r.valid:
       p = presentation or step_result.presentation
 
-      failures, text_failures = self.limit_failures(r.deterministic_failures)
-      for f in failures:
+      def emit_log(f, prefix):
         # FIXME: We could theoretically split up each run more. This would
         # require some refactoring in util.py to store each individual run's
         # logs, which we don't do currently.
-        log_name = '%s (status %s)' % (f, ','.join(set(r.raw_results[f])))
+        log_name = '%s: %s (status %s)' % (
+            prefix, f, ','.join(set(r.raw_results[f])))
         p.logs[log_name] = [
             "Test '%s' completed with the following status(es): '%s'" % (
                 f, '\',\''.join(r.raw_results[f])),
@@ -161,9 +161,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
             '=' * 80,
         ]
 
+      deterministic_failures_set = set(r.deterministic_failures)
+      flaky_failures_set = set(r.unique_failures) - deterministic_failures_set
+
+      deterministic_failures, deterministic_failures_text = (
+          self.limit_failures(sorted(deterministic_failures_set)))
+      flaky_failures, flaky_failures_text = (
+          self.limit_failures(sorted(flaky_failures_set)))
+      for f in deterministic_failures:
+        emit_log(f, 'Deterministic failure')
+      for f in flaky_failures:
+        emit_log(f, 'Flaky failure')
 
       p.step_text += self.format_step_text([
-          ['failures:', text_failures],
+          ['deterministic failures [caused step to fail]:',
+           deterministic_failures_text],
+          ['flaky failures [ignored]:', flaky_failures_text],
       ])
     return r
 

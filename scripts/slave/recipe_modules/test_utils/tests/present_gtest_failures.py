@@ -52,7 +52,8 @@ def GenTests(api):
               ],
           })),
           retcode=1) +
-      api.post_process(has_log, 'test', 'Test.One (status FAILURE)') +
+      api.post_process(has_log, 'test', 'Deterministic failure: Test.One '
+                                        '(status FAILURE)') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -79,6 +80,7 @@ def GenTests(api):
               ],
           })),
           retcode=1) +
-      api.post_process(doesnt_have_log, 'test', 'Test.One (status FAILURE)') +
+      api.post_process(doesnt_have_log, 'test', 'Deterministic failure: '
+                                                'Test.One (status FAILURE)') +
       api.post_process(post_process.DropExpectation)
   )

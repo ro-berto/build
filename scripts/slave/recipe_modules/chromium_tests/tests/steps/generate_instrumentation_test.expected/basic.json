@@ -212,17 +212,17 @@
     ],
     "name": "Report example_instrumentation_test results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@:(@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_END@Test.Two (status FAILURE)@@@"
+      "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@:(@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_END@Deterministic failure: Test.Two (status FAILURE)@@@"
     ]
   },
   {
