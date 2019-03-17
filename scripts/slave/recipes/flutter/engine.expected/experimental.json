@@ -919,7 +919,8 @@
       "-j",
       "200",
       "-C",
-      "[START_DIR]/src/out/host_debug"
+      "[START_DIR]/src/out/host_debug",
+      "--full-dart-sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -929,7 +930,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build host_debug"
+    "name": "build host_debug --full-dart-sdk"
   },
   {
     "cmd": [],
@@ -1049,7 +1050,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build host_debug",
+      "build host_debug --full-dart-sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
