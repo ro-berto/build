@@ -972,9 +972,10 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos'],
+      'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'intel',
