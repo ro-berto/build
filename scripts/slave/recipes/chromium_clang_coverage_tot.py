@@ -5,8 +5,10 @@ from recipe_engine.types import freeze
 
 DEPS = [
     'chromium',
+    'chromium_checkout',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
+    'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -50,9 +52,13 @@ SAMPLE_FUZZER_TARGETS = ['pdfium_fuzzer', 'third_party_re2_fuzzer']
 
 def RunSteps(api):
   mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
-  api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
+  buildername, bot_config = api.m.chromium.configure_bot(BUILDERS, ['mb'])
+  with api.m.context(cwd=api.m.chromium_checkout.get_checkout_dir(bot_config)):
+    _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config)
 
+
+def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
+  api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   clang_revision_file = api.path['checkout'].join('third_party', 'llvm-build',
