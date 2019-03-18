@@ -296,12 +296,12 @@ def BuildLinuxAndroid(api):
 
 
 def BuildLinux(api):
-  RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
   Build(api, 'host_debug_unopt')
-  Build(api, 'host_debug', '--full-dart-sdk')
+  Build(api, 'host_debug')
   Build(api, 'host_dynamic_release')
   Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
@@ -330,6 +330,7 @@ def BuildLinux(api):
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
 
+
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
   flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
@@ -355,7 +356,7 @@ def SetupXcode(api):
     yield
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'debug', '--no-lto')
+  RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
   RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
   RunGN(api, '--runtime-mode', 'profile', '--android')
@@ -371,7 +372,7 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
-  Build(api, 'host_debug', '--full-dart-sdk')
+  Build(api, 'host_debug')
   Build(api, 'host_dynamic_release')
   RunHostTests(api, 'out/host_debug_unopt')
 
@@ -446,6 +447,7 @@ def BuildMac(api):
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
+
 
 def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   checkout = api.path['start_dir'].join('src')
@@ -543,7 +545,7 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
-  RunGN(api, '--runtime-mode', 'debug')
+  RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'profile', '--android')
@@ -558,7 +560,7 @@ def BuildWindows(api):
         '--android-cpu=arm64')
 
   Build(api, 'host_debug_unopt')
-  Build(api, 'host_debug', '--full-dart-sdk')
+  Build(api, 'host_debug')
   Build(api, 'host_dynamic_release')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_profile_arm64', 'gen_snapshot')
@@ -622,6 +624,7 @@ def BuildWindows(api):
   ], archive_name='windows-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
+
 
 def BuildJavadoc(api):
   checkout = api.path['start_dir'].join('src')

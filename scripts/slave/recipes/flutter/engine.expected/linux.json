@@ -437,7 +437,8 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--runtime-mode",
-      "debug"
+      "debug",
+      "--full-dart-sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -448,7 +449,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode debug"
+    "name": "gn --runtime-mode debug --full-dart-sdk"
   },
   {
     "cmd": [
@@ -895,8 +896,7 @@
       "-j",
       "200",
       "-C",
-      "[START_DIR]/src/out/host_debug",
-      "--full-dart-sdk"
+      "[START_DIR]/src/out/host_debug"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -906,7 +906,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build host_debug --full-dart-sdk"
+    "name": "build host_debug"
   },
   {
     "cmd": [],
@@ -1026,7 +1026,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build host_debug --full-dart-sdk",
+      "build host_debug",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
