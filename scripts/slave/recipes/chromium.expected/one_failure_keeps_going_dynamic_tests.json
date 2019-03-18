@@ -538,12 +538,7 @@
     "name": "Upload to test-results [browser_tests]"
   },
   {
-    "failure": {
-      "failure": {
-        "step": ""
-      },
-      "humanReason": "1 tests failed: ['base_unittests']"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]
