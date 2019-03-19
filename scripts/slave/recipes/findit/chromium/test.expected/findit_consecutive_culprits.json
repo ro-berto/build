@@ -3337,7 +3337,6 @@
     "name": "test r4.gl_tests (r4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>deterministic failures [caused step to fail]:<br/>Test.One<br/>@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
