@@ -72,7 +72,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         }
       },
@@ -85,7 +85,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         },
         'baremetal_swarming_dimensions': {
@@ -103,7 +103,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         }
       },
@@ -116,7 +116,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         }
       },
@@ -138,7 +138,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         },
         'baremetal_swarming_dimensions': {
@@ -621,7 +621,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         }
       },
@@ -634,7 +634,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         }
       },
@@ -970,7 +970,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         }
       },
@@ -983,7 +983,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         },
         'baremetal_swarming_dimensions': {
@@ -1001,7 +1001,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         }
       },
@@ -1014,7 +1014,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         }
       },
@@ -1063,7 +1063,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         },
       },
@@ -1076,7 +1076,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         },
         'baremetal_swarming_dimensions': {
@@ -1094,7 +1094,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         },
       },
@@ -1107,7 +1107,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86-64',
         },
       },
@@ -1169,7 +1169,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
+          'os': 'Windows-10',
           'cpu': 'x86',
         }
       },
