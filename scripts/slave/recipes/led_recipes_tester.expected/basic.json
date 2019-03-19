@@ -362,7 +362,7 @@
     "cmd": [
       "[CACHE]/led/led",
       "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
+      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led edit-cr-cl",
@@ -370,11 +370,11 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using slow testing CL@@@",
+      "@@@STEP_TEXT@Using fast testing CL@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1286761@@@"
+      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
     ]
   },
   {
@@ -416,146 +416,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led launch",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"beeeeeeeee5\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "analyze+launch luci.chromium.try:win7-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try:win7-rel"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led get-builder",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try:win7-rel.git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit-cr-cl",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using fast testing CL@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit-recipe-bundle"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit-recipe-bundle",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "edit",
-      "-exp",
-      "false"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "launch"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led launch",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -646,23 +506,6 @@
       "--task-output-stdout=none"
     ],
     "name": "collect luci.chromium.try:linux-rel task",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/client_py/client-py/swarming.py",
-      "collect",
-      "-S",
-      "chromium-swarm.appspot.com",
-      "beeeeeeeee5",
-      "--print-status-updates",
-      "--task-output-stdout=none"
-    ],
-    "name": "collect luci.chromium.try:win7-rel task",
     "~followup_annotations": [
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
     ]
