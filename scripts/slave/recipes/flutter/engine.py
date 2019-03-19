@@ -160,6 +160,13 @@ def UploadDartSdk(api, archive_name):
     'dart-sdk', # folder_name
     archive_name)
 
+def UploadWebSdk(api, archive_name):
+  UploadFolder(api,
+    'Upload Web SDK', # dir_label
+    'src/out/host_debug', # parent_dir
+    'flutter_web_sdk', # folder_name
+    archive_name)
+
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
 def MakeTempDir(api, label):
@@ -329,6 +336,7 @@ def BuildLinux(api):
   ], archive_name='linux-x64-embedder')
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
+  UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
 
 
 def TestObservatory(api):
@@ -447,6 +455,7 @@ def BuildMac(api):
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
+  UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
 
 
 def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
@@ -624,6 +633,7 @@ def BuildWindows(api):
   ], archive_name='windows-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
+  UploadWebSdk(api, archive_name='flutter-web-sdk-windows-x64.zip')
 
 
 def BuildJavadoc(api):

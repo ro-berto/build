@@ -4287,6 +4287,70 @@
     "name": "temp dir for Upload Dart SDK"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "name": "Zip flutter_web_sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\flutter_web_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_12\\\\flutter-web-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_12\\flutter-web-sdk-windows-x64.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload flutter-web-sdk-windows-x64.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]\\tmp_tmp_12"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for Upload Web SDK"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
