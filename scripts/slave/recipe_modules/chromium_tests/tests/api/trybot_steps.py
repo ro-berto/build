@@ -294,8 +294,8 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
           post_process.MustRun, 'base_unittests (retry shards with patch)') +
@@ -325,16 +325,16 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
           post_process.MustRun, 'base_unittests (retry shards with patch)') +
@@ -373,8 +373,9 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.gtest_results('invalid_results', 1)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.gtest_results('invalid_results', 1),
+              failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
           post_process.MustRun, 'base_unittests (retry shards with patch)') +
@@ -413,12 +414,13 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.gtest_results('invalid results', 1)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.gtest_results('invalid results', 1),
+              failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
           post_process.MustRun, 'base_unittests (with patch)') +
@@ -459,12 +461,14 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.gtest_results('invalid results', 1)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.gtest_results(
+                  'invalid results', 1), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(failure=True) +
-          api.test_utils.gtest_results('invalid results', 1)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.gtest_results(
+                  'invalid results', 1), failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
           post_process.MustRun, 'base_unittests (with patch)') +

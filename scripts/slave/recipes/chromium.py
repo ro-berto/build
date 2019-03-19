@@ -159,8 +159,8 @@ def GenTests(api):
     ) +
     # Make one of the tests fail to improve code coverage.
     api.override_step_data('base_unittests on NVIDIA GPU on Linux',
-        api.chromium_swarming.canned_summary_output(failure=True) +
-        api.test_utils.canned_gtest_output(False))
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_gtest_output(False)))
   )
 
   yield (
@@ -564,11 +564,12 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=True,
-            use_json_test_format=True, output_chartjson=True),
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                shards=2, isolated_script_passing=True,
+                use_json_test_format=True, output_chartjson=True),
+            shards=2),
         retcode=0)
   )
 
@@ -596,11 +597,12 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(3)
-        + api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True,
-            shards=3, isolated_script_passing=True, corrupt=True,
-            use_json_test_format=True, output_chartjson=True),
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                shards=3, isolated_script_passing=True, corrupt=True,
+                use_json_test_format=True, output_chartjson=True),
+            shards=3),
         retcode=0)
   )
 
@@ -655,11 +657,13 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=False,
-            use_json_test_format=True), retcode=1)
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=False, is_win=False, swarming=True,
+                shards=2, isolated_script_passing=False,
+                use_json_test_format=True),
+            shards=2,
+            retcode=1))
   )
 
   yield (
@@ -686,11 +690,12 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.chromium_swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
-        passing=False, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=False, valid=True,
-        missing_shards=[1]))
+      api.chromium_swarming.canned_summary_output_fixed(
+          api.test_utils.canned_isolated_script_output(
+              passing=False, is_win=False, swarming=True,
+              shards=2, isolated_script_passing=False, valid=True,
+              missing_shards=[1]),
+          shards=2))
   )
 
   yield (
@@ -717,11 +722,12 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.chromium_swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
-        passing=False, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=False, valid=True,
-        empty_shards=[1]))
+      api.chromium_swarming.canned_summary_output_fixed(
+          api.test_utils.canned_isolated_script_output(
+            passing=False, is_win=False, swarming=True,
+            shards=2, isolated_script_passing=False, valid=True,
+            empty_shards=[1]),
+        shards=2))
   )
 
   yield (
@@ -749,12 +755,13 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.chromium_swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
-        passing=False, is_win=False, swarming=True,
-        shards=4, isolated_script_passing=False,
-        empty_shards=[1], output_chartjson=True,
-        use_json_test_format=True))
+      api.chromium_swarming.canned_summary_output_fixed(
+          api.test_utils.canned_isolated_script_output(
+              passing=False, is_win=False, swarming=True,
+              shards=4, isolated_script_passing=False,
+              empty_shards=[1], output_chartjson=True,
+              use_json_test_format=True),
+          shards=2))
   )
 
   yield (
@@ -781,13 +788,14 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(2)
-        + api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True,
-            shards=2, isolated_script_passing=True,
-            output_chartjson=True, benchmark_enabled=False,
-            use_json_test_format=True),
-        retcode=0)
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                shards=2, isolated_script_passing=True,
+                output_chartjson=True, benchmark_enabled=False,
+                use_json_test_format=True),
+            shards=2,
+            retcode=0))
   )
 
   yield (
@@ -815,12 +823,14 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.chromium_swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
-        passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True,
-        missing_shards=[1], output_chartjson=True, use_json_test_format=True),
-      retcode=1) +
+      api.chromium_swarming.canned_summary_output_fixed(
+          api.test_utils.canned_isolated_script_output(
+            passing=True, is_win=False, swarming=True,
+            shards=2, isolated_script_passing=True,
+            missing_shards=[1], output_chartjson=True,
+            use_json_test_format=True),
+        shards=2,
+        retcode=1)) +
     api.post_process(
         post_process.DoesNotRun, 'telemetry_gpu_unittests Dashboard Upload') +
     api.post_process(
@@ -851,12 +861,14 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
-      api.chromium_swarming.canned_summary_output(2)
-      + api.test_utils.canned_isolated_script_output(
-        passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True,
-        missing_shards=[1], output_chartjson=True, use_json_test_format=True),
-      retcode=1)
+      api.chromium_swarming.canned_summary_output_fixed(
+          api.test_utils.canned_isolated_script_output(
+              passing=True, is_win=False, swarming=True,
+              shards=2, isolated_script_passing=True,
+              missing_shards=[1], output_chartjson=True,
+              use_json_test_format=True),
+          shards=2,
+          retcode=1))
   )
 
   yield (
@@ -1018,10 +1030,10 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output()
-        + api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True,
-            isolated_script_passing=False, valid=True),
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                isolated_script_passing=False, valid=True)),
         retcode=255)
   )
 
@@ -1046,10 +1058,10 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output()
-        + api.test_utils.canned_isolated_script_output(
-            passing=True, is_win=False, swarming=True,
-            isolated_script_passing=True, valid=True),
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=True, is_win=False, swarming=True,
+                isolated_script_passing=True, valid=True)),
         retcode=255)
   )
 
@@ -1075,11 +1087,12 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(internal_failure=True)
-        + api.test_utils.canned_isolated_script_output(
-            passing=False, is_win=False, swarming=True,
-            swarming_internal_failure=True, isolated_script_passing=True,
-            valid=True),
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.test_utils.canned_isolated_script_output(
+                passing=False, is_win=False, swarming=True,
+                swarming_internal_failure=True, isolated_script_passing=True,
+                valid=True),
+            internal_failure=True),
         retcode=255)
   )
 
@@ -1105,9 +1118,8 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
-        api.chromium_swarming.canned_summary_output(failure=True)
-        + api.json.output({}),
-        retcode=1)
+        api.chromium_swarming.canned_summary_output_fixed(
+            api.json.output({}), failure=True, retcode=1))
   )
 
   yield (

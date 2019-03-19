@@ -341,8 +341,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.canned_summary_output() +
-          api.test_utils.canned_gtest_output(True))
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(True)))
     )
 
   data = {
@@ -361,8 +361,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary(data) +
-          api.test_utils.canned_gtest_output(True))
+          api.chromium_swarming.summary_fixed(
+              api.test_utils.canned_gtest_output(True), data))
     )
 
   data = api.chromium_swarming.canned_summary_output_raw(shards=4)
@@ -376,8 +376,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary(data) +
-          api.test_utils.canned_gtest_output(True))
+          api.chromium_swarming.summary_fixed(
+              api.test_utils.canned_gtest_output(True), data))
     )
 
   yield (
@@ -422,7 +422,7 @@ def GenTests(api):
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary(data)))
+                    api.chromium_swarming.summary_fixed(None, data)))
   yield (
       api.test('isolated_script_expired_new') +
       api.step_data(
@@ -440,7 +440,7 @@ def GenTests(api):
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary(data)))
+                    api.chromium_swarming.summary_fixed(None, data)))
   yield (
       api.test('isolated_script_timeout_new') +
       api.step_data(
@@ -461,7 +461,7 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)}) +
-          api.chromium_swarming.summary(data)) +
+          api.chromium_swarming.summary_fixed(None, data)) +
       api.properties(isolated_script_task=True))
 
   data['shards'][0]['state'] = 'TIMED_OUT'
@@ -511,8 +511,8 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results) + api.chromium_swarming.summary(
-              summary_data)) +
+          api.json.output(json_results) + api.chromium_swarming.summary_fixed(
+              None, summary_data)) +
       api.properties(
           isolated_script_task=True,
           merge={
@@ -527,8 +527,8 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results) + api.chromium_swarming.summary(
-              summary_data)) +
+          api.json.output(json_results) + api.chromium_swarming.summary_fixed(
+              None, summary_data)) +
       api.properties(
           isolated_script_task=True,
           trigger_script={
@@ -556,7 +556,7 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.chromium_swarming.summary(summary_data) +
+          api.chromium_swarming.summary_fixed(None, summary_data) +
           api.test_utils.canned_gtest_output(False)) +
       api.properties(
           platforms=('linux',),
@@ -570,7 +570,7 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.chromium_swarming.summary(summary_data)) +
+          api.chromium_swarming.summary_fixed(None, summary_data)) +
       api.properties(
           platforms=('linux',),
           show_shards_in_collect_step=True,
@@ -604,7 +604,7 @@ def GenTests(api):
           'hello_world',
           api.raw_io.output_dir(
               {'summary.json': json.dumps(summary_data_deduped)}),
-          api.chromium_swarming.summary(summary_data_deduped) +
+          api.chromium_swarming.summary_fixed(None, summary_data_deduped) +
           api.test_utils.canned_gtest_output(False)) +
       api.properties(
           platforms=('linux',),

@@ -5548,9 +5548,9 @@ which has offset 0.
 
 See PROPERTIES for documentation on the recipe's interface.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#529)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, max_calibration_attempts, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, swarming_priority, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#530)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, max_calibration_attempts, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, swarming_priority, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
 
-&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#428)(api, depot, initial_commit_offset, is_bad_func, offset):**
+&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#429)(api, depot, initial_commit_offset, is_bad_func, offset):**
 
 Exercises the bisection control flow.
 
@@ -5563,7 +5563,7 @@ Args:
       bad.
   offset: Offset at which to start bisection.
 
-&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#511)(api, swarming_dimensions, swarming_priority):**
+&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#512)(api, swarming_dimensions, swarming_priority):**
 ### *recipes* / [v8/node\_integration](/scripts/slave/recipes/v8/node_integration.py)
 
 [DEPS](/scripts/slave/recipes/v8/node_integration.py#13): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
