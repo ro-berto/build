@@ -607,91 +607,6 @@ BUILDERS = freeze({
       },
     },
   },
-  'luci.webrtc.branches': {
-    'settings': {
-      'build_gs_bucket': 'chromium-webrtc',
-    },
-    'builders': {
-      'Win (stable)': {  # Win32 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-          'cpu': 'x86',
-        }
-      },
-      'Win (beta)': {  # Win32 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-          'cpu': 'x86',
-        }
-      },
-      'Mac (stable)': {  # Mac64 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'swarming_dimensions': {
-          'os': 'Mac-10.12',
-          'cpu': 'x86-64',
-        }
-      },
-      'Mac (beta)': {  # Mac64 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'swarming_dimensions': {
-          'os': 'Mac-10.12',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux (stable)': {  # Linux64 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        }
-      },
-      'Linux (beta)': {  # Linux64 Release
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        }
-      },
-    },
-  },
   'luci.webrtc.perf': {
     'settings': {
       'mastername': 'client.webrtc.perf',
@@ -1160,19 +1075,6 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         }
       },
-      'win_experimental': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-          'cpu': 'x86',
-        }
-      },
       'mac_compile_dbg': {
         'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
@@ -1244,19 +1146,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
-      },
-      'mac_experimental': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'swarming_dimensions': {
-          'os': 'Mac-10.11',
-          'cpu': 'x86-64',
-        }
       },
       'linux_compile_rel': {
         'recipe_config': 'webrtc',
