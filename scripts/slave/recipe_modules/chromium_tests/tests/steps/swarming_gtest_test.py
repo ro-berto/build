@@ -73,8 +73,8 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output(failure=False) +
-          api.test_utils.canned_gtest_output(passing=True))
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.canned_gtest_output(passing=True), failure=False))
   )
 
   yield (
@@ -113,8 +113,8 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output(failure=True),
-          retcode=1)
+          api.chromium_swarming.canned_summary_output_fixed(
+              dispatched_task_step_test_data=None, failure=True, retcode=1))
   )
 
   yield (
@@ -128,8 +128,8 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output() +
-          api.test_utils.gtest_results(None, 255)) +
+          api.chromium_swarming.canned_summary_output_fixed(
+              api.test_utils.gtest_results(None, 255))) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)
   )
