@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from recipe_engine import recipe_test_api
 
 class SwarmingTestApi(recipe_test_api.RecipeTestApi):
@@ -62,3 +64,72 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
         res += data
 
     return res
+
+  # TODO(erikchen): Remove summary() and rename summary_fixed() once all
+  # callsites have been fixed. https://crbug.com/942801
+  def summary_fixed(self, dispatched_task_step_test_data, data, retcode=None):
+    """Returns step test data for a swarming collect step.
+
+    Args:
+      dispatched_task_step_test_data: A StepTestData which wraps
+          PlaceholderTestDatas for the dispatched task and/or merge script.
+      data: A python dictionary that holds the swarming summary.
+      retcode: The retcode for the collect step.
+
+    Returns:
+      A StepTestData that wraps multiple PlaceholderTestDatas.
+    """
+    # Generate step test data for the swarming step.
+    step_test_data = recipe_test_api.StepTestData()
+    key = ('chromium_swarming', 'summary', None)
+    placeholder = recipe_test_api.PlaceholderTestData(json.dumps(data))
+    step_test_data.placeholder_data[key] = placeholder
+
+    # Add the test data for the dispatched step.
+    if dispatched_task_step_test_data:
+      step_test_data += dispatched_task_step_test_data
+
+    # Explicitly set the retcode
+    step_test_data.retcode = retcode
+
+    # The 'exit_code' of the swarming shards is currently populated by the
+    # 'failure' parameter. As a future improvement, we could automatically set
+    # the 'exit_code' parameter of the swarming shards based on the exit code of
+    # the placeholder for the dispatched tasks.
+    return step_test_data
+
+  # Swarming is used to dispatch tasks remotely. This means that unless there is
+  # an internal swarming error, the results should include both:
+  #  1) The swarming output itself.
+  #  2) The output from the dispatched task.
+  # The retcode of (2) should become the exit_code in the swarming output.
+  # The swarming task itself should almost always have a retcode of 0, unless
+  # the test is trying to test swarming failures. output from swarming itself,
+  def canned_summary_output_fixed(
+      self, dispatched_task_step_test_data, shards=1, shard_indices=None,
+      failure=False, internal_failure=False, retcode=0):
+    """Returns step test data for a swarming collect step.
+
+    Swarming is used to dispatch tasks remotely. Those tasks typically have
+    their own placeholders. This function returns a single StepTestData that
+    wraps multiple placeholders -- the placeholder for the swarming summary, and
+    the placeholder(s) for the dispatched task and/or merge script.
+
+    Args:
+      dispatched_task_step_test_data: A StepTestData which wraps
+          PlaceholderTestDatas for the dispatched task and/or merge script.
+      shards: The number of shards that the task was divided into.
+      shard_indices: The indices of the shards that were dispatched.
+      failure: Whether the swarming task failed.
+      internal_failure: Whether swarming itself encountered an error.
+      retcode: The retcode for the collect step.
+
+    Returns:
+      A StepTestData that wraps multiple PlaceholderTestDatas.
+    """
+    assert dispatched_task_step_test_data or retcode or internal_failure, (
+        'There must be a placeholder for the dispatched task unless there is a '
+        'swarming error')
+    return self.summary_fixed(
+        dispatched_task_step_test_data, self.canned_summary_output_raw(
+            shards, shard_indices, failure, internal_failure), retcode)
