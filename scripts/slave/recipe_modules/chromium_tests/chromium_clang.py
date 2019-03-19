@@ -340,6 +340,7 @@ SPEC = {
       'swarming_server': 'https://chrome-swarming.appspot.com',
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'swarming_dimensions': {
+        'gpu': None,
         'pool': 'chrome.tests',
       },
       'chromium_apply_config': ['mb'],
