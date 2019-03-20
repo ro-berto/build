@@ -8,10 +8,6 @@ from recipe_engine import recipe_test_api
 
 class SwarmingTestApi(recipe_test_api.RecipeTestApi):
 
-  @recipe_test_api.placeholder_step_data
-  def summary(self, data): # pragma: no cover
-    return self.m.json.output(data)
-
   def canned_summary_output_raw(
       self, shards=1, shard_indices=None, failure=False,
       internal_failure=False):
@@ -41,12 +37,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
         } for i in shard_indices
       ],
     }
-
-  def canned_summary_output(
-      self, shards=1, shard_indices=None, failure=False,
-      internal_failure=False): # pragma: no cover
-    return self.summary(self.canned_summary_output_raw(
-        shards, shard_indices, failure, internal_failure))
 
   def merge_script_log_file(self, data):
     return self.m.raw_io.output(data)
