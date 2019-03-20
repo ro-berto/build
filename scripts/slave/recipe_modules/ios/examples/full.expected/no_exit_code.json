@@ -717,7 +717,6 @@
     },
     "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Unexpected infrastructure failure.@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",

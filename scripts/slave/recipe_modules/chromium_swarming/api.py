@@ -1180,12 +1180,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  2) a gtest results JSON emitted by the task
     #  3) a merge script stdout/stderr log emitted by the task
     # This builds an instance of StepTestData that covers all of them.
-    step_test_data = step_test_data or (
-      self.test_api.canned_summary_output(task.shards, task.shard_indices) +
-      self.m.json.test_api.output({}) +
-      self.m.raw_io.test_api.output(
-        'Successfully merged all data'))
-
+    if not step_test_data:
+      dispatched_task_placeholder = (self.m.json.test_api.output({}) +
+          self.m.raw_io.test_api.output('Successfully merged all data'))
+      step_test_data = self.test_api.canned_summary_output_fixed(
+          dispatched_task_placeholder, task.shards, task.shard_indices)
     try:
       with self.m.swarming.on_path():
         with self.m.context(cwd=self.m.path['start_dir']):
@@ -1252,10 +1251,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  2) a gtest results JSON emitted by the task
     #  3) a log file that stores stdout/stderr of task
     # This builds an instance of StepTestData that covers all three.
-    step_test_data = (
-        self.test_api.canned_summary_output(task.shards, task.shard_indices) +
-        gtest_results_test_data +
+    dispatched_task_placeholder = (gtest_results_test_data +
         self.test_api.merge_script_log_file('Gtest merged successfully'))
+    step_test_data = self.test_api.canned_summary_output_fixed(
+        dispatched_task_placeholder, task.shards, task.shard_indices)
+
     try:
       return self._default_collect_step(
           task,
@@ -1407,10 +1407,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  1) a task summary JSON emitted by swarming
     #  2) a test results JSON emitted by the task
     # This builds an instance of StepTestData that covers both.
-    step_test_data = (
-        self.test_api.canned_summary_output(task.shards, task.shard_indices) +
-        isolated_script_results_test_data +
+    dispatched_task_placeholder = (isolated_script_results_test_data +
         self.test_api.merge_script_log_file('Merged succesfully'))
+    step_test_data = self.test_api.canned_summary_output_fixed(
+        dispatched_task_placeholder, task.shards, task.shard_indices)
 
     try:
       return self._default_collect_step(

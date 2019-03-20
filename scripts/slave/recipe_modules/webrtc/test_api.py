@@ -64,10 +64,14 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(parent_got_revision=parent_rev)
 
     if failing_test:
-      test += self.step_data(failing_test, retcode=1)
+      step_test_data = recipe_test_api.StepTestData()
+      step_test_data.retcode = 1
+      test += self.override_step_data(failing_test, step_test_data)
 
     if fail_android_archive:
-      test += self.step_data('build android archive', retcode=1)
+      step_test_data = recipe_test_api.StepTestData()
+      step_test_data.retcode = 1
+      test += self.override_step_data('build android archive', step_test_data)
 
     git_repo = 'https://webrtc.googlesource.com/src'
     if is_chromium:

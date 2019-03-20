@@ -465,7 +465,6 @@
     },
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>deterministic failures [caused step to fail]:<br/>test-0<br/>test-1<br/>test-10<br/>test-11<br/>test-12<br/>test-13<br/>test-14<br/>test-15<br/>test-16<br/>test-17<br/>test-18<br/>test-19<br/>test-2<br/>test-20<br/>test-21<br/>test-22<br/>test-23<br/>test-24<br/>test-25<br/>test-26<br/>test-27<br/>test-28<br/>test-29<br/>test-3<br/>test-30<br/>test-31<br/>test-32<br/>test-33<br/>test-34<br/>test-35<br/>... 70 more (100 total) ...<br/>@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -794,17 +793,39 @@
       "@@@STEP_LOG_LINE@Deterministic failure: test-35 (status FAILURE)@@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: test-35 (status FAILURE)@================================================================================@@@",
       "@@@STEP_LOG_END@Deterministic failure: test-35 (status FAILURE)@@@",
-      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "hello_world on Windows-7-SP1"
-      },
-      "humanReason": "Step('hello_world on Windows-7-SP1') failed with return_code 1"
-    },
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/hello_isolated_world_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "remove temp dir"
+  },
+  {
+    "jsonResult": null,
     "name": "$result"
   }
 ]

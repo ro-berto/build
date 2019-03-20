@@ -23,6 +23,7 @@ DEPS = [
 ]
 
 from recipe_engine import post_process
+from recipe_engine import recipe_test_api
 
 
 def RunSteps(api):
@@ -400,6 +401,9 @@ def GenTests(api):
       )
   )
 
+  step_test_data = recipe_test_api.StepTestData()
+  step_test_data.retcode = 1
+
   yield (
       api.test('experimental') +
       api.properties(
@@ -417,7 +421,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
-      api.step_data('base_unittests (experimental)', retcode=1) +
+      api.override_step_data('base_unittests (experimental)', step_test_data) +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

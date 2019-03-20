@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import recipe_test_api
 from recipe_engine.post_process import (
     Filter, DoesNotRun, DropExpectation, MustRun, ResultReasonRE, StepException)
 from recipe_engine.recipe_api import Property
@@ -430,6 +431,8 @@ def GenTests(api):
     )
   )
 
+  step_test_data = recipe_test_api.StepTestData()
+  step_test_data.retcode = 1
   yield (
     api.v8.test(
         'client.v8',
@@ -439,7 +442,7 @@ def GenTests(api):
         parent_bot_config=release_bot_config,
         parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
     ) +
-    api.step_data('Fuzz', retcode=1)
+    api.override_step_data('Fuzz', step_test_data)
   )
 
   yield (

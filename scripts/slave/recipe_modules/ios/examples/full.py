@@ -226,13 +226,12 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'exit_code': 1,
             'state': 'COMPLETED',
           }],
-        }),
-        retcode=1,
+        })
     )
     + api.post_process(post_process.StatusFailure)
   )
@@ -271,13 +270,12 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'exit_code': '1',
             'state': 'COMPLETED',
           }],
-        }),
-        retcode=1,
+        })
     )
     + api.post_process(post_process.StatusFailure)
     + api.post_process(post_process.DropExpectation)
@@ -317,13 +315,12 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'exit_code': 'b',
             'state': 'COMPLETED',
           }],
-        }),
-        retcode=1,
+        })
     )
     + api.post_process(
         post_process.MustRun,
@@ -366,13 +363,12 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'exit_code': 2,
             'state': 'COMPLETED',
           }],
-        }),
-        retcode=1,
+        })
     )
   )
 
@@ -410,12 +406,11 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'state': 'TIMED_OUT',
           }],
-        }),
-        retcode=1,
+        })
     )
   )
 
@@ -453,12 +448,11 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'state': 'EXPIRED',
           }],
-        }),
-        retcode=1,
+        })
     )
   )
 
@@ -496,12 +490,11 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary({
+        api.chromium_swarming.summary_fixed(None, {
           'shards': [{
             'state': 'BOT_DIED',
           }],
-        }),
-        retcode=1,
+        })
     )
   )
 
