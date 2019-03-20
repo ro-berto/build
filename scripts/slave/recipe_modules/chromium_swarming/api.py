@@ -572,10 +572,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if env:
       init_env.update(env)
 
-    builder_name = (builder_name or self.m.buildbucket.builder_name
-                    or self.m.properties.get('buildername'))
-    build_number = (build_number or self.m.buildbucket.build.number
-                    or self.m.properties.get('buildnumber'))
+    builder_name = (builder_name or self.m.buildbucket.builder_name)
+    build_number = (build_number or self.m.buildbucket.build.number)
 
     if shard_indices is None:
       shard_indices = range(shards)
@@ -1659,9 +1657,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         self.add_default_tag('purpose:ManualTS')
       self.default_user = requester
 
-      patch_project = self.m.properties.get('patch_project')
-      if patch_project:
-        self.add_default_tag('patch_project:%s' % patch_project)
+      if self.m.tryserver.gerrit_change:
+        self.add_default_tag(
+            'patch_project:%s' % self.m.tryserver.gerrit_change.project)
     else:
       self.default_priority = MASTER_SWARMING_PRIORITIES[mastername]
       self.add_default_tag('purpose:post-commit')
