@@ -20,7 +20,7 @@ from chromium_tests.steps import (
 from chromium_tests.steps import SwarmingTest
 
 # adb path relative to out dir (e.g. out/Release)
-ADB_PATH = '../../third_party/android_tools/sdk/platform-tools/adb'
+ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
 
 ANDROID_CIPD_PACKAGES = [
     ("bin",

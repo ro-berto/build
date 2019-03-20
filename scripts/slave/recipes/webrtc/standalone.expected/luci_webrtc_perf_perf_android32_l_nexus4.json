@@ -172,7 +172,7 @@
       "--",
       "--android",
       "--adb-path",
-      "../../third_party/android_tools/sdk/platform-tools/adb",
+      "../../third_party/android_sdk/public/platform-tools/adb",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json"
     ],
