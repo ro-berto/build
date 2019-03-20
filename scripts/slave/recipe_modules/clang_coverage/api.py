@@ -137,7 +137,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     binaries = []
     for t in tests:
       if t.is_gtest and t.runs_on_swarming:
-        binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+        # TODO(crbug.com/943686): Figure out what to do with ozone test targets.
+        if t.isolate_target == 'gl_unittests_ozone':
+          binaries.append(self.m.chromium.output_dir.join('gl_unittests'))
+        else:
+          binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
       # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
       elif 'webkit_layout_tests' in t.isolate_target or (
           'blink_web_tests' in t.isolate_target):
