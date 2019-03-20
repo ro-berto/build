@@ -267,7 +267,7 @@ class GTestResults(object):
     # https://bugs.chromium.org/p/chromium/issues/detail?id=872042#c32
 
     # A set of tests which were never run [every test result was NOTRUN or
-    # UNKNOWN].
+    # UNKNOWN or SKIPPED].
     self.findit_notrun = set()
 
     # Stores raw results of each test. Used to display test results in build
@@ -305,7 +305,7 @@ class GTestResults(object):
       # These strings are defined by base/test/launcher/test_result.cc.
       # https://cs.chromium.org/chromium/src/base/test/launcher/test_result.cc
       unique_results = set(results)
-      if unique_results.issubset(set(['UNKNOWN', 'NOTRUN'])):
+      if unique_results.issubset(set(['UNKNOWN', 'NOTRUN', 'SKIPPED'])):
         self.findit_notrun.add(test_fullname)
 
   @property
