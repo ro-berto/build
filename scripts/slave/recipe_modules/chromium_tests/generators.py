@@ -81,8 +81,8 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   tests = []
   kwargs = {}
 
-  target_name = str(spec.get('test') or spec.get('isolate_name'))
-  name = str(spec.get('name', target_name))
+  target_name = spec.get('test') or spec.get('isolate_name')
+  name = spec.get('name', target_name)
 
   kwargs['target_name'] = target_name
   kwargs['name'] = name

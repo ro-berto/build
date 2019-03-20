@@ -788,12 +788,12 @@ def GenTests(api):
 
   def check_ordering(check, step_odict, *steps):
       test_steps = [
-          'test_pre_run (with patch).[error] 10_gtest (with patch)',
-          'test_pre_run (with patch).[error] 6_isolated_tests (with patch)',
-          'test_pre_run (with patch).[error] 5_gtest (with patch)',
-          'test_pre_run (with patch).[error] 3_isolated_tests (with patch)',
-          'test_pre_run (with patch).[error] 2_isolated_tests (with patch)',
-          'test_pre_run (with patch).[error] 1_gtest (with patch)',
+          'test_pre_run (with patch).[trigger] 10_gtest (with patch)',
+          'test_pre_run (with patch).[trigger] 6_isolated_tests (with patch)',
+          'test_pre_run (with patch).[trigger] 5_gtest (with patch)',
+          'test_pre_run (with patch).[trigger] 3_isolated_tests (with patch)',
+          'test_pre_run (with patch).[trigger] 2_isolated_tests (with patch)',
+          'test_pre_run (with patch).[trigger] 1_gtest (with patch)',
       ]
 
       for step_name in step_odict:

@@ -689,10 +689,8 @@ class SwarmingGroup(TestGroup):
   def pre_run(self, caller_api, suffix):
     """Executes the |pre_run| method of each test."""
     for t in self._tests:
-      self._run_func(t, t.pre_run, caller_api, suffix, False)
+      t.pre_run(caller_api, suffix)
       task = t.get_task(suffix)
-      if not task:
-        continue
 
       task_ids = tuple(task.get_task_ids())
       self._task_ids_to_test[task_ids] = t
