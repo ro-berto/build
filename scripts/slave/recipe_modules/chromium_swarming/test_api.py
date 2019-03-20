@@ -55,9 +55,7 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
 
     return res
 
-  # TODO(erikchen): Remove summary() and rename summary_fixed() once all
-  # callsites have been fixed. https://crbug.com/942801
-  def summary_fixed(self, dispatched_task_step_test_data, data, retcode=None):
+  def summary(self, dispatched_task_step_test_data, data, retcode=None):
     """Returns step test data for a swarming collect step.
 
     Args:
@@ -95,7 +93,7 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
   # The retcode of (2) should become the exit_code in the swarming output.
   # The swarming task itself should almost always have a retcode of 0, unless
   # the test is trying to test swarming failures. output from swarming itself,
-  def canned_summary_output_fixed(
+  def canned_summary_output(
       self, dispatched_task_step_test_data, shards=1, shard_indices=None,
       failure=False, internal_failure=False, retcode=0):
     """Returns step test data for a swarming collect step.
@@ -120,6 +118,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
     assert dispatched_task_step_test_data or retcode or internal_failure, (
         'There must be a placeholder for the dispatched task unless there is a '
         'swarming error')
-    return self.summary_fixed(
+    return self.summary(
         dispatched_task_step_test_data, self.canned_summary_output_raw(
             shards, shard_indices, failure, internal_failure), retcode)

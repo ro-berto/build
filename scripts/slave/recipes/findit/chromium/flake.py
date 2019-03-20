@@ -177,7 +177,7 @@ def GenTests(api):
           }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.browser_tests (r0)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One'])))
   )
@@ -197,7 +197,7 @@ def GenTests(api):
           }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.gl_tests (r0)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One'])))
   )
@@ -225,7 +225,7 @@ def GenTests(api):
           }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.gl_tests (r0)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One']))
       )
@@ -280,7 +280,7 @@ def GenTests(api):
           }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.blink_web_tests (r0)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_isolated_script_output(
                   flaky_test_names=['fast/dummy/test.html'],
                   path_delimiter='/')))

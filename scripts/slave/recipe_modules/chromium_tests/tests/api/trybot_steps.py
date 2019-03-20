@@ -294,7 +294,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
@@ -325,15 +325,15 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.filter.suppress_analyze() +
       api.post_process(
@@ -373,7 +373,7 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results('invalid_results', 1),
               failure=True)) +
       api.filter.suppress_analyze() +
@@ -414,11 +414,11 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results('invalid results', 1),
               failure=True)) +
       api.filter.suppress_analyze() +
@@ -461,12 +461,12 @@ def GenTests(api):
       ) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   'invalid results', 1), failure=True)) +
       api.override_step_data(
           'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   'invalid results', 1), failure=True)) +
       api.filter.suppress_analyze() +

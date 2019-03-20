@@ -255,7 +255,7 @@ def GenTests(api):
           run_without_patch='a') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               isolated_script_output, failure=True, retcode=1)) +
       api.post_process(post_process.Filter(
           '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
@@ -312,7 +312,7 @@ def GenTests(api):
           repeat_count=20) +
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               isolated_script_output, failure=True)) +
       api.post_process(
           verify_log_fields,
@@ -398,7 +398,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True,
@@ -426,7 +426,7 @@ def GenTests(api):
           ignore_task_failure=True) +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=False, swarming=True,
                   shards=2, isolated_script_passing=False, valid=True,
@@ -451,7 +451,7 @@ def GenTests(api):
           ignore_task_failure=True) +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=False, swarming=True,
                   shards=2, isolated_script_passing=False,
@@ -477,7 +477,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True, valid=False,
@@ -502,7 +502,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True,
@@ -561,7 +561,7 @@ def GenTests(api):
           got_revision_cp=123456) +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True,
@@ -585,7 +585,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True,
@@ -613,7 +613,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True, valid=True,
@@ -646,7 +646,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               placeholder_test_output, shards=2)) +
       api.runtime(is_luci=True, is_experimental=False)
   )
@@ -671,7 +671,7 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
                   passing=True, swarming=True,
                   shards=2, isolated_script_passing=True,
@@ -766,7 +766,7 @@ def GenTests(api):
           repeat_count=20) +
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(None, 255), shards=2)) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)
@@ -789,7 +789,7 @@ def GenTests(api):
           repeat_count=20) +
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(
                   {'global_tags': ['UNRELIABLE_RESULTS']}, 0), shards=2)) +
       api.post_process(post_process.StatusFailure) +

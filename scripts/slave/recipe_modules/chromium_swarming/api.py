@@ -1181,7 +1181,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if not step_test_data:
       dispatched_task_placeholder = (self.m.json.test_api.output({}) +
           self.m.raw_io.test_api.output('Successfully merged all data'))
-      step_test_data = self.test_api.canned_summary_output_fixed(
+      step_test_data = self.test_api.canned_summary_output(
           dispatched_task_placeholder, task.shards, task.shard_indices)
     try:
       with self.m.swarming.on_path():
@@ -1251,7 +1251,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # This builds an instance of StepTestData that covers all three.
     dispatched_task_placeholder = (gtest_results_test_data +
         self.test_api.merge_script_log_file('Gtest merged successfully'))
-    step_test_data = self.test_api.canned_summary_output_fixed(
+    step_test_data = self.test_api.canned_summary_output(
         dispatched_task_placeholder, task.shards, task.shard_indices)
 
     try:
@@ -1407,7 +1407,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # This builds an instance of StepTestData that covers both.
     dispatched_task_placeholder = (isolated_script_results_test_data +
         self.test_api.merge_script_log_file('Merged succesfully'))
-    step_test_data = self.test_api.canned_summary_output_fixed(
+    step_test_data = self.test_api.canned_summary_output(
         dispatched_task_placeholder, task.shards, task.shard_indices)
 
     try:

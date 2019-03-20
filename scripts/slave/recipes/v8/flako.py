@@ -315,7 +315,7 @@ class Runner(object):
     test_data = self.api.chromium_swarming.test_api.canned_summary_output_raw()
     test_data['shards'][0]['output'] = TEST_PASSED_TEXT
     return (
-        self.api.chromium_swarming.test_api.summary_fixed(
+        self.api.chromium_swarming.test_api.summary(
             self.api.json.test_api.output({}) +
             self.api.raw_io.test_api.output(''),
             test_data)
@@ -650,7 +650,7 @@ def GenTests(api):
     step_name = 'check %s at #%d' % (test_name, offset)
     return api.step_data(
         '%s%s.%s - shard %d' % (step_prefix, step_name, step_name, shard),
-        api.chromium_swarming.summary_fixed(dispatched_task_step_test_data=None,
+        api.chromium_swarming.summary(dispatched_task_step_test_data=None,
                                             data=test_data, retcode=1)
     )
 

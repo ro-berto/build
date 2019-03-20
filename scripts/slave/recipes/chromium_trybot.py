@@ -190,7 +190,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True
             ))
@@ -217,7 +217,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True,
                 isolated_script_passing=False,
@@ -226,7 +226,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests (without patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True,
                 isolated_script_passing=True,
@@ -263,7 +263,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=True,
             ),
@@ -292,7 +292,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.json.output({}), failure=True, retcode=1))
   )
 
@@ -357,7 +357,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'gl_tests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             canned_test(passing=False), failure=True))
   )
 
@@ -380,7 +380,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'gl_tests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             canned_test(passing=False), failure=True)) +
     api.override_step_data(
           'git diff to analyze patch',
@@ -719,7 +719,7 @@ def GenTests(api):
     api.test('swarmed_webkit_tests_unexpected_error') +
     swarmed_webkit_tests +
     api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, swarming=True,
                 isolated_script_passing=False,
@@ -736,7 +736,7 @@ def GenTests(api):
     api.test('swarmed_webkit_tests_interrupted') +
     swarmed_webkit_tests +
     api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, swarming=True,
                 isolated_script_passing=False,
@@ -752,14 +752,14 @@ def GenTests(api):
     api.test('swarmed_layout_tests_too_many_failures_for_retcode') +
     swarmed_webkit_tests +
     api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, swarming=True,
                 isolated_script_passing=False,
                 isolated_script_retcode=125),
             failure=True)) +
     api.override_step_data('blink_web_tests (without patch)',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True,
                 isolated_script_passing=True)))

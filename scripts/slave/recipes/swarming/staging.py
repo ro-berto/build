@@ -147,7 +147,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'browser_tests on Ubuntu',
-        api.chromium_swarming.canned_summary_output_fixed(
+        api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_gtest_output(
                 passing=False,
                 minimal=True,

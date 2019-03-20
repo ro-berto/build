@@ -73,7 +73,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False))
   )
 
@@ -113,7 +113,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               dispatched_task_step_test_data=None, failure=True, retcode=1))
   )
 
@@ -128,7 +128,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(None, 255))) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)

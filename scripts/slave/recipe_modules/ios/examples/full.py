@@ -226,7 +226,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': 1,
             'state': 'COMPLETED',
@@ -270,7 +270,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': '1',
             'state': 'COMPLETED',
@@ -315,7 +315,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': 'b',
             'state': 'COMPLETED',
@@ -363,7 +363,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': 2,
             'state': 'COMPLETED',
@@ -406,7 +406,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'TIMED_OUT',
           }],
@@ -448,7 +448,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'EXPIRED',
           }],
@@ -490,7 +490,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.chromium_swarming.summary_fixed(None, {
+        api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'BOT_DIED',
           }],

@@ -341,7 +341,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(True)))
     )
 
@@ -361,7 +361,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.test_utils.canned_gtest_output(True), data))
     )
 
@@ -376,7 +376,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.test_utils.canned_gtest_output(True), data))
     )
 
@@ -387,7 +387,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.canned_summary_output_fixed(
+          api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['test-%d' % i for i in xrange(100)]))) +
       api.properties(gtest_task=True)
@@ -423,7 +423,7 @@ def GenTests(api):
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary_fixed(None, data)))
+                    api.chromium_swarming.summary(None, data)))
   yield (
       api.test('isolated_script_expired_new') +
       api.step_data(
@@ -441,7 +441,7 @@ def GenTests(api):
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary_fixed(None, data)))
+                    api.chromium_swarming.summary(None, data)))
   yield (
       api.test('isolated_script_timeout_new') +
       api.step_data(
@@ -461,7 +461,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.raw_io.output_dir({'summary.json': json.dumps(data)}),
               data)) +
       api.properties(isolated_script_task=True))
@@ -512,7 +512,7 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-           api.chromium_swarming.summary_fixed(
+           api.chromium_swarming.summary(
               api.raw_io.output_dir(
                   {'summary.json': json.dumps(summary_data)}) +
               api.json.output(json_results),
@@ -530,7 +530,7 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.raw_io.output_dir(
                   {'summary.json': json.dumps(summary_data)}) +
               api.json.output(json_results),
@@ -561,7 +561,7 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
       api.step_data(
           'hello_world',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.raw_io.output_dir(
                   {'summary.json': json.dumps(summary_data)}) +
               api.test_utils.canned_gtest_output(False),
@@ -578,7 +578,7 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
       api.step_data(
           'hello_world',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
               summary_data)) +
       api.properties(
@@ -612,7 +612,7 @@ def GenTests(api):
           stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
       api.step_data(
           'hello_world',
-          api.chromium_swarming.summary_fixed(
+          api.chromium_swarming.summary(
               api.raw_io.output_dir(
                   {'summary.json': json.dumps(summary_data_deduped)}) +
               api.test_utils.canned_gtest_output(False),
