@@ -16,7 +16,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 
 from recipe_engine.post_process import (
     DropExpectation, MustRun, ResultReasonRE, StatusException, StatusFailure,
-    StatusSuccess)
+    StatusSuccess, Filter)
 
 
 DEPS = [
@@ -87,14 +87,16 @@ def RunSteps(api):
     build = api.buildbucket.collect_build(
         int(build.id), step_name=label, mirror_status=True, timeout=4*3600)
     api.step.active_result.presentation.links['build %s' % build.id] = (
-        api.buildbucket.build_url(build.id))
+        api.buildbucket.build_url(build_id=build.id))
     api.step.active_result.presentation.logs['flake config'] = api.json.dumps(
         configs[index], indent=2).splitlines()
     if build.status == common_pb2.FAILURE:
       api.step.active_result.presentation.step_text = (
           'failed to reproduce<br/>please consider re-enabling this test')
-    else:
+    elif build.status == common_pb2.SUCCESS:
       api.step.active_result.presentation.step_text = 'reproduced'
+    else:
+      api.step.active_result.presentation.step_text = 'failed to execute'
     results.append(build.status)
 
   if common_pb2.INFRA_FAILURE in results:
@@ -142,7 +144,7 @@ def GenTests(api):
       test('infra_failure', ['INFRA_FAILURE']) +
       api.post_process(StatusException) +
       api.post_process(ResultReasonRE, 'Some builds failed to execute') +
-      api.post_process(DropExpectation)
+      api.post_process(Filter('FunctionCallSample'))
   )
 
   yield (

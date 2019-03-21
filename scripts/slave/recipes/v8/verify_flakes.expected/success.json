@@ -249,7 +249,7 @@
       "@@@STEP_LOG_LINE@flake config@  \"variant\": \"interpreted_regexp\"@@@",
       "@@@STEP_LOG_LINE@flake config@}@@@",
       "@@@STEP_LOG_END@flake config@@@",
-      "@@@STEP_LINK@build 123@https://123/build/0@@@"
+      "@@@STEP_LINK@build 123@https://cr-buildbucket.appspot.com/build/123@@@"
     ]
   },
   {
