@@ -14,6 +14,7 @@ DEPS = [
   'depot_tools/osx_sdk',
   'goma',
   'recipe_engine/buildbucket',
+  'recipe_engine/cipd',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -360,8 +361,16 @@ def TestObservatory(api):
 #  with api.context(cwd=checkout):
 #    api.step('engine unit tests', test_cmd)
 
+def GetMacSDKDir(api):
+  return api.path['cache'].join('builder', 'mac_sdk')
+
 @contextmanager
 def SetupXcode(api):
+  macos_sdk_cache_dir = GetMacSDKDir(api)
+  api.cipd.ensure(macos_sdk_cache_dir, api.cipd.EnsureFile()
+    .add_package('flutter_internal/macos/sdk', 'version:10.13')
+  )
+
   # See cr-buildbucket.cfg for how the version is passed in.
   # https://github.com/flutter/infra/blob/master/config/cr-buildbucket.cfg#L148
   with api.osx_sdk('ios'):
@@ -369,9 +378,12 @@ def SetupXcode(api):
 
 def BuildMac(api):
   if api.properties.get('build_host', True):
-    RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
-    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
-    RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
+    RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
     Build(api, 'host_debug_unopt')
     Build(api, 'host_debug')
     Build(api, 'host_dynamic_release')
@@ -411,6 +423,7 @@ def BuildMac(api):
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
 
   if api.properties.get('build_android_dynamic', True):
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
     RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
           '--android-cpu=arm64')
     RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
@@ -446,7 +459,6 @@ def BuildMac(api):
     RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
     RunGN(api, '--runtime-mode', 'release', '--android')
     RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
-    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
 
     Build(api, 'android_profile', 'flutter/lib/snapshot')
     Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
