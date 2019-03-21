@@ -222,7 +222,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/host_debug_unopt",
       "generate_dart_ui"
@@ -607,7 +607,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/host_debug_unopt"
     ],
@@ -894,7 +894,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/host_debug"
     ],
@@ -1181,7 +1181,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/host_dynamic_release"
     ],
@@ -1468,7 +1468,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_release_vulkan"
     ],
@@ -2220,7 +2220,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_debug"
     ],
@@ -2654,7 +2654,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_debug_arm64"
     ],
@@ -3088,7 +3088,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_debug_x86"
     ],
@@ -3522,7 +3522,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_debug_x64"
     ],
@@ -3958,7 +3958,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile"
     ],
@@ -4458,7 +4458,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release"
     ],
@@ -4958,7 +4958,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile_arm64"
     ],
@@ -5458,7 +5458,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release_arm64"
     ],
@@ -5957,7 +5957,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_profile"
     ],
@@ -6456,7 +6456,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_release"
     ],
@@ -7025,7 +7025,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_profile_arm64"
     ],
@@ -7524,7 +7524,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_release_arm64"
     ],
@@ -8073,7 +8073,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "200",
+      "1024",
       "-C",
       "[START_DIR]/src/out/android_debug",
       ":dist"

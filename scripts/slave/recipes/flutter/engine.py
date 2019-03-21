@@ -27,7 +27,6 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
-GOMA_JOBS = '200'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
 
@@ -38,10 +37,10 @@ def GetCloudPath(api, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-def Build(api, config, *targets, **kwargs):
+def Build(api, config, *targets):
   checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
-  goma_jobs = kwargs['goma_jobs'] if 'goma_jobs' in kwargs else GOMA_JOBS
+  goma_jobs = api.properties['goma_jobs']
   ninja_args = [api.depot_tools.ninja_path, '-j', goma_jobs, '-C', build_dir]
   ninja_args.extend(targets)
   api.goma.build_with_goma(
@@ -743,7 +742,8 @@ def GenTests(api):
         builder='%s Engine' % platform.capitalize(),
         git_repo=GIT_REPO,
         project='flutter',
-      )
+      ) +
+      api.properties(goma_jobs=1024)
     )
     if platform == 'mac':
       test += (api.properties(jazzy_version='0.8.4'))
@@ -756,5 +756,6 @@ def GenTests(api):
         git_repo=GIT_REPO,
         project='flutter',
     ) +
-    api.runtime(is_luci=True, is_experimental=True)
+    api.runtime(is_luci=True, is_experimental=True) +
+    api.properties(goma_jobs=1024)
   )
