@@ -498,58 +498,61 @@ def gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
         raise
 
 
+def gen_ci_build(api, builder):
+  return api.buildbucket.ci_build(
+      project='pdfium',
+      builder=builder,
+      build_number=1234,
+      git_repo='https://pdfium.googlesource.com/pdfium',
+  )
+
+
 def GenTests(api):
   yield (
       api.test('win') +
       api.platform('win', 64) +
-      api.properties(mastername="client.pdfium",
-                     buildername='windows',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows')
   )
   yield (
       api.test('linux') +
       api.platform('linux', 64) +
-      api.properties(mastername="client.pdfium",
-                     buildername='linux',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux')
   )
   yield (
       api.test('mac') +
       api.platform('mac', 64) +
-      api.properties(mastername="client.pdfium",
-                     buildername='mac',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac')
   )
 
   yield (
       api.test('win_no_v8') +
       api.platform('win', 64) +
       api.properties(v8=False,
-                     mastername="client.pdfium",
-                     buildername='windows_no_v8',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_no_v8')
   )
   yield (
       api.test('linux_no_v8') +
       api.platform('linux', 64) +
       api.properties(v8=False,
-                     mastername="client.pdfium",
-                     buildername='linux_no_v8',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_no_v8')
   )
   yield (
       api.test('mac_no_v8') +
       api.platform('mac', 64) +
       api.properties(v8=False,
-                     mastername="client.pdfium",
-                     buildername='mac_no_v8',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_no_v8')
   )
 
   yield (
@@ -558,10 +561,9 @@ def GenTests(api):
       api.properties(skia=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='windows_skia',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_skia')
   )
 
   yield (
@@ -570,10 +572,9 @@ def GenTests(api):
       api.properties(skia_paths=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='windows_skia_paths',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_skia_paths')
   )
 
   yield (
@@ -581,20 +582,18 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      target_cpu='x86',
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_32',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_32')
   )
 
   yield (
       api.test('win_xfa') +
       api.platform('win', 64) +
       api.properties(xfa=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa')
   )
 
   yield (
@@ -602,10 +601,9 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      rel=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_rel',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_rel')
   )
 
   yield (
@@ -613,10 +611,9 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      jumbo=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_jumbo',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_jumbo')
   )
 
   yield (
@@ -625,10 +622,9 @@ def GenTests(api):
       api.properties(xfa=True,
                      msvc=True,
                      target_cpu='x86',
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_msvc_32',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_msvc_32')
   )
 
   yield (
@@ -636,10 +632,9 @@ def GenTests(api):
       api.platform('win', 64) +
       api.properties(xfa=True,
                      msvc=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_msvc',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_msvc')
   )
 
   yield (
@@ -648,10 +643,9 @@ def GenTests(api):
       api.properties(skia=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='linux_skia',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_skia')
   )
 
   yield (
@@ -660,20 +654,18 @@ def GenTests(api):
       api.properties(skia_paths=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='linux_skia_paths',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_skia_paths')
   )
 
   yield (
       api.test('linux_xfa') +
       api.platform('linux', 64) +
       api.properties(xfa=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa')
   )
 
   yield (
@@ -681,10 +673,9 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(xfa=True,
                      rel=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_rel',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa_rel')
   )
 
   yield (
@@ -692,10 +683,9 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(xfa=True,
                      jumbo=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_jumbo',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa_jumbo')
   )
 
   yield (
@@ -704,10 +694,9 @@ def GenTests(api):
       api.properties(skia=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='mac_skia',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_skia')
   )
 
   yield (
@@ -716,20 +705,18 @@ def GenTests(api):
       api.properties(skia_paths=True,
                      xfa=True,
                      skip_test=True,
-                     mastername="client.pdfium",
-                     buildername='mac_skia_paths',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_skia_paths')
   )
 
   yield (
       api.test('mac_xfa') +
       api.platform('mac', 64) +
       api.properties(xfa=True,
-                     mastername="client.pdfium",
-                     buildername='mac_xfa',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_xfa')
   )
 
   yield (
@@ -737,10 +724,9 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties(xfa=True,
                      rel=True,
-                     mastername="client.pdfium",
-                     buildername='mac_xfa_rel',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_xfa_rel')
   )
 
   yield (
@@ -748,20 +734,18 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties(xfa=True,
                      jumbo=True,
-                     mastername="client.pdfium",
-                     buildername='mac_xfa_jumbo',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_xfa_jumbo')
   )
 
   yield (
       api.test('linux_asan_lsan') +
       api.platform('linux', 64) +
       api.properties(memory_tool='asan',
-                     mastername="client.pdfium",
-                     buildername='linux_asan_lsan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_asan_lsan')
   )
 
   yield (
@@ -769,10 +753,9 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(memory_tool='msan',
                      rel=True,
-                     mastername="client.pdfium",
-                     buildername='linux_msan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_msan')
   )
 
   yield (
@@ -780,10 +763,9 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(memory_tool='ubsan',
                      rel=True,
-                     mastername="client.pdfium",
-                     buildername='linux_ubsan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_ubsan')
   )
 
   yield (
@@ -791,10 +773,9 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.properties(memory_tool='asan',
                      xfa=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_asan_lsan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa_asan_lsan')
   )
 
   yield (
@@ -803,10 +784,9 @@ def GenTests(api):
       api.properties(memory_tool='msan',
                      rel=True,
                      xfa=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_msan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa_msan')
   )
 
   yield (
@@ -815,10 +795,9 @@ def GenTests(api):
       api.properties(memory_tool='ubsan',
                      rel=True,
                      xfa=True,
-                     mastername="client.pdfium",
-                     buildername='linux_xfa_ubsan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_xfa_ubsan')
   )
 
   yield (
@@ -828,10 +807,9 @@ def GenTests(api):
                      memory_tool='asan',
                      rel=True,
                      target_cpu='x86',
-                     mastername="client.pdfium",
-                     buildername='windows_asan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_asan')
   )
 
   yield (
@@ -842,10 +820,9 @@ def GenTests(api):
                      rel=True,
                      target_cpu='x86',
                      xfa=True,
-                     mastername="client.pdfium",
-                     buildername='windows_xfa_asan',
-                     buildnumber='1234',
-                     bot_id="test_slave")
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'windows_xfa_asan')
   )
 
   yield (
@@ -864,69 +841,59 @@ def GenTests(api):
       api.test('android') +
       api.platform('linux', 64) +
       api.properties(mastername='client.pdfium',
-                     buildername='android',
                      bot_id='test_slave',
                      target_os='android',
-                     buildnumber='1234',
-                     skip_test=True)
+                     skip_test=True) +
+      gen_ci_build(api, 'android')
   )
 
   yield (
-    api.test('success-download-hashes-file') +
-    api.platform('linux', 64) +
-    api.properties(v8=False,
-                   mastername='client.pdfium',
-                   buildername='android',
-                   bot_id='test_slave',
-                   target_os='android',
-                   buildnumber='1234') +
-    api.path.exists(
-      api.path['cache'].join(
-          'builder', 'pdfium', 'out', 'debug', 'ignore_hashes.txt')
-    )
+      api.test('success-download-hashes-file') +
+      api.platform('linux', 64) +
+      api.properties(v8=False,
+                     mastername='client.pdfium',
+                     bot_id='test_slave',
+                     target_os='android') +
+      gen_ci_build(api, 'android') +
+      api.path.exists(
+        api.path['cache'].join(
+            'builder', 'pdfium', 'out', 'debug', 'ignore_hashes.txt')
+      )
   )
 
   yield (
-    api.test('fail-download-hashes-file') +
-    api.platform('linux', 64) +
-    api.properties(mastername='client.pdfium',
-                   buildername='android',
-                   bot_id='test_slave',
-                   target_os='android',
-                   buildnumber='1234') +
-    api.step_data(
-          'get uninteresting hashes', retcode=1)
+      api.test('fail-download-hashes-file') +
+      api.platform('linux', 64) +
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave',
+                     target_os='android') +
+      gen_ci_build(api, 'android') +
+      api.step_data('get uninteresting hashes', retcode=1)
   )
 
   yield (
-    api.test('fail-javascript-tests') +
-    api.platform('linux', 64) +
-    api.properties(mastername="client.pdfium",
-                   buildername='linux',
-                   buildnumber='1234',
-                   bot_id="test_slave") +
-    api.step_data(
-          'javascript tests', retcode=1)
+      api.test('fail-javascript-tests') +
+      api.platform('linux', 64) +
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux') +
+      api.step_data('javascript tests', retcode=1)
   )
 
   yield (
-    api.test('fail-pixel-tests') +
-    api.platform('linux', 64) +
-    api.properties(mastername="client.pdfium",
-                   buildername='linux',
-                   buildnumber='1234',
-                   bot_id="test_slave") +
-    api.step_data(
-          'pixel tests', retcode=1)
+      api.test('fail-pixel-tests') +
+      api.platform('linux', 64) +
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux') +
+      api.step_data('pixel tests', retcode=1)
   )
 
   yield (
-    api.test('fail-corpus-tests') +
-    api.platform('linux', 64) +
-    api.properties(mastername="client.pdfium",
-                   buildername='linux',
-                   buildnumber='1234',
-                   bot_id="test_slave") +
-    api.step_data(
-          'corpus tests', retcode=1)
+      api.test('fail-corpus-tests') +
+      api.platform('linux', 64) +
+      api.properties(mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux') +
+      api.step_data('corpus tests', retcode=1)
   )

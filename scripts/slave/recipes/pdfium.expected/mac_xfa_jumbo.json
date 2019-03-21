@@ -30,7 +30,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "pdfium@HEAD"
+      "pdfium@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[CACHE]/builder",
     "env_prefixes": {
@@ -45,7 +45,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"pdfium\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"pdfium\": {@@@",
@@ -383,8 +383,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.pdfium\", \"builder\": \"mac_xfa_jumbo\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"mac_xfa_jumbo\", \"project\": \"pdfium\"}",
       "--buildbot-buildername",
       "mac_xfa_jumbo",
       "--buildbot-mastername",
