@@ -51,7 +51,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
       },
