@@ -1654,17 +1654,17 @@ Usage is generally discouraged.
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#715)(self, bot_config, tests=None):**
 ### *recipe_modules* / [clang\_coverage](/scripts/slave/recipe_modules/clang_coverage)
 
-[DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ClangCoverageApi](/scripts/slave/recipe_modules/clang_coverage/api.py#26)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 This module contains apis to interact with llvm-cov and llvm-profdata.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#78)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#93)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#175)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#190)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1672,11 +1672,13 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#90)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#63)(self):**
+
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#105)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#202)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#217)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1684,7 +1686,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#97)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#112)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1693,28 +1695,32 @@ Args:
       save in in this dir. None for getting the parent directory to contain
       the dirs for all steps.
 
-&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#73)(self):**
+&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#88)(self):**
 
 Returns the path to the llvm-profdata executable.
 
-&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#60)(self):**
+&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#75)(self):**
 
 Returns the location of a script that merges raw profiles from shards.
 
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#83)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#98)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#346)(self, step_name):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#361)(self, step_name):**
 
 Returns a merge object understood by the swarming module.
 
 See the docstring for the `merge` parameter of api.chromium_swarming.task.
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#121)(self):**
+&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#70)(self):**
+
+Returns the script that merges indexed profiles from multiple targets.
+
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#136)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
@@ -4424,7 +4430,7 @@ Each entry in the BUILDERS dict will be checked to ensure
 chromium_tests.configure_build can be called with a BotConfig for that builder
 without error.
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#74)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#78)(api, mastername, buildername):**
 
 &mdash; **def [validate\_tester\_config](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#45)(api, mastername, buildername, bot_config):**
 ### *recipes* / [chromium\_tests:tests/configs](/scripts/slave/recipe_modules/chromium_tests/tests/configs.py)
@@ -4544,14 +4550,14 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/sizes_step.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/swarming\_gtest\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#24)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#26)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/swarming\_isolated\_script\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#32)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#33)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/web\_view\_cts\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4585,9 +4591,9 @@ properties set for the entry.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#63)(api):**
 ### *recipes* / [clang\_coverage:tests/full](/scripts/slave/recipe_modules/clang_coverage/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#22)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#23)(api):**
 ### *recipes* / [client.nacl.sdk.recipe\_autogen](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5268,6 +5274,8 @@ Recipe for building and running tests for Open Screen stand-alone.
 
 Returns the given dictionary as a string of space
 separated key/value pairs sorted by keys.
+
+&mdash; **def [gen\_ci\_build](/scripts/slave/recipes/pdfium.py#501)(api, builder):**
 
 &mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#380)(api, out_dir):**
 

@@ -10,6 +10,7 @@ DEPS = [
     'clang_coverage',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
@@ -28,6 +29,8 @@ def RunSteps(api):
   api.chromium_tests.configure_build(bot_config_object)
   if 'tryserver' in mastername:
     api.clang_coverage.instrument(api.properties['files_to_instrument'])
+  # Fake path.
+  api.clang_coverage._merge_scripts_location = api.path['start_dir']
 
   for i in range(_NUM_TARGETS):
     step = 'step %d' % i

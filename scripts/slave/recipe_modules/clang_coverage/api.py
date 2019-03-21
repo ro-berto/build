@@ -41,6 +41,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._affected_source_files = None
     # When set, indicates that current context is per-cl coverage for try jobs.
     self._is_per_cl_coverage = False
+    # The location of the scripts used to merge code coverage data (as opposed
+    # to test results).
+    self._merge_scripts_location = None
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -58,13 +61,25 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     return value
 
   @property
+  def merge_scripts_location(self):
+    if not self._merge_scripts_location:  # pragma: no cover
+      self._merge_scripts_location = self.m.chromium_checkout.working_dir.join(
+          'src', 'testing', 'merge_scripts', 'code_coverage')
+    return self._merge_scripts_location
+
+  @property
+  def step_merge_script(self):
+    """Returns the script that merges indexed profiles from multiple targets."""
+    return self.merge_scripts_location.join('merge_steps.py')
+
+  @property
   def raw_profile_merge_script(self):
     """Returns the location of a script that merges raw profiles from shards.
 
     This is intended to be passed to the swarming recipe module to be called
     upon completion of the shards.
     """
-    return self.resource('merge_profiles.py')
+    return self.merge_scripts_location.join('merge_profiles.py')
 
   def _llvm_exec(self, name):
     return self.m.path['checkout'].join('third_party', 'llvm-build',
@@ -238,7 +253,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     merged_profdata = self.profdata_dir().join('merged.profdata')
     self.m.python(
         'merge profile data for %d targets' % len(self._profdata_dirs),
-        self.resource('merge_steps.py'),
+        self.step_merge_script,
         args=[
             '--input-dir',
             self.profdata_dir(),

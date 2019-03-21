@@ -8,6 +8,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
+    'clang_coverage',
     'commit_position',
     'depot_tools/bot_update',
     'isolate',
@@ -35,6 +36,8 @@ def RunSteps(api):
       'got_v8_revision': 'v8_sha',
   })
   api.chromium.set_config('chromium')
+  # Fake path, as the real one depends on having done a chromium checkout.
+  api.clang_coverage._merge_scripts_location = api.path['start_dir']
 
   bot_config_object = api.chromium_tests.create_bot_config_object([
       api.chromium_tests.create_bot_id(
@@ -120,7 +123,7 @@ def GenTests(api):
     step = step_odict[
         'base_unittests on Intel GPU on Linux (with patch)']
     # Make sure swarming collect know how to merge coverage profile data.
-    check('RECIPE_MODULE[build::clang_coverage]/resources/merge_profiles.py'
+    check('[START_DIR]/merge_profiles.py'
           in step['cmd'])
 
   yield (
