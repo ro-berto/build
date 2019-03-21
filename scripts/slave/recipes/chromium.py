@@ -602,8 +602,7 @@ def GenTests(api):
                 passing=True, is_win=False, swarming=True,
                 shards=3, isolated_script_passing=True, corrupt=True,
                 use_json_test_format=True, output_chartjson=True),
-            shards=3),
-        retcode=0)
+            shards=3))
   )
 
   yield (
@@ -629,8 +628,8 @@ def GenTests(api):
         }
     ) +
     api.override_step_data('telemetry_gpu_unittests',
-        api.json.output({'version': 2}),
-        retcode=0)
+        api.chromium_swarming.canned_summary_output(
+            api.json.output({'version': 2})))
   )
 
   yield (

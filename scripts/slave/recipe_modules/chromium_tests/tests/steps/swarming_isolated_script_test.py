@@ -543,7 +543,9 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux (with patch)', retcode=1)
+          'base_unittests on Intel GPU on Linux (with patch)',
+              api.chromium_swarming.canned_summary_output(
+                  api.test_utils.m.json.output(None, 255), failure=True))
   )
 
   yield (
@@ -792,6 +794,7 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(
                   {'global_tags': ['UNRELIABLE_RESULTS']}, 0), shards=2)) +
-      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.StepFailure,
+                       'blink_web_tests on Intel GPU on Linux (with patch)') +
       api.post_process(post_process.DropExpectation)
   )

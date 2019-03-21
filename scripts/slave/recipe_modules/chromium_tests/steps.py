@@ -11,6 +11,7 @@ import re
 import string
 import struct
 
+from recipe_engine import recipe_api
 from recipe_engine.types import freeze
 
 
@@ -276,6 +277,7 @@ class Test(object):
     del api, suffix
     return []
 
+  @recipe_api.composite_step
   def run(self, api, suffix):  # pragma: no cover
     """Run the test.
 
@@ -637,6 +639,7 @@ class TestWrapper(Test):  # pragma: no cover
   def pre_run(self, api, suffix):
     return self._test.pre_run(api, suffix)
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     return self._test.run(api, suffix)
 
@@ -738,6 +741,7 @@ class ExperimentalTest(TestWrapper):
       pass
 
   #override
+  @recipe_api.composite_step
   def run(self, api, suffix):
     if not self._is_in_experiment(api):
       return []
@@ -799,6 +803,7 @@ class SizesStep(Test):
     self.results_url = results_url
     self.perf_id = perf_id
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     step_result = api.chromium.sizes(self.results_url, self.perf_id)
     self._suffix_step_name_map[suffix] = step_result.step['name']
@@ -874,6 +879,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       raise
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     name = self.name
     if suffix:
@@ -1023,6 +1029,7 @@ class LocalGTestTest(Test):
       return self._override_compile_targets
     return [self.target_name]
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
@@ -1665,6 +1672,7 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     assert suffix not in self._test_runs, (
@@ -1767,6 +1775,7 @@ class SwarmingGTestTest(SwarmingTest):
       return self._gtest_results[suffix].pass_fail_counts
     return {}
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     try:
@@ -1863,6 +1872,7 @@ class LocalIsolatedScriptTest(Test):
 
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
+  @recipe_api.composite_step
   def run(self, api, suffix):
     tests_to_retry = self.tests_to_retry(api, suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
@@ -2011,6 +2021,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     return test_run_dictionary
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     try:
       super(SwarmingIsolatedScriptTest, self).run(api, suffix)
@@ -2032,6 +2043,7 @@ class PythonBasedTest(Test):
   def run_step(self, api, suffix, cmd_args, **kwargs):
     raise NotImplementedError()  # pragma: no cover
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     # These arguments must be passed to an invocation of the recipe engine. The
     # recipe engine will recognize that the second argument is a subclass of
@@ -2091,6 +2103,7 @@ class AndroidTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
 
@@ -2275,6 +2288,7 @@ class BlinkTest(Test):
   def uses_local_devices(self):
     return True
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     results_dir = api.path['start_dir'].join('layout-test-results')
 
@@ -2428,6 +2442,7 @@ class IncrementalCoverageTest(Test):
     """List of compile targets needed by this test."""
     return []
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     step_result = api.chromium_android.coverage_report(upload=False)
     self._suffix_step_name_map[suffix] = step_result.step['name']
@@ -2448,6 +2463,7 @@ class FindAnnotatedTest(Test):
   def compile_targets(self, api):
     return FindAnnotatedTest._TEST_APKS.keys()
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
       timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
@@ -2511,6 +2527,7 @@ class WebRTCPerfTest(LocalGTestTest):
         name, args, commit_position_property=commit_position_property,
         **runtest_kwargs)
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     self._wire_up_perf_config(api)
     super(WebRTCPerfTest, self).run(api, suffix)
@@ -2581,6 +2598,7 @@ class MockTest(Test):
     with self._mock_exit_codes(api):
       api.step('pre_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
 
+  @recipe_api.composite_step
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
       step_result = api.step(

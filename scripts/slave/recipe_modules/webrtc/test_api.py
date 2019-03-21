@@ -64,8 +64,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(parent_got_revision=parent_rev)
 
     if failing_test:
-      step_test_data = recipe_test_api.StepTestData()
-      step_test_data.retcode = 1
+      # Unfortunately, we have no idea what type of test this is and what would
+      # be appropriate test data to pass. We guess that this is a swarmed gtest.
+      step_test_data = self.m.chromium_swarming.canned_summary_output(
+          self.m.test_utils.canned_gtest_output(passing=False))
       test += self.override_step_data(failing_test, step_test_data)
 
     if fail_android_archive:

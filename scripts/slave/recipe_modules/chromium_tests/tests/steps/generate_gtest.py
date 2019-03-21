@@ -401,9 +401,6 @@ def GenTests(api):
       )
   )
 
-  step_test_data = recipe_test_api.StepTestData()
-  step_test_data.retcode = 1
-
   yield (
       api.test('experimental') +
       api.properties(
@@ -421,7 +418,8 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
-      api.override_step_data('base_unittests (experimental)', step_test_data) +
+      api.override_step_data('base_unittests (experimental)',
+          api.chromium_swarming.canned_summary_output(None, retcode=1)) +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

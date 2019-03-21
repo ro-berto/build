@@ -516,14 +516,35 @@
     },
     "name": "webrtc_perf_tests on Android",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary (invalid)@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary (exception)@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@no_results_exc@'NoneType' object has no attribute 'get'@@@",
@@ -552,17 +573,48 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LOG_END@logcats@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@logcats@@@"
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "Aggregate step failure."
-      },
-      "humanReason": "1 out of 5 aggregated steps failed: Step('webrtc_perf_tests on Android') failed with return_code 1"
-    },
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::webrtc]/resources/upload_perf_dashboard_results.py",
+      "--build-url",
+      "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android32%20%28L%20Nexus5%29/0",
+      "--name",
+      "webrtc_perf_tests",
+      "--perf-id",
+      "webrtc-android-tests-nexus5",
+      "--output-json-file",
+      "/path/to/tmp/json",
+      "--results-file",
+      "{\"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
+      "--results-url",
+      "https://chromeperf.appspot.com",
+      "--commit-position",
+      "170242",
+      "--got-webrtc-revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--perf-dashboard-machine-group",
+      "WebRTCPerf"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "webrtc_perf_tests Dashboard Upload",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "jsonResult": null,
     "name": "$result"
   }
 ]

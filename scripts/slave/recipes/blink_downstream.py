@@ -25,6 +25,8 @@ Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 """
 
+import functools
+
 from recipe_engine import post_process
 from recipe_engine.types import freeze
 
@@ -291,7 +293,8 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_test = api.test_utils.canned_isolated_script_output
+  canned_test = functools.partial(api.test_utils.canned_isolated_script_output,
+                                  swarming=True)
   with_patch = 'webkit_layout_tests (with patch)'
   without_patch = 'webkit_layout_tests (without patch)'
 
