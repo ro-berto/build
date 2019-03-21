@@ -223,93 +223,98 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
 
 
 def BuildLinuxAndroid(api):
-  debug_variants = [
-    ('arm', 'android_debug', 'android-arm'),
-    ('arm64', 'android_debug_arm64', 'android-arm64'),
-    ('x86', 'android_debug_x86', 'android-x86'),
-    ('x64', 'android_debug_x64', 'android-x64'),
-  ]
-  for android_cpu, out_dir, artifact_dir in debug_variants:
-    RunGN(api, '--android', '--android-cpu=%s' % android_cpu)
-    Build(api, out_dir)
-    artifacts = ['out/%s/flutter.jar' % out_dir]
-    if android_cpu in ['x86', 'x64']:
-        artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
-    UploadArtifacts(api, artifact_dir, artifacts)
-    UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
-                    archive_name='symbols.zip')
+  if api.properties.get('build_android_debug', True):
+    debug_variants = [
+      ('arm', 'android_debug', 'android-arm'),
+      ('arm64', 'android_debug_arm64', 'android-arm64'),
+      ('x86', 'android_debug_x86', 'android-x86'),
+      ('x64', 'android_debug_x64', 'android-x64'),
+    ]
+    for android_cpu, out_dir, artifact_dir in debug_variants:
+      RunGN(api, '--android', '--android-cpu=%s' % android_cpu, '--no-lto')
+      Build(api, out_dir)
+      artifacts = ['out/%s/flutter.jar' % out_dir]
+      if android_cpu in ['x86', 'x64']:
+          artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
+      UploadArtifacts(api, artifact_dir, artifacts)
+      UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
+                      archive_name='symbols.zip')
+    Build(api, 'android_debug', ':dist')
+    UploadDartPackage(api, 'sky_engine')
+    BuildJavadoc(api)
 
-  jit_variants = [
-    ('arm', 'android_dynamic_%s', 'android-arm-dynamic-%s', 'clang_x86'),
-    ('arm64', 'android_dynamic_%s_arm64', 'android-arm64-dynamic-%s',
-     'clang_x64'),
-  ]
-  for android_cpu, out_dir, artifact_dir, clang_dir in jit_variants:
-    for runtime_mode in ['profile', 'release']:
-      build_output_dir = out_dir % runtime_mode
-      upload_dir = artifact_dir % runtime_mode
+  if api.properties.get('build_android_dynamic', True):
+    jit_variants = [
+      ('arm', 'android_dynamic_%s', 'android-arm-dynamic-%s', 'clang_x86'),
+      ('arm64', 'android_dynamic_%s_arm64', 'android-arm64-dynamic-%s',
+      'clang_x64'),
+    ]
+    for android_cpu, out_dir, artifact_dir, clang_dir in jit_variants:
+      for runtime_mode in ['profile', 'release']:
+        build_output_dir = out_dir % runtime_mode
+        upload_dir = artifact_dir % runtime_mode
 
-      RunGN(api, '--android', '--dynamic', '--runtime-mode=' + runtime_mode,
-            '--android-cpu=%s' % android_cpu)
-      Build(api, build_output_dir)
+        RunGN(api, '--android', '--dynamic', '--runtime-mode=' + runtime_mode,
+              '--android-cpu=%s' % android_cpu)
+        Build(api, build_output_dir)
 
-      UploadArtifacts(api, upload_dir, [
-        'out/%s/flutter.jar' % build_output_dir,
-      ])
-      UploadArtifacts(api, upload_dir, [
-        'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
-      ], archive_name='linux-x64.zip')
-      UploadArtifacts(api, upload_dir, [
-          'out/%s/libflutter.so' % build_output_dir
-      ], archive_name='symbols.zip')
+        UploadArtifacts(api, upload_dir, [
+          'out/%s/flutter.jar' % build_output_dir,
+        ])
+        UploadArtifacts(api, upload_dir, [
+          'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
+        ], archive_name='linux-x64.zip')
+        UploadArtifacts(api, upload_dir, [
+            'out/%s/libflutter.so' % build_output_dir
+        ], archive_name='symbols.zip')
 
-  # Build and upload engines for the runtime modes that use AOT compilation.
-  aot_variants = [
-    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86',
-     'arm-linux-androideabi'),
-    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
-     'aarch64-linux-android'),
-  ]
-  for (android_cpu, out_dir, artifact_dir, clang_dir,
-       android_triple) in aot_variants:
-    for runtime_mode in ['profile', 'release']:
-      build_output_dir = out_dir % runtime_mode
-      upload_dir = artifact_dir % runtime_mode
+  if api.properties.get('build_android_vulkan', True):
+    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
+    Build(api, 'android_release_vulkan')
 
-      RunGN(api, '--android', '--runtime-mode=' + runtime_mode,
-            '--android-cpu=%s' % android_cpu)
-      Build(api, build_output_dir)
+  if api.properties.get('build_android_aot', True):
+    # Build and upload engines for the runtime modes that use AOT compilation.
+    aot_variants = [
+      ('arm', 'android_%s', 'android-arm-%s', 'clang_x86',
+      'arm-linux-androideabi'),
+      ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
+      'aarch64-linux-android'),
+    ]
+    for (android_cpu, out_dir, artifact_dir, clang_dir,
+        android_triple) in aot_variants:
+      for runtime_mode in ['profile', 'release']:
+        build_output_dir = out_dir % runtime_mode
+        upload_dir = artifact_dir % runtime_mode
 
-      UploadArtifacts(api, upload_dir, [
-        'out/%s/flutter.jar' % build_output_dir,
-      ])
+        RunGN(api, '--android', '--runtime-mode=' + runtime_mode,
+              '--android-cpu=%s' % android_cpu)
+        Build(api, build_output_dir)
 
-      # Upload artifacts used for AOT compilation on Linux hosts.
-      UploadArtifacts(api, upload_dir, [
-        'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
-      ], archive_name='linux-x64.zip')
-      unstripped_lib_flutter_path = 'out/%s/libflutter.so' % build_output_dir
-      UploadArtifacts(api, upload_dir, [
-          unstripped_lib_flutter_path
-      ], archive_name='symbols.zip')
+        UploadArtifacts(api, upload_dir, [
+          'out/%s/flutter.jar' % build_output_dir,
+        ])
 
-      if runtime_mode == 'release':
-        UploadTreeMap(
-            api, upload_dir, unstripped_lib_flutter_path, android_triple)
+        # Upload artifacts used for AOT compilation on Linux hosts.
+        UploadArtifacts(api, upload_dir, [
+          'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
+        ], archive_name='linux-x64.zip')
+        unstripped_lib_flutter_path = 'out/%s/libflutter.so' % build_output_dir
+        UploadArtifacts(api, upload_dir, [
+            unstripped_lib_flutter_path
+        ], archive_name='symbols.zip')
 
-  Build(api, 'android_debug', ':dist')
-  UploadDartPackage(api, 'sky_engine')
+        if runtime_mode == 'release':
+          UploadTreeMap(
+              api, upload_dir, unstripped_lib_flutter_path, android_triple)
 
 
 def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
   Build(api, 'host_dynamic_release')
-  Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     ICU_DATA_PATH,
@@ -363,99 +368,103 @@ def SetupXcode(api):
     yield
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
-  RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
-  RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
-  RunGN(api, '--runtime-mode', 'profile', '--android')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'release', '--android')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
-        '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
-        '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
+  if api.properties.get('build_host', True):
+    RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
+    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
+    RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
+    Build(api, 'host_debug_unopt')
+    Build(api, 'host_debug')
+    Build(api, 'host_dynamic_release')
+    RunHostTests(api, 'out/host_debug_unopt')
+    host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
 
-  Build(api, 'host_debug_unopt')
-  Build(api, 'host_debug')
-  Build(api, 'host_dynamic_release')
-  RunHostTests(api, 'out/host_debug_unopt')
+    api.zip.directory('Archive FlutterEmbedder.framework',
+      host_debug_path.join('FlutterEmbedder.framework'),
+      host_debug_path.join('FlutterEmbedder.framework.zip'))
 
-  Build(api, 'android_profile', 'flutter/lib/snapshot')
-  Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
-  Build(api, 'android_release', 'flutter/lib/snapshot')
-  Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
-  Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot')
-  Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot')
-  Build(api, 'android_dynamic_release', 'flutter/lib/snapshot')
-  Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot')
-  Build(api, 'android_release_vulkan')
+    api.zip.directory('Archive FlutterMacOS.framework',
+      host_debug_path.join('FlutterMacOS.framework'),
+      host_debug_path.join('FlutterMacOS.framework.zip'))
 
-  host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
+    UploadArtifacts(api, 'darwin-x64', [
+      ICU_DATA_PATH,
+      'out/host_debug_unopt/flutter_tester',
+      'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+      'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+      'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+      ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+      'product_isolate_snapshot.bin'),
+      ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+      'vm_isolate_snapshot.bin',
+      'product_vm_isolate_snapshot.bin'),
+    ])
 
-  api.zip.directory('Archive FlutterEmbedder.framework',
-    host_debug_path.join('FlutterEmbedder.framework'),
-    host_debug_path.join('FlutterEmbedder.framework.zip'))
+    UploadArtifacts(api, 'darwin-x64', [
+      'out/host_debug/FlutterEmbedder.framework.zip'
+    ], archive_name='FlutterEmbedder.framework.zip')
 
-  api.zip.directory('Archive FlutterMacOS.framework',
-    host_debug_path.join('FlutterMacOS.framework'),
-    host_debug_path.join('FlutterMacOS.framework.zip'))
+    UploadArtifacts(api, 'darwin-x64', [
+      'out/host_debug/FlutterMacOS.framework.zip'
+    ], archive_name='FlutterMacOS.framework.zip')
 
-  UploadArtifacts(api, 'darwin-x64', [
-    ICU_DATA_PATH,
-    'out/host_debug_unopt/flutter_tester',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-     'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
-     'vm_isolate_snapshot.bin',
-     'product_vm_isolate_snapshot.bin'),
-  ])
+    UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
+    UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
 
-  UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug/FlutterEmbedder.framework.zip'
-  ], archive_name='FlutterEmbedder.framework.zip')
+  if api.properties.get('build_android_dynamic', True):
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
+          '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
+          '--android-cpu=arm64')
+    Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_release', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot')
+    # These gen_snapshot binaries are identical to their non-dynamic versions
+    # below, but we duplicate them here for the sake of simpler framework code
+    # and easier maintenance of artifacts tree.
+    UploadArtifacts(api, "android-arm-dynamic-profile" , [
+      'out/android_dynamic_profile/clang_x86/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm64-dynamic-profile" , [
+      'out/android_dynamic_profile_arm64/clang_x64/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm-dynamic-release" , [
+      'out/android_dynamic_release/clang_x86/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm64-dynamic-release" , [
+      'out/android_dynamic_release_arm64/clang_x64/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
 
-  UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug/FlutterMacOS.framework.zip'
-  ], archive_name='FlutterMacOS.framework.zip')
 
-  UploadArtifacts(api, "android-arm-profile" , [
-    'out/android_profile/clang_x86/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm64-profile" , [
-    'out/android_profile_arm64/clang_x64/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm-release" , [
-    'out/android_release/clang_x86/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm64-release" , [
-    'out/android_release_arm64/clang_x64/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
+  if api.properties.get('build_android_vulkan', True):
+    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
+    Build(api, 'android_release_vulkan')
 
-  # These gen_snapshot binaries are identical to their non-dynamic versions
-  # above, but we duplicate them here for the sake of simpler framework code
-  # and easier maintenance of artifacts tree.
-  UploadArtifacts(api, "android-arm-dynamic-profile" , [
-    'out/android_dynamic_profile/clang_x86/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm64-dynamic-profile" , [
-    'out/android_dynamic_profile_arm64/clang_x64/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm-dynamic-release" , [
-    'out/android_dynamic_release/clang_x86/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
-  UploadArtifacts(api, "android-arm64-dynamic-release" , [
-    'out/android_dynamic_release_arm64/clang_x64/gen_snapshot',
-  ], archive_name='darwin-x64.zip')
+  if api.properties.get('build_android_aot', True):
+    RunGN(api, '--runtime-mode', 'profile', '--android')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
 
-  UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
-  UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
+    Build(api, 'android_profile', 'flutter/lib/snapshot')
+    Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
+    Build(api, 'android_release', 'flutter/lib/snapshot')
+    Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
 
+    UploadArtifacts(api, "android-arm-profile" , [
+      'out/android_profile/clang_x86/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm64-profile" , [
+      'out/android_profile_arm64/clang_x64/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm-release" , [
+      'out/android_release/clang_x86/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
+    UploadArtifacts(api, "android-arm64-release" , [
+      'out/android_release_arm64/clang_x64/gen_snapshot',
+    ], archive_name='darwin-x64.zip')
 
 def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   checkout = api.path['start_dir'].join('src')
@@ -553,87 +562,88 @@ def BuildIOS(api):
 
 
 def BuildWindows(api):
-  RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
-  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
-  RunGN(api, '--runtime-mode', 'release', '--dynamic')
-  RunGN(api, '--runtime-mode', 'profile', '--android')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'release', '--android')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
-        '--android-cpu=arm64')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
-        '--android-cpu=arm64')
+  if api.properties.get('build_host', True):
+    RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
+    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
+    RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
+    Build(api, 'host_debug_unopt')
+    Build(api, 'host_debug')
+    Build(api, 'host_dynamic_release')
+    RunHostTests(api, 'out\\host_debug', '.exe')
+    UploadArtifacts(api, 'windows-x64', [
+      ICU_DATA_PATH,
+      'out/host_debug/flutter_tester.exe',
+      'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+      'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+      'out/host_debug/gen/frontend_server.dart.snapshot',
+      ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+      'product_isolate_snapshot.bin'),
+      ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+      'vm_isolate_snapshot.bin',
+      'product_vm_isolate_snapshot.bin'),
+    ])
 
-  Build(api, 'host_debug_unopt')
-  Build(api, 'host_debug')
-  Build(api, 'host_dynamic_release')
-  Build(api, 'android_profile', 'gen_snapshot')
-  Build(api, 'android_profile_arm64', 'gen_snapshot')
-  Build(api, 'android_release', 'gen_snapshot')
-  Build(api, 'android_release_arm64', 'gen_snapshot')
-  Build(api, 'android_dynamic_profile', 'gen_snapshot')
-  Build(api, 'android_dynamic_profile_arm64', 'gen_snapshot')
-  Build(api, 'android_dynamic_release', 'gen_snapshot')
-  Build(api, 'android_dynamic_release_arm64', 'gen_snapshot')
+    UploadArtifacts(api, 'windows-x64', [
+      'out/host_debug/flutter_embedder.h',
+      'out/host_debug/flutter_engine.dll',
+      'out/host_debug/flutter_engine.dll.exp',
+      'out/host_debug/flutter_engine.dll.lib',
+      'out/host_debug/flutter_engine.dll.pdb',
+    ], archive_name='windows-x64-embedder.zip')
 
-  RunHostTests(api, 'out\\host_debug', '.exe')
+    UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
+    UploadWebSdk(api, archive_name='flutter-web-sdk-windows-x64.zip')
 
-  UploadArtifacts(api, 'windows-x64', [
-    ICU_DATA_PATH,
-    'out/host_debug/flutter_tester.exe',
-    'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug/gen/frontend_server.dart.snapshot',
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-     'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
-     'vm_isolate_snapshot.bin',
-     'product_vm_isolate_snapshot.bin'),
-  ])
+  if api.properties.get('build_android_aot', True):
+    RunGN(api, '--runtime-mode', 'profile', '--android')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+    Build(api, 'android_profile', 'gen_snapshot')
+    Build(api, 'android_profile_arm64', 'gen_snapshot')
+    Build(api, 'android_release', 'gen_snapshot')
+    Build(api, 'android_release_arm64', 'gen_snapshot')
+    UploadArtifacts(api, "android-arm-profile" , [
+      'out/android_profile/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm64-profile" , [
+      'out/android_profile_arm64/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm-release" , [
+      'out/android_release/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm64-release" , [
+      'out/android_release_arm64/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
 
-  UploadArtifacts(api, 'windows-x64', [
-    'out/host_debug/flutter_embedder.h',
-    'out/host_debug/flutter_engine.dll',
-    'out/host_debug/flutter_engine.dll.exp',
-    'out/host_debug/flutter_engine.dll.lib',
-    'out/host_debug/flutter_engine.dll.pdb',
-  ], archive_name='windows-x64-embedder.zip')
+  if api.properties.get('build_android_dynamic', True):
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
+          '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
+          '--android-cpu=arm64')
 
-  UploadArtifacts(api, "android-arm-profile" , [
-    'out/android_profile/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm64-profile" , [
-    'out/android_profile_arm64/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm-release" , [
-    'out/android_release/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm64-release" , [
-    'out/android_release_arm64/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
+    Build(api, 'android_dynamic_profile', 'gen_snapshot')
+    Build(api, 'android_dynamic_profile_arm64', 'gen_snapshot')
+    Build(api, 'android_dynamic_release', 'gen_snapshot')
+    Build(api, 'android_dynamic_release_arm64', 'gen_snapshot')
 
-  # These gen_snapshot binaries are identical to their non-dynamic versions
-  # above, but we duplicate them here for the sake of simpler framework code
-  # and easier maintenance of artifacts tree.
-  UploadArtifacts(api, "android-arm-dynamic-profile" , [
-    'out/android_dynamic_profile/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm64-dynamic-profile" , [
-    'out/android_dynamic_profile_arm64/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm-dynamic-release" , [
-    'out/android_dynamic_release/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-  UploadArtifacts(api, "android-arm64-dynamic-release" , [
-    'out/android_dynamic_release_arm64/gen_snapshot.exe',
-  ], archive_name='windows-x64.zip')
-
-  UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
-  UploadWebSdk(api, archive_name='flutter-web-sdk-windows-x64.zip')
-
+    # These gen_snapshot binaries are identical to their non-dynamic versions
+    # above, but we duplicate them here for the sake of simpler framework code
+    # and easier maintenance of artifacts tree.
+    UploadArtifacts(api, "android-arm-dynamic-profile" , [
+      'out/android_dynamic_profile/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm64-dynamic-profile" , [
+      'out/android_dynamic_profile_arm64/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm-dynamic-release" , [
+      'out/android_dynamic_release/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
+    UploadArtifacts(api, "android-arm64-dynamic-release" , [
+      'out/android_dynamic_release_arm64/gen_snapshot.exe',
+    ], archive_name='windows-x64.zip')
 
 def BuildJavadoc(api):
   checkout = api.path['start_dir'].join('src')
@@ -712,19 +722,20 @@ def RunSteps(api):
   with api.context(env=env, env_prefixes=env_prefixes):
     if api.platform.is_linux:
       AnalyzeDartUI(api)
-      BuildLinux(api)
-      TestObservatory(api)
+      if api.properties.get('build_host', True):
+        BuildLinux(api)
+        TestObservatory(api)
       #TestEngine(api)
       BuildLinuxAndroid(api)
-      BuildJavadoc(api)
       VerifyExportedSymbols(api)
 
     if api.platform.is_mac:
       with SetupXcode(api):
         BuildMac(api)
-        BuildIOS(api)
-        with InstallJazzy(api):
-          BuildObjcDoc(api)
+        if api.properties.get('build_ios', True):
+          BuildIOS(api)
+          with InstallJazzy(api):
+            BuildObjcDoc(api)
         VerifyExportedSymbols(api)
 
     if api.platform.is_win:
@@ -743,7 +754,14 @@ def GenTests(api):
         git_repo=GIT_REPO,
         project='flutter',
       ) +
-      api.properties(goma_jobs=1024)
+      api.properties(
+        goma_jobs=1024,
+        build_host=True,
+        build_android_aot=True,
+        build_android_debug=True,
+        build_android_dynamic=True,
+        build_android_vulkan=True,
+      )
     )
     if platform == 'mac':
       test += (api.properties(jazzy_version='0.8.4'))
