@@ -378,6 +378,10 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
     # Wait for llvm in case the above code ran into uncaught exceptions.
     if p is not None:
       if p.wait() != 0:
+        logging.error('Subprocess returned error %d', p.returncode)
+        with open(error_out_file) as error_f:
+          logging.error('--------dumping stderr from %s -----', error_out_file)
+          print error_f.read()
         sys.exit(p.returncode)
 
   logging.info('---------------------Processing metadata--------------------')
