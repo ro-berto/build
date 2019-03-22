@@ -308,6 +308,17 @@ class DartApi(recipe_api.RecipeApi):
         'LATEST/approved_results.json',
         name='download approved results',
         ok_ret='any')
+    apply_preapproval_arguments = [self.dart_executable(),
+                                   'tools/bots/apply_preapprovals.dart',
+                                   'LATEST/approved_results.json']
+    if not self.m.buildbucket.builder_name.endswith('-try'):
+      apply_preapproval_arguments.append('--upload')
+      apply_preapproval_arguments.append(
+          'gs://dart-test-results-approved-results/' +
+          'builders/%s/approved_results.json' % builder)
+    self.m.step('apply pre-approvals',
+                apply_preapproval_arguments,
+                infra_step=True)
 
 
   def _deflake_results(self, step, global_config):

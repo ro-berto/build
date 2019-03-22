@@ -916,6 +916,19 @@
     ]
   },
   {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/apply_preapprovals.dart",
+      "LATEST/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "download previous results.apply pre-approvals",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "deflaking"
   },
