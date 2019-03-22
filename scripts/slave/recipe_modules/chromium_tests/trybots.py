@@ -603,6 +603,18 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Mojo ChromiumOS',
       }),
+      'linux_vr': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'VR Linux',
+      }),
+      'leak_detection_linux': simple_bot({
+          'mastername': 'chromium.linux',
+          'buildername': 'Leak Detection Linux',
+      }),
+      'layout_test_leak_detection': simple_bot({
+          'mastername': 'chromium.webkit',
+          'buildername': 'WebKit Linux Trusty Leak',
+      }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
         'bot_ids': [
@@ -618,17 +630,55 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'linux_vr': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'VR Linux',
+      # Manually triggered GPU bots.
+      'gpu-manual-try-linux-amd-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI Release (AMD R7 240)',
       }),
-      'leak_detection_linux': simple_bot({
-          'mastername': 'chromium.linux',
-          'buildername': 'Leak Detection Linux',
+      'gpu-manual-try-linux-intel-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux dEQP Builder',
+        'tester': 'Linux FYI dEQP Release (Intel HD 630)',
       }),
-      'layout_test_leak_detection': simple_bot({
-          'mastername': 'chromium.webkit',
-          'buildername': 'WebKit Linux Trusty Leak',
+      'gpu-manual-try-linux-intel-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI Experimental Release (Intel HD 630)',
+      }),
+      'gpu-manual-try-linux-intel-ozn': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Ozone Builder',
+        'tester': 'Linux FYI Ozone (Intel)',
+      }),
+      'gpu-manual-try-linux-intel-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI Release (Intel HD 630)',
+      }),
+      'gpu-manual-try-linux-nvidia-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder (dbg)',
+        'tester': 'Linux FYI Debug (NVIDIA)',
+      }),
+      'gpu-manual-try-linux-nvidia-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux dEQP Builder',
+        'tester': 'Linux FYI dEQP Release (NVIDIA)',
+      }),
+      'gpu-manual-try-linux-nvidia-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI Experimental Release (NVIDIA)',
+      }),
+      'gpu-manual-try-linux-nvidia-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI Release (NVIDIA)',
+      }),
+      'gpu-manual-try-linux-nvidia-tsn': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Linux FYI GPU TSAN Release',
       }),
     },
   },
@@ -915,10 +965,70 @@ TRYBOTS = freeze({
         ],
       },
       # Manually triggered GPU bots.
-      'gpu_manual_try_win7_nvidia_rel': simple_bot({
+      'gpu-manual-try-win7-amd-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder (dbg)',
+        'tester': 'Win7 FYI Debug (AMD)',
+      }),
+      'gpu-manual-try-win7-amd-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win dEQP Builder',
+        'tester': 'Win7 FYI dEQP Release (AMD)',
+      }),
+      'gpu-manual-try-win7-amd-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win7 FYI Release (AMD)',
+      }),
+      'gpu-manual-try-win7-nvidia-dqp-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win x64 dEQP Builder',
+        'tester': 'Win7 FYI x64 dEQP Release (NVIDIA)',
+      }),
+      'gpu-manual-try-win7-nvidia-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (NVIDIA)',
+      }),
+      'gpu-manual-try-win7-nvidia-rel-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win x64 Builder',
+        'tester': 'Win7 FYI x64 Release (NVIDIA)',
+      }),
+      'gpu-manual-try-win10-intel-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win dEQP Builder',
+        'tester': 'Win10 FYI dEQP Release (Intel HD 630)',
+      }),
+      'gpu-manual-try-win10-intel-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win10 FYI Exp Release (Intel HD 630)',
+      }),
+      'gpu-manual-try-win10-intel-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win10 FYI Release (Intel HD 630)',
+      }),
+      'gpu-manual-try-win10-nvidia-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder (dbg)',
+        'tester': 'Win10 FYI Debug (NVIDIA)',
+      }),
+      'gpu-manual-try-win10-nvidia-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win dEQP Builder',
+        'tester': 'Win10 FYI dEQP Release (NVIDIA)',
+      }),
+      'gpu-manual-try-win10-nvidia-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win10 FYI Exp Release (NVIDIA)',
+      }),
+      'gpu-manual-try-win10-nvidia-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win10 FYI Release (NVIDIA)',
       }),
     },
   },
