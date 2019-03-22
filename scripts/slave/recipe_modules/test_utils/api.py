@@ -703,7 +703,8 @@ class SwarmingGroup(TestGroup):
         # We only have one test left to collect, just collect it normally.
         key = list(self._task_ids_to_test.keys())[0]
         test = self._task_ids_to_test[key]
-        self._run_func(test, test.run, caller_api, suffix, True)
+
+        test.run(caller_api, suffix)
         del self._task_ids_to_test[key]
         break
 
@@ -713,7 +714,7 @@ class SwarmingGroup(TestGroup):
                   (' (%s)' % suffix) if suffix else ''), attempts=attempts))
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
-        self._run_func(test, test.run, caller_api, suffix, True)
+        test.run(caller_api, suffix)
         del self._task_ids_to_test[task_set]
 
     # Testing this suite is hard, because the step_test_data for get_states
@@ -735,4 +736,4 @@ class SwarmingGroup(TestGroup):
       for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
-        self._run_func(test, test.run, caller_api, suffix, True)
+        test.run(caller_api, suffix)
