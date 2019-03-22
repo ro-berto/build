@@ -824,9 +824,11 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Trigger parameters.
     pre_trigger_args = ['trigger']
+    # TODO(maruel): https://crbug.com/944904
     args = [
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
+      '--namespace', self.m.isolate.namespace,
       '--priority', str(task.priority),
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),

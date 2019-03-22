@@ -30,7 +30,7 @@ def capture(cmd, **kwargs):
 
 def run(
     client_dir, isolated_hash, dimensions, suffix, task_name, isolate_server,
-    swarming_server, timeout, channel):
+    namespace, swarming_server, timeout, channel):
   out = 'An internal error occured'
   code = 1
   duration = -1.
@@ -41,6 +41,7 @@ def run(
       'run',
       '--swarming', swarming_server,
       '--isolate-server', isolate_server,
+      '--namespace', namespace,
       '--priority', '5',
       '--task-name', '%s-%s' % (task_name, suffix),
       '--deadline', str(timeout),
@@ -76,6 +77,7 @@ def main():
     parser.error('Unknown args: %s' % args)
 
   # Testing parameters:
+  namespace = 'default-gzip'
   if options.staging:
     swarming_server = 'https://chromium-swarm-dev.appspot.com'
     isolate_server = 'https://isolateserver-dev.appspot.com'
@@ -115,6 +117,7 @@ def main():
     '--isolate', 'heartbeat.isolate',
     '--isolated', 'heartbeat.isolated',
     '--isolate-server', isolate_server,
+    '--namespace', namespace,
   ]
   isolated_hash = subprocess.check_output(cmd, cwd=cwd).split()[0]
   print 'Archiving heartbeat.isolate took %3.1fs' % (time.time() - start)
@@ -137,7 +140,7 @@ def main():
       target=run,
       args=(
           client_dir, isolated_hash, dimensions, suffix, task_name,
-          isolate_server, swarming_server, timeout, channel))
+          isolate_server, namespace, swarming_server, timeout, channel))
     for suffix, dimensions in suffixes_dict.iteritems()
   ]
   start = time.time()

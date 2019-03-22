@@ -92,7 +92,10 @@
       "-u",
       "[START_DIR]/swarming.client/isolateserver.py",
       "download",
-      "-Ihttps://isolateserver.appspot.com",
+      "-I",
+      "isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
       "-sisolate_123",
       "--target=."
     ],

@@ -608,6 +608,7 @@ class V8Api(recipe_api.RecipeApi):
           step_name='isolate tests (perf)',
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
+      # https://crbug.com/944904
       self.m.isolate.isolate_server = 'https://isolateserver.appspot.com'
 
     if isolate_targets:

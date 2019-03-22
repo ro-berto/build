@@ -123,6 +123,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def upload_isolate(self, isolate_fileset):
     """Builds an isolate"""
+    # TODO(athom): Use upstream isolated recipe. https://crbug.com/944902
     if isolate_fileset == self.m.properties.get('parent_fileset_name', None):
       return self.m.properties.get('parent_fileset')
     step_result = self.m.python(
@@ -131,7 +132,8 @@ class DartApi(recipe_api.RecipeApi):
         args= ['archive',
                  '--blacklist=%s' % BLACKLIST,
                  '--ignore_broken_items', # TODO(athom) find a way to avoid that
-                 '-Ihttps://isolateserver.appspot.com',
+                 '-I', 'isolateserver.appspot.com',
+                 '--namespace', 'default-gzip',
                  '-i%s' % self.m.path['checkout'].join('%s' % isolate_fileset),
                  '-s%s' % self.m.path['checkout'].join(
                      '%s.isolated' % isolate_fileset)],
@@ -143,6 +145,7 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def download_parent_isolate(self):
+    # TODO(athom): Use upstream isolated recipe. https://crbug.com/944902
     self.m.path['checkout'] = self.m.path['cleanup']
     isolate_hash = self.m.properties['parent_fileset']
     fileset_name = self.m.properties['parent_fileset_name']
@@ -151,7 +154,8 @@ class DartApi(recipe_api.RecipeApi):
         'downloading fileset %s' % fileset_name,
         self.m.swarming_client.path.join('isolateserver.py'),
         args= ['download',
-                 '-Ihttps://isolateserver.appspot.com',
+                 '-I', 'isolateserver.appspot.com',
+                 '--namespace', 'default-gzip',
                  '-s%s' % isolate_hash,
                  '--target=.'],
         stdout=self.m.raw_io.output('out'))

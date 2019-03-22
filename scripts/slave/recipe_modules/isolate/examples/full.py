@@ -27,6 +27,10 @@ def RunSteps(api):
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
   assert api.isolate.isolate_server == 'https://isolateserver-dev.appspot.com'
 
+  # Code coverage for namespace property.
+  api.isolate.namespace = 'default-gzip'
+  assert api.isolate.namespace == 'default-gzip'
+
   # Code coverage for service_account_json property.
   api.isolate.service_account_json = 'chromium_builder'
   assert api.isolate.service_account_json == 'chromium_builder'

@@ -132,6 +132,8 @@
       "/path/to/tmp/json",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
+      "--namespace",
+      "default-gzip",
       "--eventlog-endpoint",
       "prod",
       "--blacklist",

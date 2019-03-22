@@ -7,6 +7,8 @@
       "archive",
       "--isolate-server",
       "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
       "{\"algo\": \"sha-1\", \"includes\": [\"isolated_hash1\", \"isolated_hash2\"], \"version\": \"1.4\"}"
     ],
     "name": "compose isolates",
