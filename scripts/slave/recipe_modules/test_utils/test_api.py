@@ -286,7 +286,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if swarming:
       jsonish_shards = []
       files_dict = {}
-      for i in shard_indices:
+      for index, i in enumerate(shard_indices):
         if isolated_script_retcode is None:
             exit_code = '1' if not passing or swarming_internal_failure else '0'
         else:
@@ -312,11 +312,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
         if not output_missing:
           files_dict[swarming_path] = \
-            '' if output_empty else json.dumps(per_shard_results[i])
+            '' if output_empty else json.dumps(per_shard_results[index])
         if not chartjson_output_missing and output_chartjson:
           files_dict[chartjson_swarming_path] = \
             '' if chartjson_output_empty \
-              else json.dumps(per_shard_chartjson_results[i])
+              else json.dumps(per_shard_chartjson_results[index])
 
       jsonish_summary = {'shards': jsonish_shards}
       step_test_data = recipe_test_api.StepTestData()

@@ -302,7 +302,7 @@ def GenTests(api):
     shard_one = api.chromium_swarming.canned_summary_output_raw(
         shard_indices=[1], failure=True)
     shards = [shard_zero['shards'][0], shard_one['shards'][0]]
-    shards[1]['state'] = 'EXPIRED'
+    shards[1]['state'] = 'FAILED'
     return {'shards': shards}
 
   # If one shard fails or expires, retry shards with patch should retry just
