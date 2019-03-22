@@ -431,14 +431,10 @@ def BuildMac(api):
                '--mac-sdk-path', str(GetMacSDKDir(api)))
     RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
                '--android-cpu=arm64', '--mac-sdk-path', str(GetMacSDKDir(api)))
-    Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    Build(api, 'android_dynamic_release', 'flutter/lib/snapshot',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_release', 'flutter/lib/snapshot')
+    Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot')
     # These gen_snapshot binaries are identical to their non-dynamic versions
     # below, but we duplicate them here for the sake of simpler framework code
     # and easier maintenance of artifacts tree.

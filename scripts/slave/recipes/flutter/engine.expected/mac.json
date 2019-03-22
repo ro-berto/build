@@ -1816,9 +1816,7 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile",
-      "flutter/lib/snapshot",
-      "--mac-sdk-path",
-      "[CACHE]/builder/mac_sdk"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -1828,7 +1826,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_profile flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
+    "name": "build android_dynamic_profile flutter/lib/snapshot"
   },
   {
     "cmd": [],
@@ -1948,7 +1946,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_profile flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
+      "build android_dynamic_profile flutter/lib/snapshot",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2106,9 +2104,7 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile_arm64",
-      "flutter/lib/snapshot",
-      "--mac-sdk-path",
-      "[CACHE]/builder/mac_sdk"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2118,7 +2114,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_profile_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
+    "name": "build android_dynamic_profile_arm64 flutter/lib/snapshot"
   },
   {
     "cmd": [],
@@ -2238,7 +2234,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_profile_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
+      "build android_dynamic_profile_arm64 flutter/lib/snapshot",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2396,9 +2392,7 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release",
-      "flutter/lib/snapshot",
-      "--mac-sdk-path",
-      "[CACHE]/builder/mac_sdk"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2408,7 +2402,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_release flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
+    "name": "build android_dynamic_release flutter/lib/snapshot"
   },
   {
     "cmd": [],
@@ -2528,7 +2522,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_release flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
+      "build android_dynamic_release flutter/lib/snapshot",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2686,9 +2680,7 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release_arm64",
-      "flutter/lib/snapshot",
-      "--mac-sdk-path",
-      "[CACHE]/builder/mac_sdk"
+      "flutter/lib/snapshot"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2698,7 +2690,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_release_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
+    "name": "build android_dynamic_release_arm64 flutter/lib/snapshot"
   },
   {
     "cmd": [],
@@ -2818,7 +2810,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_release_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
+      "build android_dynamic_release_arm64 flutter/lib/snapshot",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
