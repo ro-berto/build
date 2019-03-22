@@ -470,7 +470,7 @@
     },
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -508,24 +508,9 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
@@ -556,23 +541,7 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"3/output.json\": \"{\\\"successes\\\": [\\\"test7.Test7\\\", \\\"test8.Test8\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test7.Test7\\\": 0.1, \\\"test8.Test8\\\": 0.1}}\", @@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"try_number\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"outputs_ref\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": \\\"TIMED_OUT\\\", \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"user\\\": \\\"unknown\\\", \\\"duration\\\": 60, \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "Tests statistics",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_LOG_END@outdir_json@@@"
     ]
   },
   {

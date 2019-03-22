@@ -576,7 +576,7 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: 255",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>2 passed, 0 failed (2 total)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>2 passed, 0 failed (2 total)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"successes\": [@@@",
@@ -593,24 +593,9 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
@@ -640,28 +625,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Tests statistics",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

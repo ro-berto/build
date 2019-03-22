@@ -315,9 +315,17 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
               else json.dumps(per_shard_chartjson_results[i])
 
       jsonish_summary = {'shards': jsonish_shards}
+      step_test_data = recipe_test_api.StepTestData()
+      key = ('chromium_swarming', 'summary', None)
+      placeholder = recipe_test_api.PlaceholderTestData(
+          json.dumps(jsonish_summary))
+      step_test_data.placeholder_data[key] = placeholder
+      step_test_data += self.m.json.output(per_shard_results[0])
+
       files_dict['summary.json'] = json.dumps(jsonish_summary)
-      return (self.m.raw_io.output_dir(files_dict)
-              + self.m.json.output(per_shard_results[0]))
+      step_test_data += self.m.raw_io.output_dir(files_dict)
+
+      return step_test_data
     else:
       return self.m.json.output(per_shard_results[0])
 
