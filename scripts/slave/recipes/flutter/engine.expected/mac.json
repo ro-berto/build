@@ -1632,7 +1632,9 @@
       "--runtime-mode",
       "profile",
       "--android",
-      "--dynamic"
+      "--dynamic",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -1643,7 +1645,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode profile --android --dynamic"
+    "name": "gn --runtime-mode profile --android --dynamic --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -1654,7 +1656,9 @@
       "profile",
       "--android",
       "--dynamic",
-      "--android-cpu=arm64"
+      "--android-cpu=arm64",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -1665,28 +1669,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode profile --android --dynamic --android-cpu=arm64"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--runtime-mode",
-      "release",
-      "--android",
-      "--dynamic"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "gn --runtime-mode release --android --dynamic"
+    "name": "gn --runtime-mode profile --android --dynamic --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -1697,7 +1680,8 @@
       "release",
       "--android",
       "--dynamic",
-      "--android-cpu=arm64"
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -1708,7 +1692,31 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode release --android --dynamic --android-cpu=arm64"
+    "name": "gn --runtime-mode release --android --dynamic --mac-sdk-path [CACHE]/builder/mac_sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--runtime-mode",
+      "release",
+      "--android",
+      "--dynamic",
+      "--android-cpu=arm64",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "name": "gn --runtime-mode release --android --dynamic --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -1808,7 +1816,9 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile",
-      "flutter/lib/snapshot"
+      "flutter/lib/snapshot",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -1818,7 +1828,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_profile flutter/lib/snapshot"
+    "name": "build android_dynamic_profile flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -1938,7 +1948,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_profile flutter/lib/snapshot",
+      "build android_dynamic_profile flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2096,7 +2106,9 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_profile_arm64",
-      "flutter/lib/snapshot"
+      "flutter/lib/snapshot",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2106,7 +2118,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_profile_arm64 flutter/lib/snapshot"
+    "name": "build android_dynamic_profile_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -2226,7 +2238,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_profile_arm64 flutter/lib/snapshot",
+      "build android_dynamic_profile_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2384,7 +2396,9 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release",
-      "flutter/lib/snapshot"
+      "flutter/lib/snapshot",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2394,7 +2408,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_release flutter/lib/snapshot"
+    "name": "build android_dynamic_release flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -2514,7 +2528,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_release flutter/lib/snapshot",
+      "build android_dynamic_release flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2672,7 +2686,9 @@
       "1024",
       "-C",
       "[START_DIR]/src/out/android_dynamic_release_arm64",
-      "flutter/lib/snapshot"
+      "flutter/lib/snapshot",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -2682,7 +2698,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build android_dynamic_release_arm64 flutter/lib/snapshot"
+    "name": "build android_dynamic_release_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -2802,7 +2818,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_dynamic_release_arm64 flutter/lib/snapshot",
+      "build android_dynamic_release_arm64 flutter/lib/snapshot --mac-sdk-path [CACHE]/builder/mac_sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -3126,7 +3142,9 @@
       "--runtime-mode",
       "release",
       "--android",
-      "--enable-vulkan"
+      "--enable-vulkan",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3137,7 +3155,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode release --android --enable-vulkan"
+    "name": "gn --runtime-mode release --android --enable-vulkan --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -3433,7 +3451,9 @@
       "--goma",
       "--runtime-mode",
       "profile",
-      "--android"
+      "--android",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3444,7 +3464,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode profile --android"
+    "name": "gn --runtime-mode profile --android --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -3454,7 +3474,9 @@
       "--runtime-mode",
       "profile",
       "--android",
-      "--android-cpu=arm64"
+      "--android-cpu=arm64",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3465,27 +3487,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode profile --android --android-cpu=arm64"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--runtime-mode",
-      "release",
-      "--android"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "gn --runtime-mode release --android"
+    "name": "gn --runtime-mode profile --android --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -3495,7 +3497,8 @@
       "--runtime-mode",
       "release",
       "--android",
-      "--android-cpu=arm64"
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3506,7 +3509,30 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --runtime-mode release --android --android-cpu=arm64"
+    "name": "gn --runtime-mode release --android --mac-sdk-path [CACHE]/builder/mac_sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--runtime-mode",
+      "release",
+      "--android",
+      "--android-cpu=arm64",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "name": "gn --runtime-mode release --android --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],
@@ -4924,7 +4950,9 @@
       "--ios",
       "--runtime-mode",
       "debug",
-      "--no-lto"
+      "--no-lto",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -4935,7 +4963,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode debug --no-lto"
+    "name": "gn --ios --runtime-mode debug --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -4946,7 +4974,9 @@
       "--runtime-mode",
       "debug",
       "--ios-cpu=arm",
-      "--no-lto"
+      "--no-lto",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -4957,7 +4987,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
+    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -4968,7 +4998,9 @@
       "--runtime-mode",
       "debug",
       "--simulator",
-      "--no-lto"
+      "--no-lto",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -4979,27 +5011,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode debug --simulator --no-lto"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "profile"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "gn --ios --runtime-mode profile"
+    "name": "gn --ios --runtime-mode debug --simulator --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -5009,7 +5021,8 @@
       "--ios",
       "--runtime-mode",
       "profile",
-      "--ios-cpu=arm"
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -5020,7 +5033,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode profile --ios-cpu=arm"
+    "name": "gn --ios --runtime-mode profile --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -5029,7 +5042,10 @@
       "--goma",
       "--ios",
       "--runtime-mode",
-      "release"
+      "profile",
+      "--ios-cpu=arm",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -5040,7 +5056,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode release"
+    "name": "gn --ios --runtime-mode profile --ios-cpu=arm --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [
@@ -5050,7 +5066,8 @@
       "--ios",
       "--runtime-mode",
       "release",
-      "--ios-cpu=arm"
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -5061,7 +5078,30 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "gn --ios --runtime-mode release --ios-cpu=arm"
+    "name": "gn --ios --runtime-mode release --mac-sdk-path [CACHE]/builder/mac_sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "release",
+      "--ios-cpu=arm",
+      "--mac-sdk-path",
+      "[CACHE]/builder/mac_sdk"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "name": "gn --ios --runtime-mode release --ios-cpu=arm --mac-sdk-path [CACHE]/builder/mac_sdk"
   },
   {
     "cmd": [],

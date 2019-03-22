@@ -423,16 +423,22 @@ def BuildMac(api):
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
 
   if api.properties.get('build_android_dynamic', True):
-    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
     RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
-          '--android-cpu=arm64')
-    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
+               '--android-cpu=arm64', '--mac-sdk-path', str(GetMacSDKDir(api)))
     RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
-          '--android-cpu=arm64')
-    Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot')
-    Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot')
-    Build(api, 'android_dynamic_release', 'flutter/lib/snapshot')
-    Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot')
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
+               '--android-cpu=arm64', '--mac-sdk-path', str(GetMacSDKDir(api)))
+    Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    Build(api, 'android_dynamic_release', 'flutter/lib/snapshot',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
     # These gen_snapshot binaries are identical to their non-dynamic versions
     # below, but we duplicate them here for the sake of simpler framework code
     # and easier maintenance of artifacts tree.
@@ -451,14 +457,19 @@ def BuildMac(api):
 
 
   if api.properties.get('build_android_vulkan', True):
-    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
     Build(api, 'android_release_vulkan')
 
   if api.properties.get('build_android_aot', True):
-    RunGN(api, '--runtime-mode', 'profile', '--android')
-    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
-    RunGN(api, '--runtime-mode', 'release', '--android')
-    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'profile', '--android',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'release', '--android',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64',
+               '--mac-sdk-path', str(GetMacSDKDir(api)))
 
     Build(api, 'android_profile', 'flutter/lib/snapshot')
     Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
@@ -545,13 +556,20 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto')
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
-  RunGN(api, '--ios', '--runtime-mode', 'profile')
-  RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm')
-  RunGN(api, '--ios', '--runtime-mode', 'release')
-  RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'profile',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'release',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm',
+             '--mac-sdk-path', str(GetMacSDKDir(api)))
 
   # Build all configurations.
   Build(api, 'ios_debug')
