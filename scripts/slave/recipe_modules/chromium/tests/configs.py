@@ -230,3 +230,21 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('ios_release_simulator') +
+      api.properties(chromium_apply_config=['ios_release_simulator']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('no_mac_toolchain_cipd_creds') +
+      api.properties(chromium_apply_config=['no_mac_toolchain_cipd_creds']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('xcode_10b61') +
+      api.properties(chromium_apply_config=['xcode_10b61']) +
+      api.post_process(post_process.DropExpectation)
+  )

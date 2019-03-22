@@ -632,3 +632,15 @@ def android_internal_isolate_maps(c):
       c.CHECKOUT_PATH.join('clank', 'build', 'gn_isolate_map.pyl'),
       c.CHECKOUT_PATH.join('testing', 'buildbot', 'gn_isolate_map.pyl'),
   ]
+
+@config_ctx()
+def ios_release_simulator(c):
+  c.build_config_fs = 'Release-iphonesimulator'
+
+@config_ctx()
+def no_mac_toolchain_cipd_creds(c):
+  c.mac_toolchain.cipd_credentials = None
+
+@config_ctx()
+def xcode_10b61(c):
+  c.mac_toolchain.xcode_build_version = '10b61'
