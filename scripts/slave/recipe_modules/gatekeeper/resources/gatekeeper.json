@@ -579,67 +579,17 @@
     "https://build.chromium.org/p/chromium.perf": [
       {
         "forgive_all": "true",
-
         "subject_template": "%(project_name)s %(builder_name)s %(result)s",
-
+        "categories": [
+          "chromium_tree_closer",
+          "experimental_tests"
+        ],
         "builders": {
           "Android Builder Perf": {
             "tree_notify": [
               "chrome-binary-size-sheriff@grotations.appspotmail.com"
             ]
           },
-          "Android Compile": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Android arm64 Builder": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Android arm64 Compile": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Linux Builder": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Mac Builder": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Win Builder": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          },
-          "Win x64 Builder": {
-            "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
-            ],
-            "forgiving_optional": []
-          }
-        },
-
-        "builders": {
           "*": {}
         }
       }
