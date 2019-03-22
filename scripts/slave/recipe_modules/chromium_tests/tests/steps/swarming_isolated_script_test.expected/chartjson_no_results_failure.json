@@ -462,13 +462,6 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@'NoneType' object has no attribute 'get'@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_swarming/api.py\", line NA, in _default_collect_step@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    links = step_result.json.output.get('links', {})@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@AttributeError: 'NoneType' object has no attribute 'get'@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LOG_LINE@outdir_json@{}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
@@ -488,6 +481,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -502,12 +496,7 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": ""
-      },
-      "humanReason": "TEST RESULTS WERE INVALID"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]

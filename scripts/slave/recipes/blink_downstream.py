@@ -349,7 +349,8 @@ def GenTests(api):
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch,
         api.test_utils.canned_isolated_script_output(passing=False,
-                                                     valid=False)) +
+                                                     valid=False,
+                                                     swarming=True)) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )

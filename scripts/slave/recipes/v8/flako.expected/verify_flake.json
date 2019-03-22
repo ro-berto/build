@@ -150,7 +150,6 @@
     "name": "calibration attempt 1.check mjsunit/foobar at #0.check mjsunit/foobar at #0 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",

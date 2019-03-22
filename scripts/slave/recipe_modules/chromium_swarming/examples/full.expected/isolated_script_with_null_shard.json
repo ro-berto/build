@@ -630,10 +630,6 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [null, {\\\"internal_failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\"}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@shard #0 failed without producing output.json@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/110100@@@",
       "@@@STEP_EXCEPTION@@@"
@@ -641,10 +637,12 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Shard #0 failed: Details unknown (missing shard results)"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
-      "humanReason": "Step('Shard #0 failed: Details unknown (missing shard results)') failed with return_code 0"
+      "humanReason": "Infra Failure: Step('Shard #0 failed: Details unknown (missing shard results)') returned 0"
     },
     "name": "$result"
   }

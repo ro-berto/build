@@ -539,12 +539,35 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "There are failed tasks."
-      },
-      "humanReason": "Step('There are failed tasks.') failed with return_code 0"
-    },
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 0:01:00 <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:00 @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 0:01:00 / 0:01:00 / 0:01:00@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/hello_isolated_world_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "remove temp dir"
+  },
+  {
+    "jsonResult": null,
     "name": "$result"
   }
 ]

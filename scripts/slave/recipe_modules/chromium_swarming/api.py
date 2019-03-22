@@ -489,6 +489,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     same instance to 'collect_task' to wait for the task to finish and fetch its
     results.
 
+    The default collect step will raise a StepFailure exception if there is a
+    test failure. To change this behavior, overwrite the default collect step.
+
     Args:
       * title: name of the test, used as part of a task ID.
       * isolated_hash: hash of isolated test on isolate server, the test should
@@ -577,6 +580,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if shard_indices is None:
       shard_indices = range(shards)
+    collect_step = functools.partial(
+        self._default_collect_step, failure_as_exception=True)
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -595,7 +600,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         idempotent=idempotent,
         ignore_task_failure=ignore_task_failure,
         extra_args=extra_args,
-        collect_step=self._default_collect_step,
+        collect_step=collect_step,
         task_output_dir=task_output_dir,
         cipd_packages=cipd_packages or [],
         build_properties=build_properties,
@@ -1114,9 +1119,45 @@ class SwarmingApi(recipe_api.RecipeApi):
           fmt_time(min_duration[0]), min_duration[1]))
 
   def _default_collect_step(
-      self, task, merged_test_output=None, name=None, step_test_data=None,
-      **kwargs):
-    """Produces a step that collects a result of an arbitrary task."""
+      self, task, failure_as_exception, merged_test_output=None, name=None,
+      step_test_data=None, **kwargs):
+    """Produces a step that collects the results of a Task object.
+
+    A Task object may have triggered multiple swarming tasks.
+
+    The go and python implementation of swarming collect have diverged. The go
+    implementation has exit code 0 if the tasks were successfully collected. The
+    python implementation has non-zero exit code if any of the swarming tasks
+    has non-zero exit code, with later exit codes overriding previous ones.
+
+    The behavior of the python implementation is undesirable, as it makes it
+    impossible to distinguish between non-zero exit code due to an actual
+    collection error, and successful collection but failed swarming tasks. For
+    now, we wrap the python implementation with manual logic to mimic the
+    behavior of the go implementation. Once we switch over to the go
+    implementation, this wrapper logic can be removed.
+
+    This method will always update the presentation status with EXCEPTION if
+    there was an infra error, or FAILURE if any of the shards timed out or had
+    non-zero exit code.
+
+    If failure_as_exception is True, this method will raise a StepFailure
+    exception when the presentation status is EXCEPTION or FAILURE.
+
+    Regardless of whether an exception is raised, subsequent recipe logic will
+    need to know if there are missing shards. This information is transported
+    through a side channel. The merge script will set the global tag
+    'UNRELIABLE_RESULTS', which the results parser recognizes.
+
+    Args:
+      task: A Task object that must have dispatched tasks
+      failure_as_exception: Whether a non-zero retcode of a dispatched task
+                            should raise a StepFailure exception.
+      merged_test_output: Output placeholder for the merge script.
+      name: Name to use for the collect step.
+      step_test_data: StepTestData to use for the collect step.
+    Returns: A StepData result for the recipe step.
+    """
     task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
 
     # If we don't already have a Placeholder, wrap the task_output_dir in one
@@ -1169,10 +1210,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     task_args.extend(collect_cmd)
 
-    allowed_return_codes = {0}
-    if task.ignore_task_failure:
-      allowed_return_codes = 'any'
-
     # The call to collect_task emits two JSON files and one text file:
     #  1) a task summary JSON emitted by swarming
     #  2) a gtest results JSON emitted by the task
@@ -1183,47 +1220,46 @@ class SwarmingApi(recipe_api.RecipeApi):
           self.m.raw_io.test_api.output('Successfully merged all data'))
       step_test_data = self.test_api.canned_summary_output(
           dispatched_task_placeholder, task.shards, task.shard_indices)
-    try:
-      with self.m.swarming.on_path():
-        with self.m.context(cwd=self.m.path['start_dir']):
-          return self.m.build.python(
-              name=name or self.get_step_name('', task),
-              script=self.resource('collect_task.py'),
-              args=task_args,
-              ok_ret=allowed_return_codes,
-              step_test_data=lambda: step_test_data,
-              **kwargs)
-    finally:
-      step_result = None
-      try:
-        step_result = self.m.step.active_result
-        if step_result is not None:
-          step_result.presentation.step_text = text_for_task(task)
+    with self.m.swarming.on_path():
+      with self.m.context(cwd=self.m.path['start_dir']):
+        # TODO(erikchen): Once we switch over to the go implementation of
+        # swarming, we should stop accepting all return codes.
+        # https://crbug.com/944179.
+        step_result = self.m.build.python(
+            name=name or self.get_step_name('', task),
+            script=self.resource('collect_task.py'),
+            args=task_args,
+            ok_ret='any',
+            step_test_data=lambda: step_test_data,
+            **kwargs)
 
-          step_result.presentation.logs['Merge script log'] = [
-              step_result.raw_io.output]
+    step_result.presentation.step_text = text_for_task(task)
 
-          links = {}
-          if hasattr(step_result, 'json') and hasattr(
-              step_result.json, 'output'):
-            links = step_result.json.output.get('links', {})
-          elif (hasattr(step_result, 'test_utils') and
-                hasattr(step_result.test_utils, 'gtest_results')):
-            links = step_result.test_utils.gtest_results.raw.get('links', {})
-          for k, v in links.iteritems():
-            step_result.presentation.links[k] = v
+    step_result.presentation.logs['Merge script log'] = [
+        step_result.raw_io.output]
 
-          summary_json = step_result.chromium_swarming.summary
-          self._handle_summary_json(task, summary_json, step_result)
+    links = {}
+    if hasattr(step_result, 'json') and hasattr(
+        step_result.json, 'output') and step_result.json.output:
+      links = step_result.json.output.get('links', {})
+    elif (hasattr(step_result, 'test_utils') and
+          hasattr(step_result.test_utils, 'gtest_results')):
+      links = step_result.test_utils.gtest_results.raw.get('links', {})
+    for k, v in links.iteritems():
+      step_result.presentation.links[k] = v
 
-      except self.m.step.StepFailure:
-        # Make sure that, if _handle_summary_json raises an StepFailure, it
-        # correctly propogates.
-        raise
-      except Exception as e:
-        if step_result is not None:
-          step_result.presentation.logs['no_results_exc'] = [
-            str(e), '\n', self.m.traceback.format_exc()]
+    exception = self._handle_summary_json(task, step_result)
+
+    if (step_result.retcode != 0 and failure_as_exception and not
+        task.ignore_task_failure):
+      raise recipe_api.StepFailure(
+          'Swarming collect had non-zero exit code.',
+          result=step_result)
+
+    if exception and failure_as_exception:
+      raise exception
+
+    return step_result
 
   def _check_for_missing_shard(self, merged_results_json, active_step, task):
     if merged_results_json:
@@ -1254,40 +1290,34 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_test_data = self.test_api.canned_summary_output(
         dispatched_task_placeholder, task.shards, task.shard_indices)
 
-    try:
-      return self._default_collect_step(
-          task,
-          merged_test_output=merged_test_output,
-          step_test_data=step_test_data,
-          allow_subannotations=True,
-          **kwargs)
-    finally:
-      # HACK: it is assumed that caller used 'api.test_utils.gtest_results'
-      # placeholder for 'test_launcher_summary_output' parameter when calling
-      # gtest_task(...). It's not enforced in any way.
-      step_result = self.m.step.active_result
+    step_result = self._default_collect_step(
+        task,
+        merged_test_output=merged_test_output,
+        step_test_data=step_test_data,
+        allow_subannotations=True,
+        failure_as_exception=False,
+        **kwargs)
 
-      gtest_results = self.m.test_utils.present_gtest_failures(step_result)
-      if gtest_results and gtest_results.valid:
-        self._check_for_missing_shard(gtest_results.raw, step_result, task)
+    gtest_results = self.m.test_utils.present_gtest_failures(step_result)
+    if gtest_results and gtest_results.valid:
+      self._check_for_missing_shard(gtest_results.raw, step_result, task)
 
-        swarming_summary = step_result.chromium_swarming.summary
+      swarming_summary = step_result.chromium_swarming.summary
 
-        # Show any remaining isolated outputs (such as logcats).
-        # Note that collect_task.py uses the default summary.json, which
-        # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
-        for index, shard in enumerate(swarming_summary.get('shards', [])):
-          if not shard:
-            continue
+      # Show any remaining isolated outputs (such as logcats).
+      # Note that collect_task.py uses the default summary.json, which
+      # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
+      for index, shard in enumerate(swarming_summary.get('shards', [])):
+        outputs_ref = shard.get('outputs_ref')
+        if outputs_ref:
+          link_name = 'shard #%d isolated out' % index
 
-          outputs_ref = shard.get('outputs_ref')
-          if outputs_ref:
-            link_name = 'shard #%d isolated out' % index
+          p = step_result.presentation
+          p.links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
+            outputs_ref['isolatedserver'], outputs_ref['namespace'],
+            outputs_ref['isolated'])
 
-            p = step_result.presentation
-            p.links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
-              outputs_ref['isolatedserver'], outputs_ref['namespace'],
-              outputs_ref['isolated'])
+    return step_result
 
   def _merge_isolated_script_perftest_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
@@ -1311,15 +1341,11 @@ class SwarmingApi(recipe_api.RecipeApi):
         # perf test results were not written for this shard, not an error,
         # just continue to the next shard
         continue
+
       results_raw = step_result.raw_io.output_dir[path]
-      try:
-        perf_results_json = self.m.json.loads(results_raw)
-      except Exception as e:
-        raise Exception(
-            'error decoding chart JSON results from shard #%d\n%s\n%s' % (
-                i,
-                str(e),
-                self.m.traceback.format_exc()))
+      if not results_raw:
+        continue
+      perf_results_json = self.m.json.loads(results_raw)
       collected_results.append(perf_results_json)
 
     if collected_results:
@@ -1410,45 +1436,36 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_test_data = self.test_api.canned_summary_output(
         dispatched_task_placeholder, task.shards, task.shard_indices)
 
-    try:
-      return self._default_collect_step(
-          task, step_test_data=step_test_data, **kwargs)
-    finally:
-      # Regardless of the outcome of the test (pass or fail), we try to parse
-      # the results. If any error occurs while parsing results, then we set them
-      # to None, which caller should treat as invalid results.
-      # Note that try-except block below will not mask the
-      # recipe_api.StepFailure exception from the collect step above. Instead
-      # it is being allowed to propagate after the results have been parsed.
-      try:
-        step_result = self.m.step.active_result
+    step_result = self._default_collect_step(
+        task, step_test_data=step_test_data, failure_as_exception=False,
+          **kwargs)
 
-        if step_result is not None:
-          outdir = filter_outdir(
-              self.m.json.dumps, step_result.raw_io.output_dir)
-          outdir_json = self.m.json.dumps(outdir, indent=2)
-          step_result.presentation.logs['outdir_json'] = (
-              outdir_json.splitlines())
+    # Regardless of the outcome of the test (pass or fail), we try to parse
+    # the results. If any error occurs while parsing results, then we set them
+    # to None, which caller should treat as invalid results.
+    # Note that try-except block below will not mask the
+    # recipe_api.StepFailure exception from the collect step above. Instead
+    # it is being allowed to propagate after the results have been parsed.
+    outdir = filter_outdir(
+        self.m.json.dumps, step_result.raw_io.output_dir)
+    outdir_json = self.m.json.dumps(outdir, indent=2)
+    step_result.presentation.logs['outdir_json'] = (
+        outdir_json.splitlines())
 
-          step_result.isolated_script_results = step_result.json.output
-          self._check_for_missing_shard(
-              step_result.isolated_script_results, step_result, task)
+    step_result.isolated_script_results = step_result.json.output
+    self._check_for_missing_shard(
+        step_result.isolated_script_results, step_result, task)
 
-          # Obtain perftest results if present
-          perftest_results, is_histogramset = \
-            self._merge_isolated_script_perftest_output_shards(
-                task, step_result)
-          step_result.isolated_script_perf_results = {
-            'is_histogramset': is_histogramset,
-            'data': perftest_results
-          }
+    # Obtain perftest results if present
+    perftest_results, is_histogramset = \
+      self._merge_isolated_script_perftest_output_shards(
+          task, step_result)
+    step_result.isolated_script_perf_results = {
+      'is_histogramset': is_histogramset,
+      'data': perftest_results
+    }
 
-      except Exception as e:
-        if self.m.step.active_result is not None:
-          self.m.step.active_result.presentation.logs[
-            'no_isolated_results_exc'] = [
-              str(e), '\n', self.m.traceback.format_exc()]
-          self.m.step.active_result.isolated_script_results = None
+    return step_result
 
   def get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
@@ -1476,15 +1493,40 @@ class SwarmingApi(recipe_api.RecipeApi):
     # can differ.
     return ''.join((prefix, task.title, suffix))
 
-  def _handle_summary_json(self, task, summary, step_result):
+
+  def _handle_summary_json(self, task, step_result):
+    """Updates presentation with results from swarming collect.
+
+    The presentation is updated with links and details for each of the shards.
+    The presentation's status is set to:
+      * EXCEPTION if there is any type of infra error.
+      * FAILURE if shards timed out or had non-zero exit code.
+
+    task.failed_shards is updated with the indices of the failed shards.
+
+    Args:
+      * task: The Task object with dispatched shards.
+      * step_result: The StepData from the collect step.
+    Returns: A StepFailure() exception describing an expected error.
+             Examples of expected errors include: An expired shard, a timed
+             out shard, or test failures. If there are no issues, returns None.
+    Raises: An InfraFailure() if there is an unexpected error. Examples include
+            if the swarming summary is formatted incorrectly.
+    """
+    summary = step_result.chromium_swarming.summary
     # We store this now, and add links to all shards first, before failing the
     # build. Format is tuple of (error message, shard that failed)
-    infra_failures = []
+    unexpected_errors = []
+    expected_errors = []
+    # Test failures should present as FAILURE [red].
+    # Some expected errors [e.g. expiration] should present as EXCEPTION
+    # [purple].
+    expected_error_present_as_exception = False
     failed_shards = []
-    exist_failure = False
 
+    summary_shards = summary['shards']
     links = step_result.presentation.links
-    for index, shard in enumerate(summary['shards']):
+    for index, shard in enumerate(summary_shards):
       url = task.get_shard_view_url(index)
       duration = shard and shard.get('duration')
       if duration is not None:
@@ -1496,21 +1538,27 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and shard.get('deduped_from'):
         display_text += ' (deduped)'
 
+      exist_failure = False
       if not shard:
         display_text = 'shard #%d failed without producing output.json' % index
-        infra_failures.append(
+        unexpected_errors.append(
             (index, 'Details unknown (missing shard results)'))
         exist_failure = True
       elif shard.get('internal_failure'):
         display_text = (
           'shard #%d had an internal swarming failure' % index)
-        infra_failures.append((index, 'Internal swarming failure'))
+        # Unfortunately, src/ tests can trigger swarming internal failures.
+        # Examples include: macOS tests killing the window server.
+        # Since we cannot distinguish between infra failures and test failures,
+        # we mark this as an unexpected error.
+        expected_errors.append((index, 'Internal swarming failure'))
+        expected_error_present_as_exception = True
         exist_failure = True
       elif shard.get('state') == 'EXPIRED':
         display_text = (
           'shard #%d expired, not enough capacity' % index)
-        infra_failures.append((
-            index, 'There isn\'t enough capacity to run your test'))
+        expected_errors.append(display_text)
+        expected_error_present_as_exception = True
         exist_failure = True
       elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
@@ -1520,6 +1568,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           # TODO(tikuta): Add coverage for this code.
           display_text = (
               'shard #%d timed out, took too much time to complete' % index)
+        expected_errors.append(display_text)
         exist_failure = True
       elif self._get_exit_code(shard) != 0:
         # TODO(bpastene): Add coverage for this code.
@@ -1527,6 +1576,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           display_text = 'shard #%d (failed) (%.1f sec)' % (index, duration)
         else:
           display_text = 'shard #%d (failed)' % index
+        expected_errors.append(display_text)
         exist_failure = True
 
       if exist_failure:
@@ -1548,19 +1598,23 @@ class SwarmingApi(recipe_api.RecipeApi):
     # here.
     task.failed_shards = failed_shards
 
-    self._display_pending(summary.get('shards', []), step_result.presentation)
+    self._display_pending(summary_shards, step_result.presentation)
 
-    if infra_failures:
+    if unexpected_errors:
       template = 'Shard #%s failed: %s'
 
       step_result.presentation.status = self.m.step.EXCEPTION
-      raise recipe_api.StepFailure(
-          '\n'.join(template % f for f in infra_failures), result=step_result)
+      raise recipe_api.InfraFailure(
+          '\n'.join(template % f for f in unexpected_errors),
+          result=step_result)
 
-    if exist_failure:
-      step_result.presentation.status = self.m.step.FAILURE
-      raise recipe_api.StepFailure('There are failed tasks.',
-                                   result=step_result)
+    if expected_errors:
+      step_result.presentation.status = (self.m.step.EXCEPTION if
+          expected_error_present_as_exception else self.m.step.FAILURE)
+      return recipe_api.StepFailure(str(expected_errors),
+                                    result=step_result)
+
+    return None
 
   def get_collect_cmd_args(self, task):
     """

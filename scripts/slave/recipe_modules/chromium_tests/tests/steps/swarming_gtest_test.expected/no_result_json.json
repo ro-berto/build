@@ -166,7 +166,6 @@
     },
     "name": "base_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -228,12 +227,7 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "There are failed tasks."
-      },
-      "humanReason": "Step('There are failed tasks.') failed with return_code 1"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]

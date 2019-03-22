@@ -540,12 +540,7 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "There are failed tasks."
-      },
-      "humanReason": "Step('There are failed tasks.') failed with return_code 0"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]

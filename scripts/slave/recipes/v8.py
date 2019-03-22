@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'archive',
   'chromium',
+  'chromium_swarming',
   'depot_tools/gclient',
   'depot_tools/infra_paths',
   'recipe_engine/buildbucket',
@@ -24,6 +25,7 @@ DEPS = [
   'recipe_engine/url',
   'swarming_client',
   'recipe_engine/time',
+  'test_utils',
   'depot_tools/tryserver',
   'v8',
 ]
@@ -431,8 +433,8 @@ def GenTests(api):
     )
   )
 
-  step_test_data = recipe_test_api.StepTestData()
-  step_test_data.retcode = 1
+  step_test_data = api.m.chromium_swarming.canned_summary_output(
+      api.m.test_utils.canned_gtest_output(passing=False), failure=True)
   yield (
     api.v8.test(
         'client.v8',

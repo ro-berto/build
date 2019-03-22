@@ -502,12 +502,7 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": ""
-      },
-      "humanReason": "TEST RESULTS WERE INVALID"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]

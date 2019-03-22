@@ -1016,12 +1016,7 @@ class iOSApi(recipe_api.RecipeApi):
       exit_code = swarming_summary.get('exit_code', exit_code)
 
       if isinstance(exit_code, basestring):
-        try:
-          exit_code = int(exit_code)
-        except ValueError:
-          self.m.python.infra_failing_step(
-              'Unrecognized exit_code from swarming',
-              'Cannot handle non-integer exit_code "%s"' % exit_code)
+        exit_code = int(exit_code)
 
       # Link to isolate file browser for files emitted by the test.
       if swarming_summary.get('outputs_ref', None):

@@ -498,9 +498,9 @@
   {
     "failure": {
       "failure": {
-        "step": "Shard #0 failed: There isn't enough capacity to run your test"
+        "step": "['shard #0 expired, not enough capacity']"
       },
-      "humanReason": "Step(\"Shard #0 failed: There isn't enough capacity to run your test\") failed with return_code 0"
+      "humanReason": "Step(\"['shard #0 expired, not enough capacity']\") failed with return_code 0"
     },
     "name": "$result"
   }

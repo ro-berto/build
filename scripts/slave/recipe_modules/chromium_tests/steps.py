@@ -1685,23 +1685,16 @@ class SwarmingTest(Test):
           '[collect error] %s' % self.step_name(suffix),
           '%s wasn\'t triggered' % self.target_name)
 
-    try:
-      api.chromium_swarming.collect_task(self._tasks[suffix])
-    finally:
-      step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = step_result.step['name']
+    step_result = api.chromium_swarming.collect_task(self._tasks[suffix])
+    self._suffix_step_name_map[suffix] = step_result.step['name']
 
-      step_result.presentation.logs['step_metadata'] = (
-          json.dumps(self.step_metadata(api, suffix), sort_keys=True,
-                     indent=2)
-      ).splitlines()
+    step_result.presentation.logs['step_metadata'] = (
+        json.dumps(self.step_metadata(api, suffix), sort_keys=True,
+                   indent=2)
+    ).splitlines()
 
-      self._test_runs[suffix] = self.validate_task_results(api, step_result)
-
-      if step_result.retcode == 0 and not self._test_runs[suffix]['valid']:
-        # This failure won't be caught automatically. Need to manually
-        # raise it as a step failure.
-        raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+    self._test_runs[suffix] = self.validate_task_results(api, step_result)
+    return step_result
 
   @property
   def uses_isolate(self):
@@ -1778,26 +1771,22 @@ class SwarmingGTestTest(SwarmingTest):
   @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
-    try:
-      super(SwarmingGTestTest, self).run(api, suffix)
-    finally:
-      step_result = api.step.active_result
-      self._suffix_step_name_map[suffix] = step_result.step['name']
-      if (hasattr(step_result, 'test_utils') and
-          hasattr(step_result.test_utils, 'gtest_results')):
-        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        self._gtest_results[suffix] = gtest_results
-        # Only upload test results if we have gtest results.
-        if gtest_results and gtest_results.raw:
-          parsed_gtest_data = gtest_results.raw
-          chrome_revision_cp = api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}')
-          chrome_revision = str(api.commit_position.parse_revision(
-              chrome_revision_cp))
-          api.test_results.upload(
-              api.json.input(parsed_gtest_data),
-              chrome_revision=chrome_revision,
-              test_type=step_result.step['name'])
+    step_result = super(SwarmingGTestTest, self).run(api, suffix)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
+    gtest_results = step_result.test_utils.gtest_results
+    self._gtest_results[suffix] = gtest_results
+    # Only upload test results if we have gtest results.
+    if gtest_results and gtest_results.raw:
+      parsed_gtest_data = gtest_results.raw
+      chrome_revision_cp = api.bot_update.last_returned_properties.get(
+          'got_revision_cp', 'x@{#0}')
+      chrome_revision = str(api.commit_position.parse_revision(
+          chrome_revision_cp))
+      api.test_results.upload(
+          api.json.input(parsed_gtest_data),
+          chrome_revision=chrome_revision,
+          test_type=step_result.step['name'])
+    return step_result
 
 
 class LocalIsolatedScriptTest(Test):
@@ -2023,14 +2012,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    try:
-      super(SwarmingIsolatedScriptTest, self).run(api, suffix)
-    finally:
-      results = self._isolated_script_results
+    step_result = super(SwarmingIsolatedScriptTest, self).run(api, suffix)
+    results = self._isolated_script_results
 
-      if results:
-        self.results_handler.upload_results(
-            api, results, self.step_name(suffix), suffix)
+    if results:
+      self.results_handler.upload_results(
+          api, results, self.step_name(suffix), suffix)
+    return step_result
 
 
 class PythonBasedTest(Test):

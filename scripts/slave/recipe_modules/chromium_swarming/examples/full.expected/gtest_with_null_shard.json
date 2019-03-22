@@ -572,7 +572,7 @@
     },
     "name": "hello_world",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    null, @@@",
@@ -585,16 +585,6 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Gtest merged successfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@:(@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_END@Deterministic failure: Test.Two (status FAILURE)@@@",
       "@@@STEP_LINK@shard #0 failed without producing output.json@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/110100@@@",
       "@@@STEP_EXCEPTION@@@"
@@ -602,10 +592,12 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Shard #0 failed: Details unknown (missing shard results)"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
-      "humanReason": "Step('Shard #0 failed: Details unknown (missing shard results)') failed with return_code 0"
+      "humanReason": "Infra Failure: Step('Shard #0 failed: Details unknown (missing shard results)') returned 0"
     },
     "name": "$result"
   }

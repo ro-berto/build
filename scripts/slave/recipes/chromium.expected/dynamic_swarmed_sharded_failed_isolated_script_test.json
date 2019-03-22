@@ -694,7 +694,6 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: 3<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 3 (1 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* test1.Test2<br/>* test1.Test2-2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",

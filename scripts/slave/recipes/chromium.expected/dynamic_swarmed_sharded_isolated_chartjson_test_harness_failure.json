@@ -694,7 +694,7 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: 3<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 3 (1 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* test1.Test2<br/>* test1.Test2-2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -763,34 +763,6 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"1\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@error decoding chart JSON results from shard #1@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/chromium_swarming/api.py\", line NA, in _merge_isolated_script_perftest_output_shards@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    perf_results_json = self.m.json.loads(results_raw)@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/json/api.py\", line NA, in loads@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    return recipe_util.strip_unicode(json.loads(data, **kwargs))@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  <skipping stdlib frames that depend on python version>@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@ValueError: No JSON object could be decoded@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/chromium_swarming/api.py\", line NA, in _isolated_script_collect_step@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    task, step_result)@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/chromium_swarming/api.py\", line NA, in _merge_isolated_script_perftest_output_shards@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    self.m.traceback.format_exc()))@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@Exception: error decoding chart JSON results from shard #1@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/chromium_swarming/api.py\", line NA, in _merge_isolated_script_perftest_output_shards@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    perf_results_json = self.m.json.loads(results_raw)@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/json/api.py\", line NA, in loads@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    return recipe_util.strip_unicode(json.loads(data, **kwargs))@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@  <skipping stdlib frames that depend on python version>@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@ValueError: No JSON object could be decoded@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@@@@",
-      "@@@STEP_LOG_END@no_isolated_results_exc@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -816,7 +788,40 @@
     ]
   },
   {
-    "jsonResult": null,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 2, \"PASS\": 0}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"FAIL FAIL TIMEOUT\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\", \"is_unexpected\": true}, \"Test2-2\": {\"actual\": \"FAIL FAIL FAIL\", \"expected\": \"PASS TIMEOUT\", \"is_unexpected\": true}}}, \"version\": 3}",
+      "--master-name",
+      "chromium.linux",
+      "--builder-name",
+      "Linux Tests",
+      "--build-number",
+      "0",
+      "--test-type",
+      "telemetry_gpu_unittests",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Upload to test-results [telemetry_gpu_unittests]"
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['telemetry_gpu_unittests']"
+    },
     "name": "$result"
   }
 ]

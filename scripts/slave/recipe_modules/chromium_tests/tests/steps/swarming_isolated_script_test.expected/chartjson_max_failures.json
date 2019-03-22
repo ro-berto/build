@@ -432,7 +432,6 @@
     },
     "name": "base_unittests on Intel GPU on Linux (with patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 102",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
@@ -509,8 +508,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@step_metadata@@@"
     ]
   },
   {
@@ -546,12 +544,7 @@
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "base_unittests on Intel GPU on Linux (with patch)"
-      },
-      "humanReason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 102"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]

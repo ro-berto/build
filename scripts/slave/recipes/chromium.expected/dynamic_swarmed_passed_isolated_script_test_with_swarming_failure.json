@@ -575,7 +575,6 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 255",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>2 passed, 0 failed (2 total)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
