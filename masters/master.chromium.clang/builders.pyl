@@ -46,12 +46,6 @@
       "bot": "build3-b1",
       "category": "1ToTAndroid",
     },
-
-    "linux-win_cross-rel": {
-      "mixins": ["trusty"],
-      "bot": "slave169-c1",
-      "category": "4Windows",
-    },
   },
 
   "bot_pools": {
