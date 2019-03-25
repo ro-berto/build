@@ -1189,7 +1189,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1670)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1655)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1255,11 +1255,11 @@ Returns: (script, pre_trigger_args, post_trigger_args)
   pre_trigger_args: All arguments up to and including 'trigger'
   post_triggers_args: All arguments following 'trigger'
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1621)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1606)(self, task):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1472)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1457)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1471,7 +1471,7 @@ Raises:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1380)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1365)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 

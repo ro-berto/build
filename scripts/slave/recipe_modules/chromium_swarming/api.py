@@ -1304,21 +1304,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     if gtest_results and gtest_results.valid:
       self._check_for_missing_shard(gtest_results.raw, step_result, task)
 
-      swarming_summary = step_result.chromium_swarming.summary
-
-      # Show any remaining isolated outputs (such as logcats).
-      # Note that collect_task.py uses the default summary.json, which
-      # only has 'outputs_ref' instead of the deprecated 'isolated_out'.
-      for index, shard in enumerate(swarming_summary.get('shards', [])):
-        outputs_ref = shard.get('outputs_ref')
-        if outputs_ref:
-          link_name = 'shard #%d isolated out' % index
-
-          p = step_result.presentation
-          p.links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
-            outputs_ref['isolatedserver'], outputs_ref['namespace'],
-            outputs_ref['isolated'])
-
     return step_result
 
   def _merge_isolated_script_perftest_output_shards(self, task, step_result):
