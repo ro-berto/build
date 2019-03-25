@@ -1569,7 +1569,17 @@ class SwarmingApi(recipe_api.RecipeApi):
       if exist_failure:
         failed_shards.append(index)
 
-      if shard and self.show_outputs_ref_in_collect_step:
+      # We only want to show shards if they were dispatched in this retry
+      # step, not if they were duplicated from a previous step.
+      should_show_shard = True
+      if shard and task.task_to_retry:
+        task_id = shard.get('task_id')
+        dispatched_task_ids = set()
+        for task_dict in task._trigger_output['tasks'].itervalues():
+          dispatched_task_ids.add(task_dict['task_id'])
+        should_show_shard = task_id in dispatched_task_ids
+
+      if shard and self.show_outputs_ref_in_collect_step and should_show_shard:
         outputs_ref = shard.get('outputs_ref')
         if outputs_ref:
           link_name = 'shard #%d isolated out' % index
@@ -1577,7 +1587,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             outputs_ref['isolatedserver'], outputs_ref['namespace'],
             outputs_ref['isolated'])
 
-      if url and self.show_shards_in_collect_step:
+      if url and self.show_shards_in_collect_step and should_show_shard:
         links[display_text] = url
 
     # Keep track of this in case we want to retry failed shards later. Clients
@@ -1892,7 +1902,12 @@ class SwarmingTask(object):
 
   @property
   def trigger_output(self):
-    """JSON results of 'trigger' step or None if not triggered."""
+    """JSON results of 'trigger' step or None if not triggered.
+
+    This includes shards whose results are being reused from a previous retry
+    attempt. The actual triggered shards from this attempt can be obtained by
+    directly accessing the member.
+    """
     # JSON results of 'trigger' step converted for luci-go client.
     # This is used for isolated script tasks.
     tasks = sorted(self._trigger_output['tasks'].values(),

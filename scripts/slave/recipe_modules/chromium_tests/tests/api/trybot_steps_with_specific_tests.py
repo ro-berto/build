@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -296,6 +297,10 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  def annotation_does_not_contain(check, step_odict, step, expected_str):
+    annotations = '\n'.join(step_odict[step].get('~followup_annotations', []))
+    check(expected_str not in annotations)
+
   def generate_one_failed_shard_raw():
     shard_zero = api.chromium_swarming.canned_summary_output_raw(
         shard_indices=[0], failure=False)
@@ -309,12 +314,33 @@ def GenTests(api):
   # that failed/expired shard.
   for failure_type in ['failed', 'expired']:
     test_name = 'retry_shards_with_patch_wait_for_task_' + failure_type
+
+    # This 'with patch' swarming summary contains two shards. First succeeds,
+    # second fails.
     swarming_summary = generate_one_failed_shard_raw()
     if failure_type == 'expired':
       swarming_summary['shards'][1]['state'] = 'EXPIRED'
     retry_shards_step_name = (
         'test_pre_run (retry shards with patch).[trigger] base_unittests '
         '(retry shards with patch)')
+
+    # 'retry shards with patch' will only retrigger the second shard. The
+    # distinguishing feature is that it has 'custom_task_id' as the task_id.
+    retry_trigger_summary = {
+      'base_task_name': 'base_task_name_does_not_matter',
+      'tasks': {
+        'task_name_does_not_matter': {
+          'task_id': 'custom_task_id',
+          'shard_index': 1,
+          'view_url': 'view_url_does_not_matter'
+        }
+      },
+    }
+
+    # When collecting the swarming, make sure to update the task_id of shard 1.
+    retry_swarming_summary = dict(swarming_summary)
+    retry_swarming_summary['shards'][1]['task_id'] = 'custom_task_id'
+
     yield (
         api.test(test_name) +
         api.properties.tryserver(
@@ -325,11 +351,15 @@ def GenTests(api):
             swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
             }) +
+        # Override 'with patch' collect step output.
         api.override_step_data(
             'base_unittests (with patch)',
             api.chromium_swarming.summary(
                 api.test_utils.canned_gtest_output(passing=False),
                 swarming_summary)) +
+
+        # Check that we are sending right input to 'retry shards with patch'
+        # trigger.
         api.post_process(post_process.StepCommandContains,
             retry_shards_step_name,
             ['--env', 'GTEST_SHARD_INDEX', '1']) +
@@ -338,6 +368,28 @@ def GenTests(api):
             ['--env', 'GTEST_TOTAL_SHARDS', '2']) +
         api.post_process(post_process.AnnotationContains,
             retry_shards_step_name, ['"shard_index": 1']) +
+
+        # Override 'retry shards with patch' trigger output.
+        api.override_step_data(
+            retry_shards_step_name,
+            api.json.output(retry_trigger_summary)) +
+
+        # Override 'retry shards with patch' collect output.
+        api.override_step_data(
+            'base_unittests (retry shards with patch)',
+            api.chromium_swarming.summary(
+                api.test_utils.canned_gtest_output(passing=False),
+                retry_swarming_summary)) +
+
+        # We should not emit a link for shard #0, since it wasn't retried.
+        api.post_process(annotation_does_not_contain,
+            'base_unittests (retry shards with patch)',
+            'STEP_LINK@shard #0') +
+
+        # We should emit a link for shard#1
+        api.post_process(post_process.AnnotationContains,
+            'base_unittests (retry shards with patch)',
+            ['STEP_LINK@shard #1']) +
         api.post_process(post_process.DropExpectation)
     )
 
