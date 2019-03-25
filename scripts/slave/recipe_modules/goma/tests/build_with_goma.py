@@ -26,3 +26,8 @@ def GenTests(api):
       api.test('basic') +
       api.properties(buildername='test_buildername')
   )
+  yield (
+      api.test('enable_ats') +
+      api.properties(buildername='test_buildername') +
+      api.goma(jobs=80, enable_ats=True)
+  )

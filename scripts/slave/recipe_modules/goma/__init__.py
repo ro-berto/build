@@ -35,6 +35,8 @@ PROPERTIES = {
       # Whether or not we're running locally and should pick the local client
       # from this path.
       local=Single(str),
+      # Whether to enable Arbitrary Toolchain Support in Goma client.
+      enable_ats=Single(bool),
     ),
     default={},
   ),

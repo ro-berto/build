@@ -48,6 +48,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
+    self._enable_ats = properties.get('enable_ats', False)
 
     self._client_type = 'release'
 
@@ -283,6 +284,8 @@ class GomaApi(recipe_api.RecipeApi):
 
       self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
       self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
+      if self._enable_ats:
+          self._goma_ctl_env['GOMA_ARBITRARY_TOOLCHAIN_SUPPORT'] = 'true'
 
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env
