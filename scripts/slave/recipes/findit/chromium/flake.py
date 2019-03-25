@@ -57,10 +57,6 @@ PROPERTIES = {
              '    "suite.test1", "suite.test2"'
              '  ]'
              '}'),
-    'buildbucket': Property(
-        default=None,
-        help='The buildbucket property in which we can find build id.'
-             'We need to use build id to get tests.'),
     'test_repeat_count': Property(
         kind=Single(int, required=False), default=100,
         help='How many times to repeat the tests.'),
@@ -71,21 +67,7 @@ PROPERTIES = {
 
 
 def RunSteps(api, target_mastername, target_testername,
-             test_revision, tests, buildbucket, test_repeat_count, skip_tests):
-  if not tests:
-    # This recipe is run through Swarming instead of buildbot.
-    # Retrieve the failed tests from the build request.
-    # If the recipe is run by swarmbucket, the property 'buildbucket' will be
-    # a dict instead of a string containing json.
-    if isinstance(buildbucket, dict):
-      buildbucket_json = buildbucket  # pragma: no cover. To be deprecated.
-    else:
-      buildbucket_json = json.loads(buildbucket)
-    build_id = buildbucket_json['build']['id']
-    build_request = api.buildbucket.get_build(build_id)
-    tests = json.loads(
-        build_request.stdout['build']['parameters_json']).get(
-            'additional_build_parameters', {}).get('tests')
+             test_revision, tests, test_repeat_count, skip_tests):
   assert tests, 'No failed tests were specified.'
 
   target_buildername, checked_out_revision, cached_revision  = (
@@ -122,7 +104,7 @@ def RunSteps(api, target_mastername, target_testername,
 def GenTests(api):
   def props(
       tests, platform_name, tester_name, use_analyze=False, revision=None,
-      buildbucket=None, skip_tests=False):
+      skip_tests=False):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
@@ -136,8 +118,6 @@ def GenTests(api):
     }
     if tests:
       properties['tests'] = tests
-    if buildbucket:
-      properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(
         platform_name) + api.runtime(True, False)
 
@@ -200,35 +180,6 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One'])))
-  )
-  yield (
-      api.test('use_build_parameter_for_tests') +
-      props({}, 'mac', 'Mac10.13 Tests',
-            revision='r0',
-            buildbucket=json.dumps({'build': {'id': 1}})) +
-      api.buildbucket.simulated_buildbucket_output({
-          'additional_build_parameters' : {
-              'tests': {
-                  'gl_tests': ['Test.One']
-              }
-          }}) +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r0.') +
-      api.override_step_data(
-          'test r0.gl_tests (r0)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))
-      )
   )
   yield (
       api.test('record_infra_failure') +

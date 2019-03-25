@@ -1,26 +1,6 @@
 [
   {
     "cmd": [
-      "buildbucket",
-      "get",
-      "-host",
-      "cr-buildbucket.appspot.com",
-      "1"
-    ],
-    "infra_step": true,
-    "name": "buildbucket.get",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"parameters_json\": \"{}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",

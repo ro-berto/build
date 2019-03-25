@@ -63,10 +63,6 @@ PROPERTIES = {
              '    "suite.test1", "suite.test2"'
              '  ]'
              '}'),
-    'buildbucket': Property(
-        default=None,
-        help='The buildbucket property in which we can find build id.'
-             'We need to use build id to get tests.'),
     'use_analyze': Property(
         kind=Single(bool, empty_val=False, required=False), default=True,
         help='Use analyze to skip commits that do not affect tests.'),
@@ -118,21 +114,8 @@ def _consolidate_flaky_tests(all_flakes, new_flakes):
 
 
 def RunSteps(api, target_mastername, target_testername, good_revision,
-             bad_revision, tests, buildbucket, use_analyze,
+             bad_revision, tests, use_analyze,
              suspected_revisions, test_on_good_revision, test_repeat_count):
-  if not tests:
-    # Retrieve the failed tests from the build request.
-    # If the recipe is run by swarmbucket, the property 'buildbucket' will be
-    # a dict instead of a string containing json.
-    if isinstance(buildbucket, dict):
-      buildbucket_json = buildbucket  # pragma: no cover. To be deprecated.
-    else:
-      buildbucket_json = json.loads(buildbucket)
-    build_id = buildbucket_json['build']['id']
-    build_request = api.buildbucket.get_build(build_id)
-    tests = json.loads(
-        build_request.stdout['build']['parameters_json']).get(
-            'additional_build_parameters', {}).get('tests')
   assert tests, 'No failed tests were specified.'
 
   target_buildername, checked_out_revision, cached_revision = (
@@ -311,7 +294,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
 def GenTests(api):
   def props(
       tests, platform_name, tester_name, use_analyze=False, good_revision=None,
-      bad_revision=None, suspected_revisions=None, buildbucket=None,
+      bad_revision=None, suspected_revisions=None,
       test_on_good_revision=True, test_repeat_count=20):
     properties = {
         'path_config': 'kitchen',
@@ -331,8 +314,6 @@ def GenTests(api):
       properties['tests'] = tests
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
-    if buildbucket:
-      properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(
         platform_name) + api.runtime(True, False)
 
@@ -1074,140 +1055,6 @@ def GenTests(api):
                       },
                   ],
               }))
-  )
-
-  yield (
-      api.test('use_build_parameter_for_tests') +
-      props({}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-            good_revision='r0', bad_revision='r6',
-            suspected_revisions=['r3', 'r4'],
-            buildbucket=json.dumps({'build': {'id': 1}})) +
-      api.buildbucket.simulated_buildbucket_output({
-          'additional_build_parameters' : {
-              'tests': {
-                  'gl_tests': ['Test.One']
-              }
-          }}) +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r2.') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r3.') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r4.') +
-      api.override_step_data(
-          'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
-      api.override_step_data(
-          'test r4.gl_tests (r4)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-                  failure=True)) +
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
-  )
-
-  yield (
-      api.test('use_build_parameter_for_tests_non_json_buildbucket') +
-      props({}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-            good_revision='r0', bad_revision='r6',
-            suspected_revisions=['r3', 'r4'],
-            buildbucket={'build': {'id': 1}}) +
-      api.buildbucket.simulated_buildbucket_output({
-          'additional_build_parameters' : {
-              'tests': {
-                  'gl_tests': ['Test.One']
-              }
-          }}) +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r2.') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r3.') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r4.') +
-      api.override_step_data(
-          'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
-      api.override_step_data(
-          'test r4.gl_tests (r4)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-                  failure=True)) +
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
   )
 
   yield (
