@@ -24,6 +24,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
     },
     'linux-chromeos-google-rel': {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
@@ -47,6 +49,8 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
     },
     'linux-google-rel': {
       'chromium_config': 'chromium_official',
@@ -66,6 +70,8 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'linux-google-rel')
       },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
     },
     'mac-google-rel': {
       'chromium_config': 'chromium_official',
@@ -85,6 +91,8 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'mac-google-rel')
       },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
     },
     'win-google-rel': {
       'chromium_config': 'chromium_official',
@@ -105,6 +113,8 @@ SPEC = {
       'tests': {
         steps.SizesStep(RESULTS_URL, 'win-google-rel')
       },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
     },
   },
 }
