@@ -1750,14 +1750,9 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name]
 
   def create_task(self, api, suffix, isolated_hash):
-    def _create_swarming_task(*args, **kwargs):
-      kwargs['test_launcher_summary_output'] = (
-          api.test_utils.gtest_results(add_json_log=False))
-      return api.chromium_swarming.gtest_task(*args, **kwargs)
-
     return self._create_task_common(
         api, suffix, isolated_hash, '--gtest_filter', ':',
-        _create_swarming_task)
+        api.chromium_swarming.gtest_task)
 
   def validate_task_results(self, api, step_result):
     return step_result.test_utils.gtest_results.canonical_result_format()

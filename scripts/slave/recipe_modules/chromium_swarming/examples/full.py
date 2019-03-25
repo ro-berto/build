@@ -117,8 +117,6 @@ def RunSteps(api, platforms, custom_trigger_script,
       task = api.chromium_swarming.gtest_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
-          test_launcher_summary_output=api.test_utils.gtest_results(
-              add_json_log=False),
           merge=merge)
     elif isolated_script_task:
       task = api.chromium_swarming.isolated_script_task(

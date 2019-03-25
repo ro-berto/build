@@ -368,7 +368,7 @@ class Runner(object):
     def collect_task(task):
       try:
         step_result = self.api.chromium_swarming.collect_task(
-            task, step_test_data=self._default_task_pass_test_data())
+            task, gen_step_test_data=self._default_task_pass_test_data)
         data = step_result.chromium_swarming.summary['shards'][0]
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json

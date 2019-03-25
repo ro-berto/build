@@ -614,14 +614,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_to_retry=task_to_retry,
     )
 
-  def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
-                 extra_args=None, cipd_packages=None, merge=None, **kwargs):
+  def gtest_task(self, title, isolated_hash, extra_args=None,
+                 cipd_packages=None, merge=None, **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
-    Swarming recipe module knows how collect and interpret JSON files with test
-    execution summary produced by chromium test launcher. It will combine JSON
-    results from multiple shards and place it in path provided by
-    |test_launcher_summary_output| placeholder.
+    The implementation uses a test_utils.gtest_results() placeholder to parse
+    the JSON output.
 
     For meaning of the rest of the arguments see 'task' method.
     """
@@ -644,8 +642,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Make a task, configure it to be collected through shim script.
     task = self.task(title, isolated_hash, extra_args=extra_args,
                      cipd_packages=cipd_packages, merge=merge, **kwargs)
-    task.collect_step = lambda *args, **kw: (
-        self._gtest_collect_step(test_launcher_summary_output, *args, **kw))
+    task.collect_step = self._gtest_collect_step
     return task
 
   def _check_and_set_output_flag(self, extra_args, flag, output_file_name):
@@ -1121,8 +1118,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           fmt_time(min_duration[0]), min_duration[1]))
 
   def _default_collect_step(
-      self, task, failure_as_exception, merged_test_output=None, name=None,
-      step_test_data=None, **kwargs):
+      self, task, failure_as_exception, output_placeholder=None, name=None,
+      gen_step_test_data=None, **kwargs):
     """Produces a step that collects the results of a Task object.
 
     A Task object may have triggered multiple swarming tasks.
@@ -1155,9 +1152,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       task: A Task object that must have dispatched tasks
       failure_as_exception: Whether a non-zero retcode of a dispatched task
                             should raise a StepFailure exception.
-      merged_test_output: Output placeholder for the merge script.
+      output_placeholder: A custom placeholder that will transform test
+                          results. Defaults to json.output().
       name: Name to use for the collect step.
-      step_test_data: StepTestData to use for the collect step.
+      gen_step_test_data: A generator that produces default step_test_data.
     Returns: A StepData result for the recipe step.
     """
     task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
@@ -1169,7 +1167,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     task_args = [
       '--verbose',
-      '-o', merged_test_output or self.m.json.output(),
+      '-o', output_placeholder or self.m.json.output(),
       '--task-output-dir', task_output_dir,
     ]
 
@@ -1217,11 +1215,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  2) a gtest results JSON emitted by the task
     #  3) a merge script stdout/stderr log emitted by the task
     # This builds an instance of StepTestData that covers all of them.
-    if not step_test_data:
-      dispatched_task_placeholder = (self.m.json.test_api.output({}) +
-          self.m.raw_io.test_api.output('Successfully merged all data'))
-      step_test_data = self.test_api.canned_summary_output(
-          dispatched_task_placeholder, task.shards, task.shard_indices)
+    if not gen_step_test_data:
+      def gen_default_step_test_data():
+        dispatched_task_placeholder = (self.m.json.test_api.output({}) +
+            self.m.raw_io.test_api.output('Successfully merged all data'))
+        return self.test_api.canned_summary_output(
+            dispatched_task_placeholder, task.shards, task.shard_indices)
+      gen_step_test_data = gen_default_step_test_data
     with self.m.swarming.on_path():
       with self.m.context(cwd=self.m.path['start_dir']):
         # TODO(erikchen): Once we switch over to the go implementation of
@@ -1232,7 +1232,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             script=self.resource('collect_task.py'),
             args=task_args,
             ok_ret='any',
-            step_test_data=lambda: step_test_data,
+            step_test_data=gen_step_test_data,
             **kwargs)
 
     step_result.presentation.step_text = text_for_task(task)
@@ -1272,30 +1272,28 @@ class SwarmingApi(recipe_api.RecipeApi):
           active_step.presentation.links['missing shard #%d' % index] = \
               task.get_shard_view_url(index)
 
-  def _gtest_collect_step(self, merged_test_output, task, **kwargs):
+  def _gtest_collect_step(self, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
     """
-    # Where to put combined summary to, consumed by recipes. Also emit
-    # test expectation only if |merged_test_output| is really used.
-    gtest_results_test_data = kwargs.pop('step_test_data', None)
-    if merged_test_output and not gtest_results_test_data:
-      gtest_results_test_data = (
-          self.m.test_utils.test_api.canned_gtest_output(True))
+    output_placeholder = self.m.test_utils.gtest_results(add_json_log=False)
 
     # The call to collect_task emits two JSON files and a test file:
     #  1) a task summary JSON emitted by swarming
     #  2) a gtest results JSON emitted by the task
     #  3) a log file that stores stdout/stderr of task
     # This builds an instance of StepTestData that covers all three.
-    dispatched_task_placeholder = (gtest_results_test_data +
-        self.test_api.merge_script_log_file('Gtest merged successfully'))
-    step_test_data = self.test_api.canned_summary_output(
-        dispatched_task_placeholder, task.shards, task.shard_indices)
+    def gen_default_step_test_data():
+      dispatched_step_test_data = (
+          self.m.test_utils.test_api.canned_gtest_output(True))
+      dispatched_step_test_data += self.test_api.merge_script_log_file(
+          'Gtest merged successfully')
+      return self.test_api.canned_summary_output(
+        dispatched_step_test_data, task.shards, task.shard_indices)
 
     step_result = self._default_collect_step(
         task,
-        merged_test_output=merged_test_output,
-        step_test_data=step_test_data,
+        output_placeholder=output_placeholder,
+        gen_step_test_data=gen_default_step_test_data,
         allow_subannotations=True,
         failure_as_exception=False,
         **kwargs)
@@ -1406,26 +1404,25 @@ class SwarmingApi(recipe_api.RecipeApi):
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.
     """
-    isolated_script_results_test_data = kwargs.pop('step_test_data', None)
-    if not isolated_script_results_test_data:
+    def gen_default_step_test_data():
       isolated_script_results_test_data = (
           self.m.test_utils.test_api.canned_isolated_script_output(
               passing=True, is_win=self.m.platform.is_win, swarming=True,
               use_json_test_format=True, shards=task.shards,
               shard_indices=task.shard_indices))
 
-    # The call to collect_isolated_script_task emits two JSON files:
-    #  1) a task summary JSON emitted by swarming
-    #  2) a test results JSON emitted by the task
-    # This builds an instance of StepTestData that covers both.
-    dispatched_task_placeholder = (isolated_script_results_test_data +
-        self.test_api.merge_script_log_file('Merged succesfully'))
-    step_test_data = self.test_api.canned_summary_output(
-        dispatched_task_placeholder, task.shards, task.shard_indices)
+      # The call to collect_isolated_script_task emits two JSON files:
+      #  1) a task summary JSON emitted by swarming
+      #  2) a test results JSON emitted by the task
+      # This builds an instance of StepTestData that covers both.
+      dispatched_task_placeholder = (isolated_script_results_test_data +
+          self.test_api.merge_script_log_file('Merged succesfully'))
+      return self.test_api.canned_summary_output(
+          dispatched_task_placeholder, task.shards, task.shard_indices)
 
     step_result = self._default_collect_step(
-        task, step_test_data=step_test_data, failure_as_exception=False,
-          **kwargs)
+        task, gen_step_test_data=gen_default_step_test_data,
+        failure_as_exception=False, **kwargs)
 
     # Regardless of the outcome of the test (pass or fail), we try to parse
     # the results. If any error occurs while parsing results, then we set them

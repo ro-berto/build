@@ -1173,11 +1173,11 @@ tasks run for a day to calculate the cost of a type of type (CQ, ASAN, etc).
 
 Tags can be added per individual task.
 
-&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/chromium_swarming/api.py#699)(self, step_test_data=None):**
+&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/chromium_swarming/api.py#696)(self, step_test_data=None):**
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1029)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1026)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -1189,7 +1189,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1665)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1662)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1244,7 +1244,7 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#348)(self, value):**
 
-&mdash; **def [generate\_trigger\_task\_shard\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#776)(self, task, \*\*kwargs):**
+&mdash; **def [generate\_trigger\_task\_shard\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#773)(self, task, \*\*kwargs):**
 
 Generates the arguments for triggered shards.
 
@@ -1255,11 +1255,11 @@ Returns: (script, pre_trigger_args, post_trigger_args)
   pre_trigger_args: All arguments up to and including 'trigger'
   post_triggers_args: All arguments following 'trigger'
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1616)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1613)(self, task):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1457)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1454)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1272,20 +1272,18 @@ Args:
 Returns:
   '[<prefix>] <task title> on <OS>'
 
-&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#617)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
+&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#617)(self, title, isolated_hash, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
-Swarming recipe module knows how collect and interpret JSON files with test
-execution summary produced by chromium test launcher. It will combine JSON
-results from multiple shards and place it in path provided by
-|test_launcher_summary_output| placeholder.
+The implementation uses a test_utils.gtest_results() placeholder to parse
+the JSON output.
 
 For meaning of the rest of the arguments see 'task' method.
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/chromium_swarming/api.py#225)(self):**
 
-&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#664)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
+&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#661)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -1317,7 +1315,7 @@ Recipes are free to use other OS dimension if there's a need for it. For
 example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
 dimension.
 
-&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1057)(self):**
+&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1054)(self):**
 
 Report statistics on all tasks ran so far.
 
@@ -1428,7 +1426,7 @@ Args:
 
 &emsp; **@task_output_stdout.setter**<br>&mdash; **def [task\_output\_stdout](/scripts/slave/recipe_modules/chromium_swarming/api.py#413)(self, value):**
 
-&mdash; **def [trigger\_all\_task\_shards](/scripts/slave/recipe_modules/chromium_swarming/api.py#931)(self, task, shard_indices, \*\*kwargs):**
+&mdash; **def [trigger\_all\_task\_shards](/scripts/slave/recipe_modules/chromium_swarming/api.py#928)(self, task, shard_indices, \*\*kwargs):**
 
 Triggers all shards as a single step.
 
@@ -1438,7 +1436,7 @@ task._trigger_output.
 Returns:
   StepResult from the step.
 
-&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#704)(self, task, \*\*kwargs):**
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#701)(self, task, \*\*kwargs):**
 
 Triggers one task.
 
@@ -1456,7 +1454,7 @@ Args:
 Returns:
   A list of StepResults, one for each shard triggered.
 
-&mdash; **def [trigger\_task\_shard](/scripts/slave/recipe_modules/chromium_swarming/api.py#975)(self, task, shard_index, \*\*kwargs):**
+&mdash; **def [trigger\_task\_shard](/scripts/slave/recipe_modules/chromium_swarming/api.py#972)(self, task, shard_index, \*\*kwargs):**
 
 Triggers a single shard for a task.
 
@@ -1471,7 +1469,7 @@ Raises:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1365)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1363)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 
