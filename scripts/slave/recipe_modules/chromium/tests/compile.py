@@ -41,6 +41,16 @@ def GenTests(api):
   )
 
   yield (
+      api.test('compile_fail') +
+      api.properties(buildername='test_buildername') +
+      api.step_data('compile', retcode=1) +
+      api.path.exists(api.path['checkout'].join(
+          'tools', 'clang', 'scripts', 'process_crashreports.py')) +
+      api.post_process(post_process.MustRun, 'process clang crashes') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('codesearch') +
       api.properties(
           buildername='test_buildername',

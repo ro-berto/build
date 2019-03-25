@@ -234,49 +234,50 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # TODO(https://crbug.com/752212) Remove this condition after fixing the bug.
     # This bug makes ninja wrapper can't parse arguments correctly.
-    if kwargs.get('wrapper'):
-      with self.m.context(env=ninja_env):
-        self.m.step(name or 'compile', ninja_command, **kwargs)
-    else:
-      script = self.resource('ninja_wrapper.py')
+    try:
+      if kwargs.get('wrapper'):
+        with self.m.context(env=ninja_env):
+          self.m.step(name or 'compile', ninja_command, **kwargs)
+      else:
+        script = self.resource('ninja_wrapper.py')
 
-      script_args = [
-          '--ninja_info_output',
-          self.m.json.output(add_json_log='on_failure', name='ninja_info'),
-          '--failure_output',
-          self.m.raw_io.output(add_output_log='on_failure',
-                               name='failure_summary'),
-      ]
-      script_args.append('--')
-      script_args.extend(ninja_command)
+        script_args = [
+            '--ninja_info_output',
+            self.m.json.output(add_json_log='on_failure', name='ninja_info'),
+            '--failure_output',
+            self.m.raw_io.output(add_output_log='on_failure',
+                                 name='failure_summary'),
+        ]
+        script_args.append('--')
+        script_args.extend(ninja_command)
 
-      example_json = {'failures': [{
-          'output_nodes': ['a.o'],
-          'rule': 'CXX',
-          'output': 'error info',
-          'dependencies': ['b/a.cc']
-      }]}
-      example_failure_output = textwrap.dedent("""\
-      [1/1] CXX a.o
-      error info
-      """)
-      step_test_data = (lambda: self.m.json.test_api.output(
-                            example_json, name='ninja_info') +
-                        self.m.raw_io.test_api.output(
-                            example_failure_output, name='failure_summary'))
+        example_json = {'failures': [{
+            'output_nodes': ['a.o'],
+            'rule': 'CXX',
+            'output': 'error info',
+            'dependencies': ['b/a.cc']
+        }]}
+        example_failure_output = textwrap.dedent("""\
+        [1/1] CXX a.o
+        error info
+        """)
+        step_test_data = (lambda: self.m.json.test_api.output(
+                              example_json, name='ninja_info') +
+                          self.m.raw_io.test_api.output(
+                              example_failure_output, name='failure_summary'))
 
-      with self.m.context(env=ninja_env):
-        self.m.python(name or 'compile', script=script,
-                      args=script_args,
-                      step_test_data=step_test_data,
+        with self.m.context(env=ninja_env):
+          self.m.python(name or 'compile', script=script,
+                        args=script_args,
+                        step_test_data=step_test_data,
+                        **kwargs)
+    finally:
+      clang_crashreports_script = self.m.path['checkout'].join(
+          'tools', 'clang', 'scripts', 'process_crashreports.py')
+      if self.m.path.exists(clang_crashreports_script):
+        self.m.python('process clang crashes', script=clang_crashreports_script,
+                      args=['--source', self.m.properties['buildername']],
                       **kwargs)
-
-    clang_crashreports_script = self.m.path['checkout'].join(
-        'tools', 'clang', 'scripts', 'process_crashreports.py')
-    if self.m.path.exists(clang_crashreports_script):
-      self.m.python('process clang crashes', script=clang_crashreports_script,
-                    args=['--source', self.m.properties['buildername']],
-                    **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
