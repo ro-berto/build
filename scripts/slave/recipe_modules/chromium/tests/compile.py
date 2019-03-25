@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'goma',
+  'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/runtime',
 ]
@@ -34,7 +35,9 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('basic') +
-      api.properties(buildername='test_buildername')
+      api.properties(buildername='test_buildername') +
+      api.path.exists(api.path['checkout'].join(
+          'tools', 'clang', 'scripts', 'process_crashreports.py'))
   )
 
   yield (

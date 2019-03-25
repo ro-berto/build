@@ -170,6 +170,20 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "None/tools/clang/scripts/process_crashreports.py",
+      "--source",
+      "test_buildername"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "process clang crashes"
+  },
+  {
+    "cmd": [
       "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",

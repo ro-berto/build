@@ -271,6 +271,13 @@ class ChromiumApi(recipe_api.RecipeApi):
                       step_test_data=step_test_data,
                       **kwargs)
 
+    clang_crashreports_script = self.m.path['checkout'].join(
+        'tools', 'clang', 'scripts', 'process_crashreports.py')
+    if self.m.path.exists(clang_crashreports_script):
+      self.m.python('process clang crashes', script=clang_crashreports_script,
+                    args=['--source', self.m.properties['buildername']],
+                    **kwargs)
+
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
     ninja_no_work = 'ninja: no work to do.'
