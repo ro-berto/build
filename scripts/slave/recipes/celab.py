@@ -141,7 +141,7 @@ def _RunTests(api, checkout, pool_name, pool_size):
           '--hosts', host_dir,
           '--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', logs_dir,
-          '--noprogress', '-vv'
+          '--noprogress', '-v', '1'
         ],
         venv=True)
     except:

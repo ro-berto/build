@@ -271,7 +271,8 @@
       "--error_logs_dir",
       "[START_DIR]/logs",
       "--noprogress",
-      "-vv"
+      "-v",
+      "1"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "run all tests",
