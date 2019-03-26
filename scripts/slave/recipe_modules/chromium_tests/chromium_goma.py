@@ -75,8 +75,7 @@ SPEC = {
         'Chromium Linux Goma RBE ToT':
             CreateConfig('linux', 'Release', ['goma_rbe_tot']),
         'Chromium Linux Goma RBE ToT (ATS)':
-            CreateConfig('linux', 'Release',
-                         ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+            CreateConfig('linux', 'Release', ['goma_rbe_tot']),
         'Chromium Linux Goma RBE Staging':
             CreateConfig('linux', 'Release', ['goma_mixer_staging']),
         'Chromium Linux Goma RBE Staging (clobber)':
@@ -108,9 +107,7 @@ SPEC = {
         'Chromium Android ARM 32-bit Goma RBE ToT':
             CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
         'Chromium Android ARM 32-bit Goma RBE ToT (ATS)':
-            CreateAndroidConfig(
-                'Release', 32,
-                ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+            CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
         'Chromium Android ARM 32-bit Goma RBE Staging':
             CreateAndroidConfig('Release', 32, ['goma_mixer_staging']),
         'Chromium Android ARM 32-bit Goma RBE Prod':
@@ -124,30 +121,18 @@ SPEC = {
 
         # Windows RBE
         'Chromium Win Goma RBE ToT':
-            CreateConfig('win', 'Release',
-                         ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+            CreateConfig('win', 'Release', ['goma_rbe_tot']),
         'Chromium Win Goma RBE Staging':
-            CreateConfig(
-                'win', 'Release',
-                ['goma_mixer_staging', 'goma_arbitrary_toolchain_support']),
+            CreateConfig('win', 'Release', ['goma_mixer_staging']),
         'Chromium Win Goma RBE Staging (clobber)':
-            CreateConfig('win', 'Release', [
-                'goma_mixer_staging', 'goma_arbitrary_toolchain_support',
-                'clobber'
-            ]),
+            CreateConfig('win', 'Release', ['goma_mixer_staging', 'clobber']),
         'Chromium Win Goma RBE Prod':
-            CreateConfig('win', 'Release',
-                         ['goma_rbe_prod', 'goma_arbitrary_toolchain_support']),
+            CreateConfig('win', 'Release', ['goma_rbe_prod']),
         'Chromium Win Goma RBE Prod (clobber)':
-            CreateConfig('win', 'Release', [
-                'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'clobber'
-            ]),
+            CreateConfig('win', 'Release', ['goma_rbe_prod', 'clobber']),
         'Chromium Win Goma RBE Prod (dbg)':
-            CreateConfig('win', 'Debug',
-                         ['goma_rbe_prod', 'goma_arbitrary_toolchain_support']),
+            CreateConfig('win', 'Debug', ['goma_rbe_prod']),
         'Chromium Win Goma RBE Prod (dbg) (clobber)':
-            CreateConfig('win', 'Debug', [
-                'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'clobber'
-            ]),
+            CreateConfig('win', 'Debug', ['goma_rbe_prod', 'clobber']),
     },
 }

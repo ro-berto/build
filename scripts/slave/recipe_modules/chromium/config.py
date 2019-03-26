@@ -74,7 +74,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                                                               required=False),
       GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(
           int, required=False),
-      GOMA_ARBITRARY_TOOLCHAIN_SUPPORT = Single(int, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
     ),
     mac_toolchain = ConfigGroup(
@@ -321,10 +320,6 @@ def goma_localoutputcache_small(c):
 @config_ctx()
 def goma_use_local(c):
   c.compile_py.goma_use_local = True
-
-@config_ctx()
-def goma_arbitrary_toolchain_support(c):
-  c.env.GOMA_ARBITRARY_TOOLCHAIN_SUPPORT = 1
 
 @config_ctx()
 def ninja_confirm_noop_warn(c):
