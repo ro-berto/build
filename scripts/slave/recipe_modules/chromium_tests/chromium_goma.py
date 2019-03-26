@@ -65,74 +65,74 @@ SPEC = {
     'builders': {
         # clients5
         'Chromium Linux Goma Staging':
-            CreateConfig('linux', 'Release', ['goma_staging', 'clobber']),
+        CreateConfig('linux', 'Release', ['goma_staging', 'clobber']),
         'Chromium Mac Goma Staging':
-            CreateConfig('mac', 'Release', ['goma_staging', 'clobber']),
+        CreateConfig('mac', 'Release', ['goma_staging', 'clobber']),
         'CrWinGomaStaging':
-            CreateConfig('win', 'Release', ['goma_staging', 'clobber']),
+        CreateConfig('win', 'Release', ['goma_staging', 'clobber']),
 
         # Linux RBE
         'Chromium Linux Goma RBE ToT':
-            CreateConfig('linux', 'Release', ['goma_rbe_tot']),
+        CreateConfig('linux', 'Release', ['goma_rbe_tot']),
         'Chromium Linux Goma RBE ToT (ATS)':
-            CreateConfig('linux', 'Release', ['goma_rbe_tot']),
+        CreateConfig('linux', 'Release', ['goma_rbe_tot']),
         'Chromium Linux Goma RBE Staging':
-            CreateConfig('linux', 'Release', ['goma_mixer_staging']),
+        CreateConfig('linux', 'Release', ['goma_mixer_staging']),
         'Chromium Linux Goma RBE Staging (clobber)':
-            CreateConfig('linux', 'Release', ['goma_mixer_staging', 'clobber']),
+        CreateConfig('linux', 'Release', ['goma_mixer_staging', 'clobber']),
         'Chromium Linux Goma RBE Staging (dbg)':
-            CreateConfig('linux', 'Debug', ['goma_mixer_staging']),
+        CreateConfig('linux', 'Debug', ['goma_mixer_staging']),
         'Chromium Linux Goma RBE Staging (dbg) (clobber)':
-            CreateConfig('linux', 'Debug', ['goma_mixer_staging', 'clobber']),
+        CreateConfig('linux', 'Debug', ['goma_mixer_staging', 'clobber']),
         'Chromium Linux Goma RBE Prod':
-            CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Release', ['goma_rbe_prod']),
         'Chromium Linux Goma RBE Prod (clobber)':
-            CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
         'Chromium Linux Goma RBE Prod (dbg)':
-            CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
         'Chromium Linux Goma RBE Prod (dbg) (clobber)':
-            CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
 
         # Mac RBE
         'Chromium Mac Goma RBE ToT':
-            CreateConfig('mac', 'Release', ['goma_rbe_tot']),
+        CreateConfig('mac', 'Release', ['goma_rbe_tot']),
         'Chromium Mac Goma RBE Staging':
-            CreateConfig('mac', 'Release', ['goma_mixer_staging']),
+        CreateConfig('mac', 'Release', ['goma_mixer_staging']),
         'Chromium Mac Goma RBE Staging (clobber)':
-            CreateConfig('mac', 'Release', ['goma_mixer_staging', 'clobber']),
+        CreateConfig('mac', 'Release', ['goma_mixer_staging', 'clobber']),
         'Chromium Mac Goma RBE Staging (dbg)':
-            CreateConfig('mac', 'Debug', ['goma_mixer_staging']),
+        CreateConfig('mac', 'Debug', ['goma_mixer_staging']),
 
         # Android ARM 32-bit RBE
         'Chromium Android ARM 32-bit Goma RBE ToT':
-            CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
+        CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
         'Chromium Android ARM 32-bit Goma RBE ToT (ATS)':
-            CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
+        CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
         'Chromium Android ARM 32-bit Goma RBE Staging':
-            CreateAndroidConfig('Release', 32, ['goma_mixer_staging']),
+        CreateAndroidConfig('Release', 32, ['goma_mixer_staging']),
         'Chromium Android ARM 32-bit Goma RBE Prod':
-            CreateAndroidConfig('Release', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Release', 32, ['goma_rbe_prod']),
         'Chromium Android ARM 32-bit Goma RBE Prod (clobber)':
-            CreateAndroidConfig('Release', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Release', 32, ['goma_rbe_prod', 'clobber']),
         'Chromium Android ARM 32-bit Goma RBE Prod (dbg)':
-            CreateAndroidConfig('Debug', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod']),
         'Chromium Android ARM 32-bit Goma RBE Prod (dbg) (clobber)':
-            CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'clobber']),
 
         # Windows RBE
         'Chromium Win Goma RBE ToT':
-            CreateConfig('win', 'Release', ['goma_rbe_tot']),
+        CreateConfig('win', 'Release', ['goma_rbe_tot']),
         'Chromium Win Goma RBE Staging':
-            CreateConfig('win', 'Release', ['goma_mixer_staging']),
+        CreateConfig('win', 'Release', ['goma_mixer_staging']),
         'Chromium Win Goma RBE Staging (clobber)':
-            CreateConfig('win', 'Release', ['goma_mixer_staging', 'clobber']),
+        CreateConfig('win', 'Release', ['goma_mixer_staging', 'clobber']),
         'Chromium Win Goma RBE Prod':
-            CreateConfig('win', 'Release', ['goma_rbe_prod']),
+        CreateConfig('win', 'Release', ['goma_rbe_prod']),
         'Chromium Win Goma RBE Prod (clobber)':
-            CreateConfig('win', 'Release', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('win', 'Release', ['goma_rbe_prod', 'clobber']),
         'Chromium Win Goma RBE Prod (dbg)':
-            CreateConfig('win', 'Debug', ['goma_rbe_prod']),
+        CreateConfig('win', 'Debug', ['goma_rbe_prod']),
         'Chromium Win Goma RBE Prod (dbg) (clobber)':
-            CreateConfig('win', 'Debug', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('win', 'Debug', ['goma_rbe_prod', 'clobber']),
     },
 }
