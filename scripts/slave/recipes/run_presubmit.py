@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/infra_paths',
   'depot_tools/presubmit',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
@@ -15,9 +16,12 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/runtime',
+  'recipe_engine/python',
   'recipe_engine/step',
+  'depot_tools/gerrit',
   'depot_tools/tryserver',
+  'v8',
+  'webrtc',
 ]
 
 
@@ -34,7 +38,7 @@ def _RunStepsInternal(api):
     solution = gclient_config.solutions.add()
     solution.url = api.properties.get(
         'repository_url', api.tryserver.gerrit_change_repo_url)
-    # Solution name shouldn't matter for most users, particularly if there is no
+    # Solution name should matter for most users, particularly if there is no
     # DEPS file, but if someone wants to override it, fine.
     solution.name = api.properties.get('solution_name', 's')
     gclient_config.got_revision_mapping[solution.name] = 'got_revision'
@@ -137,18 +141,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('expected_tryjob') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.buildbucket.try_build(
-        project='chromium',
-        bucket='try',
-        builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.step_data('presubmit',
-                  api.json.output([['chromium_presubmit', ['compile']]]))
-  )
-
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
   # reflect reality (cosmetical problem only).
   REPO_NAMES = [
@@ -271,6 +263,17 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output({}, retcode=2))
+  )
+
+  yield (
+    api.test('repository_url') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repository_url='https://skia.googlesource.com/skia.git',
+        gerrit_project='skia') +
+    api.step_data('presubmit',
+                  api.json.output([['chromium_presubmit', ['compile']]]))
   )
 
   yield (
