@@ -339,6 +339,8 @@ SPEC = {
       'gclient_apply_config': ['chrome_internal'],
       'swarming_server': 'https://chrome-swarming.appspot.com',
       'isolate_server': 'https://chrome-isolated.appspot.com',
+      # Run with lower priority; see https://crbug.com/937297#c26
+      'swarming_default_priority': 210,
       'swarming_dimensions': {
         'gpu': None,
         'pool': 'chrome.tests',
