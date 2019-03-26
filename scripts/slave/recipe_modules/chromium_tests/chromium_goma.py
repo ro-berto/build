@@ -4,418 +4,150 @@
 
 from . import steps
 
+
+def CreateConfig(platform, config_type, apply_configs):
+    """Generates a builder recipe config for non-Android builder.
+
+    Args:
+        platform: win, linux, mac
+        config_type: Release or Debug.
+        apply_configs: list of additional config names to apply.
+
+    Returns:
+        A dict mapping string keys to field values in the build config format.
+    """
+
+    return {
+        'chromium_config': 'chromium',
+        # Non-Android builder always uses regular mb.
+        'chromium_apply_config': ['mb'] + apply_configs,
+        'gclient_config': 'chromium',
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': config_type,
+            'TARGET_BITS': 64,
+        },
+        'testing': {
+            'platform': platform,
+        },
+    }
+
+
+def CreateAndroidConfig(config_type, bits, apply_configs):
+    """Generates a builder recipe config specifically for Android.
+
+    Args:
+        config_type: Release or Debug.
+        bits: Target architecture number of bits (e.g. 32 or 64).
+        apply_configs: list of additional config names to apply.
+
+    Returns:
+        A dict mapping string keys to field values in the build config format.
+    """
+
+    return {
+        'chromium_config': 'chromium',
+        'chromium_apply_config': apply_configs,
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': config_type,
+            'TARGET_BITS': bits,
+            'TARGET_PLATFORM': 'android',
+        },
+        'android_config': 'main_builder_mb',
+        'testing': {
+            'platform': 'linux',  # Android builder always uses Linux.
+        },
+    }
+
+
 SPEC = {
-  'builders': {
-    'Chromium Linux Goma Staging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
+    'builders': {
+        # clients5
+        'Chromium Linux Goma Staging':
+            CreateConfig('linux', 'Release', ['goma_staging', 'clobber']),
+        'Chromium Mac Goma Staging':
+            CreateConfig('mac', 'Release', ['goma_staging', 'clobber']),
+        'CrWinGomaStaging':
+            CreateConfig('win', 'Release', ['goma_staging', 'clobber']),
+
+        # Linux RBE
+        'Chromium Linux Goma RBE ToT':
+            CreateConfig('linux', 'Release', ['goma_rbe_tot']),
+        'Chromium Linux Goma RBE ToT (ATS)':
+            CreateConfig('linux', 'Release',
+                         ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+        'Chromium Linux Goma RBE Staging':
+            CreateConfig('linux', 'Release', ['goma_mixer_staging']),
+        'Chromium Linux Goma RBE Staging (clobber)':
+            CreateConfig('linux', 'Release', ['goma_mixer_staging', 'clobber']),
+        'Chromium Linux Goma RBE Staging (dbg)':
+            CreateConfig('linux', 'Debug', ['goma_mixer_staging']),
+        'Chromium Linux Goma RBE Staging (dbg) (clobber)':
+            CreateConfig('linux', 'Debug', ['goma_mixer_staging', 'clobber']),
+        'Chromium Linux Goma RBE Prod':
+            CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE Prod (clobber)':
+            CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        'Chromium Linux Goma RBE Prod (dbg)':
+            CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE Prod (dbg) (clobber)':
+            CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
+
+        # Mac RBE
+        'Chromium Mac Goma RBE ToT':
+            CreateConfig('mac', 'Release', ['goma_rbe_tot']),
+        'Chromium Mac Goma RBE Staging':
+            CreateConfig('mac', 'Release', ['goma_mixer_staging']),
+        'Chromium Mac Goma RBE Staging (clobber)':
+            CreateConfig('mac', 'Release', ['goma_mixer_staging', 'clobber']),
+        'Chromium Mac Goma RBE Staging (dbg)':
+            CreateConfig('mac', 'Debug', ['goma_mixer_staging']),
+
+        # Android ARM 32-bit RBE
+        'Chromium Android ARM 32-bit Goma RBE ToT':
+            CreateAndroidConfig('Release', 32, ['goma_rbe_tot']),
+        'Chromium Android ARM 32-bit Goma RBE ToT (ATS)':
+            CreateAndroidConfig(
+                'Release', 32,
+                ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+        'Chromium Android ARM 32-bit Goma RBE Staging':
+            CreateAndroidConfig('Release', 32, ['goma_mixer_staging']),
+        'Chromium Android ARM 32-bit Goma RBE Prod':
+            CreateAndroidConfig('Release', 32, ['goma_rbe_prod']),
+        'Chromium Android ARM 32-bit Goma RBE Prod (clobber)':
+            CreateAndroidConfig('Release', 32, ['goma_rbe_prod', 'clobber']),
+        'Chromium Android ARM 32-bit Goma RBE Prod (dbg)':
+            CreateAndroidConfig('Debug', 32, ['goma_rbe_prod']),
+        'Chromium Android ARM 32-bit Goma RBE Prod (dbg) (clobber)':
+            CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'clobber']),
+
+        # Windows RBE
+        'Chromium Win Goma RBE ToT':
+            CreateConfig('win', 'Release',
+                         ['goma_arbitrary_toolchain_support', 'goma_rbe_tot']),
+        'Chromium Win Goma RBE Staging':
+            CreateConfig(
+                'win', 'Release',
+                ['goma_mixer_staging', 'goma_arbitrary_toolchain_support']),
+        'Chromium Win Goma RBE Staging (clobber)':
+            CreateConfig('win', 'Release', [
+                'goma_mixer_staging', 'goma_arbitrary_toolchain_support',
+                'clobber'
+            ]),
+        'Chromium Win Goma RBE Prod':
+            CreateConfig('win', 'Release',
+                         ['goma_rbe_prod', 'goma_arbitrary_toolchain_support']),
+        'Chromium Win Goma RBE Prod (clobber)':
+            CreateConfig('win', 'Release', [
+                'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'clobber'
+            ]),
+        'Chromium Win Goma RBE Prod (dbg)':
+            CreateConfig('win', 'Debug',
+                         ['goma_rbe_prod', 'goma_arbitrary_toolchain_support']),
+        'Chromium Win Goma RBE Prod (dbg) (clobber)':
+            CreateConfig('win', 'Debug', [
+                'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'clobber'
+            ]),
     },
-    'Chromium Mac Goma Staging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'CrWinGomaStaging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Linux Goma RBE ToT': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_tot', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE ToT (ATS)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'goma_arbitrary_toolchain_support', 'goma_rbe_tot', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Staging (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Staging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Staging (dbg) (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Staging (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Prod': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_prod', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Prod (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_prod', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Prod (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_prod', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Linux Goma RBE Prod (dbg) (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_prod', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Mac Goma RBE ToT': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_rbe_tot', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Chromium Mac Goma RBE Staging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Chromium Mac Goma RBE Staging (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'clobber', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Chromium Mac Goma RBE Staging (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['goma_mixer_staging', 'mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE ToT': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_rbe_tot'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE ToT (ATS)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'goma_arbitrary_toolchain_support', 'goma_rbe_tot',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE Staging': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_mixer_staging'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE Prod': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_rbe_prod'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE Prod (clobber)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_rbe_prod', 'clobber'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE Prod (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_rbe_prod'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Android ARM 32-bit Goma RBE Prod (dbg) (clobber)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['goma_rbe_prod', 'clobber'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Chromium Win Goma RBE ToT': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'goma_rbe_tot', 'goma_arbitrary_toolchain_support', 'mb'
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Staging': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'goma_mixer_staging', 'goma_arbitrary_toolchain_support', 'mb'
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Staging (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber', 'goma_mixer_staging', 'goma_arbitrary_toolchain_support',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Prod': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb'
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Prod (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber', 'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Prod (dbg) ': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb'
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Chromium Win Goma RBE Prod (dbg) (clobber)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber', 'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'testing': {
-        'platform': 'win',
-      },
-    },
-  },
 }
