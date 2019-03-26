@@ -35,7 +35,6 @@
   * [isolate](#recipe_modules-isolate)
   * [legion](#recipe_modules-legion)
   * [libyuv](#recipe_modules-libyuv)
-  * [luci_config](#recipe_modules-luci_config)
   * [math_utils](#recipe_modules-math_utils) &mdash; General statistical or mathematical functions.
   * [ndk](#recipe_modules-ndk)
   * [perf_dashboard](#recipe_modules-perf_dashboard)
@@ -270,7 +269,6 @@
   * [legion:examples/full](#recipes-legion_examples_full) &mdash; Specifies how to launch chromoting integration test on build_internal.
   * [libyuv/libyuv](#recipes-libyuv_libyuv) &mdash; Recipe for building and running tests for Libyuv stand-alone.
   * [libyuv/roll_deps](#recipes-libyuv_roll_deps)
-  * [luci_config:examples/full](#recipes-luci_config_examples_full)
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
   * [math_utils:tests/mean_error](#recipes-math_utils_tests_mean_error)
   * [nacl](#recipes-nacl)
@@ -2780,36 +2778,6 @@ Add a suite of test steps.
 &emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/libyuv/api.py#72)(self):**
 
 &emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/libyuv/api.py#76)(self):**
-### *recipe_modules* / [luci\_config](/scripts/slave/recipe_modules/luci_config)
-
-[DEPS](/scripts/slave/recipe_modules/luci_config/__init__.py#1): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
-
-#### **class [LuciConfigApi](/scripts/slave/recipe_modules/luci_config/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/luci_config/api.py#17)(self):**
-
-&mdash; **def [get\_project\_metadata](/scripts/slave/recipe_modules/luci_config/api.py#70)(self, project):**
-
-&mdash; **def [get\_projects](/scripts/slave/recipe_modules/luci_config/api.py#30)(self):**
-
-Fetch the mapping of project id to url from luci-config.
-
-Returns:
-  A dictionary mapping project id to its luci-config project spec (among
-  which there is a repo_url key).
-
-&mdash; **def [get\_ref\_config](/scripts/slave/recipe_modules/luci_config/api.py#47)(self, project, ref, config):**
-
-Fetch the ref config from luci-config.
-
-Args:
-  project: The name of the project in luci-config.
-  ref: git ref, e.g., 'refs/heads/master'
-  config: The config to fetch from refs/heads/master of the project.
-
-Returns:
-  The json returned from luci-config with 'content' field already base64
-  decoded.
 ### *recipe_modules* / [math\_utils](/scripts/slave/recipe_modules/math_utils)
 
 General statistical or mathematical functions.
@@ -5216,11 +5184,6 @@ Recipe for building and running tests for Libyuv stand-alone.
 [DEPS](/scripts/slave/recipes/libyuv/roll_deps.py#6): [libyuv](#recipe_modules-libyuv), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/libyuv/roll_deps.py#25)(api):**
-### *recipes* / [luci\_config:examples/full](/scripts/slave/recipe_modules/luci_config/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/luci_config/examples/full.py#7): [luci\_config](#recipe_modules-luci_config), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/luci_config/examples/full.py#19)(api, auth_token):**
 ### *recipes* / [math\_utils:examples/full](/scripts/slave/recipe_modules/math_utils/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/math_utils/examples/full.py#5): [math\_utils](#recipe_modules-math_utils), [recipe\_engine/step][recipe_engine/recipe_modules/step]
