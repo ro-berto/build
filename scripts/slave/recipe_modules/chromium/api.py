@@ -271,9 +271,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       clang_crashreports_script = self.m.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')
       if self.m.path.exists(clang_crashreports_script):
+        source = '%s-%s-%s' % (self.m.properties['mastername'],
+                               self.m.properties['buildername'],
+                               self.m.properties['buildnumber'])
         self.m.python('process clang crashes', script=clang_crashreports_script,
-                      args=['--source', self.m.properties['buildername']],
-                      **kwargs)
+                      args=['--source', source], **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 

@@ -174,7 +174,7 @@
       "-u",
       "None/tools/clang/scripts/process_crashreports.py",
       "--source",
-      "test_buildername"
+      "test_mastername-test_buildername-1"
     ],
     "cwd": "None",
     "env": {
@@ -321,9 +321,11 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"test_buildername\", \"project\": \"\"}",
+      "{\"bucket\": \"master.test_mastername\", \"builder\": \"test_buildername\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "test_buildername"
+      "test_buildername",
+      "--buildbot-mastername",
+      "test_mastername"
     ],
     "cwd": "None",
     "env": {

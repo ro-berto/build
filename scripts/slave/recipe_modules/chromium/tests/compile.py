@@ -36,6 +36,8 @@ def GenTests(api):
   yield (
       api.test('basic') +
       api.properties(buildername='test_buildername') +
+      api.properties(buildnumber='1') +
+      api.properties(mastername='test_mastername') +
       api.path.exists(api.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py'))
   )
@@ -43,6 +45,8 @@ def GenTests(api):
   yield (
       api.test('compile_fail') +
       api.properties(buildername='test_buildername') +
+      api.properties(buildnumber='2') +
+      api.properties(mastername='test_mastername') +
       api.step_data('compile', retcode=1) +
       api.path.exists(api.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')) +
