@@ -45,7 +45,6 @@ def GenTests(api):
   yield (
       api.test('compile_fail') +
       api.properties(buildername='test_buildername') +
-      api.properties(buildnumber='2') +
       api.properties(mastername='test_mastername') +
       api.step_data('compile', retcode=1) +
       api.path.exists(api.path['checkout'].join(
