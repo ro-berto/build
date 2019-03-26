@@ -312,7 +312,8 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
       # git merge-base doesn't work without a FETCH_HEAD, which isn't available
       # on the first run of a bot. The builder tests a single revision, so use
       # flutter_rev.
-      'TEST_COMMIT_RANGE': flutter_rev
+      'TEST_COMMIT_RANGE': flutter_rev,
+      'FLUTTER_TEST_NO_BUILD_RUNNER': 'true'
     }
 
     with api.step.defer_results():

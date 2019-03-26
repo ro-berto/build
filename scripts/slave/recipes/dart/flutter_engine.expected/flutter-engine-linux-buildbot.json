@@ -3193,6 +3193,7 @@
     ],
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3209,6 +3210,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3228,6 +3230,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3249,6 +3252,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3269,6 +3273,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3290,6 +3295,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3310,6 +3316,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3331,6 +3338,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3351,6 +3359,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3372,6 +3381,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3392,6 +3402,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3413,6 +3424,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3433,6 +3445,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3454,6 +3467,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3474,6 +3488,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3495,6 +3510,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3515,6 +3531,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3536,6 +3553,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3552,6 +3570,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3567,6 +3586,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3587,6 +3607,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3608,6 +3629,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3624,6 +3646,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3641,6 +3664,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3658,6 +3682,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[START_DIR]/.dartServer",
+      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
