@@ -68,7 +68,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     env = ConfigGroup(
       PATH = List(Path),
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
-      GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
+      GOMA_SERVER_HOST = Single(basestring, required=False),
       GOMA_RPC_EXTRA_PARAMS = Single(basestring, required=False),
       GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int,
                                                               required=False),
@@ -276,13 +276,13 @@ def goma_latest_client(c):
 @config_ctx()
 def goma_staging(c):
   c.compile_py.goma_failfast = True
-  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'
+  c.env.GOMA_SERVER_HOST = 'sandbox.google.com'
   c.compile_py.ninja_confirm_noop = True
 
 @config_ctx()
 def goma_rbe_tot(c):
   c.compile_py.goma_failfast = True
-  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = (
+  c.env.GOMA_SERVER_HOST = (
       'rbe-tot.endpoints.cxx-compiler-service.cloud.goog')
   c.compile_py.use_autoninja = True
   c.compile_py.goma_client_type = 'candidate'
@@ -290,7 +290,7 @@ def goma_rbe_tot(c):
 @config_ctx()
 def goma_mixer_staging(c):
   c.compile_py.goma_failfast = True
-  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'staging-goma.chromium.org'
+  c.env.GOMA_SERVER_HOST = 'staging-goma.chromium.org'
   c.env.GOMA_RPC_EXTRA_PARAMS = '?staging'
   c.compile_py.use_autoninja = True
 
@@ -299,7 +299,7 @@ def goma_mixer_staging(c):
 @config_ctx()
 def goma_rbe_prod(c):
   c.compile_py.goma_failfast = True
-  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'goma.chromium.org'
+  c.env.GOMA_SERVER_HOST = 'goma.chromium.org'
   c.env.GOMA_RPC_EXTRA_PARAMS = '?prod'
   c.compile_py.use_autoninja = True
 

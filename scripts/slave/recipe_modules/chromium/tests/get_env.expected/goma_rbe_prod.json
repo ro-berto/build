@@ -4,7 +4,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_RPC_EXTRA_PARAMS": "?prod",
-      "GOMA_STUBBY_PROXY_IP_ADDRESS": "goma.chromium.org"
+      "GOMA_SERVER_HOST": "goma.chromium.org"
     },
     "name": "test"
   },
