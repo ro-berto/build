@@ -282,6 +282,9 @@ def GenTests(api):
           builder='dart2js-strong-linux-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
+      api.override_step_data(
+        'download previous results.gerrit changes',
+        api.json.output([{'change_id': 'Ideadbeef'}])) +
       _canned_step(api, 'test1', 2, False) +
       _canned_step(api, 'test2') +
       api.step_data('upload testing fileset test',

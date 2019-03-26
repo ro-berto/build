@@ -315,7 +315,15 @@ class DartApi(recipe_api.RecipeApi):
     apply_preapproval_arguments = [self.dart_executable(),
                                    'tools/bots/apply_preapprovals.dart',
                                    'LATEST/approved_results.json']
-    if not self.m.buildbucket.builder_name.endswith('-try'):
+    if self.m.buildbucket.builder_name.endswith('-try'):
+      info = self.m.gerrit.get_changes(
+          'https://%s' % self.m.tryserver.gerrit_change.host,
+          query_params=[('change', str(self.m.tryserver.gerrit_change.change))],
+          limit=1)
+      change_id = info[0]['change_id']
+      apply_preapproval_arguments.append('--apply-changelist')
+      apply_preapproval_arguments.append(change_id)
+    else:
       apply_preapproval_arguments.append('--upload')
       apply_preapproval_arguments.append(
           'gs://dart-test-results-approved-results/' +
