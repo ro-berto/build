@@ -37,6 +37,10 @@ PROPERTIES = {
       local=Single(str),
       # Whether to enable Arbitrary Toolchain Support in Goma client.
       enable_ats=Single(bool),
+      # Explicitly specify a URL for a Goma server.
+      server_host=Single(str),
+      # Extra parameters to append to RPC path in `server_host`.
+      rpc_extra_params=Single(str),
     ),
     default={},
   ),

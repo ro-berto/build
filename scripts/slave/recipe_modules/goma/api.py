@@ -49,6 +49,8 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
     self._enable_ats = properties.get('enable_ats', False)
+    self._goma_server_host = properties.get('server_host', False)
+    self._goma_rpc_extra_params = properties.get('rpc_extra_params', False)
 
     self._client_type = 'release'
 
@@ -286,6 +288,11 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
       if self._enable_ats:
           self._goma_ctl_env['GOMA_ARBITRARY_TOOLCHAIN_SUPPORT'] = 'true'
+      if self._goma_server_host:
+          self._goma_ctl_env['GOMA_SERVER_HOST'] = self._goma_server_host
+      if self._goma_rpc_extra_params:
+          self._goma_ctl_env['GOMA_RPC_EXTRA_PARAMS'] = (
+              self._goma_rpc_extra_params)
 
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env
