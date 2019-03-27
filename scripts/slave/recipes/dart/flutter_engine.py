@@ -89,6 +89,7 @@ def BuildLinuxAndroidArm(api, checkout_dir):
 
 def BuildLinux(api, checkout_dir):
   RunGN(api, checkout_dir)
+  Build(api, checkout_dir, 'host_debug')
   Build(api, checkout_dir, 'host_debug', 'create_full_sdk')
   RunGN(api, checkout_dir, '--unoptimized')
   Build(api, checkout_dir, 'host_debug_unopt')

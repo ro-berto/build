@@ -320,7 +320,6 @@
   * [webrtc/more_configs](#recipes-webrtc_more_configs)
   * [webrtc/noop](#recipes-webrtc_noop)
   * [webrtc/standalone](#recipes-webrtc_standalone)
-  * [win_analyze](#recipes-win_analyze)
   * [zip:examples/full](#recipes-zip_examples_full)
 ## Recipe Modules
 
@@ -4696,7 +4695,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [Build](/scripts/slave/recipes/dart/flutter_engine.py#41)(api, checkout_dir, config, \*targets):**
 
-&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#292)(api, start_dir, checkout_dir, flutter_rev):**
+&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#293)(api, start_dir, checkout_dir, flutter_rev):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/dart/flutter_engine.py#90)(api, checkout_dir):**
 
@@ -4704,9 +4703,9 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [BuildLinuxAndroidx86](/scripts/slave/recipes/dart/flutter_engine.py#68)(api, checkout_dir):**
 
-&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#165)(api, engine_src, cached_dest, file_paths):**
+&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#166)(api, engine_src, cached_dest, file_paths):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#112)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#113)(api):**
 
 &mdash; **def [KillTasks](/scripts/slave/recipes/dart/flutter_engine.py#33)(api, checkout_dir, ok_ret='any'):**
 
@@ -4714,15 +4713,15 @@ Kills leftover tasks from previous runs or steps.
 
 &mdash; **def [RunGN](/scripts/slave/recipes/dart/flutter_engine.py#50)(api, checkout_dir, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#268)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#269)(api):**
 
 &mdash; **def [TestEngine](/scripts/slave/recipes/dart/flutter_engine.py#63)(api, checkout_dir):**
 
-&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#237)(api, start_dir, just_built_dart_sdk):**
+&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#238)(api, start_dir, just_built_dart_sdk):**
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#101)(api, checkout_dir):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#102)(api, checkout_dir):**
 
-&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#178)(api, flutter, engine_src):**
+&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#179)(api, flutter, engine_src):**
 ### *recipes* / [dart/forward\_branch](/scripts/slave/recipes/dart/forward_branch.py)
 
 [DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5621,11 +5620,6 @@ The changes are:
 [DEPS](/scripts/slave/recipes/webrtc/standalone.py#10): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_swarming](#recipe_modules-chromium_swarming), [test\_utils](#recipe_modules-test_utils), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/standalone.py#31)(api):**
-### *recipes* / [win\_analyze](/scripts/slave/recipes/win_analyze.py)
-
-[DEPS](/scripts/slave/recipes/win_analyze.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/win_analyze.py#27)(api):**
 ### *recipes* / [zip:examples/full](/scripts/slave/recipe_modules/zip/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/zip/examples/full.py#5): [zip](#recipe_modules-zip), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
