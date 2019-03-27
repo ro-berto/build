@@ -419,7 +419,8 @@ class Test(object):
         'isolate_target_name': self.isolate_target,
     }
     if suffix is not None:
-      data['patched'] = suffix in ('with patch', 'retry with patch')
+      data['patched'] = suffix in (
+          'with patch', 'retry with patch', 'retry shards with patch')
     return data
 
   def failures_or_invalid_results(self, api, suffix):
@@ -1705,7 +1706,8 @@ class SwarmingTest(Test):
     if suffix is not None:
       data['full_step_name'] = api.chromium_swarming.get_step_name(
           prefix=None, task=self._tasks[suffix])
-      data['patched'] = suffix in ('with patch', 'retry with patch')
+      data['patched'] = suffix in (
+          'with patch', 'retry with patch', 'retry shards with patch')
       data['dimensions'] = self._tasks[suffix].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
