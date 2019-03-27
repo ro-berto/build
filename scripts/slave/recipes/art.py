@@ -336,6 +336,10 @@ def setup_target(api,
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j%d' % (build_jobs), '--target'])
 
+  # TODO(b/123499955): Remove once we fully move to luci.
+  if serial == 'FA7BN1A04406':
+    return
+
   with api.step.defer_results():
     with api.context(env=test_env):
       api.step('device pre-run cleanup', [
@@ -573,8 +577,7 @@ _CONFIG_MAP = {
       'serial': 'FA7BN1A04406',
       'device': 'walleye-armv7',
       'debug': True,
-      # TODO(b/123499955): Put back to True.
-      'heap_poisoning': False,
+      'heap_poisoning': True,
     },
     'walleye-armv8-poison-ndebug': {
       'serial': 'FA7BN1A04412',
