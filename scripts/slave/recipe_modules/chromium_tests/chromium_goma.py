@@ -134,5 +134,23 @@ SPEC = {
         CreateConfig('win', 'Debug', ['goma_rbe_prod']),
         'Chromium Win Goma RBE Prod (dbg) (clobber)':
         CreateConfig('win', 'Debug', ['goma_rbe_prod', 'clobber']),
+
+        # RBE LoadTest
+        'Chromium Linux Goma RBE LoadTest':
+        CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE LoadTest (clobber)':
+        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        'Chromium Linux Goma RBE LoadTest (ATS)':
+        CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE LoadTest (ATS) (clobber)':
+        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        'Chromium Linux Goma RBE LoadTest (debug)':
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE LoadTest (clobber) (debug)':
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
+        'Chromium Linux Goma RBE LoadTest (ATS) (debug)':
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        'Chromium Linux Goma RBE LoadTest (ATS) (clobber) (debug)':
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
     },
 }
