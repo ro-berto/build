@@ -276,7 +276,6 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('compiler flags', [])
     self.__config.setdefault('device check', True)
     self.__config.setdefault('env', {})
-    self.__config.setdefault('explain', False)
     self.__config.setdefault('gn_args', [])
     self.__config.setdefault('tests', [])
     self.__config.setdefault('triggered bots', {})
@@ -493,8 +492,6 @@ class iOSApi(recipe_api.RecipeApi):
     exit_status = -1
     try:
       with self.m.context(cwd=cwd, env=env):
-        if self.__config['explain']:
-          self.m.step('explain compile' + suffix, cmd + ['-d', 'explain', '-n'])
         self.m.step('compile' + suffix, cmd)
       exit_status = 0
     except self.m.step.StepFailure as e:

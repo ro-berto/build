@@ -594,35 +594,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('explain')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-    )
-    + api.buildbucket.ci_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode build version': '9abc',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'explain': True,
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-  )
-
-
-  yield (
     api.test('expiration_test')
     + api.platform('mac', 64)
     + api.properties(
@@ -657,7 +628,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
- )
+  )
 
   yield (
     api.test('max_runtime_test')
@@ -694,7 +665,7 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
- )
+  )
 
   xcode_build_version = (
     api.platform('mac', 64)
