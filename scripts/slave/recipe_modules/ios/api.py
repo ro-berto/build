@@ -948,6 +948,9 @@ class iOSApi(recipe_api.RecipeApi):
       if hard_timeout:
         swarming_task.hard_timeout = hard_timeout
 
+      swarming_task.optional_dimensions = task['test'].get(
+          'optional_dimensions')
+
       try:
         self.m.chromium_swarming.trigger_task(swarming_task)
         task['task'] = swarming_task
