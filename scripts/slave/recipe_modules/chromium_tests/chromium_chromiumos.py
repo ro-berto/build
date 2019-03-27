@@ -101,6 +101,9 @@ SPEC['builders'].update([
     _config('linux-chromeos-rel'),
     _config('linux-chromeos-dbg'),
 
+    _config('chromeos-amd64-generic-asan-rel',
+            cros_board='amd64-generic',
+            gclient_apply_config=['chromeos_amd64_generic']),
     _config('chromeos-amd64-generic-cfi-thin-lto-rel',
             cros_board='amd64-generic',
             gclient_apply_config=['chromeos_amd64_generic']),
