@@ -89,7 +89,7 @@ def BuildLinuxAndroidArm(api, checkout_dir):
 
 def BuildLinux(api, checkout_dir):
   RunGN(api, checkout_dir)
-  Build(api, checkout_dir, 'host_debug')
+  Build(api, checkout_dir, 'host_debug', 'create_full_sdk')
   RunGN(api, checkout_dir, '--unoptimized')
   Build(api, checkout_dir, 'host_debug_unopt')
   RunGN(api, checkout_dir, '--runtime-mode=release', '--dynamic')
@@ -313,7 +313,6 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
       # on the first run of a bot. The builder tests a single revision, so use
       # flutter_rev.
       'TEST_COMMIT_RANGE': flutter_rev,
-      'FLUTTER_TEST_NO_BUILD_RUNNER': 'true'
     }
 
     with api.step.defer_results():

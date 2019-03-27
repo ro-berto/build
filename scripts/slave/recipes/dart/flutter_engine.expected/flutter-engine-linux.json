@@ -259,14 +259,15 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/host_debug"
+      "[CACHE]/builder/src/out/host_debug",
+      "create_full_sdk"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "name": "build host_debug"
+    "name": "build host_debug create_full_sdk"
   },
   {
     "cmd": [],
@@ -377,7 +378,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build host_debug",
+      "build host_debug create_full_sdk",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -3336,7 +3337,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3353,7 +3353,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3373,7 +3372,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3395,7 +3393,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3416,7 +3413,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3438,7 +3434,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3459,7 +3454,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3481,7 +3475,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3502,7 +3495,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3524,7 +3516,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3545,7 +3536,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3567,7 +3557,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3588,7 +3577,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3610,7 +3598,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3631,7 +3618,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3653,7 +3639,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3674,7 +3659,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3696,7 +3680,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3713,7 +3696,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3729,7 +3711,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3750,7 +3731,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3772,7 +3752,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3789,7 +3768,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3807,7 +3785,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3825,7 +3802,6 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "FLUTTER_TEST_NO_BUILD_RUNNER": "true",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
