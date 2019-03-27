@@ -1741,8 +1741,7 @@
     },
     "name": "Trybot Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@",
-      "!summary!@@@",
+      "@@@STEP_TEXT@<br/>!summary!@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

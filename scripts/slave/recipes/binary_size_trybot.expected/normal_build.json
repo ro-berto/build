@@ -1788,8 +1788,7 @@
     },
     "name": "Trybot Results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@",
-      "!summary!@@@",
+      "@@@STEP_TEXT@<br/>!summary!@@@",
       "@@@STEP_LOG_LINE@Resource Sizes Diff (high-level metrics)@!resource_sizes!@@@",
       "@@@STEP_LOG_END@Resource Sizes Diff (high-level metrics)@@@",
       "@@@STEP_LOG_LINE@SuperSize Text Diff@!supersize text with \u0394!@@@",

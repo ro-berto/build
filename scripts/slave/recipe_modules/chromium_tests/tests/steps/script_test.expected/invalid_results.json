@@ -31,8 +31,7 @@
     "name": "script_test with suffix  had an invalid result",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@The recipe expected the result to contain the key 'failures'. Contents are:",
-      "{}@@@",
+      "@@@STEP_TEXT@The recipe expected the result to contain the key 'failures'. Contents are:<br/>{}@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
