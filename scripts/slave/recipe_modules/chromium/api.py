@@ -189,7 +189,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # passed in from the slave config, but that doesn't exist today, so we
     # need a lookup mechanism to map bot name to build_config.
     mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
+    buildername = self.m.buildbucket.builder_name
     master_dict = builders_dict.get(mastername, {})
     bot_config = master_dict.get('builders', {}).get(buildername)
 
@@ -274,9 +274,9 @@ class ChromiumApi(recipe_api.RecipeApi):
           'tools', 'clang', 'scripts', 'process_crashreports.py')
       if self.m.path.exists(clang_crashreports_script):
         source = '%s-%s' % (self.m.properties['mastername'],
-                            self.m.properties['buildername'])
-        if self.m.properties.get('buildnumber'):
-          source += '-%s' % self.m.properties['buildnumber']
+                            self.m.buildbucket.builder_name)
+        if self.m.buildbucket.build.number:
+          source += '-%s' % self.m.buildbucket.build.number
         self.m.python('process clang crashes', script=clang_crashreports_script,
                       args=['--source', source], **kwargs)
 
@@ -651,7 +651,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.append('--slave-name=%s' % self.m.properties['bot_id'])
     # A couple of the recipes contain tests which don't specify a buildnumber,
     # so make this optional.
-    if self.m.properties.get('buildnumber') is not None:
+    if self.m.buildbucket.build.number is not None:
       full_args.append('--build-number=%s' % self.m.buildbucket.build.number)
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
@@ -733,9 +733,9 @@ class ChromiumApi(recipe_api.RecipeApi):
                            '--build-properties', properties_json])
     run_tests_args.extend([
         '--test-type=sizes',
-        '--builder-name=%s' % self.m.properties['buildername'],
+        '--builder-name=%s' % self.m.buildbucket.builder_name,
         '--slave-name=%s' % self.m.properties['bot_id'],
-        '--build-number=%s' % self.m.properties['buildnumber'],
+        '--build-number=%s' % self.m.buildbucket.build.number,
         '--run-python-script'])
 
     if perf_id:
@@ -1379,7 +1379,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       fake_factory_properties['target_os'] = self.c.TARGET_PLATFORM
 
     sanitized_buildername = ''.join(
-        c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+        c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
 
     args = [
         '--src-dir', self.m.path['checkout'],
