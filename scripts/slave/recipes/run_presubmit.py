@@ -38,7 +38,9 @@ def _RunStepsInternal(api):
     solution = gclient_config.solutions.add()
     solution.url = api.properties.get(
         'repository_url', api.tryserver.gerrit_change_repo_url)
-    solution.name = api.properties['solution_name']
+    # Solution name should matter for most users, particularly if there is no
+    # DEPS file, but if someone wants to override it, fine.
+    solution.name = api.properties.get('solution_name', 's')
     gclient_config.got_revision_mapping[solution.name] = 'got_revision'
 
   bot_update_step = api.bot_update.ensure_checkout(
@@ -265,6 +267,17 @@ def GenTests(api):
 
   yield (
     api.test('repository_url') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repository_url='https://skia.googlesource.com/skia.git',
+        gerrit_project='skia') +
+    api.step_data('presubmit',
+                  api.json.output([['chromium_presubmit', ['compile']]]))
+  )
+
+  yield (
+    api.test('repository_url_with_solution_name') +
     api.properties.tryserver(
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
