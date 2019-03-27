@@ -124,6 +124,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB:
       ret['GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB'] = \
         self.c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB
+    if self.c.env.GOMA_STORE_ONLY:
+      ret['GOMA_STORE_ONLY'] = self.c.env.GOMA_STORE_ONLY
     if self.c.env.FORCE_MAC_TOOLCHAIN:
       ret['FORCE_MAC_TOOLCHAIN'] = self.c.env.FORCE_MAC_TOOLCHAIN
     return ret

@@ -74,6 +74,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                                                               required=False),
       GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(
           int, required=False),
+      GOMA_STORE_ONLY = Single(bool, empty_val=False, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
     ),
     mac_toolchain = ConfigGroup(
@@ -258,6 +259,10 @@ def goma_enable_global_file_stat_cache(c):
   # Do not enable this if some src files are modified for recompilation
   # while running goma daemon.
   c.compile_py.goma_enable_global_file_stat_cache = True
+
+@config_ctx()
+def goma_store_only(c):
+  c.env.GOMA_STORE_ONLY = True
 
 @config_ctx()
 def goma_canary(c):

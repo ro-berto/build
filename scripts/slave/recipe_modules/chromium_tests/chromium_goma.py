@@ -137,37 +137,46 @@ SPEC = {
 
         # RBE LoadTest
         'Chromium Linux Goma RBE LoadTest':
-        CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Linux Goma RBE LoadTest (clobber)':
-        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('linux', 'Release',
+                     ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Linux Goma RBE LoadTest (ATS)':
-        CreateConfig('linux', 'Release', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Linux Goma RBE LoadTest (ATS) (clobber)':
-        CreateConfig('linux', 'Release', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('linux', 'Release',
+                     ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Linux Goma RBE LoadTest (debug)':
-        CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Linux Goma RBE LoadTest (clobber) (debug)':
-        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
+        CreateConfig('linux', 'Debug',
+                     ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Linux Goma RBE LoadTest (ATS) (debug)':
-        CreateConfig('linux', 'Debug', ['goma_rbe_prod']),
+        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Linux Goma RBE LoadTest (ATS) (clobber) (debug)':
-        CreateConfig('linux', 'Debug', ['goma_rbe_prod', 'clobber']),
-
+        CreateConfig('linux', 'Debug',
+                     ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest':
-        CreateAndroidConfig('Release', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Release', 32,
+                            ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (clobber)':
-        CreateAndroidConfig('Release', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Release', 32,
+                            ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (ATS)':
-        CreateAndroidConfig('Release', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Release', 32,
+                            ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (ATS) (clobber)':
-        CreateAndroidConfig('Release', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Release', 32,
+                            ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (debug)':
-        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (clobber) (debug)':
-        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Debug', 32,
+                            ['goma_rbe_prod', 'goma_store_only', 'clobber']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (ATS) (debug)':
-        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod']),
+        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'goma_store_only']),
         'Chromium Android ARM 32-bit Goma RBE LoadTest (ATS) (clobber) (debug)':
-        CreateAndroidConfig('Debug', 32, ['goma_rbe_prod', 'clobber']),
+        CreateAndroidConfig('Debug', 32,
+                            ['goma_rbe_prod', 'goma_store_only', 'clobber']),
     },
 }
