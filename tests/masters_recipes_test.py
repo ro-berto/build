@@ -65,7 +65,6 @@ FAKE_BUILDERS = {
         'Android Find Annotated Test',
         'Android Remoting Tests',
         'Android VR Tests',
-        'Chromium Windows Analyze',
     ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
@@ -181,7 +180,6 @@ FAKE_BUILDERS = {
         'layout_test_leak_detection',
         'linux-annotator-rel',
         'linux_arm',
-        'linux_chromium_analysis',
         'linux_chromium_archive_rel_ng',
         'linux_chromium_chromeos_asan_rel_ng',
         'linux_chromium_chromeos_msan_rel_ng',
