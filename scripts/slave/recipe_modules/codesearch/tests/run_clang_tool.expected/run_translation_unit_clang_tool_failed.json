@@ -20,7 +20,6 @@
     ],
     "name": "run translation_unit clang tool",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Step('run translation_unit clang tool') failed with return_code 1@@@",
       "@@@STEP_WARNINGS@@@"
     ]

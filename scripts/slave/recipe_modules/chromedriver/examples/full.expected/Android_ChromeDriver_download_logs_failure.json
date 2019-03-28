@@ -754,7 +754,6 @@
     "name": "Download Test Results Log.gsutil download results log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

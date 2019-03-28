@@ -990,7 +990,6 @@
     "name": "Set up ASAN on devices.wait_for_devices",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 87",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

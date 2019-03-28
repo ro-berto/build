@@ -168,7 +168,6 @@
     ],
     "name": "test spec format error",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@details@The test target \"base_unittests\" contains a custom tear down script@@@",
       "@@@STEP_LOG_LINE@details@\"tear_down_script2.py\" that doesn't match the expected format. Custom@@@",
       "@@@STEP_LOG_LINE@details@tear down script entries should be a path relative to the top-level@@@",

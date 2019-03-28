@@ -21,7 +21,6 @@
     ],
     "name": "Upload to test-results [example-test-type]",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_WARNINGS@@@"
     ]
   },

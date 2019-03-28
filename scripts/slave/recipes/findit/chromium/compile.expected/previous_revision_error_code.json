@@ -10,7 +10,6 @@
     "name": "record previously checked-out revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "step returned non-zero exit code: 255",
       "@@@STEP_EXCEPTION@@@"
     ]
   },
@@ -26,7 +25,6 @@
     "name": "record previously cached revision",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "step returned non-zero exit code: 255",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

@@ -1136,7 +1136,6 @@
     },
     "name": "perf_test.foo",
     "~followup_annotations": [
-      "step returned non-zero exit code: 87",
       "@@@STEP_TEXT@<br/>Device Affinity: 0<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@",

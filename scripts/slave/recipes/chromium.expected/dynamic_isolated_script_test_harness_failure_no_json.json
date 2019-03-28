@@ -397,7 +397,6 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: -11",
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",

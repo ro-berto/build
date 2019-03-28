@@ -168,7 +168,6 @@
     ],
     "name": "test spec format error",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@details@The test target \"base_unittests\" contains a custom trigger_script@@@",
       "@@@STEP_LOG_LINE@details@\"bad\" that doesn't match the expected format. Custom trigger_script@@@",
       "@@@STEP_LOG_LINE@details@entries should be a path relative to the top-level chromium src@@@",

@@ -1003,7 +1003,6 @@
     ],
     "name": "Run telemetry browser_test PopularUrlsTest",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>failed_test_1<br/>failed_test_2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",

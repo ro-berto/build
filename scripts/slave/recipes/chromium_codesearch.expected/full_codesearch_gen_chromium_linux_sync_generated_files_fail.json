@@ -841,7 +841,6 @@
     ],
     "name": "sync generated files",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Step('sync generated files') failed with return_code 1@@@",
       "@@@STEP_WARNINGS@@@"
     ]

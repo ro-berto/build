@@ -324,7 +324,6 @@
     },
     "name": "test spec format error",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@details@The test target \"fake_test\" contains a custom merge_script@@@",
       "@@@STEP_LOG_LINE@details@\"bad_fake_merge_script.py\" that doesn't match the expected format.@@@",
       "@@@STEP_LOG_LINE@details@Custom merge_script entries should be a path relative to the top-level@@@",

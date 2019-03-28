@@ -327,7 +327,6 @@
     },
     "name": "gclient runhooks (with patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -518,7 +517,6 @@
     },
     "name": "gclient runhooks (without patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"c18cfb87382155d691c887ecad8e8bf7cdf0fab3\"@@@"
     ]

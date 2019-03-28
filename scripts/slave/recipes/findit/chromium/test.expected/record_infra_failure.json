@@ -802,7 +802,6 @@
     "name": "test r1.preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

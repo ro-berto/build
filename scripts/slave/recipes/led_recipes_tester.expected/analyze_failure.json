@@ -9,7 +9,6 @@
     "name": "analyze+launch luci.chromium.try:linux-rel.recipe invalid",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@analyze reported that the recipe 'foo_recipe' was invalid. Something may be wrong with the swarming task this is based on.@@@",
       "@@@STEP_FAILURE@@@"
     ]

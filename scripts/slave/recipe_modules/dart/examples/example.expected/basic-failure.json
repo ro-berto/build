@@ -239,7 +239,6 @@
     "name": "can_time_out",
     "timeout": 1200,
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -445,7 +445,6 @@
     "name": "isolate.generate 0.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_EXCEPTION@@@"
     ]
   },
@@ -945,7 +944,6 @@
     "name": "trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake test 4 (iPhone 5s iOS 8.1)/iOS-8.1/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",

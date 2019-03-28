@@ -299,7 +299,6 @@
     "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",

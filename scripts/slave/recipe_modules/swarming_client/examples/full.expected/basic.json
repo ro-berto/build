@@ -124,7 +124,6 @@
     ],
     "name": "swarming.py is too old",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Expecting at least v20.0.0, got v0.4.4@@@",
       "@@@STEP_FAILURE@@@"
     ]

@@ -87,7 +87,6 @@
     "infra_step": true,
     "name": "create bundle (src/foo)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Exception: Infra Failure in create bundle (src/foo)@@@",
       "@@@STEP_FAILURE@@@"
     ]

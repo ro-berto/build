@@ -277,7 +277,6 @@
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "name": "run all tests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
   },

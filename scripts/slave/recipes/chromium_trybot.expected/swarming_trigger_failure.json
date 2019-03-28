@@ -924,7 +924,6 @@
     "name": "test_pre_run (with patch).[error] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"70575068828d0791d4689fb1a70a5411914b5044\"@@@"

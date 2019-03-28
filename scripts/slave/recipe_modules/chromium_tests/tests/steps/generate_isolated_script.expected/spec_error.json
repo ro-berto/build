@@ -168,7 +168,6 @@
     ],
     "name": "isolated_scripts spec format error",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@details@The isolated_scripts target \"base_unittests\" contains a custom@@@",
       "@@@STEP_LOG_LINE@details@results_handler \"bogus\" but that result handler was not found.@@@",
       "@@@STEP_LOG_END@details@@@",

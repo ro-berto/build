@@ -714,7 +714,6 @@
     },
     "name": "android_webview_unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 2",
       "@@@STEP_FAILURE@@@"
     ]
   },

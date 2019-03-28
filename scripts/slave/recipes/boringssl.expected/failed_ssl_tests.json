@@ -203,7 +203,6 @@
     "cwd": "[START_DIR]/boringssl/ssl/test/runner",
     "name": "ssl tests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 5",
       "@@@STEP_TEXT@<br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
       "@@@STEP_LOG_LINE@test_utils.test_results@  \"num_passes\": 9001, @@@",

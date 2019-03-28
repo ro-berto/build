@@ -971,7 +971,6 @@
     },
     "name": "unittests",
     "~followup_annotations": [
-      "step returned non-zero exit code: 88",
       "@@@STEP_WARNINGS@@@"
     ]
   },

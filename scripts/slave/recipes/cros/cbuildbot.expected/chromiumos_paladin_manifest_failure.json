@@ -126,7 +126,6 @@
     ],
     "name": "Fetch manifest config failure",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Failed to fetch manifest config.@@@",
       "@@@STEP_FAILURE@@@"
     ]

@@ -17,7 +17,6 @@
     ],
     "name": "Run CTS",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
       "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",

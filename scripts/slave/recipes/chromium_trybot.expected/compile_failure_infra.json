@@ -644,7 +644,6 @@
     },
     "name": "compile (with patch)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",

@@ -168,7 +168,6 @@
     ],
     "name": "instrumentation test swarming error",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@The tests can only be run locally.@@@",
       "@@@STEP_FAILURE@@@"
     ]

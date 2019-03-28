@@ -1022,7 +1022,6 @@
     "name": "unittests: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.googleapis.com/chromium-result-details/UploadQuietFailure.txt@@@",
       "@@@STEP_FAILURE@@@"
     ]

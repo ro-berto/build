@@ -80,7 +80,6 @@
     },
     "name": "device pre-run cleanup",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -236,7 +236,6 @@
     "infra_step": true,
     "name": "Host Info",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"foo\", @@@",

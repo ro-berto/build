@@ -441,7 +441,6 @@
     },
     "name": "compile",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
       "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",

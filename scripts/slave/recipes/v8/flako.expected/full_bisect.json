@@ -101,7 +101,6 @@
     "name": "gsutil lookup isolates for #0",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LINK@a0@https://chromium.googlesource.com/v8/v8/+/a0@@@"
     ]
   },
@@ -2183,7 +2182,6 @@
     "name": "gsutil lookup isolates for #4",
     "stderr": "/path/to/tmp/",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LINK@a4@https://chromium.googlesource.com/v8/v8/+/a4@@@"
     ]
   },

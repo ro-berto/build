@@ -7,7 +7,6 @@
     ],
     "name": "Recipe failed. Reason: Fake failure",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_LOG_LINE@python.inline@import sys; sys.exit(1)@@@",
       "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_FAILURE@@@"
