@@ -5150,9 +5150,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 
 Tests a recipe CL by running a chromium builder.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#123)(api, repo_name):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#120)(api, repo_name):**
 
-&mdash; **def [trigger\_cl](/scripts/slave/recipes/led_recipes_tester.py#78)(api, recipe, repo_path, recipes_py_path, builder):**
+&mdash; **def [trigger\_cl](/scripts/slave/recipes/led_recipes_tester.py#75)(api, recipe, repo_path, recipes_py_path, builder):**
 
 Calculates the chromium testing CL for the current CL.
 
