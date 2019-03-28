@@ -219,7 +219,16 @@ def GenTests(api):
         'telemetry_gpu_unittests (with patch)',
         api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
-                passing=True, is_win=False, swarming=True,
+                passing=False, is_win=False, swarming=True,
+                isolated_script_passing=False,
+            ),
+            failure=True)
+    ) +
+    api.override_step_data(
+        'telemetry_gpu_unittests (retry shards with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.test_utils.canned_isolated_script_output(
+                passing=False, is_win=False, swarming=True,
                 isolated_script_passing=False,
             ),
             failure=True)
@@ -380,6 +389,10 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'gl_tests (with patch)',
+        api.chromium_swarming.canned_summary_output(
+            canned_test(passing=False), failure=True)) +
+    api.override_step_data(
+        'gl_tests (retry shards with patch)',
         api.chromium_swarming.canned_summary_output(
             canned_test(passing=False), failure=True)) +
     api.override_step_data(
@@ -754,7 +767,14 @@ def GenTests(api):
     api.override_step_data('blink_web_tests (with patch)',
         api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
-                passing=True, swarming=True,
+                passing=False, swarming=True,
+                isolated_script_passing=False,
+                isolated_script_retcode=125),
+            failure=True)) +
+    api.override_step_data('blink_web_tests (retry shards with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.test_utils.canned_isolated_script_output(
+                passing=False, swarming=True,
                 isolated_script_passing=False,
                 isolated_script_retcode=125),
             failure=True)) +

@@ -1401,7 +1401,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    retry_failed_shards = trybot_config.get('retry_failed_shards', False)
+    retry_failed_shards = trybot_config.get('retry_failed_shards', True)
     test_failures_prevent_cq_retry = trybot_config.get(
         'test_failures_prevent_cq_retry', False)
     enable_retry_with_patch = trybot_config.get(
