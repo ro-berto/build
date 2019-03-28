@@ -904,6 +904,7 @@ TRYBOTS = freeze({
       },
       'win7-rel': {
         'retry_failed_shards': True,
+        'test_failures_prevent_cq_retry': True,
         'bot_ids': [
           {
             'mastername': 'chromium.win',
