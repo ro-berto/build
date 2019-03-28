@@ -59,12 +59,15 @@ def RunSteps(api, mastername, buildername):
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
   test_failures_prevent_cq_retry = api.properties.get(
       'test_failures_prevent_cq_retry', False)
+  enable_retry_with_patch = api.properties.get(
+      'enable_retry_with_patch', True)
 
   # Override _trybot_steps_internal to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
     return (bot_config_object, update_step, affected_files, [test],
-            retry_failed_shards, test_failures_prevent_cq_retry)
+            retry_failed_shards, test_failures_prevent_cq_retry,
+            enable_retry_with_patch)
   api.chromium_tests._trybot_steps_internal = config_override
 
   skip_deapply_patch = api.properties.get(
@@ -222,6 +225,69 @@ def GenTests(api):
       api.post_process(retry_with_tests_filter)
   )
 
+  # This disables retry with patch at the bot config layer.
+  yield (
+      api.test('disable_retry_with_patch_bot_config_layer') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          enable_retry_with_patch=False,
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False), failure=True))
+          +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True), failure=False))
+          +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('disable_retry_with_patch_bot_config_layer_fail') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          enable_retry_with_patch=False,
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False), failure=True))
+          +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False), failure=True))
+          +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True), failure=False))
+          +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  # This disables retry with patch at the test layer.
   yield (
       api.test('disable_retry_with_patch_and_deapply') +
       api.properties.tryserver(
@@ -245,6 +311,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  # This disables retry with patch at the test layer.
   yield (
       api.test('disable_retry_with_patch_and_deapply_invalid_results') +
       api.properties.tryserver(

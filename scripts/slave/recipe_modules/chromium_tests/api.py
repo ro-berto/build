@@ -907,7 +907,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return True
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
-                              affected_files, retry_failed_shards):
+                              affected_files, retry_failed_shards,
+                              enable_retry_with_patch):
     """Runs tests with retries.
 
     This function runs tests with the CL patched in. On failure, this will
@@ -983,6 +984,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Early exit if all test_suites are passing.
       if not test_suites_to_retry_with_patch:
         return
+
+      if not enable_retry_with_patch:
+        return test_suites_to_retry_with_patch
 
       # Reapply the patch. Then rerun failing tests.
       self._reapply_patch_build_isolate(test_suites_to_retry_with_patch,
@@ -1217,14 +1221,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       (bot_config_object, bot_update_step, affected_files, test_suites,
-       retry_failed_shards, test_failures_prevent_cq_retry) = (
+       retry_failed_shards, test_failures_prevent_cq_retry,
+       enable_retry_with_patch) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if test_suites:
         unrecoverable_test_suites = self._run_tests_on_tryserver(
             bot_config_object, test_suites, bot_update_step, affected_files,
-            retry_failed_shards)
+            retry_failed_shards, enable_retry_with_patch)
         self.m.chromium_swarming.report_stats()
 
         self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
@@ -1276,6 +1281,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       test_failures_prevent_cq_retry:
           If test failures are the only reason the build is failing, then set a
           flag to prevent the CQ from retrying the build.
+      enable_retry_with_patch:
+          Whether to run 'retry with patch' steps on test failures.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1397,9 +1404,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     retry_failed_shards = trybot_config.get('retry_failed_shards', False)
     test_failures_prevent_cq_retry = trybot_config.get(
         'test_failures_prevent_cq_retry', False)
+    enable_retry_with_patch = trybot_config.get(
+        'enable_retry_with_patch', True)
     return (
         bot_config_object, bot_update_step, affected_files, tests,
-        retry_failed_shards, test_failures_prevent_cq_retry
+        retry_failed_shards, test_failures_prevent_cq_retry,
+        enable_retry_with_patch
     )
 
   def _report_builders(self, bot_config):
