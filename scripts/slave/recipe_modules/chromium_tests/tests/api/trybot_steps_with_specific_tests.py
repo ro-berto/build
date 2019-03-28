@@ -57,13 +57,20 @@ def RunSteps(api, mastername, buildername):
   affected_files = api.properties.get('affected_files', [])
 
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
+  test_failures_prevent_cq_retry = api.properties.get(
+      'test_failures_prevent_cq_retry', False)
 
   # Override _trybot_steps_internal to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
     return (bot_config_object, update_step, affected_files, [test],
-            retry_failed_shards)
+            retry_failed_shards, test_failures_prevent_cq_retry)
   api.chromium_tests._trybot_steps_internal = config_override
+
+  skip_deapply_patch = api.properties.get(
+      'skip_deapply_patch', False)
+  if skip_deapply_patch:
+    api.chromium_tests._should_retry_with_patch_deapplied = lambda x: False
 
   api.chromium_tests.trybot_steps()
 
@@ -81,6 +88,115 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True))
+  )
+
+  yield (
+      api.test('test_failures_prevent_cq_retry') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          test_failures_prevent_cq_retry=True,
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(post_process.PropertyEquals, 'do_not_retry', True) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('invalid_tests_does_not_prevent_cq_retry') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          test_failures_prevent_cq_retry=True,
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      # Initial tests & retry shards with patch produce invalid results.
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(test_results_json='', retcode=1),
+              failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(test_results_json='', retcode=1),
+              failure=True)) +
+      # Test passes on tip of tree.
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True), failure=False)) +
+      # Tests fail in 'retry with patch'
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(post_process.PropertiesDoNotContain, 'do_not_retry') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('skip_without_patch_does_not_prevent_cq_retry') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          test_failures_prevent_cq_retry=True,
+          retry_failed_shards=True,
+          skip_deapply_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(post_process.PropertiesDoNotContain, 'do_not_retry') +
+      api.post_process(post_process.DoesNotRun, '.*without patch.*') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('bot_update_failure_does_not_prevent_cq_retry') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          test_failures_prevent_cq_retry=True,
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      # Initial tests & retry shards with patch produce invalid results.
+      api.override_step_data('bot_update', retcode=1) +
+      api.post_process(post_process.PropertiesDoNotContain, 'do_not_retry') +
+      api.post_process(post_process.DropExpectation)
   )
 
   retry_with_tests_filter = post_process.Filter().include_re(

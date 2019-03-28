@@ -1217,7 +1217,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       (bot_config_object, bot_update_step, affected_files, test_suites,
-       retry_failed_shards) = (
+       retry_failed_shards, test_failures_prevent_cq_retry) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
@@ -1230,6 +1230,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
 
         if unrecoverable_test_suites:
+          every_failing_test_suite_had_valid_results = True
+          for test_suite in unrecoverable_test_suites:
+            # Both 'with patch' and 'without patch' must have valid results to
+            # skip CQ retries.
+            valid_results, _ = (
+                test_suite.with_patch_failures_including_retry(self.m))
+            if not valid_results:
+              every_failing_test_suite_had_valid_results = False
+
+            if not test_suite.has_valid_results(self.m, 'without patch'):
+              every_failing_test_suite_had_valid_results = False
+
+          if (every_failing_test_suite_had_valid_results and
+              test_failures_prevent_cq_retry):
+            self.m.tryserver.set_do_not_retry_build()
+
           exit_message = ' '.join(
               [x.name + ' failed.' for x in unrecoverable_test_suites])
           raise self.m.step.StepFailure(exit_message)
@@ -1257,6 +1273,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
              parse the results. Running tests multiple times is not idempotent
              -- the results of previous runs affect future runs.
       retry_failed_shards: Whether to retry failures in 'with patch'.
+      test_failures_prevent_cq_retry:
+          If test failures are the only reason the build is failing, then set a
+          flag to prevent the CQ from retrying the build.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1376,9 +1395,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests = []
 
     retry_failed_shards = trybot_config.get('retry_failed_shards', False)
+    test_failures_prevent_cq_retry = trybot_config.get(
+        'test_failures_prevent_cq_retry', False)
     return (
         bot_config_object, bot_update_step, affected_files, tests,
-        retry_failed_shards
+        retry_failed_shards, test_failures_prevent_cq_retry
     )
 
   def _report_builders(self, bot_config):
