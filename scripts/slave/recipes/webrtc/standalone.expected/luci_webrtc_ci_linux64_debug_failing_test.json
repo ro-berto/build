@@ -6872,7 +6872,12 @@
     "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Test target(s) failed: rtc_unittests"
+    },
     "name": "$result"
   }
 ]

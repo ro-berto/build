@@ -3732,7 +3732,7 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#205)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#478)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#483)(self):**
 
 &emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#213)(self):**
 
@@ -3764,9 +3764,9 @@ Generate a JSON config from bot config, apply it to ios recipe module.
 
 &emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#228)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#462)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#467)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#519)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#524)(self):**
 
 &mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#232)(self):**
 
@@ -3785,7 +3785,7 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#244)(self):**
 
-&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#535)(self, name, step_result):**
+&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#540)(self, name, step_result):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]

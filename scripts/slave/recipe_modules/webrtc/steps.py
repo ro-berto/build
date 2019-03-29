@@ -233,7 +233,7 @@ class PythonTest(Test):
   def run(self, api, suffix):
     with api.depot_tools.on_path():
       with api.context(env=self._env):
-        api.python(self._test, self._script, self._args)
+        return api.python(self._test, self._script, self._args)
 
 
 class AndroidTest(SwarmingGTestTest):
@@ -314,7 +314,7 @@ class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
   def run(self, api, suffix):
-    api.chromium_android.run_java_unit_test_suite(self._name)
+    return api.chromium_android.run_java_unit_test_suite(self._name)
 
 
 class IosTest(object):

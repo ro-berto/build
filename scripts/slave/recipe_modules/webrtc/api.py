@@ -445,19 +445,24 @@ class WebRTCApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self._working_dir):
       tests = steps.generate_tests(
           self.m, phase, self.revision, self.revision_number, self.bot)
-      with self.m.step.defer_results():
-        if tests:
-          for test in tests:
-            test.pre_run(self.m, suffix='')
+      if tests:
+        for test in tests:
+          test.pre_run(self.m, suffix='')
 
-          # Build + upload archives while waiting for swarming tasks to finish.
-          if self.bot.config.get('build_android_archive'):
-            self.build_android_archive()
-          if self.bot.config.get('archive_apprtc'):
-            self.package_apprtcmobile()
+        # Build + upload archives while waiting for swarming tasks to finish.
+        if self.bot.config.get('build_android_archive'):
+          self.build_android_archive()
+        if self.bot.config.get('archive_apprtc'):
+          self.package_apprtcmobile()
 
-          for test in tests:
-            test.run(self.m, suffix='')
+        failures = []
+        for test in tests:
+          result = test.run(self.m, suffix='')
+          if result.presentation.status != self.m.step.SUCCESS:
+            failures.append(test._name)
+        if failures:
+          raise self.m.step.StepFailure('Test target(s) failed: %s' %
+                                        ', '.join(failures))
 
   def maybe_trigger(self):
     properties = {
