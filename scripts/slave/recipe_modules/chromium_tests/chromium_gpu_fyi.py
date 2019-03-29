@@ -221,6 +221,23 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    'Win10 FYI Release (AMD RX 550)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
     'Win10 FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
