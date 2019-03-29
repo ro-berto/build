@@ -967,8 +967,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Release/bin/run_default_test_name",
       "--blacklist-file",
       "[CACHE]/builder/src/out/bad_devices.json",

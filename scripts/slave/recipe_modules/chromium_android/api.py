@@ -1646,4 +1646,4 @@ class AndroidApi(recipe_api.RecipeApi):
         env['CHROMIUM_OUTPUT_DIR'] = self.m.context.env.get(
           'CHROMIUM_OUTPUT_DIR', self.m.chromium.output_dir)
       with self.m.context(env=env):
-        return self.m.python(step_name, script, args, venv=True, **kwargs)
+        return self.m.step(step_name, [script] + args, **kwargs)

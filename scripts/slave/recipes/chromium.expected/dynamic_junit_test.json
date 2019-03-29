@@ -707,8 +707,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Release/bin/run_base_junit_tests",
       "--verbose",
       "--release",

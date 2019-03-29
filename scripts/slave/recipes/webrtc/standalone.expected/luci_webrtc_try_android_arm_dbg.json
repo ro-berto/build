@@ -6823,8 +6823,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/android_arm_dbg/bin/run_android_junit_tests",
       "--verbose"
     ],

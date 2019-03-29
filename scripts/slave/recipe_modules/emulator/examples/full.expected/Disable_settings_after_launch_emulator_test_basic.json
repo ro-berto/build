@@ -290,8 +290,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/out/Debug/bin/run_sample_test",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",

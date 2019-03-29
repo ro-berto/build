@@ -966,8 +966,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "[CACHE]/builder/src/out/bad_devices.json",

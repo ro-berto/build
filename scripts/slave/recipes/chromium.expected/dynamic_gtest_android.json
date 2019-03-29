@@ -701,8 +701,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Debug/bin/run_base_unittests",
       "--blacklist-file",
       "[CACHE]/builder/src/out/bad_devices.json",

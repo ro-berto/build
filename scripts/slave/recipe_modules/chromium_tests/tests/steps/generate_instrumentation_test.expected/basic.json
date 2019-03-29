@@ -162,8 +162,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/out/Release/bin/run_example_instrumentation_test",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",

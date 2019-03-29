@@ -6560,8 +6560,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/bin/run_android_junit_tests",
       "--verbose"
     ],

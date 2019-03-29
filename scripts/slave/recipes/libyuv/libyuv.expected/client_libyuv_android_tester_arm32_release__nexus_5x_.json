@@ -368,8 +368,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[CACHE]/builder/src/out/Release/bin/run_libyuv_unittest",
       "--blacklist-file",
       "[CACHE]/builder/src/out/bad_devices.json",

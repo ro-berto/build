@@ -910,8 +910,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "monkey",
       "-v",
@@ -930,8 +928,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--release",
@@ -1000,8 +996,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "perf",
       "--steps",
@@ -1222,8 +1216,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/build/android/test_runner.py",
       "instrumentation",
       "--blacklist-file",
@@ -1252,8 +1244,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "[START_DIR]/src/out/Release/bin/run_unittests",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",

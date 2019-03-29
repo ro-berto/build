@@ -1,8 +1,6 @@
 [
   {
     "cmd": [
-      "vpython",
-      "-u",
       "None/out/Release/bin/run_base_unittests",
       "--gtest_filter=foo.bar",
       "--test-launcher-retry-limit=3",
@@ -52,8 +50,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "None/out/Release/bin/run_base_unittests",
       "--gtest_filter=foo.bar",
       "--test-launcher-retry-limit=3",
@@ -92,8 +88,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
       "None/out/Release/bin/run_base_unittests",
       "--gtest_filter=foo.bar",
       "--test-launcher-retry-limit=3",

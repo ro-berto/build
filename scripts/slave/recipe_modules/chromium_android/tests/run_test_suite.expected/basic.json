@@ -1,8 +1,6 @@
 [
   {
     "cmd": [
-      "vpython",
-      "-u",
       "None/out/Release/bin/run_test_suite",
       "--blacklist-file",
       "None/out/bad_devices.json",

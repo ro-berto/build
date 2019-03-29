@@ -1,8 +1,6 @@
 [
   {
     "cmd": [
-      "vpython",
-      "-u",
       "None/out/Release/bin/run_chrome_public_test_apk",
       "--blacklist-file",
       "None/out/bad_devices.json",
