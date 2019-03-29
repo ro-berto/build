@@ -40,12 +40,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'chrome',
-        'chrome_sandbox',
-        'linux_symbols',
-        'symupload'
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -61,9 +55,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'chrome/installer/linux'
-      ],
       'testing': {
         'platform': 'linux',
       },
@@ -82,9 +73,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'compile_targets': [
-        'chrome',
-      ],
       'testing': {
         'platform': 'mac',
       },
@@ -103,9 +91,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'compile_targets': [
-        'chrome_official_builder',
-      ],
       'checkout_dir': 'win_chrome',
       'testing': {
         'platform': 'win',
