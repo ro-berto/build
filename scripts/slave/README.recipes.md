@@ -6,7 +6,6 @@
   * [adb](#recipe_modules-adb)
   * [archive](#recipe_modules-archive)
   * [build](#recipe_modules-build)
-  * [chromedriver](#recipe_modules-chromedriver)
   * [chromite](#recipe_modules-chromite)
   * [chromium](#recipe_modules-chromium)
   * [chromium_android](#recipe_modules-chromium_android)
@@ -67,11 +66,8 @@
   * [build:examples/full](#recipes-build_examples_full)
   * [catapult](#recipes-catapult)
   * [celab](#recipes-celab)
-  * [chromedriver](#recipes-chromedriver)
-  * [chromedriver:examples/full](#recipes-chromedriver_examples_full)
   * [chromite:examples/full](#recipes-chromite_examples_full)
   * [chromium](#recipes-chromium)
-  * [chromium.chromedriver.recipe_autogen](#recipes-chromium.chromedriver.recipe_autogen)
   * [chromium:examples/full](#recipes-chromium_examples_full)
   * [chromium:tests/analyze](#recipes-chromium_tests_analyze)
   * [chromium:tests/archive_build](#recipes-chromium_tests_archive_build)
@@ -462,59 +458,6 @@ TODO(dnj): This function and its invocations should be deprecated in favor
 of using environment variables via "add_slave_utils_kwargs". The script
 invocation path for some of these is just too intertwined to confidently
 apply this via explicit args everywhere.
-### *recipe_modules* / [chromedriver](/scripts/slave/recipe_modules/chromedriver)
-
-[DEPS](/scripts/slave/recipe_modules/chromedriver/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_gsutil](#recipe_modules-chromium_gsutil), [zip](#recipe_modules-zip), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
-
-#### **class [ChromedriverApi](/scripts/slave/recipe_modules/chromedriver/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [archive\_server\_log](/scripts/slave/recipe_modules/chromedriver/api.py#49)(self, server_log):**
-
-Uploads chromedriver server log to Google storage.
-
-Args:
-  chromedriver_log: Path to the Chromedriver server log.
-
-&mdash; **def [download\_prebuilts](/scripts/slave/recipe_modules/chromedriver/api.py#24)(self):**
-
-Downloads the most recent prebuilts from Google storage.
-
-&mdash; **def [download\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#61)(self, chromedriver_platform):**
-
-Downloads the test results log for the given Chromedriver platform.
-
-Args:
-  chromedriver_platform: The platform of the test results log.
-
-Returns:
-  A dictionary where the keys are commit positions and the values are
-  booleans indicating whether the tests passed.
-
-&mdash; **def [run\_all\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#196)(self, android_packages=None, archive_server_logs=True):**
-
-Run all Chromedriver tests.
-
-&mdash; **def [run\_java\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#180)(self, chromedriver, chrome_version_name=None, android_package=None, verbose=False, archive_server_log=True, env=None, \*\*kwargs):**
-
-Run the Chromedriver Java tests.
-
-&mdash; **def [run\_python\_tests](/scripts/slave/recipe_modules/chromedriver/api.py#164)(self, chromedriver, ref_chromedriver, chrome_version_name=None, android_package=None, archive_server_log=True, env=None, \*\*kwargs):**
-
-Run the Chromedriver Python tests.
-
-&mdash; **def [update\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#102)(self, chromedriver_platform, commit_position, passed):**
-
-Updates the test results log stored in GS for the given platform.
-
-Args:
-  chromedriver_platform: The platform name.
-  commit_position: The commit position number.
-  passed: Boolean indicating whether the tests passed at this
-      commit position.
-
-&mdash; **def [upload\_test\_results\_log](/scripts/slave/recipe_modules/chromedriver/api.py#87)(self, chromedriver_platform, test_results_log):**
-
-Uploads the given test results log to Google storage.
 ### *recipe_modules* / [chromite](/scripts/slave/recipe_modules/chromite)
 
 [DEPS](/scripts/slave/recipe_modules/chromite/__init__.py#1): [goma](#recipe_modules-goma), [repo](#recipe_modules-repo), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -3962,16 +3905,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipes/celab.py#5): [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/celab.py#47)(api):**
-### *recipes* / [chromedriver](/scripts/slave/recipes/chromedriver.py)
-
-[DEPS](/scripts/slave/recipes/chromedriver.py#8): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [chromedriver](#recipe_modules-chromedriver), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [commit\_position](#recipe_modules-commit_position), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromedriver.py#45)(api):**
-### *recipes* / [chromedriver:examples/full](/scripts/slave/recipe_modules/chromedriver/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromedriver/examples/full.py#8): [archive](#recipe_modules-archive), [chromedriver](#recipe_modules-chromedriver), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [commit\_position](#recipe_modules-commit_position), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromedriver/examples/full.py#38)(api):**
 ### *recipes* / [chromite:examples/full](/scripts/slave/recipe_modules/chromite/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromite/examples/full.py#7): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -3984,23 +3917,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium.py#40)(api):**
 
 &mdash; **def [ignore\_undumpable](/scripts/slave/recipes/chromium.py#33)(obj):**
-### *recipes* / [chromium.chromedriver.recipe\_autogen](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py)
-
-[DEPS](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [Linux32\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#35)(api):**
-
-&mdash; **def [Linux\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#217)(api):**
-
-&mdash; **def [Mac\_10\_6\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#96)(api):**
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#301)(api):**
-
-&mdash; **def [Win7\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#157)(api):**
-
-&mdash; **def [annotated\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#286)(api, got_revision):**
-
-&mdash; **def [build\_with\_goma\_module](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#20)(api):**
 ### *recipes* / [chromium:examples/full](/scripts/slave/recipe_modules/chromium/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/examples/full.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
