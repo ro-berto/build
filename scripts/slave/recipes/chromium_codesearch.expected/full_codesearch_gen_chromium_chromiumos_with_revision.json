@@ -773,6 +773,23 @@
       "--with-third-party-lib",
       "--",
       "python",
+      "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
+      "--corpus",
+      "chromium.googlesource.com/chromium/src",
+      "--out_dir",
+      "src/out/chromeos-Debug"
+    ],
+    "name": "add kythe metadata"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
       "--checkout-dir",
       "[CACHE]/builder/src",
