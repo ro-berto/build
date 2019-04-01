@@ -438,10 +438,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-concurrent-marking-tsan-rel',
       }),
-      'linux-blink-heap-incremental-marking': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'linux-blink-heap-incremental-marking',
-      }),
       'linux-blink-heap-verification-try': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-verification',
