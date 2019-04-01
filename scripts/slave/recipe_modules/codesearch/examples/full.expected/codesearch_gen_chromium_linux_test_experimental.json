@@ -683,23 +683,6 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
-      "--corpus",
-      "chromium-linux",
-      "--out_dir",
-      "src/out/out/Debug"
-    ],
-    "name": "add kythe metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
       "--checkout-dir",
       "[START_DIR]/src",
