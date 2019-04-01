@@ -12,6 +12,7 @@ DEPS = [
   'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -34,7 +35,7 @@ BUILDERS = freeze({
       'upload': {
         'bucket': 'chrome-perf',
         'path': lambda api: ('Android Builder/full-build-linux_%s.zip'
-                             % api.properties['revision']),
+                             % api.buildbucket.gitiles_commit.id),
       },
       'resource_sizes_apks': [
         'ChromeModernPublic.minimal.apks',
@@ -70,7 +71,7 @@ BUILDERS = freeze({
         'bucket': 'chrome-perf',
         'path': lambda api: (
             'Android arm64 Builder/full-build-linux_%s.zip'
-            % api.properties['revision']),
+            % api.buildbucket.gitiles_commit.id),
       },
       'resource_sizes_apks': [
         'ChromeModernPublic.minimal.apks',
@@ -109,7 +110,7 @@ BUILDERS = freeze({
       'upload': {
         'bucket': 'v8-android',
         'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip'
-                             % api.properties['revision']),
+                             % api.buildbucket.gitiles_commit.id),
       },
       'run_mb': True,
       'targets': [
