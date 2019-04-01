@@ -169,6 +169,10 @@ SPEC = {
         CreateAndroidConfig(32,
                             ['goma_rbe_prod', 'goma_store_only', 'clobber']),
 
+        # RBE HighLoad LoadTest
+        'Chromium Linux Goma RBE Cache HighLoad LoadTest (clobber) (debug)':
+        CreateConfig('linux', ['goma_rbe_prod', 'goma_store_only', 'clobber']),
+
         # RBE Cache LoadTest
         'Chromium Linux Goma RBE Cache LoadTest (clobber) (debug)':
         CreateConfig('linux', ['goma_rbe_prod', 'clobber']),
