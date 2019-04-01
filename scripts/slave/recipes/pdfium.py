@@ -157,7 +157,7 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     args.extend(['is_msan=true', 'use_prebuilt_instrumented_libraries=true'])
   elif memory_tool == 'ubsan':
     assert not api.platform.is_win
-    args.extend(['is_ubsan_security=true', 'is_ubsan_no_recover=false'])
+    args.extend(['is_ubsan_security=true', 'is_ubsan_no_recover=true'])
 
   if target_os:
     args.append('target_os="%s"' % target_os)
