@@ -459,6 +459,13 @@
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bytecode\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"gn\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/gn.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"--arch=x64\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"runtime\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
@@ -770,6 +777,28 @@
     "infra_step": true,
     "name": "git show",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\sdk\\tools\\gn.py",
+      "-ax64",
+      "-mrelease",
+      "--bytecode"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "DART_USE_CRASHPAD": "1",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn"
   },
   {
     "cmd": [

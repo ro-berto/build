@@ -18,6 +18,7 @@ SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
 
 TEST_PY_PATH = 'tools/test.py'
 BUILD_PY_PATH = 'tools/build.py'
+GN_PY_PATH = 'tools/gn.py'
 
 CHROME_PATH_ARGUMENT = {
   'linux': '--chrome=browsers/chrome/google-chrome',
@@ -729,7 +730,9 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.depot_tools.on_path(), self.m.context(
         cwd=self.m.path['checkout'],
         env=step.environment_variables):
-      if step.is_build_step:
+      if step.is_gn_step:
+        self._run_gn(step)
+      elif step.is_build_step:
         self._run_build(step)
       elif step.is_trigger:
         self._run_trigger(step)
@@ -737,6 +740,20 @@ class DartApi(recipe_api.RecipeApi):
         self._run_test_py(step, global_config)
       else:
         self._run_script(step)
+
+  @recipe_api.non_step
+  def _run_gn(self, step):
+    mode = step.environment['mode']
+    arch = step.environment['arch']
+    args = step.args
+    if not self._has_specific_argument(args, ['-m', '--mode']):
+      args = ['-m%s' % mode] + args
+    if not self._has_specific_argument(args, ['-a', '--arch']):
+      args = ['-a%s' % arch] + args
+    with self.m.context(env={'GOMA_DIR':self.m.goma.goma_dir}):
+      self.m.python(step.name,
+                    self.m.path['checkout'].join('tools', 'gn.py'),
+                    args=args)
 
 
   @recipe_api.non_step
@@ -1028,6 +1045,7 @@ class DartApi(recipe_api.RecipeApi):
         executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
         self.script += executable_suffix
       self.is_build_step = self.script.endswith(BUILD_PY_PATH)
+      self.is_gn_step = self.script.endswith(GN_PY_PATH)
 
       self.isolate_hash = None
       self.fileset = step_json.get('fileset')

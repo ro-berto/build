@@ -85,6 +85,10 @@ TEST_MATRIX = {
       ],
       "meta": {},
       "steps": [{
+        "name": "gn",
+        "script": "tools/gn.py",
+        "arguments": ["--bytecode"]
+      }, {
         "name": "build",
         "script": "tools/build.py",
         "arguments": ["--arch=x64", "runtime"]
