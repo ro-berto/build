@@ -123,10 +123,14 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
         name='upload "%s"' % remote_name)
 
 
-def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name):
+def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
+                 platform=None):
   with MakeTempDir(api, dir_label) as temp_dir:
     local_zip = temp_dir.join(zip_name)
-    remote_name = zip_name
+    if platform is None:
+      remote_name = zip_name
+    else:
+      remote_name = '%s/%s' % (platform, zip_name)
     remote_zip = GetCloudPath(api, remote_name)
     parent_dir = api.path['start_dir'].join(parent_dir)
     pkg = api.zip.make_package(parent_dir, local_zip)
@@ -337,6 +341,21 @@ def BuildLinux(api):
     'out/host_debug/flutter_embedder.h',
     'out/host_debug/libflutter_engine.so',
   ], archive_name='linux-x64-embedder')
+
+  UploadArtifacts(api, 'linux-x64', [
+    'out/host_debug/flutter_export.h',
+    'out/host_debug/flutter_glfw.h',
+    'out/host_debug/flutter_messenger.h',
+    'out/host_debug/flutter_plugin_registrar.h',
+    'out/host_debug/libflutter_linux.so',
+  ], archive_name='linux-x64-flutter.zip')
+  UploadFolder(api,
+    'Upload linux-x64 Flutter library C++ wrapper',
+    'src/out/host_debug',
+    'cpp_client_wrapper',
+    'flutter-cpp-client-wrapper.zip',
+    'linux-x64')
+
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
   UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
@@ -614,6 +633,23 @@ def BuildWindows(api):
       'out/host_debug/flutter_engine.dll.lib',
       'out/host_debug/flutter_engine.dll.pdb',
     ], archive_name='windows-x64-embedder.zip')
+
+    UploadArtifacts(api, 'windows-x64', [
+      'out/host_debug/flutter_export.h',
+      'out/host_debug/flutter_glfw.h',
+      'out/host_debug/flutter_messenger.h',
+      'out/host_debug/flutter_plugin_registrar.h',
+      'out/host_debug/flutter_windows.dll',
+      'out/host_debug/flutter_windows.dll.exp',
+      'out/host_debug/flutter_windows.dll.lib',
+      'out/host_debug/flutter_windows.dll.pdb',
+    ], archive_name='windows-x64-flutter.zip')
+    UploadFolder(api,
+      'Upload windows-x64 Flutter library C++ wrapper',
+      'src/out/host_debug',
+      'cpp_client_wrapper',
+      'flutter-cpp-client-wrapper.zip',
+      'windows-x64')
 
     UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
     UploadWebSdk(api, archive_name='flutter-web-sdk-windows-x64.zip')

@@ -1255,8 +1255,8 @@
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
-    "name": "Zip dart-sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_3\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "name": "Zip windows-x64 windows-x64-flutter.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_export.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_export.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_glfw.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_glfw.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_messenger.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_messenger.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_plugin_registrar.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_plugin_registrar.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -1267,7 +1267,135 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_3\\dart-sdk-windows-x64.zip",
+      "[CLEANUP]\\tmp_tmp_3\\artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/windows-x64-flutter.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"windows-x64/windows-x64-flutter.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/windows-x64-flutter.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]\\tmp_tmp_3"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for windows-x64 UploadArtifacts windows-x64-flutter.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "name": "Zip cpp_client_wrapper",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\cpp_client_wrapper\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\flutter-cpp-client-wrapper.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_4\\flutter-cpp-client-wrapper.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/flutter-cpp-client-wrapper.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload windows-x64/flutter-cpp-client-wrapper.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/flutter-cpp-client-wrapper.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]\\tmp_tmp_4"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for Upload windows-x64 Flutter library C++ wrapper"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "name": "Zip dart-sdk",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_5\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_5\\dart-sdk-windows-x64.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/dart-sdk-windows-x64.zip"
     ],
     "env": {
@@ -1292,7 +1420,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_3"
+      "[CLEANUP]\\tmp_tmp_5"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -1320,7 +1448,7 @@
       ]
     },
     "name": "Zip flutter_web_sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\flutter_web_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\flutter-web-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\flutter_web_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\flutter-web-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -1331,7 +1459,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_4\\flutter-web-sdk-windows-x64.zip",
+      "[CLEANUP]\\tmp_tmp_6\\flutter-web-sdk-windows-x64.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-windows-x64.zip"
     ],
     "env": {
@@ -1356,7 +1484,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_4"
+      "[CLEANUP]\\tmp_tmp_6"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -2618,7 +2746,7 @@
       ]
     },
     "name": "Zip android-arm-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_5\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -2629,7 +2757,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_5\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_7\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/windows-x64.zip"
     ],
     "env": {
@@ -2654,7 +2782,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_5"
+      "[CLEANUP]\\tmp_tmp_7"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -2682,7 +2810,7 @@
       ]
     },
     "name": "Zip android-arm64-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -2693,7 +2821,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_6\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_8\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/windows-x64.zip"
     ],
     "env": {
@@ -2718,7 +2846,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_6"
+      "[CLEANUP]\\tmp_tmp_8"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -2746,7 +2874,7 @@
       ]
     },
     "name": "Zip android-arm-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_9\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -2757,7 +2885,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_7\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_9\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/windows-x64.zip"
     ],
     "env": {
@@ -2782,7 +2910,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_7"
+      "[CLEANUP]\\tmp_tmp_9"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -2810,7 +2938,7 @@
       ]
     },
     "name": "Zip android-arm64-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_10\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -2821,7 +2949,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_8\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_10\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/windows-x64.zip"
     ],
     "env": {
@@ -2846,7 +2974,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_8"
+      "[CLEANUP]\\tmp_tmp_10"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -4112,7 +4240,7 @@
       ]
     },
     "name": "Zip android-arm-dynamic-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_9\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -4123,7 +4251,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_9\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_11\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-dynamic-profile/windows-x64.zip"
     ],
     "env": {
@@ -4148,7 +4276,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_9"
+      "[CLEANUP]\\tmp_tmp_11"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -4176,7 +4304,7 @@
       ]
     },
     "name": "Zip android-arm64-dynamic-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_10\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_12\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -4187,7 +4315,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_10\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_12\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-dynamic-profile/windows-x64.zip"
     ],
     "env": {
@@ -4212,7 +4340,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_10"
+      "[CLEANUP]\\tmp_tmp_12"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -4240,7 +4368,7 @@
       ]
     },
     "name": "Zip android-arm-dynamic-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_13\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -4251,7 +4379,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_11\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_13\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-dynamic-release/windows-x64.zip"
     ],
     "env": {
@@ -4276,7 +4404,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_11"
+      "[CLEANUP]\\tmp_tmp_13"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
@@ -4304,7 +4432,7 @@
       ]
     },
     "name": "Zip android-arm64-dynamic-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_12\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_14\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
   },
   {
     "cmd": [
@@ -4315,7 +4443,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\tmp_tmp_12\\artifacts.zip",
+      "[CLEANUP]\\tmp_tmp_14\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-dynamic-release/windows-x64.zip"
     ],
     "env": {
@@ -4340,7 +4468,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\tmp_tmp_12"
+      "[CLEANUP]\\tmp_tmp_14"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
