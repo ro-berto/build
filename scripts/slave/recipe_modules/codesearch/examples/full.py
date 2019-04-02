@@ -108,6 +108,9 @@ def RunSteps(api):
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()
 
+  # Process annotations and add kythe metadata.
+  api.codesearch.add_kythe_metadata()
+
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(commit_timestamp=1337000000)
 

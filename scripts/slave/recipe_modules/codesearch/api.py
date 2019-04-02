@@ -82,6 +82,21 @@ class CodesearchApi(recipe_api.RecipeApi):
       ).stdout
     self.m.file.write_raw('write gn target list', output_file, output)
 
+  def add_kythe_metadata(self):
+    """Adds inline Kythe metadata to Mojom generated files.
+
+    This metadata is used to connect things in the generated file to the thing
+    in the Mojom file which generated it. This is made possible by annotations
+    added to the generated file by the Mojo compiler.
+    """
+
+    args = [
+        '--corpus', self.c.CORPUS,
+        'src/out/%s' % (self.c.GEN_REPO_OUT_DIR or 'Debug')
+    ]
+    self.m.build.python('add kythe metadata',
+                        self.resource('add_kythe_metadata.py'), args)
+
   def run_clang_tool(self):
     """Download and run the clang tool."""
     # Download the clang tool.
