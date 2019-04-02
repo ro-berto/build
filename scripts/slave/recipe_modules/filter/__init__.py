@@ -6,7 +6,9 @@ DEPS = [
   'chromite',
   'chromium',
   'depot_tools/git',
+  'depot_tools/tryserver',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -15,5 +17,4 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
-  'depot_tools/tryserver',
 ]

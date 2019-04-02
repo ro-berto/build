@@ -197,7 +197,7 @@ class FilterApi(recipe_api.RecipeApi):
       with self.m.context(cwd=cwd, env=env):
         if use_mb:
           mb_mastername = mb_mastername or self.m.properties['mastername']
-          mb_buildername = mb_buildername or self.m.properties['buildername']
+          mb_buildername = mb_buildername or self.m.buildbucket.builder_name
           step_result = self.m.chromium.mb_analyze(
               mb_mastername, mb_buildername, analyze_input,
               mb_config_path=mb_config_path,

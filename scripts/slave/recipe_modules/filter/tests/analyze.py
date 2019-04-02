@@ -27,27 +27,15 @@ def RunSteps(api):
       ['test1', 'test2'],
       ['compile1', 'compile2'],
       'config.json',
-      mb_mastername=api.properties.get('mastername'),
-      mb_buildername=api.properties.get('buildername'),
-      mb_config_path=api.properties.get('mb_config_path'))
+      mb_mastername='test_mastername',
+      mb_buildername='test_buildername',
+      mb_config_path='path/to/custom_mb_config.pyl')
 
 
 def GenTests(api):
   yield (
-      api.test('basic') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          config='cros')
-  )
-
-  yield (
       api.test('custom_mb_config_path') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          mb_config_path='path/to/custom_mb_config.pyl',
-          config='cros') +
+      api.properties(config='cros') +
       api.post_process(
           post_process.StepCommandContains,
           'analyze',
@@ -57,14 +45,8 @@ def GenTests(api):
 
   yield (
       api.test('cros_no_mb') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          config='cros',
-          gn=True) +
-      api.post_process(
-          post_process.MustRun,
-          'system_python') +
+      api.properties(config='cros', gn=True) +
+      api.post_process(post_process.MustRun, 'system_python') +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
