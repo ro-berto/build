@@ -155,6 +155,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         # TODO(crbug.com/943686): Figure out what to do with ozone test targets.
         if t.isolate_target == 'gl_unittests_ozone':
           binaries.append(self.m.chromium.output_dir.join('gl_unittests'))
+        elif t.isolate_target in ['cros_vm_sanity_test',
+                                  'chrome_all_tast_tests']:
+          binaries.append(self.m.chromium.output_dir.join('chrome'))
         else:
           binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
       # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
@@ -163,8 +166,6 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         binaries.append(self.m.chromium.output_dir.join('content_shell'))
       elif t.isolate_target.endswith('_fuzzer'):
         binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
-      elif t.isolate_target in ['cros_vm_sanity_test', 'chrome_all_tast_tests']:
-        binaries.append(self.m.chromium.output_dir.join('chrome'))
 
     return list(set(binaries))
 

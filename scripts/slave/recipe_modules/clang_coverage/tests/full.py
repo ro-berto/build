@@ -37,12 +37,11 @@ def RunSteps(api):
     api.clang_coverage.profdata_dir(step)
     api.clang_coverage.shard_merge(step)
   api.clang_coverage.process_coverage_data([
+      api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('blink_web_tests'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-          'chrome_all_tast_tests')
     ])
 
   # Exercise these properties to provide coverage only.
@@ -84,6 +83,9 @@ def GenTests(api):
       + api.post_process(
           post_process.StepCommandContains, 'Finding merging errors',
           ['--root-dir'])
+      + api.post_process(
+          post_process.StepCommandContains, 'generate metadata for %s targets' %
+          _NUM_TARGETS, ['None/out/Release/chrome'])
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
