@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/osx_sdk',
   'goma',
   'depot_tools/gsutil',
   'recipe_engine/context',
@@ -111,8 +112,9 @@ def RunSteps(api, target_cpu, debug, clang):
   with api.context(env=env):
     _CheckoutSteps(api)
     out_dir = _OutPath(target_cpu, debug, clang)
-    _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
-    _BuildSteps(api, out_dir, clang)
+    with api.osx_sdk('mac'):
+      _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
+      _BuildSteps(api, out_dir, clang)
 
 
 def GenTests(api):
