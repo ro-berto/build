@@ -221,7 +221,6 @@ def main(argv):
       'master.client.art': 'ART',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
-      'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
   }
   all_masters = {base_dir: public_masters}
   if os.path.exists(build_internal):
