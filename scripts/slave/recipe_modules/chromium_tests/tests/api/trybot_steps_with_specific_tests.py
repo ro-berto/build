@@ -474,9 +474,9 @@ def GenTests(api):
           'blink_web_tests (retry with patch)',
           api.test_utils.canned_test_output(passing=False)) +
       api.post_process(post_process.MustRun,
-          'blink_web_tests (retry with patch summary)') +
-      api.post_process(post_process.AnnotationContains,
-          'blink_web_tests (retry with patch summary)', ['STEP_FAILURE']) +
+          'blink_web_tests (retry with patch summary)')  +
+      api.post_process(post_process.StepFailure,
+                       'blink_web_tests (retry with patch summary)') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -549,8 +549,10 @@ def GenTests(api):
         api.post_process(post_process.StepCommandContains,
             retry_shards_step_name,
             ['--env', 'GTEST_TOTAL_SHARDS', '2']) +
-        api.post_process(post_process.AnnotationContains,
-            retry_shards_step_name, ['"shard_index": 1']) +
+
+        api.post_process(
+            post_process.LogContains, retry_shards_step_name, 'json.output',
+            ['"shard_index": 1']) +
 
         # Override 'retry shards with patch' trigger output.
         api.override_step_data(
@@ -595,11 +597,10 @@ def GenTests(api):
           api.test_utils.canned_test_output(passing=True)) +
       api.override_step_data(
           'blink_web_tests (retry with patch)',
-          api.test_utils.canned_test_output(passing=True)) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['bad/totally-bad-probably.html']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['blink_web_tests (with patch)']) +
+          api.test_utils.canned_test_output(passing=True))  +
+      api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
+          ['bad/totally-bad-probably.html', 'blink_web_tests (with patch)']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -628,10 +629,9 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False))
           +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['base_unittests (with patch) on Windows-10']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
+          ['base_unittests (with patch) on Windows-10', 'Test.Two']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -654,10 +654,9 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False))
           +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['Test.Two']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
+          ['Test.Two', 'base_unittests (with patch)']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -697,10 +696,9 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False))
           +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['Test.Two']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['base_unittests (retry shards with patch)']) +
+      api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
+          ['Test.Two', 'base_unittests (retry shards with patch)']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -724,16 +722,13 @@ def GenTests(api):
   # with 'NOTRUN', then FindIt wants the test to be ignored.
   for status in ['FAILURE', 'NOTRUN']:
     if status == 'FAILURE':
-      expectations = (
-        api.post_process(post_process.AnnotationContains,
-            'FindIt Flakiness', ['"Step Layer Flakiness": {}']) +
-        api.post_process(post_process.AnnotationContains,
-            'FindIt Flakiness', [
-                'Failing With Patch Tests That Caused Build Failure']) +
-        api.post_process(post_process.AnnotationContains,
-            'FindIt Flakiness', ['base_unittests (with patch)']) +
-        api.post_process(post_process.AnnotationContains,
-            'FindIt Flakiness', ['Test.Two']))
+      expectations = api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata', [
+              '"Step Layer Flakiness": {}',
+              'Failing With Patch Tests That Caused Build Failure',
+              'base_unittests (with patch)',
+              'Test.Two'
+          ])
     else:
       expectations = api.post_process(
           post_process.DoesNotRun, 'FindIt Flakiness')
@@ -785,15 +780,13 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False))
           +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['"Step Layer Flakiness": {}']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', [
-              'Failing With Patch Tests That Caused Build Failure']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['base_unittests (with patch)']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(
+          post_process.LogContains, 'FindIt Flakiness', 'step_metadata', [
+              '"Step Layer Flakiness": {}',
+              'Failing With Patch Tests That Caused Build Failure',
+              'base_unittests (with patch)',
+              'Test.Two',
+          ]) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -983,10 +976,9 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results(
                   FAILURE_THEN_SUCCESS_DATA, retcode=0), failure=False)) +
-      api.post_process(post_process.AnnotationContains,
-          'base_unittests (retry summary)', ['ignored']) +
-      api.post_process(post_process.AnnotationContains,
-          'base_unittests (retry summary)', ['Test.Two']) +
+      api.post_process(
+          post_process.StepTextContains, 'base_unittests (retry summary)',
+          ['ignored', 'Test.Two']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -1073,8 +1065,8 @@ def GenTests(api):
                   generate_blink_results('TIMEOUT PASS')), failure=False)) +
       api.post_process(post_process.MustRun,
           'blink_web_tests (retry with patch summary)') +
-      api.post_process(post_process.AnnotationContains,
-          'blink_web_tests (retry with patch summary)', ['STEP_FAILURE']) +
+      api.post_process(post_process.StepFailure,
+          'blink_web_tests (retry with patch summary)') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

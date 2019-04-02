@@ -143,9 +143,8 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
       ) +
-      api.post_process(
-          post_process.AnnotationContains, 'details',
-          ['should_retry_with_patch: False']) +
+      api.post_process(post_process.LogContains, 'details', 'details',
+                       ['should_retry_with_patch: False']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -161,9 +160,8 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
       ) +
-      api.post_process(
-          post_process.AnnotationContains, 'details',
-          ['should_retry_with_patch: True']) +
+      api.post_process(post_process.LogContains, 'details', 'details',
+                       ['should_retry_with_patch: True']) +
       api.post_process(post_process.DropExpectation)
   )
 
