@@ -163,6 +163,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         binaries.append(self.m.chromium.output_dir.join('content_shell'))
       elif t.isolate_target.endswith('_fuzzer'):
         binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+      elif t.isolate_target in ['cros_vm_sanity_test', 'chrome_all_tast_tests']:
+        binaries.append(self.m.chromium.output_dir.join('chrome'))
+
     return list(set(binaries))
 
   def _filter_source_file(self, file_paths):

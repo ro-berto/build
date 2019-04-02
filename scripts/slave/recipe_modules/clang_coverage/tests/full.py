@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 # Number of test targets used in the following tests.
-_NUM_TARGETS = 4
+_NUM_TARGETS = 5
 
 
 def RunSteps(api):
@@ -40,7 +40,9 @@ def RunSteps(api):
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest('blink_web_tests')
+      api.chromium_tests.steps.SwarmingIsolatedScriptTest('blink_web_tests'),
+      api.chromium_tests.steps.SwarmingIsolatedScriptTest(
+          'chrome_all_tast_tests')
     ])
 
   # Exercise these properties to provide coverage only.
