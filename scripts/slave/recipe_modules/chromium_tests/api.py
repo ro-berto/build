@@ -1403,7 +1403,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     retry_failed_shards = trybot_config.get('retry_failed_shards', True)
     test_failures_prevent_cq_retry = trybot_config.get(
-        'test_failures_prevent_cq_retry', False)
+        'test_failures_prevent_cq_retry', True)
     enable_retry_with_patch = trybot_config.get(
         'enable_retry_with_patch', True)
     return (
