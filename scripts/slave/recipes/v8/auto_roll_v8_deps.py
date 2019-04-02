@@ -50,6 +50,9 @@ BOT_CONFIGS = {
   'Auto-roll - v8 deps': {
     'subject': 'Update V8 DEPS.',
     'blacklist': [
+      # https://crrev.com/c/1547863
+      'third_party/perfetto',
+      'third_party/protobuf',
       # Skip these dependencies (list without solution name prefix).
       'test/mozilla/data',
       'test/simdjs/data',
