@@ -63,7 +63,12 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['base_unittests']"
+    },
     "name": "$result"
   }
 ]
