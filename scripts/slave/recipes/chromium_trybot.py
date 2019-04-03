@@ -398,8 +398,8 @@ def GenTests(api):
     api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('foo.cc\ntesting/buildbot/bar.json')) +
-    api.post_process(StatusSuccess) +
-    api.post_process(Filter('gl_tests (retry with patch)'))
+    api.post_process(StatusFailure) +
+    api.post_process(DropExpectation)
   )
 
   yield (
