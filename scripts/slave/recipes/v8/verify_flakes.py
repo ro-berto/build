@@ -65,7 +65,7 @@ def RunSteps(api):
     configs = configs[:MAX_CONFIGS]
 
   v8_commits, _ = api.gitiles.log(
-      'https://chromium.googlesource.com/v8/v8/', 'master', limit=1,
+      'https://chromium.googlesource.com/v8/v8/', 'refs/heads/master', limit=1,
       step_name='read V8 ToT revision')
   v8_tot = v8_commits[0]['commit']
   builds = api.v8.buildbucket_trigger([
@@ -80,8 +80,11 @@ def RunSteps(api):
       )
     ) for flako_properties in configs
   ], step_name='trigger flako builds')
+  api.buildbucket.set_output_gitiles_commit(common_pb2.GitilesCommit(
+      host='chromium.googlesource.com', project='v8/v8',
+      ref='refs/heads/master', id=v8_tot))
 
-  results = []
+  non_flaky_tests = []
   for index, build in enumerate(builds):
     label = api.v8.ui_test_label(configs[index]['test_name'])
     build = api.buildbucket.collect_build(
@@ -93,18 +96,17 @@ def RunSteps(api):
     if build.status == common_pb2.FAILURE:
       api.step.active_result.presentation.step_text = (
           'failed to reproduce<br/>please consider re-enabling this test')
+      non_flaky_tests.append(label)
     elif build.status == common_pb2.SUCCESS:
       api.step.active_result.presentation.step_text = 'reproduced'
     else:
       api.step.active_result.presentation.step_text = 'failed to execute'
-    results.append(build.status)
 
-  if common_pb2.INFRA_FAILURE in results:
-    raise api.step.InfraFailure('Some builds failed to execute')
-  elif common_pb2.FAILURE in results:
-    raise api.step.StepFailure('Some flakes failed to reproduce')
+  if non_flaky_tests:
+    raise api.step.StepFailure(
+        'Some flakes failed to reproduce: %s' % ', '.join(non_flaky_tests))
   else:
-    api.step('All flakes still reproduce', cmd=None)
+    api.step('No flakes that fail to reproduce', cmd=None)
 
 
 def GenTests(api):
@@ -136,14 +138,14 @@ def GenTests(api):
   yield (
       test('failure', ['FAILURE']) +
       api.post_process(StatusFailure) +
-      api.post_process(ResultReasonRE, 'Some flakes failed to reproduce') +
+      api.post_process(
+        ResultReasonRE, 'Some flakes failed to reproduce: FunctionCallSample') +
       api.post_process(DropExpectation)
   )
 
   yield (
       test('infra_failure', ['INFRA_FAILURE']) +
-      api.post_process(StatusException) +
-      api.post_process(ResultReasonRE, 'Some builds failed to execute') +
+      api.post_process(StatusSuccess) +
       api.post_process(Filter('FunctionCallSample'))
   )
 

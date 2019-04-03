@@ -21,7 +21,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/v8/v8/+log/master",
+      "https://chromium.googlesource.com/v8/v8/+log/refs/heads/master",
       "--format",
       "json",
       "--log-limit",
@@ -190,6 +190,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"chromium.googlesource.com\", \"id\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/master\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "buildbucket",
       "collect",
@@ -254,7 +261,7 @@
   },
   {
     "cmd": [],
-    "name": "All flakes still reproduce"
+    "name": "No flakes that fail to reproduce"
   },
   {
     "jsonResult": null,
