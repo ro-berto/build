@@ -42,26 +42,6 @@
           "path": "src/test2.mojom",
           "corpus": "chromium-test"
         }
-      },
-      {
-        "info": {
-          "path": "gen/test2.mojom.h",
-          "digest": "a6887f5e6a624cf55d62926ffd9fa5498d04db3b28ddf2cfa348aed8e2a63abb"
-        },
-        "v_name": {
-          "path": "src/out/Debug/gen/test2.mojom.h",
-          "corpus": "chromium-test"
-        }
-      },
-      {
-        "info": {
-          "path": "gen/test2.mojom-forward.h",
-          "digest": "1841943b755530f47d397d1f67e9723e19646182befbb0660117273310c7f8f2"
-        },
-        "v_name": {
-          "path": "src/out/Debug/gen/test2.mojom-forward.h",
-          "corpus": "chromium-test"
-        }
       }
     ]
   }

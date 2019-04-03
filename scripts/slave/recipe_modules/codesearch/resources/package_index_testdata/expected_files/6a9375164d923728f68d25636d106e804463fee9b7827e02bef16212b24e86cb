@@ -1,3 +1,0 @@
-#ifndef TEST_MOJOM_FORWARD_H
-#define TEST_MOJOM_FORWARD_H
-#endif

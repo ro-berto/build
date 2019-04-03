@@ -218,17 +218,6 @@ class IndexPack(object):
 
     return os.path.normpath(os.path.join(self.out_dir, path))
 
-  def _CorrespondingGeneratedHeaders(self, source_target):
-    """Given a mojom file target, return a list of the corresponding generated
-    header filenames.
-
-    e.g. //foo/bar.mojom -> [gen/foo/bar.mojom.h, gen/foo/bar.mojom-forward.h]
-    """
-
-    return [
-        s % source_target[len('//'):] for s in ['gen/%s.h', 'gen/%s-forward.h']
-    ]
-
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
 
@@ -279,13 +268,6 @@ class IndexPack(object):
         self._AddDataFile(
             os.path.join(self.root_dir, self.out_dir,
                          self._ConvertGnPath(source)))
-
-        # Add the C++ header files generated from this mojom file. The Kythe
-        # mojom analyser can't generate these itself, so it needs them supplied
-        # in order to wire up the mojom identifiers to their generated C++
-        # counterparts.
-        for header in self._CorrespondingGeneratedHeaders(source):
-          self._AddDataFile(os.path.join(self.root_dir, self.out_dir, header))
 
   def _GenerateUnitFiles(self):
     """Produces the unit files for the index pack.
@@ -347,11 +329,6 @@ class IndexPack(object):
           self._ConvertGnPath(source) for source in target['sources']
       ]
       unit_dictionary['source_file'] = source_files
-      generated_headers = [
-          header
-          for source in target['sources']
-          for header in self._CorrespondingGeneratedHeaders(source)
-      ]
 
       # gn produces an unsubstituted {{response_file_name}} for filelist. We
       # can't work with this, so we remove it and add the source files as a
@@ -377,7 +354,7 @@ class IndexPack(object):
       ]
 
       required_inputs = []
-      for required_file in source_files + generated_headers + imported_files:
+      for required_file in source_files + imported_files:
         path = os.path.normpath(
             os.path.join(self.root_dir, self.out_dir, required_file))
         # We don't want to fail completely if the file doesn't exist.
