@@ -182,8 +182,7 @@ class CodesearchApi(recipe_api.RecipeApi):
             '--path-to-gn-targets', self.c.gn_targets_json_file,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
-            '--corpus', self.c.CORPUS,
-            '--verbose']
+            '--corpus', self.c.CORPUS]
     if self.c.ROOT:
       args.extend(['--root', self.c.ROOT])
     if self.c.BUILD_CONFIG:

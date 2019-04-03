@@ -804,7 +804,6 @@
       "[CACHE]/builder/src/out/chromeos-Debug/chromium_chromeos.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--verbose",
       "--root",
       "chromium-chromeos",
       "--build-config",

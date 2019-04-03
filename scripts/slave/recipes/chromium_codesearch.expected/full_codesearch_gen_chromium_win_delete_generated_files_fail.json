@@ -717,7 +717,6 @@
       "[CACHE]/builder/src/out/win-Debug/chromium_win.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--verbose",
       "--root",
       "chromium-win",
       "--build-config",

@@ -710,7 +710,6 @@
       "[CACHE]/builder/src/out/fuchsia-Debug/chromium_fuchsia.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--verbose",
       "--root",
       "chromium-fuchsia",
       "--build-config",

@@ -180,7 +180,6 @@
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
       "chromium",
-      "--verbose",
       "--root",
       "linux"
     ],

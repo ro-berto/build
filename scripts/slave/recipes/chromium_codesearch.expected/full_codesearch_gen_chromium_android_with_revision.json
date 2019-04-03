@@ -710,7 +710,6 @@
       "[CACHE]/builder/src/out/android-Debug/chromium_android.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--verbose",
       "--root",
       "chromium-android",
       "--build-config",
