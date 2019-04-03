@@ -27,6 +27,25 @@ SPEC = {
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'swarming_server': 'https://chrome-swarming.appspot.com',
     },
+    'chromeos-betty-google-rel': {
+      'chromium_config': 'chromium_official',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+          'chrome_internal', 'chromeos_betty'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'intel',
+        'TARGET_BITS': 64,
+        'TARGET_CROS_BOARD': 'betty',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+    },
     'linux-chromeos-google-rel': {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
       # that's fixed to set the correct mb_config.pyl path.
