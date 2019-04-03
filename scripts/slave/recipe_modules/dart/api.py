@@ -110,11 +110,11 @@ class DartApi(recipe_api.RecipeApi):
         self.m.python(name,
                       self.m.path['checkout'].join('tools', 'build.py'),
                       args=build_args,
-                      timeout=20 * 60)
+                      timeout=60 * 60)
         build_exit_status = 0
       except self.m.step.StepTimeout as e:
         raise self.m.step.StepFailure(
-            'Step "%s" timed out after 20 minutes' % name)
+            'Step "%s" timed out after 60 minutes' % name)
       except self.m.step.StepFailure as e:
         build_exit_status = e.retcode
         raise e

@@ -237,7 +237,7 @@
       ]
     },
     "name": "can_time_out",
-    "timeout": 1200
+    "timeout": 3600
   },
   {
     "cmd": [],
@@ -423,7 +423,7 @@
       "failure": {
         "step": ""
       },
-      "humanReason": "Step \"can_time_out\" timed out after 20 minutes"
+      "humanReason": "Step \"can_time_out\" timed out after 60 minutes"
     },
     "name": "$result"
   }

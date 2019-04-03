@@ -339,7 +339,7 @@ def GenTests(api):
       api.buildbucket.ci_build(builder='times-out',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('can_time_out', times_out_after=20 * 61 + 1))
+      api.step_data('can_time_out', times_out_after=60 * 61 + 1))
 
   yield (api.test('basic-failure') +
       api.buildbucket.ci_build(builder='build-fail',

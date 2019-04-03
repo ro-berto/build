@@ -541,7 +541,7 @@
       ]
     },
     "name": "Build",
-    "timeout": 1200
+    "timeout": 3600
   },
   {
     "cmd": [],
