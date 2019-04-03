@@ -5472,7 +5472,7 @@ Recipe for running presubmit in V8 CI.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/presubmit.py#23)(api):**
 ### *recipes* / [v8/verify\_flakes](/scripts/slave/recipes/v8/verify_flakes.py)
 
-[DEPS](/scripts/slave/recipes/v8/verify_flakes.py#22): [v8](#recipe_modules-v8), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/verify_flakes.py#23): [v8](#recipe_modules-v8), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe to verify flaky tests (aka progression testing).
 
@@ -5480,7 +5480,9 @@ The recipe reads flake config and for each entry triggers flako recipe in
 reproduce_only mode. If any flake fails to reproduce, the build is marked as
 failed, which can then be used to alert sheriffs via a gatekeeper rule.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/verify_flakes.py#53)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/verify_flakes.py#73)(api):**
+
+&mdash; **def [update\_step\_presentation](/scripts/slave/recipes/v8/verify_flakes.py#56)(api, presentation, build, flake_config):**
 ### *recipes* / [v8:tests/example](/scripts/slave/recipe_modules/v8/tests/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/v8/tests/example.py#7): [v8](#recipe_modules-v8), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

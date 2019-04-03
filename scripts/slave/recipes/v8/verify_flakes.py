@@ -10,6 +10,7 @@ failed, which can then be used to alert sheriffs via a gatekeeper rule.
 """
 
 import ast
+import re
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
@@ -28,6 +29,7 @@ DEPS = [
 ]
 
 MAX_CONFIGS = 16
+URL_FORMAT_RE = re.compile(r'(?:https?://)?(.+)')
 
 TEST_CONFIG = [{
   'bisect_buildername': 'V8 Linux64 - debug builder',
@@ -49,6 +51,24 @@ TEST_CONFIG = [{
   'total_timeout_sec': 120,
   'variant': 'interpreted_regexp'
 }]
+
+
+def update_step_presentation(api, presentation, build, flake_config):
+  presentation.links['build %s' % build.id] = (
+      api.buildbucket.build_url(build_id=build.id))
+  bug_url = flake_config.get('bug_url')
+  if bug_url:
+    presentation.links[URL_FORMAT_RE.match(bug_url).group(1)] = bug_url
+  presentation.logs['flake config'] = api.json.dumps(
+      flake_config, indent=2).splitlines()
+  if build.status == common_pb2.FAILURE:
+    presentation.step_text = (
+        'failed to reproduce<br/>please consider re-enabling this test')
+  elif build.status == common_pb2.SUCCESS:
+    presentation.step_text = 'reproduced'
+  else:
+    presentation.step_text = 'failed to execute'
+
 
 def RunSteps(api):
   configs = ast.literal_eval(api.gitiles.download_file(
@@ -89,18 +109,10 @@ def RunSteps(api):
     label = api.v8.ui_test_label(configs[index]['test_name'])
     build = api.buildbucket.collect_build(
         int(build.id), step_name=label, mirror_status=True, timeout=4*3600)
-    api.step.active_result.presentation.links['build %s' % build.id] = (
-        api.buildbucket.build_url(build_id=build.id))
-    api.step.active_result.presentation.logs['flake config'] = api.json.dumps(
-        configs[index], indent=2).splitlines()
+    update_step_presentation(
+        api, api.step.active_result.presentation, build, configs[index])
     if build.status == common_pb2.FAILURE:
-      api.step.active_result.presentation.step_text = (
-          'failed to reproduce<br/>please consider re-enabling this test')
       non_flaky_tests.append(label)
-    elif build.status == common_pb2.SUCCESS:
-      api.step.active_result.presentation.step_text = 'reproduced'
-    else:
-      api.step.active_result.presentation.step_text = 'failed to execute'
 
   if non_flaky_tests:
     raise api.step.StepFailure(
