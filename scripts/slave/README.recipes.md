@@ -204,11 +204,8 @@
   * [dart/forward_branch](#recipes-dart_forward_branch)
   * [dart/gclient](#recipes-dart_gclient)
   * [dart/linearize](#recipes-dart_linearize)
-  * [dart/misc](#recipes-dart_misc)
   * [dart/neo](#recipes-dart_neo)
   * [dart/package_co19](#recipes-dart_package_co19)
-  * [dart/sdk_builder](#recipes-dart_sdk_builder)
-  * [dart/sdk_swarming](#recipes-dart_sdk_swarming)
   * [dart:examples/example](#recipes-dart_examples_example)
   * [dart:examples/example-get_secret](#recipes-dart_examples_example-get_secret)
   * [dawn](#recipes-dawn)
@@ -4626,7 +4623,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [Build](/scripts/slave/recipes/dart/flutter_engine.py#41)(api, checkout_dir, config, \*targets):**
 
-&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#293)(api, start_dir, checkout_dir, flutter_rev):**
+&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#284)(api, start_dir, checkout_dir, flutter_rev):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/dart/flutter_engine.py#90)(api, checkout_dir):**
 
@@ -4634,7 +4631,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [BuildLinuxAndroidx86](/scripts/slave/recipes/dart/flutter_engine.py#68)(api, checkout_dir):**
 
-&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#166)(api, engine_src, cached_dest, file_paths):**
+&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#160)(api, engine_src, cached_dest, file_paths):**
 
 &mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#113)(api):**
 
@@ -4644,15 +4641,15 @@ Kills leftover tasks from previous runs or steps.
 
 &mdash; **def [RunGN](/scripts/slave/recipes/dart/flutter_engine.py#50)(api, checkout_dir, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#269)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#263)(api):**
 
 &mdash; **def [TestEngine](/scripts/slave/recipes/dart/flutter_engine.py#63)(api, checkout_dir):**
 
-&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#238)(api, start_dir, just_built_dart_sdk):**
+&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#232)(api, start_dir, just_built_dart_sdk):**
 
 &mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#102)(api, checkout_dir):**
 
-&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#179)(api, flutter, engine_src):**
+&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#173)(api, flutter, engine_src):**
 ### *recipes* / [dart/forward\_branch](/scripts/slave/recipes/dart/forward_branch.py)
 
 [DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4668,11 +4665,6 @@ Kills leftover tasks from previous runs or steps.
 [DEPS](/scripts/slave/recipes/dart/linearize.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/linearize.py#24)(api):**
-### *recipes* / [dart/misc](/scripts/slave/recipes/dart/misc.py)
-
-[DEPS](/scripts/slave/recipes/dart/misc.py#5): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/misc.py#16)(api):**
 ### *recipes* / [dart/neo](/scripts/slave/recipes/dart/neo.py)
 
 [DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4683,18 +4675,6 @@ Kills leftover tasks from previous runs or steps.
 [DEPS](/scripts/slave/recipes/dart/package_co19.py#8): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/package_co19.py#18)(api):**
-### *recipes* / [dart/sdk\_builder](/scripts/slave/recipes/dart/sdk_builder.py)
-
-[DEPS](/scripts/slave/recipes/dart/sdk_builder.py#7): [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [BuildBuilderNames](/scripts/slave/recipes/dart/sdk_builder.py#24)(name, channel, shards):**
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_builder.py#28)(api, revision, buildername):**
-### *recipes* / [dart/sdk\_swarming](/scripts/slave/recipes/dart/sdk_swarming.py)
-
-[DEPS](/scripts/slave/recipes/dart/sdk_swarming.py#7): [dart](#recipe_modules-dart), [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_swarming.py#21)(api, buildername):**
 ### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#9): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

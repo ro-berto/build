@@ -113,20 +113,15 @@ def TestObservatory(api, checkout_dir):
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   src_cfg.target_os = set(['android'])
-  engine_rev = (api.properties.get('rev_engine') or
-               api.properties.get('revision') or 'HEAD')
-  flutter_rev = api.properties.get('rev_flutter') or 'HEAD'
-  sdk_rev = api.properties.get('rev_sdk') or 'HEAD'
-  if api.runtime.is_luci:
-    commits = json.loads(api.gitiles.download_file(
-        'https://dart.googlesource.com/linear_sdk_flutter_engine',
-        COMMITS_JSON,
-        api.buildbucket.gitiles_commit.id,
-        step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
-            json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
-    engine_rev = commits.get(ENGINE_REPO, 'HEAD')
-    flutter_rev = commits.get(FLUTTER_REPO, 'HEAD')
-    sdk_rev = commits.get(SDK_REPO, 'HEAD')
+  commits = json.loads(api.gitiles.download_file(
+      'https://dart.googlesource.com/linear_sdk_flutter_engine',
+      COMMITS_JSON,
+      api.buildbucket.gitiles_commit.id,
+      step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
+          json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
+  engine_rev = commits.get(ENGINE_REPO, 'HEAD')
+  flutter_rev = commits.get(FLUTTER_REPO, 'HEAD')
+  sdk_rev = commits.get(SDK_REPO, 'HEAD')
 
   src_cfg.revisions = {
     'src/flutter': engine_rev,
@@ -145,14 +140,13 @@ def GetCheckout(api):
       'https://dart.googlesource.com/%s' % FLUTTER_REPO
 
   api.gclient.c = src_cfg
-  api.bot_update.ensure_checkout(ignore_input_commit=api.runtime.is_luci,
-      update_presentation=api.runtime.is_luci)
-  if api.runtime.is_luci:
-    properties = api.step.active_result.presentation.properties
-    properties['rev_engine'] = engine_rev
-    properties['rev_flutter'] = flutter_rev
-    properties['rev_sdk'] = sdk_rev
-    properties['got_revision'] = api.buildbucket.gitiles_commit.id
+  api.bot_update.ensure_checkout(ignore_input_commit=True,
+                                 update_presentation=True)
+  properties = api.step.active_result.presentation.properties
+  properties['rev_engine'] = engine_rev
+  properties['rev_flutter'] = flutter_rev
+  properties['rev_sdk'] = sdk_rev
+  properties['got_revision'] = api.buildbucket.gitiles_commit.id
 
   api.gclient.runhooks()
 
@@ -267,10 +261,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
 
 
 def RunSteps(api):
-  if api.runtime.is_luci:
-    start_dir = api.path['cache'].join('builder')
-  else:
-    start_dir = api.path['start_dir']
+  start_dir = api.path['cache'].join('builder')
 
   with api.context(cwd=start_dir):
     # buildbot sets 'clobber' to the empty string which is falsey, check with
@@ -330,12 +321,6 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
 
 
 def GenTests(api):
-  yield (api.test('flutter-engine-linux-buildbot') + api.platform('linux', 64)
-      + api.properties(mastername='client.dart.internal',
-          buildername='flutter-engine-linux',
-          bot_id='fake-m1', clobber='',
-          rev_sdk='foo', rev_engine='bar')
-      + api.runtime(is_luci=False, is_experimental=False))
   yield (api.test('flutter-engine-linux') + api.platform('linux', 64)
       + api.buildbucket.ci_build(
           builder='flutter-engine-linux',
