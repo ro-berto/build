@@ -1,0 +1,46 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "default"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "name": "test default"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--shell",
+      "[BUILDER_CACHE]/node-ci/out/Release/node",
+      "default"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "name": "test default (retry)"
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/node-ci/node",
+    "name": "test default (flakes)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  }
+]

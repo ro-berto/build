@@ -5,7 +5,7 @@
 """Recipe to test v8/node.js integration."""
 
 from recipe_engine.recipe_api import Property
-from recipe_engine.post_process import Filter
+from recipe_engine.post_process import Filter, ResultReasonRE, StatusFailure
 
 from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 from PB.google.rpc import code as rpc_code_pb2
@@ -41,6 +41,28 @@ PROPERTIES = {
 
 ARCHIVE_PATH = 'chromium-v8/node-%s-rel'
 ARCHIVE_LINK = 'https://storage.googleapis.com/%s/%%s' % ARCHIVE_PATH
+
+
+def run_with_retry(api, step_name, step_fun):
+  """Runs `step_fun` and retries once on failure.
+
+  Returns: True if a flake has been detected.
+  """
+  # First try. Be forgiving and bail out if it passes.
+  try:
+    step_fun(step_name=step_name)
+    return False
+  except api.step.StepFailure:
+    api.step.active_result.presentation.status = api.step.SUCCESS
+
+  # Second try. Let it raise if it fails again.
+  step_fun(step_name=step_name + ' (retry)')
+
+  # If the retry didn't raise, we found a flake. We report it in a separate
+  # step that's ignored by gatekeeper.
+  step_result = api.step(step_name + ' (flakes)', cmd=None)
+  step_result.presentation.status = api.step.FAILURE
+  return True
 
 
 def RunSteps(api, triggers, v8_tot):
@@ -114,8 +136,11 @@ def RunSteps(api, triggers, v8_tot):
           bucket='ci')
 
   # Run tests.
+  has_flakes = False
   with api.context(cwd=api.path['checkout'].join('node')):
-    api.step('run cctest', [build_output_path.join('node_cctest')])
+    run_cctest = lambda step_name: api.step(
+        step_name, [build_output_path.join('node_cctest')])
+    has_flakes |= run_with_retry(api, 'run cctest', run_cctest)
 
     suites = [
       ('addons', True),
@@ -133,11 +158,16 @@ def RunSteps(api, triggers, v8_tot):
       ]
       if use_test_root:
         args += ['--test-root', build_output_path.join('gen', 'node', 'test')]
-      api.python(
-        name='test ' + suite,
-        script=api.path.join('tools', 'test.py'),
-        args=args + [suite],
+      run_test = lambda step_name: api.python(
+          name=step_name,
+          script=api.path.join('tools', 'test.py'),
+          args=args + [suite],
       )
+      has_flakes |= run_with_retry(api, 'test ' + suite, run_test)
+
+  # Make flakes visible on the waterfall. This is not tracked by gatekeeper.
+  if has_flakes:
+    raise api.step.StepFailure('Flakes in build')
 
 
 def _sanitize_nonalpha(*chunks):
@@ -214,4 +244,35 @@ def GenTests(api):
           step_name='trigger',
       ) +
       api.post_process(Filter('trigger', '$result'))
+  )
+
+  # Test CI builder on V8 master with consistent test failures.
+  yield (
+      test(
+          'V8 Foobar',
+          platform='linux',
+          suffix='_test_failure',
+          triggers=['v8_foobar_perf'],
+          v8_tot=True,
+      ) +
+      api.step_data('test default', retcode=1) +
+      api.step_data('test default (retry)', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(Filter('test default', 'test default (retry)'))
+  )
+
+  # Test CI builder on V8 master with flakes.
+  yield (
+      test(
+          'V8 Foobar',
+          platform='linux',
+          suffix='_flake',
+          triggers=['v8_foobar_perf'],
+          v8_tot=True,
+      ) +
+      api.step_data('test default', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(ResultReasonRE, 'Flakes in build') +
+      api.post_process(Filter(
+          'test default', 'test default (retry)', 'test default (flakes)'))
   )
