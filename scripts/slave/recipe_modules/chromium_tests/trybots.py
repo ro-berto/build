@@ -248,6 +248,20 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
+      'linux-angle-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'ANGLE GPU Linux Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'ANGLE GPU Linux Release (Intel HD 630)',
+          },
+        ],
+      },
       'linux_angle_rel_ng': {
         'bot_ids': [
           {
@@ -284,6 +298,25 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Linux dEQP Builder',
             'tester': 'Linux FYI dEQP Release (Intel HD 630)',
+          },
+        ],
+      },
+      'mac-angle-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'ANGLE GPU Mac Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'ANGLE GPU Mac Retina Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'ANGLE GPU Mac Retina Release (AMD)',
           },
         ],
       },
