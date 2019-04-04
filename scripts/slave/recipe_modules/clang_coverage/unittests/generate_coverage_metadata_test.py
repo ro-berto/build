@@ -295,21 +295,17 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.maxDiff = None
     self.assertDictEqual(expected_record, record)
 
-  def test_compute_llvm_args_with_sharded_output(self):
-    args, shard_dir = generator._compute_llvm_args(
-        '/path/to/coverage.profdata',
-        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
-        ['/src/a.cc', '/src/b.cc'],
-        '/path/output/dir',
-        5,
-        no_sharded_output=False)
+  def test_compute_llvm_args(self):
+    args = generator._compute_llvm_args(
+        '/path/to/coverage.profdata', '/path/to/llvm-cov',
+        ['/path/to/1.exe', '/path/to/2.exe'], ['/src/a.cc', '/src/b.cc'], 1)
     expected_args = [
         '/path/to/llvm-cov',
         'export',
-        '-output-dir',
-        '/path/output/dir/shards',
+        '-skip-expansions',
+        '-skip-functions',
         '-num-threads',
-        '5',
+        '1',
         '-instr-profile',
         '/path/to/coverage.profdata',
         '/path/to/1.exe',
@@ -319,29 +315,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         '/src/b.cc',
     ]
     self.assertListEqual(expected_args, args)
-    self.assertEqual('/path/output/dir/shards', shard_dir)
-
-  def test_compute_llvm_args_without_sharded_output(self):
-    args, shard_dir = generator._compute_llvm_args(
-        '/path/to/coverage.profdata',
-        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
-        ['/src/a.cc', '/src/b.cc'],
-        '/path/output/dir',
-        5,
-        no_sharded_output=True)
-    expected_args = [
-        '/path/to/llvm-cov',
-        'export',
-        '-instr-profile',
-        '/path/to/coverage.profdata',
-        '/path/to/1.exe',
-        '-object',
-        '/path/to/2.exe',
-        '/src/a.cc',
-        '/src/b.cc',
-    ]
-    self.assertListEqual(expected_args, args)
-    self.assertIsNone(shard_dir)
 
   # This test uses the following code:
   # 1|      1|int main() {

@@ -420,18 +420,6 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
   def _generate_and_upload_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
-    llvm_cov = self.cov_executable
-    if not self._is_per_cl_coverage:
-      # Download the version with multi-thread support.
-      # Assume that this is running on Linux.
-      temp_dir = self.m.path.mkdtemp()
-      self.m.gsutil.download(
-          _BUCKET_NAME,
-          'llvm_cov_optimized',
-          temp_dir,
-          name='download llvm-cov')
-      llvm_cov = temp_dir.join('llvm_cov_optimized')
-
     args = [
         '--src-path',
         self.m.path['checkout'],
@@ -440,7 +428,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         '--profdata-path',
         profdata_path,
         '--llvm-cov',
-        llvm_cov,
+        self.cov_executable,
         '--binaries',
     ]
     args.extend(binaries)

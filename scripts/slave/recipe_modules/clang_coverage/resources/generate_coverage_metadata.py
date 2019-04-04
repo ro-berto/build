@@ -261,22 +261,23 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   return data
 
 
-def _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
-                       output_dir, cpu_count, no_sharded_output):
+def _compute_llvm_args(profdata_path,
+                       llvm_cov_path,
+                       binaries,
+                       sources,
+                       num_threads=None):
+  # Use as many cpu cores as possible for parallel processing of huge data.
+  # Leave 5 cpu cores out for other processes in the bot.
+  cpu_count = num_threads or max(10, psutil.cpu_count() - 5)
+
   args = [
       llvm_cov_path,
       'export',
+      '-skip-expansions',
+      '-skip-functions',
+      '-num-threads',
+      str(cpu_count),
   ]
-
-  shard_file_dir = None
-  if not no_sharded_output:
-    shard_file_dir = os.path.join(output_dir, 'shards')
-    args.extend([
-        '-output-dir',
-        shard_file_dir,
-        '-num-threads',
-        str(cpu_count),
-    ])
 
   args.extend(['-instr-profile', profdata_path, binaries[0]])
   for b in binaries[1:]:
@@ -284,7 +285,7 @@ def _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
     args.append(b)
   args.extend(sources or [])
 
-  return args, shard_file_dir
+  return args
 
 
 def _show_system_resource_usage(proc):
@@ -339,21 +340,16 @@ def _show_system_resource_usage(proc):
 
 
 def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
-                               output_dir, no_sharded_output):
+                               output_dir):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
   p = None
   try:
-    # Use as many cpu cores as possible for parallel processing of huge data.
-    # Leave 5 cpu cores out for other processes in the bot.
-    cpu_count = max(10, psutil.cpu_count() - 5)
 
     with open(coverage_json_file, 'w') as f_out, open(error_out_file,
                                                       'w') as f_error:
-      args, shard_file_dir = _compute_llvm_args(profdata_path, llvm_cov_path,
-                                                binaries, sources, output_dir,
-                                                cpu_count, no_sharded_output)
+      args = _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -385,20 +381,9 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
         sys.exit(p.returncode)
 
   logging.info('---------------------Processing metadata--------------------')
-  this_proc = psutil.Process(os.getpid())
   if p and p.returncode == 0:
     with open(coverage_json_file, 'r') as f:
-      data = json.load(f)
-      for real_data in data['data']:
-        if 'file_shards' in real_data and shard_file_dir:
-          files = []
-          for file_shard in real_data['file_shards']:
-            logging.info('------------Processing %s', file_shard)
-            with open(os.path.join(shard_file_dir, file_shard), 'r') as shard:
-              files.extend(json.load(shard))
-            _show_system_resource_usage(this_proc)
-          real_data['files'] = files
-      return data
+      return json.load(f)
 
 
 def _merge_summary(a, b):
@@ -661,9 +646,8 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
   # For per-CL code coverage, we don't use the multi-threaded llvm-cov.
-  no_sharded_output = diff_mapping is not None
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
-                                    sources, output_dir, no_sharded_output)
+                                    sources, output_dir)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '
