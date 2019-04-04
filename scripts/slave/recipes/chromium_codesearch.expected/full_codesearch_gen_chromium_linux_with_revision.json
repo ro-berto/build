@@ -686,7 +686,7 @@
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "src/out/Debug"
+      "[CACHE]/builder/src/out/Debug"
     ],
     "name": "add kythe metadata"
   },

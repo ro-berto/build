@@ -92,7 +92,7 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     args = [
         '--corpus', self.c.CORPUS,
-        'src/out/%s' % (self.c.GEN_REPO_OUT_DIR or 'Debug')
+        self.m.path['checkout'].join('out', self.c.GEN_REPO_OUT_DIR or 'Debug')
     ]
     self.m.build.python('add kythe metadata',
                         self.resource('add_kythe_metadata.py'), args)

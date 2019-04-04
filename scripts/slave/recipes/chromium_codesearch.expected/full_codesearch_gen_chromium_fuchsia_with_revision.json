@@ -686,7 +686,7 @@
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "src/out/fuchsia-Debug"
+      "[CACHE]/builder/src/out/fuchsia-Debug"
     ],
     "name": "add kythe metadata"
   },
