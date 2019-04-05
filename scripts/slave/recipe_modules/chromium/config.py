@@ -181,10 +181,6 @@ def BASE(c):
     raise BadConf('host bits < targ bits')  # pragma: no cover
 
   c.build_config_fs = c.BUILD_CONFIG
-  if c.HOST_PLATFORM == 'win':
-    if c.TARGET_BITS == 64:
-      # Windows requires 64-bit builds to be in <dir>_x64.
-      c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
   # Test runner memory tools that are not compile-time based.
   c.runtests.memory_tests_runner = c.CHECKOUT_PATH.join(
