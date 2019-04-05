@@ -847,10 +847,9 @@ class Failure(object):
         lines.append(' %s: %s' % (key, self.api.v8.build_environment[key]))
     lines.append('')
 
-    # Print the command line for flake bisect if the test is flaky. Only
-    # supports tests run on swarming and CI.
-    if (self.is_flaky and
-        isinstance(self.test, V8SwarmingTest) and
+    # Print the command line for flake bisect. Only supports tests run on
+    # swarming and CI.
+    if (isinstance(self.test, V8SwarmingTest) and
         not self.api.tryserver.is_tryserver):
       lines.append('Trigger flake bisect on command line:')
       lines.append(self._flako_cmd_line())
