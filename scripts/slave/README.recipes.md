@@ -212,6 +212,7 @@
   * [disk:examples/full](#recipes-disk_examples_full)
   * [docker:examples/full](#recipes-docker_examples_full)
   * [docker_run](#recipes-docker_run) &mdash; A generic recipe that runs a given docker container and exits.
+  * [emscripten_releases](#recipes-emscripten_releases)
   * [emulator](#recipes-emulator)
   * [emulator:examples/full](#recipes-emulator_examples_full)
   * [example/defer_no_fail](#recipes-example_defer_no_fail)
@@ -4707,6 +4708,11 @@ Kills leftover tasks from previous runs or steps.
 A generic recipe that runs a given docker container and exits.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/docker_run.py#50)(api, server, project, image, cmd_args, env):**
+### *recipes* / [emscripten\_releases](/scripts/slave/recipes/emscripten_releases.py)
+
+[DEPS](/scripts/slave/recipes/emscripten_releases.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/emscripten_releases.py#12)(api):**
 ### *recipes* / [emulator](/scripts/slave/recipes/emulator.py)
 
 [DEPS](/scripts/slave/recipes/emulator.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
