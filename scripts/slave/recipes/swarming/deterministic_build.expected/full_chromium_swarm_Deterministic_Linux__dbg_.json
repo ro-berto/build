@@ -346,6 +346,8 @@
       "Deterministic Linux (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "local",
       "--goma-dir",
       "[CACHE]/goma/client",
       "//out/Release"
@@ -490,6 +492,8 @@
       "Deterministic Linux (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
       "--goma-dir",
       "[CACHE]/goma/client",
       "//out/Release.2"

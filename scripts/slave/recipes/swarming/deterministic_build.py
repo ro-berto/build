@@ -191,8 +191,9 @@ def RunSteps(api, buildername):
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.mb_gen(api.properties.get('mastername'), buildername,
                       phase='local' if compare_local else None)
-  api.chromium.mb_isolate_everything(api.properties.get('mastername'),
-                                     buildername)
+  api.chromium.mb_isolate_everything(
+    api.properties.get('mastername'), buildername,
+    phase='local' if compare_local else None)
 
   api.chromium.compile(targets, name='First build',
                        use_goma_module=not compare_local)
@@ -211,8 +212,9 @@ def RunSteps(api, buildername):
                       build_dir=build_dir,
                       phase='goma' if compare_local else None)
 
-  api.chromium.mb_isolate_everything(api.properties.get('mastername'),
-                                     buildername, build_dir=build_dir)
+  api.chromium.mb_isolate_everything(
+    api.properties.get('mastername'), buildername, build_dir=build_dir,
+    phase='goma' if compare_local else None)
   api.chromium.compile(targets, name='Second build', use_goma_module=True,
                        target=target)
   if not check_different_build_dirs:
