@@ -23,7 +23,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "emscripten_releases@refs/heads/master"
+      "emscripten_releases@HEAD"
     ],
     "env_prefixes": {
       "PATH": [
@@ -37,7 +37,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"emscripten_releases\": \"refs/heads/master\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"emscripten_releases\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"emscripten_releases\": {@@@",

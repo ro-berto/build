@@ -15,7 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "crashpad@refs/heads/master"
+      "crashpad@HEAD"
     ],
     "env_prefixes": {
       "PATH": [
@@ -29,7 +29,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"crashpad\": \"refs/heads/master\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"crashpad\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",

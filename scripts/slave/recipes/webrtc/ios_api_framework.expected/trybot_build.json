@@ -74,7 +74,7 @@
       "--patch_ref",
       "https://webrtc.googlesource.com/src@refs/changes/89/456789/12",
       "--revision",
-      "src@refs/heads/master"
+      "src@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/ios_api_framework",
     "env_prefixes": {
@@ -89,7 +89,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"refs/heads/master\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
