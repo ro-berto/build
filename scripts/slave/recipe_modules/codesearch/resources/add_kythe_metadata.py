@@ -113,10 +113,17 @@ def main():
   for filename in _FindAllMojomGeneratedFiles(opts.gen_dir):
     if opts.verbose:
       print 'Adding metadata to %s' % filename
-    with open(filename, 'r+') as f:
+    with open(filename, 'a+') as f:
       contents = f.read()
       metadata = _GenerateMetadata(filename, contents, opts.corpus,
                                    opts.verbose)
+
+      # Python files are a thin wrapper around libc. As fopen(3) states:
+      #   Note that ANSI C requires that a file positioning function
+      #   intervene between output and input.
+      # and indeed, on Windows any following writes will fail without this seek,
+      # since we did a read() above.
+      f.seek(0, os.SEEK_CURR)
 
       # read() already put us at the end of the file
       if contents[-1] != '\n':
