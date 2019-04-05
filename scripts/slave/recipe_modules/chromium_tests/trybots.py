@@ -1031,11 +1031,55 @@ TRYBOTS = freeze({
       }),
     },
   },
-  # Dawn GPU bots.
-  # These trybots are used to mirror the fake "Dawn GPU" builders so that they
-  # can be triggered from the Dawn CQ.
+  # Dawn GPU bots
   'tryserver.chromium.dawn': {
     'builders': {
+      'dawn-linux-x64-deps-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Linux x64 DEPS Builder',
+            'tester': 'Dawn Linux x64 DEPS Release (Intel HD 630)',
+          },
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Linux x64 DEPS Builder',
+            'tester': 'Dawn Linux x64 DEPS Release (NVIDIA)',
+          },
+        ],
+      },
+      'dawn-win10-x86-deps-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x86 DEPS Builder',
+            'tester': 'Dawn Win10 x86 DEPS Release (Intel HD 630)',
+          },
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x86 DEPS Builder',
+            'tester': 'Dawn Win10 x86 DEPS Release (NVIDIA)',
+          },
+        ],
+      },
+      'dawn-win10-x64-deps-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x64 DEPS Builder',
+            'tester': 'Dawn Win10 x64 DEPS Release (Intel HD 630)',
+          },
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x64 DEPS Builder',
+            'tester': 'Dawn Win10 x64 DEPS Release (NVIDIA)',
+          },
+        ],
+      },
+      # The trybots below are used to mirror the fake "Dawn GPU" builders so
+      # that they can be triggered from the Dawn CQ.
+      # TODO(enga): These will be replaced by real builders like the other
+      # Dawn DEPS trybots above.
       'linux-dawn-rel': {
         'bot_ids': [
           {
