@@ -66,6 +66,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'gclient_config': 'chromium',
     'platform': 'linux',
     'targets': ['all'],
+    'compare_local': True,
   },
   'Deterministic Android': {
     'chromium_config': 'android',
@@ -184,11 +185,17 @@ def RunSteps(api, buildername):
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
 
+  # Whether do first build in local or use goma.
+  compare_local = recipe_config.get('compare_local', False)
+
   # Do a first build and move the build artifact to the temp directory.
-  api.chromium.mb_gen(api.properties.get('mastername'), buildername)
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
+                      phase='local' if compare_local else None)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername)
-  api.chromium.compile(targets, name='First build', use_goma_module=True)
+
+  api.chromium.compile(targets, name='First build',
+                       use_goma_module=not compare_local)
 
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
@@ -199,8 +206,11 @@ def RunSteps(api, buildername):
   if check_different_build_dirs:
     build_dir = '//out/Release.2'
     target = 'Release.2'
+
   api.chromium.mb_gen(api.properties.get('mastername'), buildername,
-                      build_dir=build_dir)
+                      build_dir=build_dir,
+                      phase='goma' if compare_local else None)
+
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername, build_dir=build_dir)
   api.chromium.compile(targets, name='Second build', use_goma_module=True,
@@ -216,7 +226,7 @@ def RunSteps(api, buildername):
   if not check_different_build_dirs:
     first_dir = first_dir.rstrip('\\/') + '.1'
   api.isolate.compare_build_artifacts(
-      first_dir, 
+      first_dir,
       str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
 
@@ -268,4 +278,3 @@ def GenTests(api):
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )
-
