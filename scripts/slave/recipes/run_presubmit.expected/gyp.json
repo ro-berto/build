@@ -58,7 +58,7 @@
       "--patch_ref",
       "https://chromium.googlesource.com/gyp@refs/changes/89/456789/12",
       "--revision",
-      "gyp@HEAD"
+      "gyp@refs/heads/master"
     ],
     "env_prefixes": {
       "PATH": [
@@ -72,7 +72,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gyp\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gyp\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gyp\": {@@@",

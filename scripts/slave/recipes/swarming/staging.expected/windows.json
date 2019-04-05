@@ -44,7 +44,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD",
+      "src@refs/heads/master",
       "--revision",
       "src/tools/swarming_client@HEAD"
     ],
@@ -61,7 +61,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"refs/heads/master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",

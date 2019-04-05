@@ -58,7 +58,7 @@
       "--patch_ref",
       "https://boringssl.googlesource.com/boringssl@refs/changes/56/123456/7",
       "--revision",
-      "boringssl@HEAD"
+      "boringssl@refs/heads/master"
     ],
     "env_suffixes": {
       "PATH": [
@@ -72,7 +72,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"boringssl\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"boringssl\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",

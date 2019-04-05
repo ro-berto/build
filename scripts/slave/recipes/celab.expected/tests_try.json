@@ -74,7 +74,7 @@
       "--patch_ref",
       "https://chromium.googlesource.com/enterprise/cel@refs/changes/56/123456/7",
       "--revision",
-      "cel@HEAD"
+      "cel@refs/heads/master"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
     "env_prefixes": {
@@ -89,7 +89,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"cel\": {@@@",

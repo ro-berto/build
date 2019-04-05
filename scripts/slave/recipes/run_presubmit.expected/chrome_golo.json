@@ -58,7 +58,7 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chrome_golo@refs/changes/89/456789/12",
       "--revision",
-      "chrome_golo@HEAD"
+      "chrome_golo@refs/heads/master"
     ],
     "env_prefixes": {
       "PATH": [
@@ -72,7 +72,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"chrome_golo\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome_golo\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome_golo\": {@@@",
