@@ -501,8 +501,9 @@ def setup_aosp_builder(api, read_barrier):
                       api.path.pathsep + '%(PATH)s',
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
-        api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
+        api.step('Clean %s' % build, ['make', '-j8', 'clean'])
         api.step('build %s' % build, ['make', '-j8'])
+        api.step('Clean %s' % build, ['make', '-j8', 'clean'])
 
 
 _CONFIG_MAP = {

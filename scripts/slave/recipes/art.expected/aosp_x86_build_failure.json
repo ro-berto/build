@@ -25,7 +25,7 @@
     "cmd": [
       "make",
       "-j8",
-      "clean-oat-host"
+      "clean"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -37,7 +37,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "Clean oat x86"
+    "name": "Clean x86"
   },
   {
     "cmd": [
@@ -63,7 +63,25 @@
     "cmd": [
       "make",
       "-j8",
-      "clean-oat-host"
+      "clean"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "false",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "Clean x86 (2)"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -75,7 +93,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean oat x86_64"
+    "name": "Clean x86_64"
   },
   {
     "cmd": [
@@ -98,7 +116,25 @@
     "cmd": [
       "make",
       "-j8",
-      "clean-oat-host"
+      "clean"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "false",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "Clean x86_64 (2)"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -110,7 +146,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "Clean oat arm"
+    "name": "Clean arm"
   },
   {
     "cmd": [
@@ -133,7 +169,25 @@
     "cmd": [
       "make",
       "-j8",
-      "clean-oat-host"
+      "clean"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "false",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "Clean arm (2)"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -145,7 +199,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "Clean oat arm64"
+    "name": "Clean arm64"
   },
   {
     "cmd": [
@@ -165,11 +219,29 @@
     "name": "build arm64"
   },
   {
+    "cmd": [
+      "make",
+      "-j8",
+      "clean"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "false",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "Clean arm64 (2)"
+  },
+  {
     "failure": {
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 8 aggregated steps failed: Step('build x86') failed with return_code 1"
+      "humanReason": "1 out of 12 aggregated steps failed: Step('build x86') failed with return_code 1"
     },
     "name": "$result"
   }
