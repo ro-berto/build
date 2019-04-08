@@ -115,6 +115,14 @@ def main():
       print 'Adding metadata to %s' % filename
     with open(filename, 'a+') as f:
       contents = f.read()
+      # This string always appears at least once, in the kythe_inline_metadata
+      # pragma. If there's another copy of it, this file is untouched since the
+      # last time this script ran, so we'd just be adding duplicate metadata.
+      if contents.count('Metadata comment') >= 2:
+        if opts.verbose:
+          print 'Skipping %s as it already has metadata' % filename
+        continue
+
       metadata = _GenerateMetadata(filename, contents, opts.corpus,
                                    opts.verbose)
 
