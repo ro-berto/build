@@ -123,7 +123,7 @@ def main():
       #   intervene between output and input.
       # and indeed, on Windows any following writes will fail without this seek,
       # since we did a read() above.
-      f.seek(0, os.SEEK_CURR)
+      f.seek(0, os.SEEK_CUR)
 
       # read() already put us at the end of the file
       if contents[-1] != '\n':
