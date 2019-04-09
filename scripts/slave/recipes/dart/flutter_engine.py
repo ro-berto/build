@@ -158,6 +158,10 @@ def GetCheckout(api):
 
 
 def CopyArtifacts(api, engine_src, cached_dest, file_paths):
+  # cached_dest folder might not exist: flutter update-packages downloads only
+  # artifacts that are needed by the connected devices and 3xHEAD bot
+  # does not have any devices attached.
+  api.file.ensure_directory('mkdir %s' % cached_dest, cached_dest)
   for path in file_paths:
     if isinstance(path, tuple):
       # Second item is explicitly specified target file name

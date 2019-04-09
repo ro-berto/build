@@ -3629,6 +3629,28 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "mkdir [CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "remove",
       "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat"
     ],
@@ -3908,6 +3930,28 @@
     },
     "infra_step": true,
     "name": "copy product_vm_isolate_snapshot.bin"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/android-arm-release/linux-x64"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "mkdir [CACHE]/builder/flutter/bin/cache/artifacts/engine/android-arm-release/linux-x64"
   },
   {
     "cmd": [
