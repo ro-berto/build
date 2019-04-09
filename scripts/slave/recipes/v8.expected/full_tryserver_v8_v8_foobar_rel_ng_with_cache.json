@@ -300,7 +300,7 @@
   },
   {
     "cmd": [
-      "buildbucket",
+      "bb",
       "batch",
       "-host",
       "cr-buildbucket.appspot.com"
