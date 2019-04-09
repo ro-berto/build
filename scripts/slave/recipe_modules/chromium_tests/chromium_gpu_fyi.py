@@ -1554,6 +1554,86 @@ SPEC = {
     # configurations because we don't have the capacity to run all of
     # the tests on the GPU try servers. And to specify tests for
     # ANGLE's try servers separately from the gpu.fyi waterfall.
+    'ANGLE GPU Linux Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'ANGLE GPU Linux Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'ANGLE GPU Mac Release (Intel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'ANGLE GPU Mac Retina Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'ANGLE GPU Mac Retina Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'ANGLE GPU Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
