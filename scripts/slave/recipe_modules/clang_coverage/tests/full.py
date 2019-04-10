@@ -16,7 +16,8 @@ DEPS = [
     'recipe_engine/step',
 ]
 
-# Number of test targets used in the following tests.
+
+# Number of tests. Needed by the tests.
 _NUM_TARGETS = 5
 
 
@@ -32,17 +33,29 @@ def RunSteps(api):
   # Fake path.
   api.clang_coverage._merge_scripts_location = api.path['start_dir']
 
-  for i in range(_NUM_TARGETS):
-    step = 'step %d' % i
-    api.clang_coverage.profdata_dir(step)
-    api.clang_coverage.shard_merge(step)
-  api.clang_coverage.process_coverage_data([
+  tests = [
       api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest('blink_web_tests'),
-    ])
+      api.chromium_tests.steps.SwarmingIsolatedScriptTest(
+          'blink_web_tests', merge={
+              'script': api.path['start_dir'].join(
+                  'coverage', 'tests', 'merge_blink_web_tests.py'),
+              'args': ['random', 'args'],
+          })
+    ]
+  assert _NUM_TARGETS == len(tests)
+
+  for i, test in enumerate(tests):
+    step = 'step %d' % i
+    api.clang_coverage.profdata_dir(step)
+    # Protected access ok here, as this is normally done by the test object
+    # itself.
+    api.clang_coverage.shard_merge(step, additional_merge=getattr(
+        test, '_merge', None))
+
+  api.clang_coverage.process_coverage_data(tests)
 
   # Exercise these properties to provide coverage only.
   _ = api.clang_coverage.using_coverage

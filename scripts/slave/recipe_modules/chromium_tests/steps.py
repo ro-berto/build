@@ -1513,9 +1513,8 @@ class SwarmingTest(Test):
               '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
 
-      if not self._merge:
-        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
-            self.step_name(suffix))
+      self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
+          self.step_name(suffix), additional_merge=self._merge)
 
     if suffix == 'retry shards with patch':
       kwargs['task_to_retry'] = self._tasks['with patch']

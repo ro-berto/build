@@ -362,12 +362,15 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         'https://storage.cloud.google.com/%s/%s/index.html' %
         (_BUCKET_NAME, html_report_gs_path))
 
-  def shard_merge(self, step_name):
+  def shard_merge(self, step_name, additional_merge=None):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.chromium_swarming.task.
+
+    |additional_merge| is an additional merge script. This will be invoked from
+    the clang coverage merge script.
     """
-    return {
+    new_merge = {
         'script':
             self.raw_profile_merge_script,
         'args': [
@@ -377,6 +380,14 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.profdata_executable,
         ],
     }
+    if additional_merge:
+      new_merge['args'].extend([
+          '--additional-merge-script', additional_merge['script'],
+      ])
+      for arg in additional_merge['args']:
+        new_merge['args'].extend(['--additional-merge-script-args', arg])
+
+    return new_merge
 
   def _compose_gs_path_for_coverage_data(self, data_type):
     build = self.m.buildbucket.build
