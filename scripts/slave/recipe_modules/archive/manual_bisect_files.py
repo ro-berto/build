@@ -12,6 +12,10 @@ typing 'chrome://version' in chrome and following the executable path.
 The list needs to be updated if future chrome versions require additional files.
 """
 CHROME_REQUIRED_FILES = {
+  'android': [
+    'apks',
+    'apks/*',
+  ],
   'linux': [
     'chrome',
     'chrome_100_percent.pak',
