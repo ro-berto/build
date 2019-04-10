@@ -1070,21 +1070,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\src\\out\\host_debug\\synchronization_unittests.exe"
-    ],
-    "cwd": "[START_DIR]\\src\\out\\host_debug",
-    "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
-      ]
-    },
-    "name": "Test Synchronization"
-  },
-  {
-    "cmd": [
       "[START_DIR]\\src\\out\\host_debug\\runtime_unittests.exe"
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",

@@ -71,8 +71,6 @@ def RunHostTests(api, out_dir, exe_extension=''):
       directory.join('fml_unittests' + exe_extension),
       '--gtest_filter="-*TimeSensitiveTest*"'
     ])
-    api.step('Test Synchronization',
-      [directory.join('synchronization_unittests' + exe_extension)])
     api.step('Test Runtime',
       [directory.join('runtime_unittests' + exe_extension)])
     api.step('Test Shell',
