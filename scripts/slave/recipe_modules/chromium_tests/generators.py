@@ -207,10 +207,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     tests.append(local_delegate(spec, **kwargs))
 
   experiment_percentage = spec.get('experiment_percentage')
-  should_retry_with_patch = spec.get('should_retry_with_patch')
   for t in tests:
-    if should_retry_with_patch is not None:
-      t._should_retry_with_patch = should_retry_with_patch
     if experiment_percentage is not None:
       yield steps.ExperimentalTest(t, experiment_percentage)
     else:

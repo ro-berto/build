@@ -475,7 +475,7 @@ def GenTests(api):
       api.post_process(
           post_process.MustRun, 'base_unittests (retry shards with patch)') +
       api.post_process(
-          post_process.MustRun, 'base_unittests (without patch)') +
+          post_process.DoesNotRun, 'base_unittests (without patch)') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

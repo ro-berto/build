@@ -30,8 +30,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   Tests are run in [up to] three stages:
     * 'with patch'
+    * 'retry shards with patch'
     * 'without patch'
-    * 'retry with patch'
 
   The first stage applies the patch and runs the tests. If this passes, we're
   finished. Assuming that tests fail or return invalid results, then we deapply
@@ -390,10 +390,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     valid_results, failures = test_suite.with_patch_failures_including_retry(
         caller_api)
-    if valid_results:
-      new_failures = failures - ignored_failures
-    else:
-      new_failures = set(['all initial tests failed'])
+    assert valid_results, (
+        "If there were no valid results, then there was no "
+        "point in running 'without patch'. This is a recipe bug.")
+    new_failures = failures - ignored_failures
 
     failure_text = ('Failed with patch, succeeded without patch:')
     ignored_text = ('Tests ignored as they also fail without patch:')
@@ -401,49 +401,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite, new_failures, ignored_failures, 'retry summary',
         failure_text, ignored_text)
 
-  def summarize_test_with_patch_reapplied(self, caller_api, test_suite):
-    """Summarizes test results after a CL has been retried with patch reapplied.
-
-    Returns:
-      A Boolean describing whether the retry succeeded. Which is to say, whether
-      there are tests that failed in 'with patch' and 'retry with patch', but
-      not in 'without patch'.
-    """
-    valid_results, _, new_failures = test_suite.retry_with_patch_results(
-        caller_api)
-
-    # We currently do not attempt to recover from invalid test results on the
-    # retry. Record a failing step with INVALID_RESULTS_MAGIC, which
-    # chromium_try_flakes uses for analysis.
-    if not valid_results:
-      self._invalid_test_results(test_suite)
-      return False
-
-    # Assuming both 'with patch' and 'retry with patch' produced valid results,
-    # look for the intersection of failures.
-    valid_results, initial_failures = (
-        test_suite.with_patch_failures_including_retry(caller_api))
-    if valid_results:
-      repeated_failures = new_failures & initial_failures
-    else:
-      repeated_failures = new_failures
-
-    # Assuming 'without patch' produced valid results, subtract those from
-    # repeated failures, as they're likely problems with tip of tree.
-    valid_results, without_patch_failures = (
-        test_suite.without_patch_failures_to_ignore(caller_api))
-    if valid_results:
-      new_failures = repeated_failures - without_patch_failures
-      ignored_failures = without_patch_failures
-    else:
-      new_failures = repeated_failures
-      ignored_failures = set()
-
-    failure_text = ('Failed with patch twice, succeeded without patch:')
-    ignored_text = ('Tests ignored as they succeeded on retry:')
-    return self._summarize_new_and_ignored_failures(
-        test_suite, new_failures, ignored_failures, 'retry with patch summary',
-        failure_text=failure_text, ignored_text=ignored_text)
 
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
@@ -511,8 +468,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     There are several types of test flakiness. FindIt categories these by the
     layer at which the flakiness is discovered. One of these categories is for a
     test that fails, but when retried in a separate step, succeeds. This
-    currently applies to 'retry with patch', but will also apply to shard-layer
-    retries when those are introduced. These are labeled 'Step Layer Flakiness'.
+    currently applies to 'retry shards with patch'. These are labeled 'Step
+    Layer Flakiness'.
 
     FindIt also wants to know about 'with patch' tests that caused the build to
     fail. If a future build with the same CL succeeds, then the tests are
@@ -530,30 +487,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
                                                                  test_suite)
 
       # We only want to consider tests that failed in 'with patch' but succeeded
-      # when retried, either by 'retry shards with patch' or 'retry with patch'.
-      # If a test didn't run in either of these steps, then we ignore it.
-      valid_retry_with_patch_results, retry_with_patch_successes, _ = (
-          test_suite.retry_with_patch_results(caller_api))
+      # when retried by 'retry shards with patch'. If a test didn't run in
+      # either of these steps, then we ignore it.
       valid_retry_shards_results, retry_shards_successes, _ = (
           test_suite.shard_retry_with_patch_results(caller_api))
-      if not (valid_retry_shards_results or valid_retry_with_patch_results):
+      if not valid_retry_shards_results:
         continue
 
-      flaky_tests = set()
-      if valid_retry_shards_results:
-        flaky_tests = flaky_tests.union(
-            potential_test_flakes & retry_shards_successes)
-      if valid_retry_with_patch_results:
-        flaky_tests = flaky_tests.union(
-            potential_test_flakes & retry_with_patch_successes)
-
+      flaky_tests = potential_test_flakes & retry_shards_successes
       if flaky_tests:
         suffix = 'with patch'
-        # If we have invalid results on the initial run, but had valid results
-        # on the retries, count the retried shards as flaky.
-        if (not test_suite.has_valid_results(caller_api, 'with patch') and
-            valid_retry_with_patch_results and valid_retry_shards_results):
-          suffix = 'retry shards with patch'
 
         step_name = test_suite.name_of_step_for_suffix(suffix)
         step_layer_flakiness[step_name] = sorted(flaky_tests)
@@ -562,15 +505,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     for test_suite in test_suites:
       potential_test_flakes = self._findit_potential_test_flakes(caller_api,
                                                                  test_suite)
-
-      # If the test suite was supposed to run retry with patch, then exclude all
-      # tests that passed in retry with patch.
-      if test_suite.should_retry_with_patch:
-        valid_results, retry_with_patch_successes, _ = (
-            test_suite.retry_with_patch_results(caller_api))
-        if valid_results:
-          potential_test_flakes = (
-              potential_test_flakes - retry_with_patch_successes)
 
       valid_retry_shards_results, retry_shards_successes, _ = (
           test_suite.shard_retry_with_patch_results(caller_api))

@@ -87,44 +87,6 @@
     "name": "Upload to test-results [base_unittests] (2)"
   },
   {
-    "cmd": [
-      "None/out/Release/bin/run_base_unittests",
-      "--gtest_filter=foo.bar",
-      "--test-launcher-retry-limit=3",
-      "--gtest_also_run_disabled_tests",
-      "--blacklist-file",
-      "None/out/bad_devices.json",
-      "--verbose",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
-    ],
-    "name": "base_unittests (retry with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "test_mastername",
-      "--builder-name",
-      "test_buildername",
-      "--build-number",
-      "123",
-      "--test-type",
-      "base_unittests",
-      "--chrome-revision",
-      "x@{#0}",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "name": "Upload to test-results [base_unittests] (3)"
-  },
-  {
     "jsonResult": null,
     "name": "$result"
   }

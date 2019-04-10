@@ -137,8 +137,7 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
   if not tests_to_retry or len(tests_to_retry) > 100:
     return test_options_copy
 
-  if (test_options_copy.repeat_count is None and
-      suffix in ('without patch', 'retry with patch')):
+  if test_options_copy.repeat_count is None and suffix == 'without patch':
     test_options_copy._repeat_count = REPEAT_COUNT_FOR_FAILING_TESTS
 
     # If we're repeating the tests 10 times, then we want to set retry_limit=0.
@@ -201,18 +200,6 @@ class Test(object):
     # look up the failing step for a test suite from buildbucket.
     self._suffix_step_name_map = {}
 
-    # Most test suites have a lot of flaky tests. Since we don't rerun passing
-    # tests, it's also very easy to introduce new flaky tests. The point of
-    # 'retry with patch' is to prevent false rejects by adding another layer of
-    # retries. There are two reasons we may want to skip this retry layer.
-    #
-    # 1) If test-suite layer retries have similar effectiveness to 'retry with
-    # patch', then 'retry with patch' may not be necessary,
-    # 2) If a test suite has exceptionally few flakes, and there is a
-    # sheriffing process to hunt down new flakes as they are introduced, then
-    # 'retry with patch' may not be necessary.
-    self._should_retry_with_patch = True
-
   @property
   def set_up(self):
     return None
@@ -257,10 +244,6 @@ class Test(object):
     return self.target_name
 
   @property
-  def should_retry_with_patch(self):
-    return self._should_retry_with_patch
-
-  @property
   def is_gtest(self):
     return False
 
@@ -285,7 +268,7 @@ class Test(object):
     self._suffix_step_name_map[suffix] with the name of the recipe engine step
     that best represents the work performed by this Test.
 
-    suffix is 'with patch', 'without patch' or 'retry with patch'.
+    suffix is 'with patch' or 'without patch'
     """
     raise NotImplementedError()
 
@@ -420,7 +403,7 @@ class Test(object):
     }
     if suffix is not None:
       data['patched'] = suffix in (
-          'with patch', 'retry with patch', 'retry shards with patch')
+          'with patch', 'retry shards with patch')
     return data
 
   def failures_or_invalid_results(self, api, suffix):
@@ -510,10 +493,6 @@ class Test(object):
         ignored_failures.add(test_name)
     return (True, ignored_failures)
 
-  def retry_with_patch_results(self, api):
-    """Returns results from the tests ran for 'retry with patch'."""
-    return self._results_for_suffix(api, 'retry with patch')
-
   def shard_retry_with_patch_results(self, api):
     """Returns results from the tests ran for 'retry shards with patch'."""
     return self._results_for_suffix(api, 'retry shards with patch')
@@ -549,7 +528,7 @@ class Test(object):
 
     Args:
       suffix: A unique identifier for this test suite invocation. Must be 'with
-      patch', 'without patch', or 'retry with patch'.
+      patch', 'retry shards with patch', or 'without patch'.
 
     Returns:
       A list of tests to retry. Returning None means all tests should be run.
@@ -568,23 +547,6 @@ class Test(object):
       valid_results, failures = self.failures_or_invalid_results(api,
                                                                  'with patch')
       return sorted(failures) if valid_results else None
-
-    # For the third invocation, run tests that failed in 'with patch', but not
-    # in 'without patch'.
-    if suffix == 'retry with patch':
-      # Invalid results should be treated as if every test failed.
-      valid_results, initial_failures = self.failures_or_invalid_results(
-          api, 'with patch')
-      if not valid_results:
-        return None
-
-      # Invalid results without patch should be ignored.
-      valid_results, persistent_failures = self.failures_or_invalid_results(
-          api, 'without patch')
-      if not valid_results:
-        persistent_failures = []
-
-      return sorted(set(initial_failures) - set(persistent_failures))
 
     # If we don't recognize the step, then return None. This makes it easy for
     # bugs to slip through, but this matches the previous behavior. Importantly,
@@ -629,10 +591,6 @@ class TestWrapper(Test):  # pragma: no cover
   @property
   def isolate_target(self):
     return self._test.isolate_target
-
-  @property
-  def should_retry_with_patch(self):
-    return self._test.should_retry_with_patch
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -1377,7 +1335,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
 class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
   SUFFIXES_TO_INCREASE_PRIORITY = [
-      'without patch', 'retry with patch', 'retry shards with patch' ]
+      'without patch', 'retry shards with patch' ]
 
   def __init__(self, name, dimensions=None, target_name=None,
                extra_suffix=None, expiration=None, hard_timeout=None,
@@ -1707,7 +1665,7 @@ class SwarmingTest(Test):
       data['full_step_name'] = api.chromium_swarming.get_step_name(
           prefix=None, task=self._tasks[suffix])
       data['patched'] = suffix in (
-          'with patch', 'retry with patch', 'retry shards with patch')
+          'with patch', 'retry shards with patch')
       data['dimensions'] = self._tasks[suffix].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data

@@ -797,8 +797,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failing_tests: An iterable of test_suites that need to be rebuilt.
       bot_update_step: Contains information about the current checkout. Used to
                        set swarming properties.
-      suffix: Should be either 'without patch' or 'retry with patch'. Used to
-              annotate steps and swarming properties.
+      suffix: Should be 'without patch'. Used to annotate steps and swarming
+              properties.
     """
     compile_targets = list(itertools.chain(
         *[t.compile_targets(self.m) for t in failing_tests]))
@@ -851,43 +851,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                           'without patch')
 
 
-  def _reapply_patch(self, bot_config):
-    """Rolls checkout. Reapplies patch.
-
-    Args:
-      bot_config: Contains checkout configuration.
-
-    Returns: An update_step that contains information about the checkout
-             revision.
-    """
-    assert self.m.tryserver.is_tryserver
-
-    # First, we must roll checkout and reapply the patch. The chromium_checkout
-    # recipe_module is stateful and uses revisions pinned by the dictionary
-    # gclient.c.revisions. We clear all pinned revisions.
-    self.m.gclient.c.revisions.clear()
-
-    update_step = self.m.chromium_checkout.ensure_checkout(bot_config)
-
-    with self.m.context(cwd=self.m.path['checkout']):
-      self.m.chromium.runhooks(name='runhooks (retry with patch)')
-
-    return update_step
-
-  def _reapply_patch_build_isolate(self, failing_tests, bot_config):
-    """Rolls checkout. Reapplies patch. Builds and isolates failing test suites.
-
-    Args:
-      failing_tests: An iterable of Test objects. Each represents a failing test
-                     suite. The list of exact test failures are stored on the
-                     Test object itself.
-      bot_config: Contains checkout configuration.
-    """
-    update_step = self._reapply_patch(bot_config)
-    self._build_and_isolate_failing_tests(failing_tests, update_step,
-                                          'retry with patch')
-
-
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
@@ -905,8 +868,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return True
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
-                              affected_files, retry_failed_shards,
-                              enable_retry_with_patch):
+                              affected_files, retry_failed_shards):
     """Runs tests with retries.
 
     This function runs tests with the CL patched in. On failure, this will
@@ -922,81 +884,46 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.test_utils.run_tests_with_patch(
               self.m, tests, retry_failed_shards=retry_failed_shards))
 
-      # An invalid result is unrecoverable if and only if we are not going to
-      # run 'retry with patch'.
+      # An invalid result is unrecoverable.
       unrecoverable_test_suites = []
       for test_suite in invalid_test_suites:
-        if not test_suite.should_retry_with_patch:
-          unrecoverable_test_suites.append(test_suite)
+        unrecoverable_test_suites.append(test_suite)
       if unrecoverable_test_suites:
         return unrecoverable_test_suites
 
-      # If there are no failures or if the config says that we only care about
-      # the results with patch, we are done.
-      if not failing_tests or self.c.only_with_patch:
+      # This member is misnamed and is only used by code coverage. Code coverage
+      # doesn't care about test failures. Unfortunately, this code path has
+      # never had test coverage.
+      if self.c.only_with_patch: # pragma: no cover
         return []
 
-      # If there are failures but we shouldn't deapply the patch, then skip the
-      # 'deapply patch' step.
+      # If there are no failures, we're done.
+      if not failing_tests:
+        return []
+
+      # If there are failures but we shouldn't deapply the patch, then we're
+      # done.
       should_deapply_patch = (
           self._should_retry_with_patch_deapplied(affected_files))
-      test_suites_to_retry_with_patch = []
-
-      # If there are tests that failed, for which we are skipping both
-      # 'without patch' and 'retry with patch', then the failures are fatal.
       if not should_deapply_patch:
-        unrecoverable_test_suites = []
         for t in failing_tests:
-          if not t.should_retry_with_patch:
-            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-            unrecoverable_test_suites.append(t)
-        if unrecoverable_test_suites:
-          return unrecoverable_test_suites
+          self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+        return failing_tests
 
-      if should_deapply_patch:
-        # Deapply the patch. Then rerun failing tests.
-        self._deapply_patch_build_isolate(failing_tests, bot_update_step)
-        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
-                                    sort_by_shard=True)
+      # Deapply the patch. Then rerun failing tests.
+      self._deapply_patch_build_isolate(failing_tests, bot_update_step)
+      self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
+                                  sort_by_shard=True)
 
-        unrecoverable_test_suites = []
-        for t in failing_tests:
-          # Summarize results.
-          success = (self.m.test_utils.
-            summarize_test_with_patch_deapplied(self.m, t))
-
-          # If we are not planning to run 'retry with patch', then failures
-          # are fatal.
-          failure_is_fatal = not t.should_retry_with_patch
-          if not success and failure_is_fatal:
-            unrecoverable_test_suites.append(t)
-
-          if not success:
-            test_suites_to_retry_with_patch.append(t)
-
-        if unrecoverable_test_suites:
-          return unrecoverable_test_suites
-      else:
-        test_suites_to_retry_with_patch = failing_tests
-
-      # Early exit if all test_suites are passing.
-      if not test_suites_to_retry_with_patch:
-        return
-
-      if not enable_retry_with_patch:
-        return test_suites_to_retry_with_patch
-
-      # Reapply the patch. Then rerun failing tests.
-      self._reapply_patch_build_isolate(test_suites_to_retry_with_patch,
-                                        bot_config)
-      self.m.test_utils.run_tests(self.m, test_suites_to_retry_with_patch,
-                                  'retry with patch', sort_by_shard=True)
       unrecoverable_test_suites = []
-      for t in test_suites_to_retry_with_patch:
-        success = (
-            self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t))
+      for t in failing_tests:
+        # Summarize results.
+        success = (self.m.test_utils.
+          summarize_test_with_patch_deapplied(self.m, t))
+
         if not success:
           unrecoverable_test_suites.append(t)
+
       return unrecoverable_test_suites
 
   def _build_bisect_gs_archive_url(self, master_config):
@@ -1219,15 +1146,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       (bot_config_object, bot_update_step, affected_files, test_suites,
-       retry_failed_shards, test_failures_prevent_cq_retry,
-       enable_retry_with_patch) = (
+       retry_failed_shards, test_failures_prevent_cq_retry) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if test_suites:
         unrecoverable_test_suites = self._run_tests_on_tryserver(
             bot_config_object, test_suites, bot_update_step, affected_files,
-            retry_failed_shards, enable_retry_with_patch)
+            retry_failed_shards)
         self.m.chromium_swarming.report_stats()
 
         self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
@@ -1279,8 +1205,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       test_failures_prevent_cq_retry:
           If test failures are the only reason the build is failing, then set a
           flag to prevent the CQ from retrying the build.
-      enable_retry_with_patch:
-          Whether to run 'retry with patch' steps on test failures.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1402,12 +1326,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     retry_failed_shards = trybot_config.get('retry_failed_shards', True)
     test_failures_prevent_cq_retry = trybot_config.get(
         'test_failures_prevent_cq_retry', True)
-    enable_retry_with_patch = trybot_config.get(
-        'enable_retry_with_patch', False)
     return (
         bot_config_object, bot_update_step, affected_files, tests,
-        retry_failed_shards, test_failures_prevent_cq_retry,
-        enable_retry_with_patch
+        retry_failed_shards, test_failures_prevent_cq_retry
     )
 
   def _report_builders(self, bot_config):

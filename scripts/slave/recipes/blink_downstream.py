@@ -153,12 +153,6 @@ class DetermineFailuresTool(object):
         results_handler=self.api.chromium_tests.steps.LayoutTestResultsHandler()
     )
 
-    # Since we don't implement 'retry with patch', we set the corresponding
-    # flag on the Test instances.
-    # TODO(machenbach): Maybe we should keep this activated to make the
-    # builders more reliable.
-    test._should_retry_with_patch = False
-
     invalid_test_suites, failing_tests = (
         self.api.test_utils.run_tests_with_patch(self.api, [test]))
 

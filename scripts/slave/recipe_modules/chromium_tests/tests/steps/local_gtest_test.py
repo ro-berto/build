@@ -43,7 +43,6 @@ def RunSteps(api):
     ]
 
     test.run(api, 'without patch')
-    test.run(api, 'retry with patch')
 
 
 def GenTests(api):

@@ -145,67 +145,6 @@
     "name": "Upload to test-results [base_unittests] (2)"
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot_id\"}",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"recipe\": \"chromium_tests:tests/steps/local_gtest_test\", \"slavename\": \"test_bot_id\"}",
-      "--annotate=gtest",
-      "--test-type=base_unittests",
-      "--step-name=base_unittests (retry with patch)",
-      "--test-launcher-summary-output",
-      "/path/to/tmp/json",
-      "--builder-name=test_buildername",
-      "--slave-name=test_bot_id",
-      "--build-number=123",
-      "base_unittests",
-      "--gtest_repeat=10",
-      "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests",
-      "--test-launcher-batch-limit=1",
-      "--gtest_filter=Test.Two"
-    ],
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "base_unittests (retry with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
-      "--master-name",
-      "test_mastername",
-      "--builder-name",
-      "test_buildername",
-      "--build-number",
-      "123",
-      "--test-type",
-      "base_unittests",
-      "--chrome-revision",
-      "x@{#0}",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "name": "Upload to test-results [base_unittests] (3)"
-  },
-  {
     "failure": {
       "failure": {
         "step": "base_unittests (with patch)"

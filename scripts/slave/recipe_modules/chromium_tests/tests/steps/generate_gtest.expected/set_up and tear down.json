@@ -222,7 +222,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
-      "@@@STEP_LOG_LINE@details@should_retry_with_patch: True@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },
