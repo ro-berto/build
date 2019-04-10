@@ -495,6 +495,6 @@ SPEC['builders'].update([
   stock_cronet_config('android-cronet-marshmallow-arm64-rel',
       bot_type='tester',
       parent_buildername='android-cronet-arm64-rel'),
-  stock_cronet_config('android-cronet-x86-dbg'),
+  stock_cronet_config('android-cronet-x86-dbg', config='Debug'),
   stock_cronet_config('android-cronet-x86-rel'),
 ])
