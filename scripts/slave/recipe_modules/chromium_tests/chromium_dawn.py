@@ -68,10 +68,22 @@ SPEC = {
     'Dawn Mac x64 Builder':
     CreateBuilderConfig('mac', 64, top_of_tree=True),
 
-    # This bot is actually running on a thin Linux VM. Currently attempting to
-    # make it possible to use Linux VMs for all of the testers.
+    # The Dawn Mac testers are actually running on thin Linux VMs.
     'Dawn Mac x64 Release (AMD)':
     CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
+
+    'Dawn Mac x64 Release (Intel)':
+    CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
+
+    'Dawn Mac x64 DEPS Builder':
+    CreateBuilderConfig('mac', 64, top_of_tree=False),
+
+    # The Dawn Mac testers are actually running on thin Linux VMs.
+    'Dawn Mac x64 DEPS Release (AMD)':
+    CreateTesterConfig('mac', 64, 'Dawn Mac x64 DEPS Builder'),
+
+    'Dawn Mac x64 DEPS Release (Intel)':
+    CreateTesterConfig('mac', 64, 'Dawn Mac x64 DEPS Builder'),
 
     'Dawn Win10 x86 Builder':
     CreateBuilderConfig('win', 32, top_of_tree=True),
