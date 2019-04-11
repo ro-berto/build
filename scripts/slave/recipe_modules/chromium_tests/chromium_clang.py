@@ -177,6 +177,41 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ToTWinOfficial': {
+      'chromium_config': 'chromium_win_clang_tot',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'win',
+      },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWinOfficial')
+      ],
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+      # TODO(929099): check if 'swarming_service_account' is required, or can be
+      # removed
+      'swarming_service_account': 'chrome-ci-builder',
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'isolate_service_account': 'chrome-ci-builder',
+      'swarming_dimensions': {
+        'pool': 'chrome.tests',
+        'os': 'Windows-10',
+      },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ToTWinThinLTO64': {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
