@@ -429,6 +429,16 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/clean_outdir.py",
+      "[START_DIR]/src/out/Release"
+    ],
+    "infra_step": true,
+    "name": "clean_outdir"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }

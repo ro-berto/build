@@ -1133,6 +1133,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     tests = test_config.tests_on(mastername, buildername)
     if not tests:
+      # Remove old files from out directory
+      self.m.chromium.clean_outdir()
       return
 
     self.m.chromium_swarming.configure_swarming(
@@ -1142,6 +1144,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests, serialize_tests=bot_config.get('serialize_tests'))
     with self.wrap_chromium_tests(bot_config, tests):
       test_runner()
+    # Remove old files from out directory
+    self.m.chromium.clean_outdir()
 
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
