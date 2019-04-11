@@ -15,7 +15,7 @@ from recipe_engine import post_process
 def RunSteps(api):
   test = api.chromium_tests.steps.MockTest(
       name=api.properties.get('test_name', 'MockTest'),
-      abort_on_failure=api.properties.get('abort_on_failure', False))
+      abort_on_failure=api.properties.get('abort_on_failure', False), api=api)
 
   test.pre_run(api.chromium_tests.m, '')
 

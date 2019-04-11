@@ -4,8 +4,11 @@
 
 DEPS = [
   'chromium_tests',
+  'depot_tools/tryserver',
+  'recipe_engine/buildbucket',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/step',
 ]
 
 from recipe_engine import post_process
@@ -17,10 +20,11 @@ def RunSteps(api):
       'inner_test',
       abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
-      failures=api.properties.get('failures'))
+      failures=api.properties.get('failures'), api=api)
   experimental_test = api.chromium_tests.steps.ExperimentalTest(
       inner_test,
-      experiment_percentage=api.properties['experiment_percentage'])
+      experiment_percentage=api.properties['experiment_percentage'],
+      api=api)
 
   api.python.succeeding_step(
       'Configured experimental test %s' % experimental_test.name, '')
@@ -30,7 +34,7 @@ def RunSteps(api):
   experimental_test.pre_run(api.chromium_tests.m, suffix)
   experimental_test.run(api.chromium_tests.m, suffix)
 
-  assert experimental_test.has_valid_results(api.chromium_tests.m, '')
+  assert experimental_test.has_valid_results('')
   assert not experimental_test.failures(api.chromium_tests.m, '')
   assert not experimental_test.deterministic_failures(api.chromium_tests.m, '')
   assert not experimental_test.abort_on_failure

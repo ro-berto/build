@@ -1167,7 +1167,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           if not valid_results:
             every_failing_test_suite_had_valid_results = False
 
-          if not test_suite.has_valid_results(self.m, 'without patch'):
+          if not test_suite.has_valid_results('without patch'):
             every_failing_test_suite_had_valid_results = False
 
         if every_failing_test_suite_had_valid_results:

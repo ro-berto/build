@@ -252,7 +252,7 @@ class FinditApi(recipe_api.RecipeApi):
       # Process failed tests.
       failed_tests_dict = defaultdict(list)
       for failed_test in failed_tests:
-        valid = failed_test.has_valid_results(api, suffix=abbreviated_revision)
+        valid = failed_test.has_valid_results(suffix=abbreviated_revision)
         results[failed_test.name] = {
             'status': self.TestResult.FAILED,
             'valid': valid,

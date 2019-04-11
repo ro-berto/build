@@ -272,7 +272,7 @@ class Test(object):
     """
     raise NotImplementedError()
 
-  def has_valid_results(self, api, suffix):  # pragma: no cover
+  def has_valid_results(self, suffix):  # pragma: no cover
     """
     Returns True if results (failures) are valid.
 
@@ -280,7 +280,6 @@ class Test(object):
     and the test failing to even report its results in machine-readable
     format.
     """
-    del api
     if suffix not in self._test_runs:
       return False
 
@@ -413,7 +412,7 @@ class Test(object):
       valid_results: A Boolean indicating whether results are valid.
       failures: A set of failures. Only valid if valid_results is True.
     """
-    if self.has_valid_results(api, suffix):
+    if self.has_valid_results(suffix):
       # GTestResults.failures is a set whereas TestResults.failures is a dict.
       # In both cases, we want a set.
       return (True, set(self.failures(api, suffix)))
@@ -431,12 +430,10 @@ class Test(object):
       valid_results: A Boolean indicating whether results are valid.
       failures: A set of strings. Only valid if valid_results is True.
     """
-    with_patch_valid = self.has_valid_results(
-        api, 'with patch')
+    with_patch_valid = self.has_valid_results('with patch')
     if with_patch_valid:
       failures = self.deterministic_failures(api, 'with patch')
-    retry_shards_valid = self.has_valid_results(
-        api, 'retry shards with patch')
+    retry_shards_valid = self.has_valid_results('retry shards with patch')
     if retry_shards_valid:
       retry_shards_failures = self.deterministic_failures(
             api, 'retry shards with patch')
@@ -465,7 +462,7 @@ class Test(object):
     Returns:
       not_run_tests: A set of strings. Only valid if valid_results is True.
     """
-    assert self.has_valid_results(api, suffix), (
+    assert self.has_valid_results(suffix), (
         'findit_notrun must only be called when the test run is known to have '
         'valid results.')
     return self._test_runs[suffix]['findit_notrun']
@@ -481,7 +478,7 @@ class Test(object):
       valid_results: A Boolean indicating whether failures_to_ignore is valid.
       failures_to_ignore: A set of strings. Only valid if valid_results is True.
     """
-    if not self.has_valid_results(api, 'without patch'):
+    if not self.has_valid_results('without patch'):
       return (False, None)
 
     pass_fail_counts = self.pass_fail_counts(api, 'without patch')
@@ -508,7 +505,7 @@ class Test(object):
       passing_tests: A set of strings. Only valid if valid_results is True.
       failing_tests: A set of strings. Only valid if valid_results is True.
     """
-    if not self.has_valid_results(api, suffix):
+    if not self.has_valid_results(suffix):
       return (False, None, None)
 
     passing_tests = set()
@@ -602,8 +599,8 @@ class TestWrapper(Test):  # pragma: no cover
   def run(self, api, suffix):
     return self._test.run(api, suffix)
 
-  def has_valid_results(self, api, suffix):
-    return self._test.has_valid_results(api, suffix)
+  def has_valid_results(self, suffix):
+    return self._test.has_valid_results(suffix)
 
   def failures(self, api, suffix):
     return self._test.failures(api, suffix)
@@ -637,16 +634,17 @@ class ExperimentalTest(TestWrapper):
     - will not cause the build to fail.
   """
 
-  def __init__(self, test, experiment_percentage):
+  def __init__(self, test, experiment_percentage, api):
     super(ExperimentalTest, self).__init__(test)
     self._experiment_percentage = max(0, min(100, int(experiment_percentage)))
+    self._is_in_experiment = self._calculate_is_in_experiment(api)
 
   def _experimental_suffix(self, suffix):
     if not suffix:
       return 'experimental'
     return '%s, experimental' % (suffix)
 
-  def _is_in_experiment(self, api):
+  def _calculate_is_in_experiment(self, api):
     # Arbitrarily determine whether to run the test based on its experiment
     # key. Tests with the same experiment key should always either be in the
     # experiment or not; i.e., given the same key, this should always either
@@ -680,9 +678,9 @@ class ExperimentalTest(TestWrapper):
 
 
   def _is_in_experiment_and_has_valid_results(self, api, suffix):
-    return (self._is_in_experiment(api) and
+    return (self._is_in_experiment and
         super(ExperimentalTest, self).has_valid_results(
-            api, self._experimental_suffix(suffix)))
+            self._experimental_suffix(suffix)))
 
   @property
   def abort_on_failure(self):
@@ -690,7 +688,7 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def pre_run(self, api, suffix):
-    if not self._is_in_experiment(api):
+    if not self._is_in_experiment:
       return []
 
     try:
@@ -702,7 +700,7 @@ class ExperimentalTest(TestWrapper):
   #override
   @recipe_api.composite_step
   def run(self, api, suffix):
-    if not self._is_in_experiment(api):
+    if not self._is_in_experiment:
       return []
 
     try:
@@ -712,12 +710,12 @@ class ExperimentalTest(TestWrapper):
       pass
 
   #override
-  def has_valid_results(self, api, suffix):
-    if self._is_in_experiment(api):
+  def has_valid_results(self, suffix):
+    if self._is_in_experiment:
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).has_valid_results(
-          api, self._experimental_suffix(suffix))
+          self._experimental_suffix(suffix))
     return True
 
   #override
@@ -771,7 +769,7 @@ class SizesStep(Test):
   def compile_targets(self, _):
     return ['chrome']
 
-  def has_valid_results(self, api, suffix):
+  def has_valid_results(self, suffix):
     # TODO(sebmarchand): implement this function as well as the
     # |failures| one.
     return True
@@ -1891,7 +1889,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                merge=None, trigger_script=None, results_handler=None,
                set_up=None, tear_down=None, idempotent=True,
                cipd_packages=None, isolate_coverage_data=False,
-               optional_dimensions=None, service_account=None):
+               optional_dimensions=None, service_account=None, **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1901,7 +1899,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         merge=merge, shards=shards,
         ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions,
-        service_account=service_account)
+        service_account=service_account, **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
     self._perf_id=perf_id
@@ -2371,7 +2369,7 @@ class IncrementalCoverageTest(Test):
   def uses_local_devices(self):
     return True
 
-  def has_valid_results(self, api, suffix):
+  def has_valid_results(self, suffix):
     return True
 
   def failures(self, api, suffix):
@@ -2475,7 +2473,7 @@ class WebRTCPerfTest(LocalGTestTest):
     super(WebRTCPerfTest, self).run(api, suffix)
 
   #override
-  def has_valid_results(self, api, suffix):  # pragma: no cover
+  def has_valid_results(self, suffix):  # pragma: no cover
     # This test never produces any valid results as far as this check is
     # concerned. The test is currently one-of-a-kind, so just bypass the check.
     return True
@@ -2508,7 +2506,7 @@ class MockTest(Test):
                waterfall_mastername=None, waterfall_buildername=None,
                abort_on_failure=False, has_valid_results=True, failures=None,
                runs_on_swarming=False, per_suffix_failures=None,
-               per_suffix_valid=None):
+               per_suffix_valid=None, api=None):
     super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
     self._target_name = target_name
     self._abort_on_failure = abort_on_failure
@@ -2518,6 +2516,7 @@ class MockTest(Test):
     self._per_suffix_valid = per_suffix_valid or {}
     self._name = name
     self._runs_on_swarming = runs_on_swarming
+    self._api = api
 
   @property
   def name(self):
@@ -2553,8 +2552,8 @@ class MockTest(Test):
           '%s%s' % (self.name, self._mock_suffix(suffix)), None)
       self._suffix_step_name_map[suffix] = step_result.step['name']
 
-  def has_valid_results(self, api, suffix):
-    api.step(
+  def has_valid_results(self, suffix):
+    self._api.step(
         'has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
     if suffix in self._per_suffix_valid: # pragma: no cover
       return self._per_suffix_valid[suffix]
@@ -2580,7 +2579,3 @@ class MockTest(Test):
   @property
   def abort_on_failure(self):
     return self._abort_on_failure
-
-
-class MockSwarmingTest(SwarmingIsolatedScriptTest, MockTest):
-  pass

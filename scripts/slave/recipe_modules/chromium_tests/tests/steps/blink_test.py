@@ -35,8 +35,7 @@ def RunSteps(api):
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: %r' % test.compile_targets(api),
-        'has_valid_results (no suffix): %r' % test.has_valid_results(
-            api, ''),
+        'has_valid_results (no suffix): %r' % test.has_valid_results(''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
     test.run(api, 'without patch')

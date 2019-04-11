@@ -238,7 +238,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_results = []
     for test in tests:
       # Note that this is technically O(n^2). We expect n to be small.
-      if not test.has_valid_results(caller_api, suffix):
+      if not test.has_valid_results(suffix):
         invalid_results.append(test)
       elif test.deterministic_failures(
           caller_api, suffix) and test not in failed_tests:
@@ -435,9 +435,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       findit_potential_flakes: A set of test names that should be considered
                                candidates as flaky tests.
     """
-    valid_results = test_suite.has_valid_results(caller_api, 'with patch')
+    valid_results = test_suite.has_valid_results('with patch')
     valid_retry_shards_results = test_suite.has_valid_results(
-        caller_api, 'retry shards with patch')
+        'retry shards with patch')
     if not (valid_results or valid_retry_shards_results):
       return set()
 

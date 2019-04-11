@@ -209,7 +209,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   experiment_percentage = spec.get('experiment_percentage')
   for t in tests:
     if experiment_percentage is not None:
-      yield steps.ExperimentalTest(t, experiment_percentage)
+      yield steps.ExperimentalTest(t, experiment_percentage, api)
     else:
       yield t
 

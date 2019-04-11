@@ -36,8 +36,8 @@ def RunSteps(api, has_valid_results, retry_failed_shards, per_suffix_failures,
     test_kwargs['per_suffix_valid'] = per_suffix_valid
 
   tests = [
-      api.chromium_tests.steps.MockTest(name='test', **test_kwargs),
-      api.chromium_tests.steps.MockTest(name='test2'),
+      api.chromium_tests.steps.MockTest(name='test', api=api, **test_kwargs),
+      api.chromium_tests.steps.MockTest(name='test2', api=api),
   ]
 
   invalid, failing = api.test_utils.run_tests_with_patch(
