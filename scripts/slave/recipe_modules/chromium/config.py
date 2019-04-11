@@ -109,7 +109,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       enable_lsan = Single(bool, empty_val=False, required=False),
       enable_msan = Single(bool, empty_val=False, required=False),
       enable_tsan = Single(bool, empty_val=False, required=False),
-      test_args = List(basestring),
       run_asan_test = Single(bool, required=False),
     ),
 

@@ -1474,9 +1474,6 @@ class SwarmingTest(Test):
 
   def _create_task_common(self, api, suffix, isolated_hash, filter_flag,
                           filter_delimiter, task_func):
-    # For local tests test_args are added inside api.chromium.runtest.
-    args = self._args + api.chromium.c.runtests.test_args
-
     tests_to_retry = self.tests_to_retry(api, suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)

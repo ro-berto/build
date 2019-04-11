@@ -686,7 +686,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       full_args.append(test)
 
-    full_args.extend(self.c.runtests.test_args)
     full_args.extend(args)
 
     runtest_path = self.repo_resource('scripts', 'slave', 'runtest.py')
