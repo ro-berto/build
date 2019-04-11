@@ -1121,54 +1121,45 @@ TRYBOTS = freeze({
           },
         ],
       },
-      # The trybots below are used to mirror the fake "Dawn GPU" builders so
-      # that they can be triggered from the Dawn CQ.
-      # TODO(enga): These will be replaced by real builders like the other
-      # Dawn DEPS trybots above.
       'linux-dawn-rel': {
         'bot_ids': [
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
-            'tester': 'Dawn GPU Linux Release (NVIDIA)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Linux x64 Builder',
+            'tester': 'Dawn Linux x64 Release (Intel HD 630)',
           },
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
-            'tester': 'Dawn GPU Linux Release (Intel HD 630)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Linux x64 Builder',
+            'tester': 'Dawn Linux x64 Release (NVIDIA)',
           },
         ],
       },
       'mac-dawn-rel': {
         'bot_ids': [
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Dawn GPU Mac Release (Intel)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Mac x64 Builder',
+            'tester': 'Dawn Mac x64 Release (AMD)',
           },
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Dawn GPU Mac Retina Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Dawn GPU Mac Retina Release (AMD)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Mac x64 Builder',
+            'tester': 'Dawn Mac x64 Release (Intel)',
           },
         ],
       },
       'win-dawn-rel': {
         'bot_ids': [
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Dawn GPU Win10 Release (NVIDIA)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x64 Builder',
+            'tester': 'Dawn Win10 x64 Release (Intel HD 630)',
           },
           {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Dawn GPU Win10 Release (Intel HD 630)',
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Win10 x64 Builder',
+            'tester': 'Dawn Win10 x64 Release (NVIDIA)',
           },
         ],
       },
