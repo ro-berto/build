@@ -14,6 +14,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gitiles',
   'recipe_engine/buildbucket',
+  'recipe_engine/cipd',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -32,7 +33,9 @@ BASE_URL = 'https://chromium.googlesource.com'
 V8_REPO = BASE_URL + '/v8/v8'
 CR_REPO = BASE_URL + '/chromium/src'
 LOG_TEMPLATE = 'Rolling v8/%s: %s/+log/%s..%s'
+CIPD_LOG_TEMPLATE = 'Rolling v8/%s: %s..%s'
 MAX_COMMIT_LOG_ENTRIES = 8
+CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 
 BOT_CONFIGS = {
   'Auto-roll - test262': {
@@ -245,47 +248,62 @@ def RunSteps(api):
           'Found %s value %s without pinned revision.' % (solution_name, name))
       return value.split('@')
 
-    v8_repo, v8_rev = SplitValue('v8', v8_deps[name])
+    v8_loc, v8_ver = SplitValue('v8', v8_deps[name])
     cr_value = cr_deps.get(name)
+    is_cipd_dep = v8_loc.startswith(CIPD_DEP_URL_PREFIX)
     if cr_value:
       # Use the given revision from chromium's DEPS file.
-      cr_repo, new_rev = SplitValue('src', cr_value)
-      if v8_repo != cr_repo:
+      cr_repo, new_ver = SplitValue('src', cr_value)
+      if v8_loc != cr_repo:
         # The gclient tool does not have commands that allow overriding the
         # repo, hence we'll need to make changes like this manually. However,
         # this should not block updating other DEPS and creating roll CL, hence
         # just create a failing step and continue.
         step_result = api.step(
-            'dep %s has changed repo from %s to %s' % (name, v8_repo, cr_repo),
+            'dep %s has changed repo from %s to %s' % (name, v8_loc, cr_repo),
             cmd=None)
         step_result.presentation.status = api.step.FAILURE
         failed_deps.append(name)
         continue
     else:
-      # Use the HEAD of the deps repo.
-      step_result = api.git(
-        'ls-remote', v8_repo, 'HEAD',
-        name='look up %s' % name.replace('/', '_'),
-        stdout=api.raw_io.output_text(),
-      )
-      new_rev = step_result.stdout.strip().split('\t')[0]
-      step_result.presentation.step_text = new_rev
+      if is_cipd_dep:
+        # Use the 'latest' ref for CIPD package.
+        new_ver = api.cipd.describe(
+            v8_loc[len(CIPD_DEP_URL_PREFIX):], 'latest').pin.instance_id
+      else:
+        # Use the HEAD of the deps repo.
+        step_result = api.git(
+          'ls-remote', v8_loc, 'HEAD',
+          name='look up %s' % name.replace('/', '_'),
+          stdout=api.raw_io.output_text(),
+        )
+        new_ver = step_result.stdout.strip().split('\t')[0]
+      api.step.active_result.presentation.step_text = new_ver
 
     # Check if an update is necessary.
-    if v8_rev != new_rev:
+    if v8_ver != new_ver:
       with api.context(cwd=api.path['checkout']):
         step_result = api.gclient(
             'setdep %s' % name.replace('/', '_'),
-            ['setdep', '-r', 'v8/%s@%s' % (name, new_rev)],
+            ['setdep', '-r', 'v8/%s@%s' % (name, new_ver)],
             ok_ret='any',
         )
       if step_result.retcode == 0:
-        repo = v8_repo[:-len('.git')] if v8_repo.endswith('.git') else v8_repo
-        commit_message.append(LOG_TEMPLATE % (
-            name, repo, v8_rev[:7], new_rev[:7]))
-        if bot_config['show_commit_log']:
-          commit_message.extend(commit_messages_log_entries(
-              api, repo, v8_rev, new_rev))
+        if is_cipd_dep:
+          # Unfortunately CIPD does not provide a way to generate a link that
+          # lists all versions from v8_rev to new_ver. Even just creating a link
+          # to a list of versions of a DEP is complicated as package name can
+          # contain ${platform}, which can usually be resolved to multiple
+          # distinct packages.
+          path, _ = name.split(':')
+          commit_message.append(CIPD_LOG_TEMPLATE % (path, v8_ver, new_ver))
+        else:
+          repo = v8_loc[:-len('.git')] if v8_loc.endswith('.git') else v8_loc
+          commit_message.append(LOG_TEMPLATE % (
+              name, repo, v8_ver[:7], new_ver[:7]))
+          if bot_config['show_commit_log']:
+            commit_message.extend(commit_messages_log_entries(
+                api, repo, v8_ver, new_ver))
       else:
         step_result.presentation.status = api.step.WARNING
 
@@ -325,6 +343,7 @@ v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39
 src/foo/bar: https://chromium.googlesource.com/external/github.com/foo/bar@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
 v8/tools/gyp: https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9
+v8/tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil: https://chrome-infra-packages.appspot.com/chromium/llvm-build-tools/dsymutil@OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe000"""
   cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
 src/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
