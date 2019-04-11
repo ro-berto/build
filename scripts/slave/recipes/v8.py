@@ -421,6 +421,20 @@ def GenTests(api):
       api.post_process(Filter('Test262 (flakes)'))
   )
 
+  # Test flako command line for number fuzzer.
+  yield (
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'flako_numfuzz',
+          parent_buildername='V8 Foobar - builder',
+          parent_bot_config=debug_bot_config,
+          parent_test_spec=flake_test_spec,
+      ) +
+      api.override_step_data('Test262', api.v8.one_flake(num_fuzz=True)) +
+      api.post_process(Filter('Test262 (flakes)'))
+  )
+
   yield (
     api.v8.test(
         'client.v8',

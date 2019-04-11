@@ -226,7 +226,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'tags': [],
     }])
 
-  def one_flake(self):
+  def one_flake(self, num_fuzz=False):
+    if num_fuzz:
+      framework_name = 'num_fuzzer'
+      variant = None
+      variant_flags = ['--flag1', '--flag2']
+    else:
+      framework_name = 'standard_runner'
+      variant = 'stress'
+      variant_flags = None
+
     return self.m.json.output([{
       'arch': 'theArch',
       'mode': 'theMode',
@@ -236,7 +245,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'result': 'FAIL',
           'expected': ['PASS', 'SLOW'],
           'duration': 3,
-          'variant': 'stress',
+          'variant': variant,
+          'variant_flags': variant_flags,
           'random_seed': 123,
           'run': 1,
           'stdout': 'Some output.',
@@ -244,13 +254,15 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'name': 'suite-name/dir/test-name',
           'command': 'd8 test.js',
           'exit_code': 1,
+          'framework_name': framework_name,
         },
         {
           'flags': [],
           'result': 'PASS',
           'expected': ['PASS', 'SLOW'],
           'duration': 10,
-          'variant': 'stress',
+          'variant': variant,
+          'variant_flags': variant_flags,
           'random_seed': 123,
           'run': 2,
           'stdout': 'Some output.',
@@ -258,6 +270,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'name': 'suite-name/dir/test-name',
           'command': 'd8 test.js',
           'exit_code': 0,
+          'framework_name': framework_name,
         },
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),

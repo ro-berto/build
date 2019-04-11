@@ -790,6 +790,23 @@ class Failure(object):
   def _flako_cmd_line(self):
     """Returns the command line for bisecting this failure with flako."""
     test_config = self.api.v8.test_configs[self.test.name]
+
+    # In order to use the test runner to also repro cases from the number
+    # fuzzer, we have to ignore the arguments passed to the fuzzer and instead
+    # pass the flags the fuzzer used for that particular test. Also variants
+    # are not used on the fuzzer, which is the same as using 'default'.
+    if self.results[0].get('framework_name') == 'num_fuzzer':
+      extra_args = []
+      for flag in self.results[0]['variant_flags']:
+        extra_args += ['--extra-flags', flag]
+      variant = 'default'
+    else:  # Standard test runner.
+      # TODO(machenbach): The api should hide the details how to get the args.
+      extra_args = (list(test_config.get('test_args', [])) +
+                    list(self.api.v8.c.testing.test_args) +
+                    list(self.test_step_config.test_args))
+      variant = self.results[0]['variant']
+
     properties = {
       # This assumes the builder's master is the same as the tester.
       'bisect_mastername': self.api.properties['mastername'],
@@ -814,12 +831,9 @@ class Failure(object):
       # Add total timeout default for convenience.
       'total_timeout_sec': 120,
       # The variant the failing test ran in.
-      'variant': self.results[0]['variant'],
+      'variant': variant,
       # Extra arguments passed to the V8 test runner.
-      # TODO(machenbach): The api should hide the details how to get the args.
-      'extra_args': list(test_config.get('test_args', [])) +
-                    list(self.api.v8.c.testing.test_args) +
-                    list(self.test_step_config.test_args),
+      'extra_args': extra_args,
     }
     return (
         'echo \'%s\' | '
