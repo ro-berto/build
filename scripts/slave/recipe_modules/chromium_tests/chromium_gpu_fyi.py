@@ -15,8 +15,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -33,7 +32,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -50,8 +49,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -295,8 +293,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -313,8 +310,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -388,8 +384,7 @@ SPEC = {
           'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -406,7 +401,7 @@ SPEC = {
           'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -423,8 +418,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -440,8 +434,7 @@ SPEC = {
           'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -614,7 +607,7 @@ SPEC = {
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal',
-                               'angle_top_of_tree', 'dawn_top_of_tree'],
+                               'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -648,8 +641,7 @@ SPEC = {
           'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -666,7 +658,7 @@ SPEC = {
           'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -686,7 +678,6 @@ SPEC = {
       'gclient_apply_config': [
           'chrome_internal',
           'angle_top_of_tree',
-          'dawn_top_of_tree',
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -894,8 +885,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -910,8 +900,7 @@ SPEC = {
       'chromium_apply_config': [
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -928,8 +917,7 @@ SPEC = {
       'chromium_apply_config': [
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
-                               'dawn_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
