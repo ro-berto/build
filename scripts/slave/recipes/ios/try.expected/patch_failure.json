@@ -246,8 +246,7 @@
       "@@@STEP_LOG_LINE@patch error@-something@@@",
       "@@@STEP_LOG_LINE@patch error@more context@@@",
       "@@@STEP_LOG_END@patch error@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"6fb9f41804c8a64e9770fe5ce7592c30cc6524d5\"@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

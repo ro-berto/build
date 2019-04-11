@@ -137,8 +137,7 @@ def RunSteps(api):
     # migrated to LUCI.
     cwd = api.path['start_dir']
   with api.context(cwd=cwd):
-    with api.tryserver.set_failure_hash():
-      return _RunStepsInternal(api)
+    return _RunStepsInternal(api)
 
 
 def GenTests(api):

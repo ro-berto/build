@@ -2423,8 +2423,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness\": {}@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@SET_BUILD_PROPERTY@do_not_retry@true@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"1ce3f998604c78ebafd14471cdf18add0f107908\"@@@"
+      "@@@SET_BUILD_PROPERTY@do_not_retry@true@@@"
     ]
   },
   {

@@ -481,10 +481,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks (without patch)",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"e21d0f2b4dd4945720174b0d0fa3a010820898d7\"@@@"
-    ]
+    "name": "gclient runhooks (without patch)"
   },
   {
     "failure": {

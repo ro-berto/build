@@ -15,12 +15,11 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  with api.tryserver.set_failure_hash():
-    api.ios.checkout()
-    # Ensure try bots mirror configs from chromium.mac.
-    api.ios.read_build_config(master_name='chromium.mac')
-    api.ios.build(analyze=True, suffix='with patch')
-    api.ios.test_swarming()
+  api.ios.checkout()
+  # Ensure try bots mirror configs from chromium.mac.
+  api.ios.read_build_config(master_name='chromium.mac')
+  api.ios.build(analyze=True, suffix='with patch')
+  api.ios.test_swarming()
 
 def GenTests(api):
 

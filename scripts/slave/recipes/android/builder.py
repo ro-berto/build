@@ -209,8 +209,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
 
 
 def RunSteps(api, mastername, buildername, revision):
-  with api.tryserver.set_failure_hash():
-    return _RunStepsInternal(api, mastername, buildername, revision)
+  return _RunStepsInternal(api, mastername, buildername, revision)
 
 
 def _sanitize_nonalpha(text):

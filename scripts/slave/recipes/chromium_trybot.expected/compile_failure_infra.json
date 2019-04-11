@@ -828,7 +828,6 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@GOMA_PING_FAILURE@@@",
       "@@@STEP_EXCEPTION@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"935f5d19481d533c5ea3a8d2d4abf9174668d7fe\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
     ]
   },

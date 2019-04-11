@@ -775,8 +775,7 @@
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"4d6a903860330c798a14ca4fb8a3b9ea8c90b814\"@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

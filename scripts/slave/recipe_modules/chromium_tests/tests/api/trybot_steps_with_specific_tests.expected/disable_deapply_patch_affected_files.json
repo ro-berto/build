@@ -626,8 +626,7 @@
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
       "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"bf19a771ad745a174e1029355db6d52ed6824592\"@@@"
+      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

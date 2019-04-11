@@ -289,8 +289,7 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"d263d3961e134a9db54b635705e234a976cb9ca6\"@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

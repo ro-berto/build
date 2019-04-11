@@ -251,7 +251,6 @@
     "timeout": 480,
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"80b70dd08d38767ceb3d1cf6bb3d0a1c6945ab24\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
