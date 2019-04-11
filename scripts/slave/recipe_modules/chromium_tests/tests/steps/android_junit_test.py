@@ -27,7 +27,7 @@ def RunSteps(api):
     assert test.has_valid_results('')
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: %r' % test.compile_targets(api.chromium_tests.m),
+        'compile_targets: %r' % test.compile_targets(),
         'failures: %r' % test.failures(api.chromium_tests.m, ''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]

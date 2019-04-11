@@ -251,7 +251,7 @@ class Test(object):
   def runs_on_swarming(self):
     return False
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     """List of compile targets needed by this test."""
     raise NotImplementedError()  # pragma: no cover
 
@@ -589,8 +589,8 @@ class TestWrapper(Test):  # pragma: no cover
   def isolate_target(self):
     return self._test.isolate_target
 
-  def compile_targets(self, api):
-    return self._test.compile_targets(api)
+  def compile_targets(self):
+    return self._test.compile_targets()
 
   def pre_run(self, api, suffix):
     return self._test.pre_run(api, suffix)
@@ -766,7 +766,7 @@ class SizesStep(Test):
     self._suffix_step_name_map[suffix] = step_result.step['name']
     return step_result
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     return ['chrome']
 
   def has_valid_results(self, suffix):
@@ -811,30 +811,17 @@ class ScriptTest(Test):  # pylint: disable=W0232
     self._script_args = script_args
     self._override_compile_targets = override_compile_targets
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     if self._override_compile_targets:
       return self._override_compile_targets
 
-    try:
-      substitutions = {'name': self._name}
+    substitutions = {'name': self._name}
 
-      return [string.Template(s).safe_substitute(substitutions)
-              for s in self._all_compile_targets[self._script]]
-    except KeyError:  # pragma: no cover
-      # There are internal recipes that appear to configure
-      # test script steps, but ones that don't have data.
-      # We get around this by returning a default value for that case.
-      # But the recipes should be updated to not do this.
-      # We mark this as pragma: no cover since the public recipes
-      # will not exercise this block.
-      #
-      # TODO(phajdan.jr): Revisit this when all script tests
-      # lists move src-side. We should be able to provide
-      # test data then.
-      if api.chromium._test_data.enabled:
-        return []
+    if not self._script in self._all_compile_targets:
+      return []
 
-      raise
+    return [string.Template(s).safe_substitute(substitutions)
+            for s in self._all_compile_targets[self._script]]
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -980,7 +967,7 @@ class LocalGTestTest(Test):
   def is_gtest(self):
     return True
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     # TODO(phajdan.jr): clean up override_compile_targets (remove or cover).
     if self._override_compile_targets:  # pragma: no cover
       return self._override_compile_targets
@@ -1698,7 +1685,7 @@ class SwarmingGTestTest(SwarmingTest):
   def is_gtest(self):
     return True
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     if self._override_compile_targets:
       return self._override_compile_targets
     return [self.target_name]
@@ -1799,7 +1786,7 @@ class LocalIsolatedScriptTest(Test):
   def uses_isolate(self):
     return True
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     if self._override_compile_targets:
       return self._override_compile_targets
     return [self.target_name]
@@ -1913,7 +1900,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def target_name(self):
     return self._target_name or self._name
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     if self._override_compile_targets:
       return self._override_compile_targets
     return [self.target_name]
@@ -1974,7 +1961,7 @@ class PythonBasedTest(Test):
   def __init__(self, name, **kwargs):
     super(PythonBasedTest, self).__init__(name, **kwargs)
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     return []  # pragma: no cover
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
@@ -2066,7 +2053,7 @@ class AndroidTest(Test):
             chrome_revision=api.bot_update.last_returned_properties.get(
                 'got_revision_cp', 'x@{#0}'))
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     return self._compile_targets
 
 
@@ -2218,7 +2205,7 @@ class BlinkTest(Test):
     self._extra_args = extra_args
     self.results_handler = LayoutTestResultsHandler()
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     return ['blink_tests']
 
   @property
@@ -2309,7 +2296,7 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
   def __init__(self, **kwargs):
     super(MiniInstallerTest, self).__init__('test_installer', **kwargs)
 
-  def compile_targets(self, _):
+  def compile_targets(self):
     return ['mini_installer_tests']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
@@ -2375,7 +2362,7 @@ class IncrementalCoverageTest(Test):
   def pass_fail_counts(self, api, suffix): # pragma: no cover
     return {}
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     """List of compile targets needed by this test."""
     return []
 
@@ -2397,7 +2384,7 @@ class FindAnnotatedTest(Test):
   def __init__(self, **kwargs):
     super(FindAnnotatedTest, self).__init__('Find annotated test', **kwargs)
 
-  def compile_targets(self, api):
+  def compile_targets(self):
     return FindAnnotatedTest._TEST_APKS.keys()
 
   @recipe_api.composite_step
@@ -2569,8 +2556,7 @@ class MockTest(Test):
   def pass_fail_counts(self, _, suffix):
     return {}
 
-  def compile_targets(self, api): # pragma: no cover
-    del api
+  def compile_targets(self): # pragma: no cover
     return []
 
   @property

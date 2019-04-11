@@ -801,7 +801,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               properties.
     """
     compile_targets = list(itertools.chain(
-        *[t.compile_targets(self.m) for t in failing_tests]))
+        *[t.compile_targets() for t in failing_tests]))
     if compile_targets:
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
@@ -1314,7 +1314,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # compiled targets (that's obviously not covered by the
       # 'analyze' step) if any source files change.
       if any(self._is_source_file(f) for f in affected_files):
-        tests = [t for t in tests if not t.compile_targets(self.m)]
+        tests = [t for t in tests if not t.compile_targets()]
       else:
         tests = []
 
@@ -1367,7 +1367,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Returns the compile_targets for all the Tests in |tests|."""
     return sorted(set(x
                       for test in tests
-                      for x in test.compile_targets(self.m)))
+                      for x in test.compile_targets()))
 
   def _is_source_file(self, filepath):
     """Returns true iff the file is a source file."""
@@ -1379,7 +1379,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     targets in |compile_targets|."""
     result = []
     for test in tests:
-      test_compile_targets = test.compile_targets(self.m)
+      test_compile_targets = test.compile_targets()
       # Always return tests that don't require compile. Otherwise we'd never
       # run them.
       if ((set(compile_targets) & set(test_compile_targets)) or

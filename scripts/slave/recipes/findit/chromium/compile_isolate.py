@@ -93,7 +93,7 @@ def RunSteps(api, target_mastername, target_testername,
       #  * network_service_browser_tests
       #  * webui_polymer2_browser_tests
       tests.sort(key=lambda t: t.canonical_name)
-      compile_targets = tests[0].compile_targets(api)
+      compile_targets = tests[0].compile_targets()
 
       assert compile_targets, 'Test %s has no compile target' % tests[0].name
 

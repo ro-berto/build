@@ -178,7 +178,7 @@ class FinditApi(recipe_api.RecipeApi):
       # Figure out the test targets to be compiled.
       requested_test_targets = []
       for test in requested_tests_to_run:
-        requested_test_targets.extend(test.compile_targets(api))
+        requested_test_targets.extend(test.compile_targets())
       requested_test_targets = sorted(set(requested_test_targets))
 
       actual_tests_to_run = requested_tests_to_run
@@ -199,7 +199,7 @@ class FinditApi(recipe_api.RecipeApi):
 
         actual_tests_to_run = []
         for test in requested_tests_to_run:
-          targets = test.compile_targets(api)
+          targets = test.compile_targets()
           if not targets:
             # No compile is needed for the test. Eg: checkperms.
             actual_tests_to_run.append(test)

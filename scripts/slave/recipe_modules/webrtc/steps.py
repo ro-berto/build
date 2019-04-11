@@ -289,7 +289,7 @@ class SwarmingAndroidPerfTest(SwarmingTest):
     # swarming android perf tests. This should be fixed.
     return _create_test_run_results_dictionary(True)
 
-  def compile_targets(self, api): # pragma: no cover
+  def compile_targets(self): # pragma: no cover
     return []
 
 

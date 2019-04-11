@@ -23,7 +23,7 @@ def RunSteps(api):
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
-      'compile_targets: %r' % test.compile_targets(api)
+      'compile_targets: %r' % test.compile_targets()
   ]
 
   test.run(api, '')

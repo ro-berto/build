@@ -177,7 +177,7 @@ class BotConfig(object):
 
     if self.get('add_tests_as_compile_targets', True):
       for t in tests:
-        compile_targets.update(t.compile_targets(chromium_tests_api.m))
+        compile_targets.update(t.compile_targets())
 
     return sorted(compile_targets)
 
