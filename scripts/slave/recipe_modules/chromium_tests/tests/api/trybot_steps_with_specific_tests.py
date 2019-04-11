@@ -54,14 +54,12 @@ def RunSteps(api, mastername, buildername):
   affected_files = api.properties.get('affected_files', [])
 
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
-  test_failures_prevent_cq_retry = api.properties.get(
-      'test_failures_prevent_cq_retry', False)
 
   # Override _trybot_steps_internal to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
     return (bot_config_object, update_step, affected_files, [test],
-            retry_failed_shards, test_failures_prevent_cq_retry)
+            retry_failed_shards)
   api.chromium_tests._trybot_steps_internal = config_override
 
   skip_deapply_patch = api.properties.get(
@@ -92,7 +90,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          test_failures_prevent_cq_retry=True,
           retry_failed_shards=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -118,7 +115,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          test_failures_prevent_cq_retry=True,
           retry_failed_shards=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -143,7 +139,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          test_failures_prevent_cq_retry=True,
           retry_failed_shards=True,
           skip_deapply_patch=True,
           swarm_hashes={
@@ -167,7 +162,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          test_failures_prevent_cq_retry=True,
           retry_failed_shards=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
