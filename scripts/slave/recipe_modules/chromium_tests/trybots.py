@@ -1080,6 +1080,20 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'dawn-mac-x64-deps-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Mac x64 DEPS Builder',
+            'tester': 'Dawn Mac x64 DEPS Release (AMD)',
+          },
+          {
+            'mastername': 'chromium.dawn',
+            'buildername': 'Dawn Mac x64 DEPS Builder',
+            'tester': 'Dawn Mac x64 DEPS Release (Intel)',
+          },
+        ],
+      },
       'dawn-win10-x86-deps-rel': {
         'bot_ids': [
           {
