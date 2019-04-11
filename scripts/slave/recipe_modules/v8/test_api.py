@@ -226,6 +226,44 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'tags': [],
     }])
 
+  def one_flake(self):
+    return self.m.json.output([{
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': [
+        {
+          'flags': [],
+          'result': 'FAIL',
+          'expected': ['PASS', 'SLOW'],
+          'duration': 3,
+          'variant': 'stress',
+          'random_seed': 123,
+          'run': 1,
+          'stdout': 'Some output.',
+          'stderr': 'Some errput.',
+          'name': 'suite-name/dir/test-name',
+          'command': 'd8 test.js',
+          'exit_code': 1,
+        },
+        {
+          'flags': [],
+          'result': 'PASS',
+          'expected': ['PASS', 'SLOW'],
+          'duration': 10,
+          'variant': 'stress',
+          'random_seed': 123,
+          'run': 2,
+          'stdout': 'Some output.',
+          'stderr': '',
+          'name': 'suite-name/dir/test-name',
+          'command': 'd8 test.js',
+          'exit_code': 0,
+        },
+      ],
+      'slowest_tests': V8TestApi.SLOWEST_TESTS(),
+      'tags': [],
+    }])
+
   def infra_failure(self):
     return self.m.json.output([{
       'arch': 'theArch',

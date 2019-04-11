@@ -417,8 +417,7 @@ def GenTests(api):
           parent_bot_config=debug_bot_config,
           parent_test_spec=flake_test_spec,
       ) +
-      api.override_step_data(
-          'Test262', api.v8.output_json(has_failures=True, flakes=True)) +
+      api.override_step_data('Test262', api.v8.one_flake()) +
       api.post_process(Filter('Test262 (flakes)'))
   )
 
