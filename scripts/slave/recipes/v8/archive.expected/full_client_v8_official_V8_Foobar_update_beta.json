@@ -120,7 +120,7 @@
       "@@@STEP_LOG_LINE@request@  ]@@@",
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@v8-internal/ci/v8_refbuild_bundler/8922054662172514000@https://cr-buildbucket.appspot.com/build/8922054662172514000@@@"
+      "@@@STEP_LINK@8922054662172514000@https://cr-buildbucket.appspot.com/build/8922054662172514000@@@"
     ]
   }
 ]

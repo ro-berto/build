@@ -385,7 +385,7 @@
       "@@@STEP_LOG_LINE@request@  ]@@@",
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@v8/try.triggered/v8_foobar_rel_ng_triggered/8922054662172514000@https://cr-buildbucket.appspot.com/build/8922054662172514000@@@",
+      "@@@STEP_LINK@8922054662172514000@https://cr-buildbucket.appspot.com/build/8922054662172514000@@@",
       "@@@SET_BUILD_PROPERTY@triggered_build_ids@[\"8922054662172514000\"]@@@"
     ]
   },
