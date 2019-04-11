@@ -71,7 +71,6 @@
   * [chromium:examples/full](#recipes-chromium_examples_full)
   * [chromium:tests/analyze](#recipes-chromium_tests_analyze)
   * [chromium:tests/archive_build](#recipes-chromium_tests_archive_build)
-  * [chromium:tests/clean_outdir](#recipes-chromium_tests_clean_outdir)
   * [chromium:tests/compile](#recipes-chromium_tests_compile)
   * [chromium:tests/configs](#recipes-chromium_tests_configs)
   * [chromium:tests/configure_bot](#recipes-chromium_tests_configure_bot)
@@ -599,14 +598,6 @@ Context manager that must be entered prior to performing any Chromium
 recipe operations. This is responsible for basic enviornment initialization.
 
 See "ensure_chromium_layout" for more information.
-
-&mdash; **def [clean\_outdir](/scripts/slave/recipe_modules/chromium/api.py#1409)(self):**
-
-Removes old files from the out directory.
-
-This is done to stop unbounded growth of the out directory as the files
-with version numbers in file-name will not be overwritten by the next
-build.
 
 &mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#897)(self):**
 
@@ -1595,7 +1586,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#563)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1150)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1146)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#68)(self):**
 
@@ -3941,11 +3932,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#14)(api):**
-### *recipes* / [chromium:tests/clean\_outdir](/scripts/slave/recipe_modules/chromium/tests/clean_outdir.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/clean_outdir.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/clean_outdir.py#11)(api):**
 ### *recipes* / [chromium:tests/compile](/scripts/slave/recipe_modules/chromium/tests/compile.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/compile.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

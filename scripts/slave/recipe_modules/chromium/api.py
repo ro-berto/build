@@ -1405,17 +1405,3 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def get_annotate_by_test_name(self, _):
     return 'graphing'
-
-  def clean_outdir(self):
-    """Removes old files from the out directory.
-
-    This is done to stop unbounded growth of the out directory as the files
-    with version numbers in file-name will not be overwritten by the next
-    build.
-    """
-    args = [self.output_dir]
-    self.m.python(
-        'clean_outdir',
-        self.resource('clean_outdir.py'),
-        args,
-        infra_step=True)
