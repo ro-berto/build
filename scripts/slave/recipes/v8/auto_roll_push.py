@@ -57,11 +57,13 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('standard') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.properties.generic(path_config='kitchen')
   )
 
   yield (
       api.test('rolling_deactivated') +
       api.properties.generic(path_config='kitchen') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.url.text('check roll status', '0')
   )

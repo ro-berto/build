@@ -7,9 +7,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "--platform",
       "linux",
       "--type",
@@ -22,8 +22,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -35,7 +35,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive (ref).zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/v8/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

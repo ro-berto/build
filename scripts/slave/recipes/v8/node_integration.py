@@ -338,5 +338,6 @@ def GenTests(api):
           ) +
           buildbucket_fn(**buildbucket_kwargs) +
           api.platform(bot_config['testing']['platform'], 64) +
+          api.runtime(is_luci=True, is_experimental=False) +
           api.v8.hide_infra_steps()
       )

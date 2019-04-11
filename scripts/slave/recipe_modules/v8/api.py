@@ -369,14 +369,6 @@ class V8Api(recipe_api.RecipeApi):
     solution.revision = revision
 
     self.checkout_root = self.m.path['builder_cache']
-    if self.m.runtime.is_luci:
-      self.checkout_root = self.m.path['builder_cache']
-    else:
-      # TODO(sergiyb): Deprecate this after migrating all builders to LUCI.
-      safe_buildername = ''.join(
-          c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
-      self.checkout_root = self.m.path['builder_cache'].join(safe_buildername)
-
     self.m.file.ensure_directory(
         'ensure builder cache dir', self.checkout_root)
     with self.m.context(cwd=self.checkout_root):

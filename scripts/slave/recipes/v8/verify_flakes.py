@@ -24,6 +24,7 @@ DEPS = [
     'depot_tools/gitiles',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'v8',
 ]
@@ -139,7 +140,8 @@ def GenTests(api):
         api.buildbucket.simulated_collect_output(
             [api.buildbucket.ci_build_message(build_id=123, status=result)
              for result in results],
-            step_name=ui_test_name or 'FunctionCallSample')
+            step_name=ui_test_name or 'FunctionCallSample') +
+        api.runtime(is_luci=True, is_experimental=False)
     )
 
   yield (
@@ -164,6 +166,7 @@ def GenTests(api):
   yield (
       api.test('no_flakes') +
       api.step_data('read flake config', api.gitiles.make_encoded_file('[]')) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(MustRun, 'No flakes to reproduce') +
       api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)

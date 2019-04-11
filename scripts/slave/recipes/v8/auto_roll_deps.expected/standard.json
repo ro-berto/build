@@ -33,7 +33,7 @@
       "-p",
       "project=chromium/src",
       "-p",
-      "owner=v8-autoroll@chromium.org",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "-p",
       "status=open"
     ],
@@ -69,7 +69,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/TestBuilder"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -94,8 +94,8 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -260,7 +260,7 @@
       "blob",
       "HEAD:DEPS"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/src",
+    "cwd": "[BUILDER_CACHE]/src",
     "infra_step": true,
     "name": "git cat-file",
     "stdout": "/path/to/tmp/"
@@ -269,11 +269,11 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/TestBuilder/v8/tools/release/auto_roll.py",
+      "[BUILDER_CACHE]/v8/tools/release/auto_roll.py",
       "--chromium",
-      "[BUILDER_CACHE]/TestBuilder/src",
+      "[BUILDER_CACHE]/src",
       "--author",
-      "v8-autoroll@chromium.org",
+      "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "--reviewer",
       "hablich@chromium.org,v8-waterfall-sheriff@grotations.appspotmail.com",
       "--roll",
@@ -282,7 +282,7 @@
       "--work-dir",
       "[CACHE]/TestBuilder/workdir"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/src/v8",
+    "cwd": "[BUILDER_CACHE]/src/v8",
     "name": "roll deps",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

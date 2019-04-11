@@ -55,6 +55,7 @@ def GenTests(api):
       api.test('clusterfuzz_no_issues') +
       api.properties.generic(mastername='client.v8.fyi',
                              path_config='kitchen') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.buildbucket.ci_build(
         project='v8',
         git_repo='https://chromium.googlesource.com/v8/v8',
@@ -68,6 +69,7 @@ def GenTests(api):
       api.properties.generic(mastername='client.v8.fyi',
                              path_config='kitchen') +
       api.override_step_data('check clusterfuzz', api.json.output([1, 2])) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.buildbucket.ci_build(
         project='v8',
         git_repo='https://chromium.googlesource.com/v8/v8',

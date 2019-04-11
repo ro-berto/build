@@ -4,12 +4,12 @@
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/V8_Foobar/v8",
+      "--root=[BUILDER_CACHE]/v8",
       "gen",
       "//out/Release",
       "--args=v8_static_library=true symbol_level=1 v8_android_log_stdout=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -33,12 +33,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "v8_archive"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -59,9 +59,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "--platform",
       "android",
       "--type",
@@ -74,8 +74,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -87,7 +87,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/v8/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -124,9 +124,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "--platform",
       "android",
       "--type",
@@ -139,8 +139,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -152,7 +152,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive (libs).zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/v8/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

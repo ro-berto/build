@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/Auto_roll___release_process"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -32,8 +32,8 @@
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Auto_roll___release_process",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -82,7 +82,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Auto_roll___release_process/v8/tools/release/check_clusterfuzz.py",
+      "[BUILDER_CACHE]/v8/tools/release/check_clusterfuzz.py",
       "--key-file=/creds/generic/generic-v8-autoroller_cf_key",
       "--results-file",
       "/path/to/tmp/json"

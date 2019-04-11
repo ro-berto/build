@@ -26,6 +26,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'zip',
@@ -225,6 +226,7 @@ def GenTests(api):
         api.v8.check_param_equals(
             'initialization.bot_update', '--revision', 'v8@refs/branch-heads/' +
             '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+        api.runtime(is_luci=True, is_experimental=False) +
         api.post_process(
             MustRun, 'initialization.clobber',
             'initialization.gclient runhooks', 'build.gn', 'build.compile',
@@ -283,7 +285,7 @@ def GenTests(api):
       api.v8.check_param_equals(
           'make archive.filter build files',
           '--dir',
-          '[BUILDER_CACHE]\\V8_Foobar\\v8\\out\\Release') +
+          '[BUILDER_CACHE]\\v8\\out\\Release') +
       # Show GN configs to be resiliant to changes of chromium configs.
       api.post_process(Filter('build.gn'))
   )
@@ -317,6 +319,7 @@ def GenTests(api):
           DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
           'build.compile', 'make archive.zipping',
           'make archive.gsutil upload') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(DropExpectation)
   )
 
@@ -345,6 +348,7 @@ def GenTests(api):
           DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
           'build.compile', 'make archive.zipping',
           'make archive.gsutil upload') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(DropExpectation)
   )
 
@@ -367,6 +371,7 @@ def GenTests(api):
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(Filter().include_re('.*ref.*'))
   )
 
@@ -389,6 +394,7 @@ def GenTests(api):
       api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3.1')) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(Filter(
           'make archive.gsutil upload',
           'make archive.gsutil upload json',

@@ -33,7 +33,7 @@
       "-p",
       "project=chromium/src",
       "-p",
-      "owner=v8-autoroll@chromium.org",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "-p",
       "status=open"
     ],
