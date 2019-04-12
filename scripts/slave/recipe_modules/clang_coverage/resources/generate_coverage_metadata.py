@@ -120,6 +120,11 @@ def _extract_coverage_info(segments):
 
       is_block_not_covered = (_has_count(segment) and _get_count(segment) == 0)
       col_start = col_end
+    # Handle the last segment.
+    if is_block_not_covered:
+      last_segment = current_line_segments[-1]
+      # Use -1 to indicate block extends to end of line.
+      block_data[_get_line_num(last_segment)].append([col_start, -1])
 
   return line_data, block_data
 

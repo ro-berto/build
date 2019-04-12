@@ -44,7 +44,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
     expected_line_data = dict([(1, 1), (2, 1), (3, 1), (4, 1), (5, 0), (6, 0),
                                (7, 0)])
-    expected_block_data = {2: [[18, 24]]}
+    expected_block_data = {2: [[18, 24]], 4: [[4, -1]]}
     line_data, block_data = generator._extract_coverage_info(segments)
     self.assertDictEqual(expected_line_data, line_data)
     self.assertDictEqual(expected_block_data, block_data)
@@ -145,6 +145,12 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'ranges': [{
                 'first': 18,
                 'last': 24,
+            }]
+        }, {
+            'line': 4,
+            'ranges': [{
+                'first': 4,
+                'last': -1,
             }]
         }],
     }
@@ -740,6 +746,12 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'first': 18,
                 }],
                 'line': 2
+            }, {
+                'ranges': [{
+                    'last': -1,
+                    'first': 4,
+                }],
+                'line': 4
             }],
             'revision':
                 'hash1',
