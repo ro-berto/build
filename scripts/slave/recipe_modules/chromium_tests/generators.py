@@ -246,8 +246,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
     common_gtest_kwargs['override_compile_targets'] = spec.get(
         'override_compile_targets', None)
-    common_gtest_kwargs['override_isolate_target'] = spec.get(
-        'override_isolate_target', None)
 
     common_gtest_kwargs['waterfall_mastername'] = mastername
     common_gtest_kwargs['waterfall_buildername'] = buildername

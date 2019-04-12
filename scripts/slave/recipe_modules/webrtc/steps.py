@@ -238,7 +238,7 @@ class PythonTest(Test):
 
 class AndroidTest(SwarmingGTestTest):
   def __init__(self, test, **kwargs):
-    super(AndroidTest, self).__init__(test, override_isolate_target=test,
+    super(AndroidTest, self).__init__(test,
                                       cipd_packages=ANDROID_CIPD_PACKAGES,
                                       **kwargs)
 

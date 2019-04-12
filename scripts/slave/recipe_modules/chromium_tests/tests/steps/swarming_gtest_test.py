@@ -33,7 +33,6 @@ def RunSteps(api):
 
   test = api.chromium_tests.steps.SwarmingGTestTest(
       'base_unittests',
-      override_isolate_target=api.properties.get('override_isolate_target'),
       override_compile_targets=api.properties.get('override_compile_targets'),
       isolate_coverage_data=api.properties.get('isolate_coverage_data', False)
   )
@@ -97,7 +96,6 @@ def GenTests(api):
   yield (
       api.test('overrides') +
       api.properties(
-          override_isolate_target='base_unittests_run',
           override_compile_targets=['base_unittests_run'],
           mastername='test_mastername',
           buildername='test_buildername',

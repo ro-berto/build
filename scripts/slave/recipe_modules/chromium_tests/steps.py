@@ -176,8 +176,8 @@ class Test(object):
   those modules; the state should already be stored in the configuration.
   """
 
-  def __init__(self, name, target_name=None, override_isolate_target=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+  def __init__(self, name, target_name=None, waterfall_mastername=None,
+               waterfall_buildername=None):
     """
     Args:
       waterfall_mastername (str): Matching waterfall buildbot master name.
@@ -214,7 +214,6 @@ class Test(object):
 
     self._name = name
     self._target_name = target_name
-    self._override_isolate_target = override_isolate_target
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -262,8 +261,6 @@ class Test(object):
   def isolate_target(self):
     """Returns isolate target name. Defaults to name.
     """
-    if self._override_isolate_target:
-      return self._override_isolate_target
     return self.target_name
 
   @property
@@ -917,7 +914,6 @@ class LocalGTestTest(Test):
   def __init__(self, name, args=None, target_name=None, revision=None,
                webkit_revision=None, android_shard_timeout=None,
                android_tool=None, override_compile_targets=None,
-               override_isolate_target=None,
                commit_position_property='got_revision_cp', use_xvfb=True,
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, **runtest_kwargs):
@@ -930,8 +926,6 @@ class LocalGTestTest(Test):
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
       override_compile_targets: List of compile targets for this test
-          (for tests that don't follow target naming conventions).
-      override_isolate_target: List of isolate targets for this test
           (for tests that don't follow target naming conventions).
       commit_position_property: Property to get Chromium's commit position.
           Defaults to 'got_revision_cp'.
@@ -946,7 +940,6 @@ class LocalGTestTest(Test):
     """
     super(LocalGTestTest, self).__init__(
         name, target_name=target_name,
-        override_isolate_target=override_isolate_target,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
     self._args = args or []
@@ -1676,7 +1669,7 @@ class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, extra_suffix=None, expiration=None,
                hard_timeout=None, io_timeout=None,
-               override_compile_targets=None, override_isolate_target=None,
+               override_compile_targets=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
@@ -1686,7 +1679,6 @@ class SwarmingGTestTest(SwarmingTest):
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
-        override_isolate_target=override_isolate_target,
         isolate_coverage_data=isolate_coverage_data,
         merge=merge, shards=shards,
         optional_dimensions=optional_dimensions,
@@ -1719,10 +1711,7 @@ class SwarmingGTestTest(SwarmingTest):
     return step_result.test_utils.gtest_results.canonical_result_format()
 
   def pass_fail_counts(self, suffix):
-    if self._gtest_results.get(suffix):
-      # test_result exists and is not None.
-      return self._gtest_results[suffix].pass_fail_counts
-    return {}
+    return self._gtest_results[suffix].pass_fail_counts
 
   @recipe_api.composite_step
   def run(self, api, suffix):
