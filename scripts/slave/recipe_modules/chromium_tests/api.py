@@ -512,7 +512,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             update_properties=update_step.presentation.properties,
             exclude_perf_test_files=True,
             store_by_hash=False,
-            platform=self.m.chromium.c.HOST_PLATFORM
+            platform=self.m.chromium.c.TARGET_PLATFORM
         )
 
       return self.m.archive.zip_and_upload_build(
