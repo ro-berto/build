@@ -262,20 +262,6 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'linux_angle_rel_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
-            'tester': 'Linux FYI Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
-            'tester': 'Linux FYI Release (Intel HD 630)',
-          },
-        ],
-      },
       'linux_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
@@ -317,27 +303,6 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Mac Builder',
             'tester': 'ANGLE GPU Mac Retina Release (AMD)',
-          },
-        ],
-      },
-      'mac_angle_rel_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Mac FYI Release (Intel)',
-          },
-          # Disable these testers to preserve limited capacity.
-          # TODO(jmadill): Enable when possible. crbug.com/822310
-          # {
-          #   'mastername': 'chromium.gpu.fyi',
-          #   'buildername': 'GPU FYI Mac Builder',
-          #   'tester': 'Mac FYI Retina Release (NVIDIA)',
-          # },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Mac Builder',
-            'tester': 'Mac FYI Retina Release (AMD)',
           },
         ],
       },
