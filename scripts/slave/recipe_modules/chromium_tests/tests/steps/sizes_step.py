@@ -25,7 +25,7 @@ def RunSteps(api):
         'compile_targets: %r' % test.compile_targets(),
         'uses_local_devices: %r' % test.uses_local_devices,
         'has_valid_results: %r' % test.has_valid_results(''),
-        'failures: %r' % test.failures(api, ''),
+        'failures: %r' % test.failures(''),
     ]
 
 

@@ -259,7 +259,7 @@ class FinditApi(recipe_api.RecipeApi):
         }
         if valid:
           test_list = list(
-              failed_test.failures(api, suffix=abbreviated_revision))
+              failed_test.failures(suffix=abbreviated_revision))
           results[failed_test.name]['failures'] = test_list
           failed_tests_dict[failed_test.name].extend(test_list)
 

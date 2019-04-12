@@ -240,8 +240,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Note that this is technically O(n^2). We expect n to be small.
       if not test.has_valid_results(suffix):
         invalid_results.append(test)
-      elif test.deterministic_failures(
-          caller_api, suffix) and test not in failed_tests:
+      elif test.deterministic_failures(suffix) and test not in failed_tests:
         failed_tests.append(test)
 
     return invalid_results, failed_tests
@@ -442,8 +441,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return set()
 
     suffix = 'with patch' if valid_results else 'retry shards with patch'
-    with_patch_failures = set(test_suite.deterministic_failures(
-        caller_api, suffix))
+    with_patch_failures = set(test_suite.deterministic_failures(suffix))
 
     # FindIt wants to ignore failures that have status UNKNOWN/NOTRUN. This
     # logic will eventually live in FindIt, but for now, is implemented here.

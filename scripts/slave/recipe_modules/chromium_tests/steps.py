@@ -154,7 +154,26 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
 
 class Test(object):
   """
-  Base class for test suites that can be retried.
+  Base class for a test suite that can be run locally or remotely.
+
+  Tests consist of three components:
+    * configuration
+    * logic for how to run the test
+    * results
+
+  The logic for how to run a test should only depend on the configuration, and
+  not on global state. For example, once a SwarmingTest has been configured,
+  calling pre_run() or run() should work regardless of context.
+
+  The only exception is for local tests that depend on file-system state. We do
+  not want to add the complexity of a file-system cache to this class, so
+  changes to the file-system can affect behavior of the test.
+
+  As part of this contract, methods that access configuration or results should
+  never take an "api" parameter; the configuration and results should be
+  self-contained. Likewise, the logic for running tests must take an "api"
+  parameter to access relevant recipe modules, but should not look up state from
+  those modules; the state should already be stored in the configuration.
   """
 
   def __init__(self, name, target_name=None, override_isolate_target=None,
@@ -167,6 +186,7 @@ class Test(object):
         This value would be different from trybot builder name.
     """
     super(Test, self).__init__()
+
     # Contains a record of test runs, one for each suffix. Maps suffix to a dict
     # with the keys 'valid', 'failures', and 'pass_fail_counts'.
     #   'valid': A Boolean indicating whether the test run was valid.
@@ -184,7 +204,10 @@ class Test(object):
     #   every test run had result NOTRUN or UNKNOWN. The CATS team expects to
     #   move this logic back into FindIt in Q3 2019, after the test results
     #   datastore has been cleaned up. https://crbug.com/934599.
+    # Must be updated using update_test_run()
     self._test_runs = {}
+    self._deterministic_failures = {}
+
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
     self._test_options = TestOptions()
@@ -289,12 +312,10 @@ class Test(object):
     """Returns a dictionary of pass and fail counts for each test."""
     return self._test_runs[suffix]['pass_fail_counts']
 
-  def shards_to_retry_with(self, api, original_num_shards, num_tests_to_retry):
+  def shards_to_retry_with(self, original_num_shards, num_tests_to_retry):
     """Calculates the number of shards to run when retrying this test.
 
     Args:
-      api: Recipe api. Used to possibly fail the build, if preconditions aren't
-           met.
       original_num_shards: The number of shards used to run the test when it
                            first ran.
       num_tests_to_retry: The number of tests we're trying to retry.
@@ -306,9 +327,7 @@ class Test(object):
     tests ran in that case. It doesn't make sense to ask how this test should
     run when retried, if it hasn't run already.
     """
-    if not self._test_runs['with patch']['total_tests_ran']: # pragma: no cover
-      api.python.failing_step(
-        'missing previous run results',
+    assert self._test_runs['with patch']['total_tests_ran'], (
         "We cannot compute the total number of tests to re-run if no tests "
         "were run 'with patch'. Expected %s to contain key 'total_tests_ran', "
         "but it didn't" % (self._test_runs['with patch']))
@@ -337,28 +356,28 @@ class Test(object):
             1),
         original_num_shards), num_tests_to_retry))
 
-  def failures(self, api, suffix):  # pragma: no cover
+  def failures(self, suffix):
     """Return tests that failed at least once (list of strings)."""
-    if suffix not in self._test_runs:
-      api.python.failing_step(
-        'cannot find failures for non-existent test run',
+    assert suffix in self._test_runs, (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to failures() should first check that the data '
         'exists.'.format(suffix))
 
     return self._test_runs[suffix]['failures']
 
-  def deterministic_failures(self, api, suffix):
+  def deterministic_failures(self, suffix):
     """Return tests that failed on every test run(list of strings)."""
-    if suffix not in self._test_runs: # pragma: no cover
-      api.python.failing_step(
-        'cannot find deterministic_failures for non-existent test run',
+    assert suffix in self._deterministic_failures, (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
+    return self._deterministic_failures[suffix]
 
-    return api.test_utils.canonical.deterministic_failures(
-        self._test_runs[suffix])
+  def update_test_run(self, api, suffix, test_run):
+    self._test_runs[suffix] = test_run
+    self._deterministic_failures[suffix] = (
+        api.test_utils.canonical.deterministic_failures(
+            self._test_runs[suffix]))
 
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
@@ -415,7 +434,7 @@ class Test(object):
     if self.has_valid_results(suffix):
       # GTestResults.failures is a set whereas TestResults.failures is a dict.
       # In both cases, we want a set.
-      return (True, set(self.failures(api, suffix)))
+      return (True, set(self.failures(suffix)))
     return (False, None)
 
   def with_patch_failures_including_retry(self, api):
@@ -432,11 +451,11 @@ class Test(object):
     """
     with_patch_valid = self.has_valid_results('with patch')
     if with_patch_valid:
-      failures = self.deterministic_failures(api, 'with patch')
+      failures = self.deterministic_failures('with patch')
     retry_shards_valid = self.has_valid_results('retry shards with patch')
     if retry_shards_valid:
       retry_shards_failures = self.deterministic_failures(
-            api, 'retry shards with patch')
+            'retry shards with patch')
 
     if with_patch_valid and retry_shards_valid:
       # TODO(martiniss): Maybe change this behavior? This allows for failures
@@ -602,11 +621,11 @@ class TestWrapper(Test):  # pragma: no cover
   def has_valid_results(self, suffix):
     return self._test.has_valid_results(suffix)
 
-  def failures(self, api, suffix):
-    return self._test.failures(api, suffix)
+  def failures(self, suffix):
+    return self._test.failures(suffix)
 
-  def deterministic_failures(self, api, suffix):
-    return self._test.deterministic_failures(api, suffix)
+  def deterministic_failures(self, suffix):
+    return self._test.deterministic_failures(suffix)
 
   def findit_notrun(self, api, suffix):
     return self._test.findit_notrun(api, suffix)
@@ -677,7 +696,7 @@ class ExperimentalTest(TestWrapper):
     return self._experiment_percentage * 0xffff >= short * 100
 
 
-  def _is_in_experiment_and_has_valid_results(self, api, suffix):
+  def _is_in_experiment_and_has_valid_results(self, suffix):
     return (self._is_in_experiment and
         super(ExperimentalTest, self).has_valid_results(
             self._experimental_suffix(suffix)))
@@ -719,26 +738,25 @@ class ExperimentalTest(TestWrapper):
     return True
 
   #override
-  def failures(self, api, suffix):
-    if self._is_in_experiment_and_has_valid_results(api, suffix):
+  def failures(self, suffix):
+    if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).failures(
-          api, self._experimental_suffix(suffix))
+      super(ExperimentalTest, self).failures(self._experimental_suffix(suffix))
     return []
 
   #override
-  def deterministic_failures(self, api, suffix):
-    if self._is_in_experiment_and_has_valid_results(api, suffix):
+  def deterministic_failures(self, suffix):
+    if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).deterministic_failures(
-          api, self._experimental_suffix(suffix))
+          self._experimental_suffix(suffix))
     return []
 
   #override
   def findit_notrun(self, api, suffix): # pragma: no cover
-    if self._is_in_experiment_and_has_valid_results(api, suffix):
+    if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).findit_notrun(
@@ -746,7 +764,7 @@ class ExperimentalTest(TestWrapper):
     return set()
 
   def pass_fail_counts(self, api, suffix):
-    if self._is_in_experiment_and_has_valid_results(api, suffix):
+    if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).pass_fail_counts(
@@ -774,10 +792,10 @@ class SizesStep(Test):
     # |failures| one.
     return True
 
-  def failures(self, api, suffix):
+  def failures(self, suffix):
     return []
 
-  def deterministic_failures(self, api, suffix):
+  def deterministic_failures(self, suffix):
     return []
 
   def findit_notrun(self, api, suffix):
@@ -859,7 +877,8 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       failures = result.json.output.get('failures')
       if failures is None:
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self.update_test_run(
+            api, suffix, api.test_utils.canonical.result_format())
         api.python.failing_step(
             '%s with suffix %s had an invalid result' % (self.name, suffix),
             'The recipe expected the result to contain the key \'failures\'.'
@@ -877,13 +896,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
       # It looks like the contract we have with these tests doesn't expose how
       # many tests actually ran. Just say it's the number of failures for now,
       # this should be fine for these tests.
-      self._test_runs[suffix] = {
+      self.update_test_run(
+          api, suffix, {
           'failures': failures,
           'valid': result.json.output['valid'],
           'total_tests_ran': len(failures),
           'pass_fail_counts': pass_fail_counts,
           'findit_notrun': set(),
-      }
+      })
 
       _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
@@ -1025,10 +1045,12 @@ class LocalGTestTest(Test):
       step_result = api.step.active_result
       self._suffix_step_name_map[suffix] = step_result.step['name']
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self.update_test_run(
+            api, suffix, api.test_utils.canonical.result_format())
       else:
         gtest_results = step_result.test_utils.gtest_results
-        self._test_runs[suffix] = gtest_results.canonical_result_format()
+        self.update_test_run(
+            api, suffix, gtest_results.canonical_result_format())
 
       r = api.test_utils.present_gtest_failures(step_result)
       if r:
@@ -1482,7 +1504,7 @@ class SwarmingTest(Test):
         test_list = filter_delimiter.join(tests_to_retry)
         args = _merge_arg(args, filter_flag, test_list)
 
-        shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
+        shards = self.shards_to_retry_with(shards, len(tests_to_retry))
 
     kwargs = {}
     if self._isolate_coverage_data:
@@ -1633,7 +1655,8 @@ class SwarmingTest(Test):
                    indent=2)
     ).splitlines()
 
-    self._test_runs[suffix] = self.validate_task_results(api, step_result)
+    self.update_test_run(
+        api, suffix, self.validate_task_results(api, step_result))
     return step_result
 
   @property
@@ -1850,8 +1873,8 @@ class LocalIsolatedScriptTest(Test):
       test_results = api.test_utils.create_results_from_json(results)
       self.results_handler.render_results(api, test_results, presentation)
 
-      self._test_runs[suffix] = (
-          self.results_handler.validate_results(api, results))
+      self.update_test_run(
+          api, suffix, self.results_handler.validate_results(api, results))
 
       if (api.step.active_result.retcode == 0 and
           not self._test_runs[suffix]['valid']):
@@ -1993,7 +2016,8 @@ class PythonBasedTest(Test):
 
     if (test_results.valid and
         step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
-      self._test_runs[suffix] = test_results.canonical_result_format()
+      self.update_test_run(
+          api, suffix, test_results.canonical_result_format())
       _, failures = api.test_utils.limit_failures(
           test_results.unexpected_failures.keys())
       presentation.step_text += api.test_utils.format_step_text([
@@ -2002,7 +2026,8 @@ class PythonBasedTest(Test):
       if failures:
         presentation.status = api.step.FAILURE
     else:
-      self._test_runs[suffix] = api.test_utils.canonical.result_format()
+      self.update_test_run(
+          api, suffix, api.test_utils.canonical.result_format())
       presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
@@ -2039,13 +2064,15 @@ class AndroidTest(Test):
       raise
     finally:
       self._suffix_step_name_map[suffix] = step_result.step['name']
-      self._test_runs[suffix] = api.test_utils.canonical.result_format()
+      self.update_test_run(
+          api, suffix, api.test_utils.canonical.result_format())
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
           step_result, presentation=presentation_step.presentation)
       if gtest_results:
-        self._test_runs[suffix] = gtest_results.canonical_result_format()
+        self.update_test_run(
+            api, suffix, gtest_results.canonical_result_format())
 
         api.test_results.upload(
             api.json.input(gtest_results.raw),
@@ -2278,9 +2305,11 @@ class BlinkTest(Test):
       # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
       # which case the retcode is actually 130
       if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-        self._test_runs[suffix] = api.test_utils.canonical.result_format()
+        self.update_test_run(
+            api, suffix, api.test_utils.canonical.result_format())
       else:
-        self._test_runs[suffix] = (step_result.test_utils.test_results.
+        self.update_test_run(
+            api, suffix, step_result.test_utils.test_results.
             canonical_result_format())
 
       if step_result:
@@ -2356,7 +2385,7 @@ class IncrementalCoverageTest(Test):
   def has_valid_results(self, suffix):
     return True
 
-  def failures(self, api, suffix):
+  def failures(self, suffix):
     return []
 
   def pass_fail_counts(self, api, suffix): # pragma: no cover
@@ -2543,15 +2572,16 @@ class MockTest(Test):
       return self._per_suffix_valid[suffix]
     return self._has_valid_results
 
-  def failures(self, api, suffix):
-    api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
+  def failures(self, suffix):
+    self._api.step(
+        'failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     if suffix in self._per_suffix_failures: # pragma: no cover
       return self._per_suffix_failures[suffix]
     return self._failures
 
-  def deterministic_failures(self, api, suffix):
+  def deterministic_failures(self, suffix):
     """Use same logic as failures for the Mock test."""
-    return self.failures(api, suffix)
+    return self.failures(suffix)
 
   def pass_fail_counts(self, _, suffix):
     return {}

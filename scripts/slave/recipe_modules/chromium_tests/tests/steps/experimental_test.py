@@ -35,8 +35,8 @@ def RunSteps(api):
   experimental_test.run(api.chromium_tests.m, suffix)
 
   assert experimental_test.has_valid_results('')
-  assert not experimental_test.failures(api.chromium_tests.m, '')
-  assert not experimental_test.deterministic_failures(api.chromium_tests.m, '')
+  assert not experimental_test.failures('')
+  assert not experimental_test.deterministic_failures('')
   assert not experimental_test.abort_on_failure
   assert isinstance(experimental_test.pass_fail_counts(
       api.chromium_tests.m, ''), dict)

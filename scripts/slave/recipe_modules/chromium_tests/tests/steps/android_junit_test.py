@@ -28,7 +28,7 @@ def RunSteps(api):
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: %r' % test.compile_targets(),
-        'failures: %r' % test.failures(api.chromium_tests.m, ''),
+        'failures: %r' % test.failures(''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 
