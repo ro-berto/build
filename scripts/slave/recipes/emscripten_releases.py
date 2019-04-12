@@ -11,6 +11,7 @@ DEPS = [
     'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -20,24 +21,22 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('emscripten_releases')
-  api.bot_update.ensure_checkout()
   goma_dir = api.goma.ensure_goma()
   env = {
       'GOMA_DIR': goma_dir,
   }
   api.goma.start()
-  sync_dir = api.path['start_dir'].join('sync')
+  sync_dir = api.path['builder_cache'].join('sync')
+  api.file.ensure_directory('Ensure sync dir', sync_dir)
   build_dir = api.path['builder_cache'].join('build')
-  waterfall_build = api.path['start_dir'].join('waterfall', 'src', 'build.py')
+  waterfall_build = sync_dir.join('waterfall', 'src', 'build.py')
   dir_flags = ['--sync-dir=%s' % sync_dir,
-               '--build-dir=%s' % build_dir]
-  # The bot_update call above handles the sources in DEPS. All that's left for
-  # this sync step is updating the prebuilt host toolchain (eg. clang) and CMake
-  # TODO: Consider CIPD packages for these, or whatever mechanism other
-  # recipes use.
-  api.python('Sync Buildtools', waterfall_build,
-             dir_flags + ['--no-build', '--no-test',
-              '--sync-include=tools-clang,host-toolchain,cmake'])
+               '--build-dir=%s' % build_dir,
+               '--prebuilt-dir=%s' % sync_dir]
+  with api.context(cwd=sync_dir):
+    api.bot_update.ensure_checkout()
+    api.gclient.runhooks()
+
   # Depot tools on path is for ninja
   with api.depot_tools.on_path():
     with api.context(env=env):
