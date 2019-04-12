@@ -117,6 +117,26 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    # TODO(crbug.com/952071): make this configuration work, then
+    # switch over all of the Windows testers to thin Linux VMs and
+    # delete this bot.
+    'Win10 FYI Exp LinuxVM Testing (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
     'Win10 FYI Exp Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
