@@ -272,12 +272,11 @@ class FinditApi(recipe_api.RecipeApi):
           }
 
         if hasattr(test, 'pass_fail_counts'):
-          pass_fail_counts = test.pass_fail_counts(
-              api, suffix=abbreviated_revision)
+          pass_fail_counts = test.pass_fail_counts(suffix=abbreviated_revision)
           results[test.name]['pass_fail_counts'] = pass_fail_counts
 
         results[test.name]['step_metadata'] = test.step_metadata(
-            api, suffix=abbreviated_revision)
+            suffix=abbreviated_revision)
 
       # Process skipped tests in two scenarios:
       # 1. Skipped by "analyze": tests are not affected by the given revision.

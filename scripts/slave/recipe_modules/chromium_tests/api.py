@@ -1163,7 +1163,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           # Both 'with patch' and 'without patch' must have valid results to
           # skip CQ retries.
           valid_results, _ = (
-              test_suite.with_patch_failures_including_retry(self.m))
+              test_suite.with_patch_failures_including_retry())
           if not valid_results:
             every_failing_test_suite_had_valid_results = False
 

@@ -50,7 +50,7 @@ def RunSteps(api):
 
     if api.properties.get('log_pass_fail_counts'):
       api.step.active_result.presentation.logs['details'] = [
-        'pass_fail_counts: %r' % test.pass_fail_counts(api, '')
+        'pass_fail_counts: %r' % test.pass_fail_counts('')
       ]
 
 

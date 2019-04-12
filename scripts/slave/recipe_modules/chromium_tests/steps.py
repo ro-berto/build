@@ -308,7 +308,7 @@ class Test(object):
 
     return self._test_runs[suffix]['valid']
 
-  def pass_fail_counts(self, _, suffix):
+  def pass_fail_counts(self, suffix):
     """Returns a dictionary of pass and fail counts for each test."""
     return self._test_runs[suffix]['pass_fail_counts']
 
@@ -411,8 +411,7 @@ class Test(object):
       return self.name
     return '%s (%s)' % (self.name, suffix)
 
-  def step_metadata(self, api, suffix=None):
-    del api
+  def step_metadata(self, suffix=None):
     data = {
         'waterfall_mastername': self._waterfall_mastername,
         'waterfall_buildername': self._waterfall_buildername,
@@ -424,7 +423,7 @@ class Test(object):
           'with patch', 'retry shards with patch')
     return data
 
-  def failures_or_invalid_results(self, api, suffix):
+  def failures_or_invalid_results(self, suffix):
     """If results are valid, returns the test failures.
 
     Returns: A tuple (valid_results, failures).
@@ -437,7 +436,7 @@ class Test(object):
       return (True, set(self.failures(suffix)))
     return (False, None)
 
-  def with_patch_failures_including_retry(self, api):
+  def with_patch_failures_including_retry(self):
     """Returns test failures with the patch applied.
 
     This method only considers tests to be failures if every test run fails.
@@ -471,7 +470,7 @@ class Test(object):
 
     return False, None
 
-  def findit_notrun(self, api, suffix):
+  def findit_notrun(self, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
 
     FindIt has special logic for handling for tests with status NOTRUN/UNKNOWN.
@@ -486,7 +485,7 @@ class Test(object):
         'valid results.')
     return self._test_runs[suffix]['findit_notrun']
 
-  def without_patch_failures_to_ignore(self, api):
+  def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
 
     Tests that fail in 'without patch' should be ignored, since they're failing
@@ -500,7 +499,7 @@ class Test(object):
     if not self.has_valid_results('without patch'):
       return (False, None)
 
-    pass_fail_counts = self.pass_fail_counts(api, 'without patch')
+    pass_fail_counts = self.pass_fail_counts('without patch')
     ignored_failures = set()
     for test_name, results in pass_fail_counts.iteritems():
       # If a test fails at least once, then it's flaky on tip of tree and we
@@ -509,11 +508,11 @@ class Test(object):
         ignored_failures.add(test_name)
     return (True, ignored_failures)
 
-  def shard_retry_with_patch_results(self, api):
+  def shard_retry_with_patch_results(self):
     """Returns results from the tests ran for 'retry shards with patch'."""
-    return self._results_for_suffix(api, 'retry shards with patch')
+    return self._results_for_suffix('retry shards with patch')
 
-  def _results_for_suffix(self, api, suffix):
+  def _results_for_suffix(self, suffix):
     """Returns passing and failing tests from the tests ran for 'suffix'.
 
     Only considers tests to be successes if every test run passes. Flaky tests
@@ -530,7 +529,7 @@ class Test(object):
     passing_tests = set()
     failing_tests = set()
     for test_name, result in (
-        self.pass_fail_counts(api, suffix).iteritems()):
+        self.pass_fail_counts(suffix).iteritems()):
       success_count = result['pass_count']
       fail_count = result['fail_count']
       if fail_count == 0 and success_count > 0:
@@ -539,7 +538,7 @@ class Test(object):
         failing_tests.add(test_name)
     return (True, passing_tests, failing_tests)
 
-  def tests_to_retry(self, api, suffix):
+  def _tests_to_retry(self, suffix):
     """Computes the tests to run on an invocation of the test suite.
 
     Args:
@@ -560,8 +559,7 @@ class Test(object):
     # required to just ignore the unknown test.
     if suffix == 'without patch':
       # Invalid results should be treated as if every test failed.
-      valid_results, failures = self.failures_or_invalid_results(api,
-                                                                 'with patch')
+      valid_results, failures = self.failures_or_invalid_results('with patch')
       return sorted(failures) if valid_results else None
 
     # If we don't recognize the step, then return None. This makes it easy for
@@ -627,11 +625,11 @@ class TestWrapper(Test):  # pragma: no cover
   def deterministic_failures(self, suffix):
     return self._test.deterministic_failures(suffix)
 
-  def findit_notrun(self, api, suffix):
-    return self._test.findit_notrun(api, suffix)
+  def findit_notrun(self, suffix):
+    return self._test.findit_notrun(suffix)
 
-  def pass_fail_counts(self, api, suffix):
-    return self._test.pass_fail_counts(api, suffix)
+  def pass_fail_counts(self, suffix):
+    return self._test.pass_fail_counts(suffix)
 
   @property
   def uses_isolate(self):
@@ -641,8 +639,8 @@ class TestWrapper(Test):  # pragma: no cover
   def uses_local_devices(self):
     return self._test.uses_local_devices
 
-  def step_metadata(self, api, suffix=None):
-    return self._test.step_metadata(api, suffix=suffix)
+  def step_metadata(self, suffix=None):
+    return self._test.step_metadata(suffix=suffix)
 
 
 class ExperimentalTest(TestWrapper):
@@ -755,20 +753,20 @@ class ExperimentalTest(TestWrapper):
     return []
 
   #override
-  def findit_notrun(self, api, suffix): # pragma: no cover
+  def findit_notrun(self, suffix): # pragma: no cover
     if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).findit_notrun(
-          api, self._experimental_suffix(suffix))
+          self._experimental_suffix(suffix))
     return set()
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, suffix):
     if self._is_in_experiment_and_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).pass_fail_counts(
-          api, self._experimental_suffix(suffix))
+          self._experimental_suffix(suffix))
     return {}
 
 
@@ -798,10 +796,10 @@ class SizesStep(Test):
   def deterministic_failures(self, suffix):
     return []
 
-  def findit_notrun(self, api, suffix):
+  def findit_notrun(self, suffix):
     return set()
 
-  def pass_fail_counts(self, api, suffix): # pragma: no cover
+  def pass_fail_counts(self, suffix): # pragma: no cover
     return {}
 
 
@@ -849,7 +847,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
     run_args = []
 
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     if tests_to_retry:
       run_args.extend([
           '--filter-file', api.json.input(tests_to_retry)
@@ -998,7 +996,7 @@ class LocalGTestTest(Test):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options,
                                              suffix, tests_to_retry)
     args = _merge_args_and_test_options(self, self._args, test_options)
@@ -1064,7 +1062,7 @@ class LocalGTestTest(Test):
 
     return step_result
 
-  def pass_fail_counts(self, _, suffix):
+  def pass_fail_counts(self, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1483,7 +1481,7 @@ class SwarmingTest(Test):
 
   def _create_task_common(self, api, suffix, isolated_hash, filter_flag,
                           filter_delimiter, task_func):
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
     args = _merge_args_and_test_options(self, self._args, test_options)
@@ -1651,7 +1649,7 @@ class SwarmingTest(Test):
     self._suffix_step_name_map[suffix] = step_result.step['name']
 
     step_result.presentation.logs['step_metadata'] = (
-        json.dumps(self.step_metadata(api, suffix), sort_keys=True,
+        json.dumps(self.step_metadata(suffix), sort_keys=True,
                    indent=2)
     ).splitlines()
 
@@ -1663,11 +1661,10 @@ class SwarmingTest(Test):
   def uses_isolate(self):
     return True
 
-  def step_metadata(self, api, suffix=None):
-    data = super(SwarmingTest, self).step_metadata(api, suffix)
+  def step_metadata(self, suffix=None):
+    data = super(SwarmingTest, self).step_metadata(suffix)
     if suffix is not None:
-      data['full_step_name'] = api.chromium_swarming.get_step_name(
-          prefix=None, task=self._tasks[suffix])
+      data['full_step_name'] = self._suffix_step_name_map[suffix]
       data['patched'] = suffix in (
           'with patch', 'retry shards with patch')
       data['dimensions'] = self._tasks[suffix].dimensions
@@ -1721,7 +1718,7 @@ class SwarmingGTestTest(SwarmingTest):
   def validate_task_results(self, api, step_result):
     return step_result.test_utils.gtest_results.canonical_result_format()
 
-  def pass_fail_counts(self, _, suffix):
+  def pass_fail_counts(self, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1822,7 +1819,7 @@ class LocalIsolatedScriptTest(Test):
   # (crbug.com/533480)
   @recipe_api.composite_step
   def run(self, api, suffix):
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
     args = _merge_args_and_test_options(self, self._args, test_options)
@@ -1998,7 +1995,7 @@ class PythonBasedTest(Test):
     # step_result.test_utils.test_results.
     cmd_args = ['--write-full-results-to',
                 api.test_utils.test_results(add_json_log=False)]
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     if tests_to_retry:
       cmd_args.extend(tests_to_retry)  # pragma: no cover
 
@@ -2271,7 +2268,7 @@ class BlinkTest(Test):
     if self._extra_args:
       args.extend(self._extra_args)
 
-    tests_to_retry = self.tests_to_retry(api, suffix)
+    tests_to_retry = self._tests_to_retry(suffix)
     if tests_to_retry:
       test_list = "\n".join(tests_to_retry)
       args.extend(['--test-list', api.raw_io.input_text(test_list),
@@ -2388,7 +2385,7 @@ class IncrementalCoverageTest(Test):
   def failures(self, suffix):
     return []
 
-  def pass_fail_counts(self, api, suffix): # pragma: no cover
+  def pass_fail_counts(self, suffix): # pragma: no cover
     return {}
 
   def compile_targets(self):
@@ -2583,7 +2580,7 @@ class MockTest(Test):
     """Use same logic as failures for the Mock test."""
     return self.failures(suffix)
 
-  def pass_fail_counts(self, _, suffix):
+  def pass_fail_counts(self, suffix):
     return {}
 
   def compile_targets(self): # pragma: no cover

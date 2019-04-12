@@ -291,7 +291,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # with_patch_failures_including_retry appropriately takes 'retry shards
         # with patch' and 'with patch' runs into account.
         for t in all_failing_test_suites:
-          valid, failures = t.with_patch_failures_including_retry(caller_api)
+          valid, failures = t.with_patch_failures_including_retry()
           if valid and not failures:
             all_failing_test_suites.remove(t)
 
@@ -378,7 +378,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       not cause the CL to fail.
     """
     valid_results, ignored_failures = (
-        test_suite.without_patch_failures_to_ignore(caller_api))
+        test_suite.without_patch_failures_to_ignore())
     if not valid_results:
       self._invalid_test_results(test_suite)
 
@@ -387,8 +387,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # from 'with patch'.
       ignored_failures = set()
 
-    valid_results, failures = test_suite.with_patch_failures_including_retry(
-        caller_api)
+    valid_results, failures = test_suite.with_patch_failures_including_retry()
     assert valid_results, (
         "If there were no valid results, then there was no "
         "point in running 'without patch'. This is a recipe bug.")
@@ -404,7 +403,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
     valid_results, new_failures = (
-        test_suite.with_patch_failures_including_retry(caller_api))
+        test_suite.with_patch_failures_including_retry())
 
     if not valid_results: # pragma: nocover
       self.m.python.infra_failing_step(
@@ -445,13 +444,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # FindIt wants to ignore failures that have status UNKNOWN/NOTRUN. This
     # logic will eventually live in FindIt, but for now, is implemented here.
-    not_run = test_suite.findit_notrun(caller_api, suffix)
+    not_run = test_suite.findit_notrun(suffix)
     with_patch_failures = with_patch_failures - not_run
 
     # To reduce false positives, FindIt only wants tests to be marked as
     # potentially flaky if the the test passed in 'without patch'.
     valid_results, ignored_failures = (
-        test_suite.without_patch_failures_to_ignore(caller_api))
+        test_suite.without_patch_failures_to_ignore())
     # If we've retried a shard, and we didn't run 'without patch', then the
     # tests passed the second time, and there wasn't a need to run the tests
     # without the patch. Only give up if 'without patch' never runs.
@@ -488,7 +487,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # when retried by 'retry shards with patch'. If a test didn't run in
       # either of these steps, then we ignore it.
       valid_retry_shards_results, retry_shards_successes, _ = (
-          test_suite.shard_retry_with_patch_results(caller_api))
+          test_suite.shard_retry_with_patch_results())
       if not valid_retry_shards_results:
         continue
 
@@ -505,7 +504,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                                                                  test_suite)
 
       valid_retry_shards_results, retry_shards_successes, _ = (
-          test_suite.shard_retry_with_patch_results(caller_api))
+          test_suite.shard_retry_with_patch_results())
       if valid_retry_shards_results:
         potential_test_flakes = (
             potential_test_flakes - retry_shards_successes)

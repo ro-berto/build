@@ -38,8 +38,7 @@ def RunSteps(api):
   assert not experimental_test.failures('')
   assert not experimental_test.deterministic_failures('')
   assert not experimental_test.abort_on_failure
-  assert isinstance(experimental_test.pass_fail_counts(
-      api.chromium_tests.m, ''), dict)
+  assert isinstance(experimental_test.pass_fail_counts(''), dict)
 
 
 def GenTests(api):
