@@ -61,6 +61,7 @@ def CreateGenericConfig(chromium_config='chromium',
                         chromium_apply_config=None,
                         gclient_config='chromium',
                         gclient_apply_config=None,
+                        chromium_config_kwargs=None,
                         platform='linux'):
     """
     Generates a builder recipe config that differs from the standard config or
@@ -71,6 +72,7 @@ def CreateGenericConfig(chromium_config='chromium',
         chromium_apply_configs: list of chromium configs to apply.
         gclient_config: base gclient config.
         gclient_apply_config: list of gclient config to apply.
+        chromium_config_kwargs: dict of misc config args.
         platform: one of linux, mac, win
 
     Returns:
@@ -85,14 +87,15 @@ def CreateGenericConfig(chromium_config='chromium',
     # |chromium_apply_config|, then we should provide a proper default value.
     if gclient_apply_config is None:
       gclient_apply_config = []
+    if chromium_config_kwargs is None:
+      chromium_config_kwargs = {}
 
     return {
         'chromium_config': chromium_config,
         'chromium_apply_config': chromium_apply_config,
         'gclient_config': gclient_config,
         'gclient_apply_config': gclient_apply_config,
-        # TODO(crbug.com/947436): Verify that we don't need
-        # |chromium_config_kwargs| anymore.
+        'chromium_config_kwargs': chromium_config_kwargs,
         'testing': {
             'platform': platform,
         },
@@ -232,7 +235,11 @@ SPEC = {
         'chromeos-amd64-generic-rel (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_apply_config=['mb', 'goma_rbe_tot'],
-            gclient_apply_config=['chromeos_amd64_generic']),
+            gclient_apply_config=['chromeos_amd64_generic'],
+            chromium_config_kwargs={
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            }),
         'Linux ASan LSan Builder (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_config='chromium_asan',
