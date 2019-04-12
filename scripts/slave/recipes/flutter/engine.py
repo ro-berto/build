@@ -152,6 +152,11 @@ def UploadFlutterPatchedSdk(api):
     'src/out/host_debug', # parent_dir
     'flutter_patched_sdk', # folder_name
     'flutter_patched_sdk.zip') # zip_name
+  UploadFolder(api,
+    'Upload Product Flutter patched sdk', # dir_label
+    'src/out/host_release', # parent_dir
+    'flutter_patched_sdk', # folder_name
+    'flutter_patched_sdk_product.zip') # zip_name
 
 def UploadDartSdk(api, archive_name):
   UploadFolder(api,
@@ -312,9 +317,11 @@ def BuildLinuxAndroid(api):
 def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'release')
   RunGN(api, '--runtime-mode', 'release', '--dynamic')
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
+  Build(api, 'host_release')
   Build(api, 'host_dynamic_release')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
