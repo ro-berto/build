@@ -2060,6 +2060,28 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[START_DIR]/src/out/host_release/flutter_patched_sdk",
+      "[START_DIR]/src/out/host_release/flutter_patched_sdk_product"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "Move release flutter_patched_sdk to flutter_patched_sdk_product"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
@@ -2070,8 +2092,8 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "Zip flutter_patched_sdk (2)",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_release/flutter_patched_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tmp_tmp_6/flutter_patched_sdk_product.zip\", \"root\": \"[START_DIR]/src/out/host_release\"}"
+    "name": "Zip flutter_patched_sdk_product",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_release/flutter_patched_sdk_product\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tmp_tmp_6/flutter_patched_sdk_product.zip\", \"root\": \"[START_DIR]/src/out/host_release\"}"
   },
   {
     "cmd": [
