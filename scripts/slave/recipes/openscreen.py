@@ -49,16 +49,17 @@ def RunSteps(api):
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
   with api.context(cwd=checkout_path):
+    host_tool_label = _GetHostToolLabel(api.platform)
     api.step('install build tools',
              [checkout_path.join('tools', 'install-build-tools.sh'),
-              _GetHostToolLabel(api.platform)])
+              host_tool_label])
 
     is_debug = str(api.properties.get('debug', False)).lower()
     is_asan = str(api.properties.get('is_asan', False)).lower()
     is_gcc = str(api.properties.get('is_gcc', False)).lower()
     api.step('gn gen',
-             [checkout_path.join('gn'), 'gen', output_path,
-              '--args=is_debug={} is_asan={} is_gcc={}'.format(
+             [checkout_path.join('buildtools', host_tool_label, 'gn'), 'gen',
+              output_path, '--args=is_debug={} is_asan={} is_gcc={}'.format(
                   is_debug, is_asan, is_gcc)
               ])
 

@@ -145,7 +145,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/gn",
+      "[START_DIR]/openscreen/buildtools/linux64/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",
       "--args=is_debug=true is_asan=true is_gcc=false"
