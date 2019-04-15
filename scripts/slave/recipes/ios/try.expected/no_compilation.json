@@ -565,14 +565,6 @@
     "name": "trigger"
   },
   {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
-    "name": "[skipped] fake tests (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@This test was skipped because it was not affected.@@@"
-    ]
-  },
-  {
     "jsonResult": null,
     "name": "$result"
   }

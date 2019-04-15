@@ -15,7 +15,8 @@ def RunSteps(api):
   api.ios.swarming_service_account = 'other-service-account'
   api.ios.read_build_config()
   tasks = api.ios.isolate()
-  api.ios.trigger(tasks)
+  for task in tasks:
+    api.ios.configure_and_trigger_task(task)
 
 def GenTests(api):
   yield (

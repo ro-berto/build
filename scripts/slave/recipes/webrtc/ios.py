@@ -450,13 +450,17 @@ def RunSteps(api):
   if webrtc.bot.should_test:
     with api.step.nest('isolate'):
       tasks = api.ios.isolate()
+    triggered_tasks = []
     with api.step.nest('trigger'):
-      api.ios.trigger(tasks)
+      for task in tasks:
+        if api.ios.configure_and_trigger_task(task):
+          triggered_tasks.append(task)
     if webrtc.bot.should_upload_perf_results:
-      api.ios.collect(tasks, result_callback=webrtc.upload_to_perf_dashboard)
+      api.ios.collect(triggered_tasks,
+                      result_callback=webrtc.upload_to_perf_dashboard)
     else:
       # Collect with empty callback because we don't need to do anything
-      api.ios.collect(tasks, result_callback=lambda **kw: True)
+      api.ios.collect(triggered_tasks, result_callback=lambda **kw: True)
 
 
 def GenTests(api):

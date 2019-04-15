@@ -850,114 +850,135 @@ class iOSApi(recipe_api.RecipeApi):
 
     return tasks
 
-  def trigger(self, tasks):
-    """Triggers the given Swarming tasks."""
-    for task in tasks:
-      if not task['isolated hash']: # pragma: no cover
-        continue
-      if task['buildername'] != self.m.buildbucket.builder_name:
-        continue
+  def configure_and_trigger_task(self, task):
+    self._ensure_xcode_version(task)
 
-      self._ensure_xcode_version(task)
+    device_check = self.__config.get('device check')
+    expiration = task['test'].get('expiration_time') or self.__config.get(
+        'expiration_time')
+    hard_timeout = task['test'].get(
+        'max runtime seconds') or self.__config.get('max runtime seconds')
+    return self.trigger_task(
+        task, self.m, self.swarming_service_account, self.platform,
+        device_check, expiration, hard_timeout)
 
-      task['tmp_dir'] = self.m.path.mkdtemp(task['task_id'])
+  def trigger_task(self, task, api, swarming_service_account, platform,
+                   device_check, expiration, hard_timeout):
+    """Triggers the given Swarming task.
 
-      cipd_packages = [(
-          self.MAC_TOOLCHAIN_ROOT,
-          self.MAC_TOOLCHAIN_PACKAGE,
-          self.MAC_TOOLCHAIN_VERSION,
-      )]
+    Args:
+      swarming_service_account: A string representing the service account that
+                                will trigger the task.
+      platform: A string, either 'device' or 'simulator'
+      device_check: A Boolean, whether to dispatch onto devices that have
+                    availability.
+      expiration: If not None, number of seconds to wait before expiring the
+                  task.
+      hard_timeout: If not None, max seconds to let a task run for.
 
-      replay_package_name = task['test'].get('replay package name')
-      replay_package_version = task['test'].get('replay package version')
-      use_trusted_cert = task['test'].get('use trusted cert')
-      if use_trusted_cert or (replay_package_name and replay_package_version):
-        cipd_packages.append((
-            self.WPR_TOOLS_ROOT,
-            self.WPR_TOOLS_PACKAGE,
-            self.WPR_TOOLS_VERSION,
-        ))
-      if replay_package_name and replay_package_version:
-        cipd_packages.append((
-            self.WPR_REPLAY_DATA_ROOT,
-            replay_package_name,
-            replay_package_version,
-        ))
+    Returns: A Boolean indicating whether the test was triggered.
+    """
+    if not task['isolated hash']: # pragma: no cover
+      return False
+    if task['buildername'] != api.buildbucket.builder_name:
+      return False
+    if task['skip']: # pragma: no cover
+      # Create a dummy step to indicate we skipped this test.
+      step_result = self.m.step('[skipped] %s' % task['step name'], [])
+      step_result.presentation.step_text = (
+          'This test was skipped because it was not affected.')
+      return False
 
-      swarming_task = self.m.chromium_swarming.task(
-        task['step name'],
-        task['isolated hash'],
-        task_output_dir=task['tmp_dir'],
-        service_account=self.swarming_service_account,
-        cipd_packages=cipd_packages,
-      )
-      swarming_task.dimensions = {
-        'pool': 'Chrome',
-      }
+    task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
 
-      # TODO(crbug.com/835036): remove this when all configs are migrated to
-      # "xcode build version". Otherwise keep it for backwards compatibility;
-      # otherwise we may receive an older Mac OS which does not support the
-      # requested Xcode version.
-      if task.get('xcode version'):
-        swarming_task.dimensions['xcode_version'] = task['xcode version']
+    cipd_packages = [(
+        iOSApi.MAC_TOOLCHAIN_ROOT,
+        iOSApi.MAC_TOOLCHAIN_PACKAGE,
+        iOSApi.MAC_TOOLCHAIN_VERSION,
+    )]
 
-      assert task.get('xcode build version')
-      named_cache = cache_name(task['xcode build version'])
-      swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
+    replay_package_name = task['test'].get('replay package name')
+    replay_package_version = task['test'].get('replay package version')
+    use_trusted_cert = task['test'].get('use trusted cert')
+    if use_trusted_cert or (replay_package_name and replay_package_version):
+      cipd_packages.append((
+          iOSApi.WPR_TOOLS_ROOT,
+          iOSApi.WPR_TOOLS_PACKAGE,
+          iOSApi.WPR_TOOLS_VERSION,
+      ))
+    if replay_package_name and replay_package_version:
+      cipd_packages.append((
+          iOSApi.WPR_REPLAY_DATA_ROOT,
+          replay_package_name,
+          replay_package_version,
+      ))
 
-      if self.platform == 'simulator':
-        swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
-      elif self.platform == 'device':
-        swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
-        if self.__config.get('device check'):
-          swarming_task.dimensions['device_status'] = 'available'
-          swarming_task.wait_for_capacity = True
-        swarming_task.dimensions['device'] = self.PRODUCT_TYPES.get(
-          task['test']['device type'])
-        if not swarming_task.dimensions['device']:
-          # Create a dummy step so we can annotate it to explain what
-          # went wrong.
-          step_result = self.m.step('[trigger] %s' % task['step name'], [])
-          step_result.presentation.status = self.m.step.EXCEPTION
-          step_result.presentation.logs['supported devices'] = sorted(
-            self.PRODUCT_TYPES.keys())
-          step_result.presentation.step_text = (
-            'Requested unsupported device type.')
-          continue
-      if task['bot id']:
-        swarming_task.dimensions['id'] = task['bot id']
-      if task['pool']:
-        swarming_task.dimensions['pool'] = task['pool']
+    swarming_task = api.chromium_swarming.task(
+      task['step name'],
+      task['isolated hash'],
+      task_output_dir=task['tmp_dir'],
+      service_account=swarming_service_account,
+      cipd_packages=cipd_packages,
+    )
+    swarming_task.dimensions = {
+      'pool': 'Chrome',
+    }
 
-      swarming_task.priority = task['test'].get('priority', 200)
+    # TODO(crbug.com/835036): remove this when all configs are migrated to
+    # "xcode build version". Otherwise keep it for backwards compatibility;
+    # otherwise we may receive an older Mac OS which does not support the
+    # requested Xcode version.
+    if task.get('xcode version'):
+      swarming_task.dimensions['xcode_version'] = task['xcode version']
 
-      swarming_task.tags.add(
-          'device_type:%s' % str(task['test']['device type']))
-      swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
-      swarming_task.tags.add('platform:%s' % self.platform)
-      swarming_task.tags.add('test:%s' % str(task['test']['app']))
+    assert task.get('xcode build version')
+    named_cache = cache_name(task['xcode build version'])
+    swarming_task.named_caches[named_cache] = iOSApi.XCODE_APP_PATH
 
-      expiration = task['test'].get('expiration_time') or self.__config.get(
-          'expiration_time')
-      if expiration:
-        swarming_task.expiration = expiration
+    if platform == 'simulator':
+      swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
+    elif platform == 'device':
+      swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
+      if device_check:
+        swarming_task.dimensions['device_status'] = 'available'
+        swarming_task.wait_for_capacity = True
+      swarming_task.dimensions['device'] = iOSApi.PRODUCT_TYPES.get(
+        task['test']['device type'])
+      if not swarming_task.dimensions['device']:
+        # Create a dummy step so we can annotate it to explain what
+        # went wrong.
+        step_result = api.step('[trigger] %s' % task['step name'], [])
+        step_result.presentation.status = api.step.EXCEPTION
+        step_result.presentation.logs['supported devices'] = sorted(
+          iOSApi.PRODUCT_TYPES.keys())
+        step_result.presentation.step_text = (
+          'Requested unsupported device type.')
+        return False
+    if task['bot id']:
+      swarming_task.dimensions['id'] = task['bot id']
+    if task['pool']:
+      swarming_task.dimensions['pool'] = task['pool']
 
-      hard_timeout = task['test'].get(
-          'max runtime seconds') or self.__config.get('max runtime seconds')
-      if hard_timeout:
-        swarming_task.hard_timeout = hard_timeout
+    swarming_task.priority = task['test'].get('priority', 200)
 
-      swarming_task.optional_dimensions = task['test'].get(
-          'optional_dimensions')
+    swarming_task.tags.add(
+        'device_type:%s' % str(task['test']['device type']))
+    swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
+    swarming_task.tags.add('platform:%s' % platform)
+    swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
-      try:
-        self.m.chromium_swarming.trigger_task(swarming_task)
-        task['task'] = swarming_task
-      except self.m.step.StepFailure as f:
-        f.result.presentation.status = self.m.step.EXCEPTION
+    if expiration:
+      swarming_task.expiration = expiration
 
-    return tasks
+    if hard_timeout:
+      swarming_task.hard_timeout = hard_timeout
+
+    swarming_task.optional_dimensions = task['test'].get(
+        'optional_dimensions')
+
+    api.chromium_swarming.trigger_task(swarming_task)
+    task['task'] = swarming_task
+    return True
 
   def collect(self, tasks, upload_test_results=True, result_callback=None):
     """Collects the given Swarming task results.
@@ -976,29 +997,9 @@ class iOSApi(recipe_api.RecipeApi):
     infra_failure = False
 
     for task in tasks:
-      if task['buildername'] != self.m.buildbucket.builder_name:
-        # This task isn't for this builder to collect.
-        continue
-
-      if task['skip']:
-        # Create a dummy step to indicate we skipped this test.
-        step_result = self.m.step('[skipped] %s' % task['step name'], [])
-        step_result.presentation.step_text = (
-            'This test was skipped because it was not affected.')
-        continue
-
-      if not task['task']:
-        # We failed to trigger this test.
-        # Create a dummy step for it and mark it as failed.
-        step_result = self.m.step(task['step name'], [])
-        step_result.presentation.status = self.m.step.EXCEPTION
-        if not task['isolated.gen']:
-          step_result.presentation.step_text = 'Failed to isolate the test.'
-        else:
-          step_result.presentation.step_text = 'Failed to trigger the test.'
-        failures.add(task['step name'])
-        infra_failure = True
-        continue
+      assert task['task'], (
+          'The task should have been triggered and have an '
+          'associated swarming task')
 
       try:
         step_result = self.m.chromium_swarming.collect_task(task['task'])
@@ -1158,10 +1159,13 @@ class iOSApi(recipe_api.RecipeApi):
               self.m.json.dumps(tasks),
           )
 
+      triggered_tasks = []
       with self.m.step.nest('trigger'):
-        self.trigger(tasks)
+        for task in tasks:
+          if self.configure_and_trigger_task(task):
+            triggered_tasks.append(task)
 
-      self.collect(tasks, upload_test_results)
+      self.collect(triggered_tasks, upload_test_results)
 
   @property
   def most_recent_app_path(self):
