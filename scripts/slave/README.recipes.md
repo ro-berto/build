@@ -2450,7 +2450,7 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#962)(self, tasks, upload_test_results=True, result_callback=None):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#983)(self, tasks, upload_test_results=True, result_callback=None):**
 
 Collects the given Swarming task results.
 
@@ -2466,11 +2466,13 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#77)(self):**
 
+&mdash; **def [configure\_and\_trigger\_task](/scripts/slave/recipe_modules/ios/api.py#853)(self, task):**
+
 &mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#330)(self, xcode_build_version):**
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#324)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1124)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1125)(self, path):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#593)(test):**
 
@@ -2486,16 +2488,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1179)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1183)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1166)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1170)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1194)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1198)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2529,13 +2531,25 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1143)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1144)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#853)(self, tasks):**
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/ios/api.py#865)(self, task, api, swarming_service_account, platform, device_check, expiration, hard_timeout):**
 
-Triggers the given Swarming tasks.
+Triggers the given Swarming task.
+
+Args:
+  swarming_service_account: A string representing the service account that
+                            will trigger the task.
+  platform: A string, either 'device' or 'simulator'
+  device_check: A Boolean, whether to dispatch onto devices that have
+                availability.
+  expiration: If not None, number of seconds to wait before expiring the
+              task.
+  hard_timeout: If not None, max seconds to let a task run for.
+
+Returns: A Boolean indicating whether the test was triggered.
 
 &mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#554)(self, base_path=None):**
 
@@ -4618,7 +4632,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [Build](/scripts/slave/recipes/dart/flutter_engine.py#41)(api, checkout_dir, config, \*targets):**
 
-&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#288)(api, start_dir, checkout_dir, flutter_rev):**
+&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#302)(api, start_dir, checkout_dir, flutter_rev):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/dart/flutter_engine.py#90)(api, checkout_dir):**
 
@@ -4626,9 +4640,9 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [BuildLinuxAndroidx86](/scripts/slave/recipes/dart/flutter_engine.py#68)(api, checkout_dir):**
 
-&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#160)(api, engine_src, cached_dest, file_paths):**
+&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#162)(api, engine_src, cached_dest, file_paths):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#113)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#115)(api):**
 
 &mdash; **def [KillTasks](/scripts/slave/recipes/dart/flutter_engine.py#33)(api, checkout_dir, ok_ret='any'):**
 
@@ -4636,15 +4650,15 @@ Kills leftover tasks from previous runs or steps.
 
 &mdash; **def [RunGN](/scripts/slave/recipes/dart/flutter_engine.py#50)(api, checkout_dir, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#267)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#281)(api):**
 
 &mdash; **def [TestEngine](/scripts/slave/recipes/dart/flutter_engine.py#63)(api, checkout_dir):**
 
-&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#236)(api, start_dir, just_built_dart_sdk):**
+&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#250)(api, start_dir, just_built_dart_sdk):**
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#102)(api, checkout_dir):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#104)(api, checkout_dir):**
 
-&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#177)(api, flutter, engine_src):**
+&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#179)(api, flutter, engine_src):**
 ### *recipes* / [dart/forward\_branch](/scripts/slave/recipes/dart/forward_branch.py)
 
 [DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -97,6 +97,8 @@ def BuildLinux(api, checkout_dir):
   Build(api, checkout_dir, 'host_dynamic_release', 'flutter/lib/snapshot')
   # analyze step needs dart ui sources
   Build(api, checkout_dir, 'host_debug_unopt', 'generate_dart_ui')
+  RunGN(api, checkout_dir, '--runtime-mode=release')
+  Build(api, checkout_dir, 'host_release')
 
 
 def TestObservatory(api, checkout_dir):
@@ -204,6 +206,9 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
 
   flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine',
                                      'common', 'flutter_patched_sdk')
+  flutter_patched_sdk_product = flutter.join('bin', 'cache', 'artifacts',
+                                             'engine', 'common',
+                                             'flutter_patched_sdk_product')
   dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
   # In case dart-sdk symlink was left from previous run we need to [remove] it,
   # rather than [rmtree] because rmtree is going to remove symlink target
@@ -217,12 +222,21 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     '/bin/bash', '-c',
     'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': flutter_patched_sdk}])
+  api.step('cleanup flutter_patched_sdk_product', [
+    '/bin/bash', '-c',
+    'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
+    {'dir': flutter_patched_sdk_product}])
   api.file.symlink('make cached dart-sdk point to just built dart sdk',
     engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
   api.file.symlink(
     'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
     engine_src.join('out', 'host_debug', 'flutter_patched_sdk'),
     flutter_patched_sdk)
+  api.file.symlink(
+    'make cached flutter_patched_sdk_product point to just built release '
+    'version of flutter_patched_sdk',
+    engine_src.join('out', 'host_release', 'flutter_patched_sdk'),
+    flutter_patched_sdk_product)
 
   # In case there is a cached version of "flutter_tools.snapshot" we have to
   # delete it.
