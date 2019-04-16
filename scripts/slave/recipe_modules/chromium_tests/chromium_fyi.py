@@ -1031,7 +1031,6 @@ SPEC = {
       'chromium_apply_config': [
         'ios_release_simulator',
         'mac_toolchain',
-        'ninja_confirm_noop_warn',
         'no_mac_toolchain_cipd_creds',
         'xcode_10b61'
       ],
