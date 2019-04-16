@@ -981,6 +981,27 @@ class iOSApi(recipe_api.RecipeApi):
     return True
 
   def collect(self, tasks, upload_test_results=True, result_callback=None):
+    use_test_data = self._test_data.enabled
+    failures = set()
+    infra_failure = False
+    for task in tasks:
+      result = self._collect_task(task, upload_test_results, result_callback,
+                                 self.m, use_test_data)
+      if result > 0:
+        failures.add(task['step name'])
+      if result == 2:
+        infra_failure = True
+
+    self.m.chromium_swarming.report_stats()
+
+    if failures:
+      exception_type = (
+          self.m.step.InfraFailure if infra_failure
+          else self.m.step.StepFailure)
+      raise exception_type('Failed %s.' % ', '.join(sorted(failures)))
+
+  def _collect_task(self, task, upload_test_results, result_callback,
+                    api, use_test_data):
     """Collects the given Swarming task results.
 
     Args:
@@ -992,139 +1013,137 @@ class iOSApi(recipe_api.RecipeApi):
         * step_result: Step result object from the collect step.
         If the function is not provided, the default is to upload performance
         results from perf_result.json.
+
+      Returns:
+        0 on success, 1 on failure and 2 on infra_failure. This is a placeholder
+        while refactoring. https://crbug.com/951182.
     """
-    failures = set()
+    failure = False
     infra_failure = False
 
-    for task in tasks:
-      assert task['task'], (
-          'The task should have been triggered and have an '
-          'associated swarming task')
+    assert task['task'], (
+        'The task should have been triggered and have an '
+        'associated swarming task')
 
-      try:
-        step_result = self.m.chromium_swarming.collect_task(task['task'])
-      except self.m.step.StepFailure as f:
-        step_result = f.result
+    try:
+      step_result = api.chromium_swarming.collect_task(task['task'])
+    except api.step.StepFailure as f:
+      step_result = f.result
 
-      # We only run one shard, so the results we're interested in will
-      # always be shard 0.
-      swarming_summary = step_result.chromium_swarming.summary['shards'][0]
-      state = swarming_summary['state']
+    # We only run one shard, so the results we're interested in will
+    # always be shard 0.
+    swarming_summary = step_result.chromium_swarming.summary['shards'][0]
+    state = swarming_summary['state']
 
-      exit_code = None
-      if state == 'COMPLETED':
-        exit_code = 0
-      exit_code = swarming_summary.get('exit_code', exit_code)
+    exit_code = None
+    if state == 'COMPLETED':
+      exit_code = 0
+    exit_code = swarming_summary.get('exit_code', exit_code)
 
-      if isinstance(exit_code, basestring):
-        exit_code = int(exit_code)
+    if isinstance(exit_code, basestring):
+      exit_code = int(exit_code)
 
-      # Link to isolate file browser for files emitted by the test.
-      if swarming_summary.get('outputs_ref', None):
-        outputs_ref = swarming_summary['outputs_ref']
-        step_result.presentation.links['test data'] = (
-          '%s/browse?namespace=%s&hash=%s' % (
-            outputs_ref['isolatedserver'], outputs_ref['namespace'],
-            outputs_ref['isolated']))
+    # Link to isolate file browser for files emitted by the test.
+    if swarming_summary.get('outputs_ref', None):
+      outputs_ref = swarming_summary['outputs_ref']
+      step_result.presentation.links['test data'] = (
+        '%s/browse?namespace=%s&hash=%s' % (
+          outputs_ref['isolatedserver'], outputs_ref['namespace'],
+          outputs_ref['isolated']))
 
-      # Interpret the result and set the display appropriately.
-      if state == 'COMPLETED':
-        # Task completed and we got an exit code from the iOS test runner.
-        if exit_code == 1:
-          step_result.presentation.status = self.m.step.FAILURE
-          failures.add(task['step name'])
-        elif exit_code == 2:
-          # The iOS test runner exits 2 to indicate an infrastructure failure.
-          step_result.presentation.status = self.m.step.EXCEPTION
-          failures.add(task['step name'])
-          infra_failure = True
-      elif state == 'TIMED_OUT':
-        # The task was killed for taking too long. This is a test failure
-        # because the test itself hung.
-        step_result.presentation.status = self.m.step.FAILURE
-        step_result.presentation.step_text = 'Test timed out.'
-        failures.add(task['step name'])
-      elif state == 'EXPIRED':
-        # No Swarming bot accepted the task in time.
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = (
-          'No suitable Swarming bot found in time.'
-        )
-        failures.add(task['step name'])
+    # Interpret the result and set the display appropriately.
+    if state == 'COMPLETED':
+      # Task completed and we got an exit code from the iOS test runner.
+      if exit_code == 1:
+        step_result.presentation.status = api.step.FAILURE
+        failure = True
+      elif exit_code == 2:
+        # The iOS test runner exits 2 to indicate an infrastructure failure.
+        step_result.presentation.status = api.step.EXCEPTION
         infra_failure = True
-      else:
-        step_result.presentation.status = self.m.step.EXCEPTION
-        step_result.presentation.step_text = (
-          'Unexpected infrastructure failure.'
+    elif state == 'TIMED_OUT':
+      # The task was killed for taking too long. This is a test failure
+      # because the test itself hung.
+      step_result.presentation.status = api.step.FAILURE
+      step_result.presentation.step_text = 'Test timed out.'
+      failure = True
+    elif state == 'EXPIRED':
+      # No Swarming bot accepted the task in time.
+      step_result.presentation.status = api.step.EXCEPTION
+      step_result.presentation.step_text = (
+        'No suitable Swarming bot found in time.'
+      )
+      infra_failure = True
+    else:
+      step_result.presentation.status = api.step.EXCEPTION
+      step_result.presentation.step_text = (
+        'Unexpected infrastructure failure.'
+      )
+      infra_failure = True
+
+    # Add any iOS test runner results to the display.
+    shard_output_dir = api.path.join(
+      task['task'].task_output_dir,
+      task['task'].get_task_shard_output_dirs()[0])
+    test_summary = api.path.join(shard_output_dir, 'summary.json')
+    if api.path.exists(test_summary): # pragma: no cover
+      with open(test_summary) as f:
+        test_summary_json = api.json.loads(f.read())
+      step_result.presentation.logs['test_summary.json'] = api.json.dumps(
+        test_summary_json, indent=2).splitlines()
+      step_result.presentation.logs.update(test_summary_json.get('logs', {}))
+      step_result.presentation.links.update(
+        test_summary_json.get('links', {}))
+      if test_summary_json.get('step_text'):
+        step_result.presentation.step_text = '%s<br />%s' % (
+          step_result.presentation.step_text, test_summary_json['step_text'])
+
+    # Upload test results JSON to the flakiness dashboard.
+    if api.bot_update.last_returned_properties and upload_test_results:
+      test_results = api.path.join(shard_output_dir, 'full_results.json')
+      test_type = task['step name']
+      if api.path.exists(test_results):
+        api.test_results.upload(
+          test_results,
+          test_type,
+          api.bot_update.last_returned_properties.get(
+            'got_revision_cp', 'x@{#0}'),
+          builder_name_suffix='%s-%s' % (
+            task['test']['device type'], task['test']['os']),
+          test_results_server='test-results.appspot.com',
         )
-        failures.add(task['step name'])
-        infra_failure = True
 
-      # Add any iOS test runner results to the display.
-      shard_output_dir = self.m.path.join(
-        task['task'].task_output_dir,
-        task['task'].get_task_shard_output_dirs()[0])
-      test_summary = self.m.path.join(shard_output_dir, 'summary.json')
-      if self.m.path.exists(test_summary): # pragma: no cover
-        with open(test_summary) as f:
-          test_summary_json = self.m.json.loads(f.read())
-        step_result.presentation.logs['test_summary.json'] = self.m.json.dumps(
-          test_summary_json, indent=2).splitlines()
-        step_result.presentation.logs.update(test_summary_json.get('logs', {}))
-        step_result.presentation.links.update(
-          test_summary_json.get('links', {}))
-        if test_summary_json.get('step_text'):
-          step_result.presentation.step_text = '%s<br />%s' % (
-            step_result.presentation.step_text, test_summary_json['step_text'])
-
-      # Upload test results JSON to the flakiness dashboard.
-      if self.m.bot_update.last_returned_properties and upload_test_results:
-        test_results = self.m.path.join(shard_output_dir, 'full_results.json')
-        test_type = task['step name']
-        if self.m.path.exists(test_results):
-          self.m.test_results.upload(
-            test_results,
-            test_type,
-            self.m.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}'),
-            builder_name_suffix='%s-%s' % (
-              task['test']['device type'], task['test']['os']),
-            test_results_server='test-results.appspot.com',
+    # Upload performance data result to the perf dashboard.
+    perf_results = api.path.join(
+      shard_output_dir, 'Documents', 'perf_result.json')
+    if result_callback:
+      result_callback(name=task['test']['app'], step_result=step_result)
+    elif api.path.exists(perf_results):
+      data = self.get_perftest_data(perf_results, api, use_test_data)
+      data_decode = data['Perf Data']
+      data_result = []
+      for testcase in data_decode:
+        for trace in data_decode[testcase]['value']:
+          data_point = api.perf_dashboard.get_skeleton_point(
+            'chrome_ios_perf/%s/%s' % (testcase, trace),
+            # TODO(huangml): Use revision.
+            int(api.time.time()),
+            data_decode[testcase]['value'][trace]
           )
+          data_point['units'] = data_decode[testcase]['unit']
+          data_result.extend([data_point])
+      api.perf_dashboard.set_default_config()
+      api.perf_dashboard.add_point(data_result)
 
-      # Upload performance data result to the perf dashboard.
-      perf_results = self.m.path.join(
-        shard_output_dir, 'Documents', 'perf_result.json')
-      if result_callback:
-        result_callback(name=task['test']['app'], step_result=step_result)
-      elif self.m.path.exists(perf_results):
-        data = self.get_perftest_data(perf_results)
-        data_decode = data['Perf Data']
-        data_result = []
-        for testcase in data_decode:
-          for trace in data_decode[testcase]['value']:
-            data_point = self.m.perf_dashboard.get_skeleton_point(
-              'chrome_ios_perf/%s/%s' % (testcase, trace),
-              # TODO(huangml): Use revision.
-              int(self.m.time.time()),
-              data_decode[testcase]['value'][trace]
-            )
-            data_point['units'] = data_decode[testcase]['unit']
-            data_result.extend([data_point])
-        self.m.perf_dashboard.set_default_config()
-        self.m.perf_dashboard.add_point(data_result)
+    if infra_failure:
+      return 2
+    if failure:
+      return 1
+    return 0
 
-    self.m.chromium_swarming.report_stats()
-
-    if failures:
-      failure = self.m.step.StepFailure
-      if infra_failure:
-        failure = self.m.step.InfraFailure
-      raise failure('Failed %s.' % ', '.join(sorted(failures)))
-
-  def get_perftest_data(self, path):
+  def get_perftest_data(self, path, api, use_test_data):
     # Use fake data for recipe testing.
-    if self._test_data.enabled:
+    if use_test_data:
       data = {
         'Perf Data' : {
           'startup test' : {
@@ -1138,7 +1157,7 @@ class iOSApi(recipe_api.RecipeApi):
       }
     else:
       with open(path) as f: # pragma: no cover
-        data = self.m.json.loads(f.read())
+        data = api.json.loads(f.read())
     return data
 
   def test_swarming(self, scripts_dir='src/ios/build/bots/scripts',

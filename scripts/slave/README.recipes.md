@@ -2452,18 +2452,6 @@ Checks out Chromium.
 
 &mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#983)(self, tasks, upload_test_results=True, result_callback=None):**
 
-Collects the given Swarming task results.
-
-Args:
-  tasks: A list of dicts with task attributes (produced by isolate method).
-  upload_test_results: Upload test results JSON to the flakiness dashboard.
-  result_callback: A function to call whenever a task finishes.
-    It is called with these named args:
-    * name: Name of the test ('test'->'app' attribute).
-    * step_result: Step result object from the collect step.
-    If the function is not provided, the default is to upload performance
-    results from perf_result.json.
-
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#77)(self):**
 
 &mdash; **def [configure\_and\_trigger\_task](/scripts/slave/recipe_modules/ios/api.py#853)(self, task):**
@@ -2472,7 +2460,7 @@ Args:
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#324)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1125)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1144)(self, path, api, use_test_data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#593)(test):**
 
@@ -2488,16 +2476,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1183)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1202)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1170)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1189)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1198)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1217)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2531,7 +2519,7 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1144)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1163)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
