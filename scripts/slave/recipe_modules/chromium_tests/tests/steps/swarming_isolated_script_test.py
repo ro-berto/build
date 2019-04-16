@@ -122,7 +122,7 @@ def GenTests(api):
     step = step_odict[
         'base_unittests on Intel GPU on Linux (with patch)']
     # Make sure swarming collect know how to merge coverage profile data.
-    check('[START_DIR]/merge_profiles.py'
+    check('[START_DIR]/merge_results.py'
           in step['cmd'])
 
   yield (

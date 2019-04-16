@@ -79,7 +79,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     This is intended to be passed to the swarming recipe module to be called
     upon completion of the shards.
     """
-    return self.merge_scripts_location.join('merge_profiles.py')
+    return self.merge_scripts_location.join('merge_results.py')
 
   def _llvm_exec(self, name):
     return self.m.path['checkout'].join('third_party', 'llvm-build',
