@@ -159,8 +159,6 @@ SPEC = {
       },
       'chromium_apply_config': [
           'mb',
-          # TODO(tiktua): remove this (https://crbug.com/921902)
-          'ninja_confirm_noop_warn',
       ],
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
@@ -175,8 +173,6 @@ SPEC = {
       },
       'chromium_apply_config': [
           'mb',
-          # TODO(tiktua): remove this (https://crbug.com/921902)
-          'ninja_confirm_noop_warn',
       ],
       'bot_type': 'tester',
       'parent_buildername': 'Mac ASan 64 Builder',
