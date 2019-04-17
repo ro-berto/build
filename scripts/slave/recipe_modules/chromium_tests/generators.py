@@ -269,39 +269,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
       yield t
 
 
-def generate_instrumentation_test(api, chromium_tests_api, mastername,
-                                  buildername, test_spec, bot_update_step,
-                                  swarming_dimensions=None,
-                                  scripts_compile_targets=None,
-                                  bot_config=None):
-  del mastername, swarming_dimensions
-  del scripts_compile_targets, bot_config
-
-  # Do not try to add swarming support here.
-  # Instead, swarmed instrumentation tests should be specified as gtests.
-  # (Yes, it's a little weird.)
-  def instrumentation_swarming_delegate(spec, **kwargs):
-    del spec, kwargs
-    api.python.failing_step(
-        'instrumentation test swarming error',
-        'The tests can only be run locally.')
-
-  def instrumentation_local_delegate(spec, **kwargs):
-    kwargs['result_details'] = True
-    kwargs['store_tombstones'] = True
-    kwargs['trace_output'] = spec.get('trace_output', False)
-    kwargs['timeout_scale'] = spec.get('timeout_scale')
-    kwargs['args'] = get_args_for_test(
-        api, chromium_tests_api, spec, bot_update_step)
-    return steps.AndroidInstrumentationTest(**kwargs)
-
-  for spec in test_spec.get(buildername, {}).get('instrumentation_tests', []):
-    for t in generator_common(
-        api, spec, instrumentation_swarming_delegate,
-        instrumentation_local_delegate, None):
-      yield t
-
-
 def generate_junit_test(api, chromium_tests_api, mastername, buildername,
                         test_spec, bot_update_step,
                         swarming_dimensions=None,

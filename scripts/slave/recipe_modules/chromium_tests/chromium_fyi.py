@@ -598,6 +598,8 @@ SPEC = {
       },
     },
 
+    # This builder no longer exists, but keep it around so that Goma's canary
+    # bots can copy its config.
     'Android Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
@@ -621,86 +623,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-
-    'Android Remoting Tests': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'mb',
-        'download_vr_test_apks'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'compile_targets': [
-          'remoting_apk',
-      ],
-      'parent_buildername': 'Android Builder (dbg)',
-      'bot_type': 'tester',
-      'android_config': 'main_builder',
-      'root_devices': True,
-      'tests': [
-        steps.LocalGTestTest('remoting_unittests'),
-        steps.AndroidInstrumentationTest('ChromotingTest'),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Android Find Annotated Test': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'mb',
-        'download_vr_test_apks'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'parent_buildername': 'Android Builder (dbg)',
-      'bot_type': 'tester',
-      'android_config': 'main_builder',
-      'android_apply_config': ['remove_all_system_webviews'],
-      'tests': [
-        steps.FindAnnotatedTest(),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Android Asan Builder Tests (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'clang_tests',
-      'root_devices': True,
-      'tests': [
-        steps.AndroidInstrumentationTest('ChromePublicTest', tool='asan'),
-        steps.AndroidInstrumentationTest('ContentShellTest', tool='asan'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest', tool='asan'),
-        steps.AndroidInstrumentationTest(
-            'WebViewInstrumentationTest', tool='asan'),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Win 10 Fast Ring': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
@@ -712,34 +634,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': {
         'platform': 'win',
-      },
-    },
-    'Android VR Tests': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'mb',
-        'download_vr_test_apks'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': [
-        'android',
-      ],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'main_builder',
-      'android_apply_config': [
-        'use_devil_provision',
-        'remove_system_vrcore',
-      ],
-      'root_devices': True,
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
       },
     },
     'Linux remote_run Builder': {

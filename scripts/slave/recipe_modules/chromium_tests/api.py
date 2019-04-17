@@ -60,7 +60,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       generators.generate_isolated_script,
       generators.generate_cts_test,
       generators.generate_gtest,
-      generators.generate_instrumentation_test,
       generators.generate_junit_test,
       generators.generate_script,
     ]
@@ -723,11 +722,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             for t in tests if t.uses_isolate]
         if isolated_targets:
           self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
-
-      if bot_type == 'tester':
-        if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
-            bot_config.get('root_devices')):
-          self.m.adb.root_devices()
 
       # Some recipes use this wrapper to setup devices and have their own way
       # to run tests. If platform is Android and tests is None, run device
