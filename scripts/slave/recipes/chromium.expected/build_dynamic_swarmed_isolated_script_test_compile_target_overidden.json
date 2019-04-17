@@ -739,6 +739,19 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/clean_outdir.py",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "clean_outdir"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
