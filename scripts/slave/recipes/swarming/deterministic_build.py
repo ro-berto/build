@@ -196,8 +196,7 @@ def RunSteps(api, buildername):
     phase='local' if compare_local else None)
 
   api.chromium.compile(targets, name='First build',
-                       # TODO(tikuta): use |compare_local| (crbug.com/947903).
-                       use_goma_module=True)
+                       use_goma_module=not compare_local)
 
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),

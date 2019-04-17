@@ -360,6 +360,152 @@
     "name": "generate .isolate files"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "all"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "First build"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "all",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "First build confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[CACHE]/builder/src/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"all\"]",
+      "--build-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "goma"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "Deterministic Linux (dbg)",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
+      "--goma-dir",
+      "[CACHE]/goma/client"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "Deterministic Linux (dbg)",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/Release.2"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "isolate-everything",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "Deterministic Linux (dbg)",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--phase",
+      "goma",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/Release.2"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate .isolate files (2)"
+  },
+  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -454,7 +600,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "-j",
       "20",
       "all"
@@ -464,7 +610,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "First build"
+    "name": "Second build"
   },
   {
     "cmd": [
@@ -472,7 +618,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "-j",
       "20",
       "all",
@@ -485,7 +631,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "First build confirm no-op",
+    "name": "Second build confirm no-op",
     "stdout": "/path/to/tmp/"
   },
   {
@@ -589,13 +735,13 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release.2\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "First build",
+      "Second build",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",
@@ -649,378 +795,6 @@
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.swarm",
-      "-b",
-      "Deterministic Linux (dbg)",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
-      "--phase",
-      "goma",
-      "--goma-dir",
-      "[CACHE]/goma/client"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.swarm",
-      "-b",
-      "Deterministic Linux (dbg)",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
-      "--phase",
-      "goma",
-      "--goma-dir",
-      "[CACHE]/goma/client",
-      "//out/Release.2"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "generate_build_files (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
-      "isolate-everything",
-      "-m",
-      "chromium.swarm",
-      "-b",
-      "Deterministic Linux (dbg)",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
-      "--phase",
-      "goma",
-      "--goma-dir",
-      "[CACHE]/goma/client",
-      "//out/Release.2"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "generate .isolate files (2)"
-  },
-  {
-    "cmd": [],
-    "name": "preprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/goma/data/Deterministic_Linux__dbg_"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (2).goma cache directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Linux__dbg_",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (2).start_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
-      "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (2).start cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
-      "--ninja_info_output",
-      "/path/to/tmp/json",
-      "--failure_output",
-      "/path/to/tmp/",
-      "--",
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[CACHE]/builder/src/out/Release.2",
-      "-j",
-      "20",
-      "all"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "Second build"
-  },
-  {
-    "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[CACHE]/builder/src/out/Release.2",
-      "-j",
-      "20",
-      "all",
-      "-d",
-      "explain",
-      "-n"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "Second build confirm no-op",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "name": "postprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma (2).goma_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma (2).goma_stat",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma (2).stop_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--log-url-json-file",
-      "/path/to/tmp/json",
-      "--gsutil-py-path",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
-      "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
-      "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release.2",
-      "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release.2\", \"-j\", 20, \"all\"]",
-      "--build-exit-status",
-      "0",
-      "--build-step-name",
-      "Second build",
-      "--ninja-log-compiler",
-      "goma",
-      "--goma-stats-file",
-      "[TMP_BASE]/goma_stats",
-      "--goma-counterz-file",
-      "[TMP_BASE]/goma_counterz",
-      "--goma-crash-report-id-file",
-      "[TMP_BASE]/crash_report_id",
-      "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Linux (dbg)\", \"project\": \"\"}",
-      "--buildbot-buildername",
-      "Deterministic Linux (dbg)",
-      "--buildbot-mastername",
-      "chromium.swarm",
-      "--buildbot-slavename",
-      "test_bot"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "postprocess_for_goma (2).upload_log",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
-      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "postprocess_for_goma (2).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
