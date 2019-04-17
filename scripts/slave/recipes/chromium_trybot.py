@@ -71,10 +71,9 @@ def GenTests(api):
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
-    return api.properties.tryserver(
+    return api.properties.generic(
       build_config=config,
       mastername=mastername,
-      buildername=builder,
       swarm_hashes=swarm_hashes,
       **kwargs
     ) + api.buildbucket.try_build(**bb_kwargs) + api.runtime(
