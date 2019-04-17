@@ -294,7 +294,7 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--phase",
-      "goma",
+      "local",
       "--goma-dir",
       "[CACHE]/goma/client"
     ],
@@ -322,7 +322,7 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--phase",
-      "goma",
+      "local",
       "--goma-dir",
       "[CACHE]/goma/client",
       "//out/Release"
@@ -347,7 +347,7 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--phase",
-      "goma",
+      "local",
       "--goma-dir",
       "[CACHE]/goma/client",
       "//out/Release"
