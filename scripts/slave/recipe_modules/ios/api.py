@@ -850,6 +850,29 @@ class iOSApi(recipe_api.RecipeApi):
     return tasks
 
   def configure_and_trigger_task(self, task):
+    if not task['isolated hash']: # pragma: no cover
+      return False
+    if task['buildername'] != self.m.buildbucket.builder_name:
+      return False
+    if task['skip']: # pragma: no cover
+      # Create a dummy step to indicate we skipped this test.
+      step_result = self.m.step('[skipped] %s' % task['step name'], [])
+      step_result.presentation.step_text = (
+          'This test was skipped because it was not affected.')
+      return False
+
+    if self.platform == 'device':
+      if not iOSApi.PRODUCT_TYPES.get(task['test']['device type']):
+        # Create a dummy step so we can annotate it to explain what
+        # went wrong.
+        step_result = self.m.step('[trigger] %s' % task['step name'], [])
+        step_result.presentation.status = self.m.step.EXCEPTION
+        step_result.presentation.logs['supported devices'] = sorted(
+          iOSApi.PRODUCT_TYPES.keys())
+        step_result.presentation.step_text = (
+          'Requested unsupported device type.')
+        return False
+
     self._ensure_xcode_version(task)
 
     device_check = self.__config.get('device check')
@@ -857,12 +880,14 @@ class iOSApi(recipe_api.RecipeApi):
         'expiration_time')
     hard_timeout = task['test'].get(
         'max runtime seconds') or self.__config.get('max runtime seconds')
-    return self.trigger_task(
+
+    self._trigger_task(
         task, self.m, self.swarming_service_account, self.platform,
         device_check, expiration, hard_timeout)
+    return True
 
-  def trigger_task(self, task, api, swarming_service_account, platform,
-                   device_check, expiration, hard_timeout):
+  def _trigger_task(self, task, api, swarming_service_account, platform,
+                    device_check, expiration, hard_timeout):
     """Triggers the given Swarming task.
 
     Args:
@@ -877,16 +902,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     Returns: A Boolean indicating whether the test was triggered.
     """
-    if not task['isolated hash']: # pragma: no cover
-      return False
-    if task['buildername'] != api.buildbucket.builder_name:
-      return False
-    if task['skip']: # pragma: no cover
-      # Create a dummy step to indicate we skipped this test.
-      step_result = self.m.step('[skipped] %s' % task['step name'], [])
-      step_result.presentation.step_text = (
-          'This test was skipped because it was not affected.')
-      return False
 
     task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
 
@@ -943,16 +958,6 @@ class iOSApi(recipe_api.RecipeApi):
         swarming_task.wait_for_capacity = True
       swarming_task.dimensions['device'] = iOSApi.PRODUCT_TYPES.get(
         task['test']['device type'])
-      if not swarming_task.dimensions['device']:
-        # Create a dummy step so we can annotate it to explain what
-        # went wrong.
-        step_result = api.step('[trigger] %s' % task['step name'], [])
-        step_result.presentation.status = api.step.EXCEPTION
-        step_result.presentation.logs['supported devices'] = sorted(
-          iOSApi.PRODUCT_TYPES.keys())
-        step_result.presentation.step_text = (
-          'Requested unsupported device type.')
-        return False
     if task['bot id']:
       swarming_task.dimensions['id'] = task['bot id']
     if task['pool']:
@@ -977,7 +982,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     api.chromium_swarming.trigger_task(swarming_task)
     task['task'] = swarming_task
-    return True
 
   def collect(self, tasks, upload_test_results=True, result_callback=None):
     use_test_data = self._test_data.enabled
