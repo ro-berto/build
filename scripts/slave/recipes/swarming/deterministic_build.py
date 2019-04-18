@@ -190,13 +190,16 @@ def RunSteps(api, buildername):
 
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.mb_gen(api.properties.get('mastername'), buildername,
-                      phase='local' if compare_local else None)
+                      # TODO(tikuta): use local crbug.com/947903
+                      phase='goma' if compare_local else None)
   api.chromium.mb_isolate_everything(
     api.properties.get('mastername'), buildername,
-    phase='local' if compare_local else None)
+    # TODO(tikuta): use local crbug.com/947903
+    phase='goma' if compare_local else None)
 
   api.chromium.compile(targets, name='First build',
-                       use_goma_module=not compare_local)
+                       # TODO(tikuta): use |compare_local| crbug.com/947903
+                       use_goma_module=True)
 
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
