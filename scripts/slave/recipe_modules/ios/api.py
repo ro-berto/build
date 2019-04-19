@@ -707,7 +707,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     return task
 
-  def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template):
+  def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template,
+                            bot=None):
     """Isolate earlgrey test into small shards"""
     cmd = ['otool', '-ov', '%s/%s' %
       (self.m.path.join(self.most_recent_app_path, '%s.app' % test['app']),
@@ -756,10 +757,11 @@ class iOSApi(recipe_api.RecipeApi):
     sublists = [testcases[i : i + shard_size]
                   for i in range(0, len(testcases), shard_size)]
     tasks = []
+    bot = bot or self.m.buildbucket.builder_name
     for i, sublist in enumerate(sublists):
       tasks.append(self.isolate_test(
           test, tmp_dir, isolate_template, sublist, i))
-      tasks[-1]['buildername'] = self.m.buildbucket.builder_name
+      tasks[-1]['buildername'] = bot
     return tasks
 
   def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
@@ -826,17 +828,17 @@ class iOSApi(recipe_api.RecipeApi):
 
     tmp_dir = self.m.path.mkdtemp('isolate')
 
-    for test in self.__config['tests']:
-      if test.get('shard size') and 'skip' not in test:
-        tasks += self.isolate_earlgrey_test(test, test['shard size'],
-                                            tmp_dir, isolate_template)
-      else:
-        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-        tasks[-1]['buildername'] = self.m.buildbucket.builder_name
-    for bot, tests in self.__config['triggered tests'].iteritems():
+    bots_and_tests = [(self.m.buildbucket.builder_name, self.__config['tests'])]
+    bots_and_tests.extend(self.__config['triggered tests'].items())
+    for bot, tests in bots_and_tests:
       for test in tests:
-        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-        tasks[-1]['buildername'] = bot
+        if test.get('shard size') and 'skip' not in test:
+          tasks += self.isolate_earlgrey_test(test, test['shard size'],
+                                              tmp_dir, isolate_template,
+                                              bot=bot)
+        else:
+          tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+          tasks[-1]['buildername'] = bot
 
     targets_to_isolate = [
         t['task_id'] for t in tasks
