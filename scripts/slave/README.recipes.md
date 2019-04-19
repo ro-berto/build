@@ -2457,7 +2457,7 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#986)(self, tasks, upload_test_results=True, result_callback=None):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#982)(self, tasks, upload_test_results=True, result_callback=None):**
 
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#77)(self):**
 
@@ -2467,7 +2467,7 @@ Checks out Chromium.
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#324)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1147)(self, path, api, use_test_data):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1143)(self, path, api, use_test_data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#593)(test):**
 
@@ -2483,16 +2483,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1205)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1201)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1192)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1188)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1220)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1216)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2526,9 +2526,25 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1166)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1162)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
+
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/ios/api.py#864)(self, task, api, swarming_service_account, platform, device_check, expiration, hard_timeout):**
+
+Triggers the given Swarming task.
+
+Args:
+  swarming_service_account: A string representing the service account that
+                            will trigger the task.
+  platform: A string, either 'device' or 'simulator'
+  device_check: A Boolean, whether to dispatch onto devices that have
+                availability.
+  expiration: If not None, number of seconds to wait before expiring the
+              task.
+  hard_timeout: If not None, max seconds to let a task run for.
+
+Returns: A Boolean indicating whether the test was triggered.
 
 &mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#554)(self, base_path=None):**
 
