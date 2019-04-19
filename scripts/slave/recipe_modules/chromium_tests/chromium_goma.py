@@ -143,6 +143,10 @@ SPEC = {
         CreateStandardConfig('mac', ['goma_mixer_staging', 'clobber']),
         'Chromium Mac Goma RBE Staging (dbg)':
         CreateStandardConfig('mac', ['goma_mixer_staging']),
+        'Chromium Mac Goma RBE Prod (dbg)':
+        CreateStandardConfig('mac', ['goma_rbe_prod']),
+        'Chromium Mac Goma RBE Prod (dbg) (clobber)':
+        CreateStandardConfig('mac', ['goma_rbe_prod', 'clobber']),
 
         # Android ARM 32-bit RBE
         'Chromium Android ARM 32-bit Goma RBE ToT':
