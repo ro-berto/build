@@ -826,16 +826,17 @@ class iOSApi(recipe_api.RecipeApi):
 
     tmp_dir = self.m.path.mkdtemp('isolate')
 
-    bots_and_tests = [(self.m.buildbucket.builder_name, self.__config['tests'])]
-    bots_and_tests.extend(self.__config['triggered tests'].items())
-    for bot, tests in bots_and_tests:
+    for test in self.__config['tests']:
+      if test.get('shard size') and 'skip' not in test:
+        tasks += self.isolate_earlgrey_test(test, test['shard size'],
+                                            tmp_dir, isolate_template)
+      else:
+        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+        tasks[-1]['buildername'] = self.m.buildbucket.builder_name
+    for bot, tests in self.__config['triggered tests'].iteritems():
       for test in tests:
-        if test.get('shard size') and 'skip' not in test:
-          tasks += self.isolate_earlgrey_test(test, test['shard size'],
-                                              tmp_dir, isolate_template)
-        else:
-          tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-          tasks[-1]['buildername'] = bot
+        tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
+        tasks[-1]['buildername'] = bot
 
     targets_to_isolate = [
         t['task_id'] for t in tasks
