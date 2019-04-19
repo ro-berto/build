@@ -330,8 +330,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     revs = update_step.presentation.properties
     self.revision = revs['got_revision']
     self.revision_cp = revs['got_revision_cp']
-    self.revision_number = str(self.m.commit_position.parse_revision(
-        self.revision_cp))
+    _, self.revision_number = self.m.commit_position.parse(self.revision_cp)
+    self.revision_number = str(self.revision_number)
 
     if is_chromium:
       self._apply_patch(self.m.tryserver.gerrit_change_repo_url,

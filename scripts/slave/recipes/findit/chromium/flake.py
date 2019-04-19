@@ -2,11 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from collections import defaultdict
 import json
 
 from recipe_engine.config import Dict
-from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
@@ -18,7 +16,6 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
-    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
@@ -26,6 +23,7 @@ DEPS = [
     'findit',
     'isolate',
     'recipe_engine/buildbucket',
+    'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',

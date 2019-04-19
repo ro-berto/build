@@ -66,7 +66,7 @@
       "--test-type",
       "base_unittests",
       "--chrome-revision",
-      "x@{#0}",
+      "refs/x@{#0}",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -138,7 +138,7 @@
       "--test-type",
       "base_unittests",
       "--chrome-revision",
-      "x@{#0}",
+      "refs/x@{#0}",
       "--test-results-server",
       "test-results.appspot.com"
     ],

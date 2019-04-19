@@ -1051,7 +1051,7 @@ class LocalGTestTest(Test):
             api.json.input(r.raw),
             test_type=self.name,
             chrome_revision=api.bot_update.last_returned_properties.get(
-                self._commit_position_property, 'x@{#0}'))
+                self._commit_position_property, 'refs/x@{#0}'))
 
     return step_result
 
@@ -1141,9 +1141,9 @@ class JSONResultsHandler(ResultsHandler):
       return
 
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
-        'got_revision_cp', 'x@{#0}')
-    chrome_revision = str(api.commit_position.parse_revision(
-        chrome_revision_cp))
+        'got_revision_cp', 'refs/x@{#0}')
+    _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
+    chrome_revision = str(chrome_revision)
     api.test_results.upload(
       api.json.input(results), chrome_revision=chrome_revision,
       test_type=step_name)
@@ -1724,9 +1724,9 @@ class SwarmingGTestTest(SwarmingTest):
     if gtest_results and gtest_results.raw:
       parsed_gtest_data = gtest_results.raw
       chrome_revision_cp = api.bot_update.last_returned_properties.get(
-          'got_revision_cp', 'x@{#0}')
-      chrome_revision = str(api.commit_position.parse_revision(
-          chrome_revision_cp))
+          'got_revision_cp', 'refs/x@{#0}')
+      _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
+      chrome_revision = str(chrome_revision)
       api.test_results.upload(
           api.json.input(parsed_gtest_data),
           chrome_revision=chrome_revision,
@@ -2064,7 +2064,7 @@ class AndroidTest(Test):
             api.json.input(gtest_results.raw),
             test_type=step_result.step['name'],
             chrome_revision=api.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'x@{#0}'))
+                'got_revision_cp', 'refs/x@{#0}'))
 
   def compile_targets(self):
     return self._compile_targets

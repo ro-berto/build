@@ -2,9 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation)
-from recipe_engine.post_process import (StatusSuccess, StatusFailure)
-from recipe_engine.post_process import (StepTextContains)
+from recipe_engine.post_process import (
+    Filter, DoesNotRun, DropExpectation, StatusFailure)
 
 DEPS = [
   'build',
@@ -13,7 +12,6 @@ DEPS = [
   'chromium_checkout',
   'chromium_swarming',
   'chromium_tests',
-  'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gerrit',
@@ -21,6 +19,7 @@ DEPS = [
   'filter',
   'isolate',
   'recipe_engine/buildbucket',
+  'recipe_engine/commit_position',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',

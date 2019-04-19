@@ -12,7 +12,6 @@ from PB.google.rpc import code as rpc_code_pb2
 
 
 DEPS = [
-  'commit_position',
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -20,6 +19,7 @@ DEPS = [
   'depot_tools/osx_sdk',
   'goma',
   'recipe_engine/buildbucket',
+  'recipe_engine/commit_position',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -100,7 +100,8 @@ def RunSteps(api, triggers, v8_tot):
   if v8_tot:
     revision = api.bot_update.last_returned_properties['got_revision']
     revision_cp = api.bot_update.last_returned_properties['got_revision_cp']
-    revision_number = str(api.commit_position.parse_revision(revision_cp))
+    _, revision_number = api.commit_position.parse(revision_cp)
+    revision_number = str(revision_number)
 
     with api.step.nest('archive') as parent:
       archive_name = ('node-%s-rel-%s-%s.zip' %

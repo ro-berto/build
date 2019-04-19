@@ -1111,7 +1111,7 @@ class iOSApi(recipe_api.RecipeApi):
           test_results,
           test_type,
           api.bot_update.last_returned_properties.get(
-            'got_revision_cp', 'x@{#0}'),
+            'got_revision_cp', 'refs/x@{#0}'),
           builder_name_suffix='%s-%s' % (
             task['test']['device type'], task['test']['os']),
           test_results_server='test-results.appspot.com',

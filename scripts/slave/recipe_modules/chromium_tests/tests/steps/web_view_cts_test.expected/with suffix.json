@@ -96,7 +96,7 @@
       "--test-type",
       "Run CTS (build suffix)",
       "--chrome-revision",
-      "x@{#0}",
+      "refs/x@{#0}",
       "--test-results-server",
       "test-results.appspot.com"
     ],

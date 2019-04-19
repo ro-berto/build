@@ -133,7 +133,8 @@ class CodesearchApi(recipe_api.RecipeApi):
       # generated. To resolve this issue, use 'got_revision' property here
       # instead.
       return self._get_revision()
-    return self.m.commit_position.parse_revision(got_revision_cp)
+    _, rev = self.m.commit_position.parse(got_revision_cp)
+    return rev
 
   def _get_revision(self):
     """Returns the git commit hash of the project.

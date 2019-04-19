@@ -4,10 +4,10 @@
 
 DEPS = [
   'build',
-  'commit_position',
   'depot_tools/depot_tools',
   'depot_tools/gsutil',
   'recipe_engine/buildbucket',
+  'recipe_engine/commit_position',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',

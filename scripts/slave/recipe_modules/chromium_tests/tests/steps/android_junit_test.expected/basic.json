@@ -48,7 +48,7 @@
       "--test-type",
       "test_name",
       "--chrome-revision",
-      "x@{#0}",
+      "refs/x@{#0}",
       "--test-results-server",
       "test-results.appspot.com"
     ],

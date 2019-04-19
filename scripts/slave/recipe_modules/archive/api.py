@@ -188,7 +188,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     target = self.m.path.split(build_dir)[-1]
     commit_position = self._get_commit_position(
         update_properties, primary_project)
-    cp_branch, cp_number = self.m.commit_position.parse(commit_position)
+    cp_ref, cp_number = self.m.commit_position.parse(commit_position)
     build_git_commit = self._get_git_commit(update_properties, primary_project)
     staging_dir = self.m.path['cleanup'].join('chrome_staging')
     self.m.file.ensure_directory('create staging_dir', staging_dir)
@@ -253,7 +253,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       component = '-%s-component' % revision_dir
 
     sortkey_path = self._get_comparable_upload_path_for_sort_key(
-        cp_branch, cp_number)
+        cp_ref, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
                                             platform_name,
                                             target_name,

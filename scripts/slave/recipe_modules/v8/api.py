@@ -401,8 +401,8 @@ class V8Api(recipe_api.RecipeApi):
     # Note, a commit position might not be available on feature branches.
     self.revision_number = None
     if self.revision_cp:
-      self.revision_number = str(self.m.commit_position.parse_revision(
-          self.revision_cp))
+      _, self.revision_number = self.m.commit_position.parse(self.revision_cp)
+      self.revision_number = str(self.revision_number)
 
   def calculate_patch_base_gerrit(self):
     """Calculates the commit hash a gerrit patch was branched off."""

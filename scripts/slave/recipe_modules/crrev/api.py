@@ -29,10 +29,10 @@ class CrrevApi(recipe_api.RecipeApi):
       self, commit_position, project='chromium', repo='chromium/src',
       attempts=3, step_name=None, **kwargs):
     """Fetches the corresponding commit hash for a commit position."""
-    branch, number = self.m.commit_position.parse(commit_position)
+    ref, number = self.m.commit_position.parse(commit_position)
     params = {
         'numbering_type': 'COMMIT_POSITION',
-        'numbering_identifier': branch,
+        'numbering_identifier': ref,
         'number': number,
         'project': project,
         'repo': repo,
@@ -56,7 +56,7 @@ class CrrevApi(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('Could not resolve ' + commit_hash)
     for numbering in numberings:
       if numbering['numbering_type'] == 'COMMIT_POSITION':
-        branch = numbering['numbering_identifier']
+        ref = numbering['numbering_identifier']
         number = numbering['number']
-        return self.m.commit_position.construct(branch, number)
+        return self.m.commit_position.format(ref, number)
     raise self.m.step.StepFailure('No commit position for ' + commit_hash)

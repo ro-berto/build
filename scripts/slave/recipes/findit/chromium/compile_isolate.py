@@ -8,13 +8,11 @@ If multiple test targets match the same isolated targets, we default to the
 first one after ordering test target names alphabetically.
 """
 
-from collections import defaultdict
 import json
 import re
 
 from recipe_engine import post_process
 from recipe_engine.config import List
-from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 
@@ -24,12 +22,12 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
-    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
     'findit',
     'isolate',
+    'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',

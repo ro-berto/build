@@ -6,12 +6,12 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
-    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/tryserver',
     'isolate',
     'recipe_engine/buildbucket',
+    'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -23,7 +23,6 @@ DEPS = [
 ]
 
 from recipe_engine import post_process
-from recipe_engine import recipe_test_api
 
 
 def RunSteps(api):
