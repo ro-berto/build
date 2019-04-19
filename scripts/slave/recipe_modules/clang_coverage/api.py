@@ -143,31 +143,30 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             .custom_vars)
 
   def _get_binaries(self, tests):
-    """Returns a path to the binary for the given test object."""
+    """Returns paths to the binary for the given test objects.
+
+    By default, use the name of the target as the binary.
+    """
     # TODO(crbug.com/899974): Implement a sturdier approach that also works in
     # separate builder-tester setup.
-
-    # This naive approach relies on the test binary sharing a name with the test
-    # target. Also, this only works for builder_tester on linux.
     binaries = []
     for t in tests:
-      if t.is_gtest and t.runs_on_swarming:
-        # TODO(crbug.com/943686): Figure out what to do with ozone test targets.
-        if t.isolate_target == 'gl_unittests_ozone':
-          binaries.append(self.m.chromium.output_dir.join('gl_unittests'))
-        elif t.isolate_target in ['cros_vm_sanity_test',
-                                  'chrome_all_tast_tests']:
-          binaries.append(self.m.chromium.output_dir.join('chrome'))
-        else:
-          binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+      target = t.isolate_target
       # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
-      elif 'webkit_layout_tests' in t.isolate_target or (
-          'blink_web_tests' in t.isolate_target):
-        binaries.append(self.m.chromium.output_dir.join('content_shell'))
-      elif t.isolate_target.endswith('_fuzzer'):
-        binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+      patterns = [
+          ['chrome_all_tast_tests', 'chrome'],
+          ['cros_vm_sanity_test', 'chrome'],
+          ['.*webkit_layout_tests', 'content_shell'],
+          ['.*blink_web_tests', 'content_shell'],
+          ['.*_ozone', target[:-len('_ozone')]],
+          ['.*', target],
+      ]
+      for pattern, binary in patterns:
+        if re.match(pattern, target):
+          binaries.append(self.m.chromium.output_dir.join(binary))
+          break
 
-    return list(set(binaries))
+    return list(set(binaries))  # Remove duplicates.
 
   def _filter_source_file(self, file_paths):
     """Fitlers source files with valid extensions.
