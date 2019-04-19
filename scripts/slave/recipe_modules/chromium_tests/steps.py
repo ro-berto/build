@@ -2458,3 +2458,274 @@ class MockTest(Test):
   @property
   def abort_on_failure(self):
     return self._abort_on_failure
+
+class SwarmingIosTest(SwarmingTest):
+  def __init__(self, swarming_service_account, platform, config, task,
+               upload_test_results, result_callback, use_test_data):
+    """
+    Args:
+      swarming_service_account: A string representing the service account
+                                that will trigger the task.
+      platform: A string, either 'device' or 'simulator'
+      config: A dictionary detailing the build config. This is an iOS-specific
+              config that has no documentation.
+      task: A dictionary detailing the task config. This is an iOS-specific
+            config that has no documentation.
+      upload_test_results: Upload test results JSON to the flakiness dashboard.
+      result_callback: A function to call whenever a task finishes.
+        It is called with these named args:
+        * name: Name of the test ('test'->'app' attribute).
+        * step_result: Step result object from the collect step.
+        If the function is not provided, the default is to upload performance
+        results from perf_result.json.
+    """
+    super(SwarmingIosTest, self).__init__(name=task['step name'])
+    self._swarming_service_account = swarming_service_account
+    self._platform = platform
+    self._config = copy.deepcopy(config)
+    self._task = copy.deepcopy(task)
+    self._upload_test_results = upload_test_results
+    self._result_callback = result_callback
+    self._use_test_data = use_test_data
+
+  def pre_run(self, api, suffix):
+    task = self._task
+
+    device_check = self._config.get('device check')
+    expiration = (self._task['test'].get('expiration_time') or
+                  self._config.get( 'expiration_time'))
+    hard_timeout = self._task['test'].get(
+        'max runtime seconds') or self._config.get('max runtime seconds')
+    task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
+
+    cipd_packages = [(
+        api.ios.MAC_TOOLCHAIN_ROOT,
+        api.ios.MAC_TOOLCHAIN_PACKAGE,
+        api.ios.MAC_TOOLCHAIN_VERSION,
+    )]
+
+    replay_package_name = task['test'].get('replay package name')
+    replay_package_version = task['test'].get('replay package version')
+    use_trusted_cert = task['test'].get('use trusted cert')
+    if use_trusted_cert or (replay_package_name and replay_package_version):
+      cipd_packages.append((
+          api.ios.WPR_TOOLS_ROOT,
+          api.ios.WPR_TOOLS_PACKAGE,
+          api.ios.WPR_TOOLS_VERSION,
+      ))
+    if replay_package_name and replay_package_version:
+      cipd_packages.append((
+          api.ios.WPR_REPLAY_DATA_ROOT,
+          replay_package_name,
+          replay_package_version,
+      ))
+
+    swarming_task = api.chromium_swarming.task(
+      task['step name'],
+      task['isolated hash'],
+      task_output_dir=task['tmp_dir'],
+      service_account=self._swarming_service_account,
+      cipd_packages=cipd_packages,
+    )
+    swarming_task.dimensions = {
+      'pool': 'Chrome',
+    }
+
+    # TODO(crbug.com/835036): remove this when all configs are migrated to
+    # "xcode build version". Otherwise keep it for backwards compatibility;
+    # otherwise we may receive an older Mac OS which does not support the
+    # requested Xcode version.
+    if task.get('xcode version'):
+      swarming_task.dimensions['xcode_version'] = task['xcode version']
+
+    assert task.get('xcode build version')
+    named_cache = 'xcode_ios_%s' % (task['xcode build version'])
+    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
+
+    if self._platform == 'simulator':
+      swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
+    elif self._platform == 'device':
+      swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
+      if device_check:
+        swarming_task.dimensions['device_status'] = 'available'
+        swarming_task.wait_for_capacity = True
+      swarming_task.dimensions['device'] = api.ios.PRODUCT_TYPES.get(
+        task['test']['device type'])
+    if task['bot id']:
+      swarming_task.dimensions['id'] = task['bot id']
+    if task['pool']:
+      swarming_task.dimensions['pool'] = task['pool']
+
+    swarming_task.priority = task['test'].get('priority', 200)
+
+    swarming_task.tags.add(
+        'device_type:%s' % str(task['test']['device type']))
+    swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
+    swarming_task.tags.add('platform:%s' % self._platform)
+    swarming_task.tags.add('test:%s' % str(task['test']['app']))
+
+    if expiration:
+      swarming_task.expiration = expiration
+
+    if hard_timeout:
+      swarming_task.hard_timeout = hard_timeout
+
+    swarming_task.optional_dimensions = task['test'].get(
+        'optional_dimensions')
+
+    api.chromium_swarming.trigger_task(swarming_task)
+    task['task'] = swarming_task
+
+  @recipe_api.composite_step
+  def run(self, api, suffix):
+    failure = False
+    infra_failure = False
+    task = self._task
+
+    assert task['task'], (
+        'The task should have been triggered and have an '
+        'associated swarming task')
+
+    try:
+      step_result = api.chromium_swarming.collect_task(task['task'])
+    except api.step.StepFailure as f:
+      step_result = f.result
+
+    # We only run one shard, so the results we're interested in will
+    # always be shard 0.
+    swarming_summary = step_result.chromium_swarming.summary['shards'][0]
+    state = swarming_summary['state']
+
+    exit_code = None
+    if state == 'COMPLETED':
+      exit_code = 0
+    exit_code = swarming_summary.get('exit_code', exit_code)
+
+    if isinstance(exit_code, basestring):
+      exit_code = int(exit_code)
+
+    # Link to isolate file browser for files emitted by the test.
+    if swarming_summary.get('outputs_ref', None):
+      outputs_ref = swarming_summary['outputs_ref']
+      step_result.presentation.links['test data'] = (
+        '%s/browse?namespace=%s&hash=%s' % (
+          outputs_ref['isolatedserver'], outputs_ref['namespace'],
+          outputs_ref['isolated']))
+
+    # Interpret the result and set the display appropriately.
+    if state == 'COMPLETED':
+      # Task completed and we got an exit code from the iOS test runner.
+      if exit_code == 1:
+        step_result.presentation.status = api.step.FAILURE
+        failure = True
+      elif exit_code == 2:
+        # The iOS test runner exits 2 to indicate an infrastructure failure.
+        step_result.presentation.status = api.step.EXCEPTION
+        infra_failure = True
+    elif state == 'TIMED_OUT':
+      # The task was killed for taking too long. This is a test failure
+      # because the test itself hung.
+      step_result.presentation.status = api.step.FAILURE
+      step_result.presentation.step_text = 'Test timed out.'
+      failure = True
+    elif state == 'EXPIRED':
+      # No Swarming bot accepted the task in time.
+      step_result.presentation.status = api.step.EXCEPTION
+      step_result.presentation.step_text = (
+        'No suitable Swarming bot found in time.'
+      )
+      infra_failure = True
+    else:
+      step_result.presentation.status = api.step.EXCEPTION
+      step_result.presentation.step_text = (
+        'Unexpected infrastructure failure.'
+      )
+      infra_failure = True
+
+    # Add any iOS test runner results to the display.
+    shard_output_dir = api.path.join(
+      task['task'].task_output_dir,
+      task['task'].get_task_shard_output_dirs()[0])
+    test_summary = api.path.join(shard_output_dir, 'summary.json')
+    if api.path.exists(test_summary): # pragma: no cover
+      with open(test_summary) as f:
+        test_summary_json = api.json.loads(f.read())
+      step_result.presentation.logs['test_summary.json'] = api.json.dumps(
+        test_summary_json, indent=2).splitlines()
+      step_result.presentation.logs.update(test_summary_json.get('logs', {}))
+      step_result.presentation.links.update(
+        test_summary_json.get('links', {}))
+      if test_summary_json.get('step_text'):
+        step_result.presentation.step_text = '%s<br />%s' % (
+          step_result.presentation.step_text, test_summary_json['step_text'])
+
+    # Upload test results JSON to the flakiness dashboard.
+    if api.bot_update.last_returned_properties and self._upload_test_results:
+      test_results = api.path.join(shard_output_dir, 'full_results.json')
+      test_type = task['step name']
+      if api.path.exists(test_results):
+        api.test_results.upload(
+          test_results,
+          test_type,
+          api.bot_update.last_returned_properties.get(
+            'got_revision_cp', 'refs/x@{#0}'),
+          builder_name_suffix='%s-%s' % (
+            task['test']['device type'], task['test']['os']),
+          test_results_server='test-results.appspot.com',
+        )
+
+    # Upload performance data result to the perf dashboard.
+    perf_results = api.path.join(
+      shard_output_dir, 'Documents', 'perf_result.json')
+    if self._result_callback:
+      self._result_callback(name=task['test']['app'], step_result=step_result)
+    elif api.path.exists(perf_results):
+      data = self._get_perftest_data(perf_results, api)
+      data_decode = data['Perf Data']
+      data_result = []
+      for testcase in data_decode:
+        for trace in data_decode[testcase]['value']:
+          data_point = api.perf_dashboard.get_skeleton_point(
+            'chrome_ios_perf/%s/%s' % (testcase, trace),
+            # TODO(huangml): Use revision.
+            int(api.time.time()),
+            data_decode[testcase]['value'][trace]
+          )
+          data_point['units'] = data_decode[testcase]['unit']
+          data_result.extend([data_point])
+      api.perf_dashboard.set_default_config()
+      api.perf_dashboard.add_point(data_result)
+
+    if infra_failure:
+      return 2
+    if failure:
+      return 1
+    return 0
+
+  def _get_perftest_data(self, path, api):
+    # Use fake data for recipe testing.
+    if self._use_test_data:
+      data = {
+        'Perf Data' : {
+          'startup test' : {
+            'unit' : 'seconds',
+            'value' : {
+              'finish_launching' : 0.55,
+              'become_active' : 0.68,
+            }
+          }
+        }
+      }
+    else:
+      with open(path) as f: # pragma: no cover
+        data = api.json.loads(f.read())
+    return data
+
+  def validate_task_results(self, api, step_result):
+    raise NotImplementedError()  # pragma: no cover
+
+  def create_task(self, api, suffix, isolated_hash):
+    raise NotImplementedError()  # pragma: no cover
+
+  def compile_targets(self):
+    raise NotImplementedError()  # pragma: no cover

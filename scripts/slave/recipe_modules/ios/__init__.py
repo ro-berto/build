@@ -12,6 +12,7 @@ DEPS = [
   'build/perf_dashboard',
   'build/swarming_client',
   'build/test_results',
+  'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/cipd',
   'depot_tools/depot_tools',

@@ -168,6 +168,7 @@
   * [chromium_tests:tests/steps/script_test](#recipes-chromium_tests_tests_steps_script_test)
   * [chromium_tests:tests/steps/sizes_step](#recipes-chromium_tests_tests_steps_sizes_step)
   * [chromium_tests:tests/steps/swarming_gtest_test](#recipes-chromium_tests_tests_steps_swarming_gtest_test)
+  * [chromium_tests:tests/steps/swarming_ios_test](#recipes-chromium_tests_tests_steps_swarming_ios_test)
   * [chromium_tests:tests/steps/swarming_isolated_script_test](#recipes-chromium_tests_tests_steps_swarming_isolated_script_test)
   * [chromium_tests:tests/steps/web_view_cts_test](#recipes-chromium_tests_tests_steps_web_view_cts_test)
   * [chromium_tests:tests/steps/webrtc_perf_test](#recipes-chromium_tests_tests_steps_webrtc_perf_test)
@@ -2406,17 +2407,17 @@ Raises:
 Return a failing step with the given message.
 ### *recipe_modules* / [ios](/scripts/slave/recipe_modules/ios)
 
-[DEPS](/scripts/slave/recipe_modules/ios/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/ios/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-#### **class [iOSApi](/scripts/slave/recipe_modules/ios/api.py#16)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [iOSApi](/scripts/slave/recipe_modules/ios/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#584)(self):**
+&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#579)(self):**
 
 Bootstraps Swarming.
 
-&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#72)(self):**
+&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#67)(self):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#358)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#353)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
 
 Builds from this bot's build config.
 
@@ -2427,59 +2428,62 @@ Args:
   suffix: Suffix to use at the end of step names.
   use_mb: Whether or not to use mb to generate build files.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#142)(self, gclient_apply_config=None, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#137)(self, gclient_apply_config=None, \*\*kwargs):**
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#989)(self, tasks, upload_test_results=True, result_callback=None):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#885)(self, triggered_tests):**
 
-&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#77)(self):**
+&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#72)(self):**
 
-&mdash; **def [configure\_and\_trigger\_task](/scripts/slave/recipe_modules/ios/api.py#855)(self, task):**
+&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#325)(self, xcode_build_version):**
 
-&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#330)(self, xcode_build_version):**
+&mdash; **def [generate\_test\_from\_task](/scripts/slave/recipe_modules/ios/api.py#850)(self, task, upload_test_results=True, result_callback=None):**
 
-&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#324)(self):**
+Generates a Test subclass that can run tests and parse/store results.
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1150)(self, path, api, use_test_data):**
+Returns:
+  None if no tests should be run, otherwise an instance of SwarmingIosTest.
 
-&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#593)(test):**
+&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#319)(self):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#767)(self, scripts_dir='src/ios/build/bots/scripts'):**
+&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#588)(test):**
+
+&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#762)(self, scripts_dir='src/ios/build/bots/scripts'):**
 
 Isolates the tests specified in this bot's build config.
 
-&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#710)(self, test, shard_size, tmp_dir, isolate_template, bot=None):**
+&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#705)(self, test, shard_size, tmp_dir, isolate_template, bot=None):**
 
 Isolate earlgrey test into small shards
 
-&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#614)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
+&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#609)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1208)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#944)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1195)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#931)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1223)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#959)(self):**
 
 Returns the path to the most recently compiled iossim.
 
-&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#160)(self, tests, include_dir, start_index=0):**
+&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#155)(self, tests, include_dir, start_index=0):**
 
 Parses the tests dict, reading necessary includes.
 
 Args:
   tests: A list of test dicts.
 
-&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#86)(self):**
+&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#81)(self):**
 
-&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#221)(self, master_name=None, build_config_base_dir=None, buildername=None):**
+&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#216)(self, master_name=None, build_config_base_dir=None, buildername=None):**
 
 Reads the iOS build config for this bot.
 
@@ -2489,9 +2493,9 @@ Args:
   build_config_base_dir: Directory to search for build config master and
     test include directories.
 
-&emsp; **@swarming_service_account.setter**<br>&mdash; **def [swarming\_service\_account](/scripts/slave/recipe_modules/ios/api.py#103)(self, val):**
+&emsp; **@swarming_service_account.setter**<br>&mdash; **def [swarming\_service\_account](/scripts/slave/recipe_modules/ios/api.py#98)(self, val):**
 
-&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#508)(self, artifact, url):**
+&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#503)(self, artifact, url):**
 
 Uploads the given symbols file.
 
@@ -2500,15 +2504,15 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1169)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#903)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#554)(self, base_path=None):**
+&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#549)(self, base_path=None):**
 
 Uploads built artifacts as instructed by this bot's build config.
 
-&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#523)(self, artifact, bucket, path):**
+&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#518)(self, artifact, bucket, path):**
 
 Tar gzips and uploads the given artifact to Google Storage.
 
@@ -2518,9 +2522,9 @@ Args:
   bucket: Name of the Google Storage bucket to upload to.
   path: Path to upload the artifact to relative to the bucket.
 
-&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#107)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#102)(self):**
 
-&emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/ios/api.py#112)(self):**
+&emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/ios/api.py#107)(self):**
 ### *recipe_modules* / [isolate](/scripts/slave/recipe_modules/isolate)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
@@ -4408,6 +4412,11 @@ without error.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_gtest_test.py#26)(api):**
+### *recipes* / [chromium\_tests:tests/steps/swarming\_ios\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_ios_test.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_ios_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [ios](#recipe_modules-ios), [perf\_dashboard](#recipe_modules-perf_dashboard), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_ios_test.py#23)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/swarming\_isolated\_script\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4961,17 +4970,17 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 
 [DEPS](/scripts/slave/recipe_modules/ios/tests/isolate.py#11): [ios](#recipe_modules-ios), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/isolate.py#25)(api, expected_partial_tasks):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/isolate.py#29)(api, expected_partial_tasks):**
 ### *recipes* / [ios:tests/optional\_dimensions](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#7): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+[DEPS](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/optional_dimensions.py#16)(api):**
 ### *recipes* / [ios:tests/swarming\_service\_acount](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#7): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+[DEPS](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/tests/swarming_service_acount.py#16)(api):**
 ### *recipes* / [isolate:examples/compose](/scripts/slave/recipe_modules/isolate/examples/compose.py)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/examples/compose.py#7): [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client)
@@ -5468,9 +5477,9 @@ The changes are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/chromium_ios.py#18)(api):**
 ### *recipes* / [webrtc/ios](/scripts/slave/recipes/webrtc/ios.py)
 
-[DEPS](/scripts/slave/recipes/webrtc/ios.py#10): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/webrtc/ios.py#10): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/ios.py#429)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/ios.py#431)(api):**
 ### *recipes* / [webrtc/ios\_api\_framework](/scripts/slave/recipes/webrtc/ios_api_framework.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/ios_api_framework.py#5): [archive](#recipe_modules-archive), [chromium\_checkout](#recipe_modules-chromium_checkout), [goma](#recipe_modules-goma), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

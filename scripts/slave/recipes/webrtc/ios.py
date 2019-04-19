@@ -10,7 +10,9 @@ from recipe_engine.types import freeze
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
+  'chromium_swarming',
   'ios',
+  'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/runtime',
   'recipe_engine/step',
@@ -450,17 +452,19 @@ def RunSteps(api):
   if webrtc.bot.should_test:
     with api.step.nest('isolate'):
       tasks = api.ios.isolate()
-    triggered_tasks = []
+    triggered_tests = []
     with api.step.nest('trigger'):
+      if webrtc.bot.should_upload_perf_results:
+        result_callback = webrtc.upload_to_perf_dashboard
+      else:
+        result_callback = result_callback=lambda **kw: True
       for task in tasks:
-        if api.ios.configure_and_trigger_task(task):
-          triggered_tasks.append(task)
-    if webrtc.bot.should_upload_perf_results:
-      api.ios.collect(triggered_tasks,
-                      result_callback=webrtc.upload_to_perf_dashboard)
-    else:
-      # Collect with empty callback because we don't need to do anything
-      api.ios.collect(triggered_tasks, result_callback=lambda **kw: True)
+        test = api.ios.generate_test_from_task(
+            task, result_callback=result_callback)
+        if test:
+          test.pre_run(api, suffix='')
+          triggered_tests.append(test)
+    api.ios.collect(triggered_tests)
 
 
 def GenTests(api):
