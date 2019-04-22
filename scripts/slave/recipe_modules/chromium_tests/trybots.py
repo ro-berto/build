@@ -85,6 +85,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.android': {
     'builders': {
+      'android-cronet-arm-dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'android-cronet-arm-dbg',
+      }),
       'android-kitkat-arm-rel': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'android-kitkat-arm-rel',
