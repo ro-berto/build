@@ -1608,7 +1608,7 @@ This module contains apis to interact with llvm-cov and llvm-profdata.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#193)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#194)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1622,7 +1622,7 @@ Args:
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#220)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#221)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1654,7 +1654,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#364)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#365)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 

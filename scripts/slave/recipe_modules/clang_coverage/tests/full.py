@@ -18,7 +18,7 @@ DEPS = [
 
 
 # Number of tests. Needed by the tests.
-_NUM_TARGETS = 5
+_NUM_TARGETS = 6
 
 
 def RunSteps(api):
@@ -36,6 +36,7 @@ def RunSteps(api):
   tests = [
       api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
+      api.chromium_tests.steps.SwarmingGTestTest('xr_browser_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest(

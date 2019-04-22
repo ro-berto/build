@@ -156,6 +156,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       patterns = [
           ['chrome_all_tast_tests', 'chrome'],
           ['cros_vm_sanity_test', 'chrome'],
+          ['xr_browser_tests', 'xr_browser_tests_binary'],
           ['.*webkit_layout_tests', 'content_shell'],
           ['.*blink_web_tests', 'content_shell'],
           ['.*_ozone', target[:-len('_ozone')]],
