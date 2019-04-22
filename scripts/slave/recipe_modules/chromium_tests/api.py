@@ -469,7 +469,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m.isolate.isolate_server,
               self.m.isolate.isolated_tests)
 
-  def package_build(self, mastername, buildername, update_step, bot_db):
+  def package_build(self, mastername, buildername, update_step, bot_db,
+                    reasons=None):
     """Zip and upload the build to google storage.
 
     This is currently used for transfer between builder and tester,
@@ -501,8 +502,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # without perf test files for manual bisect.
       # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
       if (master_config.get('bisect_builders') and
-          buildername in master_config.get('bisect_builders')):
-        self.m.archive.zip_and_upload_build(
+          buildername in master_config.get('bisect_builders') and
+          'bisect_build_gs_bucket' in master_config):
+        bisect_package_step = self.m.archive.zip_and_upload_build(
             'package build for bisect',
             self.m.chromium.c.build_config_fs,
             build_url=self._build_bisect_gs_archive_url(master_config),
@@ -513,19 +515,35 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             store_by_hash=False,
             platform=self.m.chromium.c.TARGET_PLATFORM
         )
+        bisect_reasons = list(reasons or [])
+        bisect_reasons.extend([
+            ' - %s is listed in bisect_builders' % buildername,
+            ' - bisect_build_gs_bucket is configured to %s'
+                % master_config.get('bisect_build_gs_bucket'),
+        ])
+        bisect_package_step.presentation.logs['why is this running?'] = (
+            bisect_reasons)
 
-      return self.m.archive.zip_and_upload_build(
-          'package build',
-          self.m.chromium.c.build_config_fs,
-          build_url=self._build_gs_archive_url(
-              mastername, master_config, buildername),
-          build_revision=build_revision,
-          cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
-          # TODO(machenbach): Make asan a configuration switch.
-          package_dsym_files=(
-              self.m.chromium.c.runtests.enable_asan and
-              self.m.chromium.c.HOST_PLATFORM == 'mac'),
-      )
+      if 'build_gs_bucket' in master_config:
+        package_step = self.m.archive.zip_and_upload_build(
+            'package build',
+            self.m.chromium.c.build_config_fs,
+            build_url=self._build_gs_archive_url(
+                mastername, master_config, buildername),
+            build_revision=build_revision,
+            cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+            # TODO(machenbach): Make asan a configuration switch.
+            package_dsym_files=(
+                self.m.chromium.c.runtests.enable_asan and
+                self.m.chromium.c.HOST_PLATFORM == 'mac'),
+        )
+        standard_reasons = list(reasons or [])
+        standard_reasons.extend([
+            ' - build_gs_bucket is configured to %s'
+                % master_config.get('build_gs_bucket'),
+        ])
+        package_step.presentation.logs['why is this running?'] = (
+            standard_reasons)
 
 
   def archive_build(self, mastername, buildername, update_step, bot_db):
@@ -1102,10 +1120,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
     if package_transfer and bot_type in ('builder', 'builder_tester'):
-      package_step = self.package_build(
-          mastername, buildername, update_step, bot_db)
-      package_step.presentation.logs['why is this running?'] = (
-          package_transfer_reasons)
+      self.package_build(
+          mastername, buildername, update_step, bot_db,
+          reasons=package_transfer_reasons)
 
     self.trigger_child_builds(
         mastername, buildername, update_step, bot_db,

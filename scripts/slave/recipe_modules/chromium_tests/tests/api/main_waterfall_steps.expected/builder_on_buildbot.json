@@ -657,6 +657,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
       "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - build_gs_bucket is configured to chromium-linux-archive@@@",
       "@@@STEP_LOG_END@why is this running?@@@"
     ]
   },

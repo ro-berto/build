@@ -682,6 +682,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
       "@@@STEP_LOG_LINE@why is this running?@ - base_unittests doesn't use isolate@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - build_gs_bucket is configured to chromium-fyi-archive@@@",
       "@@@STEP_LOG_END@why is this running?@@@"
     ]
   },

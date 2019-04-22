@@ -13,7 +13,6 @@ from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 SPEC = {
   'builders': {},
   'settings': {
-    'build_gs_bucket': 'chrome-perf',
     # Bucket for storing builds for manual bisect
     'bisect_build_gs_bucket': 'chrome-test-builds',
     'bisect_build_gs_extra': 'official-by-commit',
