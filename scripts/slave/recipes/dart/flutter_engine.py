@@ -93,8 +93,6 @@ def BuildLinux(api, checkout_dir):
   Build(api, checkout_dir, 'host_debug', 'create_full_sdk')
   RunGN(api, checkout_dir, '--unoptimized')
   Build(api, checkout_dir, 'host_debug_unopt')
-  RunGN(api, checkout_dir, '--runtime-mode=release', '--dynamic')
-  Build(api, checkout_dir, 'host_dynamic_release', 'flutter/lib/snapshot')
   # analyze step needs dart ui sources
   Build(api, checkout_dir, 'host_debug_unopt', 'generate_dart_ui')
   RunGN(api, checkout_dir, '--runtime-mode=release')
@@ -165,11 +163,7 @@ def CopyArtifacts(api, engine_src, cached_dest, file_paths):
   # does not have any devices attached.
   api.file.ensure_directory('mkdir %s' % cached_dest, cached_dest)
   for path in file_paths:
-    if isinstance(path, tuple):
-      # Second item is explicitly specified target file name
-      source, target = path[0], path[1]
-    else:
-      source, target = path, api.path.basename(path)
+    source, target = path, api.path.basename(path)
 
     api.file.remove('remove %s' % target, cached_dest.join(target))
     api.file.copy('copy %s' % target, engine_src.join(source),
@@ -182,20 +176,9 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     flutter.join('bin', 'cache', 'artifacts', 'engine', 'linux-x64'),
     [ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
-    # Flutter debug and dynamic profile modes for all target platforms use Dart
-    # RELEASE VM snapshot that comes from host debug build and has the metadata
-    # related to development tools.
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
-    # Flutter dynamic release mode for all target platforms uses Dart PRODUCT
-    # VM snapshot from host dynamic release build that strips out the metadata
-    # related to development tools.
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-     'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
-     'vm_isolate_snapshot.bin',
-     'product_vm_isolate_snapshot.bin'),
     ]
   )
 
