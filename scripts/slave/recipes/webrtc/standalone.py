@@ -102,13 +102,13 @@ def GenTests(api):
   yield generate_builder('luci.webrtc.perf', 'Perf Android32 (L Nexus5)',
                          suffix='_forced_invalid', revision=None)
 
-  yield generate_builder('luci.webrtc.perf', 'Perf Linux Trusty',
-                         failing_test='webrtc_perf_tests',
+  yield generate_builder('luci.webrtc.perf', 'Perf Linux Xenial',
+                         failing_test='webrtc_perf_tests on Ubuntu-16.04',
                          suffix='_failing_test', revision='a' * 40)
   yield generate_builder('luci.webrtc.perf', 'Perf Android32 (L Nexus5)',
                          failing_test='webrtc_perf_tests on Android',
                          suffix='_failing_test', revision='a' * 40)
 
-  yield generate_builder('luci.webrtc.perf', 'Perf Linux Trusty',
+  yield generate_builder('luci.webrtc.perf', 'Perf Linux Xenial',
                          is_experimental=True,
                          suffix='_experimental', revision='a' * 40)

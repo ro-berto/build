@@ -647,6 +647,7 @@ BUILDERS = freeze({
         },
         'swarming_timeout': 5400,  # 1h30m
       },
+      # TODO(tikuta): remove this (crbug.com/954875)
       'Perf Linux Trusty': {
         'recipe_config': 'webrtc_desktop_perf_swarming',
         'chromium_config_kwargs': {
@@ -661,6 +662,23 @@ BUILDERS = freeze({
           'pool': 'WebRTC-perf',
           'gpu': None,
           'os': 'Ubuntu-14.04',
+        },
+        'swarming_timeout': 5400,  # 1h30m
+      },
+      'Perf Linux Xenial': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'perf_id': 'webrtc-linux-large-tests',
+        'bot_type': 'tester',
+        'parent_buildername': 'Linux64 Builder',
+        'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'gpu': None,
+          'os': 'Ubuntu-16.04',
         },
         'swarming_timeout': 5400,  # 1h30m
       },
