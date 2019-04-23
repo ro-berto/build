@@ -118,7 +118,15 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f101a15507d17c20051ac2aed50ff8a09a0570cb\"@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"chromium.googlesource.com\", \"id\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/master\"}@@@"
     ]
   },
   {
@@ -188,13 +196,6 @@
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
       "@@@STEP_LINK@123@https://cr-buildbucket.appspot.com/build/123@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "set_output_gitiles_commit",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"chromium.googlesource.com\", \"id\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/master\"}@@@"
     ]
   },
   {
