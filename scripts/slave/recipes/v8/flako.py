@@ -74,6 +74,9 @@ PROPERTIES = {
   # 10 (actual numberic value increases) when using higher time than the one
   # specified in the total_timeout_sec.
   'swarming_priority': Property(default=25, kind=Single((int, float))),
+  # Expiration used for swarming tasks. Counted from the moment task is
+  # scheduled.
+  'swarming_expiration': Property(default=60 * 60, kind=Single((int, float))),
   # Fully qualified test name passed to run-tests.py. E.g. mjsunit/foobar.
   'test_name': Property(kind=str),
   # Timeout parameter passed to run-tests.py. Keep small when bisecting
@@ -510,9 +513,10 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
   from_offset, to_offset = bisect_into(from_offset, to_offset)
   report_range('Result: Suspecting %s', from_offset, to_offset)
 
-def setup_swarming(api, swarming_dimensions, swarming_priority):
+def setup_swarming(
+    api, swarming_dimensions, swarming_priority, swarming_expiration):
   api.swarming_client.checkout('master')
-  api.chromium_swarming.default_expiration = 60 * 60
+  api.chromium_swarming.default_expiration = swarming_expiration
   api.chromium_swarming.default_hard_timeout = 60 * 60
   api.chromium_swarming.default_io_timeout = 20 * 60
   api.chromium_swarming.default_idempotent = False
@@ -531,8 +535,8 @@ def setup_swarming(api, swarming_dimensions, swarming_priority):
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
              extra_args, initial_commit_offset, max_calibration_attempts,
              isolated_name, num_shards, repetitions, repro_only,
-             swarming_dimensions, swarming_priority, test_name, timeout_sec,
-             total_timeout_sec, to_revision, variant):
+             swarming_dimensions, swarming_priority, swarming_expiration,
+             test_name, timeout_sec, total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
   initial_commit_offset = int(initial_commit_offset)
   max_calibration_attempts = max(min(int(max_calibration_attempts), 5), 1)
@@ -543,7 +547,8 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
   total_timeout_sec = int(total_timeout_sec)
 
   # Set up swarming client.
-  setup_swarming(api, swarming_dimensions, swarming_priority)
+  setup_swarming(
+      api, swarming_dimensions, swarming_priority, swarming_expiration)
 
   # Set up bisection helpers.
   depot = Depot(
@@ -828,7 +833,8 @@ def GenTests(api):
       test('verify_flake') +
       api.properties(
         repro_only=True, swarming_priority=40, num_shards=2,
-        total_timeout_sec=240, max_calibration_attempts=1) +
+        swarming_expiration=7200, total_timeout_sec=240,
+        max_calibration_attempts=1) +
       isolated_lookup(0, True) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +

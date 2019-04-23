@@ -98,6 +98,7 @@ def RunSteps(api):
         swarming_priority=40,
         to_revision=v8_tot,
         max_calibration_attempts=1,
+        swarming_expiration=7200,  # 2 hours
       )
     ) for flako_properties in configs
   ], step_name='trigger flako builds')

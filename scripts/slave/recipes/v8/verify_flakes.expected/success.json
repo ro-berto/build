@@ -130,7 +130,7 @@
     ],
     "infra_step": true,
     "name": "trigger flako builds",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"builder\": \"v8_flako\"}, \"properties\": {\"bisect_buildername\": \"V8 Linux64 - debug builder\", \"bisect_mastername\": \"client.v8\", \"bug_url\": \"https://crbug.com/v8/8744\", \"build_config\": \"Debug\", \"extra_args\": [], \"isolated_name\": \"bot_default\", \"max_calibration_attempts\": 1, \"num_shards\": 2, \"repetitions\": 5000, \"repro_only\": true, \"swarming_dimensions\": [\"cpu:x86-64-avx2\", \"gpu:none\", \"os:Ubuntu-14.04\", \"pool:Chrome\"], \"swarming_priority\": 40, \"test_name\": \"cctest/test-cpu-profiler/FunctionCallSample\", \"timeout_sec\": 60, \"to_revision\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", \"total_timeout_sec\": 120, \"variant\": \"interpreted_regexp\"}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"builder\": \"v8_flako\"}, \"properties\": {\"bisect_buildername\": \"V8 Linux64 - debug builder\", \"bisect_mastername\": \"client.v8\", \"bug_url\": \"https://crbug.com/v8/8744\", \"build_config\": \"Debug\", \"extra_args\": [], \"isolated_name\": \"bot_default\", \"max_calibration_attempts\": 1, \"num_shards\": 2, \"repetitions\": 5000, \"repro_only\": true, \"swarming_dimensions\": [\"cpu:x86-64-avx2\", \"gpu:none\", \"os:Ubuntu-14.04\", \"pool:Chrome\"], \"swarming_expiration\": 7200, \"swarming_priority\": 40, \"test_name\": \"cctest/test-cpu-profiler/FunctionCallSample\", \"timeout_sec\": 60, \"to_revision\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", \"total_timeout_sec\": 120, \"variant\": \"interpreted_regexp\"}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -173,6 +173,7 @@
       "@@@STEP_LOG_LINE@request@            \"pool:Chrome\"@@@",
       "@@@STEP_LOG_LINE@request@          ], @@@",
       "@@@STEP_LOG_LINE@request@          \"extra_args\": [], @@@",
+      "@@@STEP_LOG_LINE@request@          \"swarming_expiration\": 7200, @@@",
       "@@@STEP_LOG_LINE@request@          \"test_name\": \"cctest/test-cpu-profiler/FunctionCallSample\", @@@",
       "@@@STEP_LOG_LINE@request@          \"total_timeout_sec\": 120, @@@",
       "@@@STEP_LOG_LINE@request@          \"build_config\": \"Debug\", @@@",
