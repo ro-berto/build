@@ -131,9 +131,6 @@ FAKE_BUILDERS = {
         'win_chromium_dbg_ng',
         'win_optional_gpu_tests_rel',
         'win_chromium_x64_rel_ng',
-        # TODO(crbug.com/888810): Remove this entry once bot named is switched
-        # source side.
-        'win7_chromium_rel_ng',
         'win10_chromium_x64_rel_ng',
         'win7_chromium_rel_loc_exp',
         'win_archive',
@@ -181,9 +178,6 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
-        # TODO(crbug.com/888810): Remove this entry once bot named is switched
-        # source side.
-        'linux_chromium_rel_ng',
         'linux_chromium_tsan_rel_ng',
         'linux_optional_gpu_tests_rel',
         'layout_test_leak_detection',
@@ -226,9 +220,6 @@ FAKE_BUILDERS = {
         'mac_chromium_compile_dbg_ng',
         'mac_chromium_compile_rel_ng',
         'mac_chromium_dbg_ng',
-        # TODO(crbug.com/888810): Remove this entry once bot named is switched
-        # source side.
-        'mac_chromium_rel_ng',
         'mac_optional_gpu_tests_rel',
         'ios-simulator-cronet',
         'mac-views-rel',
