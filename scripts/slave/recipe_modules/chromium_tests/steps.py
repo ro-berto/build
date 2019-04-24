@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import contextlib
 import copy
 import datetime
@@ -2643,16 +2644,35 @@ class SwarmingIosTest(SwarmingTest):
       infra_failure = True
 
     # Add any iOS test runner results to the display.
-    shard_output_dir = api.path.join(
-      task['task'].task_output_dir,
-      task['task'].get_task_shard_output_dirs()[0])
-    test_summary = api.path.join(shard_output_dir, 'summary.json')
-    if api.path.exists(test_summary): # pragma: no cover
-      with open(test_summary) as f:
-        test_summary_json = api.json.loads(f.read())
+    shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
+    test_summary_path = api.path.join(shard_output_dir, 'summary.json')
+    if test_summary_path in step_result.raw_io.output_dir:
+      test_summary_json = api.json.loads(
+          step_result.raw_io.output_dir[test_summary_path])
+
+      logs = test_summary_json.get('logs', {})
+      passed_tests = logs.get('passed tests', [])
+      flaked_tests = logs.get('flaked tests', [])
+      failed_tests = logs.get('failed tests', [])
+
+      pass_fail_counts = collections.defaultdict(
+          lambda: {'pass_count': 0, 'fail_count': 0})
+      for test in passed_tests:
+        pass_fail_counts[test]['pass_count'] += 1
+      for test in flaked_tests:
+        pass_fail_counts[test]['pass_count'] += 1
+        pass_fail_counts[test]['fail_count'] += 1
+      for test in failed_tests:
+        pass_fail_counts[test]['fail_count'] += 1
+      test_count = len(passed_tests) + len(flaked_tests) + len(failed_tests)
+      canonical_results = api.test_utils.canonical.result_format(
+          valid=True, failures=failed_tests, total_tests_ran=test_count,
+          pass_fail_counts=pass_fail_counts)
+      self.update_test_run(api, suffix, canonical_results)
+
       step_result.presentation.logs['test_summary.json'] = api.json.dumps(
         test_summary_json, indent=2).splitlines()
-      step_result.presentation.logs.update(test_summary_json.get('logs', {}))
+      step_result.presentation.logs.update(logs)
       step_result.presentation.links.update(
         test_summary_json.get('links', {}))
       if test_summary_json.get('step_text'):
@@ -2660,6 +2680,9 @@ class SwarmingIosTest(SwarmingTest):
           step_result.presentation.step_text, test_summary_json['step_text'])
 
     # Upload test results JSON to the flakiness dashboard.
+    shard_output_dir = api.path.join(
+        task['task'].task_output_dir,
+        task['task'].get_task_shard_output_dirs()[0])
     if api.bot_update.last_returned_properties and self._upload_test_results:
       test_results = api.path.join(shard_output_dir, 'full_results.json')
       test_type = task['step name']

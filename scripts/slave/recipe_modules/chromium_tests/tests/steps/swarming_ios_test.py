@@ -9,13 +9,17 @@ DEPS = [
     'depot_tools/bot_update',
     'ios',
     'perf_dashboard',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/time',
     'test_results',
     'test_utils',
 ]
+
+import json
 
 from recipe_engine import post_process
 
@@ -63,6 +67,24 @@ def GenTests(api):
   yield (
       api.test('basic_simulator') +
       api.properties(platform='simulator') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  summary_contents = {
+    'logs': {
+      'passed tests': ['PASSED_TEST'],
+      'flaked tests': ['FLAKED_TEST'],
+      'failed tests': ['FAILED_TEST'],
+    },
+    'step_text': 'dummy step text'
+  }
+  summary_path = '10000/summary.json'
+  yield (
+      api.test('test_results_parser') +
+      api.step_data(
+          'dummy step name on iOS-dummy OS',
+          api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})) +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
