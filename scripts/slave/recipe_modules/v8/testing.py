@@ -138,7 +138,7 @@ TEST_CONFIGS = freeze({
   },
   'perf': {
     'tool': 'run-perf',
-    'isolated_target': 'v8_perf',
+    'isolated_target': 'perf',
   },
   'test262': {
     'name': 'Test262 - no variants',
