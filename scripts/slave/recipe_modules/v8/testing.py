@@ -136,6 +136,10 @@ TEST_CONFIGS = freeze({
     'test_args': ['--extra-flags=--optimize-for-size'],
     'variants': V8Variant('default'),
   },
+  'perf': {
+    'tool': 'run-perf',
+    'isolated_target': 'v8_perf',
+  },
   'test262': {
     'name': 'Test262 - no variants',
     'tests': ['test262'],
@@ -734,6 +738,23 @@ class V8GCMole(V8CompositeSwarmingTest):
     ]
 
 
+class V8RunPerf(V8CompositeSwarmingTest):
+  @property
+  def composite_tests(self):
+    return [
+      V8GenericSwarmingTest(
+          self.test_step_config, self.api,
+          title='JSTest (%d)' % i,
+          command=[
+            'tools/run_perf.py',
+            'test/js-perf-test/JSTests%d.json' % i,
+            '--arch', 'x64',
+            '--buildbot',
+          ],
+      ) for i in range(1, 6)
+    ]
+
+
 TOOL_TO_TEST = freeze({
   'run-tests': V8Test,
 })
@@ -744,6 +765,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'jsfunfuzz': V8Fuzzer,
   'run-gcmole': V8GCMole,
   'run-num-fuzzer': V8SwarmingTest,
+  'run-perf': V8RunPerf,
   'run-tests': V8SwarmingTest,
 })
 
