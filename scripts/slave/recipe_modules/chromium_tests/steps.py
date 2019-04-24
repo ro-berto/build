@@ -2527,6 +2527,7 @@ class SwarmingIosTest(SwarmingTest):
       task_output_dir=task['tmp_dir'],
       service_account=self._swarming_service_account,
       cipd_packages=cipd_packages,
+      failure_as_exception=False,
     )
     swarming_task.dimensions = {
       'pool': 'Chrome',
@@ -2587,10 +2588,7 @@ class SwarmingIosTest(SwarmingTest):
         'The task should have been triggered and have an '
         'associated swarming task')
 
-    try:
-      step_result = api.chromium_swarming.collect_task(task['task'])
-    except api.step.StepFailure as f:
-      step_result = f.result
+    step_result = api.chromium_swarming.collect_task(task['task'])
 
     # We only run one shard, so the results we're interested in will
     # always be shard 0.

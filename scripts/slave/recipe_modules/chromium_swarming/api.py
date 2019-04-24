@@ -476,7 +476,8 @@ class SwarmingApi(recipe_api.RecipeApi):
            builder_name=None, build_number=None,
            merge=None, trigger_script=None, named_caches=None,
            service_account=None, raw_cmd=None, env_prefixes=None, env=None,
-           optional_dimensions=None, task_to_retry=None):
+           optional_dimensions=None, task_to_retry=None,
+           failure_as_exception=True):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -561,6 +562,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           (potentially partial) retry of another task. When collecting, the
           successful shards from 'task_to_retry' will be merged with the new
           shards in this task.
+      * failure_as_exception: Boolean. Whether test failures should throw a
+        recipe exception during the collet step.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -581,7 +584,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if shard_indices is None:
       shard_indices = range(shards)
     collect_step = functools.partial(
-        self._default_collect_step, failure_as_exception=True)
+        self._default_collect_step, failure_as_exception=failure_as_exception)
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
