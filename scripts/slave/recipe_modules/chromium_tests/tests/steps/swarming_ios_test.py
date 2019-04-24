@@ -47,6 +47,14 @@ def RunSteps(api):
           'bot id': 'dummy bot id',
           'pool': 'dummy pool',
           }
+  if platform == 'simulator':
+    task['test']['optional_dimensions'] = {
+        '60': [
+            {
+              'host os': 'other-dummy-OS',
+            }
+          ]
+        }
   test = api.chromium_tests.steps.SwarmingIosTest(
       'swarming_service_account', platform, config, task,
       upload_test_results=True, result_callback=result_callback,
@@ -109,6 +117,20 @@ def GenTests(api):
       api.path.exists(
           api.path['cleanup'].join('dummy task id_tmp_1', '10000',
                                    'full_results.json')) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('host_os_rewritten') +
+      api.properties(
+          mastername='tryserver.fake',
+          platform='simulator') +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] dummy step name on Mac',
+          ['--optional-dimension', 'os', 'other-dummy-OS', '60']
+      ) +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

@@ -47,7 +47,7 @@ def GenTests(api):
               'optional_dimensions': {
                 '60': [
                   {
-                    'os': 'Mac-10.13.6',
+                    'host os': 'Mac-10.13.6',
                   },
                 ],
               },

@@ -2545,6 +2545,7 @@ class SwarmingIosTest(SwarmingTest):
     swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
 
     if self._platform == 'simulator':
+      # TODO(crbug.com/955856): We should move away from 'host os'.
       swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
     elif self._platform == 'device':
       swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
@@ -2574,6 +2575,20 @@ class SwarmingIosTest(SwarmingTest):
 
     swarming_task.optional_dimensions = task['test'].get(
         'optional_dimensions')
+    if swarming_task.optional_dimensions:
+      for dimension_list in swarming_task.optional_dimensions.values():
+        for dimension_set in dimension_list:
+          if self._platform == 'simulator' and 'host os' in dimension_set:
+            # We don't want both values to be set, as the syntax for
+            # this won't work quite right in the swarming task api, we have
+            # no good way to specify the value twice. And, there should
+            # be no need for this.
+            # TODO(crbug.com/955856): we should just move away from 'host os'.
+            assert 'os' not in dimension_set
+            dimension_set['os'] = dimension_set['host os']
+            dimension_set.pop('host os')
+
+
 
     api.chromium_swarming.trigger_task(swarming_task)
     task['task'] = swarming_task
