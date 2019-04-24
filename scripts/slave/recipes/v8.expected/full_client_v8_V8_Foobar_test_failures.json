@@ -93,7 +93,6 @@
       "--outdir",
       "out",
       "--buildbot",
-      "--timeout=200",
       "--random-seed=831298184",
       "bot_default",
       "--variants=more,dev",

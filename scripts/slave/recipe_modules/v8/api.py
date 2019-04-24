@@ -1259,8 +1259,12 @@ class V8Api(recipe_api.RecipeApi):
       '--mode', self.m.chromium.c.build_config_fs,
       '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
       '--buildbot',
-      '--timeout=200',
     ]
+
+    # TODO(machenbach): Remove exception for branches once tested on main
+    # waterfall.
+    if self.m.properties['mastername'] == 'client.v8.branches':
+      full_args.append('--timeout=200')  # pragma: no cover
 
     # Add optional non-standard root directory for test suites.
     if test.get('test_root'):

@@ -149,7 +149,6 @@
       "--outdir",
       "out",
       "--buildbot",
-      "--timeout=200",
       "--random-seed=831298184",
       "mjsunit/regression/*",
       "intl/foo",
