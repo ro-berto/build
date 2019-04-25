@@ -106,8 +106,7 @@ class CollectTaskTest(unittest.TestCase):
       '--swarming-arg1', '1',
       'positional1',
     ]
-    merge_script = os.path.join(
-        RESOURCES_DIR, 'standard_isolated_script_merge.py')
+    merge_script = os.path.join(RESOURCES_DIR, 'noop_merge.py')
     task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
     os.makedirs(task_output_dir)
     summary_json = os.path.join(task_output_dir, 'summary.json')
