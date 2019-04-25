@@ -489,7 +489,7 @@ def GenTests(api):
         'perf',
         parent_buildername='V8 Foobar - builder',
         parent_bot_config=release_bot_config,
-        parent_test_spec='{"tests": [{"name": "perf"}]}',
+        parent_test_spec='{"tests": [{"name": "perf_integration"}]}',
     )
   )
 

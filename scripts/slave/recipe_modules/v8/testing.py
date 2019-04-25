@@ -136,9 +136,9 @@ TEST_CONFIGS = freeze({
     'test_args': ['--extra-flags=--optimize-for-size'],
     'variants': V8Variant('default'),
   },
-  'perf': {
+  'perf_integration': {
     'tool': 'run-perf',
-    'isolated_target': 'perf',
+    'isolated_target': 'perf_integration',
   },
   'test262': {
     'name': 'Test262 - no variants',
