@@ -12,9 +12,9 @@ DEPS = [
 
 def RunSteps(api):
   # Code coverage for these methods.
-  api.step('client path', [])
+  result = api.step('client path', [])
 
-  api.step.active_result.step_text = api.swarming_client.path
+  result.presentation.step_text = str(api.swarming_client.path)
 
   try:
     api.swarming_client.checkout()

@@ -541,11 +541,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
     if self._test_data.enabled and test_succeeded:
-      step_result.raw_io.output_dir = {
+      task_output_dir = {
         '0/perftest-output.json': self.test_api.example_chartjson(),
         'logcats': 'foo',
       }
-    task_output_dir = step_result.raw_io.output_dir
+    else:
+      task_output_dir = step_result.raw_io.output_dir
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):

@@ -1,7 +1,10 @@
 [
   {
     "cmd": [],
-    "name": "client path"
+    "name": "client path",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@None/tools/swarming_client@@@"
+    ]
   },
   {
     "cmd": [

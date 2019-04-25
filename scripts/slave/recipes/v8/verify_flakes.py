@@ -82,7 +82,9 @@ def RunSteps(api):
   if len(configs) > MAX_CONFIGS:
     too_many_flakes = api.step('Too many flake configs', cmd=None)
     too_many_flakes.presentation.status = api.step.FAILURE
-    too_many_flakes.step_text = 'Running on first %d configs only' % MAX_CONFIGS
+    too_many_flakes.presentation.step_text = (
+      'Running on first %d configs only' % MAX_CONFIGS
+    )
     configs = configs[:MAX_CONFIGS]
 
   v8_commits, _ = api.gitiles.log(

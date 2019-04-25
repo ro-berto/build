@@ -168,7 +168,8 @@ def GenTests(api):
               'dummy step name on iOS-dummy OS',
               api.chromium_swarming.summary(
                   dispatched_task_step_test_data=None,
-                  data=generate_summary(state, retcode), retcode=retcode)) +
+                  data=generate_summary(state, retcode),
+                  retcode=int(retcode))) +
           api.post_process(post_process.StatusAnyFailure) +
           api.post_process(post_process.DropExpectation)
       )
