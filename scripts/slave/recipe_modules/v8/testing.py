@@ -744,7 +744,7 @@ class V8RunPerf(V8CompositeSwarmingTest):
     return [
       V8GenericSwarmingTest(
           self.test_step_config, self.api,
-          title='JSTest (%d)' % i,
+          title='JSTests%d' % i,
           command=[
             'tools/run_perf.py',
             'test/js-perf-test/JSTests%d.json' % i,
