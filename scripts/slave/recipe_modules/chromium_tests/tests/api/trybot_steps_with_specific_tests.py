@@ -678,3 +678,60 @@ def GenTests(api):
                   json.dumps({'per_iteration_data': []}),
                   retcode=1), failure=True))
   )
+
+  gtest_results =  {
+    'per_iteration_data': [{
+      'Test.One': [
+        {
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'FAILURE',
+        },
+        {
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'SUCCESS',
+        },
+      ],
+      'Test.Two': [
+        {
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'FAILURE',
+        },
+        {
+          'elapsed_time_ms': 0,
+          'output_snippet': '',
+          'status': 'FAILURE',
+        },
+      ],
+    }]
+  }
+
+  yield (
+      api.test('without_patch_only_retries_relevant_tests') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(gtest_results),
+                  retcode=1), failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(gtest_results),
+                  retcode=1), failure=True)) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run (without patch).[trigger] base_unittests '
+          '(without patch)', ['--gtest_filter=Test.Two']) +
+      api.post_process(post_process.DropExpectation)
+  )

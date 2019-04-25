@@ -325,7 +325,12 @@ class Test(object):
     tests ran in that case. It doesn't make sense to ask how this test should
     run when retried, if it hasn't run already.
     """
-    assert self._test_runs['with patch']['total_tests_ran'], (
+    with_patch_total = self._test_runs['with patch']['total_tests_ran']
+    with_patch_retry_total = (
+        self._test_runs['retry shards with patch']['total_tests_ran']
+        if 'retry shards with patch' in self._test_runs else 0)
+    total_tests_ran = max(with_patch_total, with_patch_retry_total)
+    assert total_tests_ran, (
         "We cannot compute the total number of tests to re-run if no tests "
         "were run 'with patch'. Expected %s to contain key 'total_tests_ran', "
         "but it didn't" % (self._test_runs['with patch']))
@@ -349,8 +354,7 @@ class Test(object):
     return int(min(min(
         max(
             original_num_shards * REPEAT_COUNT_FOR_FAILING_TESTS *
-                (float(num_tests_to_retry) /
-                    self._test_runs['with patch']['total_tests_ran']),
+                (float(num_tests_to_retry) / total_tests_ran),
             1),
         original_num_shards), num_tests_to_retry))
 
@@ -420,19 +424,6 @@ class Test(object):
       data['patched'] = suffix in (
           'with patch', 'retry shards with patch')
     return data
-
-  def failures_or_invalid_results(self, suffix):
-    """If results are valid, returns the test failures.
-
-    Returns: A tuple (valid_results, failures).
-      valid_results: A Boolean indicating whether results are valid.
-      failures: A set of failures. Only valid if valid_results is True.
-    """
-    if self.has_valid_results(suffix):
-      # GTestResults.failures is a set whereas TestResults.failures is a dict.
-      # In both cases, we want a set.
-      return (True, set(self.failures(suffix)))
-    return (False, None)
 
   def with_patch_failures_including_retry(self):
     """Returns test failures with the patch applied.
@@ -552,12 +543,12 @@ class Test(object):
     if suffix in ('with patch', 'retry shards with patch'):
       return None
 
-    # For the second invocation, run previously failing tests.
+    # For the second invocation, run previously deterministically failing tests.
     # When a patch is adding a new test (and it fails), the test runner is
     # required to just ignore the unknown test.
     if suffix == 'without patch':
       # Invalid results should be treated as if every test failed.
-      valid_results, failures = self.failures_or_invalid_results('with patch')
+      valid_results, failures = self.with_patch_failures_including_retry()
       return sorted(failures) if valid_results else None
 
     # If we don't recognize the step, then return None. This makes it easy for
