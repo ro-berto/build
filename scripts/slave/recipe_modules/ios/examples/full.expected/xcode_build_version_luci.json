@@ -589,7 +589,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
     "name": "isolate.\"xcode version\" is DEPRECATED",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

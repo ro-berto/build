@@ -961,9 +961,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "test r1.infra status",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

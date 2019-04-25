@@ -825,7 +825,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
     "name": "trigger.[trigger] fake test 3 (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

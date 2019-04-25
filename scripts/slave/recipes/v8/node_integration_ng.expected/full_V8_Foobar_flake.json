@@ -37,7 +37,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/node-ci/node",
     "name": "test default (flakes)",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"

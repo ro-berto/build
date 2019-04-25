@@ -590,7 +590,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
     "name": "isolate.\"xcode version\" is DEPRECATED",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

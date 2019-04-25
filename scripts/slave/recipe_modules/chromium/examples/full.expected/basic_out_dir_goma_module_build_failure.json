@@ -630,9 +630,6 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
     "name": "infra status",
     "~followup_annotations": [
       "@@@STEP_TEXT@GOMA_BUILD_ERROR@@@",

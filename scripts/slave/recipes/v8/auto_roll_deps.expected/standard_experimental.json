@@ -267,7 +267,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/src/v8",
     "name": "fake roll deps"
   },
   {

@@ -1,9 +1,6 @@
 [
   {
     "cmd": [],
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
     "name": "test"
   },
   {

@@ -260,12 +260,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/src",
-    "env_prefixes": {
-      "PATH": [
-        "[BUILDER_CACHE]/src/third_party/depot_tools"
-      ]
-    },
     "name": "fake resubmit to CQ",
     "~followup_annotations": [
       "@@@STEP_TEXT@Stale roll found. Resubmitted to CQ.@@@"
