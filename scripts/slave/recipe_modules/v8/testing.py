@@ -857,11 +857,9 @@ class Failure(object):
       # Extra arguments passed to the V8 test runner.
       'extra_args': extra_args,
     }
-    return (
-        'echo \'%s\' | '
-        'buildbucket.py put -b luci.v8.try.triggered -n v8_flako -p -'
-        % json.dumps(properties, sort_keys=True)
-    )
+    return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
+        '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
+        for k, v in properties.iteritems())
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
