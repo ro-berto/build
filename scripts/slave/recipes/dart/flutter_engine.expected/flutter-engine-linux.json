@@ -4055,6 +4055,7 @@
     "cmd": [
       "dart",
       "dev/bots/test.dart",
+      "--update-goldens",
       "--local-engine=host_debug",
       "--local-engine-src-path=[CACHE]/builder/src"
     ],
