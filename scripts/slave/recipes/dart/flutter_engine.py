@@ -240,7 +240,6 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
   ]
   test_cmd = [
     'dart', 'dev/bots/test.dart',
-    '--update-goldens',
   ]
   api.step('disable flutter analytics', [
       flutter_cmd, 'config', '--no-analytics'])
