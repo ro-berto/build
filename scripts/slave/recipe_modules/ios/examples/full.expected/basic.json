@@ -3128,8 +3128,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3217,8 +3216,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -3331,8 +3329,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -3445,8 +3442,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -3580,8 +3576,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -3669,8 +3664,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@"
     ]
   },
   {
@@ -3758,8 +3752,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/160000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/160000@@@"
     ]
   },
   {
@@ -3847,8 +3840,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@"
     ]
   },
   {
@@ -3936,8 +3928,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/180000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/180000@@@"
     ]
   },
   {
@@ -4025,8 +4016,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/190000@@@",
-      "@@@STEP_LINK@test data@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/190000@@@"
     ]
   },
   {

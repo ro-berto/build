@@ -2594,18 +2594,6 @@ class SwarmingIosTest(SwarmingTest):
 
     step_result = api.chromium_swarming.collect_task(task['task'])
 
-    # We only run one shard, so the results we're interested in will
-    # always be shard 0.
-    swarming_summary = step_result.chromium_swarming.summary['shards'][0]
-
-    # Link to isolate file browser for files emitted by the test.
-    if swarming_summary.get('outputs_ref', None):
-      outputs_ref = swarming_summary['outputs_ref']
-      step_result.presentation.links['test data'] = (
-        '%s/browse?namespace=%s&hash=%s' % (
-          outputs_ref['isolatedserver'], outputs_ref['namespace'],
-          outputs_ref['isolated']))
-
     # Add any iOS test runner results to the display.
     shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
     test_summary_path = api.path.join(shard_output_dir, 'summary.json')
