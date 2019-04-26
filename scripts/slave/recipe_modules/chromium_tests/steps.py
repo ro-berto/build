@@ -2635,11 +2635,12 @@ class SwarmingIosTest(SwarmingTest):
           api, suffix, api.test_utils.canonical.result_format())
 
     # Upload test results JSON to the flakiness dashboard.
-    shard_output_dir = api.path.join(
+    shard_output_dir_full_path = api.path.join(
         task['task'].task_output_dir,
         task['task'].get_task_shard_output_dirs()[0])
     if api.bot_update.last_returned_properties and self._upload_test_results:
-      test_results = api.path.join(shard_output_dir, 'full_results.json')
+      test_results = api.path.join(shard_output_dir_full_path,
+                                   'full_results.json')
       test_type = task['step name']
       if api.path.exists(test_results):
         api.test_results.upload(
@@ -2653,12 +2654,13 @@ class SwarmingIosTest(SwarmingTest):
         )
 
     # Upload performance data result to the perf dashboard.
-    perf_results = api.path.join(
+    perf_results_path = api.path.join(
       shard_output_dir, 'Documents', 'perf_result.json')
     if self._result_callback:
       self._result_callback(name=task['test']['app'], step_result=step_result)
-    elif api.path.exists(perf_results):
-      data = self._get_perftest_data(perf_results, api)
+    elif perf_results_path in step_result.raw_io.output_dir:
+      data = api.json.loads(
+          step_result.raw_io.output_dir[perf_results_path])
       data_decode = data['Perf Data']
       data_result = []
       for testcase in data_decode:
@@ -2681,25 +2683,6 @@ class SwarmingIosTest(SwarmingTest):
     if deterministic_failures:
       return 1
     return 0
-
-  def _get_perftest_data(self, path, api):
-    # Use fake data for recipe testing.
-    if self._use_test_data:
-      data = {
-        'Perf Data' : {
-          'startup test' : {
-            'unit' : 'seconds',
-            'value' : {
-              'finish_launching' : 0.55,
-              'become_active' : 0.68,
-            }
-          }
-        }
-      }
-    else:
-      with open(path) as f: # pragma: no cover
-        data = api.json.loads(f.read())
-    return data
 
   def validate_task_results(self, api, step_result):
     raise NotImplementedError()  # pragma: no cover

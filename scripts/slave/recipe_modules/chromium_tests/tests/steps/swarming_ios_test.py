@@ -161,9 +161,37 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  def generate_perf_results_placeholder(api):
+    summary_contents = {
+      'logs': {
+        'passed tests': ['PASSED_TEST'],
+      },
+      'step_text': 'dummy step text'
+    }
+
+    perf_data = {
+      'Perf Data' : {
+        'startup test' : {
+          'unit' : 'seconds',
+          'value' : {
+            'finish_launching' : 0.55,
+            'become_active' : 0.68,
+          }
+        }
+      }
+    }
+    summary_path = '10000/summary.json'
+    perf_results_path = '10000/Documents/perf_result.json'
+    output_dir_data = {
+        summary_path: json.dumps(summary_contents),
+        perf_results_path: json.dumps(perf_data)
+    }
+    return api.raw_io.output_dir(output_dir_data)
+
   yield (
       api.test('perf_results') +
-      generate_passing_test(api, simulator=False) +
+      api.step_data('dummy step name on iOS-dummy OS',
+                    generate_perf_results_placeholder(api)) +
       api.properties(
         mastername='tryserver.fake',
       ) +
