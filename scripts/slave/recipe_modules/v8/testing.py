@@ -750,6 +750,9 @@ class V8RunPerf(V8CompositeSwarmingTest):
             'test/js-perf-test/JSTests%d.json' % i,
             '--arch', 'x64',
             '--buildbot',
+            # Low run-count for more throughput. Run fastest shard (1) twice
+            # to cover code adding up multiple results.
+            '--run-count=%d' % (2 if i == 1 else 1),
           ],
       ) for i in range(1, 6)
     ]

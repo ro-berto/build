@@ -135,7 +135,8 @@
       "test/js-perf-test/JSTests1.json",
       "--arch",
       "x64",
-      "--buildbot"
+      "--buildbot",
+      "--run-count=2"
     ],
     "name": "trigger tests.[trigger] JSTests1"
   },
@@ -230,7 +231,8 @@
       "test/js-perf-test/JSTests2.json",
       "--arch",
       "x64",
-      "--buildbot"
+      "--buildbot",
+      "--run-count=1"
     ],
     "name": "trigger tests.[trigger] JSTests2"
   },
@@ -325,7 +327,8 @@
       "test/js-perf-test/JSTests3.json",
       "--arch",
       "x64",
-      "--buildbot"
+      "--buildbot",
+      "--run-count=1"
     ],
     "name": "trigger tests.[trigger] JSTests3"
   },
@@ -420,7 +423,8 @@
       "test/js-perf-test/JSTests4.json",
       "--arch",
       "x64",
-      "--buildbot"
+      "--buildbot",
+      "--run-count=1"
     ],
     "name": "trigger tests.[trigger] JSTests4"
   },
@@ -515,7 +519,8 @@
       "test/js-perf-test/JSTests5.json",
       "--arch",
       "x64",
-      "--buildbot"
+      "--buildbot",
+      "--run-count=1"
     ],
     "name": "trigger tests.[trigger] JSTests5"
   },
