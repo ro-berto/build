@@ -2676,13 +2676,7 @@ class SwarmingIosTest(SwarmingTest):
       api.perf_dashboard.set_default_config()
       api.perf_dashboard.add_point(data_result)
 
-    results_valid = self.has_valid_results(suffix)
-    if not results_valid:
-      return 2
-    deterministic_failures = self.deterministic_failures(suffix)
-    if deterministic_failures:
-      return 1
-    return 0
+    return step_result
 
   def validate_task_results(self, api, step_result):
     raise NotImplementedError()  # pragma: no cover

@@ -886,13 +886,20 @@ class iOSApi(recipe_api.RecipeApi):
     failures = set()
     infra_failure = False
     for test in triggered_tests:
-      result = test.run(self.m, suffix='')
-      if result > 0:
-        failures.add(test.name)
-      if result == 2:
-        infra_failure = True
+      test.run(self.m, suffix='')
 
     self.m.chromium_swarming.report_stats()
+
+    for test in triggered_tests:
+      results_valid = test.has_valid_results(suffix='')
+      if not results_valid:
+        infra_failure = True
+        failures.add(test.name)
+        continue
+
+      deterministic_failures = test.deterministic_failures(suffix='')
+      if deterministic_failures:
+        failures.add(test.name)
 
     if failures:
       exception_type = (
