@@ -578,7 +578,7 @@ TRYBOTS = freeze({
           },
         ],
       },
-      # Manually triggered GPU bots.
+      # Manually triggered GPU trybots.
       'gpu-manual-try-linux-amd-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
@@ -747,6 +747,96 @@ TRYBOTS = freeze({
           },
         ],
       },
+      # Manually triggered GPU trybots.
+      'gpu-fyi-try-mac-amd-10.14': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI 10.14 Release (AMD)',
+      }),
+      'gpu-fyi-try-mac-amd-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac dEQP Builder',
+        'tester': 'Mac FYI dEQP Release AMD',
+      }),
+      'gpu-fyi-try-mac-amd-pro-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac Pro FYI Release (AMD)',
+      }),
+      'gpu-fyi-try-mac-amd-retina-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder (dbg)',
+        'tester': 'Mac FYI Retina Debug (AMD)',
+      }),
+      'gpu-fyi-try-mac-amd-retina-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Experimental Retina Release (AMD)',
+      }),
+      'gpu-fyi-try-mac-amd-retina-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Retina Release (AMD)',
+      }),
+      'gpu-fyi-try-mac-asan': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Mac FYI GPU ASAN Release',
+      }),
+      'gpu-fyi-try-mac-intel-10.14': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI 10.14 Release (Intel)',
+      }),
+      'gpu-fyi-try-mac-intel-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder (dbg)',
+        'tester': 'Mac FYI Debug (Intel)',
+      }),
+      'gpu-fyi-try-mac-intel-dqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac dEQP Builder',
+        'tester': 'Mac FYI dEQP Release Intel',
+      }),
+      'gpu-fyi-try-mac-intel-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Experimental Release (Intel)',
+      }),
+      'gpu-fyi-try-mac-intel-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Release (Intel)',
+      }),
+      'gpu-fyi-try-mac-nvidia-10.14': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI 10.14 Release (NVIDIA)',
+      }),
+      'gpu-fyi-try-mac-nvidia-retina-dbg': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder (dbg)',
+        'tester': 'Mac FYI Retina Debug (NVIDIA)',
+      }),
+      'gpu-fyi-try-mac-nvidia-retina-exp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Experimental Retina Release (NVIDIA)',
+      }),
+      'gpu-fyi-try-mac-nvidia-retina-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Mac Builder',
+        'tester': 'Mac FYI Retina Release (NVIDIA)',
+      }),
+      'gpu-try-mac-amd-retina-dbg': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Mac Builder (dbg)',
+        'tester': 'Mac Retina Debug (AMD)',
+      }),
+      'gpu-try-mac-intel-dbg': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Mac Builder (dbg)',
+        'tester': 'Mac Debug (Intel)',
+      }),
     },
   },
   'tryserver.chromium.perf': {
@@ -876,7 +966,7 @@ TRYBOTS = freeze({
           },
         ],
       },
-      # Manually triggered GPU bots.
+      # Manually triggered GPU trybots.
       'gpu-manual-try-win7-amd-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder (dbg)',
