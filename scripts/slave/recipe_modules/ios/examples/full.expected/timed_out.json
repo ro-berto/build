@@ -721,7 +721,7 @@
     },
     "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Test timed out.@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -740,8 +740,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Failed fake test (fake device iOS 8.1)."
     },

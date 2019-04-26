@@ -721,7 +721,7 @@
     },
     "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No suitable Swarming bot found in time.@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",

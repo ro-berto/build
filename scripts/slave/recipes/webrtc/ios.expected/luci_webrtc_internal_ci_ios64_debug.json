@@ -3960,7 +3960,14 @@
     ]
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
+      },
+      "humanReason": "Failed common_audio_unittests (iPhone 6s iOS 12.0), common_video_unittests (iPhone 6s iOS 12.0), modules_tests (iPhone 6s iOS 12.0), modules_unittests (iPhone 6s iOS 12.0), rtc_pc_unittests (iPhone 6s iOS 12.0), rtc_stats_unittests (iPhone 6s iOS 12.0), system_wrappers_unittests (iPhone 6s iOS 12.0), test_support_unittests (iPhone 6s iOS 12.0), tools_unittests (iPhone 6s iOS 12.0), video_capture_tests (iPhone 6s iOS 12.0), video_engine_tests (iPhone 6s iOS 12.0)."
+    },
     "name": "$result"
   }
 ]

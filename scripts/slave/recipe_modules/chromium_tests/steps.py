@@ -2586,8 +2586,6 @@ class SwarmingIosTest(SwarmingTest):
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    failure = False
-    infra_failure = False
     task = self._task
 
     assert task['task'], (
@@ -2599,15 +2597,6 @@ class SwarmingIosTest(SwarmingTest):
     # We only run one shard, so the results we're interested in will
     # always be shard 0.
     swarming_summary = step_result.chromium_swarming.summary['shards'][0]
-    state = swarming_summary['state']
-
-    exit_code = None
-    if state == 'COMPLETED':
-      exit_code = 0
-    exit_code = swarming_summary.get('exit_code', exit_code)
-
-    if isinstance(exit_code, basestring):
-      exit_code = int(exit_code)
 
     # Link to isolate file browser for files emitted by the test.
     if swarming_summary.get('outputs_ref', None):
@@ -2617,39 +2606,10 @@ class SwarmingIosTest(SwarmingTest):
           outputs_ref['isolatedserver'], outputs_ref['namespace'],
           outputs_ref['isolated']))
 
-    # Interpret the result and set the display appropriately.
-    if state == 'COMPLETED':
-      # Task completed and we got an exit code from the iOS test runner.
-      if exit_code == 1:
-        step_result.presentation.status = api.step.FAILURE
-        failure = True
-      elif exit_code == 2:
-        # The iOS test runner exits 2 to indicate an infrastructure failure.
-        step_result.presentation.status = api.step.EXCEPTION
-        infra_failure = True
-    elif state == 'TIMED_OUT':
-      # The task was killed for taking too long. This is a test failure
-      # because the test itself hung.
-      step_result.presentation.status = api.step.FAILURE
-      step_result.presentation.step_text = 'Test timed out.'
-      failure = True
-    elif state == 'EXPIRED':
-      # No Swarming bot accepted the task in time.
-      step_result.presentation.status = api.step.EXCEPTION
-      step_result.presentation.step_text = (
-        'No suitable Swarming bot found in time.'
-      )
-      infra_failure = True
-    else:
-      step_result.presentation.status = api.step.EXCEPTION
-      step_result.presentation.step_text = (
-        'Unexpected infrastructure failure.'
-      )
-      infra_failure = True
-
     # Add any iOS test runner results to the display.
     shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
     test_summary_path = api.path.join(shard_output_dir, 'summary.json')
+
     if test_summary_path in step_result.raw_io.output_dir:
       test_summary_json = api.json.loads(
           step_result.raw_io.output_dir[test_summary_path])
@@ -2682,6 +2642,9 @@ class SwarmingIosTest(SwarmingTest):
       if test_summary_json.get('step_text'):
         step_result.presentation.step_text = '%s<br />%s' % (
           step_result.presentation.step_text, test_summary_json['step_text'])
+    else:
+      self.update_test_run(
+          api, suffix, api.test_utils.canonical.result_format())
 
     # Upload test results JSON to the flakiness dashboard.
     shard_output_dir = api.path.join(
@@ -2723,9 +2686,11 @@ class SwarmingIosTest(SwarmingTest):
       api.perf_dashboard.set_default_config()
       api.perf_dashboard.add_point(data_result)
 
-    if infra_failure:
+    results_valid = self.has_valid_results(suffix)
+    if not results_valid:
       return 2
-    if failure:
+    deterministic_failures = self.deterministic_failures(suffix)
+    if deterministic_failures:
       return 1
     return 0
 

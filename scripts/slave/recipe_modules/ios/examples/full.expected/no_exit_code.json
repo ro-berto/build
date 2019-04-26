@@ -721,7 +721,7 @@
     },
     "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Unexpected infrastructure failure.@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -735,7 +735,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 (failed)@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

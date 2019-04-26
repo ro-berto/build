@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from recipe_engine import post_process
 
 DEPS = [
@@ -24,116 +26,152 @@ def RunSteps(api):
   api.ios.test_swarming()
 
 def GenTests(api):
-  yield (
-    api.test('basic')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-    )
-    + api.buildbucket.ci_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x64"',
-        'use_goma=true',
-      ],
-      'xcode build version': '9abc',
-      'bucket': 'mock-gcs-bucket',
-      'upload': [
+  def generate_test_results_placeholder(api, swarming_number):
+    summary_contents = {
+      'logs': {
+        'passed tests': ['PASSED_TEST'],
+      },
+      'step_text': 'dummy step text'
+    }
+
+    summary_path = str(swarming_number) + '/summary.json'
+    return api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})
+
+  BASIC_TEST_SUITES = [
+    'fake test 0 (fake device 0 iOS 11.0) shard 0',
+    'fake test 0 (fake device 0 iOS 11.0) shard 1',
+    'fake test 0 (fake device 0 iOS 11.0) shard 2',
+    'fake test 1 (fake device 1 iOS 8.1)',
+    'fake test 2 (fake device 2 iOS 8.1) on Mac-10.12',
+    'fake included test 1 (fake device 1 iOS 8.1)',
+    'fake included test 2 (fake device 1 iOS 8.1)',
+    'fake test 2 (fake device 2 iOS 7.1)',
+    'fake included test 1 (fake device 2 iOS 7.1)',
+    'fake included test 2 (fake device 2 iOS 7.1)',
+  ]
+
+  def gen_basic(api):
+    result = (api.test('basic')
+      + api.platform('mac', 64)
+      + api.properties(
+        mastername='chromium.fake',
+        bot_id='fake-vm',
+      )
+      + api.buildbucket.ci_build(
+        project='chromium',
+        builder='ios',
+        build_number=1,
+        revision='HEAD',
+        git_repo='https://chromium.googlesource.com/chromium/src',
+      )
+      + api.ios.make_test_build_config({
+        'gn_args': [
+          'is_debug=true',
+          'target_cpu="x64"',
+          'use_goma=true',
+        ],
+        'xcode build version': '9abc',
+        'bucket': 'mock-gcs-bucket',
+        'upload': [
+          {
+            'artifact': 'Chrome.app',
+          },
+          {
+            'artifact': 'Chrome.app.arm.breakpad',
+            'symupload': 'https://clients2.google.com/cr/symbol',
+          },
+        ],
+        'tests': [
+          {
+            'app': 'fake test 0',
+            'device type': 'fake device 0',
+            'os': '11.0',
+            'shard size': 2,
+          },
+          {
+            'app': 'fake test 1',
+            'device type': 'fake device 1',
+            'os': '8.1',
+            'test args': [
+              '--fake-arg-1',
+              '--fake-arg-2',
+            ],
+          },
+          {
+            'app': 'fake test 2',
+            'device type': 'fake device 2',
+            'os': '8.1',
+            'host os': 'Mac-10.12',
+            'shards': 4,
+          },
+          {
+            'include': 'fake include.json',
+            'device type': 'fake device 1',
+            'os': '8.1',
+          },
+          {
+            'app': 'fake test 2',
+            'device type': 'fake device 2',
+            'os': '7.1',
+          },
+          {
+            'include': 'fake include.json',
+            'device type': 'fake device 2',
+            'os': '7.1',
+          },
+        ],
+        'triggered bots': [
+            'fake child 1',
+            'fake child 2',
+        ],
+      })
+      + api.ios.make_test_build_configs_for_children([
         {
-          'artifact': 'Chrome.app',
-        },
-        {
-          'artifact': 'Chrome.app.arm.breakpad',
-          'symupload': 'https://clients2.google.com/cr/symbol',
-        },
-      ],
-      'tests': [
-        {
-          'app': 'fake test 0',
-          'device type': 'fake device 0',
-          'os': '11.0',
-          'shard size': 2,
-        },
-        {
-          'app': 'fake test 1',
-          'device type': 'fake device 1',
-          'os': '8.1',
-          'test args': [
-            '--fake-arg-1',
-            '--fake-arg-2',
+          'tests': [
+            {
+              'app': 'fake child test 1',
+              'device type': 'fake child device 1',
+              'os': '8.1',
+            },
           ],
         },
         {
-          'app': 'fake test 2',
-          'device type': 'fake device 2',
-          'os': '8.1',
-          'host os': 'Mac-10.12',
-          'shards': 4,
+          'tests': [
+            {
+              'include': 'fake include.json',
+              'device type': 'fake child device 2',
+              'os': '9.0',
+            },
+          ],
         },
-        {
-          'include': 'fake include.json',
-          'device type': 'fake device 1',
-          'os': '8.1',
-        },
-        {
-          'app': 'fake test 2',
-          'device type': 'fake device 2',
-          'os': '7.1',
-        },
-        {
-          'include': 'fake include.json',
-          'device type': 'fake device 2',
-          'os': '7.1',
-        },
-      ],
-      'triggered bots': [
-          'fake child 1',
-          'fake child 2',
-      ],
-    })
-    + api.ios.make_test_build_configs_for_children([
-      {
-        'tests': [
-          {
-            'app': 'fake child test 1',
-            'device type': 'fake child device 1',
-            'os': '8.1',
-          },
-        ],
-      },
-      {
-        'tests': [
-          {
-            'include': 'fake include.json',
-            'device type': 'fake child device 2',
-            'os': '9.0',
-          },
-        ],
-      },
-    ])
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-    + api.path.exists(
-        api.path['cleanup'].join('0_1_tmp_3', '110000'),
-        api.path['cleanup'].join('0_1_tmp_3', '110000', 'full_results.json'),
-        api.path['cleanup'].join('0_2_tmp_4', '120000'),
-        api.path['cleanup'].join('0_2_tmp_4', '120000', 'full_results.json'),
-        api.path['cleanup'].join('1_tmp_5', '130000'),
-        api.path['cleanup'].join('1_tmp_5', '130000', 'full_results.json'),
-        api.path['cleanup'].join('1_tmp_5', '130000', 'Documents',
-                                 'perf_result.json'),
-    )
-  )
+      ])
+      + api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      )
+      + api.path.exists(
+          api.path['cleanup'].join('0_1_tmp_3', '110000'),
+          api.path['cleanup'].join('0_1_tmp_3', '110000', 'full_results.json'),
+          api.path['cleanup'].join('0_2_tmp_4', '120000'),
+          api.path['cleanup'].join('0_2_tmp_4', '120000', 'full_results.json'),
+          api.path['cleanup'].join('1_tmp_5', '130000'),
+          api.path['cleanup'].join('1_tmp_5', '130000', 'full_results.json'),
+          api.path['cleanup'].join('1_tmp_5', '130000', 'Documents',
+                                   'perf_result.json'),
+      ))
+
+    for index, test in enumerate(BASIC_TEST_SUITES):
+      if index == 0:
+        swarming_number = 10000
+      else:
+        swarming_number = 100000 + index * 10000
+      result += api.step_data(
+          test, generate_test_results_placeholder(api, swarming_number))
+
+    result += api.post_process(post_process.StatusSuccess)
+    return result
+
+  yield gen_basic(api)
 
   yield (
     api.test('errors')
@@ -233,7 +271,7 @@ def GenTests(api):
           }],
         })
     )
-    + api.post_process(post_process.StatusFailure)
+    + api.post_process(post_process.StatusException)
   )
 
   yield (
@@ -277,7 +315,7 @@ def GenTests(api):
           }],
         })
     )
-    + api.post_process(post_process.StatusFailure)
+    + api.post_process(post_process.StatusException)
     + api.post_process(post_process.DropExpectation)
   )
 

@@ -1072,7 +1072,14 @@
     ]
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
+      },
+      "humanReason": "Failed fake test (iPhone X iOS 8.0)."
+    },
     "name": "$result"
   }
 ]

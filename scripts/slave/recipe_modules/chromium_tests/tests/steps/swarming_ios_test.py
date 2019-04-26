@@ -66,76 +66,27 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
+  def generate_test_results_placeholder(api, failing_test):
+    summary_contents = {
+      'logs': {
+        'passed tests': ['PASSED_TEST'],
+      },
+      'step_text': 'dummy step text'
+    }
+    if failing_test:
+      summary_contents['logs']['failed tests'] = ['FAILED_TEST']
 
-  yield (
-      api.test('basic_simulator') +
-      api.properties(platform='simulator') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
+    summary_path = '10000/summary.json'
+    return api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})
 
-  summary_contents = {
-    'logs': {
-      'passed tests': ['PASSED_TEST'],
-      'flaked tests': ['FLAKED_TEST'],
-      'failed tests': ['FAILED_TEST'],
-    },
-    'step_text': 'dummy step text'
-  }
-  summary_path = '10000/summary.json'
-  yield (
-      api.test('test_results_parser') +
-      api.step_data(
-          'dummy step name on iOS-dummy OS',
-          api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
+  def generate_passing_test(api, simulator):
+    step_name = 'dummy step name on iOS-dummy OS'
+    if simulator:
+      step_name = 'dummy step name on Mac'
+    return api.step_data(
+        step_name, generate_test_results_placeholder(api, failing_test=False))
 
-  yield (
-      api.test('perf_results') +
-      api.properties(
-        mastername='tryserver.fake',
-      ) +
-      api.path.exists(
-          api.path['cleanup'].join('dummy task id_tmp_1', '10000', 'Documents',
-                                 'perf_result.json')) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('upload_to_flakiness') +
-      api.properties(
-        mastername='tryserver.fake',
-      ) +
-      api.path.exists(
-          api.path['cleanup'].join('dummy task id_tmp_1', '10000',
-                                   'full_results.json')) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('host_os_rewritten') +
-      api.properties(
-          mastername='tryserver.fake',
-          platform='simulator') +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] dummy step name on Mac',
-          ['--optional-dimension', 'os', 'other-dummy-OS', '60']
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  def generate_summary(state, exit_code):
+  def generate_failing_summary(state, exit_code):
     return {'shards': [
         {
           'bot_id': 'vm30',
@@ -160,6 +111,97 @@ def GenTests(api):
         }
     ]}
 
+  yield (
+      api.test('basic') +
+      generate_passing_test(api, simulator=False) +
+      api.post_process(post_process.StepSuccess,
+                       'dummy step name on iOS-dummy OS') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('basic_failure') +
+      api.override_step_data(
+          'dummy step name on iOS-dummy OS',
+          api.chromium_swarming.summary(
+              dispatched_task_step_test_data=generate_test_results_placeholder(
+                  api, failing_test=True),
+              data=generate_failing_summary('COMPLETED', 1),
+              retcode=0)) +
+      api.post_process(post_process.StepFailure,
+                       'dummy step name on iOS-dummy OS') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('basic_simulator') +
+      generate_passing_test(api, simulator=True) +
+      api.properties(platform='simulator') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  summary_contents = {
+    'logs': {
+      'passed tests': ['PASSED_TEST'],
+      'flaked tests': ['FLAKED_TEST'],
+      'failed tests': ['FAILED_TEST'],
+    },
+    'step_text': 'dummy step text'
+  }
+  summary_path = '10000/summary.json'
+  yield (
+      api.test('test_results_parser') +
+      api.step_data(
+          'dummy step name on iOS-dummy OS',
+          api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('perf_results') +
+      generate_passing_test(api, simulator=False) +
+      api.properties(
+        mastername='tryserver.fake',
+      ) +
+      api.path.exists(
+          api.path['cleanup'].join('dummy task id_tmp_1', '10000', 'Documents',
+                                 'perf_result.json')) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('upload_to_flakiness') +
+      generate_passing_test(api, simulator=False) +
+      api.properties(
+        mastername='tryserver.fake',
+      ) +
+      api.path.exists(
+          api.path['cleanup'].join('dummy task id_tmp_1', '10000',
+                                   'full_results.json')) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('host_os_rewritten') +
+      generate_passing_test(api, simulator=True) +
+      api.properties(
+          mastername='tryserver.fake',
+          platform='simulator') +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] dummy step name on Mac',
+          ['--optional-dimension', 'os', 'other-dummy-OS', '60']
+      ) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   for state in ['COMPLETED', 'TIMED_OUT', 'EXPIRED', 'DUMMY']:
     for retcode in ['1', 2]:
       yield (
@@ -168,7 +210,7 @@ def GenTests(api):
               'dummy step name on iOS-dummy OS',
               api.chromium_swarming.summary(
                   dispatched_task_step_test_data=None,
-                  data=generate_summary(state, retcode),
+                  data=generate_failing_summary(state, retcode),
                   retcode=int(retcode))) +
           api.post_process(post_process.StatusAnyFailure) +
           api.post_process(post_process.DropExpectation)
@@ -176,6 +218,7 @@ def GenTests(api):
 
   yield (
       api.test('result_callback') +
+      generate_passing_test(api, simulator=False) +
       api.properties(
         result_callback=lambda **kw: None,
       ) +

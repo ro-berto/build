@@ -4965,9 +4965,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipes/ios/unified_builder_tester.py#15)(api):**
 ### *recipes* / [ios:examples/full](/scripts/slave/recipe_modules/ios/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/ios/examples/full.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/ios/examples/full.py#9): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/examples/full.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/examples/full.py#21)(api):**
 ### *recipes* / [ios:tests/isolate](/scripts/slave/recipe_modules/ios/tests/isolate.py)
 
 [DEPS](/scripts/slave/recipe_modules/ios/tests/isolate.py#11): [ios](#recipe_modules-ios), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
