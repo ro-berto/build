@@ -17,10 +17,16 @@ _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME = (
     'bot_to_gerrit_line_num_mapping.json')
 
 # Set of valid extensions for source files that use Clang.
-_EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG = set([
+_EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG = set([
     '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h', '.m',
     '.hxx'
 ])
+
+# Map exclude_sources property value to files that are to be excluded from
+# coverage aggregates.
+_EXCLUDE_SOURCES = {
+    'all_test_files': r'.*test.*',
+}
 
 
 class ClangCoverageApi(recipe_api.RecipeApi):
@@ -109,6 +115,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self._metadata_dir = self.m.path.mkdtemp()
     return self._metadata_dir
 
+  def _get_source_exclusion_pattern(self):
+    if 'exclude_sources' in self.m.properties:
+      return _EXCLUDE_SOURCES.get(self.m.properties['exclude_sources'])
+    return []
+
   def profdata_dir(self, step_name=None):
     """Ensures a directory exists for writing the step-level merged profdata.
 
@@ -173,7 +184,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     """Fitlers source files with valid extensions.
 
     Set of valid extensions is defined in:
-      _EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG.
+      _EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG.
 
     Args:
       file_paths: A list of file paths relative to the checkout path.
@@ -185,7 +196,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     for file_path in file_paths:
       if any([
           file_path.endswith(extension)
-          for extension in _EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG
+          for extension in _EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG
       ]):
         source_files.append(file_path)
 
@@ -460,6 +471,10 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           self.metadata_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
       ])
     else:
+      pattern = self._get_source_exclusion_pattern()
+      if pattern:
+        args.extend(['--exclusion-pattern', pattern])
+
       args.extend(
           ['--component-mapping-path',
            self._generate_component_mapping()])

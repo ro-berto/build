@@ -270,7 +270,8 @@ def _compute_llvm_args(profdata_path,
                        llvm_cov_path,
                        binaries,
                        sources,
-                       num_threads=None):
+                       num_threads=None,
+                       exclusions=None):
   # Use as many cpu cores as possible for parallel processing of huge data.
   # Leave 5 cpu cores out for other processes in the bot.
   cpu_count = num_threads or max(10, psutil.cpu_count() - 5)
@@ -283,6 +284,9 @@ def _compute_llvm_args(profdata_path,
       '-num-threads',
       str(cpu_count),
   ]
+
+  if exclusions:
+    args.extend(['-ignore-filename-regex', exclusions])
 
   args.extend(['-instr-profile', profdata_path, binaries[0]])
   for b in binaries[1:]:
@@ -345,7 +349,7 @@ def _show_system_resource_usage(proc):
 
 
 def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
-                               output_dir):
+                               output_dir, exclusions):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
@@ -354,7 +358,8 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
 
     with open(coverage_json_file, 'w') as f_out, open(error_out_file,
                                                       'w') as f_error:
-      args = _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources)
+      args = _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
+                                exclusions=exclusions)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -627,7 +632,8 @@ def _split_metadata_in_shards_if_necessary(
 
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
-                       binaries, component_mapping, sources, diff_mapping):
+                       binaries, component_mapping, sources, diff_mapping,
+                       exclusions):
   """Generates code coverage metadata.
 
   Args:
@@ -643,6 +649,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
              per-cl coverage.
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
+    exclusions: A regex string to exclude matches from aggregation.
 
   Returns:
     None. This method doesn't return anything, instead, it writes the produced
@@ -652,7 +659,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   start_time = time.time()
   # For per-CL code coverage, we don't use the multi-threaded llvm-cov.
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
-                                    sources, output_dir)
+                                    sources, output_dir, exclusions)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '
@@ -776,6 +783,10 @@ def _parse_args(args):
       '--diff-mapping-path',
       type=str,
       help='absolute path to the file that stores the diff mapping')
+  parser.add_argument(
+      '--exclusion-pattern',
+      type=str,
+      help='regex pattern for sources to exclude from aggregation')
   return parser.parse_args(args=args)
 
 
@@ -823,7 +834,8 @@ def main():
 
   compressed_data = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
-      params.binaries, component_mapping, abs_sources, diff_mapping)
+      params.binaries, component_mapping, abs_sources, diff_mapping,
+      params.exclusion_pattern)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))

@@ -68,8 +68,49 @@ def GenTests(api):
       api.test('basic')
       + api.properties.generic(
           mastername='chromium.fyi',
-          buildername='linux-code-coverage',
+          buildername='linux-chromeos-code-coverage',
           buildnumber=54)
+      + api.post_process(
+          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TARGETS,
+          _NUM_TARGETS)
+      + api.post_process(
+          post_process.MustRun,
+          'merge profile data for %s targets' % _NUM_TARGETS)
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload merged.profdata')
+      + api.post_process(
+          post_process.DoesNotRun,
+          'generate line number mapping from bot to Gerrit')
+      + api.post_process(
+          post_process.MustRun,
+          'Run component extraction script to generate mapping')
+      + api.post_process(
+          post_process.MustRun,
+          'generate metadata for %s targets' % _NUM_TARGETS)
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload metadata')
+      + api.post_process(
+          post_process.DoesNotRun,
+          'generate html report for %s targets' % _NUM_TARGETS)
+      + api.post_process(
+          post_process.DoesNotRun, 'gsutil upload html report')
+      + api.post_process(
+          post_process.StepCommandContains, 'Finding merging errors',
+          ['--root-dir'])
+      + api.post_process(
+          post_process.StepCommandContains, 'generate metadata for %s targets' %
+          _NUM_TARGETS, ['None/out/Release/chrome'])
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      api.test('with_exclusions')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-chromeos-code-coverage',
+          buildnumber=54,
+          exclude_sources='all_test_files',
+      )
       + api.post_process(
           post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TARGETS,
           _NUM_TARGETS)

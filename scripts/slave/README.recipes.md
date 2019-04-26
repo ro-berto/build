@@ -1602,15 +1602,15 @@ Usage is generally discouraged.
 
 [DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [ClangCoverageApi](/scripts/slave/recipe_modules/clang_coverage/api.py#26)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ClangCoverageApi](/scripts/slave/recipe_modules/clang_coverage/api.py#32)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 This module contains apis to interact with llvm-cov and llvm-profdata.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#93)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#99)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#194)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#205)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1618,13 +1618,13 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#63)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#69)(self):**
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#105)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#111)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#221)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#232)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1632,7 +1632,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#112)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#123)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1641,22 +1641,22 @@ Args:
       save in in this dir. None for getting the parent directory to contain
       the dirs for all steps.
 
-&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#88)(self):**
+&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#94)(self):**
 
 Returns the path to the llvm-profdata executable.
 
-&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#75)(self):**
+&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#81)(self):**
 
 Returns the location of a script that merges raw profiles from shards.
 
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#98)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#104)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#365)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#376)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1665,11 +1665,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#70)(self):**
+&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#76)(self):**
 
 Returns the script that merges indexed profiles from multiple targets.
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#136)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#147)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)

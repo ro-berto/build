@@ -383,7 +383,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=None,
         sources=['/path/to/src/dir/file.cc'],
-        diff_mapping=diff_mapping)
+        diff_mapping=diff_mapping,
+        exclusions=None,
+    )
 
     expected_compressed_files = [{
         'path':
@@ -507,7 +509,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         binaries=['/path/to/binary1', '/path/to/binary2'],
         component_mapping=component_mapping,
         sources=[],
-        diff_mapping=None)
+        diff_mapping=None,
+        exclusions='.*bad_file.*',
+    )
 
     expected_compressed_components = [{
         'dirs': [
