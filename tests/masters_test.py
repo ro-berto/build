@@ -218,7 +218,6 @@ def main(argv):
       'master.chromium.android.fyi': 'ChromiumAndroidFyi',
       'master.chromium.clang': 'ChromiumClang',
       'master.chromium.perf': 'ChromiumPerf',
-      'master.client.art': 'ART',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
   }
