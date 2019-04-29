@@ -22,7 +22,7 @@ DEPS = [
 
 BUILD_CONFIG = 'Default'
 # TODO: Remove 'hello' when 'gn_all' successfully builds.
-BUILD_TARGET = ['hello', 'gn_all', 'demo', 'unittests']
+BUILD_TARGET = ['hello', 'gn_all', 'demo', 'openscreen_unittests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 def _GetHostToolLabel(platform):
@@ -72,7 +72,7 @@ def RunSteps(api):
           name='compile',
           ninja_command=ninja_cmd,
           ninja_log_outdir=output_path)
-    api.step('Run unit tests', [output_path.join('unittests')])
+    api.step('Run unit tests', [output_path.join('openscreen_unittests')])
 
 
 def GenTests(api):

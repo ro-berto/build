@@ -289,7 +289,7 @@
       "hello",
       "gn_all",
       "demo",
-      "unittests"
+      "openscreen_unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "compile"
@@ -397,7 +397,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/openscreen/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 20, \"hello\", \"gn_all\", \"demo\", \"unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 20, \"hello\", \"gn_all\", \"demo\", \"openscreen_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -461,7 +461,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/out/Default/unittests"
+      "[START_DIR]/openscreen/out/Default/openscreen_unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "Run unit tests"
