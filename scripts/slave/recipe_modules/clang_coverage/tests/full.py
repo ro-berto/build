@@ -18,7 +18,7 @@ DEPS = [
 
 
 # Number of tests. Needed by the tests.
-_NUM_TARGETS = 6
+_NUM_TARGETS = 7
 
 
 def RunSteps(api):
@@ -34,6 +34,7 @@ def RunSteps(api):
   api.clang_coverage._merge_scripts_location = api.path['start_dir']
 
   tests = [
+      api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
       api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.SwarmingGTestTest('xr_browser_tests'),
@@ -176,6 +177,12 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun,
           'generate line number mapping from bot to Gerrit')
+      # Tests that local isolated scripts are skipped for collecting code
+      # coverage data.
+      + api.post_process(
+          post_process.MustRun,
+          'filter binaries with valid coverage data for %s binaries' %
+          (_NUM_TARGETS - 1))
       + api.post_process(
           post_process.MustRun,
           'generate metadata for %s targets' % _NUM_TARGETS)
@@ -229,7 +236,8 @@ def GenTests(api):
     + api.buildbucket.try_build(
         project='chromium', builder='linux-coverage-rel')
     + api.override_step_data(
-      'get binaries with valid coverage data',
+      'filter binaries with valid coverage data for %s binaries' %
+      (_NUM_TARGETS - 1),
       step_test_data=lambda: self.m.json.test_api.output([]))
     + api.post_process(
         post_process.MustRun,

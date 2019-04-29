@@ -162,6 +162,14 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     # separate builder-tester setup.
     binaries = []
     for t in tests:
+      # There are a number of local isolated scripts such as
+      # check_static_initializers, checkdeps, checkperms etc. that introduce
+      # extra complexitites, meawhile, it's still unclear if there is any value
+      # in collecting code coverage data for them. So, for simplicity, skip
+      # tests that don't run on swarming for now.
+      if not t.runs_on_swarming:
+        continue
+
       target = t.isolate_target
       # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
       patterns = [
@@ -327,7 +335,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
     args.extend(binaries)
     step_result = self.m.python(
-        'get binaries with valid coverage data',
+        'filter binaries with valid coverage data for %s binaries' %
+        len(binaries),
         self.resource('get_binaries_with_valid_coverage_data.py'),
         args=args,
         step_test_data=lambda: self.m.json.test_api.output([
@@ -393,7 +402,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     }
     if additional_merge:
       new_merge['args'].extend([
-          '--additional-merge-script', additional_merge['script'],
+          '--additional-merge-script',
+          additional_merge['script'],
       ])
       for arg in additional_merge['args']:
         new_merge['args'].extend(['--additional-merge-script-args', arg])
