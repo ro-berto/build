@@ -32,7 +32,6 @@ per-file ct_top1k_perf.py=rmistry@chromium.org
 per-file goma_client.py=tikuta@chromium.org
 per-file goma_client.py=ukai@chromium.org
 per-file goma_client.py=yyanagisawa@chromium.org
-per-file gpu.py=kbr@chromium.org
 per-file nacl.py=bradnelson@chromium.org
 per-file nacl.py=dschuff@chromium.org
 per-file nacl.py=sbc@chromium.org
