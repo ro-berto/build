@@ -48,8 +48,9 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
     },
     'enable_package_transfer': True,
     'gclient_config': config_name,
+    'gclient_apply_config': [],
     'testing': {
-      'platform': 'linux' if platform == 'android' else platform,
+      'platform': 'linux' if platform in ('android', 'chromeos') else platform,
     },
     'tests': tests,
   }
@@ -60,7 +61,9 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
     spec['chromium_apply_config'] = ['android', 'android_internal_isolate_maps']
     spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
-    spec['gclient_apply_config'] = ['android']
+    spec['gclient_apply_config'] += ['android']
+  elif platform == 'chromeos':
+    spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
 
 
   # TODO(803137): remove setting 'swarming_service_account' once all perf
@@ -76,13 +79,15 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
 def BuildSpec(
   config_name, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
-  run_sizes=True):
+  run_sizes=True, cros_board=None, target_arch=None,
+  extra_gclient_apply_config=None):
   if not compile_targets:
     compile_targets = ['chromium_builder_perf']
 
   tests = []
     # TODO: Run sizes on Android.
-  if run_sizes and not platform == 'android':
+    # TODO (crbug.com/953108): do not run test for chromeos for now
+  if run_sizes and not platform in ('android', 'chromeos'):
     tests = [steps.SizesStep('https://chromeperf.appspot.com', config_name)]
 
   spec = _BaseSpec(
@@ -101,6 +106,15 @@ def BuildSpec(
   spec['compile_targets'] = compile_targets
   if extra_compile_targets:
     spec['compile_targets'] += extra_compile_targets
+
+  if cros_board:
+    spec['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+
+  if target_arch:
+    spec['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
+
+  if extra_gclient_apply_config:
+    spec['gclient_apply_config'] += list(extra_gclient_apply_config)
 
   return spec
 

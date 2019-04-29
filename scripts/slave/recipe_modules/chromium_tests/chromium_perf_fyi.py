@@ -26,14 +26,9 @@ def chromium_perf_clang(_):
 
 
 def _AddBuildSpec(name, platform, config_name='chromium_perf',
-                  target_bits=64, compile_targets=None,
-                  extra_compile_targets=None, force_exparchive=False,
-                  run_sizes=True):
+                  target_bits=64, **kwargs):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
-      config_name, platform, target_bits,
-      compile_targets=compile_targets,
-      extra_compile_targets=extra_compile_targets,
-      force_exparchive=force_exparchive, run_sizes=run_sizes)
+      config_name, platform, target_bits, **kwargs)
 
 
 def _AddIsolatedTestSpec(name, platform,
@@ -70,6 +65,13 @@ _AddBuildSpec('android_arm64-cfi-builder-perf-fyi', 'android',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
+
+_AddBuildSpec('chromeos-kevin-builder-perf-fyi', 'chromeos',
+              force_exparchive=True,
+              target_bits=32,
+              target_arch='arm',
+              cros_board='kevin',
+              extra_gclient_apply_config=['arm', 'chromeos_kevin'])
 
 _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',
