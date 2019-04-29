@@ -52,4 +52,9 @@ def GenTests(api):
       api.properties(apply_gclient_config='use_clang_coverage') +
       api.post_process(DropExpectation)
   )
+  yield (
+      api.test('tot_clang') +
+      api.properties(apply_gclient_config='use_tot_clang') +
+      api.post_process(DropExpectation)
+  )
 

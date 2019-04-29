@@ -111,6 +111,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       enable_tsan = Single(bool, empty_val=False, required=False),
       run_asan_test = Single(bool, required=False),
     ),
+    use_tot_clang = Single(bool, empty_val=False, required=False),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
@@ -445,7 +446,7 @@ def trybot_flavor(c):
 
 @config_ctx()
 def clang_tot(c):
-  c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
+  c.use_tot_clang = True
 
 #### 'Full' configurations
 

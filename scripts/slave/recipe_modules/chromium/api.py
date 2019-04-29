@@ -112,8 +112,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.PATH:
       ret['PATH'] = self.m.path.pathsep.join(
           map(str, self.c.env.PATH) + ['%(PATH)s'])
-    if self.c.env.LLVM_FORCE_HEAD_REVISION:
-      ret['LLVM_FORCE_HEAD_REVISION'] = self.c.env.LLVM_FORCE_HEAD_REVISION
     if self.c.env.GOMA_SERVER_HOST:
       ret['GOMA_SERVER_HOST'] = self.c.env.GOMA_SERVER_HOST
     if self.c.env.GOMA_RPC_EXTRA_PARAMS:
@@ -208,6 +206,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.gclient.set_config('chromium')
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
+
+    if self.c.use_tot_clang:
+      self.m.gclient.apply_config('use_tot_clang')
 
     return (buildername, bot_config)
 
@@ -766,11 +767,14 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def get_clang_version(self, **kwargs):
     with self.m.context(env=self.get_env()):
+      args=['--src-dir', self.m.path['checkout'],
+            '--output-json', self.m.json.output()]
+      if self.c.use_tot_clang:
+        args.append('--use-tot-clang')
       step_result = self.m.build.python(
           'clang_revision',
           self.repo_resource('scripts', 'slave', 'clang_revision.py'),
-          args=['--src-dir', self.m.path['checkout'],
-                '--output-json', self.m.json.output()],
+          args=args,
           step_test_data=lambda:
               self.m.json.test_api.output({'clang_revision': '123456-7'}),
           allow_subannotations=True,

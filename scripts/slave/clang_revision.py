@@ -17,12 +17,18 @@ def main(argv):
                            help='path to a json output file')
   option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
+  option_parser.add_option('--use-tot-clang', action='store_true',
+                           help='tip-of-tree clang was used')
   (options, _) = option_parser.parse_args(argv)
 
   update_script = os.path.join(os.path.abspath(options.src_dir),
       'tools', 'clang', 'scripts', 'update.py')
-  revision = subprocess.check_output(
-      ['python', update_script, '--print-revision']).rstrip()
+
+  args = ['--print-revision']
+  if options.use_tot_clang:
+    args.append('--llvm-force-head-revision')
+
+  revision = subprocess.check_output(['python', update_script, arg]).rstrip()
   print '@@@SET_BUILD_PROPERTY@got_clang_revision@"%s"@@@' % revision
 
   if options.output_json:

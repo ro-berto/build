@@ -115,3 +115,10 @@ def GenTests(api):
       api.goma(jobs=500, debug=True) + api.runtime(
           is_luci=True, is_experimental=False)
   )
+
+  yield (
+      api.test('clang_tot') +
+      api.properties(
+          buildername='test_buildername',
+          chromium_apply_config=['clang_tot'])
+  )
