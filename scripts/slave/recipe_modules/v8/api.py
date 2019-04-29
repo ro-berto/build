@@ -1423,7 +1423,7 @@ class V8Api(recipe_api.RecipeApi):
            for tag in self.m.buildbucket.build.tags):
       extra_tags['user_agent'] = 'cq'
 
-    builds = self.m.buildbucket.schedule([
+    return self.m.buildbucket.schedule([
       self.m.buildbucket.schedule_request(
         project=project,
         bucket=bucket,
@@ -1432,14 +1432,6 @@ class V8Api(recipe_api.RecipeApi):
         properties=properties,
       ) for builder_name, properties in requests
     ], step_name=step_name)
-
-    # TODO(sergiyb): Remove this when recipe simulation will start throwing
-    # InfraFailure for a non-zero retcode. See https://crbug.com/931473.
-    if any(not b.id for b in builds):
-      self.m.step.active_result.presentation.status = self.m.step.EXCEPTION
-      raise self.m.step.InfraFailure('buildbucket.schedule failed')
-
-    return builds
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):

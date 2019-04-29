@@ -55,19 +55,11 @@
       "@@@STEP_LOG_LINE@request@    }@@@",
       "@@@STEP_LOG_LINE@request@  ]@@@",
       "@@@STEP_LOG_LINE@request@}@@@",
-      "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LOG_END@request@@@"
     ]
   },
   {
-    "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
-      "humanReason": "buildbucket.schedule failed"
-    },
+    "jsonResult": null,
     "name": "$result"
   }
 ]
