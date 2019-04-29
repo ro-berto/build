@@ -861,6 +861,10 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -955,7 +959,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake tests 1 (fake device iOS 8.0)",
+    "name": "test_pre_run (with patch).[trigger] fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -1068,7 +1072,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake tests 2 (fake device iOS 7.1)",
+    "name": "test_pre_run (with patch).[trigger] fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -1181,7 +1185,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake_eg_test_host (fake device 3 iOS 9.3)",
+    "name": "test_pre_run (with patch).[trigger] fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -1197,6 +1201,43 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
+      "--swarming-server",
+      "https://chromium-swarm.appspot.com",
+      "--swarming-py-path",
+      "[BUILDER_CACHE]/ios/src/tools/swarming_client/swarming.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "--input-json",
+      "[[\"120000\"], [\"110000\"], [\"10000\"]]",
+      "--attempts",
+      "0",
+      "--verbose"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
+    "name": "wait for tasks (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"120000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"110000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1246,7 +1287,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0_tmp_3",
+      "[CLEANUP]/2_tmp_5",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1267,14 +1308,14 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
+      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake tests 1 (fake device iOS 8.0)",
+    "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1306,7 +1347,7 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1400,7 +1441,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/2_tmp_5",
+      "[CLEANUP]/0_tmp_3",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1421,14 +1462,14 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
+    "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1460,7 +1501,8 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
@@ -1470,13 +1512,35 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
-    "name": "Tests statistics",
+    "name": "fake tests 1 (fake device iOS 8.0) (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 3<br/>Total runtime: 0:01:34.500000 <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 3@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:34.500000 @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
+    "name": "fake tests 2 (fake device iOS 7.1) (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios/src",
+    "name": "fake_eg_test_host (fake device 3 iOS 9.3) (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
   },
   {
@@ -1486,7 +1550,7 @@
           "<omitted by recipe engine>"
         ]
       },
-      "humanReason": "Failed fake tests 1 (fake device iOS 8.0), fake tests 2 (fake device iOS 7.1), fake_eg_test_host (fake device 3 iOS 9.3)."
+      "humanReason": "Failed fake tests 1 (fake device iOS 8.0), fake tests 1 (fake device iOS 8.0), fake tests 2 (fake device iOS 7.1), fake tests 2 (fake device iOS 7.1), fake_eg_test_host (fake device 3 iOS 9.3), fake_eg_test_host (fake device 3 iOS 9.3)."
     },
     "name": "$result"
   }

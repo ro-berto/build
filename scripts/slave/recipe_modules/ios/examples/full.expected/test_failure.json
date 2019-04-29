@@ -537,6 +537,10 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -626,7 +630,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake test (fake device iOS 8.1)",
+    "name": "test_pre_run (with patch).[trigger] fake test (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -721,30 +725,59 @@
     },
     "name": "fake test (fake device iOS 8.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 1, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (failed)@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@test_summary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"logs\": {@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"failed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"FAILED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ], @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    \"passed tests\": [@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@      \"PASSED_TEST\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@    ]@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
+      "@@@STEP_LOG_LINE@test_summary.json@}@@@",
+      "@@@STEP_LOG_END@test_summary.json@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
+      "@@@STEP_LOG_LINE@failed tests@FAILED_TEST@@@",
+      "@@@STEP_LOG_END@failed tests@@@",
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
+      "failure": {
+        "step": ""
       },
       "humanReason": "Failed fake test (fake device iOS 8.1)."
     },

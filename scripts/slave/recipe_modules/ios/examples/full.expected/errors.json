@@ -709,6 +709,30 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "trigger.[trigger] fake test 3 (fake device iOS 8.1)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Requested unsupported device type.@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad 4 GSM CDMA@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad 5th Gen@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad 6th Gen@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad Air@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPad Air 2@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone 5@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone 5s@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone 6s@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone 7@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone X@@@",
+      "@@@STEP_LOG_END@supported devices@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -805,7 +829,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
+    "name": "test_pre_run (with patch).[trigger] fake test 2 (iPad Air iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'iOS-8.1'@@@",
@@ -821,26 +845,6 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "trigger.[trigger] fake test 3 (fake device iOS 8.1)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Requested unsupported device type.@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPad 4 GSM CDMA@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPad 5th Gen@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPad 6th Gen@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPad Air@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPad Air 2@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPhone 5@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPhone 5s@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPhone 6s@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPhone 7@@@",
-      "@@@STEP_LOG_LINE@supported devices@iPhone X@@@",
-      "@@@STEP_LOG_END@supported devices@@@",
-      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
@@ -940,7 +944,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1",
+    "name": "test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -964,7 +968,7 @@
           "<omitted by recipe engine>"
         ]
       },
-      "humanReason": "Infra Failure: Step('trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1') returned 1"
+      "humanReason": "Infra Failure: Step('test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1') returned 1"
     },
     "name": "$result"
   }

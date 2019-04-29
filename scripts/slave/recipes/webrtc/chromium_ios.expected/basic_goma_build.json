@@ -831,6 +831,10 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -926,7 +930,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake test (iPhone X iOS 8.0) on iOS-8.0",
+    "name": "test_pre_run (with patch).[trigger] fake test (iPhone X iOS 8.0) on iOS-8.0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'iOS-8.0'@@@",
@@ -1061,13 +1065,9 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
-    "name": "Tests statistics",
+    "name": "fake test (iPhone X iOS 8.0)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
   },
   {
@@ -1077,7 +1077,7 @@
           "<omitted by recipe engine>"
         ]
       },
-      "humanReason": "Failed fake test (iPhone X iOS 8.0)."
+      "humanReason": "Failed fake test (iPhone X iOS 8.0), fake test (iPhone X iOS 8.0)."
     },
     "name": "$result"
   }

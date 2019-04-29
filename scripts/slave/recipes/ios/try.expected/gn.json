@@ -982,6 +982,10 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1076,7 +1080,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake tests (fake device iOS 8.1)",
+    "name": "test_pre_run (with patch).[trigger] fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -1201,7 +1205,8 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
   {
@@ -1211,13 +1216,9 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
-    "name": "Tests statistics",
+    "name": "fake tests (fake device iOS 8.1) (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
   },
   {
@@ -1227,7 +1228,7 @@
           "<omitted by recipe engine>"
         ]
       },
-      "humanReason": "Failed fake tests (fake device iOS 8.1)."
+      "humanReason": "Failed fake tests (fake device iOS 8.1), fake tests (fake device iOS 8.1)."
     },
     "name": "$result"
   }

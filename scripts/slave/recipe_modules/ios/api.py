@@ -925,15 +925,24 @@ class iOSApi(recipe_api.RecipeApi):
               self.m.json.dumps(tasks),
           )
 
-      triggered_tests = []
+      tests = []
       with self.m.step.nest('trigger'):
         for task in tasks:
           test = self.generate_test_from_task(task, upload_test_results)
           if test:
-            test.pre_run(self.m, suffix='')
-            triggered_tests.append(test)
+            tests.append(test)
 
-      self.collect(triggered_tests)
+      invalid_test_suites, failing_test_suites = (
+          self.m.test_utils.run_tests_with_patch(
+              self.m, tests, retry_failed_shards=False))
+      all_failures = invalid_test_suites + failing_test_suites
+      if all_failures:
+        exception_type = (
+            self.m.step.InfraFailure if invalid_test_suites
+            else self.m.step.StepFailure)
+        failing_step_names = [x.name for x in all_failures]
+        raise exception_type('Failed %s.' % ', '.join(
+            sorted(failing_step_names)))
 
   @property
   def most_recent_app_path(self):

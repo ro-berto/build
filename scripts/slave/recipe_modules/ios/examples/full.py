@@ -26,17 +26,6 @@ def RunSteps(api):
   api.ios.test_swarming()
 
 def GenTests(api):
-  def generate_test_results_placeholder(api, swarming_number):
-    summary_contents = {
-      'logs': {
-        'passed tests': ['PASSED_TEST'],
-      },
-      'step_text': 'dummy step text'
-    }
-
-    summary_path = str(swarming_number) + '/summary.json'
-    return api.raw_io.output_dir({summary_path: json.dumps(summary_contents)})
-
   BASIC_TEST_SUITES = [
     'fake test 0 (fake device 0 iOS 11.0) shard 0',
     'fake test 0 (fake device 0 iOS 11.0) shard 1',
@@ -166,7 +155,8 @@ def GenTests(api):
       else:
         swarming_number = 100000 + index * 10000
       result += api.step_data(
-          test, generate_test_results_placeholder(api, swarming_number))
+          test, api.ios.generate_test_results_placeholder(
+              failure=False, swarming_number=swarming_number))
 
     result += api.post_process(post_process.StatusSuccess)
     return result
@@ -225,13 +215,52 @@ def GenTests(api):
         retcode=1,
     )
     + api.step_data(
-        'trigger.[trigger] fake test 4 (iPhone 5s iOS 8.1) on iOS-8.1',
+        'test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) '
+        'on iOS-8.1',
         retcode=1,
     )
   )
 
   yield (
     api.test('test_failure')
+    + api.platform('mac', 64)
+    + api.properties(
+      mastername='chromium.fake',
+      bot_id='fake-vm',
+    )
+    + api.buildbucket.ci_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    + api.ios.make_test_build_config({
+      'xcode build version': '9abc',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+    + api.step_data(
+        'fake test (fake device iOS 8.1)',
+        api.ios.generate_test_results_placeholder(failure=True))
+    + api.post_process(post_process.StatusFailure)
+  )
+
+  yield (
+    api.test('test_swarming_failure')
     + api.platform('mac', 64)
     + api.properties(
       mastername='chromium.fake',

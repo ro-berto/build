@@ -538,6 +538,10 @@
     "name": "trigger"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -629,7 +633,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
-    "name": "trigger.[trigger] fake test (fake device iOS 8.1)",
+    "name": "test_pre_run (with patch).[trigger] fake test (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
@@ -764,13 +768,9 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "Tests statistics",
+    "name": "fake test (fake device iOS 8.1) (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
   },
   {
@@ -780,7 +780,7 @@
           "<omitted by recipe engine>"
         ]
       },
-      "humanReason": "Failed fake test (fake device iOS 8.1)."
+      "humanReason": "Failed fake test (fake device iOS 8.1), fake test (fake device iOS 8.1)."
     },
     "name": "$result"
   }

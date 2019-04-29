@@ -897,11 +897,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m, tests, retry_failed_shards=retry_failed_shards))
 
       # An invalid result is unrecoverable.
-      unrecoverable_test_suites = []
-      for test_suite in invalid_test_suites:
-        unrecoverable_test_suites.append(test_suite)
-      if unrecoverable_test_suites:
-        return unrecoverable_test_suites
+      if invalid_test_suites:
+        return invalid_test_suites
 
       # This member is misnamed and is only used by code coverage. Code coverage
       # doesn't care about test failures. Unfortunately, this code path has

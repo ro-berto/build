@@ -2583,6 +2583,7 @@ class SwarmingIosTest(SwarmingTest):
 
     api.chromium_swarming.trigger_task(swarming_task)
     task['task'] = swarming_task
+    self._tasks[suffix] = swarming_task
 
   @recipe_api.composite_step
   def run(self, api, suffix):
