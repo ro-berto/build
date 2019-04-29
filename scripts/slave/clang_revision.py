@@ -24,11 +24,11 @@ def main(argv):
   update_script = os.path.join(os.path.abspath(options.src_dir),
       'tools', 'clang', 'scripts', 'update.py')
 
-  args = ['--print-revision']
+  args = ['python', update_script, '--print-revision']
   if options.use_tot_clang:
     args.append('--llvm-force-head-revision')
 
-  revision = subprocess.check_output(['python', update_script, args]).rstrip()
+  revision = subprocess.check_output(args).rstrip()
   print '@@@SET_BUILD_PROPERTY@got_clang_revision@"%s"@@@' % revision
 
   if options.output_json:
