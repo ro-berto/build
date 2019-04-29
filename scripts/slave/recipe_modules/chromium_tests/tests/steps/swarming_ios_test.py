@@ -254,16 +254,17 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  step = 'dummy step name on iOS-dummy OS'
+  link = 'shard #0 isolated out'
+  url = ('https://isolateserver.appspot.com/browse?namespace=default-gzip'
+         '&hash=abc123')
   yield (
       api.test('output_refs') +
       generate_passing_test(api, simulator=False) +
       api.post_process(post_process.StepSuccess,
                        'dummy step name on iOS-dummy OS') +
       api.post_process(post_process.StatusSuccess) +
-      api.post_process(
-          post_process.AnnotationContains, 'dummy step name on iOS-dummy OS',
-          ['@@@STEP_LINK@shard #0 isolated out@'
-           'https://isolateserver.appspot.com/browse?namespace=default-gzip'
-           '&hash=abc123@@@']) +
+      api.post_check(
+          lambda check, steps: check(steps[step].links[link] == url)) +
       api.post_process(post_process.DropExpectation)
   )
