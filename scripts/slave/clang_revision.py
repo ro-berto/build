@@ -28,7 +28,7 @@ def main(argv):
   if options.use_tot_clang:
     args.append('--llvm-force-head-revision')
 
-  revision = subprocess.check_output(['python', update_script, arg]).rstrip()
+  revision = subprocess.check_output(['python', update_script, args]).rstrip()
   print '@@@SET_BUILD_PROPERTY@got_clang_revision@"%s"@@@' % revision
 
   if options.output_json:
