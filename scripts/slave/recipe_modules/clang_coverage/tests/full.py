@@ -273,10 +273,10 @@ def GenTests(api):
           ['--root-dir'])
       + api.step_data(
           'generate metadata for %s targets' % _NUM_TARGETS, retcode=1)
-      + api.post_process(
-          post_process.AnnotationContains,
-          'gsutil upload metadata',
-          ['SET_BUILD_PROPERTY@process_coverage_data_failure@true'])
+      + api.post_check(
+          lambda check, steps:
+          check(steps['gsutil upload metadata']
+                .output_properties['process_coverage_data_failure'] == 'true'))
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)
   )

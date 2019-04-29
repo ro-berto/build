@@ -37,7 +37,7 @@ def GenTests(api):
 
   def verify_checkout_dir(check, step_odict, expected_path):
     step = step_odict['git diff to analyze patch']
-    check(step['cwd'] == str(expected_path))
+    check(step.cwd == str(expected_path))
     return {}
 
   def try_build():

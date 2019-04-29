@@ -231,10 +231,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
-  def annotation_does_not_contain(check, step_odict, step, expected_str):
-    annotations = '\n'.join(step_odict[step].get('~followup_annotations', []))
-    check(expected_str not in annotations)
-
   def generate_one_failed_shard_raw():
     shard_zero = api.chromium_swarming.canned_summary_output_raw(
         shard_indices=[0], failure=False)
@@ -318,14 +314,14 @@ def GenTests(api):
                 retry_swarming_summary)) +
 
         # We should not emit a link for shard #0, since it wasn't retried.
-        api.post_process(annotation_does_not_contain,
-            'base_unittests (retry shards with patch)',
-            'STEP_LINK@shard #0') +
+        api.post_check(lambda check, steps:
+            lambda check, steps: 'shard #0'
+            not in steps['base_unittests (retry shards with patch)'].links) +
 
         # We should emit a link for shard#1
-        api.post_process(post_process.AnnotationContains,
-            'base_unittests (retry shards with patch)',
-            ['STEP_LINK@shard #1']) +
+        api.post_check(
+            lambda check, steps: 'shard #1'
+            in steps['base_unittests (retry shards with patch)'].links) +
         api.post_process(post_process.DropExpectation)
     )
 

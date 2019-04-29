@@ -58,18 +58,16 @@ def GenTests(api):
   def verify_log_fields(check, step_odict, expected_fields):
     """Verifies fields in details log are with expected values."""
     step = step_odict['details']
-    followup_annotations = step['~followup_annotations']
-    for key, value in expected_fields.iteritems():
-      expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
-      check(expected_log in followup_annotations)
-    return step_odict
+    for field in expected_fields.iteritems():
+      expected_log = '%s: %r' % field
+      check(expected_log in step.logs['details'])
 
   def verify_isolate_flag(check, step_odict):
     step = step_odict[
         'base_unittests']
     check(
         'LLVM_PROFILE_FILE=${ISOLATED_OUTDIR}/profraw/default-%1m.profraw'
-        in step['cmd'])
+        in step.cmd)
 
   yield (
       api.test('basic') +

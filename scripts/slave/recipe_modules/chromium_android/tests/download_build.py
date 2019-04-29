@@ -33,11 +33,11 @@ def GenTests(api):
     step = step_odict.get(step_name)
     check('No step named "%s"' % step_name, step)
 
-    check('Expected cwd %r but got %r' % (expected_cwd, step['cwd']),
-          str(expected_cwd) == step['cwd'])
+    check('Expected cwd %r but got %r' % (expected_cwd, step.cwd),
+          str(expected_cwd) == step.cwd)
 
-    check('Expected args %r but got %r' % (expected_args, step['cmd']),
-          expected_args == step['cmd'])
+    check('Expected args %r but got %r' % (expected_args, step.cmd),
+          expected_args == step.cmd)
     return step_odict
 
   first_args = ['unzip', '-o', '[START_DIR]/src/out/build_product.zip']

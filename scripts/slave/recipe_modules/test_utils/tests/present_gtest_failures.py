@@ -21,18 +21,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-
-  def has_log(check, step_odict, step, log):
-    if not check('step %s was run' % step, step in step_odict):
-      return  # pragma: no cover
-    logs = post_process.GetLogs(step_odict[step])
-    check('step %s has log %s' % (step, log), log in logs)
-
-  def doesnt_have_log(check, step_odict, step, log):
-    if not check('step %s was run' % step, step in step_odict):
-      return  # pragma: no cover
-    logs = post_process.GetLogs(step_odict[step])
-    check('step %s does not have log %s' % (step, log), log not in logs)
+  log = 'Deterministic failure: Test.One (status FAILURE)'
 
   yield (
       api.test('failure') +
@@ -52,8 +41,7 @@ def GenTests(api):
               ],
           })),
           retcode=1) +
-      api.post_process(has_log, 'test', 'Deterministic failure: Test.One '
-                                        '(status FAILURE)') +
+      api.post_check(lambda check, steps: check(log in steps['test'].logs)) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -80,7 +68,7 @@ def GenTests(api):
               ],
           })),
           retcode=1) +
-      api.post_process(doesnt_have_log, 'test', 'Deterministic failure: '
-                                                'Test.One (status FAILURE)') +
+      api.post_check(
+          lambda check, steps: check(log not in steps['test'].logs)) +
       api.post_process(post_process.DropExpectation)
   )

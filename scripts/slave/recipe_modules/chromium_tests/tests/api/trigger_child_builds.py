@@ -78,7 +78,7 @@ def RunSteps(api):
 
 def GenTests(api):
   def trigger_includes_bucket(check, steps_odict, builder=None, bucket=None):
-    for trigger_spec in steps_odict['trigger']['trigger_specs']:
+    for trigger_spec in steps_odict['trigger'].trigger_specs:
       if trigger_spec['builder_name'] == builder:
         check(trigger_spec['bucket'] == bucket)
     return steps_odict

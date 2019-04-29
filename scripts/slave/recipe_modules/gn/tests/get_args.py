@@ -49,7 +49,7 @@ def GenTests(api):
       + api.post_process(post_process.LogContains, 'read GN args', 'gn_args', [
           ('target_cpu = "x86"\n'
            'use_goma = true\n'),
-          'goma_dir = "/b/build/slave/cache/goma_client"\n'])
+          'goma_dir = "/b/build/slave/cache/goma_client"'])
       + api.post_process(post_process.DropExpectation)
   )
 

@@ -280,13 +280,12 @@ def GenTests(api):
     trigger_step = step_odict['trigger']
     check(
         'TriggersBuilderWithProperties only supports LUCI builds.',
-        'trigger_specs' not in trigger_step)
+        not trigger_step.trigger_specs)
     check(
         '"trigger" step did not run expected command.',
-        'cmd' in trigger_step and
-        'scheduler.Scheduler.EmitTriggers' in trigger_step['cmd'] and
-        'stdin' in trigger_step)
-    trigger_json = json.loads(trigger_step['stdin'])
+        'scheduler.Scheduler.EmitTriggers' in trigger_step.cmd and
+        trigger_step.stdin)
+    trigger_json = json.loads(trigger_step.stdin)
 
     for batch in trigger_json.get('batches', []):
       if any(builder == j.get('job') for j in batch.get('jobs', [])):
@@ -409,7 +408,7 @@ def GenTests(api):
 
   def TriggersBuilderWithoutProperties(check, step_odict, builder='',
                                        properties=None):
-    trigger_specs = step_odict['trigger']['trigger_specs']
+    trigger_specs = step_odict['trigger'].trigger_specs
     for t in trigger_specs:
       if t['builder_name'] == builder:
         check(all(p not in t['properties'] for p in properties))

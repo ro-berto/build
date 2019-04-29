@@ -320,19 +320,7 @@ def GenTests(api):
   def verify_report_fields(check, step_odict, expected_report_fields):
     """Verifies fields in report are with expected values."""
     step = step_odict['report']
-    followup_annotations = step['~followup_annotations']
-
-    def get_report_dict():
-      long_line_pattern = re.compile(r'@@@STEP_LOG_LINE@report@\s*(.*)@@@')
-
-      report_json = ''
-      for log_line in followup_annotations:
-        match = long_line_pattern.match(log_line)
-        if match:
-          report_json += match.group(1)
-      return json.loads(report_json)
-
-    report_dict = get_report_dict()
+    report_dict = json.loads(step.logs['report'])
 
     def check_fields(expected_fields, actual_fields):
       for key, value in expected_fields.iteritems():

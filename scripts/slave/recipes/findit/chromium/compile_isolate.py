@@ -192,19 +192,9 @@ def GenTests(api):
 
   def verify_report(check, step_odict, expected_isolated_tests):
     step = step_odict['report']
-    followup_annotations = step['~followup_annotations']
+    report_dict = json.loads(step.logs['report'])
 
-    def get_report_dict():
-      long_line_pattern = re.compile(r'@@@STEP_LOG_LINE@report@([^@]+)@@@')
-
-      report_lines = []
-      for log_line in followup_annotations:
-        match = long_line_pattern.match(log_line)
-        if match:
-          report_lines.append(match.group(1))
-      return json.loads(''.join(report_lines))
-
-    check(json.dumps(get_report_dict().get('isolated_tests'), sort_keys=True)
+    check(json.dumps(report_dict.get('isolated_tests'), sort_keys=True)
           == json.dumps(expected_isolated_tests, sort_keys=True))
     return step_odict
 

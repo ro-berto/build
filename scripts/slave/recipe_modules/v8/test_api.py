@@ -647,7 +647,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         for rx, fields in keep_fields_spec:
           if re.match(rx, name):
             to_ret[name] = {
-              k: v for k, v in step.iteritems()
+              k: v for k, v in step.to_step_dict().iteritems()
               if k in fields or k == 'name'
             }
             break
@@ -676,7 +676,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       parser.add_argument(param, dest='param', action=action)
     else:
       parser.add_argument(param, dest='param')
-    options, _ = parser.parse_known_args(steps[step]['cmd'])
+    options, _ = parser.parse_known_args(steps[step].cmd)
     check(options)
     return options.param
 
@@ -702,7 +702,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """Check if a given value is a substring of any argument in a step."""
     def check_any(check, steps, step, value):
       if self._check_step(check, steps, step):
-        check(any(value in arg for arg in steps[step]['cmd']))
+        check(any(value in arg for arg in steps[step].cmd))
     return self.post_process(check_any, step, value)
 
   def check_not_in_any_arg(self, step, value):
@@ -712,5 +712,5 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """
     def check_any(check, steps, step, value):
       if self._check_step(check, steps, step):
-        check(not any(value in arg for arg in steps[step]['cmd']))
+        check(not any(value in arg for arg in steps[step].cmd))
     return self.post_process(check_any, step, value)

@@ -302,12 +302,12 @@ def GenTests(api):
   yield (
       props('normal_build') +
       override_analyze() +
-      api.post_process(
-          post_process.AnnotationContains,
-          _RESULTS_STEP_NAME,
-          ['https://foo.com/{}{}/{}/{}/result.ndjson'.format(
-               _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
-               _TEST_BUILDNUMBER)]) +
+      api.post_check(
+          lambda check, steps:
+          check(steps[_RESULTS_STEP_NAME].links['Supersize HTML Diff'] ==
+                'https://foo.com/{}{}/{}/{}/result.ndjson'.format(
+                    _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
+                    _TEST_BUILDNUMBER))) +
       api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME)
   )
   yield (

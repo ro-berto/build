@@ -158,8 +158,10 @@ def GenTests(api):
              'compile confirm no-op',
              stdout=api.raw_io.output(
                  "ninja explain: chrome is dirty\n")) +
-         api.post_process(post_process.AnnotationContains,
-                          'compile confirm no-op', ['confirm no-op failure']) +
+         api.post_check(
+             lambda check, steps:
+             check(steps['compile confirm no-op']
+                   .output_properties['confirm no-op failure'] == 'true')) +
          api.post_process(post_process.StatusSuccess) +
          api.post_process(post_process.DropExpectation))
 

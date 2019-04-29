@@ -109,21 +109,18 @@ def GenTests(api):
   def verify_log_fields(check, step_odict, expected_fields):
     """Verifies fields in details log are with expected values."""
     step = step_odict['details']
-    followup_annotations = step['~followup_annotations']
-    for key, value in expected_fields.iteritems():
-      expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
-      check(expected_log in followup_annotations)
-    return step_odict
+    for field in expected_fields.iteritems():
+      expected_log = '%s: %r' % field
+      check(expected_log in step.logs['details'])
 
   def verify_isolate_flag(check, step_odict):
     step = step_odict[
         '[trigger] base_unittests on Intel GPU on Linux (with patch)']
-    check('LLVM_PROFILE_FILE' in step['cmd'])
+    check('LLVM_PROFILE_FILE' in step.cmd)
     step = step_odict[
         'base_unittests on Intel GPU on Linux (with patch)']
     # Make sure swarming collect know how to merge coverage profile data.
-    check('[START_DIR]/merge_results.py'
-          in step['cmd'])
+    check('[START_DIR]/merge_results.py' in step.cmd)
 
   yield (
       api.test('basic') +

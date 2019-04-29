@@ -668,9 +668,8 @@ def GenTests(api):
     git_range = 'a%d..a%d' % (from_offset, to_offset)
     step_name = 'Result: Suspecting #%d..#%d' % (from_offset, to_offset)
     def suspects_internal(check, steps):
-      check(step_name in steps)
-      check(steps[step_name]['~followup_annotations'][0] ==
-            '@@@STEP_LINK@%s@%s/+log/%s@@@' % (git_range, REPO, git_range))
+      check(steps[step_name].links[git_range] ==
+            '%s/+log/%s' % (REPO, git_range))
     return api.post_process(suspects_internal)
 
   # Full bisect run with some corner cases. Overview of all revisions ordered
@@ -797,8 +796,8 @@ def GenTests(api):
     step = ('calibration attempt 1.check mjsunit/foobar at #0.'
             '[trigger] check mjsunit/foobar at #0 - shard 0 on Android')
     if check(step in steps):
-      check(all(arg != 'cpu' for arg in steps[step]['cmd']))
-      check(all(arg != 'gpu' for arg in steps[step]['cmd']))
+      check(all(arg != 'cpu' for arg in steps[step].cmd))
+      check(all(arg != 'gpu' for arg in steps[step].cmd))
   yield (
       test('android_dimensions') +
       api.properties(
