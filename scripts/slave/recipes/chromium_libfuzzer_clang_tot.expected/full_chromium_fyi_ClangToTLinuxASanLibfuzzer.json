@@ -222,7 +222,8 @@
       "-b",
       "ClangToTLinuxASanLibfuzzer",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl"
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--quiet"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

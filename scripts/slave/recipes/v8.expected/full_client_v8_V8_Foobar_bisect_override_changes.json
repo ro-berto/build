@@ -163,7 +163,8 @@
       "--config-file",
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -555,7 +556,8 @@
       "--config-file",
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -807,7 +809,8 @@
       "--config-file",
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1094,7 +1097,8 @@
       "--config-file",
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {

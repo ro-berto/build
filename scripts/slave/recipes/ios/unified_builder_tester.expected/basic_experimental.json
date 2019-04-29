@@ -360,7 +360,8 @@
       "-b",
       "ios",
       "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl"
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -332,7 +332,8 @@
       "--goma-dir",
       "[CACHE]/goma/client",
       "--android-version-code=987600200",
-      "--android-version-name=123.1.9876.2"
+      "--android-version-name=123.1.9876.2",
+      "--quiet"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

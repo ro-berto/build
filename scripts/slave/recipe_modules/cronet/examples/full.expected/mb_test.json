@@ -293,7 +293,8 @@
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[CACHE]/goma/client",
+      "--quiet"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1380,7 +1381,8 @@
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[CACHE]/goma/client",
+      "--quiet"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

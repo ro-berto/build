@@ -348,7 +348,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[CACHE]/goma/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -560,7 +560,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -639,7 +640,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1261,7 +1263,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1340,7 +1343,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1962,7 +1966,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2041,7 +2046,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2663,7 +2669,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2742,7 +2749,8 @@
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

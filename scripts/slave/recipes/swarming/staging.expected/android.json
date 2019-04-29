@@ -329,7 +329,8 @@
       "--config-file",
       "[BUILDER_CACHE]/Android_N5_Swarm/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/Android_N5_Swarm/src",
     "env": {

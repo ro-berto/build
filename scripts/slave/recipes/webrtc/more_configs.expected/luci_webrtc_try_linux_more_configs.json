@@ -184,7 +184,8 @@
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -863,7 +864,8 @@
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1222,7 +1224,8 @@
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

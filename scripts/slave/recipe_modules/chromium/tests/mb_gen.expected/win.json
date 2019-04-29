@@ -14,7 +14,8 @@
       "--phase",
       "test_phase",
       "--android-version-code=3",
-      "--android-version-name=example"
+      "--android-version-name=example",
+      "--quiet"
     ],
     "cwd": "None",
     "env": {

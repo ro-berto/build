@@ -296,7 +296,8 @@
       "--phase",
       "local",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[CACHE]/goma/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -442,7 +443,8 @@
       "--phase",
       "goma",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[CACHE]/goma/client",
+      "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

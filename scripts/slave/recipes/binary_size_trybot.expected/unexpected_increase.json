@@ -486,7 +486,8 @@
       "--config-file",
       "[BUILDER_CACHE]/android_binary_size/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
@@ -1079,7 +1080,8 @@
       "--config-file",
       "[BUILDER_CACHE]/android_binary_size/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {

@@ -380,7 +380,8 @@
       "--config-file",
       "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {
