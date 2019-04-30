@@ -19,10 +19,6 @@ _BUILDERS_DICT = {
                 'chromium_apply_config': ['mb'],
                 'gclient_apply_config': ['android'],
             },
-            'clang_tot': {
-                'chromium_config': 'chromium_clang',
-                'chromium_apply_config': ['clang_tot'],
-            },
         },
     },
     'tryserver_test': {

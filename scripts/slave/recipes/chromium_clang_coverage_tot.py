@@ -24,6 +24,7 @@ BUILDERS = freeze({
       'ToTMacCoverage': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': ['clang_tot'],
+        'gclient_apply_config': ['clang_tot'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
@@ -33,6 +34,7 @@ BUILDERS = freeze({
       'ToTLinuxCoverage': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': ['clang_tot'],
+        'gclient_apply_config': ['clang_tot'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',

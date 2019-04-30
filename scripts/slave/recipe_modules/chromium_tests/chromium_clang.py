@@ -20,6 +20,7 @@ def config(name,
       'mb',
     ],
     'gclient_config': 'chromium',
+    'gclient_apply_config': ['clang_tot'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': target_arch,
@@ -45,10 +46,10 @@ def config(name,
   if android_config:
       cfg['android_config'] = android_config
       cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
-      cfg['gclient_apply_config'] = ['android']
+      cfg['gclient_apply_config'].append('android')
 
   if official:
-      cfg['gclient_apply_config'] = ['chrome_internal']
+      cfg['gclient_apply_config'].append('chrome_internal')
       cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
       cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
       cfg['swarming_dimensions'] = {
@@ -68,6 +69,7 @@ SPEC = {
       'chromium_config': 'clang_tot_linux',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -82,6 +84,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -99,6 +102,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -113,7 +117,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['win'],
+      'gclient_apply_config': ['clang_tot', 'win'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -135,6 +139,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -158,6 +163,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -181,7 +187,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -216,7 +222,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -251,6 +257,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_asan_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -268,6 +275,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_asan_tot',
       'chromium_apply_config': ['mb',],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -285,7 +293,7 @@ SPEC = {
       'chromium_config': 'clang_tot_android_asan',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['clang_tot', 'android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
@@ -308,7 +316,7 @@ SPEC = {
       'chromium_config': 'clang_tot_android_dbg',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['clang_tot', 'android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'android',
@@ -330,7 +338,7 @@ SPEC = {
       'chromium_config': 'clang_tot_android',
       'gclient_config': 'chromium',
       'chromium_apply_config': ['mb'],
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['clang_tot', 'android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -350,6 +358,7 @@ SPEC = {
     'ToTMac': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -371,7 +380,7 @@ SPEC = {
     'ToTMacOfficial': {
       'chromium_config': 'clang_tot_mac',
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'swarming_server': 'https://chrome-swarming.appspot.com',
       'isolate_server': 'https://chrome-isolated.appspot.com',
       # Run with lower priority; see https://crbug.com/937297#c26
@@ -402,6 +411,7 @@ SPEC = {
       'chromium_config': 'clang_tot_mac',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -423,6 +433,7 @@ SPEC = {
       'chromium_config': 'clang_tot_mac_asan',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -442,7 +453,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_official_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -475,6 +486,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -496,6 +508,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -518,7 +531,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_official_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -551,6 +564,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_asan_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -569,6 +583,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_official_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -591,6 +606,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -613,6 +629,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang_tot',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

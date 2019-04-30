@@ -207,9 +207,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
-    if self.c.use_tot_clang:
-      self.m.gclient.apply_config('use_tot_clang')
-
     return (buildername, bot_config)
 
   def _run_ninja(self, ninja_command, name=None, ninja_env=None,
