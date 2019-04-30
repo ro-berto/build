@@ -309,14 +309,6 @@ class IndexPack(object):
         continue
       filepaths.add(filepaths_fn)
 
-      # Add two unit files: one with the build config in the root, and one with
-      # it in the new build config fields. The new one also has a new corpus
-      # name.
-      # TODO(jsca): Remove the legacy unit when nothing is using the old format.
-      self._AddClangUnitFile(entry['file'], entry['directory'],
-                             entry['command'], filepaths_fn,
-                             'chromium',  # legacy corpus name
-                             root=self.root, build_config=None)
       self._AddClangUnitFile(entry['file'], entry['directory'],
                              entry['command'], filepaths_fn, self.corpus,
                              root=None, build_config=self.build_config)
