@@ -477,6 +477,22 @@ TRYBOTS = freeze({
           },
         ],
       },
+      # TODO(crbug.com/930364): Remove once linux-coverage-rel is folded into
+      # linux-rel or ended up not being able to fold.
+      'linux-coverage-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.linux',
+            'buildername': 'Linux Builder Code Coverage',
+            'tester': 'Linux Tests Code Coverage',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Linux Builder Code Coverage',
+            'tester': 'Linux Release Code Coverage (NVIDIA)',
+          },
+        ],
+      },
       'linux_chromium_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux ASan LSan Builder',

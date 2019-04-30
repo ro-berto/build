@@ -33,11 +33,3 @@ def GenTests(api):
           # directly to the test rather than creating a failing step
           + api.chromium_tests.handle_bot_config_errors(False)
           + api.post_process(post_process.DropExpectation))
-  yield (
-      api.test('tryserver.chromium.linux-linux-coverage-rel')
-      + api.properties.generic(mastername='tryserver.chromium.linux',
-                               buildername='linux-coverage-rel')
-      # We want any errors when creating the BotConfig to be surfaced
-      # directly to the test rather than creating a failing step
-      + api.chromium_tests.handle_bot_config_errors(False)
-      + api.post_process(post_process.DropExpectation))

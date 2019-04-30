@@ -143,6 +143,29 @@ SPEC = {
       'force_exparchive': 5,
       'checkout_dir': 'linux',
     },
+    # TODO(crbug.com/930364): Remove once linux-coverage-rel is folded into
+    # linux-rel or ended up not being able to fold.
+    'Linux Builder Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'goma_high_parallel',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_tests_apply_config': [
+          'code_coverage_trybot',
+      ],
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'Linux Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -156,6 +179,29 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    # TODO(crbug.com/930364): Remove once linux-coverage-rel is folded into
+    # linux-rel or ended up not being able to fold.
+    'Linux Tests Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'goma_high_parallel',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_tests_apply_config': [
+          'code_coverage_trybot',
+      ],
+      'bot_type': 'tester',
+      'parent_buildername': 'Linux Builder Code Coverage',
       'testing': {
         'platform': 'linux',
       },
