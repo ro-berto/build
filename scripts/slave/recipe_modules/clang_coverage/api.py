@@ -173,9 +173,23 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       target = t.isolate_target
       # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
       patterns = [
+          # Following are scripts based tests that don't build any binaries.
+          ['blink_python_tests', None],
+          ['metrics_python_tests', None],
+          ['telemetry_gpu_unittests', None],
+          ['devtools_closure_compile', None],
+          ['devtools_eslint', None],
+
+          # Following are mappings from isolate target names to binary names.
+          ['telemetry_gpu_integration_test', 'chrome'],
+          ['telemetry_unittests', 'chrome'],
+          ['telemetry_perf_unittests', 'chrome'],
+          ['chromedriver_py_tests', 'chrome'],
+          ['chromedriver_replay_unittests', 'chrome'],
           ['chrome_all_tast_tests', 'chrome'],
           ['cros_vm_sanity_test', 'chrome'],
           ['xr_browser_tests', 'xr_browser_tests_binary'],
+          ['content_shell_crash_test', 'content_shell'],
           ['.*webkit_layout_tests', 'content_shell'],
           ['.*blink_web_tests', 'content_shell'],
           ['.*_ozone', target[:-len('_ozone')]],
@@ -183,7 +197,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       ]
       for pattern, binary in patterns:
         if re.match(pattern, target):
-          binaries.append(self.m.chromium.output_dir.join(binary))
+          if binary is not None:
+            binaries.append(self.m.chromium.output_dir.join(binary))
+
           break
 
     return list(set(binaries))  # Remove duplicates.
