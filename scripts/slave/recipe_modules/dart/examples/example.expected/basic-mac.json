@@ -252,7 +252,7 @@
       ]
     },
     "name": "can_time_out",
-    "timeout": 3600
+    "timeout": 2400
   },
   {
     "cmd": [],
