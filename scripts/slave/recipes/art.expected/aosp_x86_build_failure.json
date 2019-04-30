@@ -23,9 +23,9 @@
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -37,7 +37,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "Clean x86"
+    "name": "Pre clean x86"
   },
   {
     "cmd": [
@@ -54,16 +54,16 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "build x86",
+    "name": "Build x86",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -75,13 +75,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "Clean x86 (2)"
+    "name": "Post clean x86"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -93,7 +93,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean x86_64"
+    "name": "Pre clean x86_64"
   },
   {
     "cmd": [
@@ -110,13 +110,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "build x86_64"
+    "name": "Build x86_64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -128,13 +128,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean x86_64 (2)"
+    "name": "Post clean x86_64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -146,7 +146,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "Clean arm"
+    "name": "Pre clean arm"
   },
   {
     "cmd": [
@@ -163,13 +163,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "build arm"
+    "name": "Build arm"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -181,13 +181,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "Clean arm (2)"
+    "name": "Post clean arm"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -199,7 +199,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "Clean arm64"
+    "name": "Pre clean arm64"
   },
   {
     "cmd": [
@@ -216,13 +216,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "build arm64"
+    "name": "Build arm64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -234,14 +234,14 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "Clean arm64 (2)"
+    "name": "Post clean arm64"
   },
   {
     "failure": {
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 12 aggregated steps failed: Step('build x86') failed with return_code 1"
+      "humanReason": "1 out of 12 aggregated steps failed: Step('Build x86') failed with return_code 1"
     },
     "name": "$result"
   }

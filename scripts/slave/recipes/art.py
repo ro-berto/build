@@ -501,9 +501,9 @@ def setup_aosp_builder(api, read_barrier):
                       api.path.pathsep + '%(PATH)s',
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
-        api.step('Clean %s' % build, ['make', '-j8', 'clean'])
-        api.step('build %s' % build, ['make', '-j8'])
-        api.step('Clean %s' % build, ['make', '-j8', 'clean'])
+        api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
+        api.step('Build %s' % build, ['make', '-j8'])
+        api.step('Post clean %s' % build, ['rm', '-rf', 'out'])
 
 
 _CONFIG_MAP = {
@@ -714,7 +714,7 @@ def GenTests(api):
       api.step_data('device pre-run cleanup', retcode=1))
   yield (
       test('aosp_x86_build_failure', 'aosp-builder-cms') +
-      api.step_data('build x86', retcode=1))
+      api.step_data('Build x86', retcode=1))
 #  These tests *should* exist, but can't be included as they cause the recipe
 #  simulation to error out, instead of showing that the build should become
 #  purple instead. This may need to be fixed in the simulation test script.

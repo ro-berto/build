@@ -23,9 +23,9 @@
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -37,7 +37,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "Clean x86"
+    "name": "Pre clean x86"
   },
   {
     "cmd": [
@@ -54,13 +54,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "build x86"
+    "name": "Build x86"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -72,13 +72,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86"
     },
-    "name": "Clean x86 (2)"
+    "name": "Post clean x86"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -90,7 +90,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean x86_64"
+    "name": "Pre clean x86_64"
   },
   {
     "cmd": [
@@ -107,13 +107,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "build x86_64"
+    "name": "Build x86_64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -125,13 +125,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_x86_64"
     },
-    "name": "Clean x86_64 (2)"
+    "name": "Post clean x86_64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -143,7 +143,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "Clean arm"
+    "name": "Pre clean arm"
   },
   {
     "cmd": [
@@ -160,13 +160,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "build arm"
+    "name": "Build arm"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -178,13 +178,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm"
     },
-    "name": "Clean arm (2)"
+    "name": "Post clean arm"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -196,7 +196,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "Clean arm64"
+    "name": "Pre clean arm64"
   },
   {
     "cmd": [
@@ -213,13 +213,13 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "build arm64"
+    "name": "Build arm64"
   },
   {
     "cmd": [
-      "make",
-      "-j8",
-      "clean"
+      "rm",
+      "-rf",
+      "out"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -231,7 +231,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "aosp_arm64"
     },
-    "name": "Clean arm64 (2)"
+    "name": "Post clean arm64"
   },
   {
     "jsonResult": null,
