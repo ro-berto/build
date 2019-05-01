@@ -26,14 +26,15 @@ def RunSteps(api):
       'GOMA_DIR': goma_dir,
   }
   api.goma.start()
-  sync_dir = api.path['builder_cache'].join('sync')
+  cache_dir = api.path['builder_cache']
+  sync_dir = cache_dir.join('emscripten-releases')
   api.file.ensure_directory('Ensure sync dir', sync_dir)
-  build_dir = api.path['builder_cache'].join('build')
+  build_dir = cache_dir.join('emscripten-releases', 'build')
   waterfall_build = sync_dir.join('waterfall', 'src', 'build.py')
   dir_flags = ['--sync-dir=%s' % sync_dir,
                '--build-dir=%s' % build_dir,
                '--prebuilt-dir=%s' % sync_dir]
-  with api.context(cwd=sync_dir):
+  with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 

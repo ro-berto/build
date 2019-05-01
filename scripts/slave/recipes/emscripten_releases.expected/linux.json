@@ -110,7 +110,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/sync"
+      "[BUILDER_CACHE]/emscripten-releases"
     ],
     "infra_step": true,
     "name": "Ensure sync dir"
@@ -133,7 +133,7 @@
       "--revision",
       "emscripten-releases@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/sync",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -186,7 +186,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/sync",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -198,10 +198,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/sync/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/sync",
-      "--build-dir=[BUILDER_CACHE]/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/sync",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
       "--no-sync",
       "--no-test",
       "--build-include=wabt"
@@ -220,10 +220,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/sync/waterfall/src/build.py",
-      "--sync-dir=[BUILDER_CACHE]/sync",
-      "--build-dir=[BUILDER_CACHE]/build",
-      "--prebuilt-dir=[BUILDER_CACHE]/sync",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
       "--no-sync",
       "--no-test",
       "--build-include=binaryen"
