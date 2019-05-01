@@ -103,42 +103,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\catapult\\catapult_build\\build_steps.py",
-      "--api-path-checkout",
-      "[START_DIR]\\catapult",
-      "--app-engine-sdk-pythonpath",
-      "%(PYTHONPATH)s;[START_DIR]\\google_appengine",
-      "--platform",
-      "win",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]\\catapult",
-    "name": "gen step(build_steps.py)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cmd\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"run_py_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"--no-hooks\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Dashboard Tests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "run_py_tests",
-      "--no-hooks"
-    ],
-    "name": "Dashboard Tests"
-  },
-  {
-    "cmd": [
       "cipd.bat",
       "ensure",
       "-root",
@@ -160,6 +124,54 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]\\catapult\\catapult_build\\build_steps.py",
+      "--api-path-checkout",
+      "[START_DIR]\\catapult",
+      "--app-engine-sdk-pythonpath",
+      "%(PYTHONPATH)s;[START_DIR]\\google_appengine",
+      "--platform",
+      "win",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]\\catapult",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\packages",
+        "[START_DIR]\\packages\\bin"
+      ]
+    },
+    "name": "gen step(build_steps.py)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cmd\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"run_py_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"--no-hooks\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"name\": \"Dashboard Tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "run_py_tests",
+      "--no-hooks"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\packages",
+        "[START_DIR]\\packages\\bin"
+      ]
+    },
+    "name": "Dashboard Tests"
   },
   {
     "jsonResult": null,

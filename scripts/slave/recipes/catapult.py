@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/gitiles',
   'depot_tools/osx_sdk',
   'gae_sdk',
+  'recipe_engine/context',
   'recipe_engine/generator_script',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -64,14 +65,18 @@ def RunSteps(api, platform):
   api.gae_sdk.fetch(api.gae_sdk.PLAT_PYTHON, sdk_path)
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
-  with api.osx_sdk('mac'):
-    _RemoteSteps(api, app_engine_sdk_path, platform)
 
   # Install the protoc package.
   packages = {}
   packages['infra/tools/protoc/${platform}'] = 'protobuf_version:v3.6.1'
   packages_root = api.path['start_dir'].join('packages')
   api.cipd.ensure(packages_root, packages)
+
+  with api.osx_sdk('mac'):
+    with api.context(
+        env_prefixes={'PATH': [packages_root,
+                               packages_root.join('bin')]}):
+      _RemoteSteps(api, app_engine_sdk_path, platform)
 
 
 def GenTests(api):

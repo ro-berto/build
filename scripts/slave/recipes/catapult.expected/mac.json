@@ -106,6 +106,30 @@
       "cipd",
       "ensure",
       "-root",
+      "[START_DIR]/packages",
+      "-ensure-file",
+      "infra/tools/protoc/${platform} protobuf_version:v3.6.1",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/protoc/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
       "[CACHE]/osx_sdk",
       "-ensure-file",
       "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
@@ -113,7 +137,7 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "ensure_installed (2)",
+    "name": "ensure_installed (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
@@ -167,6 +191,12 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/catapult",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
+      ]
+    },
     "name": "gen step(build_steps.py)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -186,6 +216,12 @@
       "run_py_tests",
       "--no-hooks"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
+      ]
+    },
     "name": "Dashboard Tests"
   },
   {
@@ -196,30 +232,6 @@
     ],
     "infra_step": true,
     "name": "reset XCode"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/packages",
-      "-ensure-file",
-      "infra/tools/protoc/${platform} protobuf_version:v3.6.1",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_installed (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/protoc/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "jsonResult": null,
