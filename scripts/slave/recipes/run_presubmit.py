@@ -104,9 +104,9 @@ def _RunStepsInternal(api):
       # According to event mon data we have, it seems like anything longer than
       # this is a bug, and should just instant fail.
       #
-      # https://crbug.com/917479 This is a problem on luci-py, bump to 12
+      # https://crbug.com/917479 This is a problem on luci-py, bump to 15
       # minutes.
-      timeout = 720 if repo_name == 'luci_py' else 480
+      timeout = 900 if repo_name == 'luci_py' else 480
       api.presubmit(*presubmit_args, venv=venv, timeout=timeout)
   except api.step.StepTimeout:
     raise
