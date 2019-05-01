@@ -651,9 +651,9 @@
       "--isolated",
       "[dummy hash for bwe_simulations_tests]",
       "--",
-      "--gtest_filter=VideoSendersTest/BweSimulation.Choke1000kbps500kbps1000kbps/1",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
+      "--gtest_filter=VideoSendersTest/BweSimulation.Choke1000kbps500kbps1000kbps/1"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

@@ -1278,7 +1278,6 @@
       "spec_name:chromium.try:linux-rel",
       "--tag",
       "stepname:blink_web_tests (retry shards with patch)",
-      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

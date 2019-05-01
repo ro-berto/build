@@ -470,8 +470,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
 
-  def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
-           shard_indices=None, task_output_dir=None, extra_args=None,
+  def task(self, title=None, isolated_hash=None, ignore_task_failure=False,
+           shards=1, shard_indices=None, task_output_dir=None, extra_args=None,
            idempotent=None, cipd_packages=None, build_properties=None,
            builder_name=None, build_number=None,
            merge=None, trigger_script=None, named_caches=None,
@@ -575,7 +575,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           builder_id.project, builder_id.bucket, builder_id.builder)
 
     init_env = dict(self.default_env)
-    if env:
+    if env: # pragma: no cover
       init_env.update(env)
 
     builder_name = (builder_name or self.m.buildbucket.builder_name)
@@ -617,7 +617,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_to_retry=task_to_retry,
     )
 
-  def gtest_task(self, title, isolated_hash, extra_args=None,
+  def gtest_task(self, title=None, isolated_hash=None, extra_args=None,
                  cipd_packages=None, merge=None, **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -648,21 +648,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     task.collect_step = self._gtest_collect_step
     return task
 
-  def _check_and_set_output_flag(self, extra_args, flag, output_file_name):
-    extra_args = list(extra_args or [])
-    # Ensure flag is not already passed. We are going to overwrite it.
-    flag_value = '--%s=' % flag
-    bad_args = any(x.startswith(flag_value) for x in extra_args)
-    if bad_args: # pragma: no cover
-      raise ValueError('--%s should not be used' % flag)
-
-    # Append it.
-    output_arg = '--%s=${ISOLATED_OUTDIR}/%s' % (flag, output_file_name)
-    extra_args.append(output_arg)
-    return extra_args
-
-  def isolated_script_task(self, title, isolated_hash, extra_args=None,
-                           idempotent=False, merge=None, **kwargs):
+  def isolated_script_task(self):
     """Returns a new SwarmingTask to run an isolated script test on Swarming.
 
     At the time of this writting, this code is used by WebRTC and
@@ -671,28 +657,28 @@ class SwarmingApi(recipe_api.RecipeApi):
     Swarming recipe module knows how collect JSON file with test execution
     summary produced by isolated script tests launcher. A custom script
     can be passed to merge the collected results and post-process them.
-
-    For meaning of the rest of the arguments see 'task' method.
     """
 
-    # Ensure output flags are not already passed. We are going
-    # to overwrite them.
+    def _create_output_flag(flag, output_file_name):
+      return '--%s=${ISOLATED_OUTDIR}/%s' % (flag, output_file_name)
+
+    extra_args = []
     # output.json name is expected by collect_task.py.
-    extra_args = self._check_and_set_output_flag(
-      extra_args, 'isolated-script-test-output', 'output.json')
+    extra_args.append(_create_output_flag(
+        'isolated-script-test-output', 'output.json'))
     # perftest-output.json name is expected by benchmarks generating chartjson
     # or histogram output
-    extra_args = self._check_and_set_output_flag(
-      extra_args,
-      'isolated-script-test-perf-output',
-      'perftest-output.json')
+    extra_args.append(_create_output_flag(
+        'isolated-script-test-perf-output',
+        'perftest-output.json'))
 
-    merge = merge or {
+    merge = {
       'script': self.merge_script_path('standard_isolated_script_merge.py')
     }
 
-    task = self.task(title, isolated_hash, extra_args=extra_args,
-                     idempotent=idempotent, merge=merge, **kwargs)
+    task = self.task()
+    task.extra_args = extra_args
+    task.merge = merge
     task.collect_step = self._isolated_script_collect_step
     return task
 
@@ -1857,7 +1843,7 @@ class SwarmingTask(object):
     self.dimensions = dimensions.copy()
     self.env = env.copy()
     self.expiration = expiration
-    self.extra_args = tuple(extra_args or [])
+    self.extra_args = extra_args or []
     self.hard_timeout = hard_timeout
     self.idempotent = idempotent
     self.ignore_task_failure = ignore_task_failure

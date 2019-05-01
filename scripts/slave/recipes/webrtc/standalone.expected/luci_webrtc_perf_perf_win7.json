@@ -384,11 +384,11 @@
       "--isolated",
       "[dummy hash for webrtc_perf_tests]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--test-artifacts-dir",
       "${ISOLATED_OUTDIR}",
-      "--save_worst_frame",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--save_worst_frame"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,

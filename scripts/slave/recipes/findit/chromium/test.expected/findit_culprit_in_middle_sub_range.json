@@ -1191,11 +1191,11 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",
       "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2252,11 +2252,11 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",
       "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -3273,11 +3273,11 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",
       "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -4294,11 +4294,11 @@
       "--isolated",
       "[dummy hash for gl_tests]",
       "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
       "--gtest_filter=Test.One",
       "--gtest_repeat=20",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests",
-      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+      "--gtest_also_run_disabled_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

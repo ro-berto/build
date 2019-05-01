@@ -74,9 +74,9 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
-      "--isolated-script-test-filter=test1.Test1::test1.Test2::test1.Test2-2",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
+      "--isolated-script-test-filter=test1.Test1::test1.Test2::test1.Test2-2"
     ],
     "infra_step": true,
     "name": "[trigger] base_unittests on Intel GPU on Linux (without patch)",

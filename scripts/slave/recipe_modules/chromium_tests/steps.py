@@ -1464,8 +1464,10 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def _create_task_common(self, api, suffix, isolated_hash, filter_flag,
-                          filter_delimiter, task_func):
+  def _apply_swarming_task_config(
+      self, task, api, suffix, isolated_hash, filter_flag, filter_delimiter):
+    """Applies shared configuration for swarming tasks.
+    """
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
@@ -1486,16 +1488,17 @@ class SwarmingTest(Test):
       if expected_filter_length < char_limit:
         test_list = filter_delimiter.join(tests_to_retry)
         args = _merge_arg(args, filter_flag, test_list)
-
         shards = self.shards_to_retry_with(shards, len(tests_to_retry))
 
-    kwargs = {}
+    task.extra_args.extend(args)
+    task.shards = shards
+
     if self._isolate_coverage_data:
       # Targets built with 'use_clang_coverage' will look at this environment
       # variable to determine where to write the profile dumps. The %Nm syntax
       # is understood by this instrumentation, see:
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      kwargs['env'] = {
+      task.env = {
           'LLVM_PROFILE_FILE':
               '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
@@ -1504,13 +1507,12 @@ class SwarmingTest(Test):
           self.step_name(suffix), additional_merge=self._merge)
 
     if suffix == 'retry shards with patch':
-      kwargs['task_to_retry'] = self._tasks['with patch']
-      assert kwargs['task_to_retry'], (
+      task.task_to_retry = self._tasks['with patch']
+      assert task.task_to_retry, (
           '\'retry_shards_with_patch\' expects that the \'with patch\' phase '
           'has already run, but it apparently hasn\'t.')
-      kwargs['shard_indices'] = kwargs['task_to_retry'].failed_shards
-      kwargs['idempotent'] = False
-
+      task.shard_indices = task.task_to_retry.failed_shards
+      task.idempotent = False
       # Test suite failure is determined by merging and examining the JSON
       # output from the shards. Failed shards are determined by looking at the
       # swarming output [retcode !=0 or state != 'SUCCESS']. It is possible that
@@ -1519,25 +1521,23 @@ class SwarmingTest(Test):
       # shards with patch' will simply reuse results from 'with patch'.
       # Regardless, we want to emit a failing step so that the error is not
       # overlooked.
-      if len(kwargs['task_to_retry'].failed_shards) == 0: # pragma: no cover
+      if len(task.shard_indices) == 0: # pragma: no cover
         api.python.failing_step(
           'missing failed shards',
           "Retry shards with patch is being run on a test that has no failed "
           "shards.")
+    else:
+      task.shard_indices = range(task.shards)
 
-    task = task_func(
-        build_properties=api.chromium.build_properties,
-        cipd_packages=self._cipd_packages,
-        extra_args=args,
-        ignore_task_failure=self._ignore_task_failure,
-        isolated_hash=isolated_hash,
-        merge=self._merge,
-        shards=shards,
-        title=self.step_name(suffix),
-        trigger_script=self._trigger_script,
-        service_account=self._service_account,
-        **kwargs
-    )
+    task.build_properties = api.chromium.build_properties
+    task.cipd_packages = self._cipd_packages
+    task.ignore_task_failure = self._ignore_task_failure
+    task.isolated_hash = isolated_hash
+    if self._merge:
+      task.merge = self._merge
+    task.title = self.step_name(suffix)
+    task.trigger_script = self._trigger_script
+    task.service_account = self._service_account
 
     if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
       task.priority -= 1
@@ -1570,8 +1570,6 @@ class SwarmingTest(Test):
     if 'os' not in task.dimensions:
       task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
           api.platform.name)
-
-    return task
 
   def get_task(self, suffix):
     return self._tasks.get(suffix)
@@ -1695,9 +1693,10 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name]
 
   def create_task(self, api, suffix, isolated_hash):
-    return self._create_task_common(
-        api, suffix, isolated_hash, '--gtest_filter', ':',
-        api.chromium_swarming.gtest_task)
+    task = api.chromium_swarming.gtest_task()
+    self._apply_swarming_task_config(
+        task, api, suffix, isolated_hash, '--gtest_filter', ':')
+    return task
 
   def validate_task_results(self, api, step_result):
     return step_result.test_utils.gtest_results.canonical_result_format()
@@ -1915,17 +1914,17 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, api, suffix, isolated_hash):
-    def _create_swarming_task(*args, **kwargs):
-      # For the time being, we assume all isolated_script_test are not
-      # idempotent TODO(crbug.com/549140): remove the self._idempotent
-      # parameter once Telemetry tests are idempotent, since that will make all
-      # isolated_script_tests idempotent.
-      kwargs['idempotent'] = self._idempotent
-      return api.chromium_swarming.isolated_script_task(*args, **kwargs)
+    task = api.chromium_swarming.isolated_script_task()
 
-    return self._create_task_common(
-        api, suffix, isolated_hash, '--isolated-script-test-filter', '::',
-        _create_swarming_task)
+    # For the time being, we assume all isolated_script_test are not
+    # idempotent TODO(crbug.com/549140): remove the self._idempotent
+    # parameter once Telemetry tests are idempotent, since that will make all
+    # isolated_script_tests idempotent.
+    task.idempotent = self._idempotent
+
+    self._apply_swarming_task_config(
+        task, api, suffix, isolated_hash, '--isolated-script-test-filter', '::')
+    return task
 
   def validate_task_results(self, api, step_result):
     results_json = getattr(step_result, 'isolated_script_results', None) or {}

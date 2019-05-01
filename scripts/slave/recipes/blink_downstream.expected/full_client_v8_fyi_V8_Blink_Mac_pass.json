@@ -784,11 +784,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -902,11 +902,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1020,11 +1020,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1138,11 +1138,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1256,11 +1256,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1374,11 +1374,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1492,11 +1492,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,
@@ -1610,11 +1610,11 @@
       "--isolated",
       "[dummy hash for blink_web_tests_exparchive]",
       "--",
+      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
-      "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "infra_step": true,

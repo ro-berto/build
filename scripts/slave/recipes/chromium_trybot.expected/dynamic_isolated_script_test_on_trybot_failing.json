@@ -1240,7 +1240,6 @@
       "spec_name:chromium.try:linux-rel",
       "--tag",
       "stepname:telemetry_gpu_unittests (retry shards with patch)",
-      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -2084,9 +2083,9 @@
       "--isolated",
       "[dummy hash for telemetry_gpu_unittests]",
       "--",
-      "--isolated-script-test-filter=test1.Test1::test2.Test2",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
+      "--isolated-script-test-filter=test1.Test1::test2.Test2"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

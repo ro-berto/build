@@ -119,11 +119,14 @@ def RunSteps(api, platforms, custom_trigger_script,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge)
     elif isolated_script_task:
-      task = api.chromium_swarming.isolated_script_task(
-          'hello_world', isolated_hash,
-          task_output_dir=temp_dir.join('task_output_dir'),
-          merge=merge, trigger_script=trigger_script, env={
-              'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'})
+      task = api.chromium_swarming.isolated_script_task()
+      task.title = 'hello_world'
+      task.isolated_hash = isolated_hash
+      task.task_output_dir = temp_dir.join('task_output_dir')
+      if merge:
+        task.merge = merge
+      task.trigger_script = trigger_script
+      task.env = {'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}
     else:
       task = api.chromium_swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'),
