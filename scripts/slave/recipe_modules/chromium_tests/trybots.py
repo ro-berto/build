@@ -253,6 +253,7 @@ TRYBOTS = freeze({
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
       'linux-angle-rel': {
+        'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
@@ -272,6 +273,7 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Linux Ozone Builder',
       }, analyze_mode='compile'),
       'linux_angle_deqp_rel_ng': {
+        'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
@@ -286,6 +288,7 @@ TRYBOTS = freeze({
         ],
       },
       'mac-angle-rel': {
+        'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
@@ -305,6 +308,7 @@ TRYBOTS = freeze({
         ],
       },
       'win-angle-rel': {
+        'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
@@ -324,6 +328,7 @@ TRYBOTS = freeze({
         ],
       },
       'win_angle_deqp_rel_ng': {
+        'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
