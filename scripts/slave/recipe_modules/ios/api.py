@@ -10,20 +10,6 @@ from recipe_engine import recipe_api
 
 class iOSApi(recipe_api.RecipeApi):
 
-  # Mapping of common names of supported iOS devices to product types
-  # exposed by the Swarming server.
-  PRODUCT_TYPES = {
-    'iPad 4 GSM CDMA': 'iPad3,6',
-    'iPad 5th Gen':    'iPad6,11',
-    'iPad 6th Gen':    'iPad7,5',
-    'iPad Air':        'iPad4,1',
-    'iPad Air 2':      'iPad5,3',
-    'iPhone 5':        'iPhone5,1',
-    'iPhone 5s':       'iPhone6,1',
-    'iPhone 6s':       'iPhone8,1',
-    'iPhone 7':        'iPhone9,1',
-    'iPhone X':        'iPhone10,3',
-  }
   # Service account to use in swarming tasks.
   SWARMING_SERVICE_ACCOUNT = \
     'ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com'
@@ -39,21 +25,7 @@ class iOSApi(recipe_api.RecipeApi):
   }
   XCODE_BUILD_VERSION_DEFAULT = '9c40b'
 
-  # Pinned version of
-  # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
-  MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
-  MAC_TOOLCHAIN_VERSION = (
-      'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
-  MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
-
-  # CIPD package containing various static test utilities and binaries for WPR
-  # testing.  Used with WprProxySimulatorTestRunner.
-  WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
-  WPR_TOOLS_VERSION = 'version:1.0'
-  WPR_TOOLS_ROOT = 'wpr-ios-tools'
-
-  WPR_REPLAY_DATA_ROOT = 'wpr-replay-data'
 
   def __init__(self, *args, **kwargs):
     super(iOSApi, self).__init__(*args, **kwargs)
@@ -319,7 +291,8 @@ class iOSApi(recipe_api.RecipeApi):
   def get_mac_toolchain_cmd(self):
     cipd_root = self.m.path['start_dir']
     self.m.cipd.ensure(cipd_root, {
-        self.MAC_TOOLCHAIN_PACKAGE: self.MAC_TOOLCHAIN_VERSION})
+        self.m.chromium_tests.steps.MAC_TOOLCHAIN_PACKAGE:
+        self.m.chromium_tests.steps.MAC_TOOLCHAIN_VERSION})
     return cipd_root.join('mac_toolchain')
 
   def ensure_xcode(self, xcode_build_version):
@@ -662,13 +635,14 @@ class iOSApi(recipe_api.RecipeApi):
         'replay package name')
     args.extend([
       '--config-variable', 'wpr_tools_path', (
-          self.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'),
+          self.m.chromium_tests.steps.WPR_TOOLS_ROOT
+          if use_wpr_tools else 'NO_PATH'),
     ])
 
     args.extend([
       '--config-variable', 'replay_path', (
-          self.WPR_REPLAY_DATA_ROOT if test.get(
-              'replay package name') else 'NO_PATH'),
+          self.m.chromium_tests.steps.WPR_REPLAY_DATA_ROOT if
+          test.get('replay package name') else 'NO_PATH'),
     ])
 
     args.extend([
@@ -778,7 +752,8 @@ class iOSApi(recipe_api.RecipeApi):
       '--retries', self.__config.get('retries', '3'),
       '--shards', '<(shards)',
       '--<(xcode_arg_name)', '<(xcode_version)',
-      '--mac-toolchain-cmd', '%s/mac_toolchain' % self.MAC_TOOLCHAIN_ROOT,
+      '--mac-toolchain-cmd', '%s/mac_toolchain' %
+          self.m.chromium_tests.steps.MAC_TOOLCHAIN_ROOT,
       '--xcode-path', self.XCODE_APP_PATH,
       '--wpr-tools-path', '<(wpr_tools_path)',
       '--replay-path', '<(replay_path)'
@@ -866,13 +841,14 @@ class iOSApi(recipe_api.RecipeApi):
       return None
 
     if self.platform == 'device':
-      if not iOSApi.PRODUCT_TYPES.get(task['test']['device type']):
+      if not self.m.chromium_tests.steps.IOS_PRODUCT_TYPES.get(
+          task['test']['device type']):
         # Create a dummy step so we can annotate it to explain what
         # went wrong.
         step_result = self.m.step('[trigger] %s' % task['step name'], [])
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.logs['supported devices'] = sorted(
-          iOSApi.PRODUCT_TYPES.keys())
+          self.m.chromium_tests.steps.IOS_PRODUCT_TYPES.keys())
         step_result.presentation.step_text = (
           'Requested unsupported device type.')
         return None

@@ -23,6 +23,34 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 # total run time, which we want to keep low.
 REPEAT_COUNT_FOR_FAILING_TESTS = 10
 
+# Pinned version of
+# https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
+MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
+MAC_TOOLCHAIN_VERSION = (
+    'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
+MAC_TOOLCHAIN_ROOT    = '.'
+
+# CIPD package containing various static test utilities and binaries for WPR
+# testing.  Used with WprProxySimulatorTestRunner.
+WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
+WPR_TOOLS_VERSION = 'version:1.0'
+WPR_TOOLS_ROOT = 'wpr-ios-tools'
+WPR_REPLAY_DATA_ROOT = 'wpr-replay-data'
+
+# Mapping of common names of supported iOS devices to product types
+# exposed by the Swarming server.
+IOS_PRODUCT_TYPES = {
+  'iPad 4 GSM CDMA': 'iPad3,6',
+  'iPad 5th Gen':    'iPad6,11',
+  'iPad 6th Gen':    'iPad7,5',
+  'iPad Air':        'iPad4,1',
+  'iPad Air 2':      'iPad5,3',
+  'iPhone 5':        'iPhone5,1',
+  'iPhone 5s':       'iPhone6,1',
+  'iPhone 6s':       'iPhone8,1',
+  'iPhone 7':        'iPhone9,1',
+  'iPhone X':        'iPhone10,3',
+}
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -2471,28 +2499,20 @@ class SwarmingIosTest(SwarmingTest):
         results from perf_result.json.
     """
     super(SwarmingIosTest, self).__init__(name=task['step name'])
-    self._swarming_service_account = swarming_service_account
+    self._service_account = swarming_service_account
     self._platform = platform
     self._config = copy.deepcopy(config)
     self._task = copy.deepcopy(task)
     self._upload_test_results = upload_test_results
     self._result_callback = result_callback
     self._use_test_data = use_test_data
-
-  def pre_run(self, api, suffix):
-    task = self._task
-
-    device_check = self._config.get('device check')
-    expiration = (self._task['test'].get('expiration_time') or
-                  self._config.get( 'expiration_time'))
-    hard_timeout = self._task['test'].get(
-        'max runtime seconds') or self._config.get('max runtime seconds')
-    task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
+    self._args = []
+    self._trigger_script = None
 
     cipd_packages = [(
-        api.ios.MAC_TOOLCHAIN_ROOT,
-        api.ios.MAC_TOOLCHAIN_PACKAGE,
-        api.ios.MAC_TOOLCHAIN_VERSION,
+        MAC_TOOLCHAIN_ROOT,
+        MAC_TOOLCHAIN_PACKAGE,
+        MAC_TOOLCHAIN_VERSION,
     )]
 
     replay_package_name = task['test'].get('replay package name')
@@ -2500,73 +2520,28 @@ class SwarmingIosTest(SwarmingTest):
     use_trusted_cert = task['test'].get('use trusted cert')
     if use_trusted_cert or (replay_package_name and replay_package_version):
       cipd_packages.append((
-          api.ios.WPR_TOOLS_ROOT,
-          api.ios.WPR_TOOLS_PACKAGE,
-          api.ios.WPR_TOOLS_VERSION,
+          WPR_TOOLS_ROOT,
+          WPR_TOOLS_PACKAGE,
+          WPR_TOOLS_VERSION,
       ))
     if replay_package_name and replay_package_version:
       cipd_packages.append((
-          api.ios.WPR_REPLAY_DATA_ROOT,
+          WPR_REPLAY_DATA_ROOT,
           replay_package_name,
           replay_package_version,
       ))
+    self._cipd_packages = cipd_packages
 
-    swarming_task = api.chromium_swarming.task(
-      task['step name'],
-      task['isolated hash'],
-      task_output_dir=task['tmp_dir'],
-      service_account=self._swarming_service_account,
-      cipd_packages=cipd_packages,
-      failure_as_exception=False,
-    )
-    swarming_task.dimensions = {
-      'pool': 'Chrome',
-    }
+    self._expiration = (self._task['test'].get('expiration_time') or
+                        self._config.get( 'expiration_time'))
 
-    # TODO(crbug.com/835036): remove this when all configs are migrated to
-    # "xcode build version". Otherwise keep it for backwards compatibility;
-    # otherwise we may receive an older Mac OS which does not support the
-    # requested Xcode version.
-    if task.get('xcode version'):
-      swarming_task.dimensions['xcode_version'] = task['xcode version']
+    self._hard_timeout = self._task['test'].get(
+        'max runtime seconds') or self._config.get('max runtime seconds')
 
-    assert task.get('xcode build version')
-    named_cache = 'xcode_ios_%s' % (task['xcode build version'])
-    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
-
-    if self._platform == 'simulator':
-      # TODO(crbug.com/955856): We should move away from 'host os'.
-      swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
-    elif self._platform == 'device':
-      swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
-      if device_check:
-        swarming_task.dimensions['device_status'] = 'available'
-        swarming_task.wait_for_capacity = True
-      swarming_task.dimensions['device'] = api.ios.PRODUCT_TYPES.get(
-        task['test']['device type'])
-    if task['bot id']:
-      swarming_task.dimensions['id'] = task['bot id']
-    if task['pool']:
-      swarming_task.dimensions['pool'] = task['pool']
-
-    swarming_task.priority = task['test'].get('priority', 200)
-
-    swarming_task.tags.add(
-        'device_type:%s' % str(task['test']['device type']))
-    swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
-    swarming_task.tags.add('platform:%s' % self._platform)
-    swarming_task.tags.add('test:%s' % str(task['test']['app']))
-
-    if expiration:
-      swarming_task.expiration = expiration
-
-    if hard_timeout:
-      swarming_task.hard_timeout = hard_timeout
-
-    swarming_task.optional_dimensions = task['test'].get(
+    self._optional_dimensions = task['test'].get(
         'optional_dimensions')
-    if swarming_task.optional_dimensions:
-      for dimension_list in swarming_task.optional_dimensions.values():
+    if self._optional_dimensions:
+      for dimension_list in self._optional_dimensions.values():
         for dimension_set in dimension_list:
           if self._platform == 'simulator' and 'host os' in dimension_set:
             # We don't want both values to be set, as the syntax for
@@ -2578,7 +2553,64 @@ class SwarmingIosTest(SwarmingTest):
             dimension_set['os'] = dimension_set['host os']
             dimension_set.pop('host os')
 
+    self._dimensions = {
+      'pool': 'Chrome',
+    }
 
+    # TODO(crbug.com/835036): remove this when all configs are migrated to
+    # "xcode build version". Otherwise keep it for backwards compatibility;
+    # otherwise we may receive an older Mac OS which does not support the
+    # requested Xcode version.
+    if task.get('xcode version'):
+      self._dimensions['xcode_version'] = task['xcode version']
+
+    if self._platform == 'simulator':
+      # TODO(crbug.com/955856): We should move away from 'host os'.
+      self._dimensions['os'] = task['test'].get('host os') or 'Mac'
+    elif self._platform == 'device':
+      self._dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
+      if self._config.get('device check'):
+        self._dimensions['device_status'] = 'available'
+      self._dimensions['device'] = IOS_PRODUCT_TYPES.get(
+        task['test']['device type'])
+    if task['bot id']:
+      self._dimensions['id'] = task['bot id']
+    if task['pool']:
+      self._dimensions['pool'] = task['pool']
+
+
+  def pre_run(self, api, suffix):
+    task = self._task
+
+    task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
+
+    swarming_task = api.chromium_swarming.task(
+      title=task['step name'],
+      task_output_dir=task['tmp_dir'],
+      failure_as_exception=False,
+    )
+    self._apply_swarming_task_config(
+        swarming_task, api, suffix, task['isolated hash'], filter_flag=None,
+        filter_delimiter=None)
+    swarming_task.priority = task['test'].get('priority', 200)
+
+    assert task.get('xcode build version')
+    named_cache = 'xcode_ios_%s' % (task['xcode build version'])
+    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
+
+    # The implementation of _apply_swarming_task_config picks up default
+    # dimensions which don't work for iOS because the swarming bots do not
+    # specify typical dimensions [GPU, cpu type]. We explicitly override
+    # dimensions here to get the desired results.
+    swarming_task.dimensions = self._dimensions
+    if self._platform == 'device' and self._config.get('device check'):
+      swarming_task.wait_for_capacity = True
+
+    swarming_task.tags.add(
+        'device_type:%s' % str(task['test']['device type']))
+    swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
+    swarming_task.tags.add('platform:%s' % self._platform)
+    swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
     api.chromium_swarming.trigger_task(swarming_task)
     task['task'] = swarming_task

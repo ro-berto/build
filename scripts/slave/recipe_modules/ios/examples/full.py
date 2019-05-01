@@ -27,16 +27,16 @@ def RunSteps(api):
 
 def GenTests(api):
   BASIC_TEST_SUITES = [
-    'fake test 0 (fake device 0 iOS 11.0) shard 0',
-    'fake test 0 (fake device 0 iOS 11.0) shard 1',
-    'fake test 0 (fake device 0 iOS 11.0) shard 2',
-    'fake test 1 (fake device 1 iOS 8.1)',
-    'fake test 2 (fake device 2 iOS 8.1) on Mac-10.12',
-    'fake included test 1 (fake device 1 iOS 8.1)',
-    'fake included test 2 (fake device 1 iOS 8.1)',
-    'fake test 2 (fake device 2 iOS 7.1)',
-    'fake included test 1 (fake device 2 iOS 7.1)',
-    'fake included test 2 (fake device 2 iOS 7.1)',
+    'fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)',
+    'fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)',
+    'fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)',
+    'fake test 1 (fake device 1 iOS 8.1) (with patch)',
+    'fake test 2 (fake device 2 iOS 8.1) (with patch) on Mac-10.12',
+    'fake included test 1 (fake device 1 iOS 8.1) (with patch)',
+    'fake included test 2 (fake device 1 iOS 8.1) (with patch)',
+    'fake test 2 (fake device 2 iOS 7.1) (with patch)',
+    'fake included test 1 (fake device 2 iOS 7.1) (with patch)',
+    'fake included test 2 (fake device 2 iOS 7.1) (with patch)',
   ]
 
   def gen_basic(api):
@@ -216,7 +216,7 @@ def GenTests(api):
     )
     + api.step_data(
         'test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) '
-        'on iOS-8.1',
+        '(with patch) on iOS-8.1',
         retcode=1,
     )
   )
@@ -254,7 +254,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.ios.generate_test_results_placeholder(failure=True))
     + api.post_process(post_process.StatusFailure)
   )
@@ -292,7 +292,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': 1,
@@ -336,7 +336,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': '1',
@@ -381,7 +381,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'exit_code': 2,
@@ -424,7 +424,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'TIMED_OUT',
@@ -466,7 +466,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'EXPIRED',
@@ -508,7 +508,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'fake test (fake device iOS 8.1)',
+        'fake test (fake device iOS 8.1) (with patch)',
         api.chromium_swarming.summary(None, {
           'shards': [{
             'state': 'BOT_DIED',

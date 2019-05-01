@@ -1003,7 +1003,7 @@
       "--priority",
       "200",
       "--task-name",
-      "fake tests (fake device iOS 8.1)/Mac/[dummy has/ios-simulator-gn/1",
+      "fake tests (fake device iOS 8.1) (with patch)/Mac/[dummy has/ios-simulator-gn/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1054,7 +1054,7 @@
       "--tag",
       "spec_name:chromium.try:ios-simulator-gn",
       "--tag",
-      "stepname:fake tests (fake device iOS 8.1)",
+      "stepname:fake tests (fake device iOS 8.1) (with patch)",
       "--tag",
       "test:fake tests",
       "--cipd-package",
@@ -1081,14 +1081,14 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] fake tests (fake device iOS 8.1)",
+    "name": "test_pre_run (with patch).[trigger] fake tests (fake device iOS 8.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests (fake device iOS 8.1)/Mac/[dummy has/ios-simulator-gn/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests (fake device iOS 8.1) (with patch)/Mac/[dummy has/ios-simulator-gn/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake tests (fake device iOS 8.1)/Mac/[dummy has/ios-simulator-gn/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake tests (fake device iOS 8.1) (with patch)/Mac/[dummy has/ios-simulator-gn/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1174,7 +1174,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake tests (fake device iOS 8.1)",
+    "name": "fake tests (fake device iOS 8.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1217,7 +1217,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
-    "name": "fake tests (fake device iOS 8.1) (2)",
+    "name": "fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]

@@ -5,7 +5,6 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'chromium_swarming',
   'ios',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -20,7 +19,7 @@ def RunSteps(api):
   for task in tasks:
     test = api.ios.generate_test_from_task(task)
     if test:
-      test.pre_run(api, suffix='')
+      test.pre_run(api.ios.m, suffix='')
 
 def GenTests(api):
   yield (

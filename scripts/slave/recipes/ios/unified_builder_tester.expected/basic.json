@@ -882,7 +882,7 @@
       "--priority",
       "200",
       "--task-name",
-      "fake tests 1 (fake device iOS 8.0)/Mac/[dummy has/ios/1",
+      "fake tests 1 (fake device iOS 8.0) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -933,7 +933,7 @@
       "--tag",
       "spec_name:chromium.try:ios",
       "--tag",
-      "stepname:fake tests 1 (fake device iOS 8.0)",
+      "stepname:fake tests 1 (fake device iOS 8.0) (with patch)",
       "--tag",
       "test:fake tests 1",
       "--cipd-package",
@@ -960,14 +960,14 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] fake tests 1 (fake device iOS 8.0)",
+    "name": "test_pre_run (with patch).[trigger] fake tests 1 (fake device iOS 8.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 1 (fake device iOS 8.0)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 1 (fake device iOS 8.0) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake tests 1 (fake device iOS 8.0)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake tests 1 (fake device iOS 8.0) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -995,7 +995,7 @@
       "--priority",
       "200",
       "--task-name",
-      "fake tests 2 (fake device iOS 7.1)/Mac/[dummy has/ios/1",
+      "fake tests 2 (fake device iOS 7.1) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1046,7 +1046,7 @@
       "--tag",
       "spec_name:chromium.try:ios",
       "--tag",
-      "stepname:fake tests 2 (fake device iOS 7.1)",
+      "stepname:fake tests 2 (fake device iOS 7.1) (with patch)",
       "--tag",
       "test:fake tests 2",
       "--cipd-package",
@@ -1073,14 +1073,14 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] fake tests 2 (fake device iOS 7.1)",
+    "name": "test_pre_run (with patch).[trigger] fake tests 2 (fake device iOS 7.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 2 (fake device iOS 7.1)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake tests 2 (fake device iOS 7.1) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake tests 2 (fake device iOS 7.1)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake tests 2 (fake device iOS 7.1) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1108,7 +1108,7 @@
       "--priority",
       "200",
       "--task-name",
-      "fake_eg_test_host (fake device 3 iOS 9.3)/Mac/[dummy has/ios/1",
+      "fake_eg_test_host (fake device 3 iOS 9.3) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1159,7 +1159,7 @@
       "--tag",
       "spec_name:chromium.try:ios",
       "--tag",
-      "stepname:fake_eg_test_host (fake device 3 iOS 9.3)",
+      "stepname:fake_eg_test_host (fake device 3 iOS 9.3) (with patch)",
       "--tag",
       "test:fake_eg_test_host",
       "--cipd-package",
@@ -1186,14 +1186,14 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] fake_eg_test_host (fake device 3 iOS 9.3)",
+    "name": "test_pre_run (with patch).[trigger] fake_eg_test_host (fake device 3 iOS 9.3) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake_eg_test_host (fake device 3 iOS 9.3)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"fake_eg_test_host (fake device 3 iOS 9.3) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fake_eg_test_host (fake device 3 iOS 9.3)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"fake_eg_test_host (fake device 3 iOS 9.3) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1316,7 +1316,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
+    "name": "fake_eg_test_host (fake device 3 iOS 9.3) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1393,7 +1393,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake tests 2 (fake device iOS 7.1)",
+    "name": "fake tests 2 (fake device iOS 7.1) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1470,7 +1470,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "fake tests 1 (fake device iOS 8.0)",
+    "name": "fake tests 1 (fake device iOS 8.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1513,7 +1513,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
-    "name": "fake tests 1 (fake device iOS 8.0) (2)",
+    "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
@@ -1526,7 +1526,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
-    "name": "fake tests 2 (fake device iOS 7.1) (2)",
+    "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
@@ -1539,7 +1539,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
-    "name": "fake_eg_test_host (fake device 3 iOS 9.3) (2)",
+    "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]

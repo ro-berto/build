@@ -739,7 +739,7 @@
       "--priority",
       "200",
       "--task-name",
-      "build-global xcode build version (fake device iOS 10.0)/Mac/[dummy has/ios/1",
+      "build-global xcode build version (fake device iOS 10.0) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -785,7 +785,7 @@
       "--tag",
       "spec_name:chromium.ci:ios",
       "--tag",
-      "stepname:build-global xcode build version (fake device iOS 10.0)",
+      "stepname:build-global xcode build version (fake device iOS 10.0) (with patch)",
       "--tag",
       "test:build-global xcode build version",
       "--cipd-package",
@@ -812,14 +812,14 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] build-global xcode build version (fake device iOS 10.0)",
+    "name": "test_pre_run (with patch).[trigger] build-global xcode build version (fake device iOS 10.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"build-global xcode build version (fake device iOS 10.0)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"build-global xcode build version (fake device iOS 10.0) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build-global xcode build version (fake device iOS 10.0)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"build-global xcode build version (fake device iOS 10.0) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -847,7 +847,7 @@
       "--priority",
       "200",
       "--task-name",
-      "task-local xcode build version (fake device 2 iOS 11.0)/Mac/[dummy has/ios/1",
+      "task-local xcode build version (fake device 2 iOS 11.0) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -893,7 +893,7 @@
       "--tag",
       "spec_name:chromium.ci:ios",
       "--tag",
-      "stepname:task-local xcode build version (fake device 2 iOS 11.0)",
+      "stepname:task-local xcode build version (fake device 2 iOS 11.0) (with patch)",
       "--tag",
       "test:task-local xcode build version",
       "--cipd-package",
@@ -920,14 +920,14 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] task-local xcode build version (fake device 2 iOS 11.0)",
+    "name": "test_pre_run (with patch).[trigger] task-local xcode build version (fake device 2 iOS 11.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"task-local xcode build version (fake device 2 iOS 11.0)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"task-local xcode build version (fake device 2 iOS 11.0) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task-local xcode build version (fake device 2 iOS 11.0)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task-local xcode build version (fake device 2 iOS 11.0) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -955,7 +955,7 @@
       "--priority",
       "200",
       "--task-name",
-      "task-local xcode version (fake device 3 iOS 11.0)/Mac/[dummy has/ios/1",
+      "task-local xcode version (fake device 3 iOS 11.0) (with patch)/Mac/[dummy has/ios/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1004,7 +1004,7 @@
       "--tag",
       "spec_name:chromium.ci:ios",
       "--tag",
-      "stepname:task-local xcode version (fake device 3 iOS 11.0)",
+      "stepname:task-local xcode version (fake device 3 iOS 11.0) (with patch)",
       "--tag",
       "test:task-local xcode version",
       "--cipd-package",
@@ -1031,14 +1031,14 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] task-local xcode version (fake device 3 iOS 11.0)",
+    "name": "test_pre_run (with patch).[trigger] task-local xcode version (fake device 3 iOS 11.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"task-local xcode version (fake device 3 iOS 11.0)/Mac/[dummy has/ios/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"task-local xcode version (fake device 3 iOS 11.0) (with patch)/Mac/[dummy has/ios/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task-local xcode version (fake device 3 iOS 11.0)/Mac/[dummy has/ios/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task-local xcode version (fake device 3 iOS 11.0) (with patch)/Mac/[dummy has/ios/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1161,7 +1161,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "task-local xcode version (fake device 3 iOS 11.0)",
+    "name": "task-local xcode version (fake device 3 iOS 11.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1238,7 +1238,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "task-local xcode build version (fake device 2 iOS 11.0)",
+    "name": "task-local xcode build version (fake device 2 iOS 11.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1315,7 +1315,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "build-global xcode build version (fake device iOS 10.0)",
+    "name": "build-global xcode build version (fake device iOS 10.0) (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1357,7 +1357,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "build-global xcode build version (fake device iOS 10.0) (2)",
+    "name": "build-global xcode build version (fake device iOS 10.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
@@ -1369,7 +1369,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "task-local xcode build version (fake device 2 iOS 11.0) (2)",
+    "name": "task-local xcode build version (fake device 2 iOS 11.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
@@ -1381,7 +1381,7 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "task-local xcode version (fake device 3 iOS 11.0) (2)",
+    "name": "task-local xcode version (fake device 3 iOS 11.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
     ]
