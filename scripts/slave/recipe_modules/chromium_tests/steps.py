@@ -1552,8 +1552,10 @@ class SwarmingTest(Test):
       if len(task.shard_indices) == 0: # pragma: no cover
         api.python.failing_step(
           'missing failed shards',
-          "Retry shards with patch is being run on a test that has no failed "
-          "shards.")
+          "Retry shards with patch is being run on {}, which has no failed "
+          "shards. This usually happens because of a test runner bug. The test "
+          "runner reports test failures, but had exit_code 0.".format(
+              self.step_name(suffix='with patch')))
     else:
       task.shard_indices = range(task.shards)
 
