@@ -67,6 +67,12 @@ def RunSteps(api, platform):
   with api.osx_sdk('mac'):
     _RemoteSteps(api, app_engine_sdk_path, platform)
 
+  # Install the protoc package.
+  packages = {}
+  packages['infra/tools/protoc/${platform}'] = 'protobuf_version:v3.6.1'
+  packages_root = api.path['start_dir'].join('packages')
+  api.cipd.ensure(packages_root, packages)
+
 
 def GenTests(api):
   yield (
@@ -85,7 +91,7 @@ def GenTests(api):
     api.test('mac') +
     api.properties(mastername='master.client.catapult',
                    buildername='mac',
-                   bot_id='windows_slave') +
+                   bot_id='mac_slave') +
     api.platform.name('mac') +
     api.generator_script(
       'build_steps.py',
