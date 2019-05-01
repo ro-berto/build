@@ -42,7 +42,7 @@
               "chromium_tree_closer"
             ]
           },
-          "Android Cronet ARM64 Builder": {
+          "andorid-cronet-arm64-dbg": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -50,7 +50,7 @@
               "*"
             ]
           },
-          "Android Cronet ARM64 Builder (dbg)": {
+          "android-cronet-arm64-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -58,7 +58,7 @@
               "*"
             ]
           },
-          "Android Cronet ARMv6 Builder": {
+          "android-cronet-arm-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -66,7 +66,7 @@
               "*"
             ]
           },
-          "Android Cronet Builder": {
+          "android-cronet-arm-dbg": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -74,7 +74,7 @@
               "*"
             ]
           },
-          "Android Cronet Builder (dbg)": {
+          "android-cronet-kitkat-arm-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -82,7 +82,7 @@
               "*"
             ]
           },
-          "Android Cronet KitKat Builder": {
+          "android-cronet-lollipop-arm-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -90,7 +90,7 @@
               "*"
             ]
           },
-          "Android Cronet Lollipop Builder": {
+          "android-cronet-marshmallow-arm64-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -98,7 +98,7 @@
               "*"
             ]
           },
-          "Android Cronet Marshmallow 64bit Builder": {
+          "android-cronet-x86-dbg": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
@@ -106,31 +106,7 @@
               "*"
             ]
           },
-          "Android Cronet Marshmallow 64bit Perf": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "Android Cronet MIPS Builder": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "Android Cronet x86 Builder": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "Android Cronet x86 Builder (dbg)": {
+          "android-cronet-x86-rel": {
             "tree_notify": [
               "cronet-sheriff+build@google.com"
             ],
