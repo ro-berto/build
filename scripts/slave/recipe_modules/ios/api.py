@@ -884,7 +884,7 @@ class iOSApi(recipe_api.RecipeApi):
       raise exception_type('Failed %s.' % ', '.join(sorted(failures)))
 
   def test_swarming(self, scripts_dir='src/ios/build/bots/scripts',
-                    upload_test_results=True):
+                    upload_test_results=True, retry_failed_shards=False):
     """Runs tests on Swarming as instructed by this bot's build config."""
     assert self.__config
 
@@ -910,7 +910,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests_with_patch(
-              self.m, tests, retry_failed_shards=False))
+              self.m, tests, retry_failed_shards=retry_failed_shards))
       all_failures = invalid_test_suites + failing_test_suites
       if all_failures:
         exception_type = (

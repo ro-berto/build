@@ -2509,7 +2509,7 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#886)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#886)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True, retry_failed_shards=False):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
@@ -4958,9 +4958,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/halt/examples/full.py#9)(api):**
 ### *recipes* / [ios/try](/scripts/slave/recipes/ios/try.py)
 
-[DEPS](/scripts/slave/recipes/ios/try.py#5): [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/ios/try.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#17)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#20)(api):**
 ### *recipes* / [ios/unified\_builder\_tester](/scripts/slave/recipes/ios/unified_builder_tester.py)
 
 [DEPS](/scripts/slave/recipes/ios/unified_builder_tester.py#5): [ios](#recipe_modules-ios), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

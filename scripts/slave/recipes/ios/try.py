@@ -2,7 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
+  'chromium_swarming',
   'ios',
   'depot_tools/gclient',
   'depot_tools/tryserver',
@@ -19,7 +22,7 @@ def RunSteps(api):
   # Ensure try bots mirror configs from chromium.mac.
   api.ios.read_build_config(master_name='chromium.mac')
   api.ios.build(analyze=True, suffix='with patch')
-  api.ios.test_swarming()
+  api.ios.test_swarming(retry_failed_shards=True)
 
 def GenTests(api):
 
@@ -47,7 +50,7 @@ def GenTests(api):
         git_repo=git_repo or 'https://chromium.googlesource.com/chromium/src')
 
   yield (
-    api.test('basic')
+    api.test('basic_success')
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
@@ -84,6 +87,115 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + suppress_analyze()
+    + api.step_data(
+        'fake tests (fake device iOS 8.1) (with patch)',
+        api.ios.generate_test_results_placeholder())
+    + api.post_process(post_process.StatusSuccess)
+    + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('failure_retry_still_failure')
+    + try_build()
+    + api.platform('mac', 64)
+    + api.properties(
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      bot_id='fake-vm',
+      path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+          'xctest': True,
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+    + suppress_analyze()
+    + api.step_data(
+        'fake tests (fake device iOS 8.1) (with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.ios.generate_test_results_placeholder(failure=True),
+            failure=True))
+    + api.step_data(
+        'fake tests (fake device iOS 8.1) (retry shards with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.ios.generate_test_results_placeholder(
+                failure=True, swarming_number=110000),
+            failure=True))
+    + api.post_process(post_process.StatusFailure)
+    + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('failure_retry_success')
+    + try_build()
+    + api.platform('mac', 64)
+    + api.properties(
+      issue=123456,
+      mastername='tryserver.fake',
+      patchset=1,
+      bot_id='fake-vm',
+      path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+          'xctest': True,
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+    + suppress_analyze()
+    + api.step_data(
+        'fake tests (fake device iOS 8.1) (with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.ios.generate_test_results_placeholder(failure=True),
+            failure=True))
+    + api.step_data(
+        'fake tests (fake device iOS 8.1) (retry shards with patch)',
+        api.chromium_swarming.canned_summary_output(
+            api.ios.generate_test_results_placeholder(swarming_number=110000)))
+    + api.post_process(post_process.StatusSuccess)
+    + api.post_process(post_process.DropExpectation)
   )
 
   yield (
