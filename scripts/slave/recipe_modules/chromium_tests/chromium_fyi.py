@@ -228,25 +228,6 @@ SPEC = {
           'platform': 'linux',
       },
     },
-    # TODO(crbug.com/909899): Remove this configuration after
-    # crrev.com/c/1367655 lands.
-    'WebKit Linux slimming_paint_v2 Dummy Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [],
-      'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
-    },
     # TODO(jbudorick): Remove these three once the bots have been renamed.
     'Fuchsia': {
       'chromium_config': 'chromium',
