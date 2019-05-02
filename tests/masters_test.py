@@ -218,7 +218,6 @@ def main(argv):
       'master.chromium.android.fyi': 'ChromiumAndroidFyi',
       'master.chromium.clang': 'ChromiumClang',
       'master.chromium.perf': 'ChromiumPerf',
-      'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
   }
   all_masters = {base_dir: public_masters}

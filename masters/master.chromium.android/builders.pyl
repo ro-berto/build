@@ -15,60 +15,6 @@
   },
 
   "builders": {
-    "Android Cronet KitKat Builder": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_k_hammerhead"],
-      "category": "0Cronet",
-    },
-    "Android Cronet Lollipop Builder": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_l_hammerhead"],
-      "category": "0Cronet",
-    },
-    "Android Cronet Marshmallow 64bit Builder": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_m_bullhead"],
-      "category": "0Cronet",
-    },
-    "Android Cronet Builder (dbg)": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_k_hammerhead"],
-      "category": "0Cronet",
-    },
-    "Android Cronet Builder Asan": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_k_hammerhead"],
-      "category": "0Cronet",
-    },
-    "Android Cronet ARM64 Builder": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_arm64"],
-      "category": "0Cronet",
-    },
-    "Android Cronet ARM64 Builder (dbg)": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_arm64_dbg"],
-      "category": "0Cronet",
-    },
-    "Android Cronet x86 Builder": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_x86"],
-      "category": "0Cronet",
-    },
-    "Android Cronet x86 Builder (dbg)": {
-      "recipe": "cronet",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cronet_x86_dbg"],
-      "category": "0Cronet",
-    },
     "Android Cronet Marshmallow 64bit Perf": {
       "recipe": "cronet",
       "scheduler": "chromium_commits",
@@ -85,62 +31,6 @@
   },
 
   "slave_pools": {
-    "cronet_arm64": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave188-c1"],
-    },
-    "cronet_arm64_dbg": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave189-c1"],
-    },
-    "cronet_x86": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave115-c1"],
-    },
-    "cronet_x86_dbg": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave190-c1"],
-    },
-    "cronet_k_hammerhead": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build69-b1"],
-    },
-    "cronet_l_hammerhead": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build86-b1"],
-    },
-    "cronet_m_bullhead": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build87-b1"],
-    },
     "cronet_m_bullhead_perf": {
       "slave_data": {
         "os": "linux",
