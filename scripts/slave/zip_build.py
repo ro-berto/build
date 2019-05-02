@@ -106,7 +106,7 @@ def GetRecentBuildsByModificationTime(zip_list, prune_limit):
 
 
 def FileRegexWhitelist(options):
-  if chromium_utils.IsWindows() and options.target is 'Release':
+  if chromium_utils.IsWindows() and options.target == 'Release':
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.

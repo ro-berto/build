@@ -108,7 +108,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
         'buildtools', 'mac' if is_mac else 'linux64', 'gn')
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
-    if target_cpu is "":
+    if not target_cpu:
       target_cpu = 'x64'
     args = (
       'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' +
