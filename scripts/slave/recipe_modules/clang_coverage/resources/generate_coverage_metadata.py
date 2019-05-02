@@ -245,9 +245,6 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   filename = file_coverage_data['filename']
   src_file = os.path.relpath(filename, src_path)
-  # TODO(crbug.com/902397): some region doesn't have a beginning segment.
-  # assert len(segments) % 2 == 0, "segments should be even"
-
   line_data, block_data = _extract_coverage_info(segments)
   line_data = sorted(line_data.items(), key=lambda x: x[0])
   if diff_mapping and src_file in diff_mapping:
@@ -358,8 +355,12 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
 
     with open(coverage_json_file, 'w') as f_out, open(error_out_file,
                                                       'w') as f_error:
-      args = _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
-                                exclusions=exclusions)
+      args = _compute_llvm_args(
+          profdata_path,
+          llvm_cov_path,
+          binaries,
+          sources,
+          exclusions=exclusions)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -657,7 +658,6 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   """
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
-  # For per-CL code coverage, we don't use the multi-threaded llvm-cov.
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
                                     sources, output_dir, exclusions)
   minutes = (time.time() - start_time) / 60
