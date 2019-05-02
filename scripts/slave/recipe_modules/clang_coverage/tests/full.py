@@ -49,8 +49,8 @@ def RunSteps(api):
     ]
   assert _NUM_TARGETS == len(tests)
 
-  for i, test in enumerate(tests):
-    step = 'step %d' % i
+  for test in tests:
+    step = test.name
     api.clang_coverage.profdata_dir(step)
     # Protected access ok here, as this is normally done by the test object
     # itself.
