@@ -228,30 +228,60 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.angle': {
     'builders': {
-      'android_angle_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI Release (Nexus 5X)',
-      }),
-      'android_angle_vk32_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
-      }),
-      'android_angle_vk64_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
-      }),
-      'android_angle_deqp_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI dEQP Release (Nexus 5X)',
-      }),
-      'android_angle_vk32_deqp_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
-      }),
-      'android_angle_vk64_deqp_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
-      }),
+      'android_angle_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI Release (Nexus 5X)',
+          },
+        ],
+      },
+      'android_angle_vk32_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
+          },
+        ],
+      },
+      'android_angle_vk64_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
+          },
+        ],
+      },
+      'android_angle_deqp_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI dEQP Release (Nexus 5X)',
+          },
+        ],
+      },
+      'android_angle_vk32_deqp_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
+          },
+        ],
+      },
+      'android_angle_vk64_deqp_rel_ng': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
+          },
+        ],
+      },
       'linux-angle-rel': {
         'retry_failed_shards': False,
         'bot_ids': [
