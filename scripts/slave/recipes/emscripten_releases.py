@@ -26,14 +26,21 @@ def RunSteps(api):
       'GOMA_DIR': goma_dir,
   }
   api.goma.start()
+
   cache_dir = api.path['builder_cache']
   sync_dir = cache_dir.join('emscripten-releases')
   api.file.ensure_directory('Ensure sync dir', sync_dir)
   build_dir = cache_dir.join('emscripten-releases', 'build')
+  install_dir = api.path['start_dir'].join('install')
   waterfall_build = sync_dir.join('waterfall', 'src', 'build.py')
   dir_flags = ['--sync-dir=%s' % sync_dir,
                '--build-dir=%s' % build_dir,
-               '--prebuilt-dir=%s' % sync_dir]
+               '--prebuilt-dir=%s' % sync_dir,
+               '--v8-dir=%s' % cache_dir.join('v8'),
+               '--install-dir=%s' % install_dir]
+  build_only_flags = dir_flags + ['--no-sync', '--no-test']
+
+  api.file.ensure_directory('Ensure install dir', install_dir)
   with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
@@ -43,11 +50,11 @@ def RunSteps(api):
     with api.context(env=env):
       try:
         api.python('Build Wabt', waterfall_build,
-                   dir_flags + ['--no-sync', '--no-test',
-                                '--build-include=wabt'])
+                   build_only_flags + ['--build-include=wabt'])
         api.python('Build Binaryen', waterfall_build,
-                   dir_flags + ['--no-sync', '--no-test',
-                                '--build-include=binaryen'])
+                   build_only_flags + ['--build-include=binaryen'])
+        api.python('Build V8', waterfall_build,
+                   build_only_flags + ['--build-include=v8'])
       except api.step.StepFailure as e:
         # If any of these builds fail, testing won't be meaningful.
         exit_status = e.retcode
