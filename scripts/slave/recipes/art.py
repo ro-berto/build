@@ -385,17 +385,24 @@ def setup_target(api,
     with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j%d' % (optimizing_make_jobs),
-                                   '--optimizing',
-                                   '--debuggable',
-                                   '--ndebuggable'] + common_options)
+                                   '--optimizing'] + common_options)
     test_logging(api, 'test optimizing')
-
+    
     with api.context(env=test_env):
+      # We pass --optimizing for interpreter debuggable to run AOT checker tests
+      # compiled debuggable.
       api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
                                    '-j%d' % (make_jobs),
-                                   '--jit',
+                                   '--optimizing',
                                    '--debuggable'] + common_options)
     test_logging(api, 'test debuggable')
+
+    with api.context(env=test_env):
+      api.step('test jit debuggable', ['./art/test/testrunner/testrunner.py',
+                                       '-j%d' % (make_jobs),
+                                       '--jit',
+                                       '--debuggable'] + common_options)
+    test_logging(api, 'test jit debuggable')
 
     with api.context(env=test_env):
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',

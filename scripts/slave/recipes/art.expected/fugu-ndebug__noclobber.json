@@ -266,8 +266,6 @@
       "./art/test/testrunner/testrunner.py",
       "-j1",
       "--optimizing",
-      "--debuggable",
-      "--ndebuggable",
       "--target",
       "--verbose",
       "--ndebug"
@@ -394,7 +392,7 @@
     "cmd": [
       "./art/test/testrunner/testrunner.py",
       "-j1",
-      "--jit",
+      "--optimizing",
       "--debuggable",
       "--target",
       "--verbose",
@@ -517,6 +515,134 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test debuggable: adb clear log"
+  },
+  {
+    "cmd": [
+      "./art/test/testrunner/testrunner.py",
+      "-j1",
+      "--jit",
+      "--debuggable",
+      "--target",
+      "--verbose",
+      "--ndebug"
+    ],
+    "env": {
+      "ADB": "[START_DIR]/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
+      "ANDROID_SERIAL": "0BCDB85D",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_RUNTIME_ROOT": "/system",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "LANG": "en_US.UTF-8",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/runtime:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "silvermont",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit debuggable"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
+    ],
+    "env": {
+      "ADB": "[START_DIR]/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
+      "ANDROID_SERIAL": "0BCDB85D",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_RUNTIME_ROOT": "/system",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "LANG": "en_US.UTF-8",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/runtime:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "silvermont",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit debuggable: adb logcat"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "env": {
+      "ADB": "[START_DIR]/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
+      "ANDROID_SERIAL": "0BCDB85D",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_RUNTIME_ROOT": "/system",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "LANG": "en_US.UTF-8",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/runtime:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "silvermont",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit debuggable: crashes"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-c"
+    ],
+    "env": {
+      "ADB": "[START_DIR]/prebuilts/runtime/adb",
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
+      "ANDROID_SERIAL": "0BCDB85D",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_RUNTIME_ROOT": "/system",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "LANG": "en_US.UTF-8",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/runtime:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "silvermont",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test jit debuggable: adb clear log"
   },
   {
     "cmd": [
