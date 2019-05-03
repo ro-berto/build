@@ -120,5 +120,8 @@ def GenTests(api):
       api.test('clang_tot') +
       api.properties(
           buildername='test_buildername',
-          chromium_apply_config=['clang_tot'])
+          chromium_apply_config=['clang_tot']) +
+      api.post_process(post_process.StepCommandContains, 'clang_revision',
+                                                        ['--use-tot-clang']) +
+      api.post_process(post_process.DropExpectation)
   )
