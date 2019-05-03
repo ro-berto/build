@@ -8,9 +8,11 @@ to get the last changed revision of files.
 """
 
 import collections
+import logging
 import multiprocessing
 import os
 import subprocess
+import time
 
 
 class _VarImpl(object):
@@ -22,6 +24,20 @@ class _VarImpl(object):
     if var_name not in self._local_scope.get('vars', {}):
       raise KeyError('Var is not defined: %s' % var_name)
     return self._local_scope['vars'][var_name]
+
+
+class _Timer(object):
+
+  def __init__(self):
+    self._time = None
+
+  def Start(self):
+    self._time = time.time()
+
+  def End(msg):
+    new_time = time.time()
+    elapsed_time = new_time - self._time
+    logging.info('%s took %.0f seconds', msg, elapsed_time)
 
 
 def _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_content):
@@ -145,24 +161,35 @@ def GetFileRevisions(root_dir, deps_file_path, file_paths):
         Each file path is relative to the root checkout.
   """
   file_data = []
-
+  timer = _Timer()
+  timer.Start()
   with open(os.path.join(root_dir, deps_file_path), 'r') as f:
     deps_file_content = f.read()
+  timer.End('Reading deps file')
+
+  timer.Start()
   checkouts = _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_file_content)
+  timer.End('_GetOrderedCheckoutDirOfDependenciesFromDEPS')
 
+  timer.Start()
   all_files = _GetCommitedFilesForEachCheckout(root_dir, checkouts)
+  timer.End('_GetCommitedFilesForEachCheckout')
 
+  timer.Start()
   for path in file_paths:
     for checkout in checkouts:
       if path.startswith(checkout) and path in all_files.get(checkout, []):
         file_data.append((root_dir, checkout, path))
         break
+  timer.End('Finding correct checkout')
 
+  timer.Start()
   # Leave 5 cpus for other system or infra processes.
   pool = multiprocessing.Pool(processes=max(5, multiprocessing.cpu_count() - 5))
   future_results = pool.map(_RetrieveRevisionFromGit, file_data, 100)
   pool.close()
   pool.join()
+  timer.End('Multiprocess _RetrieveRevisionFromGit')
 
   all_result = {}
   for result in future_results:
