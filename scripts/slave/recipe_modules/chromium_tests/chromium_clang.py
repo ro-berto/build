@@ -84,7 +84,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['clang_tot'],
+      # Not a ToT bot so no clang_tot gclient_apply_config.
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -102,7 +102,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['clang_tot'],
+      # Not a ToT bot so no clang_tot gclient_apply_config.
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
