@@ -93,7 +93,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://dart.googlesource.com/sdk@refs/heads/master:refs/changes/56/123456/7",
+      "https://dart.googlesource.com/sdk@refs/changes/56/123456/7",
       "--revision",
       "sdk@3456abcd78ef"
     ],

@@ -56,7 +56,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://boringssl.googlesource.com/boringssl@refs/heads/master:refs/changes/56/123456/7",
+      "https://boringssl.googlesource.com/boringssl@refs/changes/56/123456/7",
       "--revision",
       "boringssl@HEAD"
     ],
