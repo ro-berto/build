@@ -2641,6 +2641,12 @@ class SwarmingIosTest(SwarmingTest):
       flaked_tests = logs.get('flaked tests', [])
       failed_tests = logs.get('failed tests', [])
 
+      # The iOS test runners will not always emit 'failed tests' or any other
+      # signal on certain types of errors. This is a test runner bug but we add
+      # a workaround here. https:/crbug.com/958791.
+      if task['task'].failed_shards and not failed_tests:
+        failed_tests = ['invalid test results']
+
       pass_fail_counts = collections.defaultdict(
           lambda: {'pass_count': 0, 'fail_count': 0})
       for test in passed_tests:

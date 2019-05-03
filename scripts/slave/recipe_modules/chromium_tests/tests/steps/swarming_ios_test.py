@@ -268,3 +268,18 @@ def GenTests(api):
           lambda check, steps: check(steps[step].links[link] == url)) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('workaround_for_failed_shard') +
+      api.override_step_data(
+          'dummy step name on iOS-dummy OS',
+          api.chromium_swarming.summary(
+              dispatched_task_step_test_data=generate_test_results_placeholder(
+                  api, failing_test=False),
+              data=generate_failing_summary('COMPLETED', 1),
+              retcode=0)) +
+      api.post_process(post_process.StepFailure,
+                       'dummy step name on iOS-dummy OS') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
