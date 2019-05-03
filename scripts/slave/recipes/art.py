@@ -230,7 +230,6 @@ def setup_host_x86(api,
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
 def setup_target(api,
-                 serial,
                  device,
                  debug,
                  concurrent_collector=True,
@@ -272,9 +271,6 @@ def setup_target(api,
          'USE_DEX2OAT_DEBUG': 'false',
          'ART_BUILD_HOST_DEBUG': 'false',
          'ART_TEST_KEEP_GOING': 'true'}
-
-  if not api.runtime.is_luci:
-    env.update({ 'ANDROID_SERIAL' : serial })
 
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
@@ -335,10 +331,6 @@ def setup_target(api,
   with api.context(env=env):
     api.step('build target', [art_tools.join('buildbot-build.sh'),
                               '-j%d' % (build_jobs), '--target'])
-
-  # TODO(b/123499955): Remove once we fully move to luci.
-  if serial == 'FA7BN1A04406':
-    return
 
   with api.step.defer_results():
     with api.context(env=test_env):
@@ -572,79 +564,65 @@ _CONFIG_MAP = {
   # TODO: Remove device names.
   'target': {
     'angler-armv7-ndebug': {
-      'serial': '84B7N16728001219',
       'device': 'angler-armv7',
       'debug': False,
     },
     'angler-armv7-debug': {
-      'serial': '84B7N15B03000729',
       'device': 'angler-armv7',
       'debug': True,
     },
     'walleye-armv7-poison-debug': {
-      'serial': 'FA7BN1A04406',
       'device': 'walleye-armv7',
       'debug': True,
       'heap_poisoning': True,
     },
     'walleye-armv8-poison-ndebug': {
-      'serial': 'FA7BN1A04412',
       'device': 'walleye-armv8',
       'debug': False,
       'heap_poisoning': True,
     },
     'walleye-armv8-poison-debug': {
-      'serial': 'FA7BN1A04433',
       'device': 'walleye-armv8',
       'debug': True,
       'heap_poisoning': True
     },
     'fugu-ndebug': {
-      'serial': '0BCDB85D',
       'device': 'fugu',
       'debug': False,
     },
     'fugu-debug': {
-      'serial': 'E6B27F19',
       'device': 'fugu',
       'debug': True,
     },
     'angler-armv7-non-gen-cc': {
-      'serial': '84B7N15B03000329',
       'device': 'angler-armv7',
       'debug': True,
       'generational_cc': False,
     },
     'angler-armv8-ndebug': {
-      'serial': 'HT7BH1A06559',
       'device': 'angler-armv8',
       'debug': False,
     },
     'angler-armv8-debug': {
-      'serial': 'HT7BG1A03823',
       'device': 'angler-armv8',
       'debug': True,
     },
     'angler-armv8-non-gen-cc': {
-      'serial': 'HT7BG1A03952',
       'device': 'angler-armv8',
       'debug': True,
       'generational_cc': False,
     },
     'bullhead-armv8-gcstress-ndebug': {
-      'serial': '00c5089e3fac5057',
       'device': 'bullhead-armv8',
       'debug': False,
       'gcstress': True,
     },
     'bullhead-armv8-gcstress-debug': {
-      'serial': '02022c7ec2834126',
       'device': 'bullhead-armv8',
       'debug': True,
       'gcstress': True,
     },
     'bullhead-armv7-gcstress-ndebug': {
-      'serial': '01e0c128ccf732ca',
       'device': 'bullhead-armv7',
       'debug': False,
       'gcstress': True,
