@@ -34,7 +34,7 @@ class _Timer(object):
   def Start(self):
     self._time = time.time()
 
-  def End(msg):
+  def End(self, msg):
     new_time = time.time()
     elapsed_time = new_time - self._time
     logging.info('%s took %.0f seconds', msg, elapsed_time)
