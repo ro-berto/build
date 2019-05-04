@@ -7,7 +7,7 @@
       "--root=[BUILDER_CACHE]\\v8",
       "gen",
       "//out/Release",
-      "--args=symbol_level=2 v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]\\client\""
+      "--args=symbol_level=2 is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]\\client\""
     ],
     "cwd": "[BUILDER_CACHE]\\v8",
     "env": {

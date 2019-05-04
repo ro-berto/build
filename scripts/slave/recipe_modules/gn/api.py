@@ -203,3 +203,15 @@ class GnApi(recipe_api.RecipeApi):
     cmd.extend(inputs)
     step_result = self._gn_cmd(step_name, cmd, log_name='targets')
     return set(step_result.stdout.splitlines())
+
+  def clean(self, build_dir, step_name='clean outdir'):
+    """Cleans the output directory except for args.gn and needed ninja files.
+
+    See https://gn.googlesource.com/gn/+/master/docs/reference.md#cmd_clean for
+    more documentation of the command.
+
+    Args:
+      build_dir: Path to build output directory.
+      step_name: Optional recipe step name to give to the "gn clean" command.
+    """
+    self._gn_cmd(step_name, ['clean', build_dir])
