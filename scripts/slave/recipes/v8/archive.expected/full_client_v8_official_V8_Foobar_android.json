@@ -7,7 +7,7 @@
       "--root=[BUILDER_CACHE]/v8",
       "gen",
       "//out/Release",
-      "--args=symbol_level=1 v8_android_log_stdout=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=v8_static_library=true symbol_level=1 v8_android_log_stdout=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -111,59 +111,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "build (libs)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/v8",
-      "gen",
-      "//out/Release",
-      "--args=v8_static_library=true symbol_level=1 v8_android_log_stdout=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
-    ],
-    "cwd": "[BUILDER_CACHE]/v8",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "build (libs).gn",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
-      "--ninja_info_output",
-      "/path/to/tmp/json",
-      "--failure_output",
-      "/path/to/tmp/",
-      "--",
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-w",
-      "dupbuild=err",
-      "-C",
-      "[BUILDER_CACHE]/v8/out/Release",
-      "-j",
-      "20",
-      "v8_archive"
-    ],
-    "cwd": "[BUILDER_CACHE]/v8",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "build (libs).compile",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

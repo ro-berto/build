@@ -232,7 +232,6 @@
   * [gatekeeper-failure](#recipes-gatekeeper-failure) &mdash; Repeatedly fails as a way to ensure the gatekeeper is alive and well.
   * [gatekeeper:tests/call](#recipes-gatekeeper_tests_call)
   * [git_clone_bundler:examples/full](#recipes-git_clone_bundler_examples_full)
-  * [gn:tests/clean](#recipes-gn_tests_clean)
   * [gn:tests/get_args](#recipes-gn_tests_get_args)
   * [gn:tests/ls](#recipes-gn_tests_ls)
   * [gn:tests/refs](#recipes-gn_tests_refs)
@@ -2173,17 +2172,6 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
 [DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GnApi](/scripts/slave/recipe_modules/gn/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [clean](/scripts/slave/recipe_modules/gn/api.py#207)(self, build_dir, step_name='clean outdir'):**
-
-Cleans the output directory except for args.gn and needed ninja files.
-
-See https://gn.googlesource.com/gn/+/master/docs/reference.md#cmd_clean for
-more documentation of the command.
-
-Args:
-  build_dir: Path to build output directory.
-  step_name: Optional recipe step name to give to the "gn clean" command.
 
 &mdash; **def [get\_args](/scripts/slave/recipe_modules/gn/api.py#103)(self, build_dir, location=None, max_text_lines=None, step_name=None):**
 
@@ -4913,11 +4901,6 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#5): [git\_clone\_bundler](#recipe_modules-git_clone_bundler), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#23)(api):**
-### *recipes* / [gn:tests/clean](/scripts/slave/recipe_modules/gn/tests/clean.py)
-
-[DEPS](/scripts/slave/recipe_modules/gn/tests/clean.py#5): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/clean.py#11)(api):**
 ### *recipes* / [gn:tests/get\_args](/scripts/slave/recipe_modules/gn/tests/get_args.py)
 
 [DEPS](/scripts/slave/recipe_modules/gn/tests/get_args.py#9): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
@@ -5307,13 +5290,13 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8.py#77)(api, binary_size_tracking, build_config, clobber, clobber_all, clusterfuzz_archive, coverage, custom_deps, default_targets, enable_swarming, mb_config_path, set_gclient_var, target_arch, target_platform, track_build_dependencies, triggers, triggers_proxy, use_goma):**
 ### *recipes* / [v8/archive](/scripts/slave/recipes/v8/archive.py)
 
-[DEPS](/scripts/slave/recipes/v8/archive.py#16): [chromium](#recipe_modules-chromium), [gn](#recipe_modules-gn), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/archive.py#16): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe for archiving officially tagged v8 builds.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#161)(api, build_config, target_arch, target_bits, target_platform):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#138)(api, build_config, target_arch, target_bits, target_platform):**
 
-&mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#54)(api, bot_config, ref, version, archive_type, step_suffix='', archive_suffix=''):**
+&mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#53)(api, ref, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_deps.py#7): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

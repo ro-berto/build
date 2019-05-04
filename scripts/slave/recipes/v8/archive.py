@@ -18,7 +18,6 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
-  'gn',
   'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -51,33 +50,11 @@ RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?(\d+\.\d+)$')
 FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
-def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
+def make_archive(api, ref, version, archive_type, step_suffix='',
                  archive_suffix=''):
-  with api.step.nest('sync' + step_suffix):
-    api.v8.apply_bot_config(bot_config)
-    api.chromium.apply_config('clobber')
-    api.chromium.apply_config('default_target_v8_archive')
-    if api.chromium.c.build_config_fs == 'Debug':
-      api.chromium.apply_config('slow_dchecks')
-    elif archive_type in ['all', 'lib']:
-      api.chromium.apply_config('v8_static_library')
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      api.chromium.apply_config('v8_android')
-    elif api.chromium.c.TARGET_ARCH == 'arm':
-      api.chromium.apply_config('arm_hard_float')
-
-    # Opt out of using gyp environment variables.
-    api.chromium.c.use_gyp_env = False
-    api.v8.checkout()
-    api.v8.runhooks()
-
-  build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
-  with api.step.nest('build' + step_suffix):
-    api.gn.clean(build_dir)
-    api.v8.compile()
-
   with api.step.nest('make archive' + step_suffix) as parent:
     # Make a list of files to archive.
+    build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
     file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
     file_list = api.python(
         'filter build files',
@@ -182,6 +159,22 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
       if value:
         bot_config['v8_config_kwargs'][key] = value
 
+    api.v8.apply_bot_config(bot_config)
+    api.chromium.apply_config('clobber')
+    api.chromium.apply_config('default_target_v8_archive')
+    if api.chromium.c.build_config_fs == 'Release':
+      api.chromium.apply_config('v8_static_library')
+    else:
+      api.chromium.apply_config('slow_dchecks')
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      api.chromium.apply_config('v8_android')
+    elif api.chromium.c.TARGET_ARCH == 'arm':
+      api.chromium.apply_config('arm_hard_float')
+
+    # Opt out of using gyp environment variables.
+    api.chromium.c.use_gyp_env = False
+    api.v8.checkout()
+
     version = str(api.v8.read_version_from_ref(api.v8.revision, 'head'))
     tags = set(x.strip() for x in api.git(
         'describe', '--tags', 'HEAD',
@@ -192,18 +185,23 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
       api.step('Skipping due to missing tag.', cmd=None)
       return
 
-  if build_config == 'Debug':
+    api.v8.runhooks()
+
+  with api.step.nest('build'):
+    api.v8.compile()
+
+  if api.chromium.c.BUILD_CONFIG == 'Debug':
     # Debug binaries require libraries to be present in the same archive to run.
-    make_archive(api, bot_config, ref, version, 'all')
+    make_archive(api, ref, version, 'all')
   else:
-    make_archive(api, bot_config, ref, version, 'exe')
-    make_archive(api, bot_config, ref, version, 'lib', ' (libs)', '-libs')
+    make_archive(api, ref, version, 'exe')
+    make_archive(api, ref, version, 'lib', ' (libs)', '-libs')
 
     # Upload first build for the latest milestone to a known location. We use
     # these binaries for running reference perf tests.
     if (RELEASE_BRANCH_RE.match(ref) and
         FIRST_BUILD_IN_MILESTONE_RE.match(version)):
-      make_archive(api, bot_config, ref, version, 'ref', ' (ref)')
+      make_archive(api, ref, version, 'ref', ' (ref)')
 
 
 def GenTests(api):
@@ -226,13 +224,13 @@ def GenTests(api):
             'initialization.git describe',
             api.raw_io.stream_output('3.4.3.17')) +
         api.v8.check_param_equals(
-            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+            'initialization.bot_update', '--revision', 'v8@refs/branch-heads/' +
             '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
         api.runtime(is_luci=True, is_experimental=False) +
         api.post_process(
-            MustRun, 'sync.clobber', 'sync.gclient runhooks', 'build.gn',
-            'build.compile', 'make archive.zipping',
-            'make archive.gsutil upload')
+            MustRun, 'initialization.clobber',
+            'initialization.gclient runhooks', 'build.gn', 'build.compile',
+            'make archive.zipping', 'make archive.gsutil upload')
     )
 
   def filter_steps(is_release):
@@ -243,7 +241,6 @@ def GenTests(api):
     ]
     if is_release:
       expected_steps.extend([
-        'build (libs)', 'build (libs).gn', 'build (libs).compile',
         'make archive (libs)', 'make archive (libs).filter build files',
         'make archive (libs).zipping', 'make archive (libs).gsutil upload',
       ])
@@ -263,7 +260,7 @@ def GenTests(api):
           target_arch='arm', target_bits=64, target_platform='android') +
       # Make sure bot_update specifies target_os on Android builders.
       api.v8.check_in_param(
-          'sync.bot_update', '--spec-path',
+          'initialization.bot_update', '--spec-path',
           'target_os = [\'android\']') +
       filter_steps(is_release=True)
   )
@@ -275,7 +272,7 @@ def GenTests(api):
           target_arch='arm', target_bits=32) +
       # Make sure bot_update specifies target_cpu on Arm builders.
       api.v8.check_in_param(
-          'sync.bot_update', '--spec-path',
+          'initialization.bot_update', '--spec-path',
           'target_cpu = [\'arm\', \'arm64\']') +
       filter_steps(is_release=True)
   )
@@ -319,7 +316,7 @@ def GenTests(api):
       api.post_process(
         MustRun, 'initialization.Skipping due to missing release branch.') +
       api.post_process(
-          DoesNotRun, 'sync.gclient runhooks', 'build.gn',
+          DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
           'build.compile', 'make archive.zipping',
           'make archive.gsutil upload') +
       api.runtime(is_luci=True, is_experimental=False) +
@@ -348,7 +345,7 @@ def GenTests(api):
           api.raw_io.stream_output('3.4.3.17-blabla')) +
       api.post_process(MustRun, 'initialization.Skipping due to missing tag.') +
       api.post_process(
-          DoesNotRun, 'sync.gclient runhooks', 'build.gn',
+          DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
           'build.compile', 'make archive.zipping',
           'make archive.gsutil upload') +
       api.runtime(is_luci=True, is_experimental=False) +
