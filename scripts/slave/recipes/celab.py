@@ -136,7 +136,7 @@ def _RunTests(api, checkout, pool_name, pool_size):
   with api.context(cwd=checkout):
     try:
       api.python('run all tests',
-        'run_tests.py',
+        'test/run_tests.py',
         [
           '--hosts', host_dir,
           '--shared_provider_storage', '%s-assets' % pool_name,

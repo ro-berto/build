@@ -263,7 +263,7 @@
     "cmd": [
       "vpython",
       "-u",
-      "run_tests.py",
+      "test/run_tests.py",
       "--hosts",
       "[START_DIR]/hosts",
       "--shared_provider_storage",
