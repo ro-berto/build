@@ -26,6 +26,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'Foobar',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -46,6 +47,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'foo.mojom.Foobar',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -72,6 +74,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'Union.field',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             },
@@ -82,6 +85,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'Union.field',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             },
@@ -92,6 +96,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'Union.field',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -112,6 +117,7 @@ class Foobar {};
                 'vname': {
                     'signature': 'Union.field_name',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -132,6 +138,7 @@ enum Struct_Enum {};
                 'vname': {
                     'signature': 'foo.mojom.Struct.Enum',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -152,6 +159,7 @@ enum Struct_Enum {};
                 'vname': {
                     'signature': 'foo.mojom.Struct.Enum',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }
@@ -172,6 +180,7 @@ enum Struct_Enum {};
                 'vname': {
                     'signature': 'foo.mojom.Interface.Method',
                     'corpus': 'corpus',
+                    'language': 'mojom',
                 },
                 'edge': '%/kythe/edge/generates',
             }

@@ -77,8 +77,9 @@ def _GenerateMetadata(filename, file_contents, corpus, verbose):
               'begin': annotation.begin,
               'end': annotation.end,
               'vname': {
+                  'language': 'mojom',
+                  'corpus': corpus,
                   'signature': annotation.signature,
-                  'corpus': corpus
               },
               # The leading '%' indicates a reverse edge, which means from VName
               # to anchor.
