@@ -349,6 +349,9 @@ def GenTests(api):
 
   yield (api.test('vm-win') +
       api.platform('win', 64) +
+      api.properties(
+          bot_id='win-dart-123',
+          new_workflow_enabled=True) +
       api.buildbucket.ci_build(revision = '3456abce78ef',
           build_number=1357,
           builder='vm-kernel-win-release-x64',
@@ -364,6 +367,10 @@ def GenTests(api):
           api.raw_io.output_text(RESULT_DATA)))
 
   yield (api.test('basic-mac') + api.platform('mac', 64) +
+      api.properties(
+          bot_id='mac-dart-123',
+          new_workflow_enabled=True,
+          no_approvals=True) +
       api.buildbucket.ci_build(revision='a' * 40,
           build_number=1357,
           builder='dart2js-strong-mac-x64-chrome',

@@ -214,6 +214,14 @@ class DartApi(recipe_api.RecipeApi):
     return 'new_workflow_enabled' in self.m.properties
 
 
+  def _require_manual_approvals(self):
+    """Boolean that controls whether to compare results
+       only against previous results, or whether to also
+       use an 'approved_results.json' file to control
+       the buildbot status."""
+    return 'no_approvals' not in self.m.properties
+
+
   def _run_new_steps(self):
     """Boolean that controls whether to run the new
        workflow that uploads test results to cloud
@@ -297,7 +305,7 @@ class DartApi(recipe_api.RecipeApi):
     builder = self._get_builder_dir()
     results_path = self.m.path['checkout'].join('LATEST')
     self.m.file.ensure_directory('ensure LATEST dir', results_path)
-    for filename in filenames + ['approved_results.json']:
+    for filename in filenames:
       self.m.file.write_text(
         'ensure %s exists' % filename, results_path.join(filename), '')
     if latest:
@@ -307,12 +315,20 @@ class DartApi(recipe_api.RecipeApi):
         results_path,
         name='download previous results',
         ok_ret='any' if self._report_new_results() else {0})
-    self.m.gsutil.download(
+    if self._require_manual_approvals():
+      self.m.file.write_text(
+        'ensure approved_results.json exists',
+        results_path.join('approved_results.json'), '')
+      self.m.gsutil.download(
         'dart-test-results-approved-results',
         'builders/%s/approved_results.json' % builder,
         'LATEST/approved_results.json',
         name='download approved results',
         ok_ret='any')
+      self._apply_preapprovals()
+
+
+  def _apply_preapprovals(self):
     apply_preapproval_arguments = [self.dart_executable(),
                                    'tools/bots/apply_preapprovals.dart',
                                    'LATEST/approved_results.json']
@@ -328,7 +344,7 @@ class DartApi(recipe_api.RecipeApi):
       apply_preapproval_arguments.append('--upload')
       apply_preapproval_arguments.append(
           'gs://dart-test-results-approved-results/' +
-          'builders/%s/approved_results.json' % builder)
+          'builders/%s/approved_results.json' % self._get_builder_dir())
     self.m.step('apply pre-approvals',
                 apply_preapproval_arguments,
                 infra_step=True)
@@ -386,12 +402,13 @@ class DartApi(recipe_api.RecipeApi):
     if not (builder.endswith('dev') or builder.endswith('stable')):
       self._upload_result('current_flakiness', 'single_directory',
                           'flaky_current_%s.json' % builder, flaky_json_str)
-    self.m.gsutil.upload(
-      'LATEST/approved_results.json',
-      'dart-test-results',
-      'builders/%s/%s/approved_results.json' % (builder, build_number),
-      name='upload approved_results.json',
-      ok_ret='any' if self._report_new_results() else {0})
+    if self._require_manual_approvals():
+      self.m.gsutil.upload(
+        'LATEST/approved_results.json',
+        'dart-test-results',
+        'builders/%s/%s/approved_results.json' % (builder, build_number),
+        name='upload approved_results.json',
+        ok_ret='any' if self._report_new_results() else {0})
     self._upload_result(builder, build_number, 'runs.json', runs_str)
     # Update "latest" file
     new_latest = self.m.raw_io.input_text(build_number, name='latest')
@@ -439,19 +456,27 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _present_results(self, logs_str, results_str, flaky_json_str):
-    # CQ:
+    # CQ with approvals:
     #   unapproved new test failures
     #   unapproved new test failures (logs)
     #   approved new test failures
     #   approved new test failures (logs)
     #   tests that began passing
-    # CI:
+    # CQ without approvals:
+    #   new test failures
+    #   new test failures (logs)
+    #   tests that began passing
+    # CI with approvals:
     #   tests that began failing
     #   tests that began failing (logs)
     #   tests that began passing
     #   unapproved failing tests
     #   unapproved failing tests (logs)
     #   unapproved passing tests
+    # CI without approvals:
+    #   tests that began failing
+    #   tests that began failing (logs)
+    #   tests that began passing
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
@@ -460,8 +485,10 @@ class DartApi(recipe_api.RecipeApi):
             '--verbose',
             self.m.path['checkout'].join('LATEST', 'results.json'),
             self.m.raw_io.input_text(results_str),
-            self.m.path['checkout'].join('LATEST', 'approved_results.json'),
     ]
+    if self._require_manual_approvals():
+      args.append(self.m.path['checkout']
+                  .join('LATEST', 'approved_results.json'))
     args_logs = ["--logs",
                  self.m.raw_io.input_text(logs_str, name='logs.json'),
                  "--logs-only"]
@@ -470,59 +497,81 @@ class DartApi(recipe_api.RecipeApi):
     if self._report_new_results():
       judgement_args.append('--judgement')
     builder_name = self.m.buildbucket.builder_name
-    if builder_name.endswith('-try'):
-      links["unapproved new test failures"] = self.m.step(
-          'find unapproved new test failures',
-          args + ["--changed", "--failing", "--unapproved"],
+    if self._require_manual_approvals():
+      if builder_name.endswith('-try'):
+        links["unapproved new test failures"] = self.m.step(
+            'find unapproved new test failures',
+            args + ["--changed", "--failing", "--unapproved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["unapproved new test failures (logs)"] = self.m.step(
+            'find unapproved new test failures (logs)',
+            args + args_logs + ["--changed", "--failing", "--unapproved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["approved new test failures"] = self.m.step(
+            'find approved new test failures',
+            args + ["--changed", "--failing", "--approved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["approved new test failures (logs)"] = self.m.step(
+            'find approved new test failures (logs)',
+            args + args_logs + ["--changed", "--failing", "--approved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["tests that began passing"] = self.m.step(
+            'find tests that began passing',
+            args + ["--changed", "--passing", "--approved", "--unapproved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        judgement_args += ["--changed", "--passing", "--failing", "--approved",
+                           "--unapproved"]
+      else:
+        links["tests that began failing"] = self.m.step(
+            'find tests that began failing',
+            args + ["--changed", "--failing", "--approved", "--unapproved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["tests that began failing (logs)"] = self.m.step(
+            'find tests that began failing (logs)',
+            args + args_logs + ["--changed", "--failing"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["tests that began passing"] = self.m.step(
+            'find tests that began passing',
+            args + ["--changed", "--passing", "--approved", "--unapproved"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["unapproved failing tests"] = self.m.step(
+            'find unapproved failing tests',
+            args + ["--unapproved", "--failing"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["unapproved failing tests (logs)"] = self.m.step(
+            'find unapproved failing tests (logs)',
+            args + args_logs + ["--unapproved", "--failing"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["unapproved passing tests"] = self.m.step(
+            'find unapproved passing tests',
+            args + ["--unapproved", "--passing"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        links["ignored flaky test failure logs"] = self.m.step(
+            'find ignored flaky test failure logs',
+            args + args_logs + ["--flaky"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+        judgement_args += ["--failing", "--unapproved"]
+    else:  # No approvals needed or used.
+      links["new test failures"] = self.m.step(
+          'find new test failures',
+          args + ["--changed", "--failing"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["unapproved new test failures (logs)"] = self.m.step(
-          'find unapproved new test failures (logs)',
-          args + args_logs + ["--changed", "--failing", "--unapproved"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["approved new test failures"] = self.m.step(
-          'find approved new test failures',
-          args + ["--changed", "--failing", "--approved"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["approved new test failures (logs)"] = self.m.step(
-          'find approved new test failures (logs)',
-          args + args_logs + ["--changed", "--failing", "--approved"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["tests that began passing"] = self.m.step(
-          'find tests that began passing',
-          args + ["--changed", "--passing", "--approved", "--unapproved"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      judgement_args += ["--changed", "--passing", "--failing", "--approved",
-                         "--unapproved"]
-    else:
-      links["tests that began failing"] = self.m.step(
-          'find tests that began failing',
-          args + ["--changed", "--failing", "--approved", "--unapproved"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["tests that began failing (logs)"] = self.m.step(
-          'find tests that began failing (logs)',
+      links["new test failures (logs)"] = self.m.step(
+          'find new test failures (logs)',
           args + args_logs + ["--changed", "--failing"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
       links["tests that began passing"] = self.m.step(
           'find tests that began passing',
-          args + ["--changed", "--passing", "--approved", "--unapproved"],
+          args + ["--changed", "--passing"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["unapproved failing tests"] = self.m.step(
-          'find unapproved failing tests',
-          args + ["--unapproved", "--failing"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["unapproved failing tests (logs)"] = self.m.step(
-          'find unapproved failing tests (logs)',
-          args + args_logs + ["--unapproved", "--failing"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["unapproved passing tests"] = self.m.step(
-          'find unapproved passing tests',
-          args + ["--unapproved", "--passing"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["ignored flaky test failure logs"] = self.m.step(
-          'find ignored flaky test failure logs',
-          args + args_logs + ["--flaky"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      judgement_args += ["--failing", "--unapproved"]
+      judgement_args += ["--changed", "--failing"]
+      if builder_name.endswith('-try'): # pragma: no cover
+        judgement_args += ["--passing"]
+      else:
+        links["ignored flaky test failure logs"] = self.m.step(
+            'find ignored flaky test failure logs',
+            args + args_logs + ["--flaky"],
+            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     with self.m.step.defer_results():
       self.m.step('test results', judgement_args)
       doc_url = 'https://goto.google.com/dart-status-file-free-workflow';
@@ -535,11 +584,13 @@ class DartApi(recipe_api.RecipeApi):
           results_str]
 
   def _approve_successes(self):
+    if not self._require_manual_approvals():
+      return
     builder_name = self.m.buildbucket.builder_name
     if (builder_name.endswith('-try') or
         builder_name.endswith('-dev') or
         builder_name.endswith('-stable')):
-      return;
+      return
     args = [self.dart_executable(),
             "tools/approve_results.dart",
             "--automated-approver",

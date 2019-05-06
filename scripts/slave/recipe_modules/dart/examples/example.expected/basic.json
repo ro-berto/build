@@ -1514,24 +1514,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.ensure approved_results.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_REPO[depot_tools]/gsutil.py",
@@ -1543,6 +1525,24 @@
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "download previous results.gsutil download previous results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "download previous results.ensure approved_results.json exists",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

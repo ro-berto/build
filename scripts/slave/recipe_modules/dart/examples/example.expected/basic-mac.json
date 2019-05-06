@@ -385,7 +385,9 @@
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"dart2js-strong-mac-x64-chrome\", \"project\": \"dart\"}",
       "--buildbot-buildername",
-      "dart2js-strong-mac-x64-chrome"
+      "dart2js-strong-mac-x64-chrome",
+      "--buildbot-slavename",
+      "mac-dart-123"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -883,6 +885,8 @@
       "--tag",
       "name:test1_shard_1",
       "--tag",
+      "slavename:mac-dart-123",
+      "--tag",
       "spec_name:dart.ci:dart2js-strong-mac-x64-chrome",
       "--tag",
       "stepname:test1_shard_1",
@@ -918,6 +922,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "--clean-exit",
       "-ndart2js-mac-chrome",
       "foo",
       "--bar",
@@ -1005,6 +1010,8 @@
       "--tag",
       "name:test1_shard_2",
       "--tag",
+      "slavename:mac-dart-123",
+      "--tag",
       "spec_name:dart.ci:dart2js-strong-mac-x64-chrome",
       "--tag",
       "stepname:test1_shard_2",
@@ -1040,6 +1047,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "--clean-exit",
       "-ndart2js-mac-chrome",
       "foo",
       "--bar",
@@ -1109,6 +1117,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-logs",
+      "--clean-exit",
       "-ndart2js-mac-chrome",
       "foo",
       "--bar",
@@ -1397,58 +1406,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.ensure approved_results.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results-approved-results/builders/dart2js-strong-mac-x64-chrome/approved_results.json",
-      "LATEST/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.gsutil download approved results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/apply_preapprovals.dart",
-      "LATEST/approved_results.json",
-      "--upload",
-      "gs://dart-test-results-approved-results/builders/dart2js-strong-mac-x64-chrome/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.apply pre-approvals",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "deflaking"
   },
@@ -1543,14 +1500,11 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
-      "--failing",
-      "--approved",
-      "--unapproved"
+      "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "find tests that began failing",
+    "name": "find new test failures",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1566,7 +1520,6 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "",
       "--logs-only",
@@ -1574,7 +1527,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "find tests that began failing (logs)",
+    "name": "find new test failures (logs)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1590,11 +1543,8 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
-      "--passing",
-      "--approved",
-      "--unapproved"
+      "--passing"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began passing",
@@ -1613,73 +1563,6 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--unapproved",
-      "--failing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved failing tests",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--logs",
-      "",
-      "--logs-only",
-      "--unapproved",
-      "--failing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved failing tests (logs)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--unapproved",
-      "--passing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved passing tests",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "",
       "--logs-only",
@@ -1702,9 +1585,9 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--failing",
-      "--unapproved"
+      "--judgement",
+      "--changed",
+      "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
@@ -1828,26 +1711,6 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "LATEST/approved_results.json",
-      "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "upload new results.gsutil upload approved_results.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/approved_results.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
       "",
       "gs://dart-test-results/builders/dart2js-strong-mac-x64-chrome/1357/runs.json"
     ],
@@ -1924,19 +1787,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/approve_results.dart",
-      "--automated-approver",
-      "-b",
-      "dart2js-strong-mac-x64-chrome",
-      "--successes-only",
-      "-y"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "approve unapproved successes"
   },
   {
     "cmd": [
