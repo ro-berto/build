@@ -839,32 +839,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 
-
-  def _deapply_patch_build_isolate(self, failing_tests, bot_update_step):
-    """Deapplies patch. Then builds and isolates failing test suites.
-
-    This method requires that the following steps have occurred:
-      * Patch applied
-      * Test suites built + isolated
-      * Test suites have been run. Some have failures.
-
-    Args:
-      failing_tests: An iterable of Test objects. Each represents a failing test
-                     suite. The list of exact test failures are stored on the
-                     Test object itself.
-      bot_update_step: Properties from the update_step when the patch was
-                       applied. Used to update presentation properties of the
-                       isolate step.
-    """
-    # The implementation of bot_update.deapply_patch is stateful. It will
-    # deapply the patch, but keep the same ToT revision from the initial patch
-    # application. bot_update.deapply_patch will update DEPS, since it's
-    # possible that the patch was a DEPS change.
-    self.deapply_patch(bot_update_step)
-    self._build_and_isolate_failing_tests(failing_tests, bot_update_step,
-                                          'without patch')
-
-
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
@@ -898,11 +872,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return unrecoverable_test_suites
 
-  def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
-                              affected_files, retry_failed_shards):
-    """Runs tests with retries.
-
-    This function runs tests with the CL patched in. On failure, this will
+  def _run_tests_with_retries(self, bot_config, tests, bot_update_step,
+                              affected_files, retry_failed_shards,
+                              deapply_changes):
+    """This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
 
     Returns:
@@ -931,15 +904,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       # If there are failures but we shouldn't deapply the patch, then we're
       # done.
-      should_deapply_patch = (
-          self._should_retry_with_patch_deapplied(affected_files))
-      if not should_deapply_patch:
+      if not self._should_retry_with_patch_deapplied(affected_files):
         for t in failing_tests:
           self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
         return failing_tests
 
-      # Deapply the patch. Then rerun failing tests.
-      self._deapply_patch_build_isolate(failing_tests, bot_update_step)
+      deapply_changes(bot_update_step)
+      self._build_and_isolate_failing_tests(failing_tests, bot_update_step,
+                                            'without patch')
       self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
                                   sort_by_shard=True)
 
@@ -1188,9 +1160,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.m.python.succeeding_step('mark: before_tests', '')
     if test_suites:
-      unrecoverable_test_suites = self._run_tests_on_tryserver(
+      unrecoverable_test_suites = self._run_tests_with_retries(
           bot_config_object, test_suites, bot_update_step, affected_files,
-          retry_failed_shards)
+          retry_failed_shards, self.deapply_patch)
       self.m.chromium_swarming.report_stats()
 
       self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
