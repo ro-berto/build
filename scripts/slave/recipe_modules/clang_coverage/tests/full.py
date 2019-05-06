@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 
+
 DEPS = [
     'chromium_tests',
     'clang_coverage',
@@ -14,6 +15,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
+
 
 # Number of tests. Needed by the tests.
 _NUM_TARGETS = 7
@@ -39,14 +41,12 @@ def RunSteps(api):
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-          'blink_web_tests',
-          merge={
-              'script':
-                  api.path['start_dir'].join('coverage', 'tests',
-                                             'merge_blink_web_tests.py'),
+          'blink_web_tests', merge={
+              'script': api.path['start_dir'].join(
+                  'coverage', 'tests', 'merge_blink_web_tests.py'),
               'args': ['random', 'args'],
           })
-  ]
+    ]
   assert _NUM_TARGETS == len(tests)
 
   for test in tests:
@@ -54,8 +54,8 @@ def RunSteps(api):
     api.clang_coverage.profdata_dir(step)
     # Protected access ok here, as this is normally done by the test object
     # itself.
-    api.clang_coverage.shard_merge(
-        step, additional_merge=getattr(test, '_merge', None))
+    api.clang_coverage.shard_merge(step, additional_merge=getattr(
+        test, '_merge', None))
 
   api.clang_coverage.process_coverage_data(tests)
 
@@ -64,7 +64,6 @@ def RunSteps(api):
   _ = api.clang_coverage.raw_profile_merge_script
 
 
-# yapf: disable
 def GenTests(api):
   yield (
       api.test('basic')
@@ -90,8 +89,7 @@ def GenTests(api):
           post_process.MustRun,
           'generate metadata for %s targets' % _NUM_TARGETS)
       + api.post_process(
-          post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s targets' % _NUM_TARGETS)
@@ -132,8 +130,7 @@ def GenTests(api):
           post_process.MustRun,
           'generate metadata for %s targets' % _NUM_TARGETS)
       + api.post_process(
-          post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s targets' % _NUM_TARGETS)
@@ -190,8 +187,7 @@ def GenTests(api):
           post_process.MustRun,
           'generate metadata for %s targets' % _NUM_TARGETS)
       + api.post_process(
-          post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -274,8 +270,7 @@ def GenTests(api):
           post_process.MustRun,
           'generate metadata for %s targets' % _NUM_TARGETS)
       + api.post_process(
-          post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s targets' % _NUM_TARGETS)
@@ -288,7 +283,7 @@ def GenTests(api):
           'generate metadata for %s targets' % _NUM_TARGETS, retcode=1)
       + api.post_check(
           lambda check, steps:
-          check(steps['gsutil upload metadata for %s targets' % _NUM_TARGETS]
+          check(steps['gsutil upload metadata']
                 .output_properties['process_coverage_data_failure'] == 'true'))
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)
