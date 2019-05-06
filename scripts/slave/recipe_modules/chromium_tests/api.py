@@ -881,6 +881,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True
 
+  def _find_unrecoverable_test_suites(self, failing_tests):
+    """Finds which failing tests were irrecoverable.
+
+    Returns:
+      An array of test suites which irrecoverably failed.
+    """
+    unrecoverable_test_suites = []
+    for t in failing_tests:
+      # Summarize results.
+      is_successful = (self.m.test_utils.
+        summarize_test_with_patch_deapplied(self.m, t))
+
+      if not is_successful:
+        unrecoverable_test_suites.append(t)
+
+    return unrecoverable_test_suites
+
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                               affected_files, retry_failed_shards):
     """Runs tests with retries.
@@ -926,16 +943,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
                                   sort_by_shard=True)
 
-      unrecoverable_test_suites = []
-      for t in failing_tests:
-        # Summarize results.
-        success = (self.m.test_utils.
-          summarize_test_with_patch_deapplied(self.m, t))
-
-        if not success:
-          unrecoverable_test_suites.append(t)
-
-      return unrecoverable_test_suites
+      return self._find_unrecoverable_test_suites(failing_tests)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
