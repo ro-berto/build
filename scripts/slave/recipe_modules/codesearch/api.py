@@ -184,8 +184,6 @@ class CodesearchApi(recipe_api.RecipeApi):
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
             '--corpus', self.c.CORPUS]
-    if self.c.ROOT:
-      args.extend(['--root', self.c.ROOT])
     if self.c.BUILD_CONFIG:
       args.extend(['--build-config', self.c.BUILD_CONFIG])
     if self.c.GEN_REPO_OUT_DIR:

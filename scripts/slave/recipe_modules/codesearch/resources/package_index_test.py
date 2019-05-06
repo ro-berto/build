@@ -17,7 +17,6 @@ import package_index
 
 # Test values for corpus, build config, and out dir
 CORPUS = 'chromium-test'
-VNAME_ROOT = 'linux'
 BUILD_CONFIG = 'linux'
 OUT_DIR = 'src/out/Debug'
 
@@ -52,7 +51,6 @@ class PackageIndexTest(unittest.TestCase):
         os.path.join(self.build_dir, 'compile_commands.json'),
         os.path.join(self.build_dir, 'gn_targets.json'),
         corpus=CORPUS,
-        root=VNAME_ROOT,
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)
@@ -138,7 +136,6 @@ class PackageIndexTest(unittest.TestCase):
         os.path.join(self.build_dir, 'compile_commands_win.json'),
         os.path.join(self.build_dir, 'gn_targets.json'),
         corpus=CORPUS,
-        root=VNAME_ROOT,
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)

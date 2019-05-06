@@ -711,8 +711,6 @@
       "[CACHE]/builder/src/out/fuchsia-Debug/chromium_fuchsia.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--root",
-      "chromium-fuchsia",
       "--build-config",
       "fuchsia",
       "--out_dir",
