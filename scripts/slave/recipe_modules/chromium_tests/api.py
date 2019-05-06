@@ -1159,6 +1159,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Remove old files from out directory
       self.m.chromium.clean_outdir()
 
+  def _contains_invalid_results(self, unrecoverable_test_suites):
+    for test_suite in unrecoverable_test_suites:
+      # Both 'with patch' and 'without patch' must have valid results to
+      # skip CQ retries.
+      valid_results, _ = (
+          test_suite.with_patch_failures_including_retry())
+      if not valid_results:
+        return True
+
+      if not test_suite.has_valid_results('without patch'):
+        return True
+
+    return False
+
   def trybot_steps(self, builders=None, trybots=None):
     (bot_config_object, bot_update_step, affected_files, test_suites,
      retry_failed_shards) = (
@@ -1174,19 +1188,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
 
       if unrecoverable_test_suites:
-        every_failing_test_suite_had_valid_results = True
-        for test_suite in unrecoverable_test_suites:
-          # Both 'with patch' and 'without patch' must have valid results to
-          # skip CQ retries.
-          valid_results, _ = (
-              test_suite.with_patch_failures_including_retry())
-          if not valid_results:
-            every_failing_test_suite_had_valid_results = False
-
-          if not test_suite.has_valid_results('without patch'):
-            every_failing_test_suite_had_valid_results = False
-
-        if every_failing_test_suite_had_valid_results:
+        if not self._contains_invalid_results(unrecoverable_test_suites):
           self.m.tryserver.set_do_not_retry_build()
 
         exit_message = ' '.join(
