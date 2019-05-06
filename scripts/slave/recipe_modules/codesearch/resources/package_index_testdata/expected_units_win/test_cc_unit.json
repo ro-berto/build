@@ -11,6 +11,7 @@
     "source_file": [
       "../../test.cc"
     ],
+    "working_directory": "package_index_testdata/input/src/out/Debug",
     "output_key": "test.obj",
     "v_name": {
       "corpus": "chromium-test",
