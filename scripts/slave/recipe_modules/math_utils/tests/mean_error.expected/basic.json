@@ -1,11 +1,6 @@
 [
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Uncaught Exception: ValueError('Trying to take the mean of an empty list.',)"
     },
     "name": "$result"

@@ -146,9 +146,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "base_unittests (with patch)"
-      },
+      "failure": {},
       "humanReason": "Step('base_unittests (with patch)') failed with return_code 1"
     },
     "name": "$result"

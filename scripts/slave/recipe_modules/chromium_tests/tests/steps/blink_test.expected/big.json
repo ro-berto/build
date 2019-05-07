@@ -198,9 +198,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "blink_web_tests (with patch)"
-      },
+      "failure": {},
       "humanReason": "Step('blink_web_tests (with patch)') failed with return_code 125"
     },
     "name": "$result"

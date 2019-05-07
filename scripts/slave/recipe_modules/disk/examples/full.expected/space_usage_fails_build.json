@@ -25,9 +25,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Could not get disk info: 'capacity'"
     },
     "name": "$result"

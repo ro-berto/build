@@ -1185,11 +1185,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Failed webrtc_perf_tests (iPhone 7 iOS 12.1.4)."
     },
     "name": "$result"

@@ -236,9 +236,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "1 tests failed: ['jsfunfuzz']"
     },
     "name": "$result"

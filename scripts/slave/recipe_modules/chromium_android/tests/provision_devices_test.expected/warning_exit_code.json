@@ -25,9 +25,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "provision_devices"
-      },
+      "failure": {},
       "humanReason": "Warning: Step('provision_devices') returned 88"
     },
     "name": "$result"

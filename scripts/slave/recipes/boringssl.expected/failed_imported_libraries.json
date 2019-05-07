@@ -264,9 +264,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Aggregate step failure."
-      },
+      "failure": {},
       "humanReason": "1 out of 4 aggregated steps failed: Step('check imported libraries') failed with return_code 1"
     },
     "name": "$result"

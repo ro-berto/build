@@ -14,9 +14,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Recipe failed. Reason: Fake failure"
-      },
+      "failure": {},
       "humanReason": "Step('Recipe failed. Reason: Fake failure') failed with return_code 1"
     },
     "name": "$result"

@@ -2508,9 +2508,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "webkit_layout_tests failed."
     },
     "name": "$result"

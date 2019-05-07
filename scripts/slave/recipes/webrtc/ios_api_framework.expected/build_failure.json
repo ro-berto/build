@@ -431,9 +431,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "build"
-      },
+      "failure": {},
       "humanReason": "Step('build') failed with return_code 1"
     },
     "name": "$result"

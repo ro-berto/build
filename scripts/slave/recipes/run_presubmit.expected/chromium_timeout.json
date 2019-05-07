@@ -252,9 +252,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Step Timeout: Step('presubmit') timed out after 480"
     },
     "name": "$result"

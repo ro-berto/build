@@ -229,9 +229,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Aggregate step failure."
-      },
+      "failure": {},
       "humanReason": "1 out of 3 aggregated steps failed: Error, could not find builder by name builders/analyzer-triggered in test-matrix"
     },
     "name": "$result"

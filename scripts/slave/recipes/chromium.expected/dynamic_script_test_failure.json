@@ -437,9 +437,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "1 tests failed: ['test_script_with_broken_tests']"
     },
     "name": "$result"

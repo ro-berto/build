@@ -98,9 +98,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Clusterfuzz had issues."
     },
     "name": "$result"

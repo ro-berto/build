@@ -133,9 +133,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "swarming.py is too old"
-      },
+      "failure": {},
       "humanReason": "Step('swarming.py is too old') failed with return_code 1"
     },
     "name": "$result"

@@ -256,9 +256,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "presubmit"
-      },
+      "failure": {},
       "humanReason": "Step('presubmit') failed with return_code 1"
     },
     "name": "$result"

@@ -599,9 +599,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Failed to update deps: foo/bar"
     },
     "name": "$result"

@@ -593,9 +593,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "javascript tests"
-      },
+      "failure": {},
       "humanReason": "Step('javascript tests') failed with return_code 1"
     },
     "name": "$result"

@@ -839,9 +839,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "compile (with patch)"
-      },
+      "failure": {},
       "humanReason": "Step('compile (with patch)') failed with return_code 1"
     },
     "name": "$result"

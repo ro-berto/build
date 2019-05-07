@@ -775,11 +775,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Failed fake test (fake device iOS 8.1), fake test (fake device iOS 8.1)."
     },
     "name": "$result"

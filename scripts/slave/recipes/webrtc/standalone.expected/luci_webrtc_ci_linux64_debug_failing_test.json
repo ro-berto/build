@@ -6874,9 +6874,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Test target(s) failed: rtc_unittests"
     },
     "name": "$result"

@@ -135,9 +135,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Encountered 1 bundler failure(s)"
     },
     "name": "$result"

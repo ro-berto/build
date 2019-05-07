@@ -680,9 +680,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Error, could not find builder by name this-name-does-not-exist-in-test-matrix in test-matrix"
     },
     "name": "$result"

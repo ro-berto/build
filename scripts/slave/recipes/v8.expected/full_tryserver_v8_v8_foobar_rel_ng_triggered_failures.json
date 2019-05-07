@@ -916,9 +916,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Failures in tryjob."
     },
     "name": "$result"

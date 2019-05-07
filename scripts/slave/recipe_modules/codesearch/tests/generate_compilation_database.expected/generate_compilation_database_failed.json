@@ -101,9 +101,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "generate compilation database"
-      },
+      "failure": {},
       "humanReason": "Step('generate compilation database') failed with return_code 1"
     },
     "name": "$result"

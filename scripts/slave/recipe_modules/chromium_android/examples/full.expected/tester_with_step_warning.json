@@ -974,9 +974,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "unittests"
-      },
+      "failure": {},
       "humanReason": "Warning: Step('unittests') returned 88"
     },
     "name": "$result"

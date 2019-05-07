@@ -81,9 +81,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Error: ERROR"
     },
     "name": "$result"

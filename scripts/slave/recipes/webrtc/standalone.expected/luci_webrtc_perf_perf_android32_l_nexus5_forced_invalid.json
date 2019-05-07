@@ -1,11 +1,6 @@
 [
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Testers must not be started without providing revision information."
     },
     "name": "$result"

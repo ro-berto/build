@@ -217,9 +217,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "junit_test"
-      },
+      "failure": {},
       "humanReason": "Step('junit_test') failed with return_code 1"
     },
     "name": "$result"

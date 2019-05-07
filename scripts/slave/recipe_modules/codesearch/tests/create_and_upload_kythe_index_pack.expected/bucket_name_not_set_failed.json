@@ -185,11 +185,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Uncaught Exception: AssertionError('Trying to upload Kythe index pack but no google storage bucket name',)"
     },
     "name": "$result"

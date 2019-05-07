@@ -885,9 +885,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Test target(s) failed: webrtc_perf_tests"
     },
     "name": "$result"

@@ -34,9 +34,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Error, following targets were not found: invalid target, another one"
     },
     "name": "$result"

@@ -805,9 +805,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "1 tests failed: ['base_junit_tests']"
     },
     "name": "$result"

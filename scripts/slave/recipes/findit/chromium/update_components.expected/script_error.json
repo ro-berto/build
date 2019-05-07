@@ -384,9 +384,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Run component extraction script to generate mapping"
-      },
+      "failure": {},
       "humanReason": "Step('Run component extraction script to generate mapping') failed with return_code 1"
     },
     "name": "$result"

@@ -763,11 +763,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Failed build-global xcode build version (iPhone X iOS 10.0), build-global xcode build version (iPhone X iOS 10.0)."
     },
     "name": "$result"

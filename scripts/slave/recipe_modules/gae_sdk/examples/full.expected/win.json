@@ -23,9 +23,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Failed to fetch"
-      },
+      "failure": {},
       "humanReason": "Step('Failed to fetch') failed with return_code 1"
     },
     "name": "$result"

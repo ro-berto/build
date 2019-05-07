@@ -57,9 +57,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Run CTS"
-      },
+      "failure": {},
       "humanReason": "Step('Run CTS') failed with return_code 1"
     },
     "name": "$result"

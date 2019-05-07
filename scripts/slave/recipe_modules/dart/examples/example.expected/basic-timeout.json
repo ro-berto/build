@@ -420,9 +420,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Step \"can_time_out\" timed out after 40 minutes"
     },
     "name": "$result"

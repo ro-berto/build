@@ -425,9 +425,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "can_time_out"
-      },
+      "failure": {},
       "humanReason": "Step('can_time_out') failed with return_code 1"
     },
     "name": "$result"

@@ -501,11 +501,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Infra compile failure: Infra Failure in preprocess_for_goma.start_goma"
     },
     "name": "$result"

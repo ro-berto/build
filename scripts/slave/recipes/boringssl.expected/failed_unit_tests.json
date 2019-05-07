@@ -255,9 +255,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Aggregate step failure."
-      },
+      "failure": {},
       "humanReason": "1 out of 3 aggregated steps failed: Step('unit tests') failed with return_code 5"
     },
     "name": "$result"

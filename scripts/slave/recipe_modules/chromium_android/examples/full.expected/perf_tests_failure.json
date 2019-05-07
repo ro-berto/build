@@ -1294,9 +1294,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "sharded perf tests failed [StepFailure(\"Step('perf_test.foo') failed with return_code 1\",)]"
     },
     "name": "$result"

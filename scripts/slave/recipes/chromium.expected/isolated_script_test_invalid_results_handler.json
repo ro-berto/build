@@ -327,9 +327,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "isolated_scripts spec format error"
-      },
+      "failure": {},
       "humanReason": "Step('isolated_scripts spec format error') failed with return_code 1"
     },
     "name": "$result"

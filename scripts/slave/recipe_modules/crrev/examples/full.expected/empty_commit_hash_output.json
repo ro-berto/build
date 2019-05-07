@@ -23,9 +23,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Could not resolve refs/heads/master@{#111}"
     },
     "name": "$result"

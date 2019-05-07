@@ -975,9 +975,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "test_pre_run (retry shards with patch).missing failed shards"
-      },
+      "failure": {},
       "humanReason": "Step('test_pre_run (retry shards with patch).missing failed shards') failed with return_code 1"
     },
     "name": "$result"

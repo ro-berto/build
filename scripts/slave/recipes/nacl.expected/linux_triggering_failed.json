@@ -369,9 +369,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "annotated steps"
-      },
+      "failure": {},
       "humanReason": "Step('annotated steps') failed with return_code 1"
     },
     "name": "$result"

@@ -294,9 +294,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "swarming.py --version"
-      },
+      "failure": {},
       "humanReason": "Step('swarming.py --version') failed with return_code 1"
     },
     "name": "$result"

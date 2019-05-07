@@ -469,9 +469,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "run all tests"
-      },
+      "failure": {},
       "humanReason": "Step('run all tests') failed with return_code 1"
     },
     "name": "$result"

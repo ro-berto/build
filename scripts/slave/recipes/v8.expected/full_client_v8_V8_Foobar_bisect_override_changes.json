@@ -1249,9 +1249,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Failures or flakes in build."
     },
     "name": "$result"

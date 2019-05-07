@@ -823,9 +823,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "compare_build_artifacts"
-      },
+      "failure": {},
       "humanReason": "Step('compare_build_artifacts') failed with return_code 1"
     },
     "name": "$result"

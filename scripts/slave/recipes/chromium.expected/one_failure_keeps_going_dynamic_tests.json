@@ -539,9 +539,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "1 tests failed: ['base_unittests']"
     },
     "name": "$result"

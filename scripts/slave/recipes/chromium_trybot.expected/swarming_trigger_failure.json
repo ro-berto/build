@@ -931,9 +931,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "test_pre_run (with patch).[error] base_unittests (with patch)"
-      },
+      "failure": {},
       "humanReason": "Step('test_pre_run (with patch).[error] base_unittests (with patch)') failed with return_code 1"
     },
     "name": "$result"

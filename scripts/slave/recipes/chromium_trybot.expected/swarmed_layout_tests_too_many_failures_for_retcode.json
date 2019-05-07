@@ -2429,9 +2429,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "blink_web_tests failed."
     },
     "name": "$result"

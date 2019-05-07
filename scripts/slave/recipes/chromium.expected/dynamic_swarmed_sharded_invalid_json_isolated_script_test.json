@@ -895,9 +895,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "1 tests failed: ['telemetry_gpu_unittests']"
     },
     "name": "$result"

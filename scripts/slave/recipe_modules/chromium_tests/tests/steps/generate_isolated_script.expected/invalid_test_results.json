@@ -196,9 +196,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "TEST RESULTS WERE INVALID"
     },
     "name": "$result"

@@ -963,11 +963,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Infra Failure: Step('test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) (with patch) on iOS-8.1') returned 1"
     },
     "name": "$result"

@@ -23,9 +23,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Could not resolve abcdeabcde0123456789abcdeabcde0123456789"
     },
     "name": "$result"

@@ -87,11 +87,6 @@
   },
   {
     "failure": {
-      "exception": {
-        "traceback": [
-          "<omitted by recipe engine>"
-        ]
-      },
       "humanReason": "Infra Failure: Step('initialization.bot_update') returned 1"
     },
     "name": "$result"

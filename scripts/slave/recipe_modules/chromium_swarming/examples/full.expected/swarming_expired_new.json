@@ -499,9 +499,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "['shard #0 expired, not enough capacity']"
-      },
+      "failure": {},
       "humanReason": "Step(\"['shard #0 expired, not enough capacity']\") failed with return_code 0"
     },
     "name": "$result"

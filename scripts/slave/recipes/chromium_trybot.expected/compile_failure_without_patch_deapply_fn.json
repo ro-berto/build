@@ -1431,9 +1431,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "compile (without patch)"
-      },
+      "failure": {},
       "humanReason": "Step('compile (without patch)') failed with return_code 1"
     },
     "name": "$result"

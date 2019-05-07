@@ -246,9 +246,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Missing required gn_arg: is_debug"
     },
     "name": "$result"

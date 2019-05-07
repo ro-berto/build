@@ -522,9 +522,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "gclient runhooks (without patch)"
-      },
+      "failure": {},
       "humanReason": "Step('gclient runhooks (without patch)') failed with return_code 1"
     },
     "name": "$result"

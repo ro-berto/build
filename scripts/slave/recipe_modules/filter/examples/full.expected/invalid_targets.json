@@ -82,9 +82,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
-      },
+      "failure": {},
       "humanReason": "Error, following targets were not found: invalid, another one"
     },
     "name": "$result"

@@ -608,9 +608,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "compile"
-      },
+      "failure": {},
       "humanReason": "Step('compile') failed with return_code 1"
     },
     "name": "$result"

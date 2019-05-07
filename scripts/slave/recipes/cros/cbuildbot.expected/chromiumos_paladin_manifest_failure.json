@@ -132,9 +132,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Fetch manifest config failure"
-      },
+      "failure": {},
       "humanReason": "Step('Fetch manifest config failure') failed with return_code 1"
     },
     "name": "$result"

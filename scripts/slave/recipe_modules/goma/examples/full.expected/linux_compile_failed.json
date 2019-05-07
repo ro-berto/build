@@ -280,9 +280,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "ninja"
-      },
+      "failure": {},
       "humanReason": "Step('ninja') failed with return_code 1"
     },
     "name": "$result"

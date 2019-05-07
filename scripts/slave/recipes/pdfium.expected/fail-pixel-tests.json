@@ -593,9 +593,7 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "pixel tests"
-      },
+      "failure": {},
       "humanReason": "Step('pixel tests') failed with return_code 1"
     },
     "name": "$result"
