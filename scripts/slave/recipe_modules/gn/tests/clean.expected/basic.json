@@ -1,0 +1,21 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "clean",
+      "[START_DIR]/out/Release"
+    ],
+    "cwd": "[START_DIR]/out/Release",
+    "name": "foobar",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text[gn output]@@@"
+    ]
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

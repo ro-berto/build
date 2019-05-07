@@ -4,6 +4,7 @@
 
 DEPS = [
     'depot_tools/depot_tools',
+    'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/python',
     'recipe_engine/step',
