@@ -398,7 +398,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/clang_revision.py",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
       "[CACHE]/builder/src",
       "--output-json",

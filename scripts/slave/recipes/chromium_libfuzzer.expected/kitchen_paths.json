@@ -396,7 +396,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/clang_revision.py",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
       "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
       "--output-json",

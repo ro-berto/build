@@ -332,7 +332,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/clang_revision.py",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
       "[BUILDER_CACHE]/V8_Blink_Mac/src",
       "--output-json",
