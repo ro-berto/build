@@ -82,7 +82,7 @@ def _AnnotatedStepsSteps(api, got_revision):
       ]),
   }
   # Set up env for the triggered builders.
-  if api.properties['buildername'] in trigger_map.values():
+  if api.buildbucket.builder_name in trigger_map.values():
     env.update({
         'BUILDBOT_TRIGGERED_BY_BUILDERNAME':
           api.properties['parent_buildername'],
@@ -126,9 +126,9 @@ def _AnnotatedStepsSteps(api, got_revision):
       api.goma.stop(build_exit_status=exit_status)
 
 def _TriggerTestsSteps(api):
-  if api.properties['buildername'] in trigger_map:
+  if api.buildbucket.builder_name in trigger_map:
     api.trigger(
-        {'builder_name': trigger_map[api.properties['buildername']],
+        {'builder_name': trigger_map[api.buildbucket.builder_name],
          'properties': {'parent_slavename': api.properties['bot_id']}})
 
 def RunSteps(api):
