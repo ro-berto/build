@@ -635,7 +635,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Failing build because ninja reported work to do.\n          This means that after completing a compile, another was run and\n          it resulted in still having work to do (that is, a no-op build\n          wasn't a no-op). Consult the first \"ninja explain:\" line for a\n          likely culprit."
+      "humanReason": "Failing build because ninja reported work to do.\n        This means that after completing a compile, another was run and\n        it resulted in still having work to do (that is, a no-op build\n        wasn't a no-op). Consult the first \"ninja explain:\" line for a\n        likely culprit."
     },
     "name": "$result"
   }

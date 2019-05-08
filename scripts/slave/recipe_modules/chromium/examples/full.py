@@ -9,7 +9,7 @@ DEPS = [
   'chromium_tests',
   'recipe_engine/json',
   'recipe_engine/platform',
- 'recipe_engine/properties',
+  'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
@@ -23,7 +23,6 @@ def RunSteps(api):
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False);
-  ninja_confirm_noop_warn = api.properties.get('ninja_confirm_noop_warn', False)
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
@@ -33,9 +32,6 @@ def RunSteps(api):
 
     if failfast:
       api.chromium.apply_config('goma_failfast')
-
-    if ninja_confirm_noop_warn:
-      api.chromium.apply_config('ninja_confirm_noop_warn')
 
     for config in configs:
       api.chromium.apply_config(config)
@@ -139,31 +135,10 @@ def GenTests(api):
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
-             ninja_confirm_noop=True,
          ) + api.override_step_data(
              'compile confirm no-op',
              stdout=api.raw_io.output(
                  "ninja explain: chrome is dirty\n")))
-
-  yield (api.test('basic_out_dir_ninja_no_op_warning') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=True,
-             ninja_confirm_noop_warn=True,
-         ) + api.override_step_data(
-             'compile confirm no-op',
-             stdout=api.raw_io.output(
-                 "ninja explain: chrome is dirty\n")) +
-         api.post_check(
-             lambda check, steps:
-             check(steps['compile confirm no-op']
-                   .output_properties['confirm no-op failure'] == 'true')) +
-         api.post_process(post_process.StatusSuccess) +
-         api.post_process(post_process.DropExpectation))
 
   yield (api.test('basic_out_dir_goma_module_start_failure') +
          api.properties(
