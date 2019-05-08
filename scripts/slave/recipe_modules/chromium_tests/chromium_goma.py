@@ -143,6 +143,10 @@ SPEC = {
         CreateStandardConfig('mac', ['goma_mixer_staging', 'clobber']),
         'Chromium Mac Goma RBE Staging (dbg)':
         CreateStandardConfig('mac', ['goma_mixer_staging']),
+        'Chromium Mac Goma RBE Prod':
+        CreateStandardConfig('mac', ['goma_rbe_prod']),
+        'Chromium Mac Goma RBE Prod (clobber)':
+        CreateStandardConfig('mac', ['goma_rbe_prod', 'clobber']),
         'Chromium Mac Goma RBE Prod (dbg)':
         CreateStandardConfig('mac', ['goma_rbe_prod']),
         'Chromium Mac Goma RBE Prod (dbg) (clobber)':
