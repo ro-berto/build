@@ -55,6 +55,13 @@ def RunSteps(api):
                    build_only_flags + ['--build-include=binaryen'])
         api.python('Build V8', waterfall_build,
                    build_only_flags + ['--build-include=v8'])
+        api.python('Build LLVM', waterfall_build,
+                   build_only_flags + ['--build-include=llvm',
+                                       '--no-tool-tests'])
+        api.python('Build fastcomp', waterfall_build,
+                   build_only_flags + ['--build-include=fastcomp'])
+        api.python('Build Emscripten', waterfall_build,
+                   build_only_flags + ['--build-include=emscripten'])
       except api.step.StepFailure as e:
         # If any of these builds fail, testing won't be meaningful.
         exit_status = e.retcode

@@ -282,6 +282,79 @@
     "name": "Build V8"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
+      "--no-test",
+      "--build-include=llvm",
+      "--no-tool-tests"
+    ],
+    "env": {
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Build LLVM"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
+      "--no-test",
+      "--build-include=fastcomp"
+    ],
+    "env": {
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Build fastcomp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
+      "--no-test",
+      "--build-include=emscripten"
+    ],
+    "env": {
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Build Emscripten"
+  },
+  {
     "cmd": [],
     "name": "postprocess_for_goma"
   },
