@@ -39,6 +39,7 @@ def RunSteps(api):
                '--v8-dir=%s' % cache_dir.join('v8'),
                '--install-dir=%s' % install_dir]
   build_only_flags = dir_flags + ['--no-sync', '--no-test']
+  test_only_flags = dir_flags + ['--no-sync', '--no-build']
 
   api.file.ensure_directory('Ensure install dir', install_dir)
   with api.context(cwd=cache_dir):
@@ -71,6 +72,15 @@ def RunSteps(api):
       finally:
         api.goma.stop(build_exit_status=exit_status)
 
+      for name, flag in (('upstream', 'emtest'), ('asm2wasm', 'emtest-asm')):
+        try:
+          api.python('Emscripten testsuite (%s)' % name, waterfall_build,
+                     test_only_flags + ['--test-include=%s' % flag])
+        except api.step.StepFailure as e:
+          # Log the failure but continue.
+          exit_status = e.retcode
+  if exit_status != 0:
+    raise api.step.StepFailure('Emscripten tests failed')
 
 def GenTests(api):
   def test(name):
@@ -83,7 +93,16 @@ def GenTests(api):
   yield test('linux')
 
   yield (
-      test('linux_fail') +
+      test('linux_buildfail') +
       api.step_data('Build Wabt', retcode=1) +
       api.post_process(Filter('postprocess_for_goma.upload_log'))
+  )
+
+  yield (
+      # Check that if the first test fails, the second runs but the
+      # overall result is failure.
+      test('linux_emtest_fail') +
+      api.step_data('Emscripten testsuite (upstream)', retcode=1) +
+      api.post_process(Filter('Emscripten testsuite (asm2wasm)',
+                              '$result'))
   )

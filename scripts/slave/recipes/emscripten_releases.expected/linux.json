@@ -528,6 +528,54 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
+      "--no-build",
+      "--test-include=emtest"
+    ],
+    "env": {
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Emscripten testsuite (upstream)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
+      "--no-build",
+      "--test-include=emtest-asm"
+    ],
+    "env": {
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Emscripten testsuite (asm2wasm)"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
