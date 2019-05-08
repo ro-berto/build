@@ -116,14 +116,6 @@ def main():
       print 'Adding metadata to %s' % filename
     with open(filename, 'a+') as f:
       contents = f.read()
-      # This string always appears at least once, in the kythe_inline_metadata
-      # pragma. If there's another copy of it, this file is untouched since the
-      # last time this script ran, so we'd just be adding duplicate metadata.
-      if contents.count('Metadata comment') >= 2:
-        if opts.verbose:
-          print 'Skipping %s as it already has metadata' % filename
-        continue
-
       metadata = _GenerateMetadata(filename, contents, opts.corpus,
                                    opts.verbose)
 
@@ -133,6 +125,20 @@ def main():
       # and indeed, on Windows any following writes will fail without this seek,
       # since we did a read() above.
       f.seek(0, os.SEEK_CUR)
+
+      # If there's already a metadata comment, this file is untouched since the
+      # last time this script ran, and we still have the metadata we generated
+      # last time. In this case we clear the existing metadata and generate new
+      # metadata. In theory the metadata will be the same, since the file hasn't
+      # changed. However, if this script has changed we want the output from
+      # the new version rather than the old version, as it might be different.
+      comment_pos = contents.find('\n// Metadata comment')
+      if comment_pos != -1:
+        if opts.verbose:
+          print 'Clearing existing metadata from %s' % filename
+        f.seek(comment_pos)
+        f.truncate()
+        contents = contents[:comment_pos]
 
       # read() already put us at the end of the file
       if contents[-1] != '\n':
