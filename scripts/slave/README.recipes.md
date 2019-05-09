@@ -1610,11 +1610,11 @@ Usage is generally discouraged.
 
 This module contains apis to interact with llvm-cov and llvm-profdata.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#99)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#101)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#229)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#231)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1622,13 +1622,13 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#69)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#71)(self):**
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#111)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#113)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#256)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#258)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1636,7 +1636,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#123)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#125)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1645,22 +1645,22 @@ Args:
       save in in this dir. None for getting the parent directory to contain
       the dirs for all steps.
 
-&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#94)(self):**
+&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#96)(self):**
 
 Returns the path to the llvm-profdata executable.
 
-&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#81)(self):**
+&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#83)(self):**
 
 Returns the location of a script that merges raw profiles from shards.
 
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#104)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#106)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#401)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#437)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1669,11 +1669,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#76)(self):**
+&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#78)(self):**
 
 Returns the script that merges indexed profiles from multiple targets.
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#147)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#149)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
@@ -4473,9 +4473,9 @@ properties set for the entry.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#63)(api):**
 ### *recipes* / [clang\_coverage:tests/full](/scripts/slave/recipe_modules/clang_coverage/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#24)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#22)(api):**
 ### *recipes* / [client.nacl.sdk.recipe\_autogen](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5308,13 +5308,13 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8.py#77)(api, binary_size_tracking, build_config, clobber, clobber_all, clusterfuzz_archive, coverage, custom_deps, default_targets, enable_swarming, mb_config_path, set_gclient_var, target_arch, target_platform, track_build_dependencies, triggers, triggers_proxy, use_goma):**
 ### *recipes* / [v8/archive](/scripts/slave/recipes/v8/archive.py)
 
-[DEPS](/scripts/slave/recipes/v8/archive.py#16): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/archive.py#16): [chromium](#recipe_modules-chromium), [gn](#recipe_modules-gn), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe for archiving officially tagged v8 builds.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#138)(api, build_config, target_arch, target_bits, target_platform):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#174)(api, build_config, target_arch, target_bits, target_platform):**
 
-&mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#53)(api, ref, version, archive_type, step_suffix='', archive_suffix=''):**
+&mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#54)(api, bot_config, ref, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_deps.py#7): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
