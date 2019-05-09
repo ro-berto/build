@@ -44,6 +44,13 @@ def _get_ctl_binary_name(api):
   return "cel_ctl" + suffix
 
 
+def _get_python_packages(api, checkout):
+  """Returns the full path of the python whl package files."""
+  out_dir = checkout.join('out')
+  return api.file.glob_paths('find python packages', out_dir, '*.whl',
+    test_data=['test.whl'])
+
+
 def RunSteps(api):
   # Checkout the CELab repo
   go_root = api.path['start_dir'].join('go')
@@ -76,16 +83,23 @@ def RunSteps(api):
   with api.context(cwd=checkout, env=goenv, env_suffixes={'PATH': add_paths}):
     api.python('install deps', 'build.py', ['deps', '--install', '--verbose'])
     api.python('build', 'build.py', ['build', '--verbose'])
+    api.python(
+      'create python package',
+      'build.py', ['create_package', '--verbose'],
+      venv=True)
 
-  # Upload binaries (cel_ctl and resources/*) for CI builds
+  # Upload binaries (cel_ctl and resources/*, plus the python package of the
+  # test framework) for CI builds
   bucket = api.buildbucket.build.builder.bucket
   if bucket == 'ci':
-    output_dir = _get_bin_directory(api, checkout)
+    bin_dir = _get_bin_directory(api, checkout)
     cel_ctl = _get_ctl_binary_name(api)
     zip_out = api.path['start_dir'].join('cel.zip')
-    pkg = api.zip.make_package(output_dir, zip_out)
-    pkg.add_file(output_dir.join(cel_ctl))
-    pkg.add_directory(output_dir.join('resources'))
+    pkg = api.zip.make_package(checkout.join('out'), zip_out)
+    pkg.add_file(bin_dir.join(cel_ctl))
+    pkg.add_directory(bin_dir.join('resources'))
+    for package_file in _get_python_packages(api, checkout):
+      pkg.add_file(package_file)
     pkg.zip('zip archive')
 
     today = api.time.utcnow().date()

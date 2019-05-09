@@ -215,6 +215,28 @@
     "name": "build"
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "build.py",
+      "create_package",
+      "--verbose"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env": {
+      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
+      "GOPATH": "[START_DIR]/go"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/go/bin",
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
+      ]
+    },
+    "name": "create python package"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
