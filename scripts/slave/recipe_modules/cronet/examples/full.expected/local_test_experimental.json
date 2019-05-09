@@ -664,7 +664,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/out/Debug/bin/run_cronet_unittests",
+      "[START_DIR]/src/out/Debug/bin/run_cronet_unittests_android",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
@@ -676,7 +676,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "cronet_unittests"
+    "name": "cronet_unittests_android"
   },
   {
     "cmd": [

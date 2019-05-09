@@ -34,13 +34,6 @@ class CronetApi(recipe_api.RecipeApi):
     'net_unittests',
   ])
 
-  # TODO(jbudorick): Remove this once we're no longer building
-  # M65 or below.
-  UNIT_TESTS_M65_AND_BELOW = freeze ([
-    'cronet_unittests',
-    'net_unittests',
-  ])
-
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   def init_and_sync(self, recipe_config, kwargs,
@@ -139,12 +132,7 @@ class CronetApi(recipe_api.RecipeApi):
       self, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):
 
     if unit_tests is None:
-      # The Android-specific cronet unit test target was renamed from
-      # 'cronet_unittests' to 'cronet_unittests_android' starting in M66.
-      if int(self.m.chromium.get_version().get('MAJOR', sys.maxint)) > 65:
-        unit_tests = self.UNIT_TESTS
-      else:
-        unit_tests = self.UNIT_TESTS_M65_AND_BELOW
+      unit_tests = self.UNIT_TESTS
 
     droid = self.m.chromium_android
     droid.common_tests_setup_steps()
