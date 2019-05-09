@@ -369,11 +369,14 @@ class IndexPack(object):
 
         required_input = {
             'v_name': {
-                'corpus': self.corpus,
-                'path': self._NormalizePath(required_file),
+                'corpus':
+                    self.corpus,
+                'path':
+                    self._ConvertPathToForwardSlashes(
+                        self._NormalizePath(required_file)),
             },
             'info': {
-                'path': required_file,
+                'path': self._ConvertPathToForwardSlashes(required_file),
                 'digest': self.filehashes[path],
             },
         }
