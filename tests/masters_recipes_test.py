@@ -59,12 +59,6 @@ FAKE_BUILDERS = {
       'win-archive-rel',
       'win-rel',
     ],
-    'master.chromium.android': [
-        # These have been migrated to LUCI.
-        'Android ASAN (dbg)',
-        'Android Cronet Builder',
-        'Cast Android (dbg)',
-    ],
     'master.chromium.fyi': [
         # These are on LUCI.
         'linux-chromium-tests-staging-builder',
