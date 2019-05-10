@@ -26,6 +26,13 @@ RECIPE_CONFIG_PATHS = [
   'testing/buildbot/.*pyl$',
 ]
 
+class BotMetadata(object):
+  def __init__(self, mastername, buildername, config, settings):
+    self.mastername = mastername
+    self.buildername = buildername
+    self.config = config
+    self.settings = settings
+
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
@@ -1011,21 +1018,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return result.json.output
 
   def main_waterfall_steps(self, mb_config_path=None, builders=None):
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.buildbucket.builder_name
-    bot_config = self.create_bot_config_object(
-        [self.create_bot_id(mastername, buildername)], builders=builders)
+    bot = self._lookup_bot_metadata(builders)
+    self._report_builders(bot.settings)
+    self.configure_build(bot.settings)
+    update_step, bot_db = self.prepare_checkout(bot.settings)
 
-    self._report_builders(bot_config)
-
-    self.configure_build(bot_config)
-    update_step, bot_db = self.prepare_checkout(bot_config)
-
-    bot_type = bot_config.get('bot_type')
+    bot_type = bot.settings.get('bot_type')
     if bot_type == 'tester':
       # Lookup GN args for the associated builder
-      parent_mastername = bot_config.get('parent_mastername', mastername)
-      parent_buildername = bot_config.get('parent_buildername')
+      parent_mastername = bot.settings.get('parent_mastername', bot.mastername)
+      parent_buildername = bot.settings.get('parent_buildername')
       parent_bot_config = self.create_bot_config_object(
           [self.create_bot_id(parent_mastername, parent_buildername)],
           builders=builders)
@@ -1040,10 +1042,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 android_version_code=android_version_code,
                                 name='lookup builder GN args')
 
-    test_config = bot_config.get_tests(bot_db)
+    test_config = bot.settings.get_tests(bot_db)
     if bot_type == 'tester':
       non_isolated_tests = [
-          t for t in test_config.tests_on(mastername, buildername)
+          t for t in test_config.tests_on(bot.mastername, bot.buildername)
           if not t.uses_isolate]
       isolate_transfer = (
           # Some of the old buildbot trigger infrastructure may not be
@@ -1061,9 +1063,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.runtime.is_luci and
 
           any(t.uses_isolate
-              for t in test_config.tests_triggered_by(mastername, buildername)))
+              for t in test_config.tests_triggered_by(
+                    bot.mastername, bot.buildername)))
       non_isolated_tests = [
-          t for t in test_config.tests_triggered_by(mastername, buildername)
+          t for t in test_config.tests_triggered_by(
+              bot.mastername, bot.buildername)
           if not t.uses_isolate]
       package_transfer = (
           # Always use package transfer on buildbot.
@@ -1071,7 +1075,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
           bool(non_isolated_tests) or
 
-          bot_config.get('enable_package_transfer'))
+          bot.settings.get('enable_package_transfer'))
 
     if package_transfer:
       package_transfer_reasons = [
@@ -1083,14 +1087,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in non_isolated_tests:
         package_transfer_reasons.append(
             " - %s doesn't use isolate" % t.name)
-      if bot_config.get('enable_package_transfer'):
+      if bot.settings.get('enable_package_transfer'):
         package_transfer_reasons.append(
             " - package transfer is explicitly enabled")
 
     compile_targets = self.get_compile_targets(
-        bot_config, bot_db, test_config.all_tests())
+        bot.settings, bot_db, test_config.all_tests())
     self.compile_specific_targets(
-        bot_config, update_step, bot_db,
+        bot.settings, update_step, bot_db,
         compile_targets, test_config.all_tests(),
         mb_config_path=mb_config_path)
 
@@ -1100,13 +1104,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.isolate.isolated_tests)
     if package_transfer and bot_type in ('builder', 'builder_tester'):
       self.package_build(
-          mastername, buildername, update_step, bot_db,
+          bot.mastername, bot.buildername, update_step, bot_db,
           reasons=package_transfer_reasons)
 
     self.trigger_child_builds(
-        mastername, buildername, update_step, bot_db,
+        bot.mastername, bot.buildername, update_step, bot_db,
         additional_properties=additional_trigger_properties)
-    self.archive_build(mastername, buildername, update_step, bot_db)
+    self.archive_build(bot.mastername, bot.buildername, update_step, bot_db)
 
     if isolate_transfer and bot_type == 'tester':
       self.m.file.rmtree(
@@ -1115,13 +1119,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if package_transfer and bot_type == 'tester':
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
-          mastername, buildername, update_step, bot_db, read_gn_args=False)
+          bot.mastername, bot.buildername, update_step, bot_db,
+          read_gn_args=False)
       self.m.python.succeeding_step(
           'explain extract build',
           package_transfer_reasons,
           as_log='why is this running?')
 
-    tests = test_config.tests_on(mastername, buildername)
+    tests = test_config.tests_on(bot.mastername, bot.buildername)
     if not tests:
       if bot_type in ['builder', 'builder_tester']:
         # Remove old files from out directory
@@ -1129,11 +1134,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return
 
     self.m.chromium_swarming.configure_swarming(
-        'chromium', precommit=False, mastername=mastername,
-        default_priority=bot_config.get('swarming_default_priority'))
+        'chromium', precommit=False, mastername=bot.mastername,
+        default_priority=bot.settings.get('swarming_default_priority'))
     test_runner = self.create_test_runner(
-        tests, serialize_tests=bot_config.get('serialize_tests'))
-    with self.wrap_chromium_tests(bot_config, tests):
+        tests, serialize_tests=bot.settings.get('serialize_tests'))
+    with self.wrap_chromium_tests(bot.settings, tests):
       test_runner()
     if bot_type in ['builder', 'builder_tester']:
       # Remove old files from out directory
@@ -1175,6 +1180,39 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             [x.name + ' failed.' for x in unrecoverable_test_suites])
         raise self.m.step.StepFailure(exit_message)
 
+  def _lookup_bot_metadata(self, builders, mirrored_bots=None):
+    # Most trybots mirror a CI bot. They run the same suite of tests with the
+    # same configuration.
+    # This logic takes the <mastername, buildername> of the triggering trybot,
+    # and looks up the configuration of the mirrored bot. For example,
+    # <tryserver.chromium.mac, mac_chromium_dbg_ng> will return:
+    # {
+    #   'bot_ids': {
+    #                'mastername': 'chromium.mac',
+    #                'buildername': 'Mac Builder (dbg)',
+    #                'tester': 'Mac10.13 Tests (dbg)',
+    #              },
+    #   'analyze_mode': None
+    # }
+    # See ChromiumTestsApi for more details.
+    bots = mirrored_bots or self.trybots
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.buildbucket.builder_name
+    config = bots.get(mastername, {}).get('builders', {}).get(buildername)
+    if not config:
+      # Some trybots do not mirror a CI bot. In this case, return a
+      # configuration that uses the same <mastername, buildername> of the
+      # triggering trybot.
+      config = {
+        'bot_ids': [self.create_bot_id(mastername, buildername)],
+      }
+
+    # contains build/test settings for the bot
+    settings = self.create_bot_config_object(
+        config['bot_ids'], builders=builders)
+
+    return BotMetadata(mastername, buildername, config, settings)
+
   def _trybot_steps_internal(self, builders=None, trybots=None):
     """Initial configuration for all trybots.
 
@@ -1199,48 +1237,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
              -- the results of previous runs affect future runs.
       retry_failed_shards: Whether to retry failures in 'with patch'.
     """
-    # Most trybots mirror a CI bot. They run the same suite of tests with the
-    # same configuration.
-    # This logic takes the <mastername, buildername> of the triggering trybot,
-    # and looks up the configuration of the mirrored bot. For example,
-    # <tryserver.chromium.mac, mac_chromium_dbg_ng> will return:
-    # {
-    #   'bot_ids': {
-    #                'mastername': 'chromium.mac',
-    #                'buildername': 'Mac Builder (dbg)',
-    #                'tester': 'Mac10.13 Tests (dbg)',
-    #              },
-    #   'analyze_mode': None
-    # }
-    # See ChromiumTestsApi for more details.
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.buildbucket.builder_name
-    trybot_config = (trybots or self.trybots).get(mastername, {}).get(
-        'builders', {}).get(buildername)
+    bot = self._lookup_bot_metadata(builders, mirrored_bots=trybots)
 
-    # Some trybots do not mirror a CI bot. In this case, return a configuration
-    # that uses the same <mastername, buildername> of the triggering trybot.
-    if not trybot_config:
-      trybot_config = {
-        'bot_ids': [self.create_bot_id(mastername, buildername)],
-      }
-
-    # bot_config_object contains build/test settings for the mirrored
-    # <mastername, buildername>.
-    bot_config_object = self.create_bot_config_object(
-        trybot_config['bot_ids'], builders=builders)
-
-    self._report_builders(bot_config_object)
+    self._report_builders(bot.settings)
     self.set_precommit_mode()
 
-    # Applies build/test configurations from bot_config_object.
-    self.configure_build(bot_config_object, override_bot_type='builder_tester')
+    # Applies build/test configurations from bot.settings.
+    self.configure_build(bot.settings, override_bot_type='builder_tester')
 
     self.m.chromium.apply_config('trybot_flavor')
 
     # This rolls chromium checkout, applies the patch, runs gclient sync to
     # update all DEPS.
-    bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
+    bot_update_step, bot_db = self.prepare_checkout(bot.settings)
 
     self.m.chromium_swarming.configure_swarming(
       'chromium', precommit=True)
@@ -1249,7 +1258,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Tests are instances of class(Test) from chromium_tests/steps.py. These
     # objects know how to dispatch isolate tasks, parse results, and keep
     # state on the results of previous test runs.
-    test_config = self.get_tests(bot_config_object, bot_db)
+    test_config = self.get_tests(bot.settings, bot_db)
     tests = test_config.tests_in_scope()
     tests_including_triggered = test_config.all_tests()
 
@@ -1260,7 +1269,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Determine the compile targets for the tests that would be run.
     compile_targets = self.get_compile_targets(
-        bot_config_object,
+        bot.settings,
         bot_db,
         test_config.all_tests())
     test_targets = sorted(set(
@@ -1272,15 +1281,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
       analyze_names = ['chromium'] + list(
-          trybot_config.get('analyze_names', []))
+          bot.config.get('analyze_names', []))
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path
           or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
       test_targets, compile_targets = self.m.filter.analyze(
           affected_files, test_targets, additional_compile_targets,
           'trybot_analyze_config.json',
-          mb_mastername=mastername,
-          mb_buildername=buildername,
+          mb_mastername=bot.mastername,
+          mb_buildername=bot.buildername,
           mb_config_path=mb_config_path,
           additional_names=analyze_names)
 
@@ -1288,7 +1297,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # done sooner because we still want to determine the minimal set of binaries
     # that need to be compiled, which requires knowing the set of tests that
     # would be run.
-    if trybot_config.get('analyze_mode') == 'compile':
+    if bot.config.get('analyze_mode') == 'compile':
       tests = []
       tests_including_triggered = []
 
@@ -1300,7 +1309,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       compile_targets = sorted(set(compile_targets))
       self.compile_specific_targets(
-          bot_config_object,
+          bot.settings,
           bot_update_step,
           bot_db,
           compile_targets,
@@ -1316,9 +1325,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    retry_failed_shards = trybot_config.get('retry_failed_shards', True)
+    retry_failed_shards = bot.config.get('retry_failed_shards', True)
     return (
-        bot_config_object, bot_update_step, affected_files, tests,
+        bot.settings, bot_update_step, affected_files, tests,
         retry_failed_shards
     )
 
