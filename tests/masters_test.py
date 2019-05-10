@@ -215,7 +215,6 @@ def main(argv):
   public_masters = {
       'master.chromium': 'Chromium',
       'master.chromium.android': 'ChromiumAndroid',
-      'master.chromium.android.fyi': 'ChromiumAndroidFyi',
       'master.chromium.clang': 'ChromiumClang',
       'master.chromium.perf': 'ChromiumPerf',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
