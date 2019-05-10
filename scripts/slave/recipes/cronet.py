@@ -41,6 +41,20 @@ BUILDERS = freeze({
     },
     'chromium_apply_config': ['cronet_official'],
   },
+  'android-cronet-marshmallow-arm64-perf-rel': {
+    'recipe_config': 'arm64_builder_mb',
+    'run_tests': False,
+    'run_perf_tests': True,
+    'kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'REPO_NAME': 'src',
+    },
+    'cronet_kwargs': {
+      'report_sizes': False,
+      'PERF_ID': 'android_cronet_m64_perf',
+    },
+    'chromium_apply_config': ['cronet_official'],
+  },
 })
 
 
