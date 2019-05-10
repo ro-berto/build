@@ -986,38 +986,3 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
   )
-
-  yield (
-    api.test('host_app_path')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fyi',
-      bot_id='fake-vm',
-    )
-    + api.buildbucket.ci_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode build version': '9abc',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'tests': [
-        {
-          'app': 'fake test',
-          'host': 'fake host app',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-  )

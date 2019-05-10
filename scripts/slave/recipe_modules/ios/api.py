@@ -609,13 +609,6 @@ class iOSApi(recipe_api.RecipeApi):
 
     app_path = self.m.path.join(self.most_recent_app_dir,
                                 '%s.app' % test['app'])
-    # Handling for EG2
-    host_app_path = None
-    if 'host' in test:
-      host_app_path = self.m.path.join(self.most_recent_app_dir,
-                                       '%s.app' % test['host'])
-      app_path = self.m.path.join(self.most_recent_app_dir,
-                                  '%s-Runner.app' % test['app'])
     task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
 
     args = [
@@ -637,20 +630,6 @@ class iOSApi(recipe_api.RecipeApi):
       '--isolated', tmp_dir.join('%s.isolated' % test_id),
       '--path-variable', 'app_path', app_path,
     ]
-
-    args.extend([
-      '--config-variable', 'host_app_path', (
-          host_app_path if host_app_path else 'NO_PATH'),
-    ])
-
-    # Additional_app_path is a mandatory variable defining the path to a second
-    # app which will be included in the isolate's files. This is for EG2 tests
-    # which uses two apps; tests that use one app will have this variable
-    # equal to app_path (effectively being a no-op).
-    args.extend([
-      '--path-variable', 'additional_app_path', (
-          host_app_path if host_app_path else app_path),
-    ])
 
     use_wpr_tools = test.get('use trusted cert') or test.get(
         'replay package name')
@@ -764,7 +743,6 @@ class iOSApi(recipe_api.RecipeApi):
       '%s/run.py' % scripts_dir,
       '--app', '<(app_path)',
       '--args-json',
-      '--host-app', '<(host_app_path)',
       '{"test_args": <(test_args), \
         "xctest": <(xctest), \
         "test_cases": <(test_cases), \
@@ -785,7 +763,6 @@ class iOSApi(recipe_api.RecipeApi):
       # .apps are directories. Need the trailing slash to isolate the
       # contents of a directory.
       '<(app_path)/',
-      '<(additional_app_path)/',
       '%s/' % scripts_dir,
       'src/.vpython',
     ]
