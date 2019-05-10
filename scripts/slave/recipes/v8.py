@@ -853,6 +853,19 @@ def GenTests(api):
       api.post_process(Filter('trigger'))
   )
 
+  # Test ios configs.
+  yield (
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'ios',
+                  build_config='Release',
+                  target_platform='ios',
+      ) +
+      api.platform('mac', 64) +
+      api.v8.check_in_param(
+          'initialization.bot_update',
+          '--spec-path', 'target_os = [\'ios\']') +
+      api.post_process(DropExpectation)
+  )
+
   # Test for covering a hack in swarming/api.py for crbug.com/842234.
   yield (
     api.v8.test(

@@ -268,8 +268,11 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.set_config('v8', **kwargs)
     self.m.gclient.set_config('v8', **kwargs)
 
-    if self.m.chromium.c.TARGET_PLATFORM in ['android', 'fuchsia', 'ios']:
+    if self.m.chromium.c.TARGET_PLATFORM in ['android', 'fuchsia']:
       self.m.gclient.apply_config(self.m.chromium.c.TARGET_PLATFORM)
+
+    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+      self.m.gclient.apply_config('v8_ios')
 
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
