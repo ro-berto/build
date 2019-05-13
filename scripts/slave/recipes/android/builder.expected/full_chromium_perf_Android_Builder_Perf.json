@@ -434,7 +434,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -462,7 +462,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -595,7 +595,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_minimal_apks\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"monochrome_public_minimal_apks\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_minimal_apks\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"monochrome_public_minimal_apks\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

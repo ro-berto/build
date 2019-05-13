@@ -796,7 +796,7 @@
       "[CACHE]/goma/client",
       "--nostart-goma",
       "--",
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -816,7 +816,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -853,7 +853,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out_amd64-generic/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out_amd64-generic/Release\", \"All\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out_amd64-generic/Release\", \"All\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",

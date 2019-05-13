@@ -303,7 +303,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -337,7 +337,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -476,7 +476,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Android64_M_Nexus5X",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_M_Nexus5X\", \"-j\", 20, \"default\", \"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_M_Nexus5X\", \"-j\", 20, \"default\", \"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

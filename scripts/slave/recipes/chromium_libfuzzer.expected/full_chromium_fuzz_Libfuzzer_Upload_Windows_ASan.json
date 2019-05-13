@@ -462,7 +462,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]\\autoninja.bat",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -481,7 +481,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\autoninja.bat",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -605,7 +605,7 @@
       "--ninja-log-outdir",
       "[START_DIR]\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\autoninja.bat\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"target2\", \"v8_target3\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

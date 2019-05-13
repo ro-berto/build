@@ -384,7 +384,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -413,7 +413,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/autoninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -547,7 +547,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-j\", 20, \"android_webview_unittests_apk\", \"base_unittests_apk\", \"cc_unittests_apk\", \"components_unittests_apk\", \"events_unittests_apk\", \"gl_tests_apk\", \"ipc_tests_apk\", \"skia_unittests_apk\", \"sql_unittests_apk\", \"ui_android_unittests_apk\", \"ui_touch_selection_unittests_apk\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-j\", 20, \"android_webview_unittests_apk\", \"base_unittests_apk\", \"cc_unittests_apk\", \"components_unittests_apk\", \"events_unittests_apk\", \"gl_tests_apk\", \"ipc_tests_apk\", \"skia_unittests_apk\", \"sql_unittests_apk\", \"ui_android_unittests_apk\", \"ui_touch_selection_unittests_apk\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
