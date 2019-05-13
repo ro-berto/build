@@ -77,6 +77,9 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'linux-google-rel')
+      },
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'swarming_server': 'https://chrome-swarming.appspot.com',
     },
@@ -91,6 +94,9 @@ SPEC = {
       },
       'testing': {
         'platform': 'mac',
+      },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'mac-google-rel')
       },
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'swarming_server': 'https://chrome-swarming.appspot.com',
@@ -107,6 +113,9 @@ SPEC = {
       'checkout_dir': 'win_chrome',
       'testing': {
         'platform': 'win',
+      },
+      'tests': {
+        steps.SizesStep(RESULTS_URL, 'win-google-rel')
       },
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'swarming_server': 'https://chrome-swarming.appspot.com',
