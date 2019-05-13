@@ -288,7 +288,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -309,7 +309,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -435,7 +435,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Linux64_Builder",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux64_Builder\", \"-j\", 20, \"default\", \"isac_fix_test\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux64_Builder\", \"-j\", 20, \"default\", \"isac_fix_test\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

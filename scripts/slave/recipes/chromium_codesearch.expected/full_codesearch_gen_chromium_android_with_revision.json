@@ -446,7 +446,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -466,7 +466,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -591,7 +591,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/android-Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android-Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android-Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

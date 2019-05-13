@@ -642,7 +642,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -679,7 +679,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -821,7 +821,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Debug-iphonesimulator",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug-iphonesimulator\", \"-j\", 20, \"default\", \"apprtcmobile_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"modules_tests\", \"modules_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"sdk_framework_unittests\", \"sdk_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_capture_tests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug-iphonesimulator\", \"-j\", 20, \"default\", \"apprtcmobile_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"modules_tests\", \"modules_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"sdk_framework_unittests\", \"sdk_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_capture_tests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

@@ -64,7 +64,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/autoninja",
       "-w",
       "dupbuild=err",
       "-C",
