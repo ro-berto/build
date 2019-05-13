@@ -239,7 +239,7 @@ SPEC = {
         'Cast Linux (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_config='chromium_clang',
-            chromium_apply_config=['mb', 'goma_rbe_tot']),
+            chromium_apply_config=['mb', 'goma_rbe_prod']),
         'chromeos-amd64-generic-rel (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_apply_config=['mb', 'goma_rbe_tot'],
@@ -251,18 +251,18 @@ SPEC = {
         'Linux ASan LSan Builder (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_config='chromium_asan',
-            chromium_apply_config=['lsan', 'mb', 'goma_rbe_tot']),
+            chromium_apply_config=['lsan', 'mb', 'goma_rbe_prod']),
         'Linux MSan Builder (Goma RBE FYI)':
         CreateGenericConfig(
             chromium_config='chromium_msan',
-            chromium_apply_config=['mb', 'goma_rbe_tot']),
+            chromium_apply_config=['mb', 'goma_rbe_prod']),
         'fuchsia-fyi-arm64-rel (Goma RBE FYI)':
         CreateGenericConfig(
-            chromium_apply_config=['mb', 'goma_rbe_tot'],
+            chromium_apply_config=['mb', 'goma_rbe_prod'],
             gclient_apply_config=['fuchsia']),
         'fuchsia-fyi-x64-rel (Goma RBE FYI)':
         CreateGenericConfig(
-            chromium_apply_config=['mb', 'goma_rbe_tot'],
+            chromium_apply_config=['mb', 'goma_rbe_prod'],
             gclient_apply_config=['fuchsia']),
     },
 }
