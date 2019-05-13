@@ -133,7 +133,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Fetch manifest config failure') failed with return_code 1"
+      "humanReason": "Step('Fetch manifest config failure') (retcode: 1)"
     },
     "name": "$result"
   }

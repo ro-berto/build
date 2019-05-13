@@ -1019,7 +1019,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Run telemetry browser_test PopularUrlsTest') failed with return_code 1"
+      "humanReason": "Step('Run telemetry browser_test PopularUrlsTest') (retcode: 1)"
     },
     "name": "$result"
   }

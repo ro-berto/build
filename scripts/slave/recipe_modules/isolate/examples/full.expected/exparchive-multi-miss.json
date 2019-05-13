@@ -119,8 +119,8 @@
       "@@@STEP_LOG_LINE@missing.isolates@Failed to find *.isolated files:@@@",
       "@@@STEP_LOG_LINE@missing.isolates@test2_exparchive@@@",
       "@@@STEP_LOG_END@missing.isolates@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1_exparchive\": \"[dummy hash for test1_exparchive]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1_exparchive\": \"[dummy hash for test1_exparchive]\"}@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

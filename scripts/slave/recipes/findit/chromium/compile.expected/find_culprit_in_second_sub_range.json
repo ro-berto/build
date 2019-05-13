@@ -287,7 +287,10 @@
   },
   {
     "cmd": [],
-    "name": "test r7"
+    "name": "test r7",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1673,7 +1676,10 @@
   },
   {
     "cmd": [],
-    "name": "test r4"
+    "name": "test r4",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

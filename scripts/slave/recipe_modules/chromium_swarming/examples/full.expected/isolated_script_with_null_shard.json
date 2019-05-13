@@ -637,7 +637,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('Shard #0 failed: Details unknown (missing shard results)') returned 0"
+      "humanReason": "Infra Failure: Step('Shard #0 failed: Details unknown (missing shard results)') (retcode: 0)"
     },
     "name": "$result"
   }

@@ -385,7 +385,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Run component extraction script to generate mapping') failed with return_code 1"
+      "humanReason": "Step('Run component extraction script to generate mapping') (retcode: 1)"
     },
     "name": "$result"
   }

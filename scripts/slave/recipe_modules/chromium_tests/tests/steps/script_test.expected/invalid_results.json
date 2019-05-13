@@ -46,7 +46,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('script_test with suffix  had an invalid result') failed with return_code 1"
+      "humanReason": "Step('script_test with suffix  had an invalid result') (retcode: 1)"
     },
     "name": "$result"
   }

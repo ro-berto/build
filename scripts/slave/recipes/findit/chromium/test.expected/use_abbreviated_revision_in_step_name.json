@@ -326,7 +326,10 @@
   },
   {
     "cmd": [],
-    "name": "test gfedcba"
+    "name": "test gfedcba",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

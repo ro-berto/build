@@ -121,7 +121,10 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma"
+    "name": "postprocess_for_goma",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [

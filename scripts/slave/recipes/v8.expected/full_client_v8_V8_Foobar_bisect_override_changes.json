@@ -710,7 +710,10 @@
   },
   {
     "cmd": [],
-    "name": "Bisect a2"
+    "name": "Bisect a2",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

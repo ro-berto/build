@@ -2380,8 +2380,8 @@
     "name": "blink_web_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

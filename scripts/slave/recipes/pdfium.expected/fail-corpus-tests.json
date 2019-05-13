@@ -594,7 +594,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('corpus tests') failed with return_code 1"
+      "humanReason": "Step('corpus tests') (retcode: 1)"
     },
     "name": "$result"
   }

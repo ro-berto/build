@@ -239,7 +239,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 out of 12 aggregated steps failed: Step('Build x86') failed with return_code 1"
+      "humanReason": "1 out of 12 aggregated steps failed: Step('Build x86') (retcode: 1)"
     },
     "name": "$result"
   }

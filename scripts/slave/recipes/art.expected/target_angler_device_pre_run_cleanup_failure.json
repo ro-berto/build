@@ -1780,7 +1780,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 out of 57 aggregated steps failed: Step('device pre-run cleanup') failed with return_code 1"
+      "humanReason": "1 out of 57 aggregated steps failed: Step('device pre-run cleanup') (retcode: 1)"
     },
     "name": "$result"
   }

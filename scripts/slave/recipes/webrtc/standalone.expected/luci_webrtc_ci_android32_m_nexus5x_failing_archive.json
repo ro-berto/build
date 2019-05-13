@@ -4557,7 +4557,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('build android archive') failed with return_code 1"
+      "humanReason": "Step('build android archive') (retcode: 1)"
     },
     "name": "$result"
   }

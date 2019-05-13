@@ -188,7 +188,10 @@
   },
   {
     "cmd": [],
-    "name": "ensure_goma"
+    "name": "ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -218,7 +221,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('ensure_goma.ensure_installed') returned 1"
+      "humanReason": "Infra Failure: Step('ensure_goma.ensure_installed') (retcode: 1)"
     },
     "name": "$result"
   }

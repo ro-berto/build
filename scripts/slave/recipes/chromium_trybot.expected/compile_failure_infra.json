@@ -825,13 +825,13 @@
     "name": "infra status",
     "~followup_annotations": [
       "@@@STEP_TEXT@GOMA_PING_FAILURE@@@",
-      "@@@STEP_EXCEPTION@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Step Failure in compile (with patch)"
+      "humanReason": "Infra compile failure: Step('compile (with patch)') (retcode: 1)"
     },
     "name": "$result"
   }

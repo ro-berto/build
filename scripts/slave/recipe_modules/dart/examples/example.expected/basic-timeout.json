@@ -237,7 +237,10 @@
       ]
     },
     "name": "can_time_out",
-    "timeout": 2400
+    "timeout": 2400,
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [],
@@ -421,7 +424,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step \"can_time_out\" timed out after 40 minutes"
+      "humanReason": "Step('can_time_out') (timeout)"
     },
     "name": "$result"
   }

@@ -252,7 +252,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 out of 3 aggregated steps failed: Step('check filenames') failed with return_code 1"
+      "humanReason": "1 out of 3 aggregated steps failed: Step('check filenames') (retcode: 1)"
     },
     "name": "$result"
   }

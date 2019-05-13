@@ -14,7 +14,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('invalid caller_api') failed with return_code 1"
+      "humanReason": "Step('invalid caller_api') (retcode: 1)"
     },
     "name": "$result"
   }

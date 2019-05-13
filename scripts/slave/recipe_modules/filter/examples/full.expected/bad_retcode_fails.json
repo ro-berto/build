@@ -83,7 +83,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('analyze') failed with return_code -1"
+      "humanReason": "Step('analyze') (retcode: -1)"
     },
     "name": "$result"
   }

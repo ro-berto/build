@@ -369,7 +369,10 @@
   },
   {
     "cmd": [],
-    "name": "isolate"
+    "name": "isolate",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -706,7 +709,10 @@
   },
   {
     "cmd": [],
-    "name": "trigger"
+    "name": "trigger",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [],
@@ -730,7 +736,10 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (with patch)"
+    "name": "test_pre_run (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -963,7 +972,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) (with patch) on iOS-8.1') returned 1"
+      "humanReason": "Infra Failure: Step('test_pre_run (with patch).[trigger] fake test 4 (iPhone 5s iOS 8.1) (with patch) on iOS-8.1') (retcode: 1)"
     },
     "name": "$result"
   }

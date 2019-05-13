@@ -594,7 +594,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('pixel tests') failed with return_code 1"
+      "humanReason": "Step('pixel tests') (retcode: 1)"
     },
     "name": "$result"
   }

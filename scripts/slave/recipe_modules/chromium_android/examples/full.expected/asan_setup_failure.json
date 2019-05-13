@@ -918,7 +918,10 @@
   },
   {
     "cmd": [],
-    "name": "Set up ASAN on devices"
+    "name": "Set up ASAN on devices",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -1150,7 +1153,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('Set up ASAN on devices.wait_for_devices') returned 87"
+      "humanReason": "Infra Failure: Step('Set up ASAN on devices.wait_for_devices') (retcode: 87)"
     },
     "name": "$result"
   }

@@ -15,7 +15,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Recipe failed. Reason: Fake failure') failed with return_code 1"
+      "humanReason": "Step('Recipe failed. Reason: Fake failure') (retcode: 1)"
     },
     "name": "$result"
   }

@@ -279,7 +279,10 @@
   },
   {
     "cmd": [],
-    "name": "test r1"
+    "name": "test r1",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -1002,7 +1005,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Step Failure in test r1.compile"
+      "humanReason": "Infra compile failure: Step('test r1.compile') (retcode: 1)"
     },
     "name": "$result"
   }

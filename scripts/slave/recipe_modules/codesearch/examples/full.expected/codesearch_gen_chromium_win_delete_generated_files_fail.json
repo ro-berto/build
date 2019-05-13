@@ -330,7 +330,7 @@
     ],
     "name": "delete old generated files",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Step('delete old generated files') failed with return_code 1@@@",
+      "@@@STEP_TEXT@Step('delete old generated files')@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

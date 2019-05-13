@@ -365,7 +365,10 @@
   },
   {
     "cmd": [],
-    "name": "isolate"
+    "name": "isolate",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

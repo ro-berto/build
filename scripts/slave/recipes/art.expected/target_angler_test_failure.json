@@ -1780,7 +1780,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 out of 57 aggregated steps failed: Step('test jdwp interpreter') failed with return_code 1"
+      "humanReason": "1 out of 57 aggregated steps failed: Step('test jdwp interpreter') (retcode: 1)"
     },
     "name": "$result"
   }

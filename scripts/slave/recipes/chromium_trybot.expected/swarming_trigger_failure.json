@@ -910,7 +910,10 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (with patch)"
+    "name": "test_pre_run (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -932,7 +935,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('test_pre_run (with patch).[error] base_unittests (with patch)') failed with return_code 1"
+      "humanReason": "Step('test_pre_run (with patch).[error] base_unittests (with patch)') (retcode: 1)"
     },
     "name": "$result"
   }

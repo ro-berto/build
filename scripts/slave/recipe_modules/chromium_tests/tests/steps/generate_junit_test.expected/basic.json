@@ -218,7 +218,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('junit_test') failed with return_code 1"
+      "humanReason": "Step('junit_test') (retcode: 1)"
     },
     "name": "$result"
   }

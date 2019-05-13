@@ -975,7 +975,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Warning: Step('unittests') returned 88"
+      "humanReason": "Warning: Step('unittests') (retcode: 88)"
     },
     "name": "$result"
   }

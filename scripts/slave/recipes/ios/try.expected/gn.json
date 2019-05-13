@@ -1211,7 +1211,10 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (retry shards with patch)"
+    "name": "test_pre_run (retry shards with patch)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -1230,7 +1233,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('test_pre_run (retry shards with patch).missing failed shards') failed with return_code 1"
+      "humanReason": "Step('test_pre_run (retry shards with patch).missing failed shards') (retcode: 1)"
     },
     "name": "$result"
   }

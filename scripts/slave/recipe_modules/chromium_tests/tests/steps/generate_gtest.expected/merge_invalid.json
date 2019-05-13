@@ -179,7 +179,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('test spec format error') failed with return_code 1"
+      "humanReason": "Step('test spec format error') (retcode: 1)"
     },
     "name": "$result"
   }

@@ -279,7 +279,10 @@
   },
   {
     "cmd": [],
-    "name": "test r1"
+    "name": "test r1",
+    "~followup_annotations": [
+      "@@@STEP_EXCEPTION@@@"
+    ]
   },
   {
     "cmd": [
@@ -873,7 +876,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Infra Failure in test r1.preprocess_for_goma.start_goma"
+      "humanReason": "Infra compile failure: Infra Failure: Step('test r1.preprocess_for_goma.start_goma') (retcode: 1)"
     },
     "name": "$result"
   }

@@ -353,7 +353,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('annotated steps') failed with return_code 1"
+      "humanReason": "Step('annotated steps') (retcode: 1)"
     },
     "name": "$result"
   }

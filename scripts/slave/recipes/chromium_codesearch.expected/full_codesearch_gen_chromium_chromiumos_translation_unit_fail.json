@@ -765,7 +765,7 @@
     ],
     "name": "run translation_unit clang tool",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Step('run translation_unit clang tool') failed with return_code 2@@@",
+      "@@@STEP_TEXT@Step('run translation_unit clang tool')@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

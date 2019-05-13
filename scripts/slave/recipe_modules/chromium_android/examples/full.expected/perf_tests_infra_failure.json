@@ -1295,7 +1295,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "sharded perf tests failed [InfraFailure(\"Infra Failure: Step('perf_test.foo') returned 87\",)]"
+      "humanReason": "sharded perf tests failed [InfraFailure(\"Infra Failure: Step('perf_test.foo') (retcode: 87)\",)]"
     },
     "name": "$result"
   }

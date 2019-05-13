@@ -116,8 +116,8 @@
       "@@@STEP_LOG_LINE@missing.isolates@Failed to find *.isolated files:@@@",
       "@@@STEP_LOG_LINE@missing.isolates@test_exparchive@@@",
       "@@@STEP_LOG_END@missing.isolates@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{}@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

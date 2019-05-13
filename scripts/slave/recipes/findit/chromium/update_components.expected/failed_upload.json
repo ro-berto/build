@@ -454,7 +454,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('gsutil upload updated mapping') returned 1"
+      "humanReason": "Infra Failure: Step('gsutil upload updated mapping') (retcode: 1)"
     },
     "name": "$result"
   }

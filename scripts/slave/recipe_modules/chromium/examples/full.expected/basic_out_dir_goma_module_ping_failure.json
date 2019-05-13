@@ -503,7 +503,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Infra Failure in preprocess_for_goma.start_goma"
+      "humanReason": "Infra compile failure: Infra Failure: Step('preprocess_for_goma.start_goma') (retcode: 1)"
     },
     "name": "$result"
   }

@@ -250,14 +250,14 @@
     "name": "presubmit",
     "timeout": 480,
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('presubmit') failed with return_code 2"
+      "humanReason": "Step('presubmit') (retcode: 2)"
     },
     "name": "$result"
   }

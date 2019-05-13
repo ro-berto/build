@@ -108,10 +108,12 @@ def _RunStepsInternal(api):
       # minutes.
       timeout = 900 if repo_name == 'luci_py' else 480
       api.presubmit(*presubmit_args, venv=venv, timeout=timeout)
-  except api.step.StepTimeout:
-    raise
-  except api.step.StepFailure as step_failure:
-    if step_failure.result and step_failure.result.retcode == 1:
+  except api.step.StepFailure:
+    step_data = api.step.active_result
+    if step_data.exc_result.had_timeout:
+      # TODO(iannucci): Shouldn't we also mark failure on timeouts?
+      raise
+    if step_data.exc_result.retcode == 1:
       api.tryserver.set_test_failure_tryjob_result()
     else:
       # Script presubmit_support.py returns 2 on infra failures, but if we get

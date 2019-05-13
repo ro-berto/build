@@ -25,7 +25,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra Failure: Step('provision_devices') returned 87"
+      "humanReason": "Infra Failure: Step('provision_devices') (retcode: 87)"
     },
     "name": "$result"
   }

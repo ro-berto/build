@@ -988,7 +988,10 @@
   },
   {
     "cmd": [],
-    "name": "test r5"
+    "name": "test r5",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

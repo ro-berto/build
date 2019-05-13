@@ -248,12 +248,15 @@
       ]
     },
     "name": "presubmit",
-    "timeout": 480
+    "timeout": 480,
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step Timeout: Step('presubmit') timed out after 480"
+      "humanReason": "Step('presubmit') (timeout)"
     },
     "name": "$result"
   }

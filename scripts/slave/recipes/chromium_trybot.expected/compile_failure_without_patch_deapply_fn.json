@@ -1432,7 +1432,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('compile (without patch)') failed with return_code 1"
+      "humanReason": "Step('compile (without patch)') (retcode: 1)"
     },
     "name": "$result"
   }

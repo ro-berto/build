@@ -1391,7 +1391,10 @@
   },
   {
     "cmd": [],
-    "name": "test r3"
+    "name": "test r3",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

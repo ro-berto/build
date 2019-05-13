@@ -199,7 +199,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('blink_web_tests (with patch)') failed with return_code 125"
+      "humanReason": "Step('blink_web_tests (with patch)') (retcode: 125)"
     },
     "name": "$result"
   }

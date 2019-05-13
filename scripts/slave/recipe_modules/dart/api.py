@@ -107,17 +107,13 @@ class DartApi(recipe_api.RecipeApi):
       build_exit_status = None
       try:
         self.m.goma.start()
-        self.m.python(name,
-                      self.m.path['checkout'].join('tools', 'build.py'),
-                      args=build_args,
-                      timeout=40 * 60)
-        build_exit_status = 0
-      except self.m.step.StepTimeout as e:
-        raise self.m.step.StepFailure(
-            'Step "%s" timed out after 40 minutes' % name)
-      except self.m.step.StepFailure as e:
-        build_exit_status = e.retcode
-        raise e
+        try:
+          self.m.python(name,
+                        self.m.path['checkout'].join('tools', 'build.py'),
+                        args=build_args,
+                        timeout=40 * 60)
+        finally:
+          build_exit_status = self.m.step.active_result.retcode
       finally:
         self.m.goma.stop(build_exit_status=build_exit_status)
 

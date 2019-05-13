@@ -323,7 +323,10 @@
   },
   {
     "cmd": [],
-    "name": "test summary"
+    "name": "test summary",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -375,7 +378,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('test summary.parse summary') failed with return_code 1"
+      "humanReason": "Step('test summary.parse summary') (retcode: 1)"
     },
     "name": "$result"
   }
