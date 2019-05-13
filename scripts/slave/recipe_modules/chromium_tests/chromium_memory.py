@@ -241,6 +241,20 @@ SPEC = {
       'tests': [],
       'testing': {'platform': 'linux'},
     },
+    'android-asan': {
+      'android_config': 'main_builder',
+      'chromium_config': 'android_asan',
+      'chromium_apply_config': ['mb'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'bot_type': 'builder_tester',
+      'testing': {'platform': 'linux'},
+    },
     'win-asan': {
       'chromium_config': 'chromium_win_clang_asan',
       'gclient_config': 'chromium',
