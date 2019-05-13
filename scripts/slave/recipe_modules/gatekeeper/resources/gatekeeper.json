@@ -549,7 +549,10 @@
             ]
           },
           "*": {}
-        }
+        },
+        "excluded_builders": [
+          "android-asan"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.perf": [
