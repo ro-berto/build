@@ -672,6 +672,25 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    'GPU FYI Fuchsia Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

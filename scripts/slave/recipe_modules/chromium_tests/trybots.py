@@ -377,6 +377,10 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'fuchsia-angle-rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Fuchsia Builder',
+      }, analyze_mode='compile'),
     },
   },
   'tryserver.chromium.chrome': {
