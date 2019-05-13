@@ -243,6 +243,7 @@
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
   * [goma:tests/start](#recipes-goma_tests_start)
   * [goma_client](#recipes-goma_client)
+  * [goma_server](#recipes-goma_server)
   * [halt:examples/full](#recipes-halt_examples_full)
   * [ios/try](#recipes-ios_try)
   * [ios/unified_builder_tester](#recipes-ios_unified_builder_tester)
@@ -4973,6 +4974,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipes/goma_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/goma_client.py#19)(api):**
+### *recipes* / [goma\_server](/scripts/slave/recipes/goma_server.py)
+
+[DEPS](/scripts/slave/recipes/goma_server.py#5): [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/goma_server.py#17)(api):**
 ### *recipes* / [halt:examples/full](/scripts/slave/recipe_modules/halt/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/halt/examples/full.py#5): [halt](#recipe_modules-halt)
