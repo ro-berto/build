@@ -1504,7 +1504,7 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#800)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#798)(self, bot_update_step):**
 
 &mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#680)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
 
@@ -1514,11 +1514,11 @@ Returns:
 
 &mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#358)(self, bot_config, log_details=False):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#954)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#949)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#343)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#988)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#983)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1555,7 +1555,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#85)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1020)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1015)(self, mb_config_path=None, builders=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#480)(self, mastername, buildername, update_step, bot_db, reasons=None):**
 
@@ -1598,7 +1598,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#588)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1161)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1156)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#74)(self):**
 

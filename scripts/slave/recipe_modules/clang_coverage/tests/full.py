@@ -16,7 +16,7 @@ DEPS = [
 ]
 
 # Number of tests. Needed by the tests.
-_NUM_TARGETS = 7
+_NUM_TESTS = 7
 
 
 def RunSteps(api):
@@ -47,7 +47,7 @@ def RunSteps(api):
               'args': ['random', 'args'],
           })
   ]
-  assert _NUM_TARGETS == len(tests)
+  assert _NUM_TESTS == len(tests)
 
   for test in tests:
     step = test.name
@@ -73,11 +73,11 @@ def GenTests(api):
           buildername='linux-chromeos-code-coverage',
           buildnumber=54)
       + api.post_process(
-          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TARGETS,
-          _NUM_TARGETS)
+          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
+          _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'merge profile data for %s targets' % _NUM_TARGETS)
+          'merge coverage profile data for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
@@ -88,21 +88,22 @@ def GenTests(api):
           'Run component extraction script to generate mapping')
       + api.post_process(
           post_process.MustRun,
-          'generate metadata for %s targets' % _NUM_TARGETS)
+          'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          'gsutil upload metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.DoesNotRun,
-          'generate html report for %s targets' % _NUM_TARGETS)
+          'generate html report for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.DoesNotRun, 'gsutil upload html report')
       + api.post_process(
           post_process.StepCommandContains, 'Finding merging errors',
           ['--root-dir'])
       + api.post_process(
-          post_process.StepCommandContains, 'generate metadata for %s targets' %
-          _NUM_TARGETS, ['None/out/Release/chrome'])
+          post_process.StepCommandContains,
+          'generate coverage metadata for %s tests' % _NUM_TESTS,
+          ['None/out/Release/chrome'])
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -115,11 +116,11 @@ def GenTests(api):
           exclude_sources='all_test_files',
       )
       + api.post_process(
-          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TARGETS,
-          _NUM_TARGETS)
+          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
+          _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'merge profile data for %s targets' % _NUM_TARGETS)
+          'merge coverage profile data for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
@@ -130,21 +131,22 @@ def GenTests(api):
           'Run component extraction script to generate mapping')
       + api.post_process(
           post_process.MustRun,
-          'generate metadata for %s targets' % _NUM_TARGETS)
+          'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          'gsutil upload metadata for %s tests' % _NUM_TESTS  )
       + api.post_process(
           post_process.DoesNotRun,
-          'generate html report for %s targets' % _NUM_TARGETS)
+          'generate html report for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.DoesNotRun, 'gsutil upload html report')
       + api.post_process(
           post_process.StepCommandContains, 'Finding merging errors',
           ['--root-dir'])
       + api.post_process(
-          post_process.StepCommandContains, 'generate metadata for %s targets' %
-          _NUM_TARGETS, ['None/out/Release/chrome'])
+          post_process.StepCommandContains,
+          'generate coverage metadata for %s tests' % _NUM_TESTS,
+          ['None/out/Release/chrome'])
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -166,15 +168,15 @@ def GenTests(api):
           post_process.MustRun, 'save paths of affected files')
       + api.post_process(
           post_process.MustRunRE,
-          'ensure profdata dir for .*', _NUM_TARGETS, _NUM_TARGETS)
+          'ensure profdata dir for .*', _NUM_TESTS, _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'merge profile data for %s targets' % _NUM_TARGETS)
+          'merge coverage profile data for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
           post_process.MustRun,
-          'generate html report for %s targets' % _NUM_TARGETS)
+          'generate html report for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun, 'gsutil upload html report')
       + api.post_process(
@@ -185,13 +187,13 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun,
           'filter binaries with valid coverage data for %s binaries' %
-          (_NUM_TARGETS - 1))
+          (_NUM_TESTS - 1))
       + api.post_process(
           post_process.MustRun,
-          'generate metadata for %s targets' % _NUM_TARGETS)
+          'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          'gsutil upload metadata for %s tests' % _NUM_TESTS)
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -241,12 +243,13 @@ def GenTests(api):
         project='chromium', builder='linux-coverage-rel')
     + api.override_step_data(
       'filter binaries with valid coverage data for %s binaries' %
-      (_NUM_TARGETS - 1),
+      (_NUM_TESTS - 1),
       step_test_data=lambda: self.m.json.test_api.output([]))
     + api.post_process(
         post_process.MustRun,
         'skip processing coverage data because no data is found')
-    + api.post_process(post_process.DoesNotRunRE, 'generate metadata .*')
+    + api.post_process(
+        post_process.DoesNotRunRE, 'generate coverage metadata .*')
     + api.post_process(post_process.DropExpectation)
   )
 
@@ -257,11 +260,11 @@ def GenTests(api):
           buildername='linux-code-coverage',
           buildnumber=54)
       + api.post_process(
-          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TARGETS,
-          _NUM_TARGETS)
+          post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
+          _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'merge profile data for %s targets' % _NUM_TARGETS)
+          'merge coverage profile data for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
@@ -272,23 +275,23 @@ def GenTests(api):
           'Run component extraction script to generate mapping')
       + api.post_process(
           post_process.MustRun,
-          'generate metadata for %s targets' % _NUM_TARGETS)
+          'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s targets' % _NUM_TARGETS)
+          'gsutil upload metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.DoesNotRun,
-          'generate html report for %s targets' % _NUM_TARGETS)
+          'generate html report for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.DoesNotRun, 'gsutil upload html report')
       + api.post_process(
           post_process.StepCommandContains, 'Finding merging errors',
           ['--root-dir'])
       + api.step_data(
-          'generate metadata for %s targets' % _NUM_TARGETS, retcode=1)
+          'generate coverage metadata for %s tests' % _NUM_TESTS, retcode=1)
       + api.post_check(
           lambda check, steps:
-          check(steps['gsutil upload metadata for %s targets' % _NUM_TARGETS]
+          check(steps['gsutil upload metadata for %s tests' % _NUM_TESTS]
                 .output_properties['process_coverage_data_failure'] == 'true'))
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)
