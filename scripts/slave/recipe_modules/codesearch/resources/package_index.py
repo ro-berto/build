@@ -453,6 +453,11 @@ class IndexPack(object):
           '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
       ]
 
+    # This macro is used to guard Kythe-specific pragmas, so we must define it
+    # for Kythe to see them. In particular the kythe_inline_metadata pragma we
+    # insert into mojom generated files.
+    command_list.append('-DKYTHE_IS_RUNNING=1')
+
     required_inputs = []
     with open(filepaths_fn, 'rb') as filepaths_file:
       for line in filepaths_file:

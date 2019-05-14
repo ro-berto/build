@@ -9,6 +9,7 @@
       "test.cc",
       "-o",
       "test.o",
+      "-DKYTHE_IS_RUNNING=1",
       "-w"
     ],
     "source_file": [

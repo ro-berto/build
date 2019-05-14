@@ -6,6 +6,7 @@
       "/c",
       "test.cc",
       "/Fotest.obj",
+      "-DKYTHE_IS_RUNNING=1",
       "-w"
     ],
     "source_file": [
