@@ -1,6 +1,34 @@
 [
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/packages",
+      "-ensure-file",
+      "infra/go/${platform} version:1.12.5\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.12.5--\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/go/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/protoc/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
@@ -138,6 +166,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "list modules"
@@ -155,6 +187,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "generate proto"
@@ -172,6 +208,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "build"
@@ -191,6 +231,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "test"
@@ -208,6 +252,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "go vet"
@@ -225,6 +273,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "go fmt"
@@ -242,6 +294,10 @@
     "env_prefixes": {
       "GOPATH": [
         "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "infra_step": true,

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'depot_tools/cipd',
     'depot_tools/git',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
@@ -13,6 +14,25 @@ DEPS = [
     'recipe_engine/step',
 ]
 
+GO_VERSION = 'version:1.12.5'
+PROTOC_VERSION = 'protobuf_version:v3.6.1'
+
+
+def SetupExecutables(api, pkg_dir):
+  """Set up go and protoc to run the script.
+
+  Args:
+    pkg_dir: a root directory to install cipd packages.
+
+  Returns:
+    a list of paths.
+  """
+  api.cipd.ensure(pkg_dir, {
+      'infra/go/${platform}': GO_VERSION,
+      'infra/tools/protoc/${platform}': PROTOC_VERSION,
+  })
+  return [pkg_dir, api.path.join(pkg_dir, 'bin')]
+
 
 def RunSteps(api):
   repository = 'https://chromium.googlesource.com/infra/goma/server'
@@ -20,8 +40,11 @@ def RunSteps(api):
   build_root = api.path['cache'].join('builder')
   goma_src_dir = build_root.join('goma_src')
   gopath_dir = build_root.join('go')
+  # TODO(yyanagisawa): move cipd to cached directory when we confirm it works.
+  cipd_root = api.path['start_dir'].join('packages')
   env_prefixes = {
       'GOPATH': [gopath_dir],
+      'PATH': SetupExecutables(api, cipd_root),
   }
   env = {
       'GO111MODULE': 'on',
