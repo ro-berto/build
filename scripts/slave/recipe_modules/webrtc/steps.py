@@ -44,7 +44,7 @@ def _create_test_run_results_dictionary(valid):
     'findit_notrun': set()
   }
 
-def generate_tests(api, phase, revision, revision_number, bot):
+def generate_tests(api, phase, bot):
   tests = []
   build_out_dir = api.path['checkout'].join(
       'out', api.chromium.c.build_config_fs)

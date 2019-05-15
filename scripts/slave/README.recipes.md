@@ -3661,66 +3661,68 @@ Capture coverage data and upload a report.
 
 #### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#81)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#105)(self, builders, recipe_configs):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#104)(self, builders, recipe_configs):**
 
-&mdash; **def [apply\_ios\_config](/scripts/slave/recipe_modules/webrtc/api.py#140)(self):**
+&mdash; **def [apply\_ios\_config](/scripts/slave/recipe_modules/webrtc/api.py#139)(self):**
 
 Generate a JSON config from bot config, apply it to ios recipe module.
 
-&emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#205)(self):**
+&emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#209)(self):**
 
 &mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#483)(self):**
 
-&emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#213)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#217)(self):**
 
-&emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#209)(self):**
+&emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#213)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#369)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#370)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#309)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#312)(self, \*\*kwargs):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#411)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#412)(self, phase=None):**
 
-&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#251)(self, phase=None):**
+&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#255)(self, phase=None):**
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#268)(self):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#271)(self):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#341)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#342)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#349)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#350)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#373)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#374)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#423)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#424)(self, files=None, base_dir=None):**
 
-&mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#221)(self, bucketname, buildername):**
+&mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#225)(self, bucketname, buildername):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#419)(self):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#420)(self):**
 
-&emsp; **@property**<br>&mdash; **def [master\_config](/scripts/slave/recipe_modules/webrtc/api.py#224)(self):**
+&emsp; **@property**<br>&mdash; **def [master\_config](/scripts/slave/recipe_modules/webrtc/api.py#228)(self):**
 
-&emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#228)(self):**
+&emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#232)(self):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#467)(self):**
 
 &mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#524)(self):**
 
-&mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#232)(self):**
+&mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#236)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#378)(self, phase=None):**
+&emsp; **@property**<br>&mdash; **def [revision\_number](/scripts/slave/recipe_modules/webrtc/api.py#203)(self):**
 
-&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#396)(self):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#379)(self, phase=None):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#439)(self, phase=None):**
+&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#397)(self):**
+
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#440)(self, phase=None):**
 
 Add a suite of test steps.
 
 Args:
   test_suite=The name of the test suite.
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#237)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#241)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#244)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#248)(self):**
 
 &mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#540)(self, name, step_result):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)

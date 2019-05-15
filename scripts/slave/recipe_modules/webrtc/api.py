@@ -94,9 +94,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._recipe_configs = None
     self.bot = None
 
-    self.revision = ''
-    self.revision_cp = ''
-    self.revision_number = ''
+    self.revision = None
+    self.revision_cp = None
 
   BUILDERS = webrtc_builders.BUILDERS
   RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
@@ -171,8 +170,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     ios_config['tests'] = []
     if self.bot.should_test:
-      tests = steps.generate_tests(
-          self.m, None, self.revision, self.revision_number, self.bot)
+      tests = steps.generate_tests(self.m, None, self.bot)
       for test in tests:
         assert isinstance(test, steps.IosTest)
         test_dict = {
@@ -201,6 +199,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.ios.read_build_config(build_config_base_dir=tmp_path,
                                    master_name=self.bucketname,
                                    buildername=buildername)
+
+  @property
+  def revision_number(self):
+    branch, number = self.m.commit_position.parse(self.revision_cp)
+    assert branch.endswith('/master')
+    return number
 
   @property
   def bucketname(self):
@@ -255,8 +259,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     isolated_targets = set()
     for bot in self.related_bots():
       if bot.should_test:
-        for test in steps.generate_tests(
-            self.m, phase, self.revision, self.revision_number, bot):
+        for test in steps.generate_tests(self.m, phase, bot):
           if isinstance(test, (SwarmingTest, steps.IosTest)):
             isolated_targets.add(test._name)
 
@@ -329,9 +332,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Whatever step is run right before this line needs to emit got_revision.
     revs = update_step.presentation.properties
     self.revision = revs['got_revision']
-    self.revision_cp = revs['got_revision_cp']
-    _, self.revision_number = self.m.commit_position.parse(self.revision_cp)
-    self.revision_number = str(self.revision_number)
+    self.revision_cp = revs.get('got_revision_cp')
 
     if is_chromium:
       self._apply_patch(self.m.tryserver.gerrit_change_repo_url,
@@ -443,8 +444,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      tests = steps.generate_tests(
-          self.m, phase, self.revision, self.revision_number, self.bot)
+      tests = steps.generate_tests(self.m, phase, self.bot)
       if tests:
         for test in tests:
           test.pre_run(self.m, suffix='')
