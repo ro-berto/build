@@ -13,6 +13,8 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
     source_side_spec_dir = Single(Path),
     # TODO(martiniss): Remove this and all uses
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
+    # If set, bypass the deapply patch and retry.
+    only_with_patch = Single(bool, empty_val=False, required=False)
   )
 
 config_ctx = config_item_context(BaseConfig)
@@ -25,3 +27,7 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
+
+@config_ctx()
+def code_coverage_trybot(c):
+  c.only_with_patch = True
