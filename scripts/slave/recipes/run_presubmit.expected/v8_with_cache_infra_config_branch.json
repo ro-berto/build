@@ -71,9 +71,11 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/v8/v8@refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/v8/v8@refs/heads/infra/config:refs/changes/89/456789/12",
       "--revision",
-      "v8@infra/config"
+      "v8@refs/heads/infra/config",
+      "--refs",
+      "refs/heads/infra/config"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit_infra_config",
     "env_prefixes": {
