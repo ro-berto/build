@@ -169,7 +169,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "list modules"
@@ -190,7 +191,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "generate proto"
@@ -211,7 +213,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "build"
@@ -234,7 +237,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "test"
@@ -255,7 +259,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "go vet"
@@ -276,7 +281,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "name": "go fmt"
@@ -297,7 +303,8 @@
       ],
       "PATH": [
         "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]/packages/bin",
+        "[CACHE]/builder/go/bin"
       ]
     },
     "infra_step": true,

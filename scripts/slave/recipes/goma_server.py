@@ -18,6 +18,10 @@ GO_VERSION = 'version:1.12.5'
 PROTOC_VERSION = 'protobuf_version:v3.6.1'
 
 
+# TODO(yyanagisawa): install go and protoc from the script in source.
+#                    The compiler should be matched with the source, and the
+#                    script in the source code should install them like clang in
+#                    Chromium build.
 def SetupExecutables(api, pkg_dir):
   """Set up go and protoc to run the script.
 
@@ -44,7 +48,7 @@ def RunSteps(api):
   cipd_root = api.path['start_dir'].join('packages')
   env_prefixes = {
       'GOPATH': [gopath_dir],
-      'PATH': SetupExecutables(api, cipd_root),
+      'PATH': SetupExecutables(api, cipd_root) + [gopath_dir.join('bin')],
   }
   env = {
       'GO111MODULE': 'on',

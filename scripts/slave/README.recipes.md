@@ -4978,9 +4978,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 
 [DEPS](/scripts/slave/recipes/goma_server.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/goma_server.py#37)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/goma_server.py#41)(api):**
 
-&mdash; **def [SetupExecutables](/scripts/slave/recipes/goma_server.py#21)(api, pkg_dir):**
+&mdash; **def [SetupExecutables](/scripts/slave/recipes/goma_server.py#25)(api, pkg_dir):**
 
 Set up go and protoc to run the script.
 
