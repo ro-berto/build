@@ -290,8 +290,7 @@
   {
     "cmd": [
       "git",
-      "diff",
-      "--exit-code"
+      "diff"
     ],
     "cwd": "[CACHE]/builder/goma_src",
     "env": {

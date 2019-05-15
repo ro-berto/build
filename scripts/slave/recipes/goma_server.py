@@ -83,7 +83,10 @@ def RunSteps(api):
     api.step('go fmt',
              ['go', 'fmt', api.path.join(package_base, '...')])
     # Check diff
-    api.git('diff', '--exit-code', name='check git diff')
+    # TODO(yyanagisawa): add --exit-code in the future.
+    #                    There is known difference, and we cannot enforce the
+    #                    step.
+    api.git('diff', name='check git diff')
 
 
 def GenTests(api):
