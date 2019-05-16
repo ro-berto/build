@@ -163,59 +163,59 @@ TRYBOTS = freeze({
         'buildername': 'Android WebView N (dbg)',
       }),
       # Manually triggered GPU trybots.
-      'gpu-manual-try-android-l-nexus-5-32': simple_bot({
+      'gpu-fyi-try-android-l-nexus-5-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 5)',
       }),
-      'gpu-manual-try-android-l-nexus-6-32': simple_bot({
+      'gpu-fyi-try-android-l-nexus-6-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 6)',
       }),
-      'gpu-manual-try-android-m-nexus-6p-64': simple_bot({
+      'gpu-fyi-try-android-m-nexus-6p-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 6P)',
       }),
-      'gpu-manual-try-android-m-nexus-9-64': simple_bot({
+      'gpu-fyi-try-android-m-nexus-9-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 9)',
       }),
-      'gpu-manual-try-android-n-nvidia-shield-tv-64': simple_bot({
+      'gpu-fyi-try-android-n-nvidia-shield-tv-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (NVIDIA Shield TV)',
       }),
-      'gpu-manual-try-android-p-pixel-2-32': simple_bot({
+      'gpu-fyi-try-android-p-pixel-2-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Pixel 2)',
       }),
-      'gpu-manual-try-android-p-pixel-2-32-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-2-32-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
       }),
-      'gpu-manual-try-android-p-pixel-2-32-deqp-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-2-32-deqp-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
       }),
-      'gpu-manual-try-android-p-pixel-2-64-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-2-64-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
       }),
-      'gpu-manual-try-android-p-pixel-2-64-deqp-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-2-64-deqp-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
-      'gpu-manual-try-android-p-pixel-xl-32-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-xl-32-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 Vk Release (Pixel XL)',
       }),
-      'gpu-manual-try-android-p-pixel-xl-32-deqp-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-xl-32-deqp-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 dEQP Vk Release (Pixel XL)',
       }),
-      'gpu-manual-try-android-p-pixel-xl-64-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-xl-64-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 Vk Release (Pixel XL)',
       }),
-      'gpu-manual-try-android-p-pixel-xl-64-deqp-vk': simple_bot({
+      'gpu-fyi-try-android-p-pixel-xl-64-deqp-vk': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel XL)',
       }),
@@ -629,54 +629,59 @@ TRYBOTS = freeze({
         ],
       },
       # Manually triggered GPU trybots.
-      'gpu-manual-try-linux-amd-rel': simple_bot({
+      'gpu-fyi-try-linux-amd-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Release (AMD R7 240)',
       }),
-      'gpu-manual-try-linux-intel-dqp': simple_bot({
+      'gpu-fyi-try-linux-intel-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux dEQP Builder',
         'tester': 'Linux FYI dEQP Release (Intel HD 630)',
       }),
-      'gpu-manual-try-linux-intel-exp': simple_bot({
+      'gpu-fyi-try-linux-intel-exp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Experimental Release (Intel HD 630)',
       }),
-      'gpu-manual-try-linux-intel-ozn': simple_bot({
+      'gpu-fyi-try-linux-intel-ozn': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Ozone Builder',
         'tester': 'Linux FYI Ozone (Intel)',
       }),
-      'gpu-manual-try-linux-intel-rel': simple_bot({
+      'gpu-fyi-try-linux-intel-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Release (Intel HD 630)',
       }),
-      'gpu-manual-try-linux-nvidia-dbg': simple_bot({
+      'gpu-fyi-try-linux-nvidia-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder (dbg)',
         'tester': 'Linux FYI Debug (NVIDIA)',
       }),
-      'gpu-manual-try-linux-nvidia-dqp': simple_bot({
+      'gpu-fyi-try-linux-nvidia-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux dEQP Builder',
         'tester': 'Linux FYI dEQP Release (NVIDIA)',
       }),
-      'gpu-manual-try-linux-nvidia-exp': simple_bot({
+      'gpu-fyi-try-linux-nvidia-exp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Experimental Release (NVIDIA)',
       }),
-      'gpu-manual-try-linux-nvidia-rel': simple_bot({
+      'gpu-fyi-try-linux-nvidia-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Release (NVIDIA)',
       }),
-      'gpu-manual-try-linux-nvidia-tsn': simple_bot({
+      'gpu-fyi-try-linux-nvidia-tsn': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Linux FYI GPU TSAN Release',
+      }),
+      'gpu-try-linux-nvidia-dbg': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Linux Builder (dbg)',
+        'tester': 'Linux Debug (NVIDIA)',
       }),
     },
   },
@@ -1017,70 +1022,75 @@ TRYBOTS = freeze({
         ],
       },
       # Manually triggered GPU trybots.
-      'gpu-manual-try-win7-amd-dbg': simple_bot({
+      'gpu-fyi-try-win7-amd-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder (dbg)',
         'tester': 'Win7 FYI Debug (AMD)',
       }),
-      'gpu-manual-try-win7-amd-dqp': simple_bot({
+      'gpu-fyi-try-win7-amd-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win dEQP Builder',
         'tester': 'Win7 FYI dEQP Release (AMD)',
       }),
-      'gpu-manual-try-win7-amd-rel': simple_bot({
+      'gpu-fyi-try-win7-amd-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (AMD)',
       }),
-      'gpu-manual-try-win7-nvidia-dqp-64': simple_bot({
+      'gpu-fyi-try-win7-nvidia-dqp-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win x64 dEQP Builder',
         'tester': 'Win7 FYI x64 dEQP Release (NVIDIA)',
       }),
-      'gpu-manual-try-win7-nvidia-rel': simple_bot({
+      'gpu-fyi-try-win7-nvidia-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (NVIDIA)',
       }),
-      'gpu-manual-try-win7-nvidia-rel-64': simple_bot({
+      'gpu-fyi-try-win7-nvidia-rel-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win7 FYI x64 Release (NVIDIA)',
       }),
-      'gpu-manual-try-win10-intel-dqp': simple_bot({
+      'gpu-fyi-try-win10-intel-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win dEQP Builder',
         'tester': 'Win10 FYI dEQP Release (Intel HD 630)',
       }),
-      'gpu-manual-try-win10-intel-exp': simple_bot({
+      'gpu-fyi-try-win10-intel-exp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win10 FYI Exp Release (Intel HD 630)',
       }),
-      'gpu-manual-try-win10-intel-rel': simple_bot({
+      'gpu-fyi-try-win10-intel-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win10 FYI Release (Intel HD 630)',
       }),
-      'gpu-manual-try-win10-nvidia-dbg': simple_bot({
+      'gpu-fyi-try-win10-nvidia-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder (dbg)',
         'tester': 'Win10 FYI Debug (NVIDIA)',
       }),
-      'gpu-manual-try-win10-nvidia-dqp': simple_bot({
+      'gpu-fyi-try-win10-nvidia-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win dEQP Builder',
         'tester': 'Win10 FYI dEQP Release (NVIDIA)',
       }),
-      'gpu-manual-try-win10-nvidia-exp': simple_bot({
+      'gpu-fyi-try-win10-nvidia-exp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win10 FYI Exp Release (NVIDIA)',
       }),
-      'gpu-manual-try-win10-nvidia-rel': simple_bot({
+      'gpu-fyi-try-win10-nvidia-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win10 FYI Release (NVIDIA)',
+      }),
+      'gpu-try-win10-nvidia-dbg': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Win Builder (dbg)',
+        'tester': 'Win10 Debug (NVIDIA)',
       }),
     },
   },
