@@ -157,9 +157,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_tests_apply_config': [
-          'code_coverage_trybot',
-      ],
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
@@ -197,9 +194,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_tests_apply_config': [
-          'code_coverage_trybot',
-      ],
       'bot_type': 'tester',
       'parent_buildername': 'Linux Builder Code Coverage',
       'testing': {

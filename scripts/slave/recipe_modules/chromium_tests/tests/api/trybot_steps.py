@@ -479,3 +479,140 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('code_coverage_trybot_with_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          path_config='kitchen',
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },) +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Tests Code Coverage': {
+                  'gtest_tests': [
+                      {
+                          'isolate_coverage_data': True,
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.filter.suppress_analyze() +
+      api.post_process(
+            post_process.MustRun, 'base_unittests (with patch)') +
+      api.post_process(
+            post_process.DoesNotRun,
+            'base_unittests (retry shards with patch)') +
+      api.post_process(
+            post_process.DoesNotRun, 'base_unittests (without patch)') +
+      api.post_process(
+            # Only generates coverage data for the with patch step.
+            post_process.MustRun, 'generate coverage metadata for 1 tests') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('code_coverage_trybot_retry_shards_with_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          path_config='kitchen',
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },) +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Tests Code Coverage': {
+                  'gtest_tests': [
+                      {
+                          'isolate_coverage_data': True,
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.filter.suppress_analyze() +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(
+            post_process.MustRun, 'base_unittests (with patch)') +
+      api.post_process(
+            post_process.MustRun,
+            'base_unittests (retry shards with patch)') +
+      api.post_process(
+            post_process.DoesNotRun, 'base_unittests (without patch)') +
+      api.post_process(
+            # Generates coverage data for the with patch and retry shards with
+            # patch steps.
+            post_process.MustRun, 'generate coverage metadata for 2 tests') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('code_coverage_trybot_without_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          path_config='kitchen',
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          },) +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Tests Code Coverage': {
+                  'gtest_tests': [
+                      {
+                          'isolate_coverage_data': True,
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.filter.suppress_analyze() +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(
+            post_process.MustRun, 'base_unittests (with patch)') +
+      api.post_process(
+            post_process.MustRun,
+            'base_unittests (retry shards with patch)') +
+      api.post_process(
+            post_process.MustRun, 'base_unittests (without patch)') +
+      api.post_process(
+            # Generates coverage data for the with patch and retry shards with
+            # patch steps. Without patch steps are always ignored.
+            post_process.MustRun, 'generate coverage metadata for 2 tests') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )

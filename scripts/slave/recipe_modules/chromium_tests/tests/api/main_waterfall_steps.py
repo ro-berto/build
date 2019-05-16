@@ -275,6 +275,38 @@ def GenTests(api):
       )
   )
 
+  yield (
+      api.test('code_coverage_ci_bots') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-chromeos-code-coverage',
+          swarm_hashes={
+            'base_unittests':
+            '[dummy hash for base_unittests]'
+          }) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.fyi', {
+              'linux-chromeos-code-coverage': {
+                  'gtest_tests': [
+                      {
+                          'isolate_coverage_data': True,
+                          'test': 'base_unittests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.post_process(
+            post_process.MustRun, 'base_unittests') +
+      api.post_process(
+            post_process.MustRun, 'generate coverage metadata for 1 tests') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+    )
+
   def TriggersBuilderWithProperties(check, step_odict, builder='',
                                     properties=None):
     trigger_step = step_odict['trigger']

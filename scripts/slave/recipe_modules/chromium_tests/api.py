@@ -774,8 +774,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       try:
         yield
       finally:
-        if self.m.clang_coverage.using_coverage:
-          self.m.clang_coverage.process_coverage_data(tests)
         for test in (tests or []):
           for tear_down_step in (test.tear_down or []):
             self.m.python(
@@ -895,15 +893,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.test_utils.run_tests_with_patch(
               self.m, tests, retry_failed_shards=retry_failed_shards))
 
+      if self.m.clang_coverage.using_coverage:
+        self.m.clang_coverage.process_coverage_data(tests)
+
       # An invalid result is unrecoverable.
       if invalid_test_suites:
         return invalid_test_suites
-
-      # This member is misnamed and is only used by code coverage. Code coverage
-      # doesn't care about test failures. Unfortunately, this code path has
-      # never had test coverage.
-      if self.c.only_with_patch: # pragma: no cover
-        return []
 
       # If there are no failures, we're done.
       if not failing_tests:
@@ -1140,6 +1135,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests, serialize_tests=bot.settings.get('serialize_tests'))
     with self.wrap_chromium_tests(bot.settings, tests):
       test_runner()
+
+    if self.m.clang_coverage.using_coverage:
+      self.m.clang_coverage.process_coverage_data(tests)
+
     if bot_type in ['builder', 'builder_tester']:
       # Remove old files from out directory
       self.m.chromium.clean_outdir()
@@ -1199,6 +1198,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.buildbucket.builder_name
     config = bots.get(mastername, {}).get('builders', {}).get(buildername)
+
     if not config:
       # Some trybots do not mirror a CI bot. In this case, return a
       # configuration that uses the same <mastername, buildername> of the
@@ -1264,6 +1264,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
+    # Must happen before without patch steps.
     if self.m.clang_coverage.using_coverage:
       self.m.clang_coverage.instrument(affected_files)
 
