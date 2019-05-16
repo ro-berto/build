@@ -12,12 +12,12 @@
         ],
 
         "builders": {
-          "linux-archive-rel": {
+          "linux-rel": {
             "tree_notify": [
               "thomasanderson@chromium.org"
             ]
           },
-          "win32-archive-rel": {
+          "win32-rel": {
             "categories": [
               "chromium_windows"
             ]
@@ -27,8 +27,6 @@
         "excluded_builders": [
           "win-dbg",
           "win32-dbg"
-          "win-archive-dbg",
-          "win32-archive-dbg"
         ]
       }
     ],
