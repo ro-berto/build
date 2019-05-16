@@ -52,6 +52,7 @@ class Gatekeeper(recipe_api.RecipeApi):
           '--json', gatekeeper_json,
           '--service-account-path',
           self.m.puppet_service_account.get_key_path('gatekeeper'),
+          '--verbose',
       ]
 
       if tree_args.get('status-url'):

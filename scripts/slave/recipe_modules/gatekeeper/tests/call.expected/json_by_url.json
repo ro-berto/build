@@ -58,7 +58,8 @@
       "--json",
       "{}",
       "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json"
+      "/creds/service_accounts/service-account-gatekeeper.json",
+      "--verbose"
     ],
     "name": "gatekeeper: foobar"
   },

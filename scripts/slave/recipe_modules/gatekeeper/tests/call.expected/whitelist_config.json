@@ -57,7 +57,8 @@
       "--json",
       "RECIPE_REPO[build]/scripts/slave/gatekeeper.json",
       "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json"
+      "/creds/service_accounts/service-account-gatekeeper.json",
+      "--verbose"
     ],
     "name": "gatekeeper: chromium"
   },
@@ -70,6 +71,7 @@
       "RECIPE_REPO[build]/scripts/slave/gatekeeper.json",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
+      "--verbose",
       "--status-url",
       "https://blink-status.appspot.com",
       "--sheriff-url",
