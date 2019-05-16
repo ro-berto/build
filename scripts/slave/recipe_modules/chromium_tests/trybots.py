@@ -629,11 +629,6 @@ TRYBOTS = freeze({
         ],
       },
       # Manually triggered GPU trybots.
-      'gpu-fyi-try-linux-amd-rel': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Linux Builder',
-        'tester': 'Linux FYI Release (AMD R7 240)',
-      }),
       'gpu-fyi-try-linux-intel-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux dEQP Builder',
@@ -643,11 +638,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Experimental Release (Intel HD 630)',
-      }),
-      'gpu-fyi-try-linux-intel-ozn': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Linux Ozone Builder',
-        'tester': 'Linux FYI Ozone (Intel)',
       }),
       'gpu-fyi-try-linux-intel-rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
@@ -803,11 +793,6 @@ TRYBOTS = freeze({
         ],
       },
       # Manually triggered GPU trybots.
-      'gpu-fyi-try-mac-amd-10.14': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Mac Builder',
-        'tester': 'Mac FYI 10.14 Release (AMD)',
-      }),
       'gpu-fyi-try-mac-amd-dqp': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Mac dEQP Builder',
@@ -837,11 +822,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Mac FYI GPU ASAN Release',
       }),
-      'gpu-fyi-try-mac-intel-10.14': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Mac Builder',
-        'tester': 'Mac FYI 10.14 Release (Intel)',
-      }),
       'gpu-fyi-try-mac-intel-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Mac Builder (dbg)',
@@ -861,11 +841,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Mac Builder',
         'tester': 'Mac FYI Release (Intel)',
-      }),
-      'gpu-fyi-try-mac-nvidia-10.14': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Mac Builder',
-        'tester': 'Mac FYI 10.14 Release (NVIDIA)',
       }),
       'gpu-fyi-try-mac-nvidia-retina-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
