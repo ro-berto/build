@@ -178,17 +178,20 @@ class GomaApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.WARNING
 
       with self.m.context(infra_steps=True):
-        self.m.cipd.set_service_account_credentials(
-            self.service_account_json_path)
+        try:
+          self.m.cipd.set_service_account_credentials(
+              self.service_account_json_path)
 
-        goma_package = ('infra_internal/goma/client/%s' %
-            self.m.cipd.platform_suffix())
-        # For Windows there's only 64-bit goma client.
-        if self.m.platform.is_win:
-          goma_package = goma_package.replace('386', 'amd64')
-        ref = client_type
-        self._goma_dir = self.default_client_path
-        self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+          goma_package = ('infra_internal/goma/client/%s' %
+              self.m.cipd.platform_suffix())
+          # For Windows there's only 64-bit goma client.
+          if self.m.platform.is_win:
+            goma_package = goma_package.replace('386', 'amd64')
+          ref = client_type
+          self._goma_dir = self.default_client_path
+          self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+        finally:
+          self.m.cipd.set_service_account_credentials(None)
         return self._goma_dir
 
   @property

@@ -2819,9 +2819,7 @@
       "-ensure-file",
       "infra/tools/bqupload/${platform} latest",
       "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "upload new results.ensure_installed",
