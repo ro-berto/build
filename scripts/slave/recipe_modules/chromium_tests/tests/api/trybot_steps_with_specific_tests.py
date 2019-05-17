@@ -51,7 +51,7 @@ def RunSteps(api, mastername, buildername):
 
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
 
-  # Override _trybot_steps_internal to run the desired test, in the desired
+  # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
     task = api.chromium_tests.Task(bot, [test], update_step, affected_files)
@@ -59,7 +59,7 @@ def RunSteps(api, mastername, buildername):
 
     return task
 
-  api.chromium_tests._trybot_steps_internal = config_override
+  api.chromium_tests._calculate_tests_to_run = config_override
 
   skip_deapply_patch = api.properties.get(
       'skip_deapply_patch', False)

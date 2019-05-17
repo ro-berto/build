@@ -1183,11 +1183,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return False
 
   def trybot_steps(self, builders=None, trybots=None):
-    task = self._trybot_steps_internal(builders=builders, trybots=trybots)
+    self.run_tests_with_and_without_changes(
+      builders=builders, mirrored_bots=trybots,
+      deapply_changes=self.deapply_patch)
+
+  def run_tests_with_and_without_changes(self, builders, mirrored_bots,
+                                         deapply_changes):
+    task = self._calculate_tests_to_run(
+      builders=builders, mirrored_bots=mirrored_bots)
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:
       unrecoverable_test_suites = self._run_tests_with_retries(
-        task, self.deapply_patch)
+        task, deapply_changes)
       self.m.chromium_swarming.report_stats()
 
       self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
@@ -1234,23 +1241,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return BotMetadata(mastername, buildername, config, settings)
 
-  def _trybot_steps_internal(self, builders=None, trybots=None):
-    """Initial configuration for all trybots.
-
-    The main purpose of this method is to determine which tests need to be run.
+  def _calculate_tests_to_run(self, builders=None, mirrored_bots=None):
+    """Determines which tests need to be run.
 
     Args:
       builders: An optional mapping from <mastername, buildername> to
                 build/test settings. For an example of defaults for chromium,
                 see scripts/slave/recipe_modules/chromium_tests/chromium.py
-      trybots: An optional mapping from <mastername, buildername> of the trybot
-               to configurations of the mirrored CI bot. Defaults are in
-               ChromiumTestsApi.
+      mirrored_bots: An optional mapping from <mastername, buildername> of the
+                     trybot to configurations of the mirrored CI bot. Defaults
+                     are in ChromiumTestsApi.
 
     Returns:
       task: Configuration of the build/test.
     """
-    bot = self._lookup_bot_metadata(builders, mirrored_bots=trybots)
+    bot = self._lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
 
     self._report_builders(bot.settings)
     self.set_precommit_mode()
@@ -1307,10 +1312,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           additional_names=analyze_names)
 
-    # If this is a compile-only trybot, then clear our all tests. This cannot be
-    # done sooner because we still want to determine the minimal set of binaries
-    # that need to be compiled, which requires knowing the set of tests that
-    # would be run.
+    # If this is a compile-only bot, then clear our all tests. This cannot be
+    # done sooner because we still want to determine the minimal set of
+    # binaries that need to be compiled, which requires knowing the set of
+    # tests that would be run.
     if bot.config.get('analyze_mode') == 'compile':
       tests = []
       tests_including_triggered = []

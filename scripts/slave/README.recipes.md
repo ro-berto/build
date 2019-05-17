@@ -1577,6 +1577,8 @@ Note that:
 
 &mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#682)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1190)(self, builders, mirrored_bots, deapply_changes):**
+
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#255)(self, update_step):**
 
 &mdash; **def [set\_precommit\_mode](/scripts/slave/recipe_modules/chromium_tests/api.py#144)(self):**
