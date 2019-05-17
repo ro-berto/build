@@ -1159,10 +1159,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_runner = self.create_test_runner(
         tests, serialize_tests=bot.settings.get('serialize_tests'))
     with self.wrap_chromium_tests(bot.settings, tests):
-      test_runner()
-
-    if self.m.clang_coverage.using_coverage:
-      self.m.clang_coverage.process_coverage_data(tests)
+      try:
+        test_runner()
+      finally:
+        if self.m.clang_coverage.using_coverage:
+          self.m.clang_coverage.process_coverage_data(tests)
 
     if bot_type in ['builder', 'builder_tester']:
       # Remove old files from out directory
