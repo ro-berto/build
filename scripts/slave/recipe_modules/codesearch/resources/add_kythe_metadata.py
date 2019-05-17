@@ -94,10 +94,8 @@ def _FormatMetadata(metadata):
   b64_metadata = base64.encodestring(json.dumps(metadata))
 
   # base64.encodedstring returns multi-line output. This is fine by us, as we
-  # want to wrap the comment anyway. The first line will be longer than the rest
-  # since we add the magic comment string, but we don't care too much about
-  # prettiness of the output.
-  return '// Metadata comment ' + b64_metadata[:-1].replace('\n', '\n// ')
+  # want to wrap the comment anyway.
+  return '/* Metadata comment\n' + b64_metadata + '*/'
 
 
 def main():
@@ -132,8 +130,12 @@ def main():
       # metadata. In theory the metadata will be the same, since the file hasn't
       # changed. However, if this script has changed we want the output from
       # the new version rather than the old version, as it might be different.
-      comment_pos = contents.find('\n// Metadata comment')
-      if comment_pos != -1:
+      #
+      # We search for both '//' and '/*' comment prefixes, to match both the
+      # current output of this script, and the output from the previous version.
+      match = re.search('\n/[/*] Metadata comment', contents)
+      if match is not None:
+        comment_pos = match.start()
         if opts.verbose:
           print 'Clearing existing metadata from %s' % filename
         f.seek(comment_pos)

@@ -188,16 +188,20 @@ enum Struct_Enum {};
 
 
   def testFormatMetadataSingleLine(self):
-    self.assertEqual('// Metadata comment eyJmb28iOiAiYmFyIn0=',
+    self.assertEqual('/* Metadata comment\neyJmb28iOiAiYmFyIn0=\n*/',
                      add_kythe_metadata._FormatMetadata({'foo': 'bar'}))
 
   def testFormatMetadataMultiLine(self):
-    self.assertEqual('// Metadata comment WyJhIiwgImEiLCAiYSIsICJhIiwgImEiLCA' +
-                                 'iYSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAi\n' +
-                     '// YSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwg' +
-                                                  'ImEiLCAiYSIsICJhIiwgImEi\n' +
-                     '// LCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSJd',
-                     add_kythe_metadata._FormatMetadata(['a'] * 30))
+    self.assertEqual(
+        '/* Metadata comment\n' +
+        'WyJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwg' +
+        'ImEiLCAi\n' +
+        'YSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSIsICJh' +
+        'IiwgImEi\n' +
+        'LCAiYSIsICJhIiwgImEiLCAiYSIsICJhIiwgImEiLCAiYSJd\n' +
+        '*/',
+        add_kythe_metadata._FormatMetadata(['a'] * 30))
+
 
 if __name__ == '__main__':
   unittest.main()
