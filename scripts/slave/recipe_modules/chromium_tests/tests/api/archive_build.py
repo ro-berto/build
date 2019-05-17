@@ -34,5 +34,5 @@ def GenTests(api):
       api.test('archive_build') +
       api.properties.generic(
           mastername='chromium',
-          buildername='linux-rel')
+          buildername='linux-archive-rel')
   )

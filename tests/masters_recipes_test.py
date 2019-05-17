@@ -33,31 +33,16 @@ SUPPRESSIONS = {
 FAKE_BUILDERS = {
     'master.chromium': [
       # These have been migrated to LUCI.
-      'Android',
-      'Linux x64',
-      'Mac',
-      'Win',
-      'Win x64',
       'android-archive-dbg',
-      'android-dbg',
       'android-archive-rel',
-      'android-rel',
       'linux-archive-dbg',
-      'linux-dbg',
       'linux-archive-rel',
-      'linux-rel',
       'mac-archive-dbg',
-      'mac-dbg',
       'mac-archive-rel',
-      'mac-rel',
       'win32-archive-dbg',
-      'win32-dbg',
       'win32-archive-rel',
-      'win32-rel',
       'win-archive-dbg',
-      'win-dbg',
       'win-archive-rel',
-      'win-rel',
     ],
     'master.chromium.fyi': [
         # These are on LUCI.

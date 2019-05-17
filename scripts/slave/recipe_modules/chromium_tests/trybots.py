@@ -107,7 +107,7 @@ TRYBOTS = freeze({
       },
       'android_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'android-rel',
+        'buildername': 'android-archive-rel',
       }),
       'android_arm64_dbg_recipe': simple_bot({
         'mastername': 'chromium.android',
@@ -543,11 +543,11 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
       'linux_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'linux-rel',
+        'buildername': 'linux-archive-rel',
       }),
       'linux_chromium_clobber_rel_ng': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'linux-rel',
+        'buildername': 'linux-archive-rel',
       }, analyze_mode='compile'),
       'linux_chromium_chromeos_asan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
@@ -715,7 +715,7 @@ TRYBOTS = freeze({
       }),
       'mac_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'mac-rel',
+        'buildername': 'mac-archive-rel',
       }),
       'mac_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.mac',
@@ -918,11 +918,11 @@ TRYBOTS = freeze({
       }),
       'win_archive': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'win32-rel',
+        'buildername': 'win32-archive-rel',
       }),
       'win_x64_archive': simple_bot({
         'mastername': 'chromium',
-        'buildername': 'win-rel',
+        'buildername': 'win-archive-rel',
       }),
       'win_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.win',

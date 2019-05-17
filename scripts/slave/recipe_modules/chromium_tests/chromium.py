@@ -22,44 +22,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    # TODO(martiniss): Delete old names once https://crrev.com/c/1357628 lands.
-    'win32-dbg': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'checkout_dir': 'win',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'win32-archive-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'archive_build': True,
-      'gs_bucket': 'chromium-browser-snapshots',
-      'gs_build_name': 'Win',
-      'gs_acl': 'public-read',
-      'checkout_dir': 'win',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'win32-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
@@ -95,43 +58,7 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'win-dbg': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'checkout_dir': 'win',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     'win-archive-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'archive_build': True,
-      'gs_bucket': 'chromium-browser-snapshots',
-      'gs_build_name': 'Win_x64',
-      'gs_acl': 'public-read',
-      'checkout_dir': 'win',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'win-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
@@ -167,43 +94,7 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'mac-dbg': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'checkout_dir': 'mac',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
     'mac-archive-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'archive_build': True,
-      'gs_bucket': 'chromium-browser-snapshots',
-      'gs_build_name': 'Mac',
-      'gs_acl': 'public-read',
-      'checkout_dir': 'mac',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'mac-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
@@ -239,43 +130,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'linux-dbg': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'checkout_dir': 'linux_clobber',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'linux-archive-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'archive_build': True,
-      'gs_bucket': 'chromium-browser-snapshots',
-      'gs_build_name': 'Linux_x64',
-      'gs_acl': 'public-read',
-      'checkout_dir': 'linux_clobber',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'linux-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
@@ -313,47 +168,7 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'android-dbg': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-        'TARGET_ARCH': 'arm',
-      },
-      'android_config': 'main_builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'android-archive-rel': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'clobber',
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-        'TARGET_ARCH': 'arm',
-      },
-      'android_config': 'main_builder',
-      'archive_build': True,
-      'gs_bucket': 'chromium-browser-snapshots',
-      'gs_build_name': 'Android',
-      'gs_acl': 'public-read',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'android-rel': {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'clobber',
