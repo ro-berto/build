@@ -33,7 +33,33 @@ class BotMetadata(object):
     self.config = config
     self.settings = settings
 
+class Task(object):
+  """Represents the configuration for build/test tasks.
+
+  Attributes:
+    bot: BotMetadata of the task runner bot.
+    bot_update_step: Holds state on build properties. Used to pass state
+                     between methods.
+    tests: A list of Test objects [see chromium_tests/steps.py]. Stateful
+           objects that can run tests [possibly remotely via swarming] and
+           parse the results. Running tests multiple times is not idempotent
+           -- the results of previous runs affect future runs.
+      affected_files: A list of paths affected by the CL.
+  """
+
+  def __init__(self, bot, test_suites, bot_update_step, affected_files):
+    self.bot = bot
+    self.test_suites = test_suites
+    self.bot_update_step = bot_update_step
+    self.affected_files = affected_files
+
+  def should_retry_failures_with_changes(self):
+    return self.bot.config.get('retry_failed_shards', True)
+
 class ChromiumTestsApi(recipe_api.RecipeApi):
+  BotMetadata = BotMetadata
+  Task = Task
+
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
     self._builders = {}
@@ -877,9 +903,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return unrecoverable_test_suites
 
-  def _run_tests_with_retries(self, bot_config, tests, bot_update_step,
-                              affected_files, retry_failed_shards,
-                              deapply_changes):
+  def _run_tests_with_retries(self, task, deapply_changes):
     """This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
 
@@ -887,14 +911,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       An array of test suites which irrecoverably failed. If all test suites
       succeeded, returns an empty array.
     """
-    with self.wrap_chromium_tests(bot_config, tests):
+    with self.wrap_chromium_tests(task.bot.settings, task.test_suites):
       # Run the test. The isolates have already been created.
       invalid_test_suites, failing_tests = (
           self.m.test_utils.run_tests_with_patch(
-              self.m, tests, retry_failed_shards=retry_failed_shards))
+              self.m, task.test_suites,
+              retry_failed_shards=task.should_retry_failures_with_changes()))
 
       if self.m.clang_coverage.using_coverage:
-        self.m.clang_coverage.process_coverage_data(tests)
+        self.m.clang_coverage.process_coverage_data(task.test_suites)
 
       # An invalid result is unrecoverable.
       if invalid_test_suites:
@@ -906,13 +931,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       # If there are failures but we shouldn't deapply the patch, then we're
       # done.
-      if not self._should_retry_with_patch_deapplied(affected_files):
+      if not self._should_retry_with_patch_deapplied(task.affected_files):
         for t in failing_tests:
           self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
         return failing_tests
 
-      deapply_changes(bot_update_step)
-      self._build_and_isolate_failing_tests(failing_tests, bot_update_step,
+      deapply_changes(task.bot_update_step)
+      self._build_and_isolate_failing_tests(failing_tests, task.bot_update_step,
                                             'without patch')
       self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
                                   sort_by_shard=True)
@@ -1158,18 +1183,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return False
 
   def trybot_steps(self, builders=None, trybots=None):
-    (bot_config_object, bot_update_step, affected_files, test_suites,
-     retry_failed_shards) = (
-        self._trybot_steps_internal(builders=builders, trybots=trybots))
-
+    task = self._trybot_steps_internal(builders=builders, trybots=trybots)
     self.m.python.succeeding_step('mark: before_tests', '')
-    if test_suites:
+    if task.test_suites:
       unrecoverable_test_suites = self._run_tests_with_retries(
-          bot_config_object, test_suites, bot_update_step, affected_files,
-          retry_failed_shards, self.deapply_patch)
+        task, self.deapply_patch)
       self.m.chromium_swarming.report_stats()
 
-      self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
+      self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
 
       if unrecoverable_test_suites:
         if not self._contains_invalid_results(unrecoverable_test_suites):
@@ -1226,16 +1247,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                to configurations of the mirrored CI bot. Defaults are in
                ChromiumTestsApi.
 
-    Returns: [a 6-tuple of the following]
-      bot_config_object: Configuration for the tests to be run.
-      bot_update_step: Holds state on build properties. Used to pass state
-                       between methods.
-      affected_files: A list of paths affected by the CL.
-      tests: A list of Test objects [see chromium_tests/steps.py]. Stateful
-             objects that can run tests [possibly remotely via swarming] and
-             parse the results. Running tests multiple times is not idempotent
-             -- the results of previous runs affect future runs.
-      retry_failed_shards: Whether to retry failures in 'with patch'.
+    Returns:
+      task: Configuration of the build/test.
     """
     bot = self._lookup_bot_metadata(builders, mirrored_bots=trybots)
 
@@ -1326,11 +1339,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    retry_failed_shards = bot.config.get('retry_failed_shards', True)
-    return (
-        bot.settings, bot_update_step, affected_files, tests,
-        retry_failed_shards
-    )
+    return Task(bot, tests, bot_update_step, affected_files)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""

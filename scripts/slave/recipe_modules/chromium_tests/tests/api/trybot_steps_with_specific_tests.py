@@ -24,19 +24,15 @@ PROPERTIES = {
 
 
 def RunSteps(api, mastername, buildername):
-  trybots = api.chromium_tests.trybots
-  bot_config = trybots[mastername]['builders'][buildername]
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_config['bot_ids'])
+  bot = api.chromium_tests._lookup_bot_metadata(builders={})
 
-  api.chromium_tests.configure_build(bot_config_object)
-
+  api.chromium_tests.configure_build(bot.settings)
   api.chromium_swarming.configure_swarming(
       'chromium', precommit=True,
       # Fake path to make tests pass.
       path_to_testing_dir=api.path['start_dir'].join('checkout'))
 
-  update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
+  update_step, _bot_db = api.chromium_tests.prepare_checkout(bot.settings)
 
   if api.properties.get('use_gtest', True):
     kwargs = {}
@@ -58,8 +54,11 @@ def RunSteps(api, mastername, buildername):
   # Override _trybot_steps_internal to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
-    return (bot_config_object, update_step, affected_files, [test],
-            retry_failed_shards)
+    task = api.chromium_tests.Task(bot, [test], update_step, affected_files)
+    task.should_retry_failures_with_changes = lambda: retry_failed_shards
+
+    return task
+
   api.chromium_tests._trybot_steps_internal = config_override
 
   skip_deapply_patch = api.properties.get(
