@@ -106,20 +106,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'linux-xenial-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'checkout_dir': 'linux',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

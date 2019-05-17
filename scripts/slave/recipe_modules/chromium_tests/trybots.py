@@ -484,10 +484,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.memory',
         'buildername': 'WebKit Linux Trusty MSAN',
       }),
-      'linux-xenial-rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'linux-xenial-rel',
-      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
