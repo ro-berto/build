@@ -946,9 +946,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         **kwargs)
     step_result.presentation.step_text += text_for_task(task)
 
-    assert not hasattr(step_result, 'swarming_task')
-    step_result.swarming_task = task
-
     task._trigger_output = step_result.json.output
     links = step_result.presentation.links
     for shard_index in shard_indices:
@@ -997,9 +994,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         **kwargs)
     step_result.presentation.step_text += text_for_task(task)
 
-    assert not hasattr(step_result, 'swarming_task')
-    step_result.swarming_task = task
-
     # While it might make more sense to update all presentation links in
     # trigger_task(), this is currently not possible. Steps are run in series,
     # and once a step is finalized, it becomes immutable.
@@ -1029,16 +1023,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         'Trying to collect a task that was not triggered: %s' %
         task.task_name)
     self._pending_tasks.remove(task.task_name)
-
     try:
       return task.collect_step(task, **kwargs)
     finally:
-      try:
-        self.m.step.active_result.swarming_task = task
-      except Exception:  # pragma: no cover
-        # If we don't have an active_result, something failed very early,
-        # so we eat this exception and let that one propagate.
-        pass
+      pass
 
   def report_stats(self):
     """Report statistics on all tasks ran so far."""
