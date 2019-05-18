@@ -101,13 +101,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybots(self):
     return self.test_api.trybots
 
-  @property
-  def swarming_extra_args(self):
-    args = []
-    if self.m.chromium.c.runtests.enable_lsan:
-      args += ['--lsan=1']
-    return args
-
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
