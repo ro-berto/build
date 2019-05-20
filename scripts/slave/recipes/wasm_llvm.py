@@ -32,7 +32,7 @@ def RunSteps(api):
   got_revision = result.presentation.properties['got_waterfall_revision']
   goma_dir = api.goma.ensure_goma()
   env = {
-      'BUILDBOT_MASTERNAME': api.properties['mastername'],
+      'BUILDBOT_MASTERNAME': 'client.wasm.llvm',
       'BUILDBOT_BUILDERNAME': api.buildbucket.builder_name,
       'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
       'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
@@ -64,7 +64,6 @@ def GenTests(api):
     return (
         api.test(name) +
         api.properties(
-          mastername='client.wasm.llvm',
           path_config='kitchen',
           **kwargs
         ) +

@@ -14,6 +14,11 @@
       "--test-include=emtest-asm"
     ],
     "env": {
+      "BUILDBOT_BUCKET": "ci",
+      "BUILDBOT_BUILDERNAME": "linux",
+      "BUILDBOT_BUILDNUMBER": "42",
+      "BUILDBOT_MASTERNAME": "emscripten-releases",
+      "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[GOMA_CACHE]/client"
     },
     "env_suffixes": {

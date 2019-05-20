@@ -23,6 +23,11 @@ def RunSteps(api):
   api.gclient.set_config('emscripten_releases')
   goma_dir = api.goma.ensure_goma()
   env = {
+      'BUILDBOT_MASTERNAME': 'emscripten-releases',
+      'BUILDBOT_BUILDERNAME': api.buildbucket.builder_name,
+      'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
+      'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
+      'BUILDBOT_BUCKET': api.buildbucket.build.builder.bucket,
       'GOMA_DIR': goma_dir,
   }
   api.goma.start()
@@ -87,6 +92,11 @@ def GenTests(api):
     return (
         api.test(name) +
         api.properties(path_config='kitchen') +
+        api.buildbucket.ci_build(
+            project='emscripten-releases',
+            builder='linux',
+            build_number=42,
+        ) +
         api.runtime(is_luci=True, is_experimental=False)
     )
 
