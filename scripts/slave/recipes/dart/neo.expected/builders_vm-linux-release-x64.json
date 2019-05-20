@@ -16,6 +16,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -51,6 +54,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -93,6 +97,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -113,6 +118,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes"
   },
   {
@@ -123,6 +131,9 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -219,6 +230,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes (2)"
   },
   {
@@ -227,6 +241,9 @@
       ".debug.log"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "debug log"
   },
   {

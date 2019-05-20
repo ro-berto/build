@@ -16,6 +16,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -52,6 +55,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -99,6 +103,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -141,6 +146,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -161,6 +167,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes"
   },
   {
@@ -173,6 +182,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -200,6 +210,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -222,6 +233,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builders_vm_linux_release_x64_try",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -263,6 +275,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -286,6 +299,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -310,6 +324,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builders_vm_linux_release_x64_try",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -349,6 +364,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builders_vm_linux_release_x64_try",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -377,6 +393,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builders_vm_linux_release_x64_try",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -435,6 +452,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -468,6 +486,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -490,6 +509,9 @@
       "-mrelease"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "xvfb tools/test.py  -mrelease 0"
   },
   {
@@ -498,6 +520,9 @@
       "language_2/some_test"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "tools/test.py language_2/some_test 0"
   },
   {
@@ -506,6 +531,9 @@
       "language_2/some_test"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "tools/test.py language_2/some_test 1"
   },
   {
@@ -514,6 +542,9 @@
       "language_2/some_test"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "tools/test.py language_2/some_test 2"
   },
   {

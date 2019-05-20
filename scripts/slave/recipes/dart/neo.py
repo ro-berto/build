@@ -72,7 +72,10 @@ TEST_MATRIX = {
 
 
 def RunSteps(api):
-  with api.osx_sdk('mac'):
+  # Override analyzer cache location to make analyzer runs hermetic.
+  env = {'ANALYZER_STATE_LOCATION_OVERRIDE':
+      api.path['cleanup'].join('analysis-cache')}
+  with api.osx_sdk('mac'), api.context(env=env):
     _run_steps_impl(api)
 
 

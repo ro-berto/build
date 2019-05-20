@@ -16,6 +16,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -52,6 +55,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -99,6 +103,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -141,6 +146,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
       "GIT_TRACE_CURL": "1",
       "GIT_TRACE_CURL_NO_DATA": "1",
@@ -161,6 +167,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes"
   },
   {
@@ -171,6 +180,9 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -269,6 +281,9 @@
       "remove",
       "[CACHE]/builder/sdk/.debug.log"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "delete debug log"
   },
@@ -283,6 +298,9 @@
       "{'variables': {'files': '[]'}}",
       "[CACHE]/builder/sdk/nameoffileset"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "write fileset nameoffileset to sdk root"
   },
@@ -297,6 +315,9 @@
       "{'variables': {'files': '[]'}}",
       "[CACHE]/builder/sdk/fileset1"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "write fileset fileset1 to sdk root"
   },
@@ -310,6 +331,9 @@
       "sdk/tools/sdks:dart/dart-sdk/${platform}"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -332,6 +356,9 @@
       "sdk/tests/co19_2/src:dart/third_party/co19"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -353,6 +380,9 @@
       "-s"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "git show",
     "stdout": "/path/to/tmp/"
@@ -369,6 +399,9 @@
       "0777",
       "[CACHE]/builder/sdk/browsers"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "create browser cache"
   },
@@ -383,6 +416,9 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -406,6 +442,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -435,6 +472,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -459,6 +497,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win_debug_x64_firefox_try",
@@ -502,6 +541,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -531,6 +571,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -557,6 +598,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win_debug_x64_firefox_try",
@@ -598,6 +640,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win_debug_x64_firefox_try",
@@ -628,6 +671,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win_debug_x64_firefox_try",
@@ -688,6 +732,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -723,6 +768,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -759,6 +805,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
     },
     "env_prefixes": {
@@ -790,6 +837,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
     },
     "env_prefixes": {
@@ -816,6 +864,9 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.gsutil find latest build",
     "~followup_annotations": [
@@ -836,6 +887,9 @@
       "[CACHE]/builder/sdk/LATEST"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.ensure LATEST dir",
     "~followup_annotations": [
@@ -854,6 +908,9 @@
       "[CACHE]/builder/sdk/LATEST/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.ensure results.json exists",
     "~followup_annotations": [
@@ -872,6 +929,9 @@
       "[CACHE]/builder/sdk/LATEST/flaky.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.ensure flaky.json exists",
     "~followup_annotations": [
@@ -890,6 +950,9 @@
       "[CACHE]/builder/sdk/LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.ensure approved_results.json exists",
     "~followup_annotations": [
@@ -909,6 +972,9 @@
       "LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.gsutil download approved results",
     "~followup_annotations": [
@@ -932,6 +998,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -970,6 +1037,9 @@
       "Ideadbeef"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "download previous results.apply pre-approvals",
     "~followup_annotations": [
@@ -995,6 +1065,9 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "deflaking.list tests to deflake (Test-step 1)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1017,6 +1090,9 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "deflaking.list tests to deflake (Test-step 2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1039,6 +1115,9 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "update flakiness information",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
@@ -1059,6 +1138,9 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "add fields to result records"
   },
   {
@@ -1077,6 +1159,9 @@
       "--unapproved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "find unapproved new test failures",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1102,6 +1187,9 @@
       "--unapproved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "find unapproved new test failures (logs)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1124,6 +1212,9 @@
       "--approved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "find approved new test failures",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1149,6 +1240,9 @@
       "--approved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "find approved new test failures (logs)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1172,6 +1266,9 @@
       "--unapproved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "find tests that began passing",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -1197,6 +1294,9 @@
       "--unapproved"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "test results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@results.json@@@@",
@@ -1216,6 +1316,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes (3)"
   },
   {
@@ -1224,6 +1327,9 @@
       ".debug.log"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "debug log"
   },
   {

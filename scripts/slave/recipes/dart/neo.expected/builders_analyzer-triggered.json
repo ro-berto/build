@@ -9,6 +9,9 @@
       "--url",
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "git setup (swarming_client)"
   },
   {
@@ -22,6 +25,7 @@
     ],
     "cwd": "[START_DIR]/swarming.client",
     "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
@@ -35,6 +39,9 @@
       "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "git checkout (swarming_client)"
   },
@@ -45,6 +52,9 @@
       "HEAD"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
@@ -61,6 +71,9 @@
       "-x"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "git clean (swarming_client)"
   },
@@ -71,6 +84,9 @@
       "sync"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "submodule sync (swarming_client)"
   },
@@ -83,6 +99,9 @@
       "--recursive"
     ],
     "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "infra_step": true,
     "name": "submodule update (swarming_client)"
   },
@@ -100,6 +119,9 @@
       "--target=."
     ],
     "cwd": "[CLEANUP]",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "downloading fileset test_name",
     "stdout": "/path/to/tmp/out"
   },
@@ -111,6 +133,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes"
   },
   {
@@ -121,6 +146,9 @@
       "[CLEANUP]/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -217,6 +245,9 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "kill processes (2)"
   },
   {
@@ -225,6 +256,9 @@
       ".debug.log"
     ],
     "cwd": "[CLEANUP]",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
     "name": "debug log"
   },
   {
