@@ -152,7 +152,6 @@ FAKE_BUILDERS = {
         'linux-gcc-rel',
         'linux-rel',
         'linux-ozone-rel',
-        'linux-xenial-rel',
         'linux_chromium_asan_rel_ng',
         'linux_chromium_cfi_rel_ng',
         'linux_chromium_compile_dbg_ng',
