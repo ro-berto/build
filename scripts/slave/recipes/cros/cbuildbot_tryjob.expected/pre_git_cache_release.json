@@ -17,7 +17,7 @@
       "--revision",
       "chromite@master",
       "--revision",
-      "depot_tools@80a1cf66b83c394c911b14312274b26dba888ae0"
+      "depot_tools@7639f1999ac1d8992fc4fbb169d164b156d9a7f7"
     ],
     "env_prefixes": {
       "PATH": [
@@ -32,7 +32,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chromite\": \"master\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"depot_tools\": \"80a1cf66b83c394c911b14312274b26dba888ae0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"depot_tools\": \"7639f1999ac1d8992fc4fbb169d164b156d9a7f7\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
