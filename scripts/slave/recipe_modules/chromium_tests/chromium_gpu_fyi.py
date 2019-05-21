@@ -83,6 +83,29 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'win',
     },
+    'GPU FYI XR Win Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'checkout_dir': 'win',
+      # This causes the builder to upload isolates to a location where Pinpoint
+      # can access them in addition to the usual isolate server. This is
+      # necessary because "Win10 FYI Release XR Perf (NVIDIA)", which is a
+      # child of this builder, uploads perf results, and Pinpoint may trigger
+      # additional builds on this builder during a bisect.
+      'perf_isolate_lookup': True,
+    },
     'Win7 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -183,6 +206,23 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU FYI Win Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI Release XR Perf (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI XR Win Builder',
       'testing': {
         'platform': 'win',
       },
