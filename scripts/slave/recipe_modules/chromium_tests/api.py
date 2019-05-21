@@ -1240,6 +1240,36 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return BotMetadata(mastername, buildername, config, settings)
 
+  def _determine_compilation_targets(self, bot, affected_files, bot_db):
+    test_config = self.get_tests(bot.settings, bot_db)
+
+    compile_targets = self.get_compile_targets(
+        bot.settings,
+        bot_db,
+        test_config.all_tests())
+    test_targets = sorted(set(
+        self._all_compile_targets(test_config.all_tests())))
+
+    # Use analyze to determine the compile targets that are affected by the CL.
+    # Use this to prune the relevant compile targets and test targets.
+    if self.m.tryserver.is_tryserver:
+      additional_compile_targets = sorted(
+          set(compile_targets) - set(test_targets))
+      analyze_names = ['chromium'] + list(
+          bot.config.get('analyze_names', []))
+      mb_config_path = (
+          self.m.chromium.c.project_generator.config_path
+          or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
+      test_targets, compile_targets = self.m.filter.analyze(
+          affected_files, test_targets, additional_compile_targets,
+          'trybot_analyze_config.json',
+          mb_mastername=bot.mastername,
+          mb_buildername=bot.buildername,
+          mb_config_path=mb_config_path,
+          additional_names=analyze_names)
+
+    return test_targets, compile_targets
+
   def _calculate_tests_to_run(self, builders=None, mirrored_bots=None):
     """Determines which tests need to be run.
 
@@ -1285,31 +1315,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.clang_coverage.using_coverage:
       self.m.clang_coverage.instrument(affected_files)
 
-    # Determine the compile targets for the tests that would be run.
-    compile_targets = self.get_compile_targets(
-        bot.settings,
-        bot_db,
-        test_config.all_tests())
-    test_targets = sorted(set(
-        self._all_compile_targets(test_config.all_tests())))
-
-    # Use analyze to determine the compile targets that are affected by the CL.
-    # Use this to prune the relevant compile targets and test targets.
-    if self.m.tryserver.is_tryserver:
-      additional_compile_targets = sorted(
-          set(compile_targets) - set(test_targets))
-      analyze_names = ['chromium'] + list(
-          bot.config.get('analyze_names', []))
-      mb_config_path = (
-          self.m.chromium.c.project_generator.config_path
-          or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
-      test_targets, compile_targets = self.m.filter.analyze(
-          affected_files, test_targets, additional_compile_targets,
-          'trybot_analyze_config.json',
-          mb_mastername=bot.mastername,
-          mb_buildername=bot.buildername,
-          mb_config_path=mb_config_path,
-          additional_names=analyze_names)
+    test_targets, compile_targets = self._determine_compilation_targets(
+        bot, affected_files, bot_db)
 
     # If this is a compile-only bot, then clear our all tests. This cannot be
     # done sooner because we still want to determine the minimal set of
