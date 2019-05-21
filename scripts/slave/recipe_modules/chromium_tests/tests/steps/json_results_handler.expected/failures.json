@@ -49,7 +49,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@valid: True@@@",
-      "@@@STEP_LOG_LINE@details@unexpected_failures: {'test1.Test2-2': 'FAIL FAIL FAIL', 'test1.Test2': 'FAIL FAIL FAIL'}@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: ['test1.Test2-2', 'test1.Test2']@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },
