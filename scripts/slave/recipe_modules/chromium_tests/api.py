@@ -1197,9 +1197,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not self._contains_invalid_results(unrecoverable_test_suites):
           self.m.tryserver.set_do_not_retry_build()
 
-        exit_message = ' '.join(
-            [x.name + ' failed.' for x in unrecoverable_test_suites])
+        exit_message = self._format_unrecoverable_failures(
+          unrecoverable_test_suites)
         raise self.m.step.StepFailure(exit_message)
+
+  def _format_unrecoverable_failures(self, unrecoverable_test_suites):
+    failures = [suite.name + ' failed.' for suite in unrecoverable_test_suites]
+
+    return ' '.join(failures)
 
   def _lookup_bot_metadata(self, builders, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
