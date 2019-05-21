@@ -33,6 +33,9 @@ class BotMetadata(object):
     self.config = config
     self.settings = settings
 
+  def is_compile_only(self):
+    return self.config.get('analyze_mode') == 'compile'
+
 class Task(object):
   """Represents the configuration for build/test tasks.
 
@@ -1270,6 +1273,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_targets, compile_targets
 
+  def _gather_tests_to_run(self, bot, bot_db):
+    if bot.is_compile_only():
+      return [], []
+
+    # Determine the tests that would be run if this were a CI tester.
+    # Tests are instances of class(Test) from chromium_tests/steps.py. These
+    # objects know how to dispatch isolate tasks, parse results, and keep
+    # state on the results of previous test runs.
+    config = self.get_tests(bot.settings, bot_db)
+    return config.tests_in_scope(), config.all_tests()
+
   def _calculate_tests_to_run(self, builders=None, mirrored_bots=None):
     """Determines which tests need to be run.
 
@@ -1301,31 +1315,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming(
       'chromium', precommit=True)
 
-    # Determine the tests that would be run if this were a CI tester.
-    # Tests are instances of class(Test) from chromium_tests/steps.py. These
-    # objects know how to dispatch isolate tasks, parse results, and keep
-    # state on the results of previous test runs.
-    test_config = self.get_tests(bot.settings, bot_db)
-    tests = test_config.tests_in_scope()
-    tests_including_triggered = test_config.all_tests()
-
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
     # Must happen before without patch steps.
     if self.m.clang_coverage.using_coverage:
       self.m.clang_coverage.instrument(affected_files)
 
+    tests, tests_including_triggered = self._gather_tests_to_run(bot, bot_db)
+
     test_targets, compile_targets = self._determine_compilation_targets(
         bot, affected_files, bot_db)
-
-    # If this is a compile-only bot, then clear our all tests. This cannot be
-    # done sooner because we still want to determine the minimal set of
-    # binaries that need to be compiled, which requires knowing the set of
-    # tests that would be run.
-    if bot.config.get('analyze_mode') == 'compile':
-      tests = []
-      tests_including_triggered = []
-
     # Compiles and isolates test suites.
     if compile_targets:
       tests = self._tests_in_compile_targets(test_targets, tests)
