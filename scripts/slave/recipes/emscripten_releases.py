@@ -81,15 +81,11 @@ def RunSteps(api):
       api.python('Upload archive', waterfall_build,
                  build_only_flags + ['--build-include=archive'])
 
-      for name, flag in (('upstream', 'emtest'), ('asm2wasm', 'emtest-asm')):
-        try:
+      with api.step.defer_results():
+        for name, flag in (('upstream', 'emtest'), ('asm2wasm', 'emtest-asm')):
           api.python('Emscripten testsuite (%s)' % name, waterfall_build,
                      test_only_flags + ['--test-include=%s' % flag])
-        except api.step.StepFailure as e:
-          # Log the failure but continue.
-          exit_status = e.retcode
-  if exit_status != 0:
-    raise api.step.StepFailure('Emscripten tests failed')
+
 
 def GenTests(api):
   def test(name):
