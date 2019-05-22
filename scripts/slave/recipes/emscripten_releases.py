@@ -77,6 +77,10 @@ def RunSteps(api):
       finally:
         api.goma.stop(build_exit_status=exit_status)
 
+      # Upload the results before running the test.
+      api.python('Upload archive', waterfall_build,
+                 build_only_flags + ['--build-include=archive'])
+
       for name, flag in (('upstream', 'emtest'), ('asm2wasm', 'emtest-asm')):
         try:
           api.python('Emscripten testsuite (%s)' % name, waterfall_build,

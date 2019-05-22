@@ -597,6 +597,35 @@
       "--v8-dir=[BUILDER_CACHE]/v8",
       "--install-dir=[START_DIR]/install",
       "--no-sync",
+      "--no-test",
+      "--build-include=archive"
+    ],
+    "env": {
+      "BUILDBOT_BUCKET": "ci",
+      "BUILDBOT_BUILDERNAME": "linux",
+      "BUILDBOT_BUILDNUMBER": "42",
+      "BUILDBOT_MASTERNAME": "emscripten-releases",
+      "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "GOMA_DIR": "[GOMA_CACHE]/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Upload archive"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/emscripten-releases/waterfall/src/build.py",
+      "--sync-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--build-dir=[BUILDER_CACHE]/emscripten-releases/build",
+      "--prebuilt-dir=[BUILDER_CACHE]/emscripten-releases",
+      "--v8-dir=[BUILDER_CACHE]/v8",
+      "--install-dir=[START_DIR]/install",
+      "--no-sync",
       "--no-build",
       "--test-include=emtest"
     ],
