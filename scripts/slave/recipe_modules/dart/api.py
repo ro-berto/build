@@ -952,7 +952,6 @@ class DartApi(recipe_api.RecipeApi):
     test_args = ['--progress=status',
                  '--report',
                  '--time',
-                 '--write-debug-log',
                  '--write-results',
                  '--write-logs']
     if self._report_new_results() or deflake_list:
