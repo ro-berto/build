@@ -179,8 +179,7 @@ class TestResults(object):
 
     for (test, result) in self.tests.iteritems():
       key = 'unexpected_' if result.get('is_unexpected') else ''
-      data = result['actual']
-      actual_results = data.split()
+      actual_results = result['actual'].split()
       last_result = actual_results[-1]
       expected_results = result['expected'].split()
 
@@ -194,10 +193,6 @@ class TestResults(object):
         key += 'flakes'
       elif last_result in passing_statuses:
         key += 'passes'
-        # TODO(dpranke): https://crbug.com/357867 ...  Why are we assigning
-        # result instead of actual_result here. Do we even need these things to
-        # be hashes, or just lists?
-        data = result
       elif last_result in failing_statuses:
         key += 'failures'
       elif last_result in skipping_statuses:
@@ -205,7 +200,7 @@ class TestResults(object):
       else:
         # Unknown test state was found.
         key = 'unknown'
-      getattr(self, key)[test] = data
+      getattr(self, key)[test] = result
 
       # Goes through actual_results to get pass_fail_counts for each test.
       self.pass_fail_counts.setdefault(
