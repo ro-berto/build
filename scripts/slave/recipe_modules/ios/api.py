@@ -271,6 +271,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     self.m.chromium.c = cfg
 
+    self.m.chromium.apply_config('BASE')
     if self.use_goma:
       # Make sure these chromium configs are applied consistently for the
       # rest of the recipe; they are needed in order for m.chromium.compile()

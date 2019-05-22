@@ -10,7 +10,6 @@ from recipe_engine.config_types import Path
 def BaseConfig(CHECKOUT_PATH, **_kwargs):
   return ConfigGroup(
     staging = Single(bool, empty_val=False, required=False),
-    source_side_spec_dir = Single(Path),
     # TODO(martiniss): Remove this and all uses
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
   )
@@ -20,7 +19,7 @@ config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
 def chromium(c):
-  c.source_side_spec_dir = c.CHECKOUT_PATH.join('testing', 'buildbot')
+  pass
 
 @config_ctx()
 def staging(c):

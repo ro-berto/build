@@ -44,10 +44,10 @@ class FilterApi(recipe_api.RecipeApi):
     return self._paths
 
   def _load_analyze_config(self, file_name):
-    config_path = self.m.path.join('testing', 'buildbot', file_name)
+    config_path = self.m.chromium.c.source_side_spec_dir.join(file_name)
     step_result = self.m.json.read(
       'read filter exclusion spec',
-      self.m.path['checkout'].join(config_path),
+      config_path,
       step_test_data=lambda: self.m.json.test_api.output({
           'base': {
             'exclusions': [],

@@ -306,7 +306,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return self.generate_tests_from_source_side_spec(*args)
 
   def read_source_side_spec(self, source_side_spec_file):
-    source_side_spec_path = self.c.source_side_spec_dir.join(
+    source_side_spec_path = self.m.chromium.c.source_side_spec_dir.join(
         source_side_spec_file)
     spec_result = self.m.json.read(
         'read test spec (%s)' % self.m.path.basename(source_side_spec_path),
