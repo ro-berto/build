@@ -21,6 +21,8 @@ def RunSteps(api):
       api.platform.name)
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
+  if api.properties.get('containment_type'):
+    task.containment_type = api.properties['containment_type']
   api.chromium_swarming.trigger_task(task)
   api.chromium_swarming.collect_task(task)
 
@@ -36,6 +38,18 @@ def GenTests(api):
         post_process.StepCommandContains,
         '[trigger] capacity-constrained task',
         ['--wait-for-capacity']) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('containment_type') +
+    api.properties(
+        task_name='windows gpu task',
+        containment_type='AUTO') +
+    api.post_process(
+        post_process.StepCommandContains,
+        '[trigger] windows gpu task',
+        ['--containment-type', 'AUTO']) +
     api.post_process(post_process.DropExpectation)
   )
 

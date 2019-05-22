@@ -137,6 +137,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     swarming_optional_dimensions = swarming_spec.get(
         'optional_dimensions')
     kwargs['expiration'] = swarming_spec.get('expiration')
+    kwargs['containment_type'] = swarming_spec.get('containment_type')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['shards'] = swarming_spec.get('shards', 1)

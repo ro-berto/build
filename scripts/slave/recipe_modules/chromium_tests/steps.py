@@ -1361,13 +1361,14 @@ class SwarmingTest(Test):
                waterfall_buildername=None, set_up=None, tear_down=None,
                optional_dimensions=None, service_account=None,
                isolate_coverage_data=None, merge=None, ignore_task_failure=None,
-               shards=1, **kwargs):
+               containment_type=None, shards=1, **kwargs):
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         **kwargs)
     self._tasks = {}
+    self._containment_type = containment_type
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions
     self._extra_suffix = extra_suffix
@@ -1561,6 +1562,7 @@ class SwarmingTest(Test):
 
     task.build_properties = api.chromium.build_properties
     task.cipd_packages = self._cipd_packages
+    task.containment_type = self._containment_type
     task.ignore_task_failure = self._ignore_task_failure
     task.isolated_hash = isolated_hash
     if self._merge:
@@ -1693,7 +1695,8 @@ class SwarmingGTestTest(SwarmingTest):
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
-               optional_dimensions=None, service_account=None):
+               optional_dimensions=None, service_account=None,
+               containment_type=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1702,7 +1705,7 @@ class SwarmingGTestTest(SwarmingTest):
         isolate_coverage_data=isolate_coverage_data,
         merge=merge, shards=shards,
         optional_dimensions=optional_dimensions,
-        service_account=service_account)
+        service_account=service_account, containment_type=containment_type)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
     self._cipd_packages = cipd_packages

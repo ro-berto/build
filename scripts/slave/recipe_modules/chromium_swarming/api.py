@@ -853,6 +853,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.wait_for_capacity:
       args.append('--wait-for-capacity')
 
+    if task.containment_type:
+      args.extend(['--containment-type', task.containment_type])
+
     # Default tags.
     tags = set(task.tags)
     tags.update(self._default_tags)
@@ -1726,7 +1729,7 @@ class SwarmingTask(object):
                cipd_packages=None, build_properties=None, merge=None,
                trigger_script=None, named_caches=None, service_account=None,
                raw_cmd=None, env_prefixes=None, optional_dimensions=None,
-               task_to_retry=None):
+               task_to_retry=None, containment_type=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1819,6 +1822,10 @@ class SwarmingTask(object):
       * task_to_retry: Task object. If set, indicates that this task is a
           (potentially partial) retry of another task. When collecting, should
           re-use some shards from the retried task.
+      * containment_type: string. Type of containment to use for the task. This
+          is being added to fix https://crbug.com/965222, please talk to
+          martiniss@ if you are using this feature; it should be deleted in the
+          next few months.
     """
 
     self._trigger_output = None
@@ -1828,6 +1835,7 @@ class SwarmingTask(object):
     self.buildnumber = buildnumber
     self.cipd_packages = cipd_packages
     self.collect_step = collect_step
+    self.containment_type = containment_type
     self.dimensions = dimensions.copy()
     self.env = env.copy()
     self.expiration = expiration
