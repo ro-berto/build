@@ -135,7 +135,11 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
       'android_cronet': simple_bot({
         'mastername': 'chromium.android',
-        'buildername': 'Android Cronet Builder'
+        'buildername': 'android-cronet-arm-rel'
+      }, analyze_mode='compile'),
+      'android_cronet_tester': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'android-cronet-arm-dbg'
       }),
       'android_mojo': simple_bot({
         'mastername': 'chromium.fyi',

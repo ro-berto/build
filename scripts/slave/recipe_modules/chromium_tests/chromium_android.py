@@ -69,24 +69,6 @@ SPEC = {
       },
     },
 
-    # TODO(jbudorick): Remove this and use android-cronet-arm-rel as the
-    # trybot mirror.
-    'Android Cronet Builder': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['cronet_builder'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_rel_mb',
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Android x64 Builder (dbg)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

@@ -112,7 +112,7 @@ def GenTests(api):
       api.test('android') +
       api.properties.generic(
           mastername='chromium.android',
-          buildername='Android Cronet Builder')
+          buildername='android-cronet-arm-rel')
   )
 
   yield (

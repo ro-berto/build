@@ -254,7 +254,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Cronet Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"android-cronet-arm-rel\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -322,7 +322,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "Android Cronet Builder",
+      "android-cronet-arm-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -350,7 +350,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "Android Cronet Builder",
+      "android-cronet-arm-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -379,7 +379,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Android_Cronet_Builder"
+      "[CACHE]/goma/data/android_cronet_arm_rel"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -403,7 +403,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android_Cronet_Builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_cronet_arm_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -614,9 +614,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.android\", \"builder\": \"Android Cronet Builder\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.android\", \"builder\": \"android-cronet-arm-rel\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "Android Cronet Builder",
+      "android-cronet-arm-rel",
       "--buildbot-mastername",
       "chromium.android",
       "--buildbot-slavename",
