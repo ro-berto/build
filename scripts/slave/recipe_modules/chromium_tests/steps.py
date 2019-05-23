@@ -1129,13 +1129,36 @@ class JSONResultsHandler(ResultsHandler):
 
   @classmethod
   def _format_failures(cls, state, failures):
-    failures.sort()
+    """Format a human-readable explanation of what has failed.
+
+    Args:
+      state: A string describing what type of failure it was.
+      failures: a dictionary mapping test names to failure information.
+        The failure information could be empty or it could be a dictionary
+        of per-test fields per
+        https://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md
+
+    Returns:
+      A tuple: (failure state, list of failure strings).
+    """
+    index = 0
+    failure_strings = []
     num_failures = len(failures)
-    if num_failures > cls.MAX_FAILS:
-      failures = failures[:cls.MAX_FAILS]
-      failures.append('... %d more (%d total) ...' % (
-          num_failures - cls.MAX_FAILS, num_failures))
-    return ('%s:' % state, ['* %s' % f for f in failures])
+
+    for test_name in sorted(failures):
+      if index >= cls.MAX_FAILS:
+        failure_strings.append('* ... %d more (%d total) ...' % (
+            num_failures - cls.MAX_FAILS, num_failures))
+        break
+      if failures[test_name] and 'shard' in failures[test_name]:
+        shard = failures[test_name]['shard']
+        failure_strings.append('* {test} (shard #{shard})'.format(
+            test=test_name, shard=shard))
+      else:
+        failure_strings.append('* {test}'.format(test=test_name))
+      index += 1
+
+    return ('{state}:'.format(state=state), failure_strings)
 
   # TODO(tansell): Make this better formatted when milo supports html rendering.
   @classmethod
@@ -1231,15 +1254,15 @@ class JSONResultsHandler(ResultsHandler):
     # format_step_text will automatically trim these if the list is empty.
     step_text += [
         self._format_failures(
-            'Unexpected Failures', results.unexpected_failures.keys()),
+            'Unexpected Failures', results.unexpected_failures),
     ]
     step_text += [
         self._format_failures(
-            'Unexpected Flakes', results.unexpected_flakes.keys()),
+            'Unexpected Flakes', results.unexpected_flakes),
     ]
     step_text += [
         self._format_failures(
-            'Unexpected Skips', results.unexpected_skipped.keys()),
+            'Unexpected Skips', results.unexpected_skipped),
     ]
 
     # Unknown test results mean something has probably gone wrong, mark as an
@@ -1248,7 +1271,7 @@ class JSONResultsHandler(ResultsHandler):
       presentation.status = api.step.EXCEPTION
     step_text += [
         self._format_failures(
-            'Unknown test result', results.unknown.keys()),
+            'Unknown test result', results.unknown),
     ]
 
     presentation.step_text += api.test_utils.format_step_text(step_text)

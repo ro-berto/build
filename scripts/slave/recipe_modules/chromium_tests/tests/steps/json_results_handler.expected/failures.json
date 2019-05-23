@@ -27,7 +27,8 @@
       "@@@STEP_LOG_LINE@json.output@      \"Test2-2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL FAIL\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"is_unexpected\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"shard\": 0@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
@@ -40,7 +41,7 @@
     "cmd": [],
     "name": "presentation_step",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total tests: 3<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 3 (1 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* test1.Test2<br/>* test1.Test2-2<br/>@@@",
+      "@@@STEP_TEXT@<br/>Total tests: 3<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 3 (1 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* test1.Test2<br/>* test1.Test2-2 (shard #0)<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

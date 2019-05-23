@@ -39,9 +39,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       minimal - If True, the canned output will omit one test to emulate the
                 effect of running fewer than the total number of tests.
       num_additional_failures - the number of failed tests to simulate in
-                addition to the three generated if passing is False
+                addition to the three generated if passing is False.
 
-    Returns: A test_results placeholder
+    Returns: A test_results placeholder.
     """
     if_failing = lambda fail_val: None if passing else fail_val
     t = TestResults({'version': 3})
@@ -159,7 +159,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
   def generate_json_test_results(self, shard_indices,
                                  isolated_script_passing, benchmark_enabled,
-                                 customized_test_results):
+                                 customized_test_results,
+                                 add_shard_index):
     per_shard_results = []
     for i in shard_indices:
       if customized_test_results:
@@ -202,6 +203,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         jsonish_results['num_failures_by_type']['PASS'] = 2
         jsonish_results['num_failures_by_type']['SKIP'] = 1
       elif benchmark_enabled:
+        test0_2_results = {
+          'expected': 'PASS TIMEOUT',
+          'actual': 'FAIL FAIL FAIL',
+          'is_unexpected': True,
+        }
+        if add_shard_index:
+          test0_2_results['shard'] = i
         tests_run = {
           'test%d' % idx: {
             'Test%d' % idx: {
@@ -210,14 +218,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
             },
             'Test%d' % (idx + 1): {
               'expected': 'PASS TIMEOUT',
-               'actual': 'FAIL FAIL FAIL',
-               'is_unexpected': True,
-             },
-            'Test%d-2' % (idx + 1): {
-              'expected': 'PASS TIMEOUT',
-               'actual': 'FAIL FAIL FAIL',
-               'is_unexpected': True,
-             },
+              'actual': 'FAIL FAIL FAIL',
+              'is_unexpected': True,
+            },
+            'Test%d-2' % (idx + 1): test0_2_results,
           }
         }
 
@@ -242,7 +246,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     benchmark_enabled=True,
                                     corrupt=False,
                                     unknown=False,
-                                    customized_test_results=None
+                                    customized_test_results=None,
+                                    add_shard_index=False
                                     ):
     """Produces a test results' compatible json for isolated script tests. """
     if not missing_shards:
@@ -271,7 +276,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(
           shard_indices, isolated_script_passing, benchmark_enabled,
-          customized_test_results)
+          customized_test_results, add_shard_index)
     else:
       if valid is None:
         valid = True

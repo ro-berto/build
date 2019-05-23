@@ -52,7 +52,8 @@ def GenTests(api):
           api.test_utils.canned_isolated_script_output(
               passing=False, is_win=False, swarming=False,
               isolated_script_passing=False,
-              use_json_test_format=True))
+              use_json_test_format=True,
+              add_shard_index=True))
   )
 
   yield (
