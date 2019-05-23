@@ -990,4 +990,5 @@ SPEC['builders'].update([
     stock_config('linux-tcmalloc-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
+    stock_config('win-pixel-browser-tests-rel'),
 ])
