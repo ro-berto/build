@@ -444,7 +444,7 @@ def BuildMac(api):
     ], archive_name='FlutterEmbedder.framework.zip')
 
     UploadArtifacts(api, 'darwin-x64', [
-      'out/host_debug/FlutterMacOS.framework.zip'
+      'out/host_debug/FlutterMacOS.framework.zip',
       'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
     ], archive_name='FlutterMacOS.framework.zip')
 

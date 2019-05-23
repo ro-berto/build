@@ -1417,7 +1417,7 @@
       ]
     },
     "name": "Zip darwin-x64 FlutterMacOS.framework.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterMacOS.podspec\", \"path\": \"[START_DIR]/src/out/host_debug/FlutterMacOS.framework.zipflutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterMacOS.framework.zip\", \"path\": \"[START_DIR]/src/out/host_debug/FlutterMacOS.framework.zip\", \"type\": \"file\"}, {\"archive_name\": \"FlutterMacOS.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
