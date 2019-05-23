@@ -4,14 +4,11 @@
 
 DEPS = [
     'depot_tools/cipd',
-    'depot_tools/git',
-    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
-    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/runtime',
-    'recipe_engine/step',
+    'goma_server',
 ]
 
 GO_VERSION = 'version:1.12.5'
@@ -41,52 +38,10 @@ def SetupExecutables(api, pkg_dir):
 def RunSteps(api):
   repository = 'https://chromium.googlesource.com/infra/goma/server'
   package_base = 'go.chromium.org/goma/server'
-  build_root = api.path['cache'].join('builder')
-  goma_src_dir = build_root.join('goma_src')
-  gopath_dir = build_root.join('go')
   # TODO(yyanagisawa): move cipd to cached directory when we confirm it works.
   cipd_root = api.path['start_dir'].join('packages')
-  env_prefixes = {
-      'GOPATH': [gopath_dir],
-      'PATH': SetupExecutables(api, cipd_root) + [gopath_dir.join('bin')],
-  }
-  env = {
-      'GO111MODULE': 'on',
-  }
-
-  # Checkout
-  # We do not have CI builder, but let me confirm.
-  assert api.tryserver.is_tryserver
-  ref = api.tryserver.gerrit_change_fetch_ref
-  api.git.checkout(repository, ref=ref, dir_path=goma_src_dir)
-
-  with api.context(cwd=api.path['checkout'],
-                   env_prefixes=env_prefixes,
-                   env=env):
-    # Set up modules.
-    api.step('list modules',
-             ['go', 'list', '-m', 'all'])
-    # Generate proto
-    api.step('generate proto',
-             ['go', 'generate', api.path.join(package_base, 'proto', '...')])
-    # Build
-    api.step('build',
-             ['go', 'install', api.path.join(package_base, 'cmd', '...')])
-    # Test
-    api.step('test',
-             ['go', 'test', '-race', '-cover',
-              api.path.join(package_base, '...')])
-    # Vet
-    api.step('go vet',
-             ['go', 'vet', api.path.join(package_base, '...')])
-    # Go fmt
-    api.step('go fmt',
-             ['go', 'fmt', api.path.join(package_base, '...')])
-    # Check diff
-    # TODO(yyanagisawa): add --exit-code in the future.
-    #                    There is known difference, and we cannot enforce the
-    #                    step.
-    api.git('diff', name='check git diff')
+  api.goma_server.BuildAndTest(repository, package_base,
+                               SetupExecutables(api, cipd_root))
 
 
 def GenTests(api):

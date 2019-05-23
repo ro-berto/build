@@ -1,0 +1,283 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=4840",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit fetch current CL info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/40/4840/2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[CACHE]/builder/goma_src",
+      "--url",
+      "git://goma-server/"
+    ],
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "refs/changes/40/4840/2",
+      "--progress"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "infra_step": true,
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "infra_step": true,
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "infra_step": true,
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "infra_step": true,
+    "name": "submodule update"
+  },
+  {
+    "cmd": [
+      "go",
+      "list",
+      "-m",
+      "all"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "list modules"
+  },
+  {
+    "cmd": [
+      "go",
+      "generate",
+      "goma-server/proto/..."
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "generate proto"
+  },
+  {
+    "cmd": [
+      "go",
+      "install",
+      "goma-server/cmd/..."
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "build"
+  },
+  {
+    "cmd": [
+      "go",
+      "test",
+      "-race",
+      "-cover",
+      "goma-server/..."
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "test"
+  },
+  {
+    "cmd": [
+      "go",
+      "vet",
+      "goma-server/..."
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "go vet"
+  },
+  {
+    "cmd": [
+      "go",
+      "fmt",
+      "goma-server/..."
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "name": "go fmt"
+  },
+  {
+    "cmd": [
+      "git",
+      "diff",
+      "--exit-code"
+    ],
+    "cwd": "[CACHE]/builder/goma_src",
+    "env": {
+      "GO111MODULE": "on"
+    },
+    "env_prefixes": {
+      "GOPATH": [
+        "[CACHE]/builder/go"
+      ],
+      "PATH": [
+        "/home/goma",
+        "[CACHE]/builder/go/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "check git diff"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]
