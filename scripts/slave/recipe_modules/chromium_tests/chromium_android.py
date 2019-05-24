@@ -469,6 +469,11 @@ def stock_cronet_config(name, config='Release', **kwargs):
 
 
 SPEC['builders'].update([
+  stock_config(
+      'android-code-coverage',
+      config='Debug',
+      gclient_apply_config=['android', 'use_clang_coverage'],
+      chromium_config_kwargs={'TARGET_BITS': 64}),
   stock_config('android-incremental-dbg', config='Debug'),
   stock_config('android-jumbo-rel'),
   stock_config(
