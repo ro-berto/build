@@ -64,8 +64,6 @@ def CommitChecks(input_api, output_api):
         join('tests'),
       ]))
 
-  output.extend(CheckExternalBuildersPylMastersAreInSync(input_api, output_api))
-
   tests = []
 
   # masters_test can be very slow, so only add it if relevant files have been
@@ -163,21 +161,6 @@ def BuildInternalCheck(output, input_api, output_api):
       return [output_api.PresubmitNotifyResult(
           'You have a build_internal checkout. '
           'Updating it may resolve some issues.')]
-  return []
-
-
-def CheckExternalBuildersPylMastersAreInSync(input_api, output_api):
-  script_path = input_api.os_path.join('scripts', 'tools', 'buildbot-tool')
-  proc = input_api.subprocess.Popen([
-      script_path,
-      'check',
-      '--external-only'
-      ], stdout=input_api.subprocess.PIPE, stderr=input_api.subprocess.STDOUT)
-  out, _ = proc.communicate()
-  if proc.returncode or out:
-    return [output_api.PresubmitError('`scripts/tools/buildbot-tool '
-                                      'check --external-only` returned '
-                                      '%d:\n%s\n' % (proc.returncode, out))]
   return []
 
 

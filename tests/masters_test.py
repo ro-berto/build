@@ -214,7 +214,6 @@ def main(argv):
   ))
   public_masters = {
       'master.chromium': 'Chromium',
-      'master.chromium.clang': 'ChromiumClang',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
   }
   all_masters = {base_dir: public_masters}
