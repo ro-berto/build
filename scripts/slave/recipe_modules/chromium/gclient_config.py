@@ -127,6 +127,10 @@ def chromeos_amd64_generic(c):
   c.solutions[0].custom_vars['cros_board'] = 'amd64-generic'
 
 @CONFIG_CTX(includes=['chromeos'])
+def chromeos_arm_generic(c): # pragma: no cover
+  c.solutions[0].custom_vars['cros_board'] = 'arm-generic'
+
+@CONFIG_CTX(includes=['chromeos'])
 def chromeos_betty(c): # pragma: no cover
   c.solutions[0].custom_vars['cros_board'] = 'betty'
 
