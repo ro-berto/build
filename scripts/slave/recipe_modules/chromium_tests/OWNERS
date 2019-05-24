@@ -45,11 +45,7 @@ per-file trybots.py=simonhatch@chromium.org
 per-file trybots.py=thakis@chromium.org
 
 # For goma canary bots config.
-per-file chromium_fyi.py=sque@chromium.org
-per-file chromium_fyi.py=ukai@chromium.org
-per-file chromium_fyi.py=yyanagisawa@chromium.org
+per-file chromium_fyi.py=file://scripts/slave/goma/GOMA_OWNERS
 
 # for goma staging bots config.
-per-file chromium_goma.py=sque@chromium.org
-per-file chromium_goma.py=ukai@chromium.org
-per-file chromium_goma.py=yyanagisawa@chromium.org
+per-file chromium_goma.py=file://scripts/slave/goma/GOMA_OWNERS

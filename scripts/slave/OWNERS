@@ -1,11 +1,8 @@
 # README.recipes.md is auto-generated, so all owners of recipes need access.
 per-file README.recipes.md=*
 
-per-file goma_utils.py=yyanagisawa@chromium.org
-
-per-file upload_goma_logs.py=tikuta@chromium.org
-per-file upload_goma_logs.py=ukai@chromium.org
-per-file upload_goma_logs.py=yyanagisawa@chromium.org
+per-file goma_utils.py=file://scripts/slave/goma/GOMA_OWNERS
+per-file upload_goma_logs.py=file://scripts/slave/goma/GOMA_OWNERS
 
 # tikuta is OWNER of goma related changes.
 tikuta@chromium.org
