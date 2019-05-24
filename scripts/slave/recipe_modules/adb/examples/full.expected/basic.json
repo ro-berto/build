@@ -3,8 +3,8 @@
     "cmd": [],
     "name": "adb paths",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result@default: Path('checkout', 'third_party','android_tools','sdk','platform-tools','adb')@@@",
-      "@@@STEP_LOG_LINE@result@custom: Path('checkout', 'custom','adb','path')@@@",
+      "@@@STEP_LOG_LINE@result@default: Path([CHECKOUT], 'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')@@@",
+      "@@@STEP_LOG_LINE@result@custom: Path([CHECKOUT], 'custom', 'adb', 'path')@@@",
       "@@@STEP_LOG_END@result@@@"
     ]
   },
