@@ -1683,7 +1683,8 @@ class SwarmingTest(Test):
           '[collect error] %s' % self.step_name(suffix),
           '%s wasn\'t triggered' % self.target_name)
 
-    step_result = api.chromium_swarming.collect_task(self._tasks[suffix])
+    step_result, has_valid_results = api.chromium_swarming.collect_task(
+      self._tasks[suffix])
     self._suffix_step_name_map[suffix] = step_result.step['name']
 
     step_result.presentation.logs['step_metadata'] = (
@@ -1691,8 +1692,13 @@ class SwarmingTest(Test):
                    indent=2)
     ).splitlines()
 
-    self.update_test_run(
-        api, suffix, self.validate_task_results(api, step_result))
+    # TODO(martiniss): Consider moving this into some sort of base
+    # validate_task_results implementation.
+    results = self.validate_task_results(api, step_result)
+    if not has_valid_results:
+      results['valid'] = False
+
+    self.update_test_run(api, suffix, results)
     return step_result
 
   @property
@@ -2652,7 +2658,8 @@ class SwarmingIosTest(SwarmingTest):
         'The task should have been triggered and have an '
         'associated swarming task')
 
-    step_result = api.chromium_swarming.collect_task(task['task'])
+    step_result, has_valid_results = api.chromium_swarming.collect_task(
+      task['task'])
 
     # Add any iOS test runner results to the display.
     shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
@@ -2684,8 +2691,8 @@ class SwarmingIosTest(SwarmingTest):
         pass_fail_counts[test]['fail_count'] += 1
       test_count = len(passed_tests) + len(flaked_tests) + len(failed_tests)
       canonical_results = api.test_utils.canonical.result_format(
-          valid=True, failures=failed_tests, total_tests_ran=test_count,
-          pass_fail_counts=pass_fail_counts)
+          valid=has_valid_results, failures=failed_tests,
+          total_tests_ran=test_count, pass_fail_counts=pass_fail_counts)
       self.update_test_run(api, suffix, canonical_results)
 
       step_result.presentation.logs['test_summary.json'] = api.json.dumps(

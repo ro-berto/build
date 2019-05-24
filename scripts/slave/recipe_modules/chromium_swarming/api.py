@@ -1136,7 +1136,11 @@ class SwarmingApi(recipe_api.RecipeApi):
                           results. Defaults to json.output().
       name: Name to use for the collect step.
       gen_step_test_data: A generator that produces default step_test_data.
-    Returns: A StepData result for the recipe step.
+    Returns: A StepData result for the recipe step, and a boolean indicating if
+             the task results should be considered valid.
+             They can be invalid if the task didn't successfully execute as
+             expected; for example, if the task timed out or an internal
+             swarming failure occured.
     """
     task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
 
@@ -1230,7 +1234,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     for k, v in links.iteritems():
       step_result.presentation.links[k] = v
 
-    exception = self._handle_summary_json(task, step_result)
+    exception, has_valid_results = self._handle_summary_json(task, step_result)
 
     if (step_result.retcode != 0 and failure_as_exception and not
         task.ignore_task_failure):
@@ -1241,7 +1245,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if exception and failure_as_exception:
       raise exception
 
-    return step_result
+    return step_result, has_valid_results
 
   def _check_for_missing_shard(self, merged_results_json, active_step, task):
     if merged_results_json:
@@ -1270,7 +1274,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       return self.test_api.canned_summary_output(
         dispatched_step_test_data, task.shards, task.shard_indices)
 
-    step_result = self._default_collect_step(
+    step_result, has_valid_results = self._default_collect_step(
         task,
         output_placeholder=output_placeholder,
         gen_step_test_data=gen_default_step_test_data,
@@ -1282,7 +1286,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if gtest_results and gtest_results.valid:
       self._check_for_missing_shard(gtest_results.raw, step_result, task)
 
-    return step_result
+    return step_result, has_valid_results
 
   def _merge_isolated_script_perftest_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
@@ -1400,7 +1404,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       return self.test_api.canned_summary_output(
           dispatched_task_placeholder, task.shards, task.shard_indices)
 
-    step_result = self._default_collect_step(
+    step_result, has_valid_results = self._default_collect_step(
         task, gen_step_test_data=gen_default_step_test_data,
         failure_as_exception=False, **kwargs)
 
@@ -1429,7 +1433,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       'data': perftest_results
     }
 
-    return step_result
+    return step_result, has_valid_results
 
   def get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
@@ -1471,9 +1475,15 @@ class SwarmingApi(recipe_api.RecipeApi):
     Args:
       * task: The Task object with dispatched shards.
       * step_result: The StepData from the collect step.
-    Returns: A StepFailure() exception describing an expected error.
+    Returns: A StepFailure() exception describing an expected error, and a
+             boolean representing if the results from this swarming task should
+             be considered valid.
              Examples of expected errors include: An expired shard, a timed
              out shard, or test failures. If there are no issues, returns None.
+             The task will be considered valid as long as it was able to
+             successfully complete execution as expected. A failed task still
+             can have valid results. A task which times out or has an internal
+             failure does not, since the task didn't execute as intended.
     Raises: An InfraFailure() if there is an unexpected error. Examples include
             if the swarming summary is formatted incorrectly.
     """
@@ -1486,6 +1496,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Some expected errors [e.g. expiration] should present as EXCEPTION
     # [purple].
     expected_error_present_as_exception = False
+    # Do we have valid results? We count shards as not having valid resuls if
+    # they weren't able to complete execution normally, due to timing out or
+    # the bot dying. Completing execution, but failing, gives valid results.
+    has_valid_results = True
     failed_shards = []
 
     summary_shards = summary['shards']
@@ -1502,12 +1516,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and shard.get('deduped_from'):
         display_text += ' (deduped)'
 
-      exist_failure = False
       if not shard:
         display_text = 'shard #%d failed without producing output.json' % index
         unexpected_errors.append(
             (index, 'Details unknown (missing shard results)'))
-        exist_failure = True
+        failed_shards.append(index)
+        has_valid_results = False
       elif shard.get('internal_failure'):
         display_text = (
           'shard #%d had an internal swarming failure' % index)
@@ -1517,13 +1531,15 @@ class SwarmingApi(recipe_api.RecipeApi):
         # we mark this as an unexpected error.
         expected_errors.append((index, 'Internal swarming failure'))
         expected_error_present_as_exception = True
-        exist_failure = True
+        failed_shards.append(index)
+        has_valid_results = False
       elif shard.get('state') == 'EXPIRED':
         display_text = (
           'shard #%d expired, not enough capacity' % index)
         expected_errors.append(display_text)
         expected_error_present_as_exception = True
-        exist_failure = True
+        failed_shards.append(index)
+        has_valid_results = False
       elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
           display_text = (
@@ -1533,7 +1549,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           display_text = (
               'shard #%d timed out, took too much time to complete' % index)
         expected_errors.append(display_text)
-        exist_failure = True
+        failed_shards.append(index)
+        has_valid_results = False
       elif self._get_exit_code(shard) != 0:
         # TODO(bpastene): Add coverage for this code.
         if duration is not None:  # pragma: no cover
@@ -1541,9 +1558,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         else:
           display_text = 'shard #%d (failed)' % index
         expected_errors.append(display_text)
-        exist_failure = True
-
-      if exist_failure:
         failed_shards.append(index)
 
       # We only want to show shards if they were dispatched in this retry
@@ -1586,9 +1600,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_result.presentation.status = (self.m.step.EXCEPTION if
           expected_error_present_as_exception else self.m.step.FAILURE)
       return recipe_api.StepFailure(str(expected_errors),
-                                    result=step_result)
+                                    result=step_result), has_valid_results
 
-    return None
+    return None, has_valid_results
 
   def get_collect_cmd_args(self, task):
     """
