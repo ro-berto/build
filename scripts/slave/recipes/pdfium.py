@@ -34,18 +34,19 @@ GS_BUCKET = 'skia-pdfium-gm'
 UPLOAD_ATTEMPTS = 5
 
 PROPERTIES = {
-  'skia': Property(default=False, kind=bool),
-  'skia_paths': Property(default=False, kind=bool),
-  'xfa': Property(default=False, kind=bool),
-  'memory_tool': Property(default=None, kind=str),
-  'v8': Property(default=True, kind=bool),
-  'target_cpu': Property(default=None, kind=str),
   'clang': Property(default=False, kind=bool),
+  'component': Property(default=False, kind=bool),
+  'jumbo': Property(default=False, kind=bool),
+  'memory_tool': Property(default=None, kind=str),
   'msvc': Property(default=False, kind=bool),
   'rel': Property(default=False, kind=bool),
-  'jumbo': Property(default=False, kind=bool),
+  'skia_paths': Property(default=False, kind=bool),
+  'skia': Property(default=False, kind=bool),
   'skip_test': Property(default=False, kind=bool),
+  'target_cpu': Property(default=None, kind=str),
   'target_os': Property(default=None, kind=str),
+  'v8': Property(default=True, kind=bool),
+  'xfa': Property(default=False, kind=bool),
 }
 
 
@@ -65,7 +66,8 @@ def _CheckoutSteps(api, target_os):
     return update_step.presentation.properties['got_revision']
 
 
-def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
+def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo,
+             component):
   out_dir = 'release' if rel else 'debug'
 
   if skia:
@@ -85,6 +87,9 @@ def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
   if jumbo:
     out_dir += "_jumbo"
 
+  if component:
+    out_dir += "_component"
+
   if memory_tool == 'asan':
     out_dir += "_asan"
   elif memory_tool == 'msan':
@@ -98,7 +103,7 @@ def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
 # _GNGenBuilds calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
 def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-                 msvc, rel, jumbo, target_os, out_dir):
+                 msvc, rel, jumbo, component, target_os, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
@@ -108,7 +113,7 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
   # Prepare the arguments to pass in.
   args = [
       'is_debug=%s' % gn_bool[not rel],
-      'is_component_build=false',
+      'is_component_build=%s' % gn_bool[component],
       'pdf_enable_v8=%s' % gn_bool[v8],
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
@@ -291,16 +296,16 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
 
 def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-             msvc, rel, jumbo, skip_test, target_os):
+             msvc, rel, jumbo, component, skip_test, target_os):
   revision = _CheckoutSteps(api, target_os)
 
   out_dir = _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
-                     jumbo)
+                     jumbo, component)
 
   with api.osx_sdk('mac'):
     build_config = _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8,
-                                target_cpu, clang, msvc, rel, jumbo, target_os,
-                                out_dir)
+                                target_cpu, clang, msvc, rel, jumbo, component,
+                                target_os, out_dir)
     _BuildSteps(api, clang, out_dir)
 
     if skip_test:
@@ -556,6 +561,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_component') +
+      api.platform('win', 64) +
+      api.properties(component=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'win_component')
+  )
+
+  yield (
       api.test('win_skia') +
       api.platform('win', 64) +
       api.properties(skia=True,
@@ -638,6 +654,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_component') +
+      api.platform('linux', 64) +
+      api.properties(component=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'linux_component')
+  )
+
+  yield (
       api.test('linux_skia') +
       api.platform('linux', 64) +
       api.properties(skia=True,
@@ -686,6 +713,17 @@ def GenTests(api):
                      mastername='client.pdfium',
                      bot_id='test_slave') +
       gen_ci_build(api, 'linux_xfa_jumbo')
+  )
+
+  yield (
+      api.test('mac_component') +
+      api.platform('mac', 64) +
+      api.properties(component=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername='client.pdfium',
+                     bot_id='test_slave') +
+      gen_ci_build(api, 'mac_component')
   )
 
   yield (
