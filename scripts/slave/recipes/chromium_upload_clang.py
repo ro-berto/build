@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -9,11 +10,14 @@ DEPS = [
   'chromium',
   'depot_tools/depot_tools',
   'depot_tools/gsutil',
+  'depot_tools/osx_sdk',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
 ]
 
@@ -72,17 +76,44 @@ def RunSteps(api):
       api.path['checkout'].join('build', 'mac_toolchain.py'))
   api.python('update fuchsia sdk',
       api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py'))
-  with api.depot_tools.on_path():
-    api.python('download binutils',
-        api.path['checkout'].join('third_party', 'binutils', 'download.py'))
 
-    # Note this shares above's context manager.
-    api.python(
-        'package clang',
-        api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
-        args=['--upload'])
+  if api.runtime.is_luci:
+    with api.osx_sdk('mac'):
+      with api.depot_tools.on_path():
+        api.python('download binutils',
+            api.path['checkout'].join('third_party', 'binutils', 'download.py'))
+        api.python(
+            'package clang',
+            api.path['checkout'].join(
+                'tools', 'clang', 'scripts', 'package.py'),
+            args=['--upload'])
+  else:
+    with api.depot_tools.on_path():
+      api.python('download binutils',
+          api.path['checkout'].join('third_party', 'binutils', 'download.py'))
+      api.python(
+          'package clang',
+          api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
+          args=['--upload'])
 
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
+
+  yield (
+      api.test('mac-luci') +
+      api.platform.name('mac') +
+      api.runtime(is_experimental=False, is_luci=True) +
+      api.properties.tryserver(
+          buildername='mac_upload_clang',
+          mastername='tryserver.chromium.mac') +
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='mac_upload_clang',
+          git_repo='https://chromium.googlesource.com/chromium/src') +
+      api.post_process(post_process.MustRun, 'install xcode') +
+      api.post_process(post_process.MustRun, 'select XCode') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
