@@ -12,7 +12,8 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  api.v8.apply_bot_config({'triggers': ['v8_triggered_bot']})
+  api.v8.apply_bot_config(
+      {'triggers': ['v8_triggered_bot'], 'triggers_proxy': True})
   api.v8.checkout()
   api.v8.load_static_test_configs()
   api.v8.compile(

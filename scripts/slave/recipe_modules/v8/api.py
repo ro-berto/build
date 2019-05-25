@@ -603,6 +603,13 @@ class V8Api(recipe_api.RecipeApi):
           step_name='isolate tests (perf)',
       )
       self.isolated_tests.update(self.m.isolate.isolated_tests)
+      if not self.m.tryserver.is_tryserver:
+        self.m.perf_dashboard.upload_isolate(
+            self.m.buildbucket.builder_name,
+            self.m.perf_dashboard.get_change_info(
+                [{'repository': 'v8', 'git_hash': self.revision}]),
+            self.m.isolate.isolate_server,
+            self.m.isolate.isolated_tests)
       # https://crbug.com/944904
       self.m.isolate.isolate_server = 'https://isolateserver.appspot.com'
 
