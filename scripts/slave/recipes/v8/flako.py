@@ -312,7 +312,8 @@ class Runner(object):
           self.num_shards = min(self.num_shards * 2, MAX_SWARMING_SHARDS)
         else:
           self.multiplier *= 2
-    parent.presentation.step_text = 'failed to reproduce the flaky test'
+        if i == self.max_calibration_attempts - 1:
+          parent.presentation.step_text = 'failed to reproduce the flaky test'
     return False
 
   def _default_task_pass_test_data(self):
