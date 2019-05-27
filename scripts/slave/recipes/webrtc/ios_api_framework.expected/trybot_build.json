@@ -307,8 +307,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/ios_api_framework/src/tools_webrtc/ios/build_ios_libs.py",
-      "-r",
-      "170242",
       "--use-goma",
       "--extra-gn-args=goma_dir=\"[GOMA_CACHE]/client\"",
       "--verbose"

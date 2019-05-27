@@ -38,16 +38,18 @@ def RunSteps(api):
   try:
     build_script = api.path['checkout'].join('tools_webrtc', 'ios',
                                              'build_ios_libs.py')
-    if not api.tryserver.is_tryserver:
+    if api.tryserver.is_tryserver:
+      build_revision_number_args = []
+    else:
       api.step('cleanup', [build_script, '-c'])
+      build_revision_number_args = ['-r', api.webrtc.revision_number]
 
     step_result = api.python(
         'build',
         build_script,
-        args=['-r', api.webrtc.revision_number,
-              '--use-goma',
+        args=['--use-goma',
               '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
-              '--verbose'],
+              '--verbose'] + build_revision_number_args,
     )
     build_exit_status = step_result.retcode
   except api.step.StepFailure as e:
