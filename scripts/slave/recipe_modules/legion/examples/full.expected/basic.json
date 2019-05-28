@@ -205,8 +205,7 @@
       "Task",
       "task_path.isolated"
     ],
-    "name": "Running test for Test Controller",
-    "stdout": "/path/to/tmp/"
+    "name": "Running test for Test Controller"
   },
   {
     "jsonResult": null,

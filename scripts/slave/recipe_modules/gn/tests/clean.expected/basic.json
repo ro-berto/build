@@ -9,7 +9,6 @@
     ],
     "cwd": "[START_DIR]/out/Release",
     "name": "foobar",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[gn output]@@@"
     ]

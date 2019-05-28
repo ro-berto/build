@@ -12,7 +12,6 @@
     ],
     "infra_step": true,
     "name": "find isolated targets",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@glob@None/out/Release/dummy_target_1.isolated.gen.json@@@",
       "@@@STEP_LOG_LINE@glob@None/out/Release/dummy_target_2.isolated.gen.json@@@",

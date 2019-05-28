@@ -305,7 +305,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -399,8 +398,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "First build confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "First build confirm no-op"
   },
   {
     "cmd": [
@@ -452,7 +450,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -633,8 +630,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "Second build confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "Second build confirm no-op"
   },
   {
     "cmd": [],

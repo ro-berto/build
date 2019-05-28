@@ -438,8 +438,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -645,8 +644,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git number",
-    "stdout": "/path/to/tmp/"
+    "name": "git number"
   },
   {
     "cmd": [

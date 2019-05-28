@@ -259,7 +259,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -311,8 +310,7 @@
       "--format=json"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "generate gn target list",
-    "stdout": "/path/to/tmp/"
+    "name": "generate gn target list"
   },
   {
     "cmd": [
@@ -485,8 +483,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -799,7 +796,6 @@
     "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "read revision",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
@@ -908,7 +904,6 @@
     "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "read revision (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]

@@ -180,7 +180,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -223,7 +222,6 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "name": "calculate targets",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@targets@target1@@@",
       "@@@STEP_LOG_LINE@targets@target2@@@",
@@ -361,8 +359,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

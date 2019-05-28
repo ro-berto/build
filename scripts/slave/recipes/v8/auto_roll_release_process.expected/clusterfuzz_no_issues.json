@@ -87,9 +87,7 @@
       "--results-file",
       "/path/to/tmp/json"
     ],
-    "name": "check clusterfuzz",
-    "stderr": "/path/to/tmp/err",
-    "stdout": "/path/to/tmp/out"
+    "name": "check clusterfuzz"
   },
   {
     "jsonResult": null,

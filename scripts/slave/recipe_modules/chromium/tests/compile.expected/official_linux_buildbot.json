@@ -191,8 +191,7 @@
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

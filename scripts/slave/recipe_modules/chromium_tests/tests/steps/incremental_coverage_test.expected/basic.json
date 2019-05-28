@@ -26,8 +26,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "Finding changed files matching diff filter: A",
-    "stdout": "/path/to/tmp/"
+    "name": "Finding changed files matching diff filter: A"
   },
   {
     "cmd": [
@@ -82,8 +81,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "Finding changed files matching diff filter: M",
-    "stdout": "/path/to/tmp/"
+    "name": "Finding changed files matching diff filter: M"
   },
   {
     "cmd": [
@@ -95,8 +93,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "Finding lines changed in modified file fake/file1.java",
-    "stdout": "/path/to/tmp/"
+    "name": "Finding lines changed in modified file fake/file1.java"
   },
   {
     "cmd": [
@@ -108,8 +105,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "Finding lines changed in modified file fake/file2.java;",
-    "stdout": "/path/to/tmp/"
+    "name": "Finding lines changed in modified file fake/file2.java;"
   },
   {
     "cmd": [
@@ -121,8 +117,7 @@
     ],
     "cwd": "None",
     "infra_step": true,
-    "name": "Finding lines changed in modified file fake/file3.java",
-    "stdout": "/path/to/tmp/"
+    "name": "Finding lines changed in modified file fake/file3.java"
   },
   {
     "cmd": [

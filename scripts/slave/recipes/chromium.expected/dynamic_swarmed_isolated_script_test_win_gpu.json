@@ -249,7 +249,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -363,7 +362,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup builder GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]

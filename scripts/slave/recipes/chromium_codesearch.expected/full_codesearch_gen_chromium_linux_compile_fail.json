@@ -259,7 +259,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -311,8 +310,7 @@
       "--format=json"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "generate gn target list",
-    "stdout": "/path/to/tmp/"
+    "name": "generate gn target list"
   },
   {
     "cmd": [

@@ -356,7 +356,6 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "name": "bootstrap swarming.swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@1.2.3@@@"

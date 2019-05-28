@@ -243,7 +243,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -800,7 +799,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -955,8 +953,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile (without patch) confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile (without patch) confirm no-op"
   },
   {
     "cmd": [],
@@ -1131,7 +1128,6 @@
     ],
     "infra_step": true,
     "name": "find isolated targets",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json@@@",
       "@@@STEP_LOG_LINE@glob@[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json@@@",

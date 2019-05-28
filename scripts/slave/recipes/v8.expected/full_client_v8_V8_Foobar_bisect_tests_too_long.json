@@ -119,7 +119,6 @@
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
@@ -172,7 +171,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -256,7 +254,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

@@ -480,7 +480,6 @@
     ],
     "infra_step": true,
     "name": "find images",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\pdfium\\out\\debug_v8\\gold_output\\someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"
@@ -549,7 +548,6 @@
     ],
     "infra_step": true,
     "name": "find images (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\pdfium\\out\\debug_v8\\gold_output\\someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"

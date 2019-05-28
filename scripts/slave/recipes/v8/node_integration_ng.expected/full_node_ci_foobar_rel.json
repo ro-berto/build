@@ -252,7 +252,6 @@
       ]
     },
     "name": "build.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

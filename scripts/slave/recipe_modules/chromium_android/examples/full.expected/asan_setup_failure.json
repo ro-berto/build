@@ -319,8 +319,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git number",
-    "stdout": "/path/to/tmp/"
+    "name": "git number"
   },
   {
     "cmd": [
@@ -913,8 +912,7 @@
       "[START_DIR]/src/tools/clang/scripts/update.py",
       "--print-clang-version"
     ],
-    "name": "get_clang_version",
-    "stdout": "/path/to/tmp/"
+    "name": "get_clang_version"
   },
   {
     "cmd": [],

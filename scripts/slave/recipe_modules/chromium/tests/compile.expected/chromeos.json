@@ -320,8 +320,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

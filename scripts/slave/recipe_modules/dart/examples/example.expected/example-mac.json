@@ -736,7 +736,6 @@
     },
     "infra_step": true,
     "name": "gclient get checked-in SDK version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -758,7 +757,6 @@
     },
     "infra_step": true,
     "name": "gclient get co19 version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -773,8 +771,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
+    "name": "git show"
   },
   {
     "cmd": [

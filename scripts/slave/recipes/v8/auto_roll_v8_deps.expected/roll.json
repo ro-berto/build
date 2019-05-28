@@ -286,7 +286,6 @@
     },
     "infra_step": true,
     "name": "gclient get src deps",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
@@ -318,7 +317,6 @@
     },
     "infra_step": true,
     "name": "gclient get v8 deps",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
       "@@@STEP_LOG_LINE@deps@  \"base/trace_event/common\": \"https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd\", @@@",
@@ -344,7 +342,6 @@
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "look up base_trace_event_common",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@deadbeef@@@"
     ]
@@ -380,7 +377,6 @@
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "look up build",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@deadbeef@@@"
     ]
@@ -541,7 +537,6 @@
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "git diff",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@diff@some difference@@@",
       "@@@STEP_LOG_END@diff@@@"
@@ -574,8 +569,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git commit",
-    "stdout": "/path/to/tmp/"
+    "name": "git commit"
   },
   {
     "cmd": [

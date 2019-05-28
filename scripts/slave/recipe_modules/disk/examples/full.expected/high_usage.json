@@ -7,7 +7,6 @@
       "[START_DIR]"
     ],
     "name": "usage1",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@90.00/100.00 GiB (90%) used@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -26,7 +25,6 @@
       "[START_DIR]"
     ],
     "name": "usage2",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@51.00/100.00 GiB (51%) used. Delta: -39936.00 MiB@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

@@ -303,7 +303,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -402,7 +401,6 @@
     },
     "infra_step": true,
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"

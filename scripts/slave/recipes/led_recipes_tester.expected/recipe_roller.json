@@ -301,7 +301,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led get-builder",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -328,7 +327,6 @@
     "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "analyze+launch luci.chromium.try:linux-rel.git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@files@[CACHE]/build/build/random/file.py@@@",
@@ -366,7 +364,6 @@
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Using fast testing CL@@@",
@@ -383,7 +380,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led edit-recipe-bundle",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -400,7 +396,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led edit",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -415,7 +410,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:linux-rel.led launch",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -440,7 +434,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led get-builder",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -467,7 +460,6 @@
     "cwd": "[CACHE]/build/build",
     "infra_step": true,
     "name": "analyze+launch luci.chromium.try:win7-rel.git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@files@[CACHE]/build/build/random/file.py@@@",
@@ -505,7 +497,6 @@
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Using fast testing CL@@@",
@@ -522,7 +513,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led edit-recipe-bundle",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -539,7 +529,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led edit",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -554,7 +543,6 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led launch",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",

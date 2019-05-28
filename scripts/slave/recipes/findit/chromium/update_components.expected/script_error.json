@@ -245,7 +245,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -375,7 +374,6 @@
       "[START_DIR]/modified_map.json"
     ],
     "name": "Run component extraction script to generate mapping",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@extract_components errors@Dummy script error@@@",
       "@@@STEP_LOG_END@extract_components errors@@@",

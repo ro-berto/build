@@ -15,7 +15,6 @@
       "3"
     ],
     "name": "crrev get commit position for abcdeabcde0123456789abcdeabcde0123456789",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"

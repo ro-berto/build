@@ -284,7 +284,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -330,7 +329,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "calculate all_fuzzers",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@//foo/bar:target1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@//foo/bar:target2@@@",
@@ -356,7 +354,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "calculate no_fuzzers",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@//foo/bar:target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
@@ -377,7 +374,6 @@
     },
     "infra_step": true,
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"
@@ -483,7 +479,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
@@ -529,7 +524,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "list gn targets",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[targets]@target2@@@",
       "@@@STEP_LOG_END@raw_io.output_text[targets]@@@"
@@ -661,8 +655,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

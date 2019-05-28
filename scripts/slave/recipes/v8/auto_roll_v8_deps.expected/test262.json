@@ -22,8 +22,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git commit",
-    "stdout": "/path/to/tmp/"
+    "name": "git commit"
   },
   {
     "cmd": [

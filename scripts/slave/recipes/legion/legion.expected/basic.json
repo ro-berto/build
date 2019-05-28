@@ -220,8 +220,7 @@
       "task-hash",
       "[START_DIR]/src/testing/legion/examples/hello_world/task_test.isolated"
     ],
-    "name": "Running test for hello_world_test",
-    "stdout": "/path/to/tmp/"
+    "name": "Running test for hello_world_test"
   },
   {
     "cmd": [
@@ -283,8 +282,7 @@
       "task-hash",
       "[START_DIR]/src/testing/legion/examples/subprocess/task.isolated"
     ],
-    "name": "Running test for subprocess_test",
-    "stdout": "/path/to/tmp/"
+    "name": "Running test for subprocess_test"
   },
   {
     "cmd": [
@@ -367,8 +365,7 @@
       "http-server",
       "[START_DIR]/src/testing/legion/examples/http_example/http_server.isolated"
     ],
-    "name": "Running test for http_test",
-    "stdout": "/path/to/tmp/"
+    "name": "Running test for http_test"
   },
   {
     "jsonResult": null,

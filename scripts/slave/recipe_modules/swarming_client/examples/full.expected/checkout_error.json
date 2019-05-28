@@ -56,7 +56,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.4.4@@@"
     ]
@@ -69,7 +68,6 @@
       "--version"
     ],
     "name": "isolate.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.3.1@@@"
     ]

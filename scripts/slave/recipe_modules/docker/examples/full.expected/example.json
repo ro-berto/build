@@ -12,7 +12,6 @@
       "version"
     ],
     "name": "docker version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@1.2.3@@@"
     ]
@@ -34,8 +33,7 @@
       "3m"
     ],
     "infra_step": true,
-    "name": "get access token for default account",
-    "stdout": "/path/to/tmp/"
+    "name": "get access token for default account"
   },
   {
     "cmd": [

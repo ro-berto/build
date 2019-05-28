@@ -178,7 +178,6 @@
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
@@ -210,7 +209,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -294,7 +292,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -309,7 +306,6 @@
     "infra_step": true,
     "name": "trigger",
     "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"try.triggered\", \"builder\": \"v8_foobar_rel_ng_triggered\", \"project\": \"v8\"}, \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"12\", \"project\": \"v8/v8\"}], \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"project\": \"v8/v8\"}, \"properties\": {\"category\": \"cq\", \"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"v8_foobar_rel_ng\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"parent_got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"v8/v8\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"reason\": \"CQ\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"buildset\", \"value\": \"patch/gerrit/chromium-review.googlesource.com/456789/12\"}, {\"key\": \"user_agent\", \"value\": \"cq\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",

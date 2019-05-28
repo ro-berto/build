@@ -744,7 +744,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "bootstrap swarming.swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@1.2.3@@@"
@@ -830,7 +829,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "isolate.shard EarlGrey test",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

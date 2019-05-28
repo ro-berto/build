@@ -47,7 +47,6 @@
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
     "name": "read revision",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
@@ -255,7 +254,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -277,8 +275,7 @@
       "linux",
       "--verbose"
     ],
-    "name": "archive for linux",
-    "stdout": "/path/to/tmp/"
+    "name": "archive for linux"
   },
   {
     "cmd": [

@@ -46,7 +46,6 @@
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
     "name": "read revision",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
@@ -98,7 +97,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #0",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a0@https://chromium.googlesource.com/v8/v8/+/a0@@@"
     ]
@@ -149,7 +147,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #1",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a1@https://chromium.googlesource.com/v8/v8/+/a1@@@"
     ]
@@ -1349,7 +1346,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #2",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@"
     ]
@@ -2186,7 +2182,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #4",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a4@https://chromium.googlesource.com/v8/v8/+/a4@@@"
     ]
@@ -2204,7 +2199,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #5",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a5@https://chromium.googlesource.com/v8/v8/+/a5@@@"
     ]
@@ -3013,7 +3007,6 @@
     ],
     "infra_step": true,
     "name": "gsutil lookup isolates for #3",
-    "stderr": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@a3@https://chromium.googlesource.com/v8/v8/+/a3@@@"
     ]

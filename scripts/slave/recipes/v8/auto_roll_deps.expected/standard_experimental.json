@@ -262,8 +262,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/src",
     "infra_step": true,
-    "name": "git cat-file",
-    "stdout": "/path/to/tmp/"
+    "name": "git cat-file"
   },
   {
     "cmd": [],

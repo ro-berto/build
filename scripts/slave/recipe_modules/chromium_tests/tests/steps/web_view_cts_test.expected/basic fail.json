@@ -81,7 +81,6 @@
       "chromium-result-details"
     ],
     "name": "CTS: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]

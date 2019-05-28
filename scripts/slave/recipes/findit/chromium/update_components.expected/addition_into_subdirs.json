@@ -245,7 +245,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -374,8 +373,7 @@
       "-o",
       "[START_DIR]/modified_map.json"
     ],
-    "name": "Run component extraction script to generate mapping",
-    "stdout": "/path/to/tmp/"
+    "name": "Run component extraction script to generate mapping"
   },
   {
     "cmd": [
@@ -499,8 +497,7 @@
       "[START_DIR]/modified_map.json",
       "--include-subdirs"
     ],
-    "name": "Run component extraction script to generate mapping with subdirs",
-    "stdout": "/path/to/tmp/"
+    "name": "Run component extraction script to generate mapping with subdirs"
   },
   {
     "cmd": [

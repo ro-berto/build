@@ -133,7 +133,6 @@
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
@@ -186,7 +185,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -275,7 +273,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -759,7 +756,6 @@
     "infra_step": true,
     "name": "Bisect.Fetch changes",
     "stdin": "{\"buildNum\": 571, \"builder\": \"V8 Foobar\", \"master\": \"client.v8\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -931,7 +927,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a0.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -1017,7 +1012,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a0.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1356,7 +1350,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a2.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -1442,7 +1435,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a2.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1819,7 +1811,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a1.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
@@ -1905,7 +1896,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a1.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

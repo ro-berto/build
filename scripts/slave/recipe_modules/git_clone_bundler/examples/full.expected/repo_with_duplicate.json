@@ -70,7 +70,6 @@
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
     "name": "repo list",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@</br></br>path/to/foo : src/foo</br>path/to/bar : src/bar</br>path/to/bar-v10 : src/bar@@@"
     ]
@@ -114,8 +113,7 @@
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/foo",
     "infra_step": true,
-    "name": "lookup Git remote (src/foo)",
-    "stdout": "/path/to/tmp/"
+    "name": "lookup Git remote (src/foo)"
   },
   {
     "cmd": [
@@ -156,8 +154,7 @@
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484/path/to/bar",
     "infra_step": true,
-    "name": "lookup Git remote (src/bar)",
-    "stdout": "/path/to/tmp/"
+    "name": "lookup Git remote (src/bar)"
   },
   {
     "jsonResult": null,

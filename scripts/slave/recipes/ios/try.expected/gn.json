@@ -399,7 +399,6 @@
       "LANDMINES_VERBOSE": "1"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -441,7 +440,6 @@
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"
@@ -787,7 +785,6 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "name": "bootstrap swarming.swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@1.2.3@@@"

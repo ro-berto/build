@@ -96,7 +96,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
@@ -170,8 +169,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [
@@ -240,8 +238,7 @@
       "3m"
     ],
     "infra_step": true,
-    "name": "get access token for default account",
-    "stdout": "/path/to/tmp/"
+    "name": "get access token for default account"
   },
   {
     "cmd": [
@@ -329,7 +326,6 @@
     "infra_step": true,
     "name": "trigger",
     "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"v8_triggered_bot\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"archive\": \"gs://chromium-v8/archives/client.v8/V8 Foobar\", \"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"V8 Foobar\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"swarm_hashes\": {\"bot_default\": \"[dummy hash for bot_default]\", \"perf\": \"[dummy hash for perf]\"}}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:V8 Foobar\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"V8 Foobar/571\"}}], \"timestamp\": 1337000001500000}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -385,7 +381,6 @@
     "infra_step": true,
     "name": "trigger_internal",
     "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"v8_trigger_proxy\", \"project\": \"v8-internal\"}, \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"archive\": \"gs://chromium-v8/archives/client.v8/V8 Foobar\", \"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"V8 Foobar\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"swarm_hashes\": {\"bot_default\": \"[dummy hash for bot_default]\", \"perf\": \"[dummy hash for perf]\"}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"buildset\", \"value\": \"commit/gitiles/chromium.googlesource.com/v8/v8/+/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",

@@ -193,8 +193,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

@@ -341,7 +341,6 @@
     },
     "infra_step": true,
     "name": "gclient get checked-in SDK version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -366,7 +365,6 @@
     },
     "infra_step": true,
     "name": "gclient get co19 version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -384,8 +382,7 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
+    "name": "git show"
   },
   {
     "cmd": [
@@ -1067,7 +1064,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "deflaking.list tests to deflake (Test-step 1)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1092,7 +1088,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "deflaking.list tests to deflake (Test-step 2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1161,7 +1156,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "find unapproved new test failures",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1189,7 +1183,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "find unapproved new test failures (logs)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1214,7 +1207,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "find approved new test failures",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1242,7 +1234,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "find approved new test failures (logs)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1268,7 +1259,6 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "name": "find tests that began passing",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]

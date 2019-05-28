@@ -71,7 +71,6 @@
     ],
     "infra_step": true,
     "name": "measurements.Check binary size",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/v8/out/Release/d8: \t111@@@",

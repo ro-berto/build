@@ -74,7 +74,6 @@
       "list"
     ],
     "name": "repo list",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@</br></br>src/foo : foo</br>src/bar : bar@@@"
     ]

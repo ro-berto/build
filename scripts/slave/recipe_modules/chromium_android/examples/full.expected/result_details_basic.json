@@ -319,8 +319,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git number",
-    "stdout": "/path/to/tmp/"
+    "name": "git number"
   },
   {
     "cmd": [
@@ -976,7 +975,6 @@
       "chromium-result-details"
     ],
     "name": "SmallTest: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
@@ -1018,7 +1016,6 @@
       "chromium-result-details"
     ],
     "name": "unittests: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]

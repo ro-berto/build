@@ -215,7 +215,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -286,7 +285,6 @@
     "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "name": "git commits in range",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@revisions@r1@@@",
       "@@@STEP_LOG_END@revisions@@@"
@@ -599,7 +597,6 @@
     "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "name": "test r1.git diff to analyze commit",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@files@foo.cc@@@",
@@ -727,7 +724,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -899,7 +895,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.compile confirm no-op",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

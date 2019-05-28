@@ -111,7 +111,6 @@
       "[CACHE]/builder/sdk/tools/bots/find_base_commit.dart"
     ],
     "name": "find base commit",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text@deadbeef@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"

@@ -187,7 +187,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -339,7 +338,6 @@
       "PATH": "[BUILDER_CACHE]/Android_N5_Swarm/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_N5_Swarm/src/build/android:<PATH>"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -495,8 +493,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[BUILDER_CACHE]/Android_N5_Swarm/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android_N5_Swarm/src/build/android:<PATH>"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

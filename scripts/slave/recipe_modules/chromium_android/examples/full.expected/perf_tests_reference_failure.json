@@ -319,8 +319,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git number",
-    "stdout": "/path/to/tmp/"
+    "name": "git number"
   },
   {
     "cmd": [

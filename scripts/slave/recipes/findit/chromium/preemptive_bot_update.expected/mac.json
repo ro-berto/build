@@ -10,7 +10,6 @@
     "cwd": "[START_DIR]/src",
     "infra_step": true,
     "name": "git log",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@Checkout is ~3300001.500000 seconds old@@@"
     ]
@@ -216,7 +215,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]

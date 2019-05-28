@@ -201,7 +201,6 @@
       "--version"
     ],
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]
@@ -271,7 +270,6 @@
     "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git commits in range",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@revisions@r2@@@",
       "@@@STEP_LOG_LINE@revisions@r3@@@",
@@ -572,7 +570,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -652,7 +649,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -1255,7 +1251,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r4.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -1600,7 +1595,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
@@ -1680,7 +1674,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r5.lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"

@@ -753,7 +753,6 @@
     },
     "infra_step": true,
     "name": "gclient get checked-in SDK version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -775,7 +774,6 @@
     },
     "infra_step": true,
     "name": "gclient get co19 version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -790,8 +788,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
+    "name": "git show"
   },
   {
     "cmd": [
@@ -1422,7 +1419,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (test1)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1444,7 +1440,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (test2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1502,7 +1497,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find new test failures",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1525,7 +1519,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find new test failures (logs)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1545,7 +1538,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began passing",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1567,7 +1559,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find ignored flaky test failure logs",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1799,8 +1790,7 @@
       "--target=."
     ],
     "cwd": "[CLEANUP]",
-    "name": "downloading fileset test",
-    "stdout": "/path/to/tmp/out"
+    "name": "downloading fileset test"
   },
   {
     "jsonResult": null,

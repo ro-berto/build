@@ -286,7 +286,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "swarming.py --version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@0.8.6@@@"
     ]

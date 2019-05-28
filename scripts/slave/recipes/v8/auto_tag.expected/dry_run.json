@@ -145,8 +145,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "Check latest version file",
-    "stdout": "/path/to/tmp/"
+    "name": "Check latest version file"
   },
   {
     "cmd": [
@@ -156,8 +155,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "Check previous version file",
-    "stdout": "/path/to/tmp/"
+    "name": "Check previous version file"
   },
   {
     "cmd": [
@@ -247,8 +245,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git log",
-    "stdout": "/path/to/tmp/"
+    "name": "git log"
   },
   {
     "cmd": [
@@ -258,8 +255,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "Check head version file",
-    "stdout": "/path/to/tmp/"
+    "name": "Check head version file"
   },
   {
     "cmd": [
@@ -270,8 +266,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "git describe",
-    "stdout": "/path/to/tmp/"
+    "name": "git describe"
   },
   {
     "cmd": [],
@@ -287,7 +282,6 @@
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
     "name": "git ls-remote refs_heads_3.4-lkgr",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@ref@hsh_old@@@",
       "@@@STEP_LOG_END@ref@@@"

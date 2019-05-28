@@ -249,7 +249,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -292,7 +291,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "calculate all_fuzzers",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target2@@@",
@@ -315,7 +313,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "calculate v8_fuzzers",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@v8_target3@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
@@ -336,7 +333,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "name": "calculate no_clusterfuzz",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
@@ -501,8 +497,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],

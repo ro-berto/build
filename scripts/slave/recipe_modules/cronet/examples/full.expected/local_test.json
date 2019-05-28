@@ -268,7 +268,6 @@
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -349,8 +348,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [
@@ -766,7 +764,6 @@
       "chromium-result-details"
     ],
     "name": "cronet_sample_test_apk: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
@@ -805,7 +802,6 @@
       "chromium-result-details"
     ],
     "name": "cronet_smoketests_missing_native_library_instrumentation_apk: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
@@ -844,7 +840,6 @@
       "chromium-result-details"
     ],
     "name": "cronet_smoketests_platform_only_instrumentation_apk: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
@@ -883,7 +878,6 @@
       "chromium-result-details"
     ],
     "name": "cronet_test_instrumentation_apk: generate result details",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
     ]
@@ -1079,7 +1073,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args (2)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -1233,8 +1226,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op (2)",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op (2)"
   },
   {
     "cmd": [],
@@ -1423,8 +1415,7 @@
       "3m"
     ],
     "infra_step": true,
-    "name": "get access token for service-account-cronet-perf.json",
-    "stdout": "/path/to/tmp/"
+    "name": "get access token for service-account-cronet-perf.json"
   },
   {
     "cmd": [

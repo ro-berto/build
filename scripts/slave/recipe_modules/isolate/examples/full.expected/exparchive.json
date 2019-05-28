@@ -47,7 +47,6 @@
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,
     "name": "read revision",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
     ]
@@ -91,7 +90,6 @@
       "cat"
     ],
     "name": "read test spec",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_exparchive\"@@@",

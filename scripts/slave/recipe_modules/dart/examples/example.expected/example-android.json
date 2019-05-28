@@ -736,7 +736,6 @@
     },
     "infra_step": true,
     "name": "gclient get checked-in SDK version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -758,7 +757,6 @@
     },
     "infra_step": true,
     "name": "gclient get co19 version",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -773,8 +771,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
+    "name": "git show"
   },
   {
     "cmd": [
@@ -792,7 +789,6 @@
       "-s[CACHE]/builder/sdk/test.isolated"
     ],
     "name": "upload testing fileset test",
-    "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming fileset hash: test_hash@@@"
     ]
@@ -1365,7 +1361,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (android)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@Flaky/Test/1@@@",
@@ -1627,7 +1622,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began failing",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1651,7 +1645,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began failing (logs)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1674,7 +1667,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began passing",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1695,7 +1687,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find unapproved failing tests",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1719,7 +1710,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find unapproved failing tests (logs)",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1740,7 +1730,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find unapproved passing tests",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1763,7 +1752,6 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find ignored flaky test failure logs",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]

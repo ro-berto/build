@@ -434,7 +434,6 @@
     "infra_step": true,
     "name": "Bisect.Fetch changes",
     "stdin": "{\"buildNum\": 571, \"builder\": \"V8 Foobar\", \"master\": \"client.v8\"}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -497,7 +496,6 @@
     ],
     "infra_step": true,
     "name": "Bisect.gsutil check build a1",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -515,7 +513,6 @@
     ],
     "infra_step": true,
     "name": "Bisect.gsutil check build a2",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

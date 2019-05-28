@@ -260,8 +260,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -473,7 +472,6 @@
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
     "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM64 Debug (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"Android ARM64 Debug\", \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"parent_buildername:Android ARM64 Debug\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android ARM64 Debug/1337\"}}], \"timestamp\": 1337000003000000}",
-    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",

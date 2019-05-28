@@ -65,8 +65,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [
