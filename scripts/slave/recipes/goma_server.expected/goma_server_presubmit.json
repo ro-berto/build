@@ -1,34 +1,6 @@
 [
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/packages",
-      "-ensure-file",
-      "infra/go/${platform} version:1.12.5\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.12.5--\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/go/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/protoc/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
@@ -154,6 +126,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/sdk"
+    ],
+    "infra_step": true,
+    "name": "ensure SDK directory"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/goma_src/buildsetup.sh",
+      "[START_DIR]/sdk"
+    ],
+    "name": "set up SDK"
+  },
+  {
+    "cmd": [
       "go",
       "list",
       "-m",
@@ -168,8 +162,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -190,8 +183,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -212,8 +204,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -236,8 +227,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -258,8 +248,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -280,8 +269,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -301,8 +289,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },

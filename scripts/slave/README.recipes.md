@@ -2422,21 +2422,22 @@ Raises:
   StepFailure if it fails to stop goma or upload logs.
 ### *recipe_modules* / [goma\_server](/scripts/slave/recipe_modules/goma_server)
 
-[DEPS](/scripts/slave/recipe_modules/goma_server/__init__.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/goma_server/__init__.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GomaServerApi](/scripts/slave/recipe_modules/goma_server/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 GomaServerApi contains helper functions for building goma server.
 
-&mdash; **def [BuildAndTest](/scripts/slave/recipe_modules/goma_server/api.py#16)(self, repository, package_base, path, allow_diff=True):**
+&mdash; **def [BuildAndTest](/scripts/slave/recipe_modules/goma_server/api.py#16)(self, repository, package_base, allow_diff=True):**
 
 Build goma server and run test.
 
 Args:
   repository: Goma server repository URL in str.
   package_base: package base name of goma server in str.
-  path: PATH environment to be used in the build in str list.
-        go and protoc should be available in PATH.
+
+Returns:
+  GOPATH that has build artifacts.
 ### *recipe_modules* / [halt](/scripts/slave/recipe_modules/halt)
 
 [DEPS](/scripts/slave/recipe_modules/halt/__init__.py#1): [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -4991,19 +4992,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipes/goma_client.py#19)(api):**
 ### *recipes* / [goma\_server](/scripts/slave/recipes/goma_server.py)
 
-[DEPS](/scripts/slave/recipes/goma_server.py#5): [goma\_server](#recipe_modules-goma_server), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipes/goma_server.py#5): [goma\_server](#recipe_modules-goma_server), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/goma_server.py#38)(api):**
-
-&mdash; **def [SetupExecutables](/scripts/slave/recipes/goma_server.py#22)(api, pkg_dir):**
-
-Set up go and protoc to run the script.
-
-Args:
-  pkg_dir: a root directory to install cipd packages.
-
-Returns:
-  a list of paths.
+&mdash; **def [RunSteps](/scripts/slave/recipes/goma_server.py#14)(api):**
 ### *recipes* / [goma\_server:tests/simple](/scripts/slave/recipe_modules/goma_server/tests/simple.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma_server/tests/simple.py#5): [goma\_server](#recipe_modules-goma_server), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket]

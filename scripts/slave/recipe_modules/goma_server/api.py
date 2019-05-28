@@ -13,25 +13,20 @@ class GomaServerApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(GomaServerApi, self).__init__(**kwargs)
 
-  def BuildAndTest(self, repository, package_base, path, allow_diff=True):
+  def BuildAndTest(self, repository, package_base, allow_diff=True):
     """Build goma server and run test.
 
     Args:
       repository: Goma server repository URL in str.
       package_base: package base name of goma server in str.
-      path: PATH environment to be used in the build in str list.
-            go and protoc should be available in PATH.
+
+    Returns:
+      GOPATH that has build artifacts.
     """
+    # set directories.
     build_root = self.m.path['cache'].join('builder')
     goma_src_dir = build_root.join('goma_src')
     gopath_dir = build_root.join('go')
-    env_prefixes = {
-        'GOPATH': [gopath_dir],
-        'PATH': path + [gopath_dir.join('bin')],
-    }
-    env = {
-        'GO111MODULE': 'on',
-    }
 
     # Checkout
     # We do not have CI builder, but let me confirm.
@@ -39,9 +34,23 @@ class GomaServerApi(recipe_api.RecipeApi):
     ref = self.m.tryserver.gerrit_change_fetch_ref
     self.m.git.checkout(repository, ref=ref, dir_path=goma_src_dir)
 
+    # Set up SDK
+    # TODO(yyanagisawa): move sdk to cached directory when we confirm it works.
+    sdk_dir = self.m.path['start_dir'].join('sdk')
+    self.m.file.ensure_directory('ensure SDK directory', sdk_dir)
+    self.m.step('set up SDK',
+                [self.m.path['checkout'].join('buildsetup.sh'), sdk_dir])
+
+    env_prefixes = {
+        'GOPATH': [gopath_dir],
+        'PATH': [sdk_dir.join('go', 'bin'), gopath_dir.join('bin')],
+    }
+    env = {
+        'GO111MODULE': 'on',
+    }
     with self.m.context(cwd=self.m.path['checkout'],
-                     env_prefixes=env_prefixes,
-                     env=env):
+                        env_prefixes=env_prefixes,
+                        env=env):
       # Set up modules.
       self.m.step('list modules',
                   ['go', 'list', '-m', 'all'])
@@ -68,3 +77,5 @@ class GomaServerApi(recipe_api.RecipeApi):
       if not allow_diff:
         git_diff_arg.append('--exit-code')
       self.m.git(*git_diff_arg, name='check git diff')
+
+    return gopath_dir

@@ -12,7 +12,6 @@ def RunSteps(api):
   api.goma_server.BuildAndTest(
       'git://goma-server/',
       'goma-server',
-      ['/home/goma'],
       allow_diff=False)
 
 

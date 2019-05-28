@@ -127,6 +127,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/sdk"
+    ],
+    "infra_step": true,
+    "name": "ensure SDK directory"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/goma_src/buildsetup.sh",
+      "[START_DIR]/sdk"
+    ],
+    "name": "set up SDK"
+  },
+  {
+    "cmd": [
       "go",
       "list",
       "-m",
@@ -141,7 +163,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -162,7 +184,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -183,7 +205,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -206,7 +228,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -227,7 +249,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -248,7 +270,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
@@ -269,7 +291,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
-        "/home/goma",
+        "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
     },
