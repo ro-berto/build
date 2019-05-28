@@ -77,16 +77,6 @@ _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',
                      parent_mastername='chromium.perf')
 
-_AddIsolatedTestSpec('android-pixel2-perf', 'android',
-                     target_bits=64,
-                     parent_mastername='chromium.perf',
-                     parent_buildername='android_arm64-builder-perf')
-_AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
-                     target_bits=64,
-                     parent_mastername='chromium.perf',
-                     parent_buildername='android_arm64-builder-perf')
-
-
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Lenovo-P51', 'win',
                      parent_buildername='win64-builder-perf',
                      parent_mastername='chromium.perf')
