@@ -485,8 +485,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_SETUP_FAILURE\"]@@@"
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
     ]
   },
   {
@@ -494,6 +493,7 @@
     "name": "infra status",
     "~followup_annotations": [
       "@@@STEP_TEXT@GOMA_SETUP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_SETUP_FAILURE\"]@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

@@ -956,8 +956,7 @@
     "infra_step": true,
     "name": "test r1.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -966,6 +965,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@GOMA_BUILD_ERROR@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

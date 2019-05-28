@@ -528,7 +528,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               ninja_log_outdir=target_output_dir,
               ninja_log_compiler=self.c.compile_py.compiler or 'goma',
               **kwargs)
-    except self.m.step.StepFailure as e:
+    except self.m.step.StepFailure as ex:
       # Handle failures caused by goma.
       failure_result_code = ''
 
@@ -543,10 +543,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       if failure_result_code:
         assert len(failure_result_code) <= 20
-        properties = self.m.step.active_result.presentation.properties
-        if not properties.get('extra_result_code'):
-          properties['extra_result_code'] = []
-        properties['extra_result_code'].append(failure_result_code)
         # FIXME(yyanagisawa): mark the active step exception on goma error.
         #
         # This is workaround to make goma error recognized as infra exception.
@@ -565,9 +561,11 @@ class ChromiumApi(recipe_api.RecipeApi):
         fake_step = self.m.step('infra status', [])
         fake_step.presentation.status = self.m.step.EXCEPTION
         fake_step.presentation.step_text = failure_result_code
-        raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
+        props = fake_step.presentation.properties
+        props['extra_result_code'] = [failure_result_code]
+        raise self.m.step.InfraFailure('Infra compile failure: %s' % ex)
 
-      raise e
+      raise
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):
