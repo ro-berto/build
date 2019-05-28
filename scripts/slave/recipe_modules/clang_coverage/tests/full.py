@@ -292,7 +292,7 @@ def GenTests(api):
       + api.post_check(
           lambda check, steps:
           check(steps['gsutil upload metadata for %s tests' % _NUM_TESTS]
-                .output_properties['process_coverage_data_failure'] == 'true'))
+                .output_properties['process_coverage_data_failure'] == True))
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)
   )
