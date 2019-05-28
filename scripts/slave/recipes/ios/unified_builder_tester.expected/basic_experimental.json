@@ -1454,8 +1454,16 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@INVALID_TEST_RESULTS@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1467,8 +1475,16 @@
     "cwd": "[CACHE]/builder/src",
     "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@INVALID_TEST_RESULTS@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1480,8 +1496,16 @@
     "cwd": "[CACHE]/builder/src",
     "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE (3)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@INVALID_TEST_RESULTS@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

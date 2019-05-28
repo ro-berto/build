@@ -250,6 +250,14 @@
     "name": "presubmit",
     "timeout": 480,
     "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
       "@@@STEP_FAILURE@@@"
     ]

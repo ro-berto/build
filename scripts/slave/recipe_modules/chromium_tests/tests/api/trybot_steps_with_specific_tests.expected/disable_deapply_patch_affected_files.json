@@ -610,6 +610,14 @@
     "name": "base_unittests (with patch summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Tests failed, not being retried<br/>Test.Two<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
       "@@@STEP_FAILURE@@@"
     ]

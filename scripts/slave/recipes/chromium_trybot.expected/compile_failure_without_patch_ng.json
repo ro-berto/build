@@ -831,8 +831,16 @@
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@COMPILE_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

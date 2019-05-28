@@ -2224,6 +2224,14 @@
     "name": "telemetry_gpu_unittests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@",
       "@@@STEP_FAILURE@@@"
     ]
@@ -2249,7 +2257,13 @@
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness\": {}@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LOG_END@step_metadata@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "TRYJOB DO NOT RETRY",
+    "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@do_not_retry@true@@@"
     ]
   },
