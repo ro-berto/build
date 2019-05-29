@@ -337,19 +337,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
       patched CL did not cause the test suite to have deterministically failing
       tests.
     """
+    new_failures = sorted(new_failures)
+    ignored_failures = sorted(ignored_failures)
+
     # We add a failure_reason even if we don't mark the build as a failure. This
     # will contribute to the failure hash if the build eventually fails.
     self.m.tryserver.add_failure_reason({
       'test_name': test.name,
-      'new_failures': sorted(new_failures),
+      'new_failures': new_failures,
     })
 
     # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
     if test.name == 'webkit_layout_tests' or test.name == 'blink_web_tests':
       dest_file = '%s.json' % suffix.replace(' ', '_')
       self._archive_retry_summary({
-          'failures': sorted(new_failures),
-          'ignored': sorted(ignored_failures)
+          'failures': new_failures,
+          'ignored': ignored_failures
       }, dest_file)
 
     step_name = '%s (%s)' % (test.name, suffix)

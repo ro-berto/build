@@ -2935,7 +2935,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Tests ignored as they also fail without patch:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
+      "@@@STEP_TEXT@<br/>Tests ignored as they also fail without patch:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
