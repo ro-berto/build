@@ -374,10 +374,10 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
-      'parent_buildername': 'Android arm Builder (dbg)',
+      'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'main_builder_mb',
       'android_apply_config': ['remove_all_system_webviews'],
