@@ -112,10 +112,12 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
       # Simulate a v8 update on slim swarming testers. The revision
       # property is mandatory. The commit position is required by gatekeeper.
-      api.step.active_result.presentation.properties['got_revision'] = (
+      info_step = api.step('simulated revision info', cmd=None)
+      info_step.presentation.properties['got_revision'] = (
           api.buildbucket.gitiles_commit.id)
-      api.step.active_result.presentation.properties['got_revision_cp'] = (
+      info_step.presentation.properties['got_revision_cp'] = (
           api.properties.get('parent_got_revision_cp'))
+
       v8.set_up_swarming()
   else:
     with api.step.nest('initialization'):

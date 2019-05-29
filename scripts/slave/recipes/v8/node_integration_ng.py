@@ -122,8 +122,8 @@ def RunSteps(api, triggers, v8_tot):
         args=['-a', 'public-read'],
       )
 
-    parent.presentation.links['download'] = (
-        ARCHIVE_LINK % (api.platform.name, archive_name))
+      parent.presentation.links['download'] = (
+          ARCHIVE_LINK % (api.platform.name, archive_name))
 
     if triggers:
       api.v8.buildbucket_trigger(

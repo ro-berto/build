@@ -227,6 +227,8 @@ def _build_and_upload(api, goma_dir):
     archive_name = ('node-%s-rel-%s-%s.zip' %
                     (api.platform.name, api.v8.revision_number,
                      api.v8.revision))
+    parent.presentation.links['download'] = (
+        ARCHIVE_LINK % (api.platform.name, archive_name))
     zip_file = api.path['cleanup'].join(archive_name)
 
     # Make archive directory.
@@ -252,9 +254,6 @@ def _build_and_upload(api, goma_dir):
       archive_name,
       args=['-a', 'public-read'],
     )
-
-  parent.presentation.links['download'] = (
-      ARCHIVE_LINK % (api.platform.name, archive_name))
 
 
 def RunSteps(api):
