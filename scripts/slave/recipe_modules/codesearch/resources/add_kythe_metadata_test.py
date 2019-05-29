@@ -186,6 +186,27 @@ enum Struct_Enum {};
             }
         ]}, metadata)
 
+  def testMetadataInterfacePtr(self):
+    metadata = self._GenerateMetadata("""
+@generated_from: foo.mojom.Interface
+using InterfacePtr = mojo::InterfacePtr<Interface>;
+""")
+    self.assertEqual({
+        'type': 'kythe0',
+        'meta': [
+            {
+                'type': 'anchor_defines',
+                'begin': 44,
+                'end': 56,
+                'vname': {
+                    'signature': 'foo.mojom.Interface',
+                    'corpus': 'corpus',
+                    'language': 'mojom',
+                },
+                'edge': '%/kythe/edge/generates',
+            }
+        ]}, metadata)
+
 
   def testFormatMetadataSingleLine(self):
     self.assertEqual('/* Metadata comment\neyJmb28iOiAiYmFyIn0=\n*/',

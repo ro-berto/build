@@ -45,12 +45,12 @@ def _GenerateMetadata(filename, file_contents, corpus, verbose):
 
     # Union fields produce methods with the name of the field preceded by "is_",
     # "get_" and "set_". Inner types are prefixed with the containing type name
-    # and an underscore. Union field tags are an uppercase version of the name,
-    # hence the IGNORECASE flag.
+    # and an underscore. InterfacePtr aliases have "Ptr" on the end. Union field
+    # tags are an uppercase version of the name, hence the IGNORECASE flag.
     entity_name_match = re.search(
-        r'\W((?:is|get|set|%s)?_?%s)(?:\W|$)' % (containing_name, entity_name),
-        next_line,
-        re.IGNORECASE)
+        r'\W((?:is|get|set|%s)?_?%s(?:Ptr)?)(?:\W|$)' %
+            (containing_name, entity_name),
+        next_line, re.IGNORECASE)
     if not entity_name_match:
       # We should always find the entity, but don't fail completely if we don't.
       print "Couldn't find name after annotation in %s for %s, at offset %d" % (
