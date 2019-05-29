@@ -278,13 +278,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
           swarming_test_suites.append(test_suite)
 
       if swarming_test_suites:
-        new_invalid, _ = self.run_tests(
+        new_swarming_invalid, _ = self.run_tests(
             caller_api, swarming_test_suites, 'retry shards with patch',
             sort_by_shard=True)
-        # If we have valid test results from one of the runs of a test suite,
-        # then that test suite by definition doesn't have invalid test results.
+
+        # For swarming test suites, if we have valid test results from one of
+        # the runs of a test suite, then that test suite by definition doesn't
+        # have invalid test results.
+        # For non-swarming test suites, becuase they don't get retried in
+        # 'retry shards with patch' steps, invalid non-swarming test suites are
+        # still invalid.
+        non_swarming_invalid = [
+            t for t in invalid_test_suites if not t.runs_on_swarming]
         invalid_test_suites = list(set(invalid_test_suites).intersection(
-            set(new_invalid)))
+            set(new_swarming_invalid))) + non_swarming_invalid
 
         # Some suites might be passing now, since we retried some tests. Remove
         # any suites which are now fully passing.

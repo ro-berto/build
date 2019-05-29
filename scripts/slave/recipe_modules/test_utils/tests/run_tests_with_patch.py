@@ -16,32 +16,41 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 PROPERTIES = {
-  'has_valid_results': Property(default=True),
-  'retry_failed_shards': Property(default=None),
-  'per_suffix_failures': Property(default=None),
-  'per_suffix_valid': Property(default=None),
+  'retry_failed_shards': Property(default=False),
+
+  # This properties is a list of objects that will be applied when creating
+  # |MockTest| for testing. If the number of test_kwargs is less than the number
+  # of |MockTest|, then only the first length(test_kwargs_list) tests will have
+  # matching test_kwargs to apply.
+  #
+  # test_kwargs is used to control the behavior of the tests run, such as
+  # whether it runs on swarming (runs_on_swarming), whether the test results is
+  # valid (has_valid_results and per_suffix valid) and what are the test
+  # failures (per_suffix_failures).
+  'test_kwargs_list': Property(default=[]),
 }
 
-def RunSteps(api, has_valid_results, retry_failed_shards, per_suffix_failures,
-             per_suffix_valid):
-  test_kwargs = {
-      'has_valid_results': has_valid_results,
-  }
-  run_tests_kwargs = {}
+def RunSteps(api, retry_failed_shards, test_kwargs_list):
+  def _get_test_kwargs_by_index(index):
+    if index < len(test_kwargs_list):
+      return test_kwargs_list[index]
 
+    return {}
+
+  run_tests_kwargs = {}
   if retry_failed_shards:
     run_tests_kwargs['retry_failed_shards'] = retry_failed_shards
-    test_kwargs['runs_on_swarming'] = True
-    test_kwargs['per_suffix_failures'] = per_suffix_failures
-    test_kwargs['per_suffix_valid'] = per_suffix_valid
 
   tests = [
-      api.chromium_tests.steps.MockTest(name='test', api=api, **test_kwargs),
-      api.chromium_tests.steps.MockTest(name='test2', api=api),
+      api.chromium_tests.steps.MockTest(name='test', api=api,
+                                        **_get_test_kwargs_by_index(0)),
+      api.chromium_tests.steps.MockTest(name='test2', api=api,
+                                        **_get_test_kwargs_by_index(1)),
   ]
 
   invalid, failing = api.test_utils.run_tests_with_patch(
       api, tests, **run_tests_kwargs)
+
   if invalid:
     api.step('%s invalid' % ','.join(sorted(t.name for t in invalid)), None)
   else:
@@ -76,7 +85,9 @@ def GenTests(api):
 
   yield (
       api.test('invalid_results') +
-      api.properties(has_valid_results=False) +
+      api.properties(test_kwargs_list=[
+          {'has_valid_results': False},
+      ]) +
       api.post_process(post_process.MustRun, 'test (with patch)') +
       api.post_process(post_process.MustRun, 'test2 (with patch)') +
       api.post_process(post_process.MustRun, 'test invalid') +
@@ -86,11 +97,15 @@ def GenTests(api):
 
   yield (
       api.test('retry_shards_retry_succeeds') +
-      api.properties(retry_failed_shards=True, per_suffix_failures={
-          'with patch': set(['testA']),
-      }) +
+      api.properties(retry_failed_shards=True, test_kwargs_list=[
+          {
+            'runs_on_swarming': True,
+            'per_suffix_failures': {'with patch': ['testA']},
+          }
+      ]) +
       api.post_process(post_process.MustRun, 'test (with patch)') +
       api.post_process(post_process.MustRun, 'test2 (with patch)') +
+      api.post_process(post_process.MustRun, 'test (retry shards with patch)') +
       api.post_process(post_process.MustRun, 'NONE invalid') +
       api.post_process(post_process.MustRun, 'NONE failing') +
       api.post_process(post_process.DropExpectation)
@@ -98,11 +113,17 @@ def GenTests(api):
 
   yield (
       api.test('retry_shards_retry_still_fails') +
-      api.properties(retry_failed_shards=True, per_suffix_failures={
-          'with patch': set(['testA']),
-          'retry shards with patch': set(['testA']),
-      }) +
+      api.properties(retry_failed_shards=True, test_kwargs_list=[
+          {
+            'runs_on_swarming': True,
+            'per_suffix_failures': {
+              'with patch': ['testA'],
+              'retry shards with patch': ['testA'],
+            },
+          }
+      ]) +
       api.post_process(post_process.MustRun, 'test (with patch)') +
+      api.post_process(post_process.MustRun, 'test (retry shards with patch)') +
       api.post_process(post_process.MustRun, 'test2 (with patch)') +
       api.post_process(post_process.MustRun, 'NONE invalid') +
       api.post_process(post_process.MustRun, 'test:testA failing') +
@@ -111,11 +132,17 @@ def GenTests(api):
 
   yield (
       api.test('retry_shards_retry_subset_fails') +
-      api.properties(retry_failed_shards=True, per_suffix_failures={
-          'with patch': set(['testA', 'testB']),
-          'retry shards with patch': set(['testB', 'testC']),
-      }) +
+      api.properties(retry_failed_shards=True, test_kwargs_list=[
+          {
+            'runs_on_swarming': True,
+            'per_suffix_failures': {
+              'with patch': ['testA', 'testB'],
+              'retry shards with patch': ['testB', 'testC'],
+            },
+          }
+      ]) +
       api.post_process(post_process.MustRun, 'test (with patch)') +
+      api.post_process(post_process.MustRun, 'test (retry shards with patch)') +
       api.post_process(post_process.MustRun, 'test2 (with patch)') +
       api.post_process(post_process.MustRun, 'NONE invalid') +
       api.post_process(post_process.MustRun, 'test:testB failing') +
@@ -124,15 +151,46 @@ def GenTests(api):
 
   yield (
       api.test('retry_shards_invalid_then_valid') +
-      api.properties(retry_failed_shards=True, per_suffix_failures={
-          'with patch': set(['testA', 'testB']),
-      }, per_suffix_valid={
-          'with patch': False,
-          'retry shards with patch': True,
-      }) +
+      api.properties(retry_failed_shards=True, test_kwargs_list=[
+          {
+            'runs_on_swarming': True,
+            'per_suffix_failures': {
+              'with patch': ['testA', 'testB'],
+            },
+            'per_suffix_valid': {
+              'with patch': False,
+              'retry shards with patch': True,
+            }
+          }
+      ]) +
       api.post_process(post_process.MustRun, 'test (with patch)') +
+      api.post_process(post_process.MustRun, 'test (retry shards with patch)') +
       api.post_process(post_process.MustRun, 'test2 (with patch)') +
       api.post_process(post_process.MustRun, 'NONE invalid') +
       api.post_process(post_process.MustRun, 'NONE failing') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  # This test tests that if a non-swarming test suite has invalid test results,
+  # it will still be correctly classified as invalid after retrying failed
+  # shards.
+  yield (
+      api.test('non_swarming_invalid_results') +
+      api.properties(retry_failed_shards=True, test_kwargs_list=[
+          {
+            'runs_on_swarming': True,
+          },
+          {
+            'per_suffix_valid': {
+              'with patch': False,
+            }
+
+          }
+      ]) +
+      api.post_process(post_process.MustRun, 'test (with patch)') +
+      api.post_process(post_process.DoesNotRun,
+                       'test2 (retry shards with patch)') +
+      api.post_process(post_process.MustRun, 'test2 invalid') +
+      api.post_process(post_process.MustRun, 'test2 failing') +
       api.post_process(post_process.DropExpectation)
   )
