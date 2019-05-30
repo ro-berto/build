@@ -990,5 +990,9 @@ SPEC['builders'].update([
     stock_config('linux-tcmalloc-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
-    stock_config('win-pixel-browser-tests-rel'),
+    stock_config('win-pixel-builder-rel',
+                 bot_type='builder'),
+    stock_config('win-pixel-tester-rel',
+                 bot_type='tester',
+                 parent_buildername='win-pixel-builder-rel'),
 ])
