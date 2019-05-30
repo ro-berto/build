@@ -91,7 +91,7 @@ def GenTests(api):
           'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s tests' % _NUM_TESTS)
+          'gsutil upload coverage metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s tests' % _NUM_TESTS)
@@ -134,7 +134,7 @@ def GenTests(api):
           'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s tests' % _NUM_TESTS  )
+          'gsutil upload coverage metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s tests' % _NUM_TESTS)
@@ -193,7 +193,7 @@ def GenTests(api):
           'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s tests' % _NUM_TESTS)
+          'gsutil upload coverage metadata')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -278,7 +278,7 @@ def GenTests(api):
           'generate coverage metadata for %s tests' % _NUM_TESTS)
       + api.post_process(
           post_process.MustRun,
-          'gsutil upload metadata for %s tests' % _NUM_TESTS)
+          'gsutil upload coverage metadata')
       + api.post_process(
           post_process.DoesNotRun,
           'generate html report for %s tests' % _NUM_TESTS)
@@ -291,7 +291,7 @@ def GenTests(api):
           'generate coverage metadata for %s tests' % _NUM_TESTS, retcode=1)
       + api.post_check(
           lambda check, steps:
-          check(steps['gsutil upload metadata for %s tests' % _NUM_TESTS]
+          check(steps['gsutil upload coverage metadata']
                 .output_properties['process_coverage_data_failure'] == True))
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)

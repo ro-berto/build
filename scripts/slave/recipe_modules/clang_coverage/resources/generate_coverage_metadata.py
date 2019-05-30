@@ -632,62 +632,9 @@ def _split_metadata_in_shards_if_necessary(
   return compressed_data
 
 
-class RevisionCache(dict):
-  """Dict-like class for storing git metadata for a file.
-
-  Can be used in a with statement to automatically load and save contents to
-  the backing file.
-
-  Since this script is invoked once for each target in a coverage build,
-  computing the git revision for a file that is present in multiple targets adds
-  significant overhead. The purpose of this class is to store that information
-  across multiple invocations of this script, which reduces the time required to
-  do the build.
-
-  Args:
-    cache_file: Path to a file to save revision data in. If cache_file is false-
-                like, RevisionCache won't try to load or save data.
-  """
-
-  def __init__(self, cache_file):
-    super(RevisionCache, self).__init__()
-    self._cache_file = cache_file
-
-  def __enter__(self):
-    self.Load()
-    return self
-
-  def __exit__(self, exc_type, exc_value, traceback):
-    self.Save()
-
-  def Load(self):
-    if self._cache_file:
-      try:
-        with open(self._cache_file) as f:
-          self.update(json.load(f))
-      except (IOError, ValueError):
-        logging.warning('Revision cache invalid, starting with empty cache')
-
-  def Save(self):
-    if self._cache_file:
-      try:
-        with open(self._cache_file, 'w') as f:
-          json.dump(self, f)
-      except IOError:
-        logging.warning('Unable to write to revision cache')
-        raise
-
-
-def _generate_metadata(src_path,
-                       output_dir,
-                       profdata_path,
-                       llvm_cov_path,
-                       binaries,
-                       component_mapping,
-                       sources,
-                       diff_mapping,
-                       exclusions,
-                       file_git_metadata=None):
+def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
+                       binaries, component_mapping, sources, diff_mapping,
+                       exclusions):
   """Generates code coverage metadata.
 
   Args:
@@ -704,9 +651,6 @@ def _generate_metadata(src_path,
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
     exclusions: A regex string to exclude matches from aggregation.
-    file_git_metadata: A dict-like object that maps file path to a tuple of
-                       (revision, timestamp). Only meaningful to full-repo
-                       coverage.
 
   Returns:
     None. This method doesn't return anything, instead, it writes the produced
@@ -721,33 +665,23 @@ def _generate_metadata(src_path,
       'Generating & loading coverage metadata with "llvm-cov export" '
       'took %.0f minutes', minutes)
 
+  file_git_metadata = {}
   if not diff_mapping:
     logging.info('Retrieving file git metadata...')
     start_time = time.time()
-    cache_hit_count = 0
-    if file_git_metadata is None:
-      file_git_metadata = {}
-    else:
-      logging.info('Starting with %d entries in cache', len(file_git_metadata))
-    files_to_check = []
+    all_files = []
     for datum in data['data']:
       for file_data in datum['files']:
         filename = file_data['filename']
         src_file = os.path.relpath(filename, src_path)
         if not src_file.startswith('//'):
           src_file = '//' + src_file  # Prefix the file path with '//'.
-        if src_file in file_git_metadata:
-          cache_hit_count += 1
-        else:
-          files_to_check.append(src_file)
-    new_git_metadata = repository_util.GetFileRevisions(src_path, 'DEPS',
-                                                        files_to_check)
-    file_git_metadata.update(new_git_metadata)
+        all_files.append(src_file)
+    file_git_metadata = repository_util.GetFileRevisions(
+        src_path, 'DEPS', all_files)
     minutes = (time.time() - start_time) / 60
     logging.info('Retrieving git metadata for %d files took %.0f minutes',
-                 len(files_to_check), minutes)
-    if cache_hit_count:
-      logging.info('Found %d cached file revisions', cache_hit_count)
+                 len(all_files), minutes)
 
   logging.info('Processing coverage data ...')
   start_time = time.time()
@@ -766,9 +700,7 @@ def _generate_metadata(src_path,
         file_path = '//' + file_path  # Prefix the file path with '//'.
         record['path'] = file_path
 
-      git_metadata = None
-      if file_git_metadata:
-        git_metadata = file_git_metadata.get(file_path)
+      git_metadata = file_git_metadata.get(file_path)
       if git_metadata:
         record['revision'] = git_metadata[0]
         record['timestamp'] = git_metadata[1]
@@ -855,10 +787,6 @@ def _parse_args(args):
       '--exclusion-pattern',
       type=str,
       help='regex pattern for sources to exclude from aggregation')
-  parser.add_argument(
-      '--revision-cache-path',
-      type=str,
-      help='file containing git revisions for each source file')
   return parser.parse_args(args=args)
 
 
@@ -904,12 +832,10 @@ def main():
       'Either component_mapping (for full-repo coverage) or diff_mapping '
       '(for per-cl coverage) must be specified.')
 
-  # Revision cache is only used in full-codebase coverage
-  with RevisionCache(params.revision_cache_path) as rev_cache:
-    compressed_data = _generate_metadata(
-        params.src_path, params.output_dir, params.profdata_path,
-        params.llvm_cov, params.binaries, component_mapping, abs_sources,
-        diff_mapping, params.exclusion_pattern, rev_cache)
+  compressed_data = _generate_metadata(
+      params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
+      params.binaries, component_mapping, abs_sources, diff_mapping,
+      params.exclusion_pattern)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
