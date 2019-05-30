@@ -162,6 +162,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -183,6 +184,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -204,6 +206,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -227,6 +230,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -248,6 +252,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -269,6 +274,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]
@@ -290,6 +296,7 @@
         "[CACHE]/builder/go"
       ],
       "PATH": [
+        "[START_DIR]/sdk",
         "[START_DIR]/sdk/go/bin",
         "[CACHE]/builder/go/bin"
       ]

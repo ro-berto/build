@@ -43,7 +43,7 @@ class GomaServerApi(recipe_api.RecipeApi):
 
     env_prefixes = {
         'GOPATH': [gopath_dir],
-        'PATH': [sdk_dir.join('go', 'bin'), gopath_dir.join('bin')],
+        'PATH': [sdk_dir, sdk_dir.join('go', 'bin'), gopath_dir.join('bin')],
     }
     env = {
         'GO111MODULE': 'on',
