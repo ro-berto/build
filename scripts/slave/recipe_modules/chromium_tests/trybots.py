@@ -490,7 +490,7 @@ TRYBOTS = freeze({
       }),
       'linux-trusty-webkit-msan-rel': simple_bot({
         'mastername': 'chromium.memory',
-        'buildername': 'WebKit Linux Trusty MSAN',
+        'buildername': 'WebKit Linux MSAN',
       }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
@@ -615,7 +615,7 @@ TRYBOTS = freeze({
       }),
       'layout_test_leak_detection': simple_bot({
           'mastername': 'chromium.webkit',
-          'buildername': 'WebKit Linux Trusty Leak',
+          'buildername': 'WebKit Linux Leak',
       }),
       # Optional GPU bots.
       'linux_optional_gpu_tests_rel': {
