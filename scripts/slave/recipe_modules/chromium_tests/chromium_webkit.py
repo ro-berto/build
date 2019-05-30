@@ -82,6 +82,7 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'mac',
   },
+  # TODO(tikuta): remove this after rename.
   'WebKit Linux Trusty ASAN': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['asan', 'mb'],
@@ -96,6 +97,21 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'linux_layout',
   },
+  'WebKit Linux ASAN': {
+    'chromium_config': 'chromium_clang',
+    'chromium_apply_config': ['asan', 'mb'],
+    'gclient_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'tests': [],
+    'testing': {
+      'platform': 'linux',
+    },
+    'checkout_dir': 'linux_layout',
+  },
+  # TODO(tikuta): remove this after rename.
   'WebKit Linux Trusty MSAN': {
     'chromium_config': 'chromium_clang',
     'gclient_config': 'chromium',
@@ -113,6 +129,24 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'linux_layout',
   },
+  'WebKit Linux MSAN': {
+    'chromium_config': 'chromium_clang',
+    'gclient_config': 'chromium',
+    'chromium_apply_config': [
+      'mb',
+      'msan',
+    ],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'tests': [],
+    'testing': {
+      'platform': 'linux',
+    },
+    'checkout_dir': 'linux_layout',
+  },
+  # TODO(tikuta): remove this after rename.
   'WebKit Linux Trusty Leak': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
@@ -129,5 +163,20 @@ SPEC['builders'] = {
       'platform': 'linux',
     },
   },
-
+  'WebKit Linux Leak': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['mb'],
+    'gclient_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+    },
+    'compile_targets': [
+      'blink_tests',
+    ],
+    'tests': [],
+    'testing': {
+      'platform': 'linux',
+    },
+  },
 }
