@@ -642,6 +642,10 @@ class V8Api(recipe_api.RecipeApi):
     # If target_cpu is not set, gn defaults to 64 bits.
     return 64  # pragma: no cover
 
+  @property
+  def osx_sdk_kind(self):
+    return 'ios' if self.m.chromium.c.TARGET_PLATFORM == 'ios' else 'mac'
+
   def _upload_build_dependencies(self, deps):
     values = {
       'ext_h_avg_deps': deps['by_extension']['h']['avg_deps'],
@@ -706,7 +710,7 @@ class V8Api(recipe_api.RecipeApi):
       out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
         'out'. Note that it is not a path, but just the name of the directory.
     """
-    with self.m.osx_sdk('mac'):  # this is no-op on non-Mac hosts
+    with self.m.osx_sdk(self.osx_sdk_kind):  # this is no-op on non-Mac hosts
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
 
@@ -766,7 +770,7 @@ class V8Api(recipe_api.RecipeApi):
         self.m.v8.bot_config.get('binary_size_tracking'))
 
   def collect_post_compile_metrics(self):
-    with self.m.osx_sdk('mac'):  # this is no-op on non-Mac hosts
+    with self.m.osx_sdk(self.osx_sdk_kind):  # this is no-op on non-Mac hosts
       if self.bot_config.get('track_build_dependencies', False):
         with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
           deps = self.m.python(

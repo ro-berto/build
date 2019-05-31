@@ -855,6 +855,16 @@ def GenTests(api):
       api.post_process(Filter('trigger'))
   )
 
+  # Test mac builder.
+  yield (
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'mac',
+                  build_config='Release',
+      ) +
+      api.platform('mac', 64) +
+      api.v8.check_in_any_arg('build.install xcode', 'mac') +
+      api.post_process(DropExpectation)
+  )
+
   # Test ios configs.
   yield (
       api.v8.test('client.v8', 'V8 Foobar - builder', 'ios',
@@ -865,6 +875,7 @@ def GenTests(api):
       api.v8.check_in_param(
           'initialization.bot_update',
           '--spec-path', 'target_os = [\'ios\']') +
+      api.v8.check_in_any_arg('build.install xcode', 'ios') +
       api.post_process(DropExpectation)
   )
 
