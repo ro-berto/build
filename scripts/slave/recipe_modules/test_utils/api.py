@@ -391,11 +391,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite.without_patch_failures_to_ignore())
     if not valid_results:
       self._invalid_test_results(test_suite)
-
-      # If there are invalid results from the deapply patch step, treat this as
-      # if all tests passed which prevents us from ignoring any test failures
-      # from 'with patch'.
-      ignored_failures = set()
+      result = self.m.python.succeeding_step(
+          '%s (retry summary)' % test_suite.name,
+          ('\n%s (without patch) did not produce valid results, '
+           'so no failures can safely be ignored') % test_suite.name)
+      result.presentation.status = self.m.step.FAILURE
+      self.m.tryserver.set_test_failure_tryjob_result()
+      return False
 
     valid_results, failures = test_suite.with_patch_failures_including_retry()
     assert valid_results, (

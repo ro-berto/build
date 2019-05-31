@@ -1548,7 +1548,7 @@
     },
     "name": "base_unittests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@<br/>base_unittests (without patch) did not produce valid results, so no failures can safely be ignored@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
