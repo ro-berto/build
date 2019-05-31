@@ -177,20 +177,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
-      'Win32 ASan': {
-        'recipe_config': 'webrtc_clang',
-        'chromium_apply_config': ['asan'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-          'cpu': 'x86-64',
-        }
-      },
       'Win64 ASan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
