@@ -175,6 +175,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       patterns = [
           # Following are scripts based tests that don't build any binaries.
           ['blink_python_tests', None],
+          ['grit_python_unittests', None],
           ['metrics_python_tests', None],
           ['telemetry_gpu_unittests', None],
           ['devtools_closure_compile', None],
