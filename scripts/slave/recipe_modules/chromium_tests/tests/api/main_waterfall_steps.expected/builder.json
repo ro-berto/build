@@ -693,7 +693,6 @@
     "name": "clean_outdir"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

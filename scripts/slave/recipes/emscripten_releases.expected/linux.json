@@ -674,7 +674,6 @@
     "name": "Emscripten testsuite (asm2wasm)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

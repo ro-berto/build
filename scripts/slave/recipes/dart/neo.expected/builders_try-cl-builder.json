@@ -535,7 +535,6 @@
     "name": "tools/test.py -mdebug 1"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

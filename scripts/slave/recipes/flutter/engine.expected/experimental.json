@@ -9048,7 +9048,6 @@
     "name": "Verify exported symbols on release binaries"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

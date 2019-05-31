@@ -309,7 +309,6 @@
     "name": "archive_build"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

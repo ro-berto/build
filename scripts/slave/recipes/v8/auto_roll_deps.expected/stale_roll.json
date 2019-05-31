@@ -297,7 +297,6 @@
     "name": "upload stats"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

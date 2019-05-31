@@ -598,7 +598,6 @@
     "name": "test_pre_run (with patch)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

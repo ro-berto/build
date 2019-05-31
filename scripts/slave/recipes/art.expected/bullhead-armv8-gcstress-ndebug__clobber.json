@@ -1559,7 +1559,6 @@
     "name": "device post-run cleanup"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

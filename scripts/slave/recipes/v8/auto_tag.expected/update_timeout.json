@@ -485,7 +485,6 @@
     "name": "log"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

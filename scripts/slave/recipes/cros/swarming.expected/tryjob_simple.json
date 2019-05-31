@@ -199,7 +199,6 @@
     "name": "cbuildbot_launch [tryjob_config]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

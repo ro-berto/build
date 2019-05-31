@@ -466,7 +466,6 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

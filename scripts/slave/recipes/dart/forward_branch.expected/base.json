@@ -128,7 +128,6 @@
     "name": "push deadbeef to refs/heads/base"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

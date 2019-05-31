@@ -96,7 +96,6 @@
     "name": "generate compilation database"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

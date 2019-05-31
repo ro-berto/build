@@ -111,7 +111,6 @@
     "name": "cbuildbot_launch [xxx-fakeboard-fakebuild]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

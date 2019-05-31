@@ -113,7 +113,6 @@
     "name": "cbuildbot_launch [x86-generic-full]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

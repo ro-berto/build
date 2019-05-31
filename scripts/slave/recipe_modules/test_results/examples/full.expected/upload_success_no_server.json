@@ -20,7 +20,6 @@
     "name": "Upload to test-results [example-test-type]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

@@ -368,7 +368,6 @@
     "name": "Running test for http_test"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

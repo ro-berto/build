@@ -202,7 +202,6 @@
     "name": "cbuildbot_launch [caroline-postsubmit]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

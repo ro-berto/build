@@ -321,7 +321,6 @@
     "name": "[emulator] deleting all temp avds after running"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

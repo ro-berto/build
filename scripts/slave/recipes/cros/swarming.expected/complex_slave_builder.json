@@ -200,7 +200,6 @@
     "name": "cbuildbot_launch [slave_config]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

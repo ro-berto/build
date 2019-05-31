@@ -601,7 +601,6 @@
     "name": "gatekeeper: webrtc"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

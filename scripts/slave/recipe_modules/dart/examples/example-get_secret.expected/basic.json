@@ -53,7 +53,6 @@
     "name": "cloudkms get key"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

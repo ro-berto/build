@@ -1210,7 +1210,6 @@
     "name": "rmtree [CLEANUP]/symbols_tmp_1"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

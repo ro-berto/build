@@ -157,7 +157,6 @@
     "name": "lookup Git remote (src/bar)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

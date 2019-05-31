@@ -1798,7 +1798,6 @@
     "name": "Upload to test-results [peerconnection_unittests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

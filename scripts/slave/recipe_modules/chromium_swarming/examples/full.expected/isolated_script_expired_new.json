@@ -534,7 +534,6 @@
     "name": "remove temp dir"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

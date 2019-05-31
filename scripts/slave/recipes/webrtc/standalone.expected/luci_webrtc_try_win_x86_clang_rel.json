@@ -7679,7 +7679,6 @@
     "name": "Upload to test-results [webrtc_perf_tests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

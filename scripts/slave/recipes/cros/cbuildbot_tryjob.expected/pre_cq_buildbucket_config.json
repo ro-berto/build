@@ -113,7 +113,6 @@
     "name": "cbuildbot_launch [binhost-pre-cq]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

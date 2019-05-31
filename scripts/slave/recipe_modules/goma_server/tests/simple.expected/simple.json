@@ -305,7 +305,6 @@
     "name": "check git diff"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

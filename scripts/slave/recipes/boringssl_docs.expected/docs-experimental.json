@@ -79,7 +79,6 @@
     "name": "skipping uploading docs on experimental build"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

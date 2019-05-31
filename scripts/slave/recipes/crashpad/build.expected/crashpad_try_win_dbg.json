@@ -466,7 +466,6 @@
     "name": "run_tests_on_x86"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

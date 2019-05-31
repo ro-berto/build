@@ -24,7 +24,6 @@
     "name": "get access token for service-account-fake-account.json (2)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

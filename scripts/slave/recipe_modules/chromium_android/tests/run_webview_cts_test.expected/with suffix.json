@@ -16,7 +16,6 @@
     "name": "Run CTS (build suffix)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

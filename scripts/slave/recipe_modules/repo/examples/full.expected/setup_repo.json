@@ -86,7 +86,6 @@
     "name": "repo list echo"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

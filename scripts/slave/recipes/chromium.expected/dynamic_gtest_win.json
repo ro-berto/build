@@ -568,7 +568,6 @@
     "name": "process_dumps"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

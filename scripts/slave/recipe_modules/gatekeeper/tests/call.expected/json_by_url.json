@@ -64,7 +64,6 @@
     "name": "gatekeeper: foobar"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

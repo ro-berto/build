@@ -494,7 +494,6 @@
     "name": "Upload to test-results [browser_tests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

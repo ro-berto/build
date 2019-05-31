@@ -787,7 +787,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

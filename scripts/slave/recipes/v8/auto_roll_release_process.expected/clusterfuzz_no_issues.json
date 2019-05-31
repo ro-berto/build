@@ -90,7 +90,6 @@
     "name": "check clusterfuzz"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

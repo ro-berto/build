@@ -19,7 +19,6 @@
     "name": "Download latest file from GS"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

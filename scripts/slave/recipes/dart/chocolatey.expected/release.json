@@ -243,7 +243,6 @@
     "name": "choco push"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

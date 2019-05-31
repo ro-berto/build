@@ -2094,7 +2094,6 @@
     "name": "upload new results"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

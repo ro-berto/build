@@ -473,7 +473,6 @@
     "name": "prepare, create and publish a flutter archive"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

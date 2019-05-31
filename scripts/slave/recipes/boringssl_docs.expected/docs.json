@@ -93,7 +93,6 @@
     "name": "gsutil cp"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

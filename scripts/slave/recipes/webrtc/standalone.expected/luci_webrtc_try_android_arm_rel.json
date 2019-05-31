@@ -7232,7 +7232,6 @@
     "name": "Upload to test-results [webrtc_perf_tests on Android]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

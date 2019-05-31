@@ -1812,7 +1812,6 @@
     "name": "rmtree [CLEANUP]/binary-size-trybot_tmp_1"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

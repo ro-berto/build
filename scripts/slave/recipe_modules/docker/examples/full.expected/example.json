@@ -83,7 +83,6 @@
     "name": "docker push"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

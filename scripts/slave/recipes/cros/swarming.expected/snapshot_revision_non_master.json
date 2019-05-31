@@ -198,7 +198,6 @@
     "name": "cbuildbot_launch [master-postsubmit]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

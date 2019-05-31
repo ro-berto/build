@@ -169,7 +169,6 @@
     "name": "run_tests"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

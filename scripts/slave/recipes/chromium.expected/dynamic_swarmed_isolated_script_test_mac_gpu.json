@@ -1036,7 +1036,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

@@ -512,7 +512,6 @@
     "name": "gclient runhooks (without patch)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

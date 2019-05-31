@@ -684,7 +684,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Linux]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

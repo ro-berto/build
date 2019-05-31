@@ -759,7 +759,6 @@
     "name": "libfuzzer-v8-arm64-linux-debug-170242.zip"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

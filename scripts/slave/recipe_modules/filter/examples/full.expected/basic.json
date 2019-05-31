@@ -85,7 +85,6 @@
     "name": "hello"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

@@ -1312,7 +1312,6 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

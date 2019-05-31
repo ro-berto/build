@@ -108,7 +108,6 @@
     "name": "cbuildbot_launch [swarming-build-config]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

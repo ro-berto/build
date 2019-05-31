@@ -402,7 +402,6 @@
     "name": "test node-api"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

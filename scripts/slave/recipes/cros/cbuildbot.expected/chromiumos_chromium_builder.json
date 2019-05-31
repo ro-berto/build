@@ -112,7 +112,6 @@
     "name": "cbuildbot_launch [x86-generic-tot-chrome-pfq-informational]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

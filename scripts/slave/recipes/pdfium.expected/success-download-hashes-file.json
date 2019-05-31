@@ -574,7 +574,6 @@
     "name": "gsutil upload JSON (2)"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

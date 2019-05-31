@@ -6974,7 +6974,6 @@
     "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

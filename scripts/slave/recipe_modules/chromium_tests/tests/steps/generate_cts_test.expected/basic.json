@@ -263,7 +263,6 @@
     "name": "Upload to test-results [Run CTS]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

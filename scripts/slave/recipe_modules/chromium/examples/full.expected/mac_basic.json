@@ -475,7 +475,6 @@
     "name": "upload_ninja_log"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

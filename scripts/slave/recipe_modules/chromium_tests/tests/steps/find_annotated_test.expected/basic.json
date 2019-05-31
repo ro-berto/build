@@ -60,7 +60,6 @@
     "name": "rmtree [CLEANUP]/annotated_tests_json_tmp_1"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

@@ -158,7 +158,6 @@
     "timeout": 900
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

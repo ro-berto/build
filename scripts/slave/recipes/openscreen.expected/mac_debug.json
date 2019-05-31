@@ -466,7 +466,6 @@
     "name": "Run unit tests"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

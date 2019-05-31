@@ -103,7 +103,6 @@
     "name": "read swarming_test_spec"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

@@ -602,7 +602,6 @@
     "name": "Upload to test-results [renamed_content_unittests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

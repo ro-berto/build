@@ -7260,7 +7260,6 @@
     "name": "Upload to test-results [video_capture_tests]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

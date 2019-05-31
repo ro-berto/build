@@ -198,7 +198,6 @@
     "name": "cbuildbot_launch [amd64-generic-goma-canary-chromium-pfq-informational]"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

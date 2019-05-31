@@ -266,7 +266,6 @@
     "name": "No flakes that fail to reproduce"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]

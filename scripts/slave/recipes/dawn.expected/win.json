@@ -413,7 +413,6 @@
     "name": "Run the Dawn unittests"
   },
   {
-    "jsonResult": null,
     "name": "$result"
   }
 ]
