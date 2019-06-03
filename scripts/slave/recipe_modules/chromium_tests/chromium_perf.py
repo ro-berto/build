@@ -203,9 +203,9 @@ _AddIsolatedTestSpec('android-go_webview-perf', 'android',
                      'android-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
-                     'android_arm64-builder-perf')
+                     'android-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
-                     'android_arm64-builder-perf')
+                     'android-builder-perf', target_bits=32)
 
 
 # Webview
