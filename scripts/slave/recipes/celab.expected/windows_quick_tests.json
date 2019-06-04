@@ -3,13 +3,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/go/src/chromium.googlesource.com/enterprise"
+      "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise"
     ],
     "infra_step": true,
     "name": "init src_root if not exists"
@@ -18,65 +18,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]/gerrit_client.py",
-      "changes",
-      "--host",
-      "https://chromium-review.googlesource.com",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--limit",
-      "1",
-      "-p",
-      "change=123456",
-      "-o",
-      "ALL_REVISIONS",
-      "-o",
-      "DOWNLOAD_COMMANDS"
-    ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
-    "env": {
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gerrit fetch current CL info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'cel', 'url': 'https://chromium.googlesource.com/enterprise/cel.git'}]",
-      "--patch_root",
-      "cel",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'cel', 'url': 'https://chromium.googlesource.com/enterprise/cel.git'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"cel\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--patch_ref",
-      "https://chromium.googlesource.com/enterprise/cel@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "cel@HEAD"
+      "cel@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise",
     "env_prefixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -89,7 +45,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cel\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"cel\": {@@@",
@@ -126,10 +82,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -139,10 +95,10 @@
   },
   {
     "cmd": [
-      "cipd",
+      "cipd.bat",
       "ensure",
       "-root",
-      "[START_DIR]/packages",
+      "[START_DIR]\\packages",
       "-ensure-file",
       "infra/go/${platform} version:1.11.2\ninfra/third_party/cacert date:2017-01-18\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
       "-json-output",
@@ -178,16 +134,16 @@
       "--install",
       "--verbose"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel",
     "env": {
-      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
-      "GOPATH": "[START_DIR]/go"
+      "GIT_SSL_CAINFO": "[START_DIR]\\packages\\cacert.pem",
+      "GOPATH": "[START_DIR]\\go"
     },
     "env_suffixes": {
       "PATH": [
-        "[START_DIR]/go/bin",
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]\\go\\bin",
+        "[START_DIR]\\packages",
+        "[START_DIR]\\packages\\bin"
       ]
     },
     "name": "install deps"
@@ -200,16 +156,16 @@
       "build",
       "--verbose"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel",
     "env": {
-      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
-      "GOPATH": "[START_DIR]/go"
+      "GIT_SSL_CAINFO": "[START_DIR]\\packages\\cacert.pem",
+      "GOPATH": "[START_DIR]\\go"
     },
     "env_suffixes": {
       "PATH": [
-        "[START_DIR]/go/bin",
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]\\go\\bin",
+        "[START_DIR]\\packages",
+        "[START_DIR]\\packages\\bin"
       ]
     },
     "name": "build"
@@ -222,16 +178,16 @@
       "create_package",
       "--verbose"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel",
     "env": {
-      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
-      "GOPATH": "[START_DIR]/go"
+      "GIT_SSL_CAINFO": "[START_DIR]\\packages\\cacert.pem",
+      "GOPATH": "[START_DIR]\\go"
     },
     "env_suffixes": {
       "PATH": [
-        "[START_DIR]/go/bin",
-        "[START_DIR]/packages",
-        "[START_DIR]/packages/bin"
+        "[START_DIR]\\go\\bin",
+        "[START_DIR]\\packages",
+        "[START_DIR]\\packages\\bin"
       ]
     },
     "name": "create python package"
@@ -244,13 +200,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/hosts"
+      "[START_DIR]\\hosts"
     ],
     "infra_step": true,
     "name": "setup tests.init host_dir if not exists",
@@ -262,13 +218,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/logs"
+      "[START_DIR]\\logs"
     ],
     "infra_step": true,
     "name": "setup tests.init logs_dir if not exists",
@@ -290,9 +246,9 @@
       "--storage_prefix",
       "test-run-8945511751514863184",
       "--destination_dir",
-      "[START_DIR]/hosts"
+      "[START_DIR]\\hosts"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/scripts/tests",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\scripts\\tests",
     "name": "setup tests.generate host files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -303,17 +259,19 @@
       "vpython",
       "-u",
       "test/run_tests.py",
+      "--tests",
+      "sample.test",
       "--hosts",
-      "[START_DIR]/hosts",
+      "[START_DIR]\\hosts",
       "--shared_provider_storage",
       "celab-try-assets",
       "--error_logs_dir",
-      "[START_DIR]/logs",
+      "[START_DIR]\\logs",
       "--noprogress",
       "-v",
       "1"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel",
     "name": "run all tests"
   },
   {

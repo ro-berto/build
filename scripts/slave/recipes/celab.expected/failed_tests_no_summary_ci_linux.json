@@ -304,6 +304,8 @@
       "vpython",
       "-u",
       "test/run_tests.py",
+      "--tests",
+      "*",
       "--hosts",
       "[START_DIR]/hosts",
       "--shared_provider_storage",

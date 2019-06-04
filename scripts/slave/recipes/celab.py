@@ -13,6 +13,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
+  'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
   'recipe_engine/time',
@@ -114,15 +115,17 @@ def RunSteps(api):
       name='upload CELab binaries',
       link_name='CELab binaries')
 
-  # Run tests for specific Linux CI/Try builds.
-  if api.platform.is_linux:
+  # Run tests for CI/Try builders that specify it.
+  if api.properties.get('tests'):
+    tests = api.properties.get('tests')
+
     if bucket == 'ci':
-      _RunTests(api, checkout, CI_POOL_NAME, CI_POOL_SIZE)
-    elif bucket == 'try' and api.buildbucket.builder_name == "tests":
-      _RunTests(api, checkout, TRY_POOL_NAME, TRY_POOL_SIZE)
+      _RunTests(api, checkout, tests, CI_POOL_NAME, CI_POOL_SIZE)
+    elif bucket == 'try':
+      _RunTests(api, checkout, tests, TRY_POOL_NAME, TRY_POOL_SIZE)
 
 
-def _RunTests(api, checkout, pool_name, pool_size):
+def _RunTests(api, checkout, tests, pool_name, pool_size):
   host_dir = api.path['start_dir'].join('hosts')
   logs_dir = api.path['start_dir'].join('logs')
   with api.step.nest('setup tests'):
@@ -152,6 +155,7 @@ def _RunTests(api, checkout, pool_name, pool_size):
       api.python('run all tests',
         'test/run_tests.py',
         [
+          '--tests', tests,
           '--hosts', host_dir,
           '--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', logs_dir,
@@ -255,12 +259,6 @@ def GenTests(api):
                                 git_repo=CELAB_REPO)
   )
   yield (
-      api.test('tests_try') +
-      api.buildbucket.try_build(project='celab', bucket='try',
-                                builder='tests',
-                                git_repo=CELAB_REPO)
-  )
-  yield (
       api.test('basic_ci_linux') +
       api.platform('linux', 64) +
       api.buildbucket.ci_build(project='celab', bucket='ci',
@@ -275,6 +273,7 @@ def GenTests(api):
   yield (
       api.test('failed_tests_ci_linux') +
       api.platform('linux', 64) +
+      api.properties(tests='*') +
       api.buildbucket.ci_build(project='celab', bucket='ci',
                                git_repo=CELAB_REPO) +
       api.step_data('run all tests', retcode=1) +
@@ -294,8 +293,17 @@ def GenTests(api):
   yield (
       api.test('failed_tests_no_summary_ci_linux') +
       api.platform('linux', 64) +
+      api.properties(tests='*') +
       api.buildbucket.ci_build(project='celab', bucket='ci',
                                git_repo=CELAB_REPO) +
       api.step_data('run all tests', retcode=1) +
       api.step_data('test summary.parse summary', retcode=1)
+  )
+  yield (
+      api.test('windows_quick_tests') +
+      api.properties(tests='sample.test') +
+      api.platform('win', 64) +
+      api.buildbucket.ci_build(project='celab', bucket='try',
+                              builder='windows-quick-tests',
+                               git_repo=CELAB_REPO)
   )
