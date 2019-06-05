@@ -24,12 +24,6 @@ from recipe_engine.recipe_api import Property
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 
-CI_POOL_NAME = "celab-ci"
-CI_POOL_SIZE = 5
-
-TRY_POOL_NAME = "celab-try"
-TRY_POOL_SIZE = 5
-
 
 def _get_bin_directory(api, checkout):
   bin_dir = checkout.join('out')
@@ -118,11 +112,13 @@ def RunSteps(api):
   # Run tests for CI/Try builders that specify it.
   if api.properties.get('tests'):
     tests = api.properties.get('tests')
+    pool_name = api.properties.get('pool_name')
+    pool_size = api.properties.get('pool_size')
 
-    if bucket == 'ci':
-      _RunTests(api, checkout, tests, CI_POOL_NAME, CI_POOL_SIZE)
-    elif bucket == 'try':
-      _RunTests(api, checkout, tests, TRY_POOL_NAME, TRY_POOL_SIZE)
+    if not pool_name or not pool_size:
+      raise ValueError('pool_name and pool_size must be defined with `tests`.')
+
+    _RunTests(api, checkout, tests, pool_name, pool_size)
 
 
 def _RunTests(api, checkout, tests, pool_name, pool_size):
@@ -273,7 +269,7 @@ def GenTests(api):
   yield (
       api.test('failed_tests_ci_linux') +
       api.platform('linux', 64) +
-      api.properties(tests='*') +
+      api.properties(tests='*', pool_name='celab-ci', pool_size=5) +
       api.buildbucket.ci_build(project='celab', bucket='ci',
                                git_repo=CELAB_REPO) +
       api.step_data('run all tests', retcode=1) +
@@ -293,7 +289,7 @@ def GenTests(api):
   yield (
       api.test('failed_tests_no_summary_ci_linux') +
       api.platform('linux', 64) +
-      api.properties(tests='*') +
+      api.properties(tests='*', pool_name='celab-ci', pool_size=5) +
       api.buildbucket.ci_build(project='celab', bucket='ci',
                                git_repo=CELAB_REPO) +
       api.step_data('run all tests', retcode=1) +
@@ -301,9 +297,18 @@ def GenTests(api):
   )
   yield (
       api.test('windows_quick_tests') +
+      api.properties(tests='sample.test', pool_name='celab-try', pool_size=5) +
+      api.platform('win', 64) +
+      api.buildbucket.ci_build(project='celab', bucket='try',
+                               builder='windows-quick-tests',
+                               git_repo=CELAB_REPO)
+  )
+  yield (
+      api.test('misconfigured_tests') +
       api.properties(tests='sample.test') +
       api.platform('win', 64) +
       api.buildbucket.ci_build(project='celab', bucket='try',
-                              builder='windows-quick-tests',
-                               git_repo=CELAB_REPO)
+                               builder='misconfigured-quick-tests',
+                               git_repo=CELAB_REPO) +
+      api.expect_exception('ValueError')
   )
