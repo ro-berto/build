@@ -492,10 +492,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'linux-ozone-rel',
       }),
-      'linux-trusty-webkit-msan-rel': simple_bot({
-        'mastername': 'chromium.memory',
-        'buildername': 'WebKit Linux MSAN',
-      }),
       'linux-webkit-msan-rel': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'WebKit Linux MSAN',
