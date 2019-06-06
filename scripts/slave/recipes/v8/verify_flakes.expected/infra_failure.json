@@ -12,10 +12,10 @@
       "123"
     ],
     "infra_step": true,
-    "name": "FunctionCallSample",
+    "name": "collect builds.FunctionCallSample",
     "timeout": 14400,
     "~followup_annotations": [
-      "@@@STEP_TEXT@failed to execute@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"builder\": {@@@",
@@ -38,6 +38,14 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "FunctionCallSample",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@failed to execute@@@",
       "@@@STEP_LOG_LINE@flake config@{@@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_buildername\": \"V8 Linux64 - debug builder\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_mastername\": \"client.v8\", @@@",
@@ -60,8 +68,7 @@
       "@@@STEP_LOG_LINE@flake config@}@@@",
       "@@@STEP_LOG_END@flake config@@@",
       "@@@STEP_LINK@build 123@https://cr-buildbucket.appspot.com/build/123@@@",
-      "@@@STEP_LINK@crbug.com/v8/8744@https://crbug.com/v8/8744@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_LINK@crbug.com/v8/8744@https://crbug.com/v8/8744@@@"
     ]
   }
 ]

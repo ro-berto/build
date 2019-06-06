@@ -199,6 +199,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "collect builds"
+  },
+  {
     "cmd": [
       "buildbucket",
       "collect",
@@ -211,10 +215,10 @@
       "123"
     ],
     "infra_step": true,
-    "name": "FunctionCallSample",
+    "name": "collect builds.FunctionCallSample",
     "timeout": 14400,
     "~followup_annotations": [
-      "@@@STEP_TEXT@reproduced@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"builder\": {@@@",
@@ -236,7 +240,14 @@
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"SUCCESS\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "FunctionCallSample",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@reproduced@@@",
       "@@@STEP_LOG_LINE@flake config@{@@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_buildername\": \"V8 Linux64 - debug builder\", @@@",
       "@@@STEP_LOG_LINE@flake config@  \"bisect_mastername\": \"client.v8\", @@@",
