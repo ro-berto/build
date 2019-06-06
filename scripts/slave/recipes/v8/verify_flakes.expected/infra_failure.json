@@ -68,7 +68,8 @@
       "@@@STEP_LOG_LINE@flake config@}@@@",
       "@@@STEP_LOG_END@flake config@@@",
       "@@@STEP_LINK@build 123@https://cr-buildbucket.appspot.com/build/123@@@",
-      "@@@STEP_LINK@crbug.com/v8/8744@https://crbug.com/v8/8744@@@"
+      "@@@STEP_LINK@crbug.com/v8/8744@https://crbug.com/v8/8744@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   }
 ]

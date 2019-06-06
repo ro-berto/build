@@ -16,8 +16,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 
 from recipe_engine.post_process import (
-    DropExpectation, MustRun, ResultReasonRE, StatusException, StatusFailure,
-    StatusSuccess, Filter)
+    DropExpectation, Filter, MustRun, ResultReasonRE, StatusException,
+    StatusFailure, StatusSuccess, StepException, StepFailure)
 
 
 DEPS = [
@@ -65,10 +65,12 @@ def update_step_presentation(api, presentation, build, flake_config):
   if build.status == common_pb2.FAILURE:
     presentation.step_text = (
         'failed to reproduce<br/>please consider re-enabling this test')
+    presentation.status = api.step.FAILURE
   elif build.status == common_pb2.SUCCESS:
     presentation.step_text = 'reproduced'
   else:
     presentation.step_text = 'failed to execute'
+    presentation.status = api.step.EXCEPTION
 
 
 def RunSteps(api):
@@ -168,6 +170,7 @@ def GenTests(api):
 
   yield (
       test('failure', ['FAILURE']) +
+      api.post_process(StepFailure, 'FunctionCallSample') +
       api.post_process(StatusFailure) +
       api.post_process(
         ResultReasonRE, 'Some flakes failed to reproduce: FunctionCallSample') +
@@ -176,6 +179,7 @@ def GenTests(api):
 
   yield (
       test('infra_failure', ['INFRA_FAILURE']) +
+      api.post_process(StepException, 'FunctionCallSample') +
       api.post_process(StatusSuccess) +
       api.post_process(Filter(
           'collect builds.FunctionCallSample', 'FunctionCallSample'))
