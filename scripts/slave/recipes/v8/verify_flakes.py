@@ -181,8 +181,7 @@ def GenTests(api):
       test('infra_failure', ['INFRA_FAILURE']) +
       api.post_process(StepException, 'FunctionCallSample') +
       api.post_process(StatusSuccess) +
-      api.post_process(Filter(
-          'collect builds.FunctionCallSample', 'FunctionCallSample'))
+      api.post_process(Filter().include_re(r'.*FunctionCallSample.*'))
   )
 
   yield (
