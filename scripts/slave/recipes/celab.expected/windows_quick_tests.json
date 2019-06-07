@@ -263,6 +263,8 @@
       "sample.test",
       "--hosts",
       "[START_DIR]\\hosts",
+      "--cel_ctl",
+      "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\out\\windows_amd64\\bin\\cel_ctl.exe",
       "--shared_provider_storage",
       "celab-try-assets",
       "--error_logs_dir",

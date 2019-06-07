@@ -308,6 +308,8 @@
       "*",
       "--hosts",
       "[START_DIR]/hosts",
+      "--cel_ctl",
+      "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl",
       "--shared_provider_storage",
       "celab-ci-assets",
       "--error_logs_dir",

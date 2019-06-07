@@ -25,8 +25,8 @@ from recipe_engine.recipe_api import Property
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 
 
-def _get_bin_directory(api, checkout):
-  bin_dir = checkout.join('out')
+def _get_bin_directory(api, bin_root):
+  bin_dir = bin_root
   if api.platform.is_linux:
     bin_dir = bin_dir.join('linux_amd64', 'bin')
   elif api.platform.is_win:
@@ -47,6 +47,37 @@ def _get_python_packages(api, checkout):
 
 
 def RunSteps(api):
+  checkout = _CheckoutCelabRepo(api)
+
+  # Get CELab binaries from CIPD or build them from source.
+  bin_dir = ""
+  version = api.properties.get('celab_version')
+  if version:
+    bin_dir = _GetCelabFromCipd(api, version)
+  else:
+    bin_dir = _BuildCelabFromSource(api, checkout)
+
+    # Upload binaries (cel_ctl and resources/*, plus the python package of the
+    # test framework) for CI builds
+    bucket = api.buildbucket.build.builder.bucket
+    if bucket == 'ci':
+      _UploadCelabBinariesToStorage(api, checkout, bin_dir)
+
+  cel_ctl = bin_dir.join(_get_ctl_binary_name(api))
+
+  # Run tests for CI/Try builders that specify it.
+  tests = api.properties.get('tests')
+  if tests:
+    _RunTests(api, checkout, tests, cel_ctl)
+
+
+def _GetCelabFromCipd(api, version):
+  packages_root = api.path['start_dir'].join('packages')
+  api.cipd.ensure(packages_root, {'infra/celab/celab/${platform}': version})
+  return _get_bin_directory(api, packages_root)
+
+
+def _CheckoutCelabRepo(api):
   # Checkout the CELab repo
   go_root = api.path['start_dir'].join('go')
   src_root = go_root.join('src', "chromium.googlesource.com", "enterprise")
@@ -56,7 +87,11 @@ def RunSteps(api):
     api.gclient.set_config('celab')
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
-  checkout = api.path['checkout']
+  return api.path['checkout']
+
+
+def _BuildCelabFromSource(api, checkout):
+  go_root = api.path['start_dir'].join('go')
 
   # Install Go & Protoc
   packages = {}
@@ -83,45 +118,39 @@ def RunSteps(api):
       'build.py', ['create_package', '--verbose'],
       venv=True)
 
-  # Upload binaries (cel_ctl and resources/*, plus the python package of the
-  # test framework) for CI builds
-  bucket = api.buildbucket.build.builder.bucket
-  if bucket == 'ci':
-    bin_dir = _get_bin_directory(api, checkout)
-    cel_ctl = _get_ctl_binary_name(api)
-    zip_out = api.path['start_dir'].join('cel.zip')
-    pkg = api.zip.make_package(checkout.join('out'), zip_out)
-    pkg.add_file(bin_dir.join(cel_ctl))
-    pkg.add_directory(bin_dir.join('resources'))
-    for package_file in _get_python_packages(api, checkout):
-      pkg.add_file(package_file)
-    pkg.zip('zip archive')
-
-    today = api.time.utcnow().date()
-    gs_dest = '%s/%s/%s/cel.zip' % (
-      api.buildbucket.builder_name,
-      today.strftime('%Y/%m/%d'),
-      api.buildbucket.build.id)
-    api.gsutil.upload(
-      source=zip_out,
-      bucket='celab',
-      dest=gs_dest,
-      name='upload CELab binaries',
-      link_name='CELab binaries')
-
-  # Run tests for CI/Try builders that specify it.
-  if api.properties.get('tests'):
-    tests = api.properties.get('tests')
-    pool_name = api.properties.get('pool_name')
-    pool_size = api.properties.get('pool_size')
-
-    if not pool_name or not pool_size:
-      raise ValueError('pool_name and pool_size must be defined with `tests`.')
-
-    _RunTests(api, checkout, tests, pool_name, pool_size)
+  return _get_bin_directory(api, checkout.join('out'))
 
 
-def _RunTests(api, checkout, tests, pool_name, pool_size):
+def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
+  cel_ctl = _get_ctl_binary_name(api)
+  zip_out = api.path['start_dir'].join('cel.zip')
+  pkg = api.zip.make_package(checkout.join('out'), zip_out)
+  pkg.add_file(bin_dir.join(cel_ctl))
+  pkg.add_directory(bin_dir.join('resources'))
+  for package_file in _get_python_packages(api, checkout):
+    pkg.add_file(package_file)
+  pkg.zip('zip archive')
+
+  today = api.time.utcnow().date()
+  gs_dest = '%s/%s/%s/cel.zip' % (
+    api.buildbucket.builder_name,
+    today.strftime('%Y/%m/%d'),
+    api.buildbucket.build.id)
+  api.gsutil.upload(
+    source=zip_out,
+    bucket='celab',
+    dest=gs_dest,
+    name='upload CELab binaries',
+    link_name='CELab binaries')
+
+
+def _RunTests(api, checkout, tests, cel_ctl):
+  pool_name = api.properties.get('pool_name')
+  pool_size = api.properties.get('pool_size')
+
+  if not pool_name or not pool_size:
+    raise ValueError('pool_name and pool_size must be defined with `tests`.')
+
   host_dir = api.path['start_dir'].join('hosts')
   logs_dir = api.path['start_dir'].join('logs')
   with api.step.nest('setup tests'):
@@ -153,6 +182,7 @@ def _RunTests(api, checkout, tests, pool_name, pool_size):
         [
           '--tests', tests,
           '--hosts', host_dir,
+          '--cel_ctl', cel_ctl,
           '--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', logs_dir,
           '--noprogress', '-v', '1'
@@ -306,6 +336,15 @@ def GenTests(api):
   yield (
       api.test('misconfigured_tests') +
       api.properties(tests='sample.test') +
+      api.platform('win', 64) +
+      api.buildbucket.ci_build(project='celab', bucket='try',
+                               builder='misconfigured-quick-tests',
+                               git_repo=CELAB_REPO) +
+      api.expect_exception('ValueError')
+  )
+  yield (
+      api.test('binaries_from_cipd') +
+      api.properties(tests='sample.test', celab_version='version:1.0.0') +
       api.platform('win', 64) +
       api.buildbucket.ci_build(project='celab', bucket='try',
                                builder='misconfigured-quick-tests',
