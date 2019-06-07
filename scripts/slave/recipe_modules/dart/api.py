@@ -982,13 +982,8 @@ class DartApi(recipe_api.RecipeApi):
       args = args + [FIREFOX_PATH_ARGUMENT[environment['system']]]
 
     with self.m.step.defer_results():
-      # TODO(https://github.com/dart-lang/sdk/issues/34158): The Firefox
-      # processes are not exiting properly, causing the step to fail at the end,
-      # despite the results having been written out. Temporarily ignore failures
-      # on firefox.
-      firefox_bug = 'firefox' in self.m.buildbucket.builder_name
       self._run_script(step, args, cipd_packages=cipd_packages,
-          ignore_failure=firefox_bug or deflake_list, shards=shards)
+          ignore_failure=deflake_list, shards=shards)
       if not step.isolate_hash or step.local_shard:
         self._add_results_and_links(self.m.properties.get('bot_id'),
                                     step.results)
