@@ -85,16 +85,11 @@ _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Dell-Precision', 'win',
                      parent_buildername='win64-builder-perf',
                      parent_mastername='chromium.perf')
 
-_AddIsolatedTestSpec('win_laptop_low_end-perf_HP-Candidate', 'win',
+_AddIsolatedTestSpec('win-10_laptop_low_end-perf_HP-Candidate', 'win',
                      parent_buildername='win64-builder-perf',
                      parent_mastername='chromium.perf')
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Acer-Aspire-5', 'win',
-                     parent_buildername='win32-builder-perf',
-                     parent_mastername='chromium.perf',
-                     target_bits=32)
-
-_AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Dell-Latitude', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
                      target_bits=32)
