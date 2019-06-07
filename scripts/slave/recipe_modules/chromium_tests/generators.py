@@ -102,10 +102,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
           'test spec format error',
           textwrap.wrap(textwrap.dedent("""\
               The test target "%s" contains a custom set up script "%s"
-              that doesn't match the expected format. Custom set up script entries
-              should be a path relative to the top-level chromium src directory and
-              should start with "//".
-              """ % (name, set_up_step_script))),
+              that doesn't match the expected format. Custom set up script
+              entries should be a path relative to the top-level chromium src
+              directory and should start with "//".""" %
+              (name, set_up_step_script))),
           as_log='details')
   kwargs['set_up'] = processed_set_up
 
@@ -124,10 +124,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
           'test spec format error',
           textwrap.wrap(textwrap.dedent("""\
               The test target "%s" contains a custom tear down script "%s"
-              that doesn't match the expected format. Custom tear down script entries
-              should be a path relative to the top-level chromium src directory and
-              should start with "//".
-              """ % (name, tear_down_step_script))),
+              that doesn't match the expected format. Custom tear down script
+              entries should be a path relative to the top-level chromium src
+              directory and should start with "//".""" %
+              (name, tear_down_step_script))),
           as_log='details')
   kwargs['tear_down'] = processed_tear_down
 
@@ -165,10 +165,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
               'test spec format error',
               textwrap.wrap(textwrap.dedent("""\
                   The test target "%s" contains a custom merge_script "%s"
-                  that doesn't match the expected format. Custom merge_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
-                  """ % (name, merge_script))),
+                  that doesn't match the expected format. Custom merge_script
+                  entries should be a path relative to the top-level chromium
+                  src directory and should start with "//".""" %
+                  (name, merge_script))),
               as_log='details')
     kwargs['merge'] = merge
 
@@ -256,6 +256,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
   def gtest_swarming_delegate(spec, **kwargs):
     kwargs.update(gtest_delegate_common(spec, **kwargs))
     kwargs['isolate_coverage_data'] = spec.get('isolate_coverage_data')
+    kwargs['ignore_task_failure'] = spec.get(
+        'ignore_task_failure', False)
     return steps.SwarmingGTestTest(**kwargs)
 
   def gtest_local_delegate(spec, **kwargs):

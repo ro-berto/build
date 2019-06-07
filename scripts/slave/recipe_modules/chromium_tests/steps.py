@@ -1725,7 +1725,7 @@ class SwarmingGTestTest(SwarmingTest):
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
                optional_dimensions=None, service_account=None,
-               containment_type=None):
+               containment_type=None, ignore_task_failure=False):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1733,6 +1733,7 @@ class SwarmingGTestTest(SwarmingTest):
         set_up=set_up, tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
         merge=merge, shards=shards,
+        ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions,
         service_account=service_account, containment_type=containment_type)
     self._args = args or []
