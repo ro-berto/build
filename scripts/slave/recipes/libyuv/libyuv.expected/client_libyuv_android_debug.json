@@ -184,7 +184,7 @@
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
     ]
   },
   {
@@ -471,7 +471,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM32 Debug (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"Android Debug\", \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"parent_buildername:Android Debug\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android Debug/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM32 Debug (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"Android Debug\", \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"parent_buildername:Android Debug\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android Debug/1337\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -500,7 +500,7 @@
       "@@@STEP_LOG_LINE@input@            }@@@",
       "@@@STEP_LOG_LINE@input@        }@@@",
       "@@@STEP_LOG_LINE@input@    ], @@@",
-      "@@@STEP_LOG_LINE@input@    \"timestamp\": 1337000003000000@@@",
+      "@@@STEP_LOG_LINE@input@    \"timestamp\": 1337000001500000@@@",
       "@@@STEP_LOG_LINE@input@}@@@",
       "@@@STEP_LOG_END@input@@@"
     ]

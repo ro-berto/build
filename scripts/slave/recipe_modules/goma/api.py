@@ -326,8 +326,7 @@ class GomaApi(recipe_api.RecipeApi):
             result.presentation.links['cloudtail'] = (
                 'https://console.cloud.google.com/logs/viewer?'
                 'project=goma-logs&resource=gce_instance%%2F'
-                'instance_id%%2F%s&timestamp=%s' %
-                (self._hostname, self.m.time.utcnow().isoformat()))
+                'instance_id%%2F%s' % self._hostname)
 
         self._goma_started = True
         if not self._local_dir:

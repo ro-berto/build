@@ -181,7 +181,7 @@
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
     ]
   },
   {
@@ -525,7 +525,7 @@
       "-z",
       "json,log",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output\\dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_asan/1337000003/pixel/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_asan/1337000001/pixel/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
@@ -596,7 +596,7 @@
       "-z",
       "json,log",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output\\dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_asan/1337000006/corpus/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_asan/1337000004/corpus/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (2)"

@@ -504,7 +504,7 @@
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
     ]
   },
   {
@@ -715,12 +715,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug-iphonesimulator/Chrome.app",
-      "gs://mock-gcs-bucket/ios/20120514125323/Chrome.app"
+      "gs://mock-gcs-bucket/ios/20120514125321/Chrome.app"
     ],
     "infra_step": true,
     "name": "gsutil upload Chrome.app",
     "~followup_annotations": [
-      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/ios/20120514125323/Chrome.app@@@"
+      "@@@STEP_LINK@Chrome.app@https://storage.cloud.google.com/mock-gcs-bucket/ios/20120514125321/Chrome.app@@@"
     ]
   },
   {
