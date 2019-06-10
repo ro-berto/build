@@ -957,8 +957,8 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder',
