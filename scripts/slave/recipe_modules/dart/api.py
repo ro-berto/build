@@ -178,7 +178,7 @@ class DartApi(recipe_api.RecipeApi):
                                   raw_cmd=test_args +
                                   ['--shards=%s' % num_shards,
                                    '--shard=%s' % (shard + 1),
-                                   '--output_directory=${ISOLATED_OUTDIR}'],
+                                   '--output-directory=${ISOLATED_OUTDIR}'],
                                   ignore_task_failure=ignore_failure)
       os_names = {
         'android': 'Android',
@@ -347,7 +347,7 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _deflake_results(self, step, global_config):
-    deflake_list = self.m.step('list tests to deflake (%s)' % step.name,
+    step.deflake_list = self.m.step('list tests to deflake (%s)' % step.name,
                 [self.dart_executable(),
                 'tools/bots/compare_results.dart',
                 '--flakiness-data',
@@ -361,8 +361,8 @@ class DartApi(recipe_api.RecipeApi):
                 self.m.raw_io.input_text(step.results.results)],
                 stdout=self.m.raw_io.output_text(add_output_log=True),
                 ok_ret='any' if self._report_new_results() else {0}).stdout
-    if deflake_list:
-      self._run_test_py(step, global_config, deflake_list)
+    if step.deflake_list:
+      self._run_step(step, global_config)
 
 
   def _update_flakiness_information(self, results_str):
@@ -570,7 +570,7 @@ class DartApi(recipe_api.RecipeApi):
             stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     with self.m.step.defer_results():
       self.m.step('test results', judgement_args)
-      doc_url = 'https://goto.google.com/dart-status-file-free-workflow';
+      doc_url = 'https://goto.google.com/dart-status-file-free-workflow'
       self.m.step.active_result.presentation.links['Documentation'] = doc_url
       # Show only the links with non-empty output (something happened).
       for link, contents in links.iteritems():
@@ -757,7 +757,7 @@ class DartApi(recipe_api.RecipeApi):
           self._build_isolates(config, isolate_hashes)
           step.isolate_hash = isolate_hashes[step.fileset]
 
-        if not step.is_trigger and self._is_test_py_step(step.script):
+        if not step.is_trigger and step.is_test_step:
           test_steps.append(step)
         if step.isolate_hash and not (step.local_shard and step.shards < 2):
           sharded_steps.append(step)
@@ -783,10 +783,12 @@ class DartApi(recipe_api.RecipeApi):
         self._run_build(step)
       elif step.is_trigger:
         self._run_trigger(step)
-      elif self._is_test_py_step(step.script):
+      elif step.is_test_py_step:
         self._run_test_py(step, global_config)
       else:
         self._run_script(step)
+    if (not step.isolate_hash or step.local_shard) and step.is_test_step:
+      self._add_results_and_links(self.m.properties.get('bot_id'), step.results)
 
   @recipe_api.non_step
   def _run_gn(self, step):
@@ -827,14 +829,15 @@ class DartApi(recipe_api.RecipeApi):
           self._download_results(latest)
         with self.m.step.nest('deflaking'):
           for step in steps:
-            self._deflake_results(step, global_config)
+            if step.is_test_py_step:
+              self._deflake_results(step, global_config)
           self.collect_all(steps)
         logs_str = ''.join(
             (step.results.logs for step in steps))
         results_str = ''.join(
             (step.results.results for step in steps))
         flaky_json_str = self._update_flakiness_information(results_str)
-        commit = steps[0].environment['commit'];
+        commit = steps[0].environment['commit']
         results_str = self._extend_results_records(
             results_str,
             self.m.path['checkout'].join('LATEST', 'results.json'),
@@ -858,10 +861,6 @@ class DartApi(recipe_api.RecipeApi):
         # the builder is red, then a commit that both fixes and breaks tests
         # would turn the builder red and leave the builder red when reverted.
         self._approve_successes()
-
-
-  def _is_test_py_step(self, script):
-    return script.endswith(TEST_PY_PATH)
 
 
   def _download_browser(self, runtime, version):
@@ -935,7 +934,7 @@ class DartApi(recipe_api.RecipeApi):
           build['build']['url'])
 
 
-  def _run_test_py(self, step, global_config, deflake_list=None):
+  def _run_test_py(self, step, global_config):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step (TestMatrixStep) - The test-matrix step.
@@ -945,8 +944,8 @@ class DartApi(recipe_api.RecipeApi):
     environment = step.environment
     args = step.args
     shards = step.shards
-    if deflake_list:
-      args = args + ['--repeat=5', '--tests', deflake_list]
+    if step.deflake_list:
+      args = args + ['--repeat=5', '--tests', step.deflake_list]
       shards = min(shards, 1)
 
     test_args = ['--progress=status',
@@ -954,7 +953,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--time',
                  '--write-results',
                  '--write-logs']
-    if self._report_new_results() or deflake_list:
+    if self._report_new_results() or step.deflake_list:
       test_args.append('--clean-exit')
     args = test_args + args
     if environment['copy-coredumps']:
@@ -983,10 +982,7 @@ class DartApi(recipe_api.RecipeApi):
 
     with self.m.step.defer_results():
       self._run_script(step, args, cipd_packages=cipd_packages,
-          ignore_failure=deflake_list, shards=shards)
-      if not step.isolate_hash or step.local_shard:
-        self._add_results_and_links(self.m.properties.get('bot_id'),
-                                    step.results)
+          ignore_failure=step.deflake_list, shards=shards)
 
 
   def _run_script(self, step, args=None, cipd_packages=None,
@@ -1054,9 +1050,9 @@ class DartApi(recipe_api.RecipeApi):
       else:
         return # Shards have been triggered, no local shard to run.
 
-    if self._is_test_py_step(script):
+    if step.is_test_step:
       args = args + [
-          '--output_directory',
+          '--output-directory',
           self.m.raw_io.output_dir(),
       ]
 
@@ -1072,6 +1068,7 @@ class DartApi(recipe_api.RecipeApi):
       self.m = m
       self.name = step_json['name']
       self.results = StepResults(m, environment['commit'])
+      self.deflake_list = []
       self.args = step_json.get('arguments', [])
       self.environment = environment
       self.tasks = []
@@ -1085,8 +1082,12 @@ class DartApi(recipe_api.RecipeApi):
       if is_dart:
         executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
         self.script += executable_suffix
+
       self.is_build_step = self.script.endswith(BUILD_PY_PATH)
       self.is_gn_step = self.script.endswith(GN_PY_PATH)
+      self.is_test_py_step = self.script.endswith(TEST_PY_PATH)
+      self.is_test_step = (self.is_test_py_step
+          or step_json.get('testRunner', False))
 
       self.isolate_hash = None
       self.fileset = step_json.get('fileset')

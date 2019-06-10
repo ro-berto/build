@@ -164,6 +164,11 @@ TEST_MATRIX = {
         "script": "tools/custom_thing.py",
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
+        "name": "custom_runner",
+        "script": "tools/custom_test_runner.py",
+        "testRunner": True,
+        "arguments": ["foo", "--bar", "--buildername"]
+      }, {
         "name": "test2",
         "arguments": ["-ndart2js-${system}-${runtime}", "foo", "--bar", "co19"],
       }]
@@ -258,21 +263,24 @@ def RunSteps(api):
   if 'parent_fileset' in api.properties:
     api.dart.download_parent_isolate()
 
-def _canned_step(api, name, shards=0, local_shard=True, suffix=''):
-  data = api.step_data('deflaking.list tests to deflake (%s)' % name,
-                stdout=api.raw_io.output('Flaky/Test/1\nFlaky/Test/2'))
-  if shards == 0:
-    data += api.step_data(name, api.raw_io.output_dir(CANNED_OUTPUT_DIR))
-    data += api.step_data('deflaking.%s' % name,
-                          api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
-  else:
-    for i in range(1, shards):
+def _canned_step(api, name, shards=0, local_shard=True, suffix='',
+      deflake=True):
+  step_name = '%s_shard_%s%s' % (name, 1, suffix) if shards > 0 else name
+  data = None
+  for i in range(1 if shards > 0 else 0, shards + 1):
+    if not data:
+      data = api.step_data(step_name, api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+    else:
       data += api.step_data('%s_shard_%s%s' % (name, i, suffix),
                             api.raw_io.output_dir(CANNED_OUTPUT_DIR))
-    deflaking_name = ('deflaking.%s' % name if local_shard
-                      else 'deflaking.%s_shard_1%s' % (name, suffix))
-    data += api.step_data(deflaking_name,
-                          api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
+    if deflake:
+      deflaking_name = ('deflaking.%s' % name if local_shard
+                        else 'deflaking.%s_shard_1%s' % (name, suffix))
+      data += api.step_data(deflaking_name,
+                            api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
+  if deflake:
+    data += api.step_data('deflaking.list tests to deflake (%s)' % name,
+                stdout=api.raw_io.output('Flaky/Test/1\nFlaky/Test/2'))
 
   return data
 
@@ -291,6 +299,7 @@ def GenTests(api):
         api.json.output([{'change_id': 'Ideadbeef'}])) +
       _canned_step(api, 'test1', 2, False) +
       _canned_step(api, 'test2') +
+      _canned_step(api, 'custom_runner', deflake=False) +
       api.step_data('upload testing fileset test',
           stdout=api.raw_io.output('test_hash')) +
       api.step_data('download previous results.gsutil find latest build',

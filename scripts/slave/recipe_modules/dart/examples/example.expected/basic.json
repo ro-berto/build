@@ -646,6 +646,16 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"custom_runner\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_test_runner.py\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"testRunner\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"-ndart2js-${system}-${runtime}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
@@ -984,7 +994,7 @@
       "--firefox=browsers/firefox/firefox",
       "--shards=2",
       "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1113,7 +1123,7 @@
       "--firefox=browsers/firefox/firefox",
       "--shards=2",
       "--shard=2",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1173,6 +1183,40 @@
       "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/custom_test_runner.py",
+      "foo",
+      "--bar",
+      "--buildername",
+      "--output-directory",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "custom_runner",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
+      "@@@STEP_LOG_END@logs.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--progress=status",
       "--report",
@@ -1186,7 +1230,7 @@
       "co19",
       "--copy-coredumps",
       "--firefox=browsers/firefox/firefox",
-      "--output_directory",
+      "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1400,6 +1444,13 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
+      "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
@@ -1622,7 +1673,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n"
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (test1)",
@@ -1742,9 +1793,17 @@
       "--firefox=browsers/firefox/firefox",
       "--shards=1",
       "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "deflaking.trigger shards for test1.[trigger] test1_shard_1",
     "~followup_annotations": [
@@ -1810,10 +1869,18 @@
       "Flaky/Test/1\nFlaky/Test/2",
       "--copy-coredumps",
       "--firefox=browsers/firefox/firefox",
-      "--output_directory",
+      "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "deflaking.test2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1926,7 +1993,7 @@
       "8945511751514863184",
       "--commit",
       "3456abce78ef",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"None\"}\n"
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"None\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1938,7 +2005,7 @@
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/extend_results.dart",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"None\"}\n",
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"test1\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"None\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
       "[CACHE]/builder/sdk/LATEST/flaky.json",
@@ -1984,7 +2051,7 @@
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--changed",
       "--failing",
@@ -2029,7 +2096,7 @@
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--changed",
       "--failing",

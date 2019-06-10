@@ -597,6 +597,16 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"custom_runner\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_test_runner.py\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"testRunner\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"-ndart2js-${system}-${runtime}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
@@ -876,7 +886,7 @@
       "-ndartkp-android-release-arm",
       "--shards=2",
       "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -985,7 +995,7 @@
       "-ndartkp-android-release-arm",
       "--shards=2",
       "--shard=2",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1206,6 +1216,13 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
+      "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
@@ -1357,7 +1374,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n"
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "deflaking.list tests to deflake (android)",
@@ -1458,9 +1475,17 @@
       "Flaky/Test/1\nFlaky/Test/2",
       "--shards=1",
       "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-arm-be"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "deflaking.trigger shards for android.[trigger] android_shard_1 on Android",
     "~followup_annotations": [
@@ -1579,7 +1604,7 @@
       "8945511751514863184",
       "--commit",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n"
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1591,7 +1616,7 @@
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/extend_results.dart",
-      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n",
+      "{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
       "[CACHE]/builder/sdk/LATEST/flaky.json",
@@ -1638,7 +1663,7 @@
       "",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--changed",
       "--failing"
@@ -1703,7 +1728,7 @@
       "",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--unapproved",
       "--failing"
@@ -1746,7 +1771,7 @@
       "",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--flaky"
     ],
@@ -1811,7 +1836,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/logs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1911,7 +1936,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n",
+      "{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n",
       "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/runs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",

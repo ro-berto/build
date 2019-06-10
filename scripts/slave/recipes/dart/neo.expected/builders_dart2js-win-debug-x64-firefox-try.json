@@ -797,7 +797,7 @@
       "--bar",
       "-e co19",
       "language_2",
-      "--output_directory",
+      "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -828,7 +828,7 @@
       "-mdebug",
       "-nfirefox-foo-debug-x64-bar",
       "--firefox=browsers\\firefox\\firefox.exe",
-      "--output_directory",
+      "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",

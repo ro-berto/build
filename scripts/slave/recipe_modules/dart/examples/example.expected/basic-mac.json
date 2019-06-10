@@ -614,6 +614,16 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"custom_runner\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_test_runner.py\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"testRunner\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"-ndart2js-${system}-${runtime}\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
@@ -927,7 +937,7 @@
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
       "--shards=2",
       "--shard=1",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1051,7 +1061,7 @@
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
       "--shards=2",
       "--shard=2",
-      "--output_directory=${ISOLATED_OUTDIR}"
+      "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1105,6 +1115,28 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/sdk/tools/custom_test_runner.py",
+      "foo",
+      "--bar",
+      "--buildername",
+      "--output-directory",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-strong-mac-x64-chrome-be"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "custom_runner"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/sdk/tools/test.py",
       "--progress=status",
       "--report",
@@ -1118,7 +1150,7 @@
       "co19",
       "--copy-coredumps",
       "--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome",
-      "--output_directory",
+      "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
