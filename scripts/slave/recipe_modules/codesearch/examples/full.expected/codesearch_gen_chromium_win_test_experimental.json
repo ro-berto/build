@@ -756,6 +756,17 @@
   },
   {
     "cmd": [
+      "git",
+      "config",
+      "core.longpaths",
+      "true"
+    ],
+    "cwd": "[CACHE]/generated",
+    "infra_step": true,
+    "name": "git config"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
@@ -826,7 +837,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "git config"
+    "name": "git config (2)"
   },
   {
     "cmd": [
@@ -837,7 +848,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "git config (2)"
+    "name": "git config (3)"
   },
   {
     "cmd": [

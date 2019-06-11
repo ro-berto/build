@@ -245,6 +245,13 @@ class CodesearchApi(recipe_api.RecipeApi):
       generated_repo_dir = self.m.path['cache'].join('generated')
     else:
       generated_repo_dir = self.m.path['start_dir'].join('generated')
+
+    # Windows is unable to checkout files with names longer than 260 chars.
+    # This git setting works around this limitation.
+    if self.c.PLATFORM.startswith('win'):
+      with self.m.context(cwd=generated_repo_dir):
+        self.m.git('config', 'core.longpaths', 'true')
+
     self.m.git.checkout(
         self.c.generated_repo,
         ref=self.c.GEN_REPO_BRANCH,
