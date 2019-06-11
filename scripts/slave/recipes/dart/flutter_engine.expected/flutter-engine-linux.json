@@ -157,7 +157,8 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn"
+      "[CACHE]/builder/src/flutter/tools/gn",
+      "--full-dart-sdk"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -169,7 +170,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn "
+    "name": "gn --full-dart-sdk"
   },
   {
     "cmd": [],
