@@ -1006,6 +1006,7 @@ SPEC['builders'].update([
     stock_config('linux-chromium-tests-staging-tests',
                  bot_type='tester',
                  parent_buildername='linux-chromium-tests-staging-builder'),
+    stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
