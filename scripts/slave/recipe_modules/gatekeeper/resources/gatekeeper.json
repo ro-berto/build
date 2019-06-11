@@ -44,78 +44,6 @@
               "chromium_tree_closer"
             ]
           },
-          "andorid-cronet-arm64-dbg": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-arm64-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-arm-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-arm-dbg": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-kitkat-arm-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-lollipop-arm-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-marshmallow-arm64-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-x86-dbg": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "android-cronet-x86-rel": {
-            "tree_notify": [
-              "cronet-sheriff+build@google.com"
-            ],
-            "closing_optional": [
-              "*"
-            ]
-          },
           "Android arm Builder (dbg)": {
             "categories": [
               "chromium_tree_closer"
@@ -172,16 +100,6 @@
           "*": {}
         },
         "excluded_builders": [
-          "android-cronet-arm-dbg",
-          "android-cronet-arm-rel",
-          "android-cronet-arm64-dbg",
-          "android-cronet-arm64-rel",
-          "android-cronet-asan-arm-rel",
-          "android-cronet-kitkat-arm-rel",
-          "android-cronet-lollipop-arm-rel",
-          "android-cronet-marshmallow-arm64-rel",
-          "android-cronet-x86-dbg",
-          "android-cronet-x86-rel",
           "android-incremental-dbg",
           "Oreo Phone Tester"
         ]
