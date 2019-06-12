@@ -43,9 +43,14 @@ def _AddIsolatedTestSpec(name, platform,
   SPEC['builders'][name] = spec
 
 
-_AddIsolatedTestSpec('android-nexus5x-perf-fyi',
-      'android', parent_buildername='android-builder-perf', target_bits=32,
-      parent_mastername='chromium.perf')
+_AddIsolatedTestSpec('android-nexus5x-perf-fyi', 'android',
+                     parent_buildername='android-builder-perf',
+                     parent_mastername='chromium.perf',
+                     target_bits=32)
+
+_AddIsolatedTestSpec('android-pixel2-perf-fyi', 'android',
+                     parent_buildername='android_arm64-builder-perf',
+                     parent_mastername='chromium.perf')
 
 _AddBuildSpec('android-cfi-builder-perf-fyi', 'android',
               target_bits=32,
