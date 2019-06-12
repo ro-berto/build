@@ -25,7 +25,7 @@ def _FindAllMojomGeneratedFiles(root_dir):
     for filename in filenames:
       if any(filename.endswith(suffix)
              for suffix in ('mojom.h', 'mojom-forward.h', 'mojom-shared.h',
-                            'mojom-shared-internal.h')):
+                            'mojom-shared-internal.h', 'mojom-blink.h')):
         yield os.path.join(dirpath, filename)
 
 
