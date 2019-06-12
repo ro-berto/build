@@ -537,7 +537,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
         'triggers': [
@@ -597,7 +596,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
         'triggers': [
@@ -1395,7 +1393,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
       },
@@ -1422,7 +1419,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
       },

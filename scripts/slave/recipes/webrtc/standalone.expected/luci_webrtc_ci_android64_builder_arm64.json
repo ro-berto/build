@@ -593,7 +593,6 @@
       "/path/to/tmp/json",
       "--",
       "libjingle_peerconnection_so.so",
-      "libjingle_peerconnection_datachannelonly_so.so",
       "apks/AppRTCMobile.apk"
     ],
     "infra_step": true,
