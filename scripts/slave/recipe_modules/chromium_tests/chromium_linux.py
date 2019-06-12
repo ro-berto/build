@@ -129,6 +129,21 @@ SPEC = {
       'force_exparchive': 5,
       'checkout_dir': 'linux',
     },
+    'Linux Trusty': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     # TODO(crbug.com/930364): Remove once linux-coverage-rel is folded into
     # linux-rel or ended up not being able to fold.
     'Linux Builder Code Coverage': {
