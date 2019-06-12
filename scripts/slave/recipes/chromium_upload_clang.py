@@ -6,8 +6,8 @@ from recipe_engine import post_process
 from recipe_engine.types import freeze
 
 DEPS = [
-  'depot_tools/bot_update',
   'chromium',
+  'chromium_checkout',
   'depot_tools/depot_tools',
   'depot_tools/gsutil',
   'depot_tools/osx_sdk',
@@ -67,8 +67,7 @@ BUILDERS = freeze({
 def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS)
 
-  api.bot_update.ensure_checkout(
-      patch_root=bot_config.get('root_override'))
+  api.chromium_checkout.ensure_checkout(bot_config)
 
   api.python('update win toolchain',
       api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
