@@ -151,8 +151,7 @@ def GenTests(api):
         bucket='try',
         builder='chromium_presubmit',
         git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.step_data('presubmit',
-                  api.json.output([['chromium_presubmit', ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
@@ -185,8 +184,7 @@ def GenTests(api):
           buildername='%s_presubmit' % repo_name,
           repo_name=repo_name,
           gerrit_project=repo_name) +
-      api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
-                                                   ['compile']]]))
+      api.step_data('presubmit', api.json.output({}))
     )
 
   yield (
@@ -196,8 +194,7 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(
-        [['chromium_presubmit', ['compile']]]), times_out_after=60*20)
+    api.step_data('presubmit', api.json.output({}), times_out_after=60*20)
   )
 
   yield (
@@ -209,8 +206,7 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src',
         dry_run=True) +
-    api.step_data('presubmit', api.json.output([['chromium_presubmit',
-                                                 ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
@@ -221,8 +217,7 @@ def GenTests(api):
         repo_name='infra',
         gerrit_project='infra/infra',
         runhooks=True) +
-    api.step_data('presubmit', api.json.output([['infra_presubmit',
-                                                 ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
@@ -233,8 +228,7 @@ def GenTests(api):
         repo_name='recipes_py',
         gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
-    api.step_data('presubmit', api.json.output([['infra_presubmit',
-                                                 ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
@@ -246,8 +240,7 @@ def GenTests(api):
         gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
     api.platform('win', 64) +
-    api.step_data('presubmit', api.json.output([['infra_presubmit',
-                                                 ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
@@ -288,8 +281,7 @@ def GenTests(api):
         repository_url='https://skia.googlesource.com/skia.git',
         gerrit_project='skia',
         solution_name='skia') +
-    api.step_data('presubmit',
-                  api.json.output([['chromium_presubmit', ['compile']]]))
+    api.step_data('presubmit', api.json.output({}))
   )
 
   yield (
