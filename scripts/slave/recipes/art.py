@@ -245,14 +245,28 @@ def setup_target(api,
   # '/apex/com.android.runtime').
   #
   # The Runtime APEX is not (yet) supported by the ART Buildot setup (see
-  # b/121117762); however ICU code depends on `ANDROID_RUNTIME_ROOT` to find ICU
-  # .dat files. As a (temporary) workaround, we
+  # b/121117762); however ICU code depends on `ANDROID_RUNTIME_ROOT` to find
+  # the ICU .dat file. As a (temporary) workaround, we
   # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
-  #   generate the ICU .dat files in `/system/etc/icu` on device (these files
-  #   are normally only put in the Runtime APEX on device);
+  #   generate the ICU .dat file in `/system/etc/icu` on device (this file
+  #   is normally only put in the Runtime APEX on device);
   # - set `ANDROID_RUNTIME_ROOT` to '/system' on the ART Buildbot (via
   #   `ART_TEST_ANDROID_RUNTIME_ROOT`).
+  #
+  # TODO(b/121117762): Remove this when the ART Buildbot has full support for
+  # the Runtime APEX.
   android_runtime_root_dir='/system'
+  # Likewise, the Time Zone Data APEX is not yet supported by the ART Buildbot
+  # setup (see b/132169989). As a workaround, we
+  # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
+  #   generate the Time Zone Data files in `/system/etc/tzdata_module/etc/tz` on
+  #   device (these files are normally put in the Time Zone APEX on device);
+  # - set `ANDROID_TZDATA_ROOT` to '/system/etc/tzdata_module' on the ART
+  #   Buildbot (via `ART_TEST_ANDROID_TZDATA_ROOT`).
+  #
+  # TODO(b/132169989): Remove this when the ART Buildbot has full support for
+  # the Time Zone Data APEX.
+  android_tzdata_root_dir='/system/etc/tzdata_module'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
@@ -300,6 +314,7 @@ def setup_target(api,
 
   env.update({ 'ART_TEST_CHROOT' : chroot_dir })
   env.update({ 'ART_TEST_ANDROID_RUNTIME_ROOT' : android_runtime_root_dir })
+  env.update({ 'ART_TEST_ANDROID_TZDATA_ROOT' : android_tzdata_root_dir })
 
   checkout(api)
   clobber(api)
@@ -379,7 +394,7 @@ def setup_target(api,
                                    '-j%d' % (optimizing_make_jobs),
                                    '--optimizing'] + common_options)
     test_logging(api, 'test optimizing')
-    
+
     with api.context(env=test_env):
       # We pass --optimizing for interpreter debuggable to run AOT checker tests
       # compiled debuggable.
