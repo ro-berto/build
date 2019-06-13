@@ -187,10 +187,7 @@ class DartApi(recipe_api.RecipeApi):
         'win': 'Windows',
       }
       task.dimensions['os'] = os_names.get(os, os)
-      if not cpu:
-        task.dimensions.pop('cpu', None)
-      else:
-        task.dimensions['cpu'] = cpu
+      task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
       task.dimensions.pop('gpu', None)
       if 'shard_timeout' in self.m.properties:
@@ -712,7 +709,8 @@ class DartApi(recipe_api.RecipeApi):
     arch = self._get_option(
       builder_fragments,
       ['ia32', 'x64', 'arm', 'armv6', 'armv5te', 'arm64', 'simarm', 'simarmv6',
-      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64'],
+      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64', 'armsimdbc', 'armsimdbc64'
+      ],
       'x64')
     runtime = self._get_option(
       builder_fragments,
@@ -1030,9 +1028,10 @@ class DartApi(recipe_api.RecipeApi):
     shards = shards or step.shards
     if step.isolate_hash and not (step.local_shard and shards < 2):
       with self.m.step.nest('trigger shards for %s' % step_name):
-        cpu = 'arm64' if environment['arch'] == 'arm64' else 'x86-64'
-        # Android bots don't have a "cpu" dimension
-        cpu = None if environment['system'] == 'android' else cpu
+        arch = environment['arch']
+        cpu = arch if arch.startswith('arm') else 'x86-64'
+        # armsimdbc64 -> arm64 because simdbc isn't a real architecture.
+        cpu = cpu.replace('simdbc', '')
         step.tasks += self.shard(step_name, step.isolate_hash,
                                   xvfb_cmd + [script] + args,
                                   num_shards=shards,

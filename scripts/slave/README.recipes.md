@@ -1775,7 +1775,7 @@ Builds dart using the specified build_args
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#229)(self, steps):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#226)(self, steps):**
 
 Collects the results of a sharded test run.
 
@@ -1783,7 +1783,7 @@ Collects the results of a sharded test run.
 
 Returns the path to the checked-in SDK dart executable.
 
-&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#611)(self):**
+&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#608)(self):**
 
 Deletes the debug log file
 
@@ -1797,7 +1797,7 @@ Decrypts the specified secret and returns the location of the result
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#599)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#596)(self):**
 
 Reads the debug log file
 
@@ -1806,7 +1806,7 @@ Reads the debug log file
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#617)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#614)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.

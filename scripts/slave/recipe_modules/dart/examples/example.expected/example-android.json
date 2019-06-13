@@ -138,7 +138,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/vm_kernel_precomp_android_release_arm"
+      "[CACHE]/goma/data/vm_kernel_precomp_android_release_armsimdbc64"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -165,7 +165,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_arm",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_armsimdbc64",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -254,7 +254,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_arm",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_armsimdbc64",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -293,7 +293,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_arm",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_armsimdbc64",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -321,7 +321,7 @@
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_arm",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/vm_kernel_precomp_android_release_armsimdbc64",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -368,9 +368,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-precomp-android-release-arm\", \"project\": \"dart\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-precomp-android-release-armsimdbc64\", \"project\": \"dart\"}",
       "--buildbot-buildername",
-      "vm-kernel-precomp-android-release-arm"
+      "vm-kernel-precomp-android-release-armsimdbc64"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -640,7 +640,7 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-precomp-android-release-arm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-precomp-android-release-armsimdbc64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
@@ -824,7 +824,7 @@
       "--priority",
       "25",
       "--task-name",
-      "android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1",
+      "android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -833,6 +833,9 @@
       "1200",
       "--hard-timeout",
       "3600",
+      "--dimension",
+      "cpu",
+      "arm64",
       "--dimension",
       "os",
       "Android",
@@ -845,19 +848,17 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-precomp-android-release-arm",
+      "buildername:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "data:test_hash",
       "--tag",
       "name:android_shard_1",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-precomp-android-release-arm",
+      "spec_name:dart.ci:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "stepname:android_shard_1 on Android",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -867,9 +868,6 @@
       "--env-prefix",
       "PATH",
       ".swarming_module",
-      "--env-prefix",
-      "PATH",
-      ".swarming_module/bin",
       "--env-prefix",
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
@@ -883,14 +881,14 @@
       "--time",
       "--write-results",
       "--write-logs",
-      "-ndartkp-android-release-arm",
+      "-ndartkp-android-release-armsimdbc64",
       "--shards=2",
       "--shard=1",
       "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-arm-be"
+      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-armsimdbc64-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -903,9 +901,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -933,7 +931,7 @@
       "--priority",
       "25",
       "--task-name",
-      "android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-arm/-1",
+      "android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -942,6 +940,9 @@
       "1200",
       "--hard-timeout",
       "3600",
+      "--dimension",
+      "cpu",
+      "arm64",
       "--dimension",
       "os",
       "Android",
@@ -954,19 +955,17 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-precomp-android-release-arm",
+      "buildername:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "data:test_hash",
       "--tag",
       "name:android_shard_2",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-precomp-android-release-arm",
+      "spec_name:dart.ci:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "stepname:android_shard_2 on Android",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -976,9 +975,6 @@
       "--env-prefix",
       "PATH",
       ".swarming_module",
-      "--env-prefix",
-      "PATH",
-      ".swarming_module/bin",
       "--env-prefix",
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
@@ -992,14 +988,14 @@
       "--time",
       "--write-results",
       "--write-logs",
-      "-ndartkp-android-release-arm",
+      "-ndartkp-android-release-armsimdbc64",
       "--shards=2",
       "--shard=2",
       "--output-directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-arm-be"
+      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-armsimdbc64-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1012,9 +1008,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_2/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1240,7 +1236,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/latest",
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/latest",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1333,7 +1329,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-arm/approved_results.json",
+      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-armsimdbc64/approved_results.json",
       "LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1349,7 +1345,7 @@
       "tools/bots/apply_preapprovals.dart",
       "LATEST/approved_results.json",
       "--upload",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-arm/approved_results.json"
+      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-armsimdbc64/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
@@ -1409,7 +1405,7 @@
       "--priority",
       "25",
       "--task-name",
-      "android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1",
+      "android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1418,6 +1414,9 @@
       "1200",
       "--hard-timeout",
       "3600",
+      "--dimension",
+      "cpu",
+      "arm64",
       "--dimension",
       "os",
       "Android",
@@ -1430,19 +1429,17 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-precomp-android-release-arm",
+      "buildername:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "data:test_hash",
       "--tag",
       "name:android_shard_1",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-precomp-android-release-arm",
+      "spec_name:dart.ci:vm-kernel-precomp-android-release-armsimdbc64",
       "--tag",
       "stepname:android_shard_1 on Android",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
-      "--cipd-package",
-      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -1452,9 +1449,6 @@
       "--env-prefix",
       "PATH",
       ".swarming_module",
-      "--env-prefix",
-      "PATH",
-      ".swarming_module/bin",
       "--env-prefix",
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
@@ -1469,7 +1463,7 @@
       "--write-results",
       "--write-logs",
       "--clean-exit",
-      "-ndartkp-android-release-arm",
+      "-ndartkp-android-release-armsimdbc64",
       "--repeat=5",
       "--tests",
       "Flaky/Test/1\nFlaky/Test/2",
@@ -1479,7 +1473,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-arm-be"
+      "BUILDBOT_BUILDERNAME": "vm-kernel-precomp-android-release-armsimdbc64-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1492,9 +1486,9 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-arm/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash/vm-kernel-precomp-android-release-armsimdbc64/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1620,7 +1614,7 @@
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
       "[CACHE]/builder/sdk/LATEST/flaky.json",
-      "vm-kernel-precomp-android-release-arm",
+      "vm-kernel-precomp-android-release-armsimdbc64",
       "0",
       "1234567",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
@@ -1817,14 +1811,14 @@
       "----",
       "cp",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/revision"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/revision"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/revision@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/revision@@@"
     ]
   },
   {
@@ -1837,14 +1831,14 @@
       "----",
       "cp",
       "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/logs.json"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/logs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload logs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/logs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/logs.json@@@"
     ]
   },
   {
@@ -1857,14 +1851,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/results.json"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/results.json@@@"
     ]
   },
   {
@@ -1877,14 +1871,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/flaky.json"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/flaky.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload flaky.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/flaky.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/flaky.json@@@"
     ]
   },
   {
@@ -1897,14 +1891,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-precomp-android-release-arm.json"
+      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-precomp-android-release-armsimdbc64.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "upload new results.gsutil upload flaky_current_vm-kernel-precomp-android-release-arm.json",
+    "name": "upload new results.gsutil upload flaky_current_vm-kernel-precomp-android-release-armsimdbc64.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-precomp-android-release-arm.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-precomp-android-release-armsimdbc64.json@@@"
     ]
   },
   {
@@ -1917,14 +1911,14 @@
       "----",
       "cp",
       "LATEST/approved_results.json",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/approved_results.json"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload approved_results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/approved_results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/approved_results.json@@@"
     ]
   },
   {
@@ -1936,15 +1930,15 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-arm\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/runs.json"
+      "{\"builder_name\": \"vm-kernel-precomp-android-release-armsimdbc64\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-armsimdbc64\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"vm-kernel-precomp-android-release-armsimdbc64\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n",
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/runs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload runs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/0/runs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/runs.json@@@"
     ]
   },
   {
@@ -1957,14 +1951,14 @@
       "----",
       "cp",
       "0",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-arm/latest"
+      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/latest"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
     "name": "upload new results.gsutil update \"latest\" reference",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-arm/latest@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/latest@@@"
     ]
   },
   {
@@ -1973,7 +1967,7 @@
       "tools/approve_results.dart",
       "--automated-approver",
       "-b",
-      "vm-kernel-precomp-android-release-arm",
+      "vm-kernel-precomp-android-release-armsimdbc64",
       "--successes-only",
       "-y"
     ],

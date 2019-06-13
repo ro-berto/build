@@ -657,7 +657,7 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-precomp-android-release-arm\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-precomp-android-release-armsimdbc64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",

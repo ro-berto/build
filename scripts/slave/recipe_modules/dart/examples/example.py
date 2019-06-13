@@ -190,7 +190,7 @@ TEST_MATRIX = {
     },
     {
       "builders": [
-        "vm-kernel-precomp-android-release-arm"
+        "vm-kernel-precomp-android-release-armsimdbc64"
       ],
       "meta": {},
       "steps": [{
@@ -398,7 +398,8 @@ def GenTests(api):
           project='dart'))
 
   yield (api.test('example-android') + api.platform('linux', 64) +
-      api.buildbucket.ci_build(builder='vm-kernel-precomp-android-release-arm',
+      api.buildbucket.ci_build(
+          builder='vm-kernel-precomp-android-release-armsimdbc64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       _canned_step(api, 'android', 2, False, ' on Android') +
