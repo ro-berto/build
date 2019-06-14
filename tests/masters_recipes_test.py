@@ -148,7 +148,6 @@ FAKE_BUILDERS = {
         'leak_detection_linux',
         'linux-blink-gen-property-trees',
         'linux-blink-heap-verification-try',
-        'linux-goma-rbe-staging-rel',
         'linux-gcc-rel',
         'linux-rel',
         'linux-ozone-rel',
