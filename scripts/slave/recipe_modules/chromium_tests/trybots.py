@@ -677,9 +677,9 @@ TRYBOTS = freeze({
         'buildername': 'GPU Linux Builder (dbg)',
         'tester': 'Linux Debug (NVIDIA)',
       }),
-      'linux-trusty':simple_bot({
+      'linux-trusty-rel':simple_bot({
         'mastername': 'chromium.linux',
-        'buildername': 'Linux Trusty',
+        'buildername': 'linux-trusty-rel',
       }),
     },
   },

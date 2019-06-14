@@ -109,7 +109,7 @@ SPEC = {
       'force_exparchive': 5,
       'checkout_dir': 'linux',
     },
-    'Linux Trusty': {
+    'linux-trusty-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
