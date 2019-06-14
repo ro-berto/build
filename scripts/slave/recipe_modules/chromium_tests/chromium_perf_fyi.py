@@ -33,10 +33,10 @@ def _AddBuildSpec(name, platform, config_name='chromium_perf',
 
 def _AddIsolatedTestSpec(name, platform,
                          parent_buildername=None, parent_mastername=None,
-                         target_bits=64):
+                         target_bits=64, **kwargs):
   spec = chromium_perf.TestSpec(
       'chromium_perf', platform, target_bits,
-      parent_buildername=parent_buildername)
+      parent_buildername=parent_buildername, **kwargs)
   if parent_mastername:
     spec['parent_mastername'] = parent_mastername
 
@@ -103,3 +103,11 @@ _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
                      target_bits=32)
+
+_AddIsolatedTestSpec('chromeos-kevin-perf-fyi', 'chromeos',
+                     parent_buildername='chromeos-kevin-builder-perf-fyi',
+                     parent_mastername='chromium.perf.fyi',
+                     target_bits=32,
+                     target_arch='arm',
+                     cros_board='kevin')
+

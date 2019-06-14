@@ -120,7 +120,8 @@ def BuildSpec(
 
 
 def TestSpec(config_name, platform, target_bits,
-             parent_buildername, tests=None):
+             parent_buildername, tests=None,
+             cros_board=None, target_arch=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
@@ -130,6 +131,12 @@ def TestSpec(config_name, platform, target_bits,
   )
 
   spec['parent_buildername'] = parent_buildername
+
+  if cros_board:
+    spec['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+
+  if target_arch:
+    spec['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
 
   return spec
 
