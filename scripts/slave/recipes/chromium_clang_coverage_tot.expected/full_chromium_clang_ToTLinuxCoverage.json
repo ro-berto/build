@@ -218,7 +218,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/third_party/llvm-build/cr_build_revision",
+      "[START_DIR]/src/third_party/llvm-build/Release+Asserts/cr_build_revision",
       "/path/to/tmp/"
     ],
     "infra_step": true,

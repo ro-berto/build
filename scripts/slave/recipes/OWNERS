@@ -17,6 +17,7 @@ per-file chromium.py=jbudorick@chromium.org
 per-file chromium.py=martiniss@chromium.org
 per-file chromium.py=sergeyberezin@chromium.org
 per-file chromium.py=sergiyb@chromium.org
+per-file chromium_clang_coverage_tot.py=file:chromium_clang_coverage_tot.expected/OWNERS
 per-file chromium_codesearch.py=file:chromium_codesearch.expected/OWNERS
 per-file chromium_libfuzzer.py=file:chromium_libfuzzer.expected/OWNERS
 per-file chromium_libfuzzer_clang_tot.py=file:chromium_libfuzzer.expected/OWNERS

@@ -47,8 +47,9 @@ BUILDERS = freeze({
 
 # Sample targets that are used to test the coverage script against clang tot
 # coverage tools.
-SAMPLE_TARGETS = ['base_unittests', 'boringssl_crypto_tests',
-                  'boringssl_ssl_tests']
+SAMPLE_TARGETS = [
+    'base_unittests', 'boringssl_crypto_tests', 'boringssl_ssl_tests'
+]
 SAMPLE_FUZZER_TARGETS = ['pdfium_fuzzer', 'third_party_re2_fuzzer']
 
 
@@ -63,10 +64,10 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
   api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  clang_revision_file = api.path['checkout'].join('third_party', 'llvm-build',
-                                                  'cr_build_revision')
-  revision = api.file.read_text('Read clang revision', clang_revision_file,
-                                test_data='332838-1')
+  clang_revision_file = api.path['checkout'].join(
+      'third_party', 'llvm-build', 'Release+Asserts', 'cr_build_revision')
+  revision = api.file.read_text(
+      'Read clang revision', clang_revision_file, test_data='332838-1')
   api.step.active_result.presentation.step_text = revision
 
   api.chromium.mb_gen(mastername, buildername, use_goma=True)
@@ -116,8 +117,8 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
     log_file_path = output_dir_path.join(api.platform.name, 'logs',
                                          log_file_name)
 
-    log_content = api.file.read_text('read log output of %s' % target,
-                                     log_file_path, test_data='aaa\nbbb')
+    log_content = api.file.read_text(
+        'read log output of %s' % target, log_file_path, test_data='aaa\nbbb')
     log_content_lines = log_content.splitlines()
     api.step.active_result.presentation.logs[log_file_name] = log_content_lines
 
