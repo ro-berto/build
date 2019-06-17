@@ -47,7 +47,6 @@ class PackageIndexTest(unittest.TestCase):
       self.archive_path = archive_file.name
 
     self.index_pack = package_index.IndexPack(
-        self.archive_path,
         TEST_DATA_INPUT_DIR,
         os.path.join(self.build_dir, 'compile_commands.json'),
         os.path.join(self.build_dir, 'gn_targets.json'),
@@ -55,23 +54,16 @@ class PackageIndexTest(unittest.TestCase):
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)
-    self.index_pack.GenerateIndexPack()
-    self.index_pack.close()
-
-    self.unpacked_index_dir = tempfile.mkdtemp()
-    z = zipfile.ZipFile(self.archive_path, 'r')
-    z.extractall(self.unpacked_index_dir)
-    z.close()
-
+    self.assertTrue(os.path.exists(self.index_pack.index_directory))
     self.assertTrue(os.path.exists(
-        os.path.join(self.unpacked_index_dir, 'kzip', 'files')))
+        os.path.join(self.index_pack.index_directory, 'files')))
     self.assertTrue(os.path.exists(
-        os.path.join(self.unpacked_index_dir, 'kzip', 'units')))
+        os.path.join(self.index_pack.index_directory, 'units')))
 
   def tearDown(self):
     if os.path.exists(self.archive_path):
       os.remove(self.archive_path)
-    shutil.rmtree(self.unpacked_index_dir)
+    self.index_pack.close()
     os.chdir(self.saved_cwd)
 
   def _CheckFilesMatchExactly(self, out_dir, golden_dir):
@@ -123,19 +115,23 @@ class PackageIndexTest(unittest.TestCase):
       self.assertEqual(golden_dicts[key], unit_dict)
 
   def testGenerateDataFiles(self):
+    self.index_pack._GenerateDataFiles()
+
     self._CheckFilesMatchExactly(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'files'),
+        out_dir=os.path.join(self.index_pack.index_directory, 'files'),
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_files'))
 
   def testGenerateUnitFiles(self):
+    self.index_pack.GenerateIndexPack()
+
     self._CheckUnitFilesMatch(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'units'),
+        out_dir=os.path.join(self.index_pack.index_directory, 'units'),
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units'))
 
   def testGenerateUnitFilesWindows(self):
     # Recreate the index pack using a different compilation database.
+    self.index_pack.close()
     self.index_pack = package_index.IndexPack(
-        self.archive_path,
         TEST_DATA_INPUT_DIR,
         os.path.join(self.build_dir, 'compile_commands_win.json'),
         os.path.join(self.build_dir, 'gn_targets.json'),
@@ -143,22 +139,19 @@ class PackageIndexTest(unittest.TestCase):
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
         verbose=True)
-    self.index_pack.GenerateIndexPack()
-    self.index_pack.close()
 
-    shutil.rmtree(self.unpacked_index_dir)
-    self.unpacked_index_dir = tempfile.mkdtemp()
-    z = zipfile.ZipFile(self.archive_path, 'r')
-    z.extractall(self.unpacked_index_dir)
-    z.close()
+    self.index_pack.GenerateIndexPack()
 
     self._CheckUnitFilesMatch(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'units'),
+        out_dir=os.path.join(self.index_pack.index_directory, 'units'),
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units_win'))
 
   def testCreateArchive(self):
+    self.index_pack.GenerateIndexPack()
+    self.index_pack.CreateArchive(self.archive_path)
+
     # Verify the structure of the archive. It should be as follows:
-    # kzip/              # Any valid non-empty directory name
+    # root/              # Any valid non-empty directory name
     #   units/
     #     abcd1234       # Compilation unit (name is SHA256 of content)
     #     ...
@@ -169,7 +162,7 @@ class PackageIndexTest(unittest.TestCase):
     with zipfile.ZipFile(self.archive_path, 'r') as archive:
       zipped_filenames = archive.namelist()
 
-    root = 'kzip'
+    root = os.path.basename(self.index_pack.index_directory)
     self.assertIn(root + os.path.sep, zipped_filenames);
 
     # Verify that the units/ dir has its own entry.
@@ -177,7 +170,7 @@ class PackageIndexTest(unittest.TestCase):
 
     # Rather than hardcode the SHA256 of the unit files here, we simply verify
     # that at least one exists and that they are all present in the zip.
-    units_dir = os.path.join(self.unpacked_index_dir, 'kzip', 'units')
+    units_dir = os.path.join(self.index_pack.index_directory, 'units')
     unit_files = os.listdir(units_dir)
     self.assertNotEqual(0, len(unit_files))
     for unit_file_name in unit_files:
