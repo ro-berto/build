@@ -38,11 +38,14 @@ WIN_SDK_CORPUS = 'winsdk'
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
-  def __init__(self, root_dir, compdb_path, gn_targets_path, corpus=None,
-               build_config=None, out_dir='src/out/Debug', verbose=False):
+  def __init__(self, output_file, root_dir, compdb_path, gn_targets_path,
+               corpus=None, build_config=None, out_dir='src/out/Debug',
+               verbose=False):
     """Initializes IndexPack.
 
     Args:
+      output_file: a file-like object or filename to which the index pack will
+        be written.
       root_dir: path to the root of the checkout (i.e. the path containing
         src/). out_dir is relative to this.
       compdb_path: path to the compilation database.
@@ -65,19 +68,26 @@ class IndexPack(object):
     self.verbose = verbose
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
-    # Create a temporary data directory. The structure is as follows:
-    # A root directory (arbitrary name) with two subdirectories. The
-    # subdirectory 'files' should contain all source files involved in any
-    # compilation unit. The subdirectory 'units' describes the compilation units
-    # in JSON format.
-    self.index_directory = tempfile.mkdtemp()
-    print 'Storing the index pack files in ' + self.index_directory
-    # Path for the files directory within the index directory
-    self.files_directory = os.path.join(self.index_directory, 'files')
-    # Path for the units directory within the index directory
-    self.units_directory = os.path.join(self.index_directory, 'units')
-    os.makedirs(self.files_directory)
-    os.makedirs(self.units_directory)
+
+    # Create the kzip. We write data directly into the zip file rather than
+    # creating a temporary directory with the structure we want and then zipping
+    # it. This reduces the number of IO operations we need. This is particularly
+    # beneficial on GCE, as the disk is remote and our IOPS are limited.
+    self.kzip = zipfile.ZipFile(
+        output_file, 'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+
+    # The structure of the kzip is as follows: A root directory (arbitrary name)
+    # with two subdirectories. The subdirectory 'files' should contain all
+    # source files involved in any compilation unit. The subdirectory 'units'
+    # describes the compilation units in JSON format.
+    index_directory = 'kzip'
+    self.files_directory = os.path.join(index_directory, 'files')
+    self.units_directory = os.path.join(index_directory, 'units')
+
+    # Write empty entries for the directories.
+    self.kzip.writestr(index_directory + '/', '')
+    self.kzip.writestr(self.files_directory + '/', '')
+    self.kzip.writestr(self.units_directory + '/', '')
 
     with open(compdb_path, 'rb') as json_commands_file:
       # The list of JSON dictionaries, each describing one compilation unit.
@@ -155,8 +165,8 @@ class IndexPack(object):
 
 
   def close(self):
-    """Cleans up any temporary dirs created in the constructor."""
-    shutil.rmtree(self.index_directory)
+    """Closes the underlying zipfile.ZipFile, flushing it to disk."""
+    self.kzip.close()
 
   def _AddDataFile(self, fname):
     """Adds a data file to the archive.
@@ -179,8 +189,7 @@ class IndexPack(object):
       if self.verbose:
         print ' Including source file %s as %s for compilation' % (fname,
                                                                    hash_fname)
-      with open(hash_fname, 'wb') as f:
-        f.write(content)
+      self.kzip.writestr(hash_fname, content)
 
   def _AddUnitFile(self, unit_dictionary):
     if self.verbose:
@@ -193,8 +202,7 @@ class IndexPack(object):
     unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
     unit_file_path = os.path.join(self.units_directory,
                                   unit_file_content_hash)
-    with open(unit_file_path, 'wb') as unit_file:
-      unit_file.write(unit_file_content)
+    self.kzip.writestr(unit_file_path, unit_file_content)
     if self.verbose:
       print 'Wrote compilation unit file %s' % unit_file_path
 
@@ -537,43 +545,6 @@ class IndexPack(object):
     # Generate the unit files.
     self._GenerateUnitFiles()
 
-  def CreateArchive(self, filepath):
-    """Creates a zip archive containing the index pack.
-
-    Args:
-      filepath: The filepath where the index pack archive should be stored.
-    Raises:
-      Exception: The zip command failed to create the archive
-    """
-
-    # Remove the old zip archive (if it exists). This avoids that the new index
-    # pack is just added to the old zip archive.
-    if os.path.exists(filepath):
-      os.remove(filepath)
-
-    # We use zipfile here rather than shutil.make_archive because it has a bug
-    # on Python <2.7.11 where it doesn't add entries for directories (see
-    # https://bugs.python.org/issue24982).
-    # TODO(crbug/790616): Once the bots have been migrated to LUCI, the block
-    # below can be replaced with shutil.make_archive.
-    with zipfile.ZipFile(
-        filepath, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as archive:
-      # os.walk doesn't include the directory you point it at in its output.
-      archive.write(self.index_directory,
-                    os.path.basename(self.index_directory))
-
-      for root, dirnames, filenames in os.walk(self.index_directory):
-        for filename in itertools.chain(dirnames, filenames):
-          # The format specification requires that the archive contains one
-          # folder with an arbitrary name directly containing the 'units' and
-          # 'files' directories. So, if index_directory is foo/bar, we need to
-          # prefix all the filenames with bar/. We do this by taking the path
-          # relative to the parent of the index directory.
-          abs_path = os.path.join(root, filename)
-          index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
-          rel_path = os.path.relpath(abs_path, index_parent)
-          archive.write(abs_path, rel_path)
-
 
 def _CorpusForFile(filepath, default_corpus):
   """Returns the appropriate corpus name for a file path.
@@ -681,9 +652,14 @@ def main():
 
   root_dir = os.path.normpath(os.path.join(options.checkout_dir, '..'))
 
+  # Remove the old zip archive (if it exists). This avoids that the new index
+  # pack is just added to the old zip archive.
+  if os.path.exists(options.path_to_archive_output):
+    os.remove(options.path_to_archive_output)
+
   print '%s: Index generation...' % time.strftime('%X')
-  with closing(
-      IndexPack(root_dir, options.path_to_compdb, options.path_to_gn_targets,
+  with open(options.path_to_archive_output, 'w') as f, closing(
+      IndexPack(f, root_dir, options.path_to_compdb, options.path_to_gn_targets,
                 options.corpus, options.build_config, options.out_dir,
                 options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
@@ -691,9 +667,6 @@ def main():
     if not options.keep_filepaths_files:
       # Clean up the *.filepaths files.
       _RemoveFilepathsFiles(os.path.join(root_dir, 'src'))
-
-    # Create the archive containing the generated files.
-    index_pack.CreateArchive(options.path_to_archive_output)
 
   print '%s: Done.' % time.strftime('%X')
   return 0
