@@ -190,11 +190,6 @@ def generate_tests(api, phase, bot):
     ]
 
   if test_suite == 'more_configs':
-    if 'bwe_test_logging' in phase:
-      tests.append(SwarmingIsolatedTest(
-          'bwe_simulations_tests',
-          args=['--gtest_filter=VideoSendersTest/'
-                'BweSimulation.Choke1000kbps500kbps1000kbps/1']))
     if 'no_sctp' in phase:
       tests.append(SwarmingIsolatedTest('peerconnection_unittests'))
 
