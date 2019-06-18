@@ -170,7 +170,7 @@ class BotConfig(object):
     for bot_id in self._bot_ids:
       bot_config = bot_db.get_bot_config(
           bot_id.mastername, bot_id.buildername)
-      compile_targets.update(set(bot_config.get('compile_targets', [])))
+      compile_targets.update(bot_config.get('compile_targets', []))
       compile_targets.update(bot_db.get_source_side_spec(
           bot_id.mastername, bot_id.buildername).get(
               'additional_compile_targets', []))

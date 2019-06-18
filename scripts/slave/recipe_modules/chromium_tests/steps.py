@@ -477,7 +477,7 @@ class Test(object):
       # TODO(martiniss): Maybe change this behavior? This allows for failures
       # in 'retry shards with patch' which might not be reported to devs, which
       # may confuse them.
-      return True, set(failures).intersection(set(retry_shards_failures))
+      return True, set(failures).intersection(retry_shards_failures)
 
     if with_patch_valid:
       return True, set(failures)

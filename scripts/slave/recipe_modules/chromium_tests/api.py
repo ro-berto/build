@@ -342,7 +342,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failed_tests = set()
       for tl in tests_list:
         invalid_ts, failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
-        failed_tests = failed_tests.union(set(failed_ts).union(set(invalid_ts)))
+        failed_tests = failed_tests.union(failed_ts, invalid_ts)
 
       self.m.chromium_swarming.report_stats()
 
