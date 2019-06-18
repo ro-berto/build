@@ -279,6 +279,31 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/packages_tests",
+      "-ensure-file",
+      "infra/gcloud/${platform} version:251.0.0.chromium0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "setup tests.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:251.0.0.\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/gcloud/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "generate_host_files.py",
@@ -319,6 +344,11 @@
       "1"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "name": "run all tests",
     "~followup_annotations": [
       "@@@STEP_FAILURE@@@"
@@ -342,6 +372,11 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "name": "test summary.parse summary",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -387,6 +422,11 @@
       "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "infra_step": true,
     "name": "test summary.1st test.read logs",
     "~followup_annotations": [
@@ -400,6 +440,11 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "name": "test summary.1st test.zip logs archive",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs/1st test\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/1st test.zip\", \"root\": \"[START_DIR]/logs/1st test\"}",
     "~followup_annotations": [
@@ -419,6 +464,11 @@
       "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/1st test.zip"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "infra_step": true,
     "name": "test summary.1st test.gsutil upload Compute logs",
     "~followup_annotations": [
@@ -449,6 +499,11 @@
       "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "infra_step": true,
     "name": "test summary.2nd test.read logs",
     "~followup_annotations": [
@@ -474,6 +529,11 @@
       "/path/to/tmp/"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "infra_step": true,
     "name": "test summary.3rd test.read logs",
     "~followup_annotations": [
@@ -489,6 +549,11 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "name": "zip logs archive",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/all_logs.zip\", \"root\": \"[START_DIR]/logs\"}"
   },
@@ -505,6 +570,11 @@
       "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/packages_tests/bin"
+      ]
+    },
     "infra_step": true,
     "name": "gsutil upload CELab Test Logs",
     "~followup_annotations": [

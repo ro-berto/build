@@ -194,6 +194,12 @@ def _RunTests(api, checkout, tests, cel_ctl):
     api.file.ensure_directory('init host_dir if not exists', host_dir)
     api.file.ensure_directory('init logs_dir if not exists', logs_dir)
 
+    # Install required package for gsutil.
+    packages_root = api.path['start_dir'].join('packages_tests')
+    packages = {'infra/gcloud/${platform}': 'version:251.0.0.chromium0'}
+    api.cipd.ensure(packages_root, packages)
+    add_paths = [packages_root.join('bin')]
+
     # Get a unique storage prefix for these tests (diff runs share the bucket)
     storage_prefix = 'test-run-%s' % api.buildbucket.build.id
 
@@ -212,7 +218,7 @@ def _RunTests(api, checkout, tests, cel_ctl):
         venv=True)
 
   # Run our tests and catch test failures.
-  with api.context(cwd=checkout):
+  with api.context(cwd=checkout, env_suffixes={'PATH': add_paths}):
     try:
       api.python('run all tests',
         'test/run_tests.py',
