@@ -343,8 +343,6 @@ def RunSteps(api, target_mastername, target_buildername,
           '<br/>Culprit: <a href="https://crrev.com/%s">%s</a>' % (
               culprit_candidate, culprit_candidate))
 
-  return report
-
 
 def GenTests(api):
   def props(compile_targets=None, use_analyze=False,

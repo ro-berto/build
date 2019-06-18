@@ -96,8 +96,6 @@ def RunSteps(api, target_mastername, target_testername,
     api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
 
-  return report
-
 
 def GenTests(api):
   def props(
