@@ -23,6 +23,7 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
+CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
 
 
 def _get_bin_directory(api, bin_root):
@@ -47,21 +48,27 @@ def _get_python_packages(api, checkout):
 
 
 def RunSteps(api):
+  project = api.buildbucket.build.builder.project
+
+  if project == 'celab':
+    _RunStepsCelab(api)
+  elif project == 'chromium':
+    _RunStepsChromium(api)
+  else:
+    raise ValueError('Invalid `project`. Accepted values: celab, chromium.')
+
+
+def _RunStepsCelab(api):
   checkout = _CheckoutCelabRepo(api)
 
-  # Get CELab binaries from CIPD or build them from source.
-  bin_dir = ""
-  version = api.properties.get('celab_version')
-  if version:
-    bin_dir = _GetCelabFromCipd(api, version)
-  else:
-    bin_dir = _BuildCelabFromSource(api, checkout)
+  # Build CELab binaries from source.
+  bin_dir = _BuildCelabFromSource(api, checkout)
 
-    # Upload binaries (cel_ctl and resources/*, plus the python package of the
-    # test framework) for CI builds
-    bucket = api.buildbucket.build.builder.bucket
-    if bucket == 'ci':
-      _UploadCelabBinariesToStorage(api, checkout, bin_dir)
+  # Upload binaries (cel_ctl and resources/*, plus the python package of the
+  # test framework) for CI builds
+  bucket = api.buildbucket.build.builder.bucket
+  if bucket == 'ci':
+    _UploadCelabBinariesToStorage(api, checkout, bin_dir)
 
   cel_ctl = bin_dir.join(_get_ctl_binary_name(api))
 
@@ -69,6 +76,26 @@ def RunSteps(api):
   tests = api.properties.get('tests')
   if tests:
     _RunTests(api, checkout, tests, cel_ctl)
+
+
+def _RunStepsChromium(api):
+  version = api.properties.get('celab_version')
+  tests = api.properties.get('tests')
+  if not version or not tests:
+    raise ValueError('Chromium bots must define `celab_version` and `tests`.')
+
+  checkout = _CheckoutChromiumRepo(api)
+
+  # Build Chromium binaries from source.
+  _BuildChromiumFromSource(api, checkout)
+
+  # Get CELab binaries from CIPD.
+  bin_dir = _GetCelabFromCipd(api, version)
+
+  cel_ctl = bin_dir.join(_get_ctl_binary_name(api))
+
+  # Run tests for all chromium bots.
+  _RunTests(api, checkout, tests, cel_ctl)
 
 
 def _GetCelabFromCipd(api, version):
@@ -119,6 +146,16 @@ def _BuildCelabFromSource(api, checkout):
       venv=True)
 
   return _get_bin_directory(api, checkout.join('out'))
+
+
+def _CheckoutChromiumRepo(api):
+  # TODO(mbinette@): Checkout the chromium repo
+  return api.path['checkout']
+
+
+def _BuildChromiumFromSource(api, checkout):
+  # TODO(mbinette@): Build chromedriver & mini_installer.
+  pass
 
 
 def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
@@ -343,11 +380,29 @@ def GenTests(api):
       api.expect_exception('ValueError')
   )
   yield (
-      api.test('binaries_from_cipd') +
-      api.properties(tests='sample.test', celab_version='version:1.0.0') +
+      api.test('chromium_try') +
+      api.properties(tests='chromium.test', celab_version='version:1.0.0',
+                     pool_name='chromium-try', pool_size=5,
+                     mastername='tryserver.chromium.win', bot_id='test_bot') +
       api.platform('win', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='try',
-                               builder='misconfigured-quick-tests',
-                               git_repo=CELAB_REPO) +
+      api.buildbucket.try_build(project='chromium',
+                                bucket='luci.chromium.try',
+                                builder='win-celab-try-rel',
+                                git_repo=CHROMIUM_REPO)
+  )
+  yield (
+      api.test('chromium_no_version') +
+      api.properties(tests='chromium.test',
+                     mastername='tryserver.chromium.win', bot_id='test_bot') +
+      api.platform('win', 64) +
+      api.buildbucket.try_build(project='chromium',
+                                bucket='luci.chromium.try',
+                                builder='win-celab-try-rel',
+                                git_repo=CHROMIUM_REPO) +
+      api.expect_exception('ValueError')
+  )
+  yield (
+      api.test('invalid_project') +
+      api.buildbucket.ci_build(project='other-project') +
       api.expect_exception('ValueError')
   )

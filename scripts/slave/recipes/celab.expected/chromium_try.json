@@ -1,0 +1,113 @@
+[
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[START_DIR]\\packages",
+      "-ensure-file",
+      "infra/celab/celab/${platform} version:1.0.0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.0.0---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/celab/celab/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "setup tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]\\hosts"
+    ],
+    "infra_step": true,
+    "name": "setup tests.init host_dir if not exists",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]\\logs"
+    ],
+    "infra_step": true,
+    "name": "setup tests.init logs_dir if not exists",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "generate_host_files.py",
+      "--template",
+      "../../examples/schema/host/example.host.textpb",
+      "--projects",
+      "chromium-try-001;chromium-try-002;chromium-try-003;chromium-try-004;chromium-try-005",
+      "--storage_bucket",
+      "chromium-try-assets",
+      "--storage_prefix",
+      "test-run-8945511751514863184",
+      "--destination_dir",
+      "[START_DIR]\\hosts"
+    ],
+    "cwd": "None\\scripts\\tests",
+    "name": "setup tests.generate host files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "test/run_tests.py",
+      "--tests",
+      "chromium.test",
+      "--hosts",
+      "[START_DIR]\\hosts",
+      "--cel_ctl",
+      "[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe",
+      "--shared_provider_storage",
+      "chromium-try-assets",
+      "--error_logs_dir",
+      "[START_DIR]\\logs",
+      "--noprogress",
+      "-v",
+      "1"
+    ],
+    "cwd": "None",
+    "name": "run all tests"
+  },
+  {
+    "name": "$result"
+  }
+]
