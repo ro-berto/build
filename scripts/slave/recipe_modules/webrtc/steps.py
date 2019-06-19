@@ -90,7 +90,8 @@ def generate_tests(api, phase, bot):
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
       if api.platform.is_linux or is_win_clang:
         tests.append(baremetal_test('webrtc_perf_tests', args=[
-            '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
+            '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
+            '--nologs',
         ]))
 
   if test_suite == 'desktop_perf_swarming':
@@ -100,6 +101,7 @@ def generate_tests(api, phase, bot):
         SwarmingPerfTest('webrtc_perf_tests', args=[
             '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
             '--save_worst_frame',
+            '--nologs',
         ]),
     ]
 
@@ -110,6 +112,7 @@ def generate_tests(api, phase, bot):
     ]))
     tests.append(SwarmingAndroidPerfTest('webrtc_perf_tests', args=[
         '--save_worst_frame',
+        '--nologs',
     ]))
 
   if test_suite == 'android':
@@ -144,7 +147,8 @@ def generate_tests(api, phase, bot):
 
     if api.tryserver.is_tryserver:
       tests.append(AndroidTest('webrtc_perf_tests', args=[
-          '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
+          '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
+          '--nologs',
       ]))
 
   if test_suite == 'ios':
@@ -186,7 +190,10 @@ def generate_tests(api, phase, bot):
 
   if test_suite == 'ios_perf':
     tests += [
-        IosTest('webrtc_perf_tests', args=['--save_chartjson_result']),
+        IosTest('webrtc_perf_tests', args=[
+            '--save_chartjson_result',
+            '--nologs',
+        ]),
     ]
 
   if test_suite == 'more_configs':

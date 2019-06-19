@@ -285,6 +285,7 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--save_worst_frame",
+      "--nologs",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json"
     ],

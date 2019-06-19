@@ -4793,7 +4793,8 @@
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
-      "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/"
+      "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/",
+      "--nologs"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,

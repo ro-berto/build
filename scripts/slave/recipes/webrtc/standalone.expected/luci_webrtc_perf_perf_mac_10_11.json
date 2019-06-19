@@ -373,7 +373,8 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--test-artifacts-dir",
       "${ISOLATED_OUTDIR}",
-      "--save_worst_frame"
+      "--save_worst_frame",
+      "--nologs"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

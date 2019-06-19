@@ -4545,7 +4545,8 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json",
-      "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/"
+      "--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/",
+      "--nologs"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
