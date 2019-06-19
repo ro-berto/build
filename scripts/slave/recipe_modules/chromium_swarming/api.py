@@ -46,7 +46,7 @@ IMPLIED_CIPD_BINARIES = {
   # NOTE(crbug.com/812693): this isn't currently available on arm. See
   # SwarmingApi.trigger_task for hack.
   'infra/python/cpython/${platform}':
-    ('bin', 'version:2.7.14.chromium14'),
+    ('bin', 'version:2.7.15.chromium14'),
 }
 
 PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)

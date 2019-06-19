@@ -89,7 +89,7 @@ AUX_BINARY_PACKAGES = {
       # The Python package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/python/cpython/${os}-${arch=386,amd64}',
-          version='version:2.7.14.chromium14'),
+          version='version:2.7.15.chromium14'),
 
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
