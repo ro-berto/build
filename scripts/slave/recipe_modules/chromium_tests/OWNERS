@@ -23,6 +23,7 @@ per-file chromium_gpu*=ynovikov@chromium.org
 per-file chromium_perf*=crouleau@chromium.org
 per-file chromium_webrtc*.py=ehmaldonado@chromium.org
 per-file chromium_webrtc*.py=phoglund@chromium.org
+per-file client_openscreen*.py=file://scripts/slave/recipes/openscreen.expected/OWNERS
 per-file client_v8_*=machenbach@chromium.org
 per-file tryserver_chromium_perf.py=dtu@chromium.org
 per-file tryserver_chromium_perf.py=prasadv@chromium.org

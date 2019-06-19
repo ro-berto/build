@@ -25,6 +25,7 @@ TEST_CONFIGS = [
   'fuchsia',
   'ios',
   'ndk_next',
+  'openscreen_tot',
   'perf',
   'show_v8_revision',
   'v8_canary',
