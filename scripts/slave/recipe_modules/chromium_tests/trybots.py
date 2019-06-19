@@ -207,22 +207,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
-      'gpu-fyi-try-android-p-pixel-xl-32-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 Vk Release (Pixel XL)',
-      }),
-      'gpu-fyi-try-android-p-pixel-xl-32-deqp-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 dEQP Vk Release (Pixel XL)',
-      }),
-      'gpu-fyi-try-android-p-pixel-xl-64-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 Vk Release (Pixel XL)',
-      }),
-      'gpu-fyi-try-android-p-pixel-xl-64-deqp-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 dEQP Vk Release (Pixel XL)',
-      }),
       'try-nougat-phone-tester': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android arm64 Builder (dbg)',

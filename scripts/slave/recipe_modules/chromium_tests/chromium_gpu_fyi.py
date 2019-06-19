@@ -1217,39 +1217,7 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
-    'Android FYI 32 Vk Release (Pixel XL)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'android',
-    },
     'Android FYI 64 Vk Release (Pixel 2)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'android',
-    },
-    'Android FYI 64 Vk Release (Pixel XL)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
@@ -1281,39 +1249,7 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
-    'Android FYI 32 dEQP Vk Release (Pixel XL)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'android',
-    },
     'Android FYI 64 dEQP Vk Release (Pixel 2)': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'android',
-    },
-    'Android FYI 64 dEQP Vk Release (Pixel XL)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
