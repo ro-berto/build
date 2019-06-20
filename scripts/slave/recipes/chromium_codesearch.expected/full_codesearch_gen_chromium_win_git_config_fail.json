@@ -763,7 +763,11 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "set core.longpaths"
+    "name": "set core.longpaths",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Infra Failure: Step('set core.longpaths')@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [

@@ -767,7 +767,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "git config"
+    "name": "set core.longpaths"
   },
   {
     "cmd": [
@@ -841,7 +841,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "git config (2)"
+    "name": "git config"
   },
   {
     "cmd": [
@@ -852,7 +852,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "infra_step": true,
-    "name": "git config (3)"
+    "name": "git config (2)"
   },
   {
     "cmd": [

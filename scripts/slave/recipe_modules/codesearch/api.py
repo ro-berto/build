@@ -249,8 +249,18 @@ class CodesearchApi(recipe_api.RecipeApi):
     # Windows is unable to checkout files with names longer than 260 chars.
     # This git setting works around this limitation.
     if self.c.PLATFORM.startswith('win'):
-      with self.m.context(cwd=generated_repo_dir):
-        self.m.git('config', 'core.longpaths', 'true')
+      try:
+        with self.m.context(cwd=generated_repo_dir):
+          self.m.git('config', 'core.longpaths', 'true',
+                     name='set core.longpaths')
+      except self.m.step.StepFailure as f: # pragma: nocover
+        # If the bot runs with an empty cache, generated_repo_dir won't be a git
+        # directory yet, causing git config to fail. In this case, we should
+        # continue the run anyway. If the checkout fails on the next step due to
+        # a long filename, this is no big deal as it should pass on the next
+        # run.
+        self.m.step.active_result.presentation.step_text = f.reason_message()
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
 
     self.m.git.checkout(
         self.c.generated_repo,

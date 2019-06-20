@@ -333,6 +333,18 @@ def GenTests(api):
 
   yield (
     api.test(
+        'full_%s_git_config_fail' %
+        _sanitize_nonalpha('codesearch-gen-chromium-win')) +
+    api.step_data('set core.longpaths', retcode=1) +
+    api.step_data('generate gn target list',
+                  api.raw_io.stream_output(
+                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
+    api.properties.generic(buildername='codesearch-gen-chromium-win') +
+    api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+    api.test(
         'full_%s_sync_generated_files_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('sync generated files', retcode=1) +
