@@ -1210,16 +1210,16 @@ SwarmingTask -> argument list for go swarming command.
 
 SwarmingTask -> name of a step of a waterfall.
 
-Will take a task title (+ step name prefix) and append OS dimension to it.
+Will take a task name (+ step name prefix) and append OS dimension to it.
 
 Args:
-  prefix: prefix to append to task title, like 'trigger'.
+  prefix: prefix to append to task name, like 'trigger'.
   task: SwarmingTask instance.
 
 Returns:
-  '[<prefix>] <task title> on <OS>'
+  '[<prefix>] <task name> on <OS>'
 
-&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#620)(self, title=None, isolated_hash=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
+&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#620)(self, name=None, isolated=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -1282,7 +1282,7 @@ Service account json to use for swarming.
 
 Changes URL of Swarming server to use.
 
-&mdash; **def [task](/scripts/slave/recipe_modules/chromium_swarming/api.py#473)(self, title=None, isolated_hash=None, ignore_task_failure=False, shards=1, shard_indices=None, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, builder_name=None, build_number=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None, task_to_retry=None, failure_as_exception=True):**
+&mdash; **def [task](/scripts/slave/recipe_modules/chromium_swarming/api.py#473)(self, name=None, isolated=None, ignore_task_failure=False, shards=1, shard_indices=None, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, builder_name=None, build_number=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None, task_to_retry=None, failure_as_exception=True):**
 
 Returns a new SwarmingTask instance to run an isolated executable on
 Swarming.
@@ -1300,13 +1300,13 @@ The default collect step will raise a StepFailure exception if there is a
 test failure. To change this behavior, overwrite the default collect step.
 
 Args:
-  * title: name of the test, used as part of a task ID.
-  * isolated_hash: hash of isolated test on isolate server, the test should
+  * name: name of the test, used as part of a task ID.
+  * isolated: hash of isolated test on isolate server, the test should
       be already isolated there, see 'isolate' recipe module.
   * ignore_task_failure: whether to ignore the test failure of swarming
     tasks. By default, this is set to False.
   * shards: if defined, the number of shards to use for the task. By default
-      this value is either 1 or based on the title.
+      this value is either 1 or based on the name.
   * shard_indices: Which shards to run. If None, all shards are run.
   * task_output_dir: if defined, the directory where task results are
       placed. The caller is responsible for removing this folder when
@@ -1799,7 +1799,7 @@ Kills leftover tasks from previous runs or steps.
 
 Reads the debug log file
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#161)(self, title, isolate_hash, test_args, os, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#161)(self, name, isolate_hash, test_args, os, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Returns the created tasks, which can be collected with collect_all().

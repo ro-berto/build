@@ -572,9 +572,9 @@ class V8SwarmingTest(V8Test):
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
     self.task = self.api.chromium_swarming.task(
-        title=self.test['name'] + self.test_step_config.step_name_suffix,
+        name=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
-        isolated_hash=self._get_isolated_hash(self.test),
+        isolated=self._get_isolated_hash(self.test),
         shards=shards,
         raw_cmd=[command] + extra_args,
     )
@@ -638,8 +638,8 @@ class V8GenericSwarmingTest(BaseTest):
   def pre_run(self, test=None, **kwargs):
     self.test = test or self.api.v8.test_configs[self.name]
     self.task = self.api.chromium_swarming.task(
-        title=self.title,
-        isolated_hash=self._get_isolated_hash(self.test),
+        name=self.title,
+        isolated=self._get_isolated_hash(self.test),
         task_output_dir=self.task_output_dir,
         raw_cmd=self.command,
     )

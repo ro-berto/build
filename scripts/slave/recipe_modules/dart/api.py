@@ -158,7 +158,7 @@ class DartApi(recipe_api.RecipeApi):
         stdout=self.m.raw_io.output('out'))
 
 
-  def shard(self, title, isolate_hash, test_args, os, cpu='x86-64',
+  def shard(self, name, isolate_hash, test_args, os, cpu='x86-64',
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
             cipd_packages=None, ignore_failure=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
@@ -172,7 +172,7 @@ class DartApi(recipe_api.RecipeApi):
     for shard in range(num_shards):
       if last_shard_is_local and shard == num_shards - 1:
         break
-      task = self.m.chromium_swarming.task('%s_shard_%s' % (title, (shard + 1)),
+      task = self.m.chromium_swarming.task('%s_shard_%s' % (name, (shard + 1)),
                                   isolate_hash,
                                   cipd_packages=cipd_packages,
                                   raw_cmd=test_args +

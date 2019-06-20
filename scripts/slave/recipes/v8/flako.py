@@ -352,7 +352,7 @@ class Runner(object):
       # override the step names.
       task = self.api.chromium_swarming.task(
           '%s - shard %d' % (step_prefix, shard),
-          isolated_hash,
+          isolated=isolated_hash,
           task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
       )

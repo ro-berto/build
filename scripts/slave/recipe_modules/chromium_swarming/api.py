@@ -470,7 +470,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
 
-  def task(self, title=None, isolated_hash=None, ignore_task_failure=False,
+  def task(self, name=None, isolated=None, ignore_task_failure=False,
            shards=1, shard_indices=None, task_output_dir=None, extra_args=None,
            idempotent=None, cipd_packages=None, build_properties=None,
            builder_name=None, build_number=None,
@@ -494,13 +494,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     test failure. To change this behavior, overwrite the default collect step.
 
     Args:
-      * title: name of the test, used as part of a task ID.
-      * isolated_hash: hash of isolated test on isolate server, the test should
+      * name: name of the test, used as part of a task ID.
+      * isolated: hash of isolated test on isolate server, the test should
           be already isolated there, see 'isolate' recipe module.
       * ignore_task_failure: whether to ignore the test failure of swarming
         tasks. By default, this is set to False.
       * shards: if defined, the number of shards to use for the task. By default
-          this value is either 1 or based on the title.
+          this value is either 1 or based on the name.
       * shard_indices: Which shards to run. If None, all shards are run.
       * task_output_dir: if defined, the directory where task results are
           placed. The caller is responsible for removing this folder when
@@ -586,8 +586,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     collect_step = functools.partial(
         self._default_collect_step, failure_as_exception=failure_as_exception)
     return SwarmingTask(
-        title=title,
-        isolated_hash=isolated_hash,
+        name=name,
+        isolated=isolated,
         dimensions=self._default_dimensions,
         env=init_env,
         priority=self.default_priority,
@@ -617,7 +617,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_to_retry=task_to_retry,
     )
 
-  def gtest_task(self, title=None, isolated_hash=None, extra_args=None,
+  def gtest_task(self, name=None, isolated=None, extra_args=None,
                  cipd_packages=None, merge=None, **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -643,7 +643,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         'standard_gtest_merge.py')}
 
     # Make a task, configure it to be collected through shim script.
-    task = self.task(title, isolated_hash, extra_args=extra_args,
+    task = self.task(name, isolated, extra_args=extra_args,
                      cipd_packages=cipd_packages, merge=merge, **kwargs)
     task.collect_step = self._gtest_collect_step
     return task
@@ -859,8 +859,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Default tags.
     tags = set(task.tags)
     tags.update(self._default_tags)
-    tags.add('data:' + task.isolated_hash)
-    tags.add('name:' + task.title.split(' ')[0])
+    tags.add('data:' + task.isolated)
+    tags.add('name:' + task.name.split(' ')[0])
     mastername = self.m.properties.get('mastername')
     if mastername:
       tags.add('master:' + mastername)
@@ -896,7 +896,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           args.extend(('--env-prefix', key, path))
 
     # What isolated command to trigger.
-    args.extend(('--isolated', task.isolated_hash))
+    args.extend(('--isolated', task.isolated))
 
     # Use a raw command as extra-args on tasks without command.
     if task.raw_cmd:
@@ -1438,14 +1438,14 @@ class SwarmingApi(recipe_api.RecipeApi):
   def get_step_name(self, prefix, task):
     """SwarmingTask -> name of a step of a waterfall.
 
-    Will take a task title (+ step name prefix) and append OS dimension to it.
+    Will take a task name (+ step name prefix) and append OS dimension to it.
 
     Args:
-      prefix: prefix to append to task title, like 'trigger'.
+      prefix: prefix to append to task name, like 'trigger'.
       task: SwarmingTask instance.
 
     Returns:
-      '[<prefix>] <task title> on <OS>'
+      '[<prefix>] <task name> on <OS>'
     """
     prefix = '[%s] ' % prefix if prefix else ''
     task_os = task.dimensions['os']
@@ -1453,13 +1453,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = ('' if (
         task_os == bot_os or task_os.lower() == self.m.platform.name.lower() or
-        task_os in task.title)
+        task_os in task.name)
               else ' on %s' % task_os)
     # Note: properly detecting dimensions of the bot the recipe is running
     # on is somewhat non-trivial. It is not safe to assume it uses default
     # or preferred dimensions for its OS. For example, the version of the OS
     # can differ.
-    return ''.join((prefix, task.title, suffix))
+    return ''.join((prefix, task.name, suffix))
 
 
   def _handle_summary_json(self, task, step_result):
@@ -1736,7 +1736,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
-  def __init__(self, title, isolated_hash, ignore_task_failure, dimensions,
+  def __init__(self, name, isolated, ignore_task_failure, dimensions,
                env, priority, shards, shard_indices, spec_name, buildername,
                buildnumber, expiration, user, io_timeout, hard_timeout,
                idempotent, extra_args, collect_step, task_output_dir,
@@ -1747,9 +1747,9 @@ class SwarmingTask(object):
     """Configuration of a swarming task.
 
     Args:
-      * title: display name of the task, hints to what task is doing. Usually
+      * name: display name of the task, hints to what task is doing. Usually
           corresponds to a name of a test executable. Doesn't have to be unique.
-      * isolated_hash: hash of isolated file that describes all files needed to
+      * isolated: hash of isolated file that describes all files needed to
           run the task as well as command line to launch. See 'isolate' recipe
           module.
       * ignore_task_failure: whether to ignore the test failure of swarming
@@ -1858,7 +1858,7 @@ class SwarmingTask(object):
     self.idempotent = idempotent
     self.ignore_task_failure = ignore_task_failure
     self.io_timeout = io_timeout
-    self.isolated_hash = isolated_hash
+    self.isolated = isolated
     self.merge = merge or {}
     self.named_caches = named_caches or {}
     self.service_account = service_account
@@ -1869,7 +1869,7 @@ class SwarmingTask(object):
     self.shard_indices = shard_indices
     self.tags = set()
     self.task_output_dir = task_output_dir
-    self.title = title
+    self.name = name
     self.user = user
     self.env_prefixes = {
       var: list(paths) for var, paths in (env_prefixes or {}).iteritems()}
@@ -1891,7 +1891,7 @@ class SwarmingTask(object):
     other way.
     """
     out = '%s/%s/%s' % (
-        self.title, self.dimensions['os'], self.isolated_hash[:10])
+        self.name, self.dimensions['os'], self.isolated[:10])
     if self.buildername:
       out += '/%s/%s' % (self.buildername, self.buildnumber or -1)
     return out

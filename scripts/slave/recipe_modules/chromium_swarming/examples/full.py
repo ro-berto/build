@@ -108,27 +108,27 @@ def RunSteps(api, platforms, custom_trigger_script,
           '--verbose',
         ], stdout=api.raw_io.output_text())
     # TODO(vadimsh): Pass result from isolate.py though --output-json option.
-    isolated_hash = step_result.stdout.split()[0].strip()
+    isolated = step_result.stdout.split()[0].strip()
 
     # Create a task to run the isolated file on swarming, set OS dimension.
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
     if gtest_task:
       task = api.chromium_swarming.gtest_task(
-          'hello_world', isolated_hash,
+          name='hello_world', isolated=isolated,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge)
     elif isolated_script_task:
       task = api.chromium_swarming.isolated_script_task()
-      task.title = 'hello_world'
-      task.isolated_hash = isolated_hash
+      task.name = 'hello_world'
+      task.isolated = isolated
       task.task_output_dir = temp_dir.join('task_output_dir')
       if merge:
         task.merge = merge
       task.trigger_script = trigger_script
       task.env = {'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}
     else:
-      task = api.chromium_swarming.task('hello_world', isolated_hash,
+      task = api.chromium_swarming.task(name='hello_world', isolated=isolated,
                               task_output_dir=temp_dir.join('task_output_dir'),
                               named_caches=named_caches,
                               service_account=service_account,

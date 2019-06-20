@@ -1503,13 +1503,13 @@ class SwarmingTest(Test):
   def shards(self):
     return self._shards
 
-  def create_task(self, api, suffix, isolated_hash):
+  def create_task(self, api, suffix, isolated):
     """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
       api: Caller's API.
       suffix: Suffix added to the test name.
-      isolated_hash: Hash of the isolated test to be run.
+      isolated: Hash of the isolated test to be run.
 
     Returns:
       A SwarmingTask object.
@@ -1517,7 +1517,7 @@ class SwarmingTest(Test):
     raise NotImplementedError()  # pragma: no cover
 
   def _apply_swarming_task_config(
-      self, task, api, suffix, isolated_hash, filter_flag, filter_delimiter):
+      self, task, api, suffix, isolated, filter_flag, filter_delimiter):
     """Applies shared configuration for swarming tasks.
     """
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1587,10 +1587,10 @@ class SwarmingTest(Test):
     task.cipd_packages = self._cipd_packages
     task.containment_type = self._containment_type
     task.ignore_task_failure = self._ignore_task_failure
-    task.isolated_hash = isolated_hash
+    task.isolated = isolated
     if self._merge:
       task.merge = self._merge
-    task.title = self.step_name(suffix)
+    task.name = self.step_name(suffix)
     task.trigger_script = self._trigger_script
     task.service_account = self._service_account
 
@@ -1636,14 +1636,14 @@ class SwarmingTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated_hash = api.isolate.isolated_tests.get(self.isolate_target)
-    if not isolated_hash:
+    isolated = api.isolate.isolated_tests.get(self.isolate_target)
+    if not isolated:
       return api.python.failing_step(
           '[error] %s' % self.step_name(suffix),
           '*.isolated file for target %s is missing' % self.isolate_target)
 
     # Create task.
-    self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
+    self._tasks[suffix] = self.create_task(api, suffix, isolated)
 
     return api.chromium_swarming.trigger_task(self._tasks[suffix])
 
@@ -1755,10 +1755,10 @@ class SwarmingGTestTest(SwarmingTest):
       return self._override_compile_targets
     return [self.target_name]
 
-  def create_task(self, api, suffix, isolated_hash):
+  def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.gtest_task()
     self._apply_swarming_task_config(
-        task, api, suffix, isolated_hash, '--gtest_filter', ':')
+        task, api, suffix, isolated, '--gtest_filter', ':')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -1976,7 +1976,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def test_options(self, value):
     self._test_options = value
 
-  def create_task(self, api, suffix, isolated_hash):
+  def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.isolated_script_task()
 
     # For the time being, we assume all isolated_script_test are not
@@ -1986,7 +1986,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     task.idempotent = self._idempotent
 
     self._apply_swarming_task_config(
-        task, api, suffix, isolated_hash, '--isolated-script-test-filter', '::')
+        task, api, suffix, isolated, '--isolated-script-test-filter', '::')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -2620,7 +2620,7 @@ class SwarmingIosTest(SwarmingTest):
     task['tmp_dir'] = api.path.mkdtemp(task['task_id'])
 
     swarming_task = api.chromium_swarming.task(
-      title=task['step name'],
+      name=task['step name'],
       task_output_dir=task['tmp_dir'],
       failure_as_exception=False,
     )
@@ -2755,7 +2755,7 @@ class SwarmingIosTest(SwarmingTest):
   def validate_task_results(self, api, step_result):
     raise NotImplementedError()  # pragma: no cover
 
-  def create_task(self, api, suffix, isolated_hash):
+  def create_task(self, api, suffix, isolated):
     raise NotImplementedError()  # pragma: no cover
 
   def compile_targets(self):
