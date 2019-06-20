@@ -482,8 +482,7 @@ TRYBOTS = freeze({
       }),
       'linux_chromium_dbg_32_ng': simple_bot({
         'mastername': 'chromium.linux',
-        'buildername': 'Linux Builder (dbg)(32)',
-        'tester': 'Linux Tests (dbg)(1)(32)',
+        'buildername': 'Linux Builder (dbg)(32)'
       }),
       'linux_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.linux',

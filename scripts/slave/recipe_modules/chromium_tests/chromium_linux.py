@@ -197,21 +197,6 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
-    'Linux Tests (dbg)(1)(32)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux Builder (dbg)(32)',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
