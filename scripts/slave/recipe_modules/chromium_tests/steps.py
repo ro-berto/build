@@ -1555,8 +1555,13 @@ class SwarmingTest(Test):
               '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
 
+      # Wrap the merge script specific to the test type (i.e. gtest vs isolated
+      # script tests) in a coverage that know how to merge coverage data. If the
+      # test object does not specify a merge script, use the one defined by the
+      # swarming task in the chromium_swarm module. (The default behavior for
+      # non-coverage tests).
       self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
-          self.step_name(suffix), additional_merge=self._merge)
+          self.step_name(suffix), additional_merge=self._merge or task.merge)
 
     if suffix == 'retry shards with patch':
       task.task_to_retry = self._tasks['with patch']

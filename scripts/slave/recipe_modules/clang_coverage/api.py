@@ -421,10 +421,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           '--additional-merge-script',
           additional_merge['script'],
       ])
-      new_merge['args'].extend([
-          '--additional-merge-script-args',
-          self.m.json.dumps(additional_merge['args'])
-      ])
+      if 'args' in additional_merge:
+        new_merge['args'].extend([
+            '--additional-merge-script-args',
+            self.m.json.dumps(additional_merge['args'])
+        ])
 
     return new_merge
 
