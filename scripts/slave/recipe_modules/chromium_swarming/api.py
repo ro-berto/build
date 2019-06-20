@@ -43,7 +43,7 @@ IMPLIED_CIPD_BINARIES = {
 
   'infra/tools/luci/logdog/butler/${platform}':
     ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
-  # NOTE(crbug.com/812693): this isn't currently available on arm. See
+  # NOTE(crbug.com/842234): this isn't currently available on mips. See
   # SwarmingApi.trigger_task for hack.
   'infra/python/cpython/${platform}':
     ('bin', 'version:2.7.15.chromium14'),
@@ -778,11 +778,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     to_add = dict(IMPLIED_CIPD_BINARIES)
 
-    # HACK(crbug.com/812693) - we don't support cpython on arm yet, so remove
+    # HACK(crbug.com/842234) - we don't support cpython on mips yet, so remove
     # it from packages to inject.
-    # HACK(crbug.com/842234): We also don't support CPython on mips.
     cpu_dimension = task.dimensions.get('cpu', '')
-    if 'arm' in cpu_dimension or 'mips' in cpu_dimension:
+    if 'mips' in cpu_dimension:
       for k in to_add.keys():
         if 'cpython' in k:
           to_add.pop(k)
