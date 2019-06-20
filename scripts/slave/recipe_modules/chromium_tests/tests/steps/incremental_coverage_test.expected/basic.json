@@ -131,7 +131,11 @@
       "[CLEANUP]/coverage_tmp_1/file_changes.json"
     ],
     "infra_step": true,
-    "name": "Saving changed lines for revision."
+    "name": "Saving changed lines for revision.",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@file_changes.json@{\"fake/file1.java\": [], \"fake/file2.java;\": [], \"fake/file3.java\": []}@@@",
+      "@@@STEP_LOG_END@file_changes.json@@@"
+    ]
   },
   {
     "cmd": [

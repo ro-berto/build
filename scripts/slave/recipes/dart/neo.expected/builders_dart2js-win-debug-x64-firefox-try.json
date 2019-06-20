@@ -303,7 +303,11 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "infra_step": true,
-    "name": "write fileset nameoffileset to sdk root"
+    "name": "write fileset nameoffileset to sdk root",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@nameoffileset@{'variables': {'files': '[]'}}@@@",
+      "@@@STEP_LOG_END@nameoffileset@@@"
+    ]
   },
   {
     "cmd": [
@@ -320,7 +324,11 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
     "infra_step": true,
-    "name": "write fileset fileset1 to sdk root"
+    "name": "write fileset fileset1 to sdk root",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@fileset1@{'variables': {'files': '[]'}}@@@",
+      "@@@STEP_LOG_END@fileset1@@@"
+    ]
   },
   {
     "cmd": [
@@ -910,7 +918,8 @@
     "infra_step": true,
     "name": "download previous results.ensure results.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@results.json@@@"
     ]
   },
   {
@@ -931,7 +940,8 @@
     "infra_step": true,
     "name": "download previous results.ensure flaky.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@flaky.json@@@"
     ]
   },
   {
@@ -952,7 +962,8 @@
     "infra_step": true,
     "name": "download previous results.ensure approved_results.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@approved_results.json@@@"
     ]
   },
   {

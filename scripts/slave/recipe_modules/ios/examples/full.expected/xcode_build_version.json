@@ -311,7 +311,10 @@
     "infra_step": true,
     "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x86\"@@@"
+      "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x86\"@@@",
+      "@@@STEP_LOG_LINE@args.gn@is_debug=true@@@",
+      "@@@STEP_LOG_LINE@args.gn@target_cpu=\"x86\"@@@",
+      "@@@STEP_LOG_END@args.gn@@@"
     ]
   },
   {

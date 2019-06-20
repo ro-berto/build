@@ -178,7 +178,19 @@
     "infra_step": true,
     "name": "apply build config.generate iOS32_Release.json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@{@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  \"configuration\": \"Release\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@    \"is_debug=false\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@    \"target_cpu=\\\"arm\\\"\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  ],@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  \"sdk\": \"iphoneos10.3\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  \"tests\": [],@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@iOS32_Release.json@}@@@",
+      "@@@STEP_LOG_END@iOS32_Release.json@@@"
     ]
   },
   {

@@ -314,7 +314,10 @@
     "infra_step": true,
     "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />is_debug=false<br />target_cpu=\"arm64\"@@@"
+      "@@@STEP_TEXT@<br />is_debug=false<br />target_cpu=\"arm64\"@@@",
+      "@@@STEP_LOG_LINE@args.gn@is_debug=false@@@",
+      "@@@STEP_LOG_LINE@args.gn@target_cpu=\"arm64\"@@@",
+      "@@@STEP_LOG_END@args.gn@@@"
     ]
   },
   {

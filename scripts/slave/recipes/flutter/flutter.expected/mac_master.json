@@ -401,7 +401,10 @@
       ]
     },
     "infra_step": true,
-    "name": "set gradle-wrapper.properties"
+    "name": "set gradle-wrapper.properties",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gradle-wrapper.properties@@@"
+    ]
   },
   {
     "cmd": [
@@ -565,7 +568,10 @@
       ]
     },
     "infra_step": true,
-    "name": "set gradle-wrapper.properties (2)"
+    "name": "set gradle-wrapper.properties (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gradle-wrapper.properties@@@"
+    ]
   },
   {
     "cmd": [

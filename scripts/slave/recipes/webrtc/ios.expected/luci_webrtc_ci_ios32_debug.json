@@ -178,7 +178,19 @@
     "infra_step": true,
     "name": "apply build config.generate iOS32_Debug.json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@{@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  \"configuration\": \"Debug\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@    \"is_debug=true\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@    \"target_cpu=\\\"arm\\\"\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  ],@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  \"sdk\": \"iphoneos10.3\",@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  \"tests\": [],@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@iOS32_Debug.json@}@@@",
+      "@@@STEP_LOG_END@iOS32_Debug.json@@@"
     ]
   },
   {

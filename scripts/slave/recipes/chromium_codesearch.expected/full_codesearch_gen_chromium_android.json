@@ -324,7 +324,26 @@
       "[CACHE]/builder/src/out/android-Debug/gn_targets.json"
     ],
     "infra_step": true,
-    "name": "write gn target list"
+    "name": "write gn target list",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@gn_targets.json@@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@{@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@   \"//ipc:mojom_constants__generator\": {@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"args\": [ \"--use_bundled_pylibs\", \"generate\", \"-d\", \"../../\", \"-I\", \"../../\", \"-o\", \"gen\", \"--bytecode_path\", \"gen/mojo/public/tools/bindings\", \"--filelist={{response_file_name}}\", \"-g\", \"c++\", \"--typemap\", \"gen/ipc/mojom_constants__type_mappings\" ],@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"deps\": [ \"//ipc:mojom_constants__parsed\", \"//ipc:mojom_constants__type_mappings\", \"//ipc:mojom_constants__verify_deps\", \"//mojo/public/tools/bindings:precompile_templates\" ],@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"inputs\": [ \"//mojo/public/tools/bindings/generators/mojom_cpp_generator.py\" ],@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"outputs\": [ \"//out/Debug/gen/ipc/constants.mojom.cc\", \"//out/Debug/gen/ipc/constants.mojom.h\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.cc\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.h\" ],@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"public\": \"*\",@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"script\": \"//mojo/public/tools/bindings/mojom_bindings_generator.py\",@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"sources\": [ \"//ipc/constants.mojom\" ],@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"testonly\": false,@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"toolchain\": \"//build/toolchain/linux:clang_x64\",@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"type\": \"action\",@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@      \"visibility\": [ \"//ipc:*\" ]@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@   }@@@",
+      "@@@STEP_LOG_LINE@gn_targets.json@}@@@",
+      "@@@STEP_LOG_END@gn_targets.json@@@"
+    ]
   },
   {
     "allow_subannotations": true,

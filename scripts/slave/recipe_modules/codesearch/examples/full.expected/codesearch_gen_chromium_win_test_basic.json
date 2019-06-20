@@ -311,7 +311,10 @@
       "[START_DIR]/src/out/win-Debug/gn_targets.json"
     ],
     "infra_step": true,
-    "name": "write gn target list"
+    "name": "write gn target list",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_targets.json@@@"
+    ]
   },
   {
     "cmd": [

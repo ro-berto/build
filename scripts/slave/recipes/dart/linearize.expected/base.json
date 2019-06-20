@@ -217,7 +217,14 @@
     ],
     "cwd": "[CLEANUP]",
     "infra_step": true,
-    "name": "update commits"
+    "name": "update commits",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@commits.json@{@@@",
+      "@@@STEP_LOG_LINE@commits.json@  \"another_repo\":\"deadbeef\",@@@",
+      "@@@STEP_LOG_LINE@commits.json@  \"repo\":\"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@commits.json@}@@@",
+      "@@@STEP_LOG_END@commits.json@@@"
+    ]
   },
   {
     "cmd": [

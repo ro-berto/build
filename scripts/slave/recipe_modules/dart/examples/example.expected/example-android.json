@@ -713,7 +713,11 @@
       "[CACHE]/builder/sdk/test"
     ],
     "infra_step": true,
-    "name": "write fileset test to sdk root"
+    "name": "write fileset test to sdk root",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@test@{'variables': {'files': '[]'}}@@@",
+      "@@@STEP_LOG_END@test@@@"
+    ]
   },
   {
     "cmd": [
@@ -727,7 +731,11 @@
       "[CACHE]/builder/sdk/trigger"
     ],
     "infra_step": true,
-    "name": "write fileset trigger to sdk root"
+    "name": "write fileset trigger to sdk root",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@trigger@{'variables': {'files': '[]'}}@@@",
+      "@@@STEP_LOG_END@trigger@@@"
+    ]
   },
   {
     "cmd": [
@@ -1281,7 +1289,8 @@
     "infra_step": true,
     "name": "download previous results.ensure results.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@results.json@@@"
     ]
   },
   {
@@ -1299,7 +1308,8 @@
     "infra_step": true,
     "name": "download previous results.ensure flaky.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@flaky.json@@@"
     ]
   },
   {
@@ -1317,7 +1327,8 @@
     "infra_step": true,
     "name": "download previous results.ensure approved_results.json exists",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@approved_results.json@@@"
     ]
   },
   {

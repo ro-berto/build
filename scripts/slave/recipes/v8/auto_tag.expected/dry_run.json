@@ -218,7 +218,15 @@
       "[BUILDER_CACHE]/v8/include/v8-version.h"
     ],
     "infra_step": true,
-    "name": "Increment version"
+    "name": "Increment version",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@v8-version.h@@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MAJOR_VERSION 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MINOR_VERSION 4@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_BUILD_NUMBER 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_PATCH_LEVEL 3@@@",
+      "@@@STEP_LOG_END@v8-version.h@@@"
+    ]
   },
   {
     "cmd": [
