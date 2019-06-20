@@ -6,15 +6,21 @@ import itertools
 import json
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import Property
 
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'clang_coverage',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
 ]
+
+PROPERTIES = {
+    'gn_args': Property(default={'fake': 'map'}),
+}
 
 CUSTOM_BUILDERS = {
   'chromium.example': {
@@ -210,10 +216,11 @@ CUSTOM_BUILDERS = {
 }
 
 
-def RunSteps(api):
+def RunSteps(api, gn_args):
   builders = None
   if api.properties.get('custom_builders'):
     builders = CUSTOM_BUILDERS
+  api.clang_coverage._gn_args = gn_args
   api.chromium_tests.main_waterfall_steps(builders=builders)
 
 
@@ -283,7 +290,8 @@ def GenTests(api):
           swarm_hashes={
             'base_unittests':
             '[dummy hash for base_unittests]'
-          }) +
+          },
+          gn_args={'use_clang_coverage': 'true'}) +
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
               'linux-chromeos-code-coverage': {
@@ -303,6 +311,39 @@ def GenTests(api):
             post_process.MustRun, 'base_unittests') +
       api.post_process(
             post_process.MustRun, 'generate coverage metadata for 1 tests') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+    )
+
+  yield (
+      api.test('java_code_coverage_ci_bots') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='android-code-coverage',
+          swarm_hashes={
+            'chrome_public_test_apk':
+            '[dummy hash for chrome_public_test_apk]'
+          }) +
+      api.properties(gn_args={'jacoco_coverage': 'true'}) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.fyi', {
+              'android-code-coverage': {
+                  'gtest_tests': [
+                      {
+                          'isolate_coverage_data': True,
+                          'test': 'chrome_public_test_apk',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          }
+                      }
+                  ],
+              },
+          }
+      ) +
+      api.post_process(
+            post_process.MustRun, 'chrome_public_test_apk on Android') +
+      api.post_process(
+            post_process.MustRun, 'process java coverage') +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
     )

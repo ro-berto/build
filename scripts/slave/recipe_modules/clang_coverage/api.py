@@ -50,6 +50,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     # The location of the scripts used to merge code coverage data (as opposed
     # to test results).
     self._merge_scripts_location = None
+    # The map of gn args in args.gn file.
+    self._gn_args = {}
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -65,6 +67,25 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     value = re.sub('[^\w\s]', '', step_name).strip().lower()
     value = re.sub('[-\s]+', '_', value)
     return value
+
+  @property
+  def gn_args(self):
+    if not self._gn_args and self.m.path.exists(
+        self.m.chromium.output_dir.join('args.gn')):
+      # TODO(yliuyliu): find more reliable way to get gn args.
+      content = self.m.gn.get_args(self.m.chromium.output_dir)
+      self._gn_args = self.m.gn.parse_gn_args(content)
+    return self._gn_args
+
+  @property
+  def is_clang_coverage(self):
+    return 'use_clang_coverage' in self.gn_args and self.gn_args[
+        'use_clang_coverage'] == 'true'
+
+  @property
+  def is_java_coverage(self):
+    return 'jacoco_coverage' in self.gn_args and self.gn_args[
+        'jacoco_coverage'] == 'true'
 
   @property
   def merge_scripts_location(self):
@@ -147,11 +168,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
   @property
   def using_coverage(self):
     """Checks if the current build is running coverage-instrumented targets."""
-    # TODO(crbug.com/896751): Implement a cleaner way to determine if the recipe
-    # is using code coverage instrumentation.
-    return (self.m.gclient.c and self.m.gclient.c.solutions and
-            'checkout_clang_coverage_tools' in self.m.gclient.c.solutions[0]
-            .custom_vars)
+    return self.is_clang_coverage or self.is_java_coverage
 
   def _get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.
@@ -250,12 +267,25 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             '--src-path',
             self.m.path['checkout'],
             '--build-path',
-            self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
+            self.m.chromium.output_dir,
         ] + self._affected_source_files,
         stdout=self.m.raw_io.output_text(add_output_log=True))
 
   def process_coverage_data(self, tests):
     """Processes the coverage data for html report or metadata.
+
+    Args:
+      tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
+          whose binaries we are to create a coverage report for.
+    """
+    if self.is_clang_coverage:
+      self.process_clang_coverage_data(tests)
+
+    if self.is_java_coverage:
+      self.process_java_coverage_data()
+
+  def process_clang_coverage_data(self, tests):
+    """Processes the clang coverage data for html report or metadata.
 
     Args:
       tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
@@ -286,6 +316,65 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self.m.step.active_result.presentation.properties[
           'process_coverage_data_failure'] = True
       raise
+
+  def process_java_coverage_data(self, **kwargs):
+    """Creates JaCoCo HTML report and metadata to upload to storage bucket.
+
+    Creates an JaCoCo HTML report and metadata using generate_jacoco_report.py,
+    and uploads the HTML report and metadata to the code-coverage-data storage
+    bucket.
+
+    Args:
+      **kwargs: Kwargs for python and gsutil steps.
+    """
+    coverage_dir = self.m.chromium.output_dir.join('coverage')
+
+    with self.m.step.nest('process java coverage'):
+      self.m.python(
+          'Generate JaCoCo HTML report',
+          self.m.path['checkout'].join(
+              'build', 'android', 'generate_jacoco_report.py'),
+          args=['--format', 'html',
+                '--coverage-dir', coverage_dir,
+                '--metadata-dir', self.m.chromium.output_dir,
+                '--output-dir', coverage_dir.join('coverage_html')],
+          infra_step=True,
+          **kwargs)
+
+      self.m.python(
+          'Generate JSON metadata',
+          self.m.path['checkout'].join(
+              'build', 'android', 'generate_jacoco_report.py'),
+          args=['--format', 'json',
+                '--coverage-dir', coverage_dir,
+                '--metadata-dir', self.m.chromium.output_dir,
+                '--output-file', coverage_dir.join('coverage.json'),
+                '--cleanup'],
+          infra_step=True,
+          **kwargs)
+
+      jacoco_html_report_gs_path = self._compose_gs_path_for_coverage_data(
+          'java_html_report'),
+      html_upload_step = self.m.gsutil.upload(
+          source=coverage_dir.join('coverage_html'),
+          bucket=_BUCKET_NAME,
+          dest=jacoco_html_report_gs_path,
+          link_name=None,
+          args=['-r'],
+          multithreaded=True,
+          name='Upload JaCoCo HTML report',
+          **kwargs)
+      html_upload_step.presentation.links['JaCoCo HTML report'] = (
+          'https://storage.cloud.google.com/%s/%s/index.html' %
+          (_BUCKET_NAME, jacoco_html_report_gs_path))
+
+      self.m.gsutil.upload(
+          source=coverage_dir.join('coverage.json'),
+          bucket=_BUCKET_NAME,
+          dest=self._compose_gs_path_for_coverage_data('java_metadata'),
+          name='Upload JSON metadata',
+          link_name='Coverage report',
+          **kwargs)
 
   def _merge_profdata(self):
     """Merges the profdata generated by each step to a single profdata."""

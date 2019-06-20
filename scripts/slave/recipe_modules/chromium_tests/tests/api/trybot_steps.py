@@ -3,11 +3,12 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-
+from recipe_engine.recipe_api import Property
 
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'clang_coverage',
     'filter',
     'recipe_engine/json',
     'recipe_engine/platform',
@@ -17,6 +18,9 @@ DEPS = [
     'test_utils',
 ]
 
+PROPERTIES = {
+    'gn_args': Property(default={'fake': 'map'}),
+}
 
 _TEST_BUILDERS = {
   'chromium.test': {
@@ -74,7 +78,8 @@ _TEST_TRYBOTS = {
 }
 
 
-def RunSteps(api):
+def RunSteps(api, gn_args):
+  api.clang_coverage._gn_args = gn_args
   api.chromium_tests.trybot_steps(
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))
@@ -490,6 +495,7 @@ def GenTests(api):
             'base_unittests':
             '[dummy hash for base_unittests]'
           },) +
+      api.properties(gn_args={'use_clang_coverage': 'true'}) +
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -531,6 +537,7 @@ def GenTests(api):
             'base_unittests':
             '[dummy hash for base_unittests]'
           },) +
+      api.properties(gn_args={'use_clang_coverage': 'true'}) +
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -577,6 +584,7 @@ def GenTests(api):
             'base_unittests':
             '[dummy hash for base_unittests]'
           },) +
+      api.properties(gn_args={'use_clang_coverage': 'true'}) +
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
