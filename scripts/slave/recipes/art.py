@@ -517,6 +517,8 @@ def setup_aosp_builder(api, read_barrier):
       with api.context(env=env):
         api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
         api.step('Build %s' % build, ['make', '-j8'])
+        api.step('Dump oat boot %s' % build,
+                 ['make', '-j8', 'dump-oat-boot-%s' % build])
         api.step('Post clean %s' % build, ['rm', '-rf', 'out'])
 
 

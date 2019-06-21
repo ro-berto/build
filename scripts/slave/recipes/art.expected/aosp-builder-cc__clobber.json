@@ -71,6 +71,24 @@
   },
   {
     "cmd": [
+      "make",
+      "-j8",
+      "dump-oat-boot-x86"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "true",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86"
+    },
+    "name": "Dump oat boot x86"
+  },
+  {
+    "cmd": [
       "rm",
       "-rf",
       "out"
@@ -121,6 +139,24 @@
       "TARGET_PRODUCT": "aosp_x86_64"
     },
     "name": "Build x86_64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "dump-oat-boot-x86_64"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "true",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_x86_64"
+    },
+    "name": "Dump oat boot x86_64"
   },
   {
     "cmd": [
@@ -177,6 +213,24 @@
   },
   {
     "cmd": [
+      "make",
+      "-j8",
+      "dump-oat-boot-arm"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "true",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm"
+    },
+    "name": "Dump oat boot arm"
+  },
+  {
+    "cmd": [
       "rm",
       "-rf",
       "out"
@@ -227,6 +281,24 @@
       "TARGET_PRODUCT": "aosp_arm64"
     },
     "name": "Build arm64"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "dump-oat-boot-arm64"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_USE_READ_BARRIER": "true",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "aosp_arm64"
+    },
+    "name": "Dump oat boot arm64"
   },
   {
     "cmd": [
