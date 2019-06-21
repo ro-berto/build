@@ -955,6 +955,8 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
+      "buildername:linux-rel",
+      "--tag",
       "data:[dummy hash for gl_tests]",
       "--tag",
       "gerrit:https://chromium-review.googlesource.com/c/123456/7",

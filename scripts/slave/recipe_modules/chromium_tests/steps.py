@@ -1018,7 +1018,6 @@ class LocalGTestTest(Test):
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
-
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
     kwargs = {
@@ -1186,8 +1185,7 @@ class JSONResultsHandler(ResultsHandler):
 
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
         'got_revision_cp', 'refs/x@{#0}')
-
-    _, chrome_revision = api.commit_position.parse(str(chrome_revision_cp))
+    _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
     chrome_revision = str(chrome_revision)
     api.test_results.upload(
       api.json.input(results), chrome_revision=chrome_revision,
@@ -1547,18 +1545,15 @@ class SwarmingTest(Test):
     task.extra_args.extend(args)
     task.shards = shards
 
-    task_request = task.request
-    task_slice = task_request[0]
-
     if self._isolate_coverage_data:
       # Targets built with 'use_clang_coverage' will look at this environment
       # variable to determine where to write the profile dumps. The %Nm syntax
       # is understood by this instrumentation, see:
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      task_slice = task_slice.with_env_vars(**{
+      task.env = {
           'LLVM_PROFILE_FILE':
               '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
-      })
+      }
 
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
       # script tests) in a coverage that know how to merge coverage data. If the
@@ -1574,7 +1569,7 @@ class SwarmingTest(Test):
           '\'retry_shards_with_patch\' expects that the \'with patch\' phase '
           'has already run, but it apparently hasn\'t.')
       task.shard_indices = task.task_to_retry.failed_shards
-      task_slice = task_slice.with_idempotent(False)
+      task.idempotent = False
       # Test suite failure is determined by merging and examining the JSON
       # output from the shards. Failed shards are determined by looking at the
       # swarming output [retcode !=0 or state != 'SUCCESS']. It is possible that
@@ -1594,52 +1589,47 @@ class SwarmingTest(Test):
       task.shard_indices = range(task.shards)
 
     task.build_properties = api.chromium.build_properties
+    task.cipd_packages = self._cipd_packages
     task.containment_type = self._containment_type
     task.ignore_task_failure = self._ignore_task_failure
+    task.isolated = isolated
     if self._merge:
       task.merge = self._merge
-
+    task.name = self.step_name(suffix)
     task.trigger_script = self._trigger_script
-
-    ensure_file = task_slice.cipd_ensure_file
-    if self._cipd_packages:
-      for package in self._cipd_packages:
-        ensure_file.add_package(package[1], package[2], package[0])
-
-    task_slice = (task_slice.with_cipd_ensure_file(ensure_file).
-                   with_isolated(isolated))
+    task.service_account = self._service_account
 
     if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
-      task_request = task_request.with_priority(task_request.priority - 1)
+      task.priority -= 1
 
     if self._expiration:
-      task_slice = task_slice.with_expiration_secs(self._expiration)
+      task.expiration = self._expiration
 
     if self._hard_timeout:
-      task_slice = task_slice.with_execution_timeout_secs(self._hard_timeout)
+      task.hard_timeout = self._hard_timeout
 
     if self._io_timeout:
-      task_slice = task_slice.with_io_timeout_secs(self._io_timeout)
+      task.io_timeout = self._io_timeout
 
-    task_dimensions = task_slice.dimensions
     # Add custom dimensions.
     if self._dimensions:  # pragma: no cover
       #TODO(stip): concoct a test case that will trigger this codepath
       for k, v in self._dimensions.iteritems():
-        task_dimensions[k] = v
-    # Set default value.
-    if 'os' not in task_dimensions:
-      task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
-          api.platform.name)
-    task_slice = task_slice.with_dimensions(**task_dimensions)
+         if v is None:
+           # Remove key if it exists. This allows one to use None to remove
+           # default dimensions.
+           task.dimensions.pop(k, None)
+         else:
+           task.dimensions[k] = v
 
     # Add optional dimensions.
-    task.optional_dimensions = self._optional_dimensions or None
+    if self._optional_dimensions:
+        task.optional_dimensions = self._optional_dimensions
 
-    task.request = (task_request.with_slice(0, task_slice).
-                      with_name(self.step_name(suffix)).
-                      with_service_account(self._service_account or ''))
-    return task
+    # Set default value.
+    if 'os' not in task.dimensions:
+      task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
+          api.platform.name)
 
   def get_task(self, suffix):
     return self._tasks.get(suffix)
@@ -1726,7 +1716,7 @@ class SwarmingTest(Test):
       data['full_step_name'] = self._suffix_step_name_map[suffix]
       data['patched'] = suffix in (
           'with patch', 'retry shards with patch')
-      data['dimensions'] = self._tasks[suffix].request[0].dimensions
+      data['dimensions'] = self._tasks[suffix].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
 
@@ -1998,9 +1988,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # idempotent TODO(crbug.com/549140): remove the self._idempotent
     # parameter once Telemetry tests are idempotent, since that will make all
     # isolated_script_tests idempotent.
-    task_slice = task.request[0]
-    task_slice = task_slice.with_idempotent(self._idempotent)
-    task.request = task.request.with_slice(0, task_slice)
+    task.idempotent = self._idempotent
 
     self._apply_swarming_task_config(
         task, api, suffix, isolated, '--isolated-script-test-filter', '::')
@@ -2012,7 +2000,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     test_run_dictionary = (
         self.results_handler.validate_results(api, results_json))
     presentation = step_result.presentation
-
     test_results = api.test_utils.create_results_from_json(results_json)
     self.results_handler.render_results(api, test_results, presentation)
 
@@ -2071,6 +2058,7 @@ class PythonBasedTest(Test):
     self._suffix_step_name_map[suffix] = step_result.step['name']
     test_results = step_result.test_utils.test_results
     presentation = step_result.presentation
+
     if (test_results.valid and
         step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
       self.update_test_run(
@@ -2583,6 +2571,7 @@ class SwarmingIosTest(SwarmingTest):
           replay_package_version,
       ))
     self._cipd_packages = cipd_packages
+
     self._expiration = (self._task['test'].get('expiration_time') or
                         self._config.get( 'expiration_time'))
 
@@ -2643,24 +2632,19 @@ class SwarmingIosTest(SwarmingTest):
     self._apply_swarming_task_config(
         swarming_task, api, suffix, task['isolated hash'], filter_flag=None,
         filter_delimiter=None)
+    swarming_task.priority = task['test'].get('priority', 200)
 
-    task_slice = swarming_task.request[0]
+    assert task.get('xcode build version')
+    named_cache = 'xcode_ios_%s' % (task['xcode build version'])
+    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
 
     # The implementation of _apply_swarming_task_config picks up default
     # dimensions which don't work for iOS because the swarming bots do not
     # specify typical dimensions [GPU, cpu type]. We explicitly override
     # dimensions here to get the desired results.
-    task_slice = task_slice.with_dimensions(**self._dimensions)
-    swarming_task.request = (swarming_task.request.
-                              with_slice(0, task_slice).
-                              with_priority(task['test'].get('priority', 200)))
-
+    swarming_task.dimensions = self._dimensions
     if self._platform == 'device' and self._config.get('device check'):
       swarming_task.wait_for_capacity = True
-
-    assert task.get('xcode build version')
-    named_cache = 'xcode_ios_%s' % (task['xcode build version'])
-    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
 
     swarming_task.tags.add(
         'device_type:%s' % str(task['test']['device type']))

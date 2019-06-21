@@ -1253,6 +1253,8 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
+      "buildername:Win (more configs)",
+      "--tag",
       "data:[dummy hash for peerconnection_unittests]",
       "--tag",
       "master:client.webrtc",

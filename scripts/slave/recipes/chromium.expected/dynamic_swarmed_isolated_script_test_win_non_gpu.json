@@ -445,6 +445,8 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
+      "buildername:Win7 Tests (1)",
+      "--tag",
       "data:eeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "--tag",
       "master:chromium.win",

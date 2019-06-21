@@ -54,7 +54,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -99,11 +99,11 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
-      path_config='kitchen'
+      path_config='kitchen',
     )
     + api.buildbucket.try_build(
       project='chromium',
@@ -152,11 +152,11 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
-      path_config='kitchen'
+      path_config='kitchen',
     )
     + api.buildbucket.try_build(
       project='chromium',
@@ -203,7 +203,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -277,7 +277,7 @@ def GenTests(api):
     + try_build(git_repo='https://chromium.googlesource.com/chromium/deps/icu')
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       patch_project='icu',
@@ -317,7 +317,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -359,7 +359,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -403,7 +403,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -444,7 +444,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',
@@ -479,7 +479,7 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      issue='123456',
+      issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       bot_id='fake-vm',

@@ -351,7 +351,7 @@ class Runner(object):
       # cancel the task, such that they are not in the list of pending tasks or
       # override the step names.
       task = self.api.chromium_swarming.task(
-          name='%s - shard %d' % (step_prefix, shard),
+          '%s - shard %d' % (step_prefix, shard),
           isolated=isolated_hash,
           task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
@@ -359,19 +359,13 @@ class Runner(object):
 
       # Use lower swarming priority given the increased time of the task.
       if self.multiplier > 1:
-        task.request = (task.request.with_priority(
-                          max(task.request.priority + 10, 255)))
+        task.priority = max(task.priority + 10, 255)
 
       # Override cpu and gpu defaults for Android as such devices don't have
       # these dimensions.
-      task_slice = task.request[0]
-      task_dimensions = task_slice.dimensions
-      if task_dimensions['os'] == 'Android':
-        task_dimensions['cpu'] = None
-        task_dimensions['gpu'] = None
-
-      task_slice = task_slice.with_dimensions(**task_dimensions)
-      task.request = task.request.with_slice(0, task_slice)
+      if task.dimensions['os'] == 'Android':
+        task.dimensions.pop('cpu')
+        task.dimensions.pop('gpu')
 
       self.api.chromium_swarming.trigger_task(task)
       return task
