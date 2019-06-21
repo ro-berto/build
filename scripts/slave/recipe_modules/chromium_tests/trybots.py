@@ -651,6 +651,11 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Release (NVIDIA)',
       }),
+      'gpu-fyi-try-linux-nvidia-skv': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI SkiaRenderer Vulkan (NVIDIA)',
+      }),
       'gpu-fyi-try-linux-nvidia-tsn': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Linux FYI GPU TSAN Release',

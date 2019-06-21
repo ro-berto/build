@@ -182,6 +182,7 @@ FAKE_BUILDERS = {
         'gpu-fyi-try-linux-nvidia-dqp',
         'gpu-fyi-try-linux-nvidia-exp',
         'gpu-fyi-try-linux-nvidia-rel',
+        'gpu-fyi-try-linux-nvidia-skv',
         'gpu-fyi-try-linux-nvidia-tsn',
         'gpu-try-linux-nvidia-dbg',
         'linux-dcheck-off-rel',
