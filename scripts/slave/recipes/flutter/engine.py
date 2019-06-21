@@ -331,6 +331,16 @@ def BuildLinux(api):
   UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
 
 
+def BuildFuchsia(api):
+  RunGN(api, '--runtime-mode', 'debug', '--fuchsia')
+  RunGN(api, '--runtime-mode', 'profile', '--fuchsia')
+  RunGN(api, '--runtime-mode', 'release', '--fuchsia')
+  Build(api, 'fuchsia_debug')
+  Build(api, 'fuchsia_profile')
+  Build(api, 'fuchsia_release')
+  # TODO(cbracken): build and upload CIPD package
+
+
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
   flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
@@ -685,6 +695,7 @@ def RunSteps(api):
       #TestEngine(api)
       BuildLinuxAndroid(api)
       VerifyExportedSymbols(api)
+      BuildFuchsia(api)
 
     if api.platform.is_mac:
       with SetupXcode(api):
@@ -694,6 +705,7 @@ def RunSteps(api):
           with InstallJazzy(api):
             BuildObjcDoc(api)
         VerifyExportedSymbols(api)
+        BuildFuchsia(api)
 
     if api.platform.is_win:
       BuildWindows(api)
