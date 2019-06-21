@@ -1287,7 +1287,7 @@ class V8Api(recipe_api.RecipeApi):
     # On reruns, there's a fixed random seed set in the test configuration.
     if ('--random-seed' not in test.get('test_args', []) and
         test.get('use_random_seed', True)):
-      full_args.append('--random-seed=%d' % self.testing_random_seed())
+      full_args.append('--random-seed=%s' % str(self.testing_random_seed()))
 
     # Either run tests as specified by the filter (trybots only) or as
     # specified by the test configuration.

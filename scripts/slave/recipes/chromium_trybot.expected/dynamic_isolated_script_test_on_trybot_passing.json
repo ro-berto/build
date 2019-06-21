@@ -954,8 +954,6 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:linux-rel",
-      "--tag",
       "data:[dummy hash for telemetry_gpu_unittests]",
       "--tag",
       "gerrit:https://chromium-review.googlesource.com/c/123456/7",

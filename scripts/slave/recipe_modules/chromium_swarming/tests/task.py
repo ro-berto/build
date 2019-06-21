@@ -14,13 +14,19 @@ from recipe_engine import post_process
 def RunSteps(api):
   opt_dims = {60: [{'os': 'Ubuntu-14.04'}]}
   task = api.chromium_swarming.task(
-      api.properties.get('task_name', 'sample_task'),
-      '0123456789012345678901234567890123456789',
+      name=api.properties.get('task_name', 'sample_task'),
+      isolated='0123456789012345678901234567890123456789',
       optional_dimensions=opt_dims)
-  task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
-      api.platform.name)
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
+
+  task_slice = task.request[0]
+  task_dimensions = task_slice.dimensions
+  task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
+      api.platform.name)
+  task_slice = task_slice.with_dimensions(**task_dimensions)
+  task.request = task.request.with_slice(0, task_slice)
+
   if api.properties.get('containment_type'):
     task.containment_type = api.properties['containment_type']
   api.chromium_swarming.trigger_task(task)

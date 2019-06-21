@@ -856,8 +856,6 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:fuzz-linux",
-      "--tag",
       "data:test_hash",
       "--tag",
       "name:make",

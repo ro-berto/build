@@ -49,7 +49,7 @@ def RunSteps(api):
   test_name = 'blink_web_tests' if test_repeat_count else 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
   test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-      test_name,
+      name=test_name,
       perf_id=api.properties.get('perf_id'),
       perf_dashboard_id='test-perf-dashboard-id',
       results_url=api.properties.get('results_url'),
@@ -134,7 +134,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456)
+          got_revision_cp='refs/heads/master@{#123456}')
   )
 
   yield (
@@ -149,7 +149,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           isolate_coverage_data=True,
       ) +
       api.post_process(verify_isolate_flag) +
@@ -168,7 +168,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456) +
+          got_revision_cp='refs/heads/master@{#123456}') +
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
           retcode=1) +
@@ -190,7 +190,7 @@ def GenTests(api):
           version='test-version',
           shards=20,
           run_without_patch=True,
-          got_revision_cp=123456) +
+          got_revision_cp='refs/heads/master@{#123456}') +
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
           retcode=1, ) +
@@ -208,7 +208,7 @@ def GenTests(api):
           buildnumber=123,
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456) +
+          got_revision_cp='refs/heads/master@{#123456}') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
@@ -231,7 +231,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456)
+          got_revision_cp='refs/heads/master@{#123456}')
   )
 
   isolated_script_output = api.test_utils.canned_isolated_script_output(
@@ -250,7 +250,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           run_without_patch='a') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
@@ -306,7 +306,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(
@@ -343,7 +343,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.post_process(
@@ -376,7 +376,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           override_compile_targets=['base_unittests_run'])
   )
 
@@ -392,7 +392,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -419,7 +419,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True) +
@@ -444,7 +444,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True) +
@@ -471,7 +471,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -496,7 +496,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -521,7 +521,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url')
   )
@@ -538,7 +538,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -559,7 +559,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456) +
+          got_revision_cp='refs/heads/master@{#123456}') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -581,7 +581,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -609,7 +609,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
@@ -693,7 +693,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={'gpu': '8086', 'os': 'Windows'})
   )
 
@@ -709,7 +709,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={'gpu': '8086', 'os': 'Mac'})
   )
 
@@ -725,7 +725,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={'gpu': '8086', 'os': 'Mac', 'hidpi': '1'})
   )
 
@@ -741,7 +741,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'device_type': 'hammerhead',
               'device_os': 'LOL123',
@@ -762,7 +762,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(
@@ -785,7 +785,7 @@ def GenTests(api):
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp=123456,
+          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(

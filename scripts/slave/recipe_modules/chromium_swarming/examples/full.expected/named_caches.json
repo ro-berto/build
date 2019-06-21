@@ -347,7 +347,7 @@
       "--user",
       "joe",
       "--cipd-package",
-      ":cool/package:vers",
+      ".:cool/package:vers",
       "--cipd-package",
       "bin:super/awesome/pkg:git_revision:deadbeef",
       "--cipd-package",
