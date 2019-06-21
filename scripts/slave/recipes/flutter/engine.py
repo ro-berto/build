@@ -332,13 +332,14 @@ def BuildLinux(api):
 
 
 def BuildFuchsia(api):
-  RunGN(api, '--runtime-mode', 'debug', '--fuchsia')
-  RunGN(api, '--runtime-mode', 'profile', '--fuchsia')
-  RunGN(api, '--runtime-mode', 'release', '--fuchsia')
-  Build(api, 'fuchsia_debug')
-  Build(api, 'fuchsia_profile')
-  Build(api, 'fuchsia_release')
-  # TODO(cbracken): build and upload CIPD package
+  if api.properties.get('build_host', True):
+    RunGN(api, '--runtime-mode', 'debug', '--fuchsia')
+    RunGN(api, '--runtime-mode', 'profile', '--fuchsia')
+    RunGN(api, '--runtime-mode', 'release', '--fuchsia')
+    Build(api, 'fuchsia_debug')
+    Build(api, 'fuchsia_profile')
+    Build(api, 'fuchsia_release')
+    # TODO(cbracken): build and upload CIPD package
 
 
 def TestObservatory(api):
