@@ -328,13 +328,13 @@
     "cmd": [
       "vpython",
       "-u",
-      "test/run_tests.py",
+      "run_tests.py",
       "--tests",
       "*",
       "--hosts",
       "[START_DIR]/hosts",
-      "--cel_ctl",
-      "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl",
+      "--test_py",
+      "test.py",
       "--shared_provider_storage",
       "celab-ci-assets",
       "--error_logs_dir",
@@ -343,7 +343,7 @@
       "-v",
       "1"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/packages_tests/bin"
@@ -369,7 +369,7 @@
       "[START_DIR]/logs/summary.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/packages_tests/bin"
@@ -390,7 +390,7 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/packages_tests/bin"
@@ -411,7 +411,7 @@
       "[START_DIR]/all_logs.zip",
       "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/all_logs.zip"
     ],
-    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/packages_tests/bin"

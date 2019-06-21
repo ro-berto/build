@@ -208,11 +208,11 @@
       "    arg_names, **additional_args)",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
       "    return callable_obj(*props, **additional_args)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 54, in RunSteps",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 57, in RunSteps",
       "    _RunStepsCelab(api)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 78, in _RunStepsCelab",
-      "    _RunTests(api, checkout, tests, cel_ctl)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 189, in _RunTests",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 84, in _RunStepsCelab",
+      "    tests)",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 224, in _RunTests",
       "    raise ValueError('pool_name and pool_size must be defined with `tests`.')",
       "ValueError: pool_name and pool_size must be defined with `tests`."
     ]

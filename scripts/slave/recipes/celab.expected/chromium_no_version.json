@@ -15,9 +15,9 @@
       "    arg_names, **additional_args)",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
       "    return callable_obj(*props, **additional_args)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 56, in RunSteps",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 59, in RunSteps",
       "    _RunStepsChromium(api)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 85, in _RunStepsChromium",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 91, in _RunStepsChromium",
       "    raise ValueError('Chromium bots must define `celab_version` and `tests`.')",
       "ValueError: Chromium bots must define `celab_version` and `tests`."
     ]

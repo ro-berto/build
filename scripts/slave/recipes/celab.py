@@ -3,6 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium',
+  'chromium_checkout',
+  'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/cipd',
   'depot_tools/gclient',
@@ -70,12 +73,15 @@ def _RunStepsCelab(api):
   if bucket == 'ci':
     _UploadCelabBinariesToStorage(api, checkout, bin_dir)
 
-  cel_ctl = bin_dir.join(_get_ctl_binary_name(api))
-
   # Run tests for CI/Try builders that specify it.
   tests = api.properties.get('tests')
   if tests:
-    _RunTests(api, checkout, tests, cel_ctl)
+    _RunTests(
+      api,
+      checkout.join('test'),
+      checkout.join('scripts').join('tests'),
+      '../../examples/schema/host/example.host.textpb',
+      tests)
 
 
 def _RunStepsChromium(api):
@@ -84,18 +90,26 @@ def _RunStepsChromium(api):
   if not version or not tests:
     raise ValueError('Chromium bots must define `celab_version` and `tests`.')
 
+  # Build Chromium binaries from source and get CELab from CIPD.
   checkout = _CheckoutChromiumRepo(api)
-
-  # Build Chromium binaries from source.
-  _BuildChromiumFromSource(api, checkout)
-
-  # Get CELab binaries from CIPD.
-  bin_dir = _GetCelabFromCipd(api, version)
-
-  cel_ctl = bin_dir.join(_get_ctl_binary_name(api))
+  test_root = checkout.join('chrome', 'browser', 'policy', 'e2e_test')
+  chromium_bin_dir = _BuildChromiumFromSource(api, test_root)
+  celab_bin_dir = _GetCelabFromCipd(api, version)
 
   # Run tests for all chromium bots.
-  _RunTests(api, checkout, tests, cel_ctl)
+  cel_ctl = celab_bin_dir.join(_get_ctl_binary_name(api))
+  installer = chromium_bin_dir.join("mini_installer.exe")
+  chromedriver = chromium_bin_dir.join("chromedriver.exe")
+  test_py_args = '--cel_ctl=%s' % cel_ctl
+  test_py_args += ' --test_arg=--chrome_installer=%s' % installer
+  test_py_args += ' --test_arg=--chromedriver=%s' % chromedriver
+  _RunTests(
+    api,
+    test_root,
+    test_root.join('infra'),
+    'template.host.textpb',
+    tests,
+    test_py_args)
 
 
 def _GetCelabFromCipd(api, version):
@@ -149,13 +163,33 @@ def _BuildCelabFromSource(api, checkout):
 
 
 def _CheckoutChromiumRepo(api):
-  # TODO(mbinette@): Checkout the chromium repo
+  with api.chromium.chromium_layout():
+    bot_config = {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': ['mb'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_BITS': 64,
+        },
+    }
+    api.chromium_tests.configure_build(bot_config)
+    api.chromium_checkout.ensure_checkout(bot_config)
+    api.chromium.runhooks()
+
   return api.path['checkout']
 
 
-def _BuildChromiumFromSource(api, checkout):
-  # TODO(mbinette@): Build chromedriver & mini_installer.
-  pass
+def _BuildChromiumFromSource(api, test_root):
+  with api.chromium.chromium_layout():
+    compile_targets = ['chrome/installer/mini_installer', 'chromedriver']
+    api.chromium_tests.run_mb_and_compile(
+      compile_targets,
+      isolated_targets=[],
+      mb_config_path=test_root.join('infra', 'config.pyl'),
+      name_suffix=' (with patch)')
+
+  return api.chromium.output_dir
 
 
 def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
@@ -181,7 +215,8 @@ def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
     link_name='CELab binaries')
 
 
-def _RunTests(api, checkout, tests, cel_ctl):
+def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
+              test_py_args = ""):
   pool_name = api.properties.get('pool_name')
   pool_size = api.properties.get('pool_size')
 
@@ -204,11 +239,11 @@ def _RunTests(api, checkout, tests, cel_ctl):
     storage_prefix = 'test-run-%s' % api.buildbucket.build.id
 
     # Generate the host files that we'll use in ./run_tests.py.
-    with api.context(cwd=checkout.join('scripts', 'tests')):
+    with api.context(cwd=test_scripts_root):
       api.python('generate host files',
         'generate_host_files.py',
         [
-          '--template', '../../examples/schema/host/example.host.textpb',
+          '--template', host_file_template,
           '--projects', ';'.join(["%s-%03d" % (pool_name, i) for i in xrange(
               1, pool_size + 1)]),
           '--storage_bucket', '%s-assets' % pool_name,
@@ -218,18 +253,22 @@ def _RunTests(api, checkout, tests, cel_ctl):
         venv=True)
 
   # Run our tests and catch test failures.
-  with api.context(cwd=checkout, env_suffixes={'PATH': add_paths}):
+  with api.context(cwd=test_root, env_suffixes={'PATH': add_paths}):
+    extra_args = []
+    if test_py_args:
+      extra_args += ['--test_py_args=%s' % test_py_args]
+
     try:
       api.python('run all tests',
-        'test/run_tests.py',
+        'run_tests.py',
         [
           '--tests', tests,
           '--hosts', host_dir,
-          '--cel_ctl', cel_ctl,
+          '--test_py', 'test.py',
           '--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', logs_dir,
           '--noprogress', '-v', '1'
-        ],
+        ] + extra_args,
         venv=True)
     except:
       storage_logs = '%s-logs' % pool_name
