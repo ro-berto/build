@@ -336,7 +336,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
               'build', 'android', 'generate_jacoco_report.py'),
           args=['--format', 'html',
                 '--coverage-dir', coverage_dir,
-                '--sources-json-dir', self.m.chromium.output_dir,
+                '--metadata-dir', self.m.chromium.output_dir,
                 '--output-dir', coverage_dir.join('coverage_html')],
           infra_step=True,
           **kwargs)
@@ -347,7 +347,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
               'build', 'android', 'generate_jacoco_report.py'),
           args=['--format', 'json',
                 '--coverage-dir', coverage_dir,
-                '--sources-json-dir', self.m.chromium.output_dir,
+                '--metadata-dir', self.m.chromium.output_dir,
                 '--output-file', coverage_dir.join('coverage.json'),
                 '--cleanup'],
           infra_step=True,
