@@ -9,6 +9,7 @@ The database is a versioned JSON file built of NamedTuples.
 """
 
 import collections
+import errno
 import json
 import logging
 import optparse
@@ -22,7 +23,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Bump each time there is an incompatible change in build_db.
-BUILD_DB_VERSION = 5
+BUILD_DB_VERSION = 6
 
 
 _BuildDB = collections.namedtuple('BuildDB', [
@@ -38,6 +39,7 @@ _BuildDBBuild = collections.namedtuple('BuildDBBuild', [
     'finished',  # True if the build has finished, False otherwise.
     'succeeded',  # True if finished and would have not closed the tree.
     'triggered',  # {section: [steps which triggered the section]}
+    'corrupted',  # True if we couldn't get the builder information from MILO.
 ])
 
 
@@ -73,7 +75,7 @@ def move_file(path, new_path):
   """Moves the file located at 'path' to 'new_path', if it exists."""
   try:
     try:
-      os.remove(file_path)
+      os.remove(new_path)
     except OSError, e:
       if e.errno != errno.ENOENT:
         raise
@@ -99,9 +101,12 @@ def gen_db(**kwargs):
 
 def gen_build(**kwargs):
   """Helper function to generate a default build."""
-  defaults = [('finished', False),
-              ('succeeded', False),
-              ('triggered', {})]
+  defaults = [
+      ('finished', False),
+      ('succeeded', False),
+      ('triggered', {}),
+      ('corrupted', False),
+  ]
 
   for key, default in defaults:
     kwargs.setdefault(key, default)

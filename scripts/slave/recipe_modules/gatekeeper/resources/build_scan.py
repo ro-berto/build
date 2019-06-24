@@ -70,6 +70,8 @@ def _get_from_milo(endpoint, data, milo_creds=None, http=None):
     if resp.status == 200:
       # Remove the jsonp header.
       return json.loads(content[4:])
+    if resp.status == 404:
+      return {'corrupted': True}
     if attempts > MAX_ATTEMPTS:
       msg = "Error encountered during URL Fetch: %s" % content
       logging.error(msg)
@@ -202,8 +204,11 @@ def get_build_json(url_tuple):
     'exclude_deprecated': True,
   }
   resp = _get_from_milo(endpoint, json.dumps(data), milo_creds)
-  return (json.loads(base64.b64decode(resp['data'])),
-          master_url, builder, buildnum)
+  if resp.get('corrupted', None) is None:
+    resp = json.loads(base64.b64decode(resp['data']))
+  else:
+    resp = {'corrupted': True}
+  return (resp, master_url, builder, buildnum)
 
 
 def get_build_jsons(master_builds, processes, milo_creds):
@@ -240,7 +245,9 @@ def propagate_build_json_to_db(build_db, builds):
     if not build:
       build = build_scan_db.gen_build()
 
-    if build_json.get('results', None) is not None:
+    if build_json.get('corrupted', None) is not None:
+      build = build._replace(corrupted=True, finished=True)
+    elif build_json.get('results', None) is not None:
       build = build._replace(finished=True)  # pylint: disable=W0212
     else:
       # Builds can't be marked succeeded unless they are finished.

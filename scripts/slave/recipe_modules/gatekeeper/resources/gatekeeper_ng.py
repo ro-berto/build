@@ -149,6 +149,9 @@ def check_builds(master_builds, master_jsons, gatekeeper_config):
   current_builds_successful = True
 
   for build_json, master_url, builder, buildnum in sorted_builds:
+    if build_json.get('corrupted', False):
+      continue
+
     gatekeeper_sections = gatekeeper_config.get(master_url, [])
     for gatekeeper_section in gatekeeper_sections:
       section_hash = gatekeeper_ng_config.gatekeeper_section_hash(
@@ -955,7 +958,7 @@ def main(argv):
 
   if not simulate:
     master_jsons, build_jsons = build_scan.get_updated_builds(
-        masters, build_db, args.parallelism, args.service_account_path)
+        masters, build_db, int(args.parallelism), args.service_account_path)
   else:
     master_jsons, build_jsons = simulate_build_failure(
         build_db, args.simulate_master, args.simulate_builder,
