@@ -174,7 +174,9 @@
       "--skip_canned",
       "CheckBuildbotPendingBuilds",
       "--upstream",
-      "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+      "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+      "--json_output",
+      "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
     "env_prefixes": {
@@ -183,7 +185,12 @@
       ]
     },
     "name": "presubmit",
-    "timeout": 480
+    "timeout": 480,
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
   },
   {
     "name": "$result"

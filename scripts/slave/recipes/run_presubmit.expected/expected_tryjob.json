@@ -143,7 +143,9 @@
       "--skip_canned",
       "CheckBuildbotPendingBuilds",
       "--upstream",
-      "a0f1490a20d0211c997b44bc357e1972deab8ae3"
+      "a0f1490a20d0211c997b44bc357e1972deab8ae3",
+      "--json_output",
+      "/path/to/tmp/json"
     ],
     "env_suffixes": {
       "PATH": [
@@ -151,7 +153,11 @@
       ]
     },
     "name": "presubmit",
-    "timeout": 480
+    "timeout": 480,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "name": "$result"
