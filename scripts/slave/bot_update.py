@@ -531,7 +531,7 @@ def maybe_ignore_revision(revision, buildspec):
   case causes bot_update to use HEAD rather that trying to checkout an
   inappropriate version of the solution.
   """
-  if buildspec and buildspec.container in ['branches', 'mountain-branches']:
+  if buildspec and buildspec.container in ['branches']:
     return []
   return revision
 
