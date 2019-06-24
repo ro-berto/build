@@ -5,7 +5,6 @@
 from recipe_engine import post_process
 
 DEPS = [
-    'chromium',
     'chromium_tests',
     'clang_coverage',
     'recipe_engine/buildbucket',
@@ -31,7 +30,6 @@ def RunSteps(api):
     api.clang_coverage.instrument(api.properties['files_to_instrument'])
   # Fake path.
   api.clang_coverage._merge_scripts_location = api.path['start_dir']
-  api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
   tests = [
       api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
@@ -74,8 +72,6 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.post_process(
           post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
           _NUM_TESTS)
@@ -119,8 +115,6 @@ def GenTests(api):
           buildnumber=54,
           exclude_sources='all_test_files',
       )
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.post_process(
           post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
           _NUM_TESTS)
@@ -163,8 +157,6 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.properties(
           files_to_instrument=[
             'some/path/to/file.cc',
@@ -212,8 +204,6 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.override_step_data(
           'Finding merging errors', stdout=api.json.output(['some_step']))
       + api.post_process(post_process.StatusSuccess)
@@ -226,8 +216,6 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.properties(
           files_to_instrument=[
             'some/path/to/non_source_file.txt'
@@ -246,8 +234,6 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='linux-coverage-rel',
         buildnumber=54)
-    + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
     + api.properties(
         files_to_instrument=[
           'some/path/to/file.cc',
@@ -273,8 +259,6 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'use_clang_coverage = true'))
       + api.post_process(
           post_process.MustRunRE, 'ensure profdata dir for .*', _NUM_TESTS,
           _NUM_TESTS)
@@ -310,18 +294,5 @@ def GenTests(api):
           check(steps['gsutil upload coverage metadata']
                 .output_properties['process_coverage_data_failure'] == True))
       + api.post_process(post_process.StatusFailure)
-      + api.post_process(post_process.DropExpectation)
-  )
-  yield (
-      api.test('process java coverage')
-      + api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='android-code-coverage',
-          buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
-          'jacoco_coverage = true'))
-      + api.post_process(
-          post_process.MustRun, 'process java coverage')
-      + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

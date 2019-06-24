@@ -5,7 +5,6 @@
 DEPS = [
     'chromium',
     'chromium_checkout',
-    'gn',
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/gsutil',

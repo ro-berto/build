@@ -232,7 +232,6 @@
   * [gn:tests/clean](#recipes-gn_tests_clean)
   * [gn:tests/get_args](#recipes-gn_tests_get_args)
   * [gn:tests/ls](#recipes-gn_tests_ls)
-  * [gn:tests/parse_gn_args](#recipes-gn_tests_parse_gn_args)
   * [gn:tests/refs](#recipes-gn_tests_refs)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
@@ -1603,19 +1602,17 @@ Usage is generally discouraged.
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#761)(self, bot_config, tests=None):**
 ### *recipe_modules* / [clang\_coverage](/scripts/slave/recipe_modules/clang_coverage)
 
-[DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ClangCoverageApi](/scripts/slave/recipe_modules/clang_coverage/api.py#32)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 This module contains apis to interact with llvm-cov and llvm-profdata.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#120)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#99)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&emsp; **@property**<br>&mdash; **def [gn\_args](/scripts/slave/recipe_modules/clang_coverage/api.py#71)(self):**
-
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#247)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#230)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1623,25 +1620,13 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [is\_clang\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#80)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#69)(self):**
 
-&emsp; **@property**<br>&mdash; **def [is\_java\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#85)(self):**
-
-&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/clang_coverage/api.py#90)(self):**
-
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#132)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#111)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#287)(self, tests):**
-
-Processes the clang coverage data for html report or metadata.
-
-Args:
-  tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
-      whose binaries we are to create a coverage report for.
-
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#274)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#257)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1649,18 +1634,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#320)(self, \*\*kwargs):**
-
-Creates JaCoCo HTML report and metadata to upload to storage bucket.
-
-Creates an JaCoCo HTML report and metadata using generate_jacoco_report.py,
-and uploads the HTML report and metadata to the code-coverage-data storage
-bucket.
-
-Args:
-  **kwargs: Kwargs for python and gsutil steps.
-
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#144)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#123)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1669,22 +1643,22 @@ Args:
       save in in this dir. None for getting the parent directory to contain
       the dirs for all steps.
 
-&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#115)(self):**
+&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/clang_coverage/api.py#94)(self):**
 
 Returns the path to the llvm-profdata executable.
 
-&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#102)(self):**
+&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#81)(self):**
 
 Returns the location of a script that merges raw profiles from shards.
 
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#125)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#104)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#490)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#401)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1693,11 +1667,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#97)(self):**
+&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/clang_coverage/api.py#76)(self):**
 
 Returns the script that merges indexed profiles from multiple targets.
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#168)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#147)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
@@ -2250,16 +2224,6 @@ Args:
   step_name: Optional recipe step name to give to the "gn ls" command.
 Returns:
   The set of targets found.
-
-&mdash; **def [parse\_gn\_args](/scripts/slave/recipe_modules/gn/api.py#221)(self, content):**
-
-Parses string content from arg.gn to a dictionary.
-
-Args:
-  content: The string content of arg.gn file.
-
-Returns:
-  A dictionary of gn args.
 
 &mdash; **def [present\_args](/scripts/slave/recipe_modules/gn/api.py#69)(self, result, args, location=None, max_text_lines=None):**
 
@@ -4310,9 +4274,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/api/main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#11): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#10): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#219)(api, gn_args):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#213)(api):**
 ### *recipes* / [chromium\_tests:tests/api/package\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/package_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/package_build.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -4340,9 +4304,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#67)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#8): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#8): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#81)(api, gn_args):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#77)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps\_with\_specific\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#10): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4519,9 +4483,9 @@ properties set for the entry.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#67)(api):**
 ### *recipes* / [clang\_coverage:tests/full](/scripts/slave/recipe_modules/clang_coverage/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [clang\_coverage](#recipe_modules-clang_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#23)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/clang_coverage/tests/full.py#22)(api):**
 ### *recipes* / [client.nacl.sdk.recipe\_autogen](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4967,11 +4931,6 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/gn/tests/ls.py#11): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/ls.py#24)(api, targets, output_type):**
-### *recipes* / [gn:tests/parse\_gn\_args](/scripts/slave/recipe_modules/gn/tests/parse_gn_args.py)
-
-[DEPS](/scripts/slave/recipe_modules/gn/tests/parse_gn_args.py#7): [gn](#recipe_modules-gn)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/parse_gn_args.py#23)(api):**
 ### *recipes* / [gn:tests/refs](/scripts/slave/recipe_modules/gn/tests/refs.py)
 
 [DEPS](/scripts/slave/recipe_modules/gn/tests/refs.py#11): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
