@@ -241,21 +241,6 @@ def setup_target(api,
   # The path to the chroot directory on the device where ART and its
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
-  # The path to the mounted Android Runtime APEX, which normally defaults to
-  # '/apex/com.android.runtime').
-  #
-  # The Runtime APEX is not (yet) supported by the ART Buildot setup (see
-  # b/121117762); however ICU code depends on `ANDROID_RUNTIME_ROOT` to find
-  # the ICU .dat file. As a (temporary) workaround, we
-  # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
-  #   generate the ICU .dat file in `/system/etc/icu` on device (this file
-  #   is normally only put in the Runtime APEX on device);
-  # - set `ANDROID_RUNTIME_ROOT` to '/system' on the ART Buildbot (via
-  #   `ART_TEST_ANDROID_RUNTIME_ROOT`).
-  #
-  # TODO(b/121117762): Remove this when the ART Buildbot has full support for
-  # the Runtime APEX.
-  android_runtime_root_dir='/system'
   # Likewise, the Time Zone Data APEX is not yet supported by the ART Buildbot
   # setup (see b/132169989). As a workaround, we
   # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
@@ -313,7 +298,6 @@ def setup_target(api,
       })
 
   env.update({ 'ART_TEST_CHROOT' : chroot_dir })
-  env.update({ 'ART_TEST_ANDROID_RUNTIME_ROOT' : android_runtime_root_dir })
   env.update({ 'ART_TEST_ANDROID_TZDATA_ROOT' : android_tzdata_root_dir })
 
   checkout(api)
