@@ -5264,9 +5264,10 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/testing/ios/IosUnitTests/run_tests.sh",
+      "run_tests.sh",
       "ios_debug_sim"
     ],
+    "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
