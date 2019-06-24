@@ -535,15 +535,14 @@ def BuildIOS(api):
              '--mac-sdk-path', str(GetMacSDKDir(api)))
 
   # Build all configurations.
+  Build(api, 'ios_debug_sim')
+  RunIOSTests(api)
   Build(api, 'ios_debug')
   Build(api, 'ios_debug_arm')
-  Build(api, 'ios_debug_sim')
   Build(api, 'ios_profile')
   Build(api, 'ios_profile_arm')
   Build(api, 'ios_release')
   Build(api, 'ios_release_arm')
-
-  RunIOSTests(api)
 
   # Package all variants
   PackageIOSVariant(api,

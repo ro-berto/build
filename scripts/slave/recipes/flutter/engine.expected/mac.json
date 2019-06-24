@@ -3350,7 +3350,7 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/ios_debug"
+      "[START_DIR]/src/out/ios_debug_sim"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3360,7 +3360,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build ios_debug"
+    "name": "build ios_debug_sim"
   },
   {
     "cmd": [],
@@ -3480,7 +3480,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build ios_debug",
+      "build ios_debug_sim",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -3539,6 +3539,22 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "run_tests.sh",
+      "ios_debug_sim"
+    ],
+    "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "name": "iOS Unit Tests"
   },
   {
     "cmd": [],
@@ -3637,7 +3653,7 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/ios_debug_arm"
+      "[START_DIR]/src/out/ios_debug"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3647,7 +3663,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build ios_debug_arm"
+    "name": "build ios_debug"
   },
   {
     "cmd": [],
@@ -3767,7 +3783,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build ios_debug_arm",
+      "build ios_debug",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -3924,7 +3940,7 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/ios_debug_sim"
+      "[START_DIR]/src/out/ios_debug_arm"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -3934,7 +3950,7 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
-    "name": "build ios_debug_sim"
+    "name": "build ios_debug_arm"
   },
   {
     "cmd": [],
@@ -4054,7 +4070,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build ios_debug_sim",
+      "build ios_debug_arm",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -5261,22 +5277,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "run_tests.sh",
-      "ios_debug_sim"
-    ],
-    "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "iOS Unit Tests"
   },
   {
     "cmd": [
