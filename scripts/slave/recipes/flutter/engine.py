@@ -515,7 +515,7 @@ def RunIOSTests(api):
   directory = api.path['start_dir'].join('src', 'flutter', 'testing', 'ios',
                                          'IosUnitTests')
   with api.context(cwd=directory):
-    api.step('iOS Unit Tests', ["run_tests.sh", "ios_debug_sim"])
+    api.step('iOS Unit Tests', ["./run_tests.sh", "ios_debug_sim"])
 
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.

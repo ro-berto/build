@@ -3542,7 +3542,7 @@
   },
   {
     "cmd": [
-      "run_tests.sh",
+      "./run_tests.sh",
       "ios_debug_sim"
     ],
     "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
