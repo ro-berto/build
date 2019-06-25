@@ -4830,8 +4830,6 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [RunHostTests](/scripts/slave/recipes/flutter/engine.py#52)(api, out_dir, exe_extension=''):**
 
-&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#514)(api):**
-
 &mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#684)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#365)(api):**

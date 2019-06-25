@@ -3541,22 +3541,6 @@
     ]
   },
   {
-    "cmd": [
-      "./run_tests.sh",
-      "ios_debug_sim"
-    ],
-    "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "iOS Unit Tests"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma (9)"
   },
