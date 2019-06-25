@@ -120,13 +120,18 @@ def RunSteps(api, platforms, custom_trigger_script,
           merge=merge)
     elif isolated_script_task:
       task = api.chromium_swarming.isolated_script_task()
-      task.name = 'hello_world'
-      task.isolated = isolated
+      task_request = task.request
+      task_slice = task_request[0]
+
+      task_slice = (task_slice.with_isolated(isolated).
+                    with_env_vars(**{'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}))
+      task.request = (task_request.with_slice(0, task_slice).
+                                  with_name('hello_world'))
+
       task.task_output_dir = temp_dir.join('task_output_dir')
       if merge:
         task.merge = merge
       task.trigger_script = trigger_script
-      task.env = {'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'}
     else:
       task = api.chromium_swarming.task(name='hello_world', isolated=isolated,
                               task_output_dir=temp_dir.join('task_output_dir'),
@@ -135,8 +140,7 @@ def RunSteps(api, platforms, custom_trigger_script,
                               cipd_packages=[
                                 ('', 'cool/package', 'vers'),
                               ])
-    task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
-        platform)
+
     if platform == 'linux':
       task.shards = 2
       task.shard_indices = range(task.shards)
@@ -148,10 +152,20 @@ def RunSteps(api, platforms, custom_trigger_script,
       task.shard_indices = [0]
     if custom_trigger_script:
       task.trigger_script = {'script': 'custom_trigger.py'}
+
+    task_request = task.request
+    task_slice = task_request[0]
+    task_dimensions = task_slice.dimensions
+    task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
+        platform)
     task.tags.add('os:' + platform)
+    ensure_file = task_slice.cipd_ensure_file
     if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
-      task.cipd_packages.append(
-        ('bin', 'super/awesome/pkg', 'git_revision:deadbeef'))
+      ensure_file.add_package('super/awesome/pkg', 'git_revision:deadbeef',
+                              'bin')
+    task_slice = (task_slice.with_dimensions(**task_dimensions).
+                    with_cipd_ensure_file(ensure_file))
+    task.request = task_request.with_slice(0, task_slice)
     tasks.append(task)
 
   # Launch all tasks.

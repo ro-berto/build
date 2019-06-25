@@ -15,7 +15,7 @@
       "@@@STEP_LOG_LINE@test-name@ useful: envvars@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'timeout_sec=60' -p 'variant=\"default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Windows-7-SP1\", \"pool:Chrome\"]' -p 'test_name=\"suite-name/dir/test-name\"' -p 'build_config=\"Debug\"' -p 'isolated_name=\"test262\"' -p 'bisect_mastername=\"client.v8\"' -p 'extra_args=[\"--extra-flags\", \"--flag1\", \"--extra-flags\", \"--flag2\"]' -p 'total_timeout_sec=120'@@@",
+      "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'timeout_sec=60' -p 'variant=\"default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"os:Windows-7-SP1\", \"pool:Chrome\"]' -p 'test_name=\"suite-name/dir/test-name\"' -p 'build_config=\"Debug\"' -p 'isolated_name=\"test262\"' -p 'bisect_mastername=\"client.v8\"' -p 'extra_args=[\"--extra-flags\", \"--flag1\", \"--extra-flags\", \"--flag2\"]' -p 'total_timeout_sec=120'@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Run #1@@@",
       "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",

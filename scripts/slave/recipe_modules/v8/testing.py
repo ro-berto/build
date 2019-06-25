@@ -464,7 +464,7 @@ class V8Test(BaseTest):
         'isolated_target', orig_config['tests'][0])
 
     test_args = list(orig_config.get('test_args', [])) + [
-      '--random-seed', failure_dict['random_seed'],
+      '--random-seed', str(failure_dict['random_seed']),
     ]
 
     rerun_config = {
@@ -492,17 +492,22 @@ def _trigger_swarming_task(api, task, test_step_config):
     test_step_config: Configuration object used to configure this task. Contains
         e.g. dimension and task-attribute overrides.
   """
+  task_slice = task.request[0]
+  task_dimensions = task_slice.dimensions
   # Add custom dimensions.
-  task.dimensions.update(api.v8.bot_config.get('swarming_dimensions', {}))
+  task_dimensions.update(api.v8.bot_config.get('swarming_dimensions', {}))
 
   # Override with per-test dimensions.
-  task.dimensions.update(test_step_config.swarming_dimensions or {})
+  task_dimensions.update(test_step_config.swarming_dimensions or {})
 
   # Override cpu and gpu defaults for Android as such devices don't have these
   # dimensions.
-  if task.dimensions['os'] == 'Android':
-    task.dimensions.pop('cpu')
-    task.dimensions.pop('gpu')
+  if task_dimensions['os'] == 'Android':
+    task_dimensions['cpu'] = None
+    task_dimensions['gpu'] = None
+
+  task_slice = task_slice.with_dimensions(**task_dimensions)
+  task.request = task.request.with_slice(0, task_slice)
 
   # Override attributes with per-test settings.
   for k, v in test_step_config.swarming_task_attrs.iteritems():
@@ -576,7 +581,7 @@ class V8SwarmingTest(V8Test):
         idempotent=idempotent,
         isolated=self._get_isolated_hash(self.test),
         shards=shards,
-        raw_cmd=[command] + extra_args,
+        raw_cmd= [command] + extra_args,
     )
     self.task.collect_step = lambda task, **kw: (
         self._v8_collect_step(task, coverage_context, **kw))
@@ -641,7 +646,7 @@ class V8GenericSwarmingTest(BaseTest):
         name=self.title,
         isolated=self._get_isolated_hash(self.test),
         task_output_dir=self.task_output_dir,
-        raw_cmd=self.command,
+        raw_cmd=self.command or [],
     )
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)
@@ -842,7 +847,7 @@ class Failure(object):
       'to_revision': self.api.buildbucket.gitiles_commit.id,
       # Use the same dimensions as the swarming task that ran this test.
       'swarming_dimensions': self._format_swarming_dimensions(
-          self.test.task.dimensions),
+          self.test.task.request[0].dimensions),
       # The isolated name is either specified in the test configurations or
       # corresponds to the name of the test suite.
       'isolated_name': test_config.get('isolated_target') or

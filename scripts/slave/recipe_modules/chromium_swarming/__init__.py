@@ -9,6 +9,7 @@ DEPS = [
   'depot_tools/tryserver',
   'isolate',
   'recipe_engine/buildbucket',
+  'recipe_engine/cipd',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',

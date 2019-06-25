@@ -119,10 +119,10 @@ def filter_outdir(dumps, output_dir, text_files=('.txt', '.json', ''),
 def text_for_task(task):
   lines = []
 
-  if task.dimensions.get('id'):
-    lines.append('Bot id: %r' % task.dimensions['id'])
-  if task.dimensions.get('os'):
-    lines.append('Run on OS: %r' % task.dimensions['os'])
+  if task.request[0].dimensions.get('id'):
+    lines.append('Bot id: %r' % task.request[0].dimensions['id'])
+  if task.request[0].dimensions.get('os'):
+    lines.append('Run on OS: %r' % task.request[0].dimensions['os'])
 
   return '<br/>'.join(lines)
 
@@ -190,7 +190,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # even if misconfigured.
     self._default_dimensions = {
       'cpu': 'x86-64',
-      'gpu': 'none',
+      'gpu': None,
     }
     # Expirations are set to mildly good values and will be tightened soon.
     self._default_expiration = 60*60
@@ -470,14 +470,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     return self.m.path.join(self._path_to_testing_dir, 'merge_scripts', name)
 
-  def task(self, name=None, isolated=None, ignore_task_failure=False,
-           shards=1, shard_indices=None, task_output_dir=None, extra_args=None,
-           idempotent=None, cipd_packages=None, build_properties=None,
-           builder_name=None, build_number=None,
-           merge=None, trigger_script=None, named_caches=None,
-           service_account=None, raw_cmd=None, env_prefixes=None, env=None,
-           optional_dimensions=None, task_to_retry=None,
-           failure_as_exception=True):
+  def task(self, name=None, build_properties=None, cipd_packages=None,
+           collect_step=None, env=None, env_prefixes=None, extra_args=None,
+           failure_as_exception=True, idempotent=None,
+           ignore_task_failure=False, isolated=None, merge=None,
+           named_caches=None, optional_dimensions=None, raw_cmd=None,
+           service_account=None, shards=1, shard_indices=None,
+           task_output_dir=None, task_to_retry=None, trigger_script=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -520,10 +519,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
-      * builder_name: An optional builder name. Defaults to builder name passed
-          by buildbucket or to the recipe property (in that order).
-      * build_number: An optional build number. Defaults to build number passed
-          by buildbucket or to the recipe property (in that order).
       * merge: An optional dict containing:
         * "script": path to a script to call to post process and merge the
               collected outputs from the tasks. The script should take one
@@ -563,10 +558,32 @@ class SwarmingApi(recipe_api.RecipeApi):
           successful shards from 'task_to_retry' will be merged with the new
           shards in this task.
       * failure_as_exception: Boolean. Whether test failures should throw a
-        recipe exception during the collet step.
+        recipe exception during the collect step.
     """
+
+    if not collect_step:
+      collect_step = functools.partial(
+        self._default_collect_step, failure_as_exception=failure_as_exception)
+
+    ensure_file = self.m.cipd.EnsureFile()
+    if cipd_packages:
+      for package in cipd_packages:
+        ensure_file.add_package(package[1], package[2], package[0])
+
+    env_prefixes = {
+      var: list(paths) for var, paths in (env_prefixes or {}).items()}
+
     if idempotent is None:
       idempotent = self.default_idempotent
+
+    init_env = self.default_env.copy()
+    init_env.update(env or {})
+
+    optional_dimensions_var = None
+    if optional_dimensions:
+      optional_dimensions_var = optional_dimensions.copy()
+
+    shard_indices = shard_indices or range(shards)
 
     spec_name = ''
     builder_id = self.m.buildbucket.build.builder
@@ -574,47 +591,45 @@ class SwarmingApi(recipe_api.RecipeApi):
       spec_name = '%s.%s:%s' % (
           builder_id.project, builder_id.bucket, builder_id.builder)
 
-    init_env = dict(self.default_env)
-    if env: # pragma: no cover
-      init_env.update(env)
+    builder_info = None
+    buildername = self.m.buildbucket.builder_name
+    if buildername:
+      builder_info = (buildername, (self.m.buildbucket.build.number or -1))
 
-    builder_name = (builder_name or self.m.buildbucket.builder_name)
-    build_number = (build_number or self.m.buildbucket.build.number)
+    request = (self.m.swarming.task_request().
+      with_name(name or '').
+      with_priority(self.default_priority).
+      with_service_account(service_account or '').
+      with_user(self.default_user or ''))
 
-    if shard_indices is None:
-      shard_indices = range(shards)
-    collect_step = functools.partial(
-        self._default_collect_step, failure_as_exception=failure_as_exception)
+    request = (request.with_slice(0, request[0].
+      with_cipd_ensure_file(ensure_file).
+      with_command(raw_cmd or []).
+      with_dimensions(**self._default_dimensions).
+      with_env_vars(**init_env.copy()).
+      with_env_prefixes(**env_prefixes).
+      with_execution_timeout_secs(self.default_hard_timeout).
+      with_expiration_secs(self.default_expiration).
+      with_io_timeout_secs(self.default_io_timeout).
+      with_isolated(isolated or ('0' * 40)).
+      with_idempotent(idempotent)))
+
     return SwarmingTask(
-        name=name,
-        isolated=isolated,
-        dimensions=self._default_dimensions,
-        env=init_env,
-        priority=self.default_priority,
-        shards=shards,
-        shard_indices=shard_indices,
-        spec_name=spec_name,
-        buildername=builder_name,
-        buildnumber=build_number,
-        user=self.default_user,
-        expiration=self.default_expiration,
-        io_timeout=self.default_io_timeout,
-        hard_timeout=self.default_hard_timeout,
-        idempotent=idempotent,
-        ignore_task_failure=ignore_task_failure,
-        extra_args=extra_args,
-        collect_step=collect_step,
-        task_output_dir=task_output_dir,
-        cipd_packages=cipd_packages or [],
-        build_properties=build_properties,
-        merge=merge,
-        trigger_script=trigger_script,
-        named_caches=named_caches,
-        service_account=service_account,
-        raw_cmd=raw_cmd,
-        env_prefixes=env_prefixes,
-        optional_dimensions=optional_dimensions,
-        task_to_retry=task_to_retry,
+      request=request,
+      builder_info=builder_info,
+      collect_step=collect_step,
+      extra_args=extra_args,
+      ignore_task_failure=ignore_task_failure,
+      named_caches=named_caches,
+      optional_dimensions=optional_dimensions_var,
+      shard_indices=shard_indices,
+      shards=shards,
+      spec_name=spec_name,
+      task_output_dir=task_output_dir,
+      task_to_retry=task_to_retry,
+      build_properties=build_properties,
+      merge=merge,
+      trigger_script=trigger_script
     )
 
   def gtest_task(self, name=None, isolated=None, extra_args=None,
@@ -643,9 +658,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         'standard_gtest_merge.py')}
 
     # Make a task, configure it to be collected through shim script.
-    task = self.task(name, isolated, extra_args=extra_args,
-                     cipd_packages=cipd_packages, merge=merge, **kwargs)
-    task.collect_step = self._gtest_collect_step
+    task = self.task(name=name, cipd_packages=cipd_packages,
+                     collect_step=self._gtest_collect_step,
+                     extra_args=extra_args, isolated=isolated, merge=merge,
+                     **kwargs)
     return task
 
   def isolated_script_task(self):
@@ -706,8 +722,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     assert isinstance(task, SwarmingTask)
     assert task.task_name not in self._pending_tasks, (
-        'Triggered same task twice: %s' % task.task_name)
-    assert 'os' in task.dimensions, task.dimensions
+        'Triggered same task twice: %s' % task.request.name)
+    assert 'os' in task.request[0].dimensions, task.request[0].dimensions
 
     # There is a single pending task, regardless of how many shards get
     # triggered.
@@ -769,9 +785,18 @@ class SwarmingApi(recipe_api.RecipeApi):
       pre_trigger_args: All arguments up to and including 'trigger'
       post_triggers_args: All arguments following 'trigger'
     """
+    task_request = task.request
+    task_slice = task.request[0]
+
     # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
     # always access them on $PATH.
-    cipd_packages = list(task.cipd_packages or ())
+    task_cipd_packages = task_slice.cipd_ensure_file.packages
+    cipd_packages = []
+    if task_cipd_packages:
+      for path in sorted(task_cipd_packages):
+        for pkg in task_cipd_packages[path]:
+          cipd_packages.append(((path or '.'), pkg.name, pkg.version))
+
     for pkg in cipd_packages:
       assert not pkg[0].startswith(IMPLIED_BINARY_PATH), \
         'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,)
@@ -780,7 +805,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # HACK(crbug.com/842234) - we don't support cpython on mips yet, so remove
     # it from packages to inject.
-    cpu_dimension = task.dimensions.get('cpu', '')
+    cpu_dimension = task_slice.dimensions.get('cpu', '')
     if 'mips' in cpu_dimension:
       for k in to_add.keys():
         if 'cpython' in k:
@@ -801,7 +826,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     })
 
     # update $PATH
-    env_prefixes = dict(task.env_prefixes or {})            # copy it
+    env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
     env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
       path_env_prefix, key=lambda x: (len(x), x))
     for k, path in IMPLIED_ENV_PREFIXES.iteritems():
@@ -814,15 +839,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
       '--namespace', self.m.isolate.namespace,
-      '--priority', str(task.priority),
+      '--priority', str(task_request.priority),
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),
-      '--expiration', str(task.expiration),
-      '--io-timeout', str(task.io_timeout),
-      '--hard-timeout', str(task.hard_timeout),
+      '--expiration', str(task_slice.expiration_secs),
+      '--io-timeout', str(task_slice.io_timeout_secs),
+      '--hard-timeout', str(task_slice.execution_timeout_secs),
     ]
 
-    for name, value in sorted(task.dimensions.iteritems()):
+    for name, value in sorted(task_slice.dimensions.iteritems()):
       assert isinstance(value, basestring), \
         'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
@@ -835,7 +860,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                 'optional-dimension %s is not a string: %s' % (name, value)
             args.extend(['--optional-dimension', name, value, exp])
 
-    for name, value in sorted(task.env.iteritems()):
+    for name, value in sorted(task_slice.env_vars.iteritems()):
       assert isinstance(value, basestring), \
         'env var %s is not a string: %s' % (name, value)
       args.extend(['--env', name, value])
@@ -843,8 +868,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     for name, relpath in sorted(named_caches.iteritems()):
       args.extend(['--named-cache', name, relpath])
 
-    if task.service_account:
-      args.extend(['--service-account', task.service_account])
+    if task_request.service_account:
+      args.extend(['--service-account', task_request.service_account])
 
     if self.service_account_json:
       args.extend(['--auth-service-account-json', self.service_account_json])
@@ -858,19 +883,24 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Default tags.
     tags = set(task.tags)
     tags.update(self._default_tags)
-    tags.add('data:' + task.isolated)
-    tags.add('name:' + task.name.split(' ')[0])
+
+    tags.add('data:' + task_slice.isolated)
+    tags.add('name:' + task_request.name.split(' ')[0])
     mastername = self.m.properties.get('mastername')
     if mastername:
       tags.add('master:' + mastername)
+
     if task.spec_name:
       tags.add('spec_name:' + task.spec_name)
-    if task.buildername:
-      tags.add('buildername:' + task.buildername)
-    if task.buildnumber:
-      tags.add('buildnumber:%s' % task.buildnumber)
+
+    if task.builder_info:
+      tags.add('buildername:' + task.builder_info[0])
+      if not task.builder_info[1] == -1:
+        tags.add('buildnumber:%s' % task.builder_info[1])
+
     if self.m.properties.get('bot_id'):
       tags.add('slavename:%s' % self.m.properties['bot_id'])
+
     tags.add('stepname:%s' % self.get_step_name('', task))
     for cl in self.m.buildbucket.build.input.gerrit_changes:
       tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
@@ -880,10 +910,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if self.verbose:
       args.append('--verbose')
-    if task.idempotent:
+    if task_slice.idempotent:
       args.append('--idempotent')
-    if task.user:
-      args.extend(['--user', task.user])
+    if task_request.user:
+      args.extend(['--user', task_request.user])
 
     if cipd_packages:
       for path, pkg, version in cipd_packages:
@@ -895,18 +925,19 @@ class SwarmingApi(recipe_api.RecipeApi):
           args.extend(('--env-prefix', key, path))
 
     # What isolated command to trigger.
-    args.extend(('--isolated', task.isolated))
+    if not task_slice.isolated == '0' * 40:
+      args.extend(('--isolated', task_slice.isolated))
 
     # Use a raw command as extra-args on tasks without command.
-    if task.raw_cmd:
+    if task_slice.command:
       # Allow using only one of raw_cmd or extra_args.
       assert not task.extra_args
       args.append('--raw-cmd')
 
     # Additional command line args for isolated command.
-    if task.extra_args or task.raw_cmd:
+    if task.extra_args or task_slice.command:
       args.append('--')
-      args.extend(task.extra_args or task.raw_cmd)
+      args.extend(task.extra_args or task_slice.command)
 
     script = self.m.swarming_client.path.join('swarming.py')
     if task.trigger_script:
@@ -1161,15 +1192,14 @@ class SwarmingApi(recipe_api.RecipeApi):
                     # they do via expectations). Leave this here for now, since
                     # this is a sane default to ship with the module.
                     or self.resource('noop_merge.py'))
-    merge_args = (task.merge.get('args') or [])
 
+    merge_args = (task.merge.get('args') or [])
     task_args.extend([
       '--merge-script', merge_script,
       '--merge-script-stdout-file',
       self.m.raw_io.output('merge_script_log'),
       '--merge-additional-args', self.m.json.dumps(merge_args),
     ])
-
     if task.build_properties:
       properties = dict(task.build_properties)
       # exclude any recipe-engine-controlling properties (starting with $)
@@ -1217,7 +1247,6 @@ class SwarmingApi(recipe_api.RecipeApi):
             ok_ret='any',
             step_test_data=gen_step_test_data,
             **kwargs)
-
     step_result.presentation.step_text = text_for_task(task)
 
     step_result.presentation.logs['Merge script log'] = [
@@ -1243,7 +1272,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if exception and failure_as_exception:
       raise exception
-
     return step_result, has_valid_results
 
   def _check_for_missing_shard(self, merged_results_json, active_step, task):
@@ -1447,18 +1475,18 @@ class SwarmingApi(recipe_api.RecipeApi):
       '[<prefix>] <task name> on <OS>'
     """
     prefix = '[%s] ' % prefix if prefix else ''
-    task_os = task.dimensions['os']
+    task_os = task.request[0].dimensions['os']
 
     bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = ('' if (
         task_os == bot_os or task_os.lower() == self.m.platform.name.lower() or
-        task_os in task.name)
+        task_os in task.request.name)
               else ' on %s' % task_os)
     # Note: properly detecting dimensions of the bot the recipe is running
     # on is somewhat non-trivial. It is not safe to assume it uses default
     # or preferred dimensions for its OS. For example, the version of the OS
     # can differ.
-    return ''.join((prefix, task.name, suffix))
+    return ''.join((prefix, task.request.name, suffix))
 
 
   def _handle_summary_json(self, task, step_result):
@@ -1677,6 +1705,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Set platform-specific default dims.
     target_platform = self.m.chromium.c.TARGET_PLATFORM
     swarming_dims = PER_TARGET_SWARMING_DIMS[target_platform]
+
     for k, v in swarming_dims.iteritems():
       self.set_default_dimension(k, v)
 
@@ -1735,70 +1764,45 @@ class SwarmingApi(recipe_api.RecipeApi):
 class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
-  def __init__(self, name, isolated, ignore_task_failure, dimensions,
-               env, priority, shards, shard_indices, spec_name, buildername,
-               buildnumber, expiration, user, io_timeout, hard_timeout,
-               idempotent, extra_args, collect_step, task_output_dir,
-               cipd_packages=None, build_properties=None, merge=None,
-               trigger_script=None, named_caches=None, service_account=None,
-               raw_cmd=None, env_prefixes=None, optional_dimensions=None,
-               task_to_retry=None, containment_type=None):
+  def __init__(self, request, collect_step, extra_args, ignore_task_failure,
+               shards, shard_indices, spec_name, task_output_dir,
+               build_properties=None, builder_info=None, containment_type=None,
+               merge=None, named_caches=None, optional_dimensions=None,
+               task_to_retry=None, trigger_script=None):
+
     """Configuration of a swarming task.
 
     Args:
-      * name: display name of the task, hints to what task is doing. Usually
-          corresponds to a name of a test executable. Doesn't have to be unique.
-      * isolated: hash of isolated file that describes all files needed to
-          run the task as well as command line to launch. See 'isolate' recipe
-          module.
-      * ignore_task_failure: whether to ignore the test failure of swarming
-          tasks.
-      * cipd_packages: list of 3-tuples corresponding to CIPD packages needed
-          for the task: ('path', 'package_name', 'version'), defined as follows:
-        * path: Path relative to the Swarming root dir in which to install
-            the package.
-        * package_name: Name of the package to install,
-            eg. "infra/tools/luci-auth/${platform}"
-        * version: Version of the package, either a package instance ID,
-            ref, or tag key/value pair.
-      * collect_step: callback that will be called to collect and processes
-          results of task execution, signature is collect_step(task, **kwargs).
-      * dimensions: key-value mapping with swarming dimensions that specify
-          on what Swarming slaves task can run. One important dimension is 'os',
-          which defines platform flavor to run the task on. See Swarming doc.
-      * env: key-value mapping with additional environment variables to add to
-          environment before launching the task executable.
-      * priority: integer [0, 255] that defines how urgent the task is.
-          Lower value corresponds to higher priority. Swarming service executes
-          tasks with higher priority first.
-      * shards: how many concurrent shards to run, makes sense only for
-          isolated tests based on gtest. Swarming uses GTEST_SHARD_INDEX
-          and GTEST_TOTAL_SHARDS environment variables to tell the executable
-          what shard to run.
-      * shard_indices: Which shards to run.
-      * spec_name: task spec name. Used in monitoring.
-      * buildername: buildbot builder this task was triggered from.
-      * buildnumber: build number of a build this task was triggered from.
-      * expiration: number of schedule until the task shouldn't even be run if
-          it hadn't started yet.
-      * user: user that requested this task, if applicable.
-      * io_timeout: number of seconds that the task is allowed to not emit any
-          stdout bytes, after which it is forcibly killed.
-      * hard_timeout: number of seconds for which the task is allowed to run,
-          after which it is forcibly killed.
-      * idempotent: True if the results from a previous task can be reused. E.g.
-          this task has no side-effects.
-      * extra_args: list of command line arguments to pass to isolated tasks.
-      * task_output_dir: if defined, the directory where task results are placed
-          during the collect step.
+      * request: swarming.TaskRequest instance as created by
+          swarming.task_request().
       * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
+      * builder_info: Information about the builder collected from buildbucket.
+        Usually composed of buildername and buildnumber.
+      * collect_step: callback that will be called to collect and processes
+          results of task execution. Expected signature is
+          collect_step(task, **kwargs).
+      * containment_type: string. Type of containment to use for the task. This
+          is being added to fix https://crbug.com/965222, please talk to
+          martiniss@ if you are using this feature; it should be deleted in the
+          next few months.
+      * extra_args: list of command line arguments to pass to isolated tasks.
+      * ignore_task_failure: whether to ignore the test failure of swarming
+          tasks.
       * merge: An optional dict containing:
         * "script": path to a script to call to post process and merge the
               collected outputs from the tasks.
         * "args": an optional list of additional arguments to pass to the
               above script.
+      * named_caches: a dict {name: relpath} requesting a cache named `name`
+          to be installed in `relpath` relative to the task root directory..
+      * spec_name: task spec name. Used in monitoring.
+      * task_output_dir: if defined, the directory where task results are placed
+          during the collect step.
+      * task_to_retry: Task object. If set, indicates that this task is a
+          (potentially partial) retry of another task. When collecting, should
+          re-use some shards from the retried task.
       * trigger_script: An optional dict containing:
         * "script": path to a script to call which will use custom logic to
               trigger appropriate swarming jobs, using swarming.py. Required.
@@ -1820,67 +1824,27 @@ class SwarmingTask(object):
           GTEST_TOTAL_SHARDS, which is the total number of shards.
           This can be done by passing `--env GTEST_SHARD_INDEX [NUM]` and
           `--env GTEST_SHARD_SHARDS [NUM]` when calling swarming.py trigger.
-      * named_caches: a dict {name: relpath} requesting a cache named `name`
-          to be installed in `relpath` relative to the task root directory.
-      * service_account: (string) a service account email to run the task under.
-      * raw_cmd: Optional list of arguments to be used as raw command. Can be
-          used instead of extra args.
-      * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
-          swarming to prepend the given relative paths to the PATH-style ENVVAR
-          specified.
-      * optional_dimensions: {expiration: [{key: value]} mapping with swarming
-          dimensions that specify on what Swarming slaves tasks can run.  These
-          are similar to what is specified in dimensions but will create
-          additional 'fallback' task slice(s) with the optional dimensions.
-      * task_to_retry: Task object. If set, indicates that this task is a
-          (potentially partial) retry of another task. When collecting, should
-          re-use some shards from the retried task.
-      * containment_type: string. Type of containment to use for the task. This
-          is being added to fix https://crbug.com/965222, please talk to
-          martiniss@ if you are using this feature; it should be deleted in the
-          next few months.
     """
-
     self._trigger_output = None
     self.build_properties = build_properties
-    self.spec_name = spec_name
-    self.buildername = buildername
-    self.buildnumber = buildnumber
-    self.cipd_packages = cipd_packages
+    self.builder_info = builder_info
     self.collect_step = collect_step
     self.containment_type = containment_type
-    self.dimensions = dimensions.copy()
-    self.env = env.copy()
-    self.expiration = expiration
     self.extra_args = extra_args or []
-    self.hard_timeout = hard_timeout
-    self.idempotent = idempotent
+    self.failed_shards = []
     self.ignore_task_failure = ignore_task_failure
-    self.io_timeout = io_timeout
-    self.isolated = isolated
     self.merge = merge or {}
     self.named_caches = named_caches or {}
-    self.service_account = service_account
-    self.trigger_script = trigger_script or {}
-    self.priority = priority
-    self.raw_cmd = tuple(raw_cmd or [])
+    self.optional_dimensions = optional_dimensions
+    self.request = request
     self.shards = shards
     self.shard_indices = shard_indices
+    self.spec_name = spec_name
     self.tags = set()
     self.task_output_dir = task_output_dir
-    self.name = name
-    self.user = user
-    self.env_prefixes = {
-      var: list(paths) for var, paths in (env_prefixes or {}).iteritems()}
-    if optional_dimensions:
-      self.optional_dimensions = optional_dimensions.copy()
-    else:
-      self.optional_dimensions = None
-    self.wait_for_capacity = False
     self.task_to_retry = task_to_retry
-    # Specific shards which failed. Used to decide which shards to retry by
-    # clients.
-    self.failed_shards = []
+    self.trigger_script = trigger_script or {}
+    self.wait_for_capacity = False
 
   @property
   def task_name(self):
@@ -1889,12 +1853,17 @@ class SwarmingTask(object):
     The task name is purely to make sense of the task and is not used in any
     other way.
     """
-    out = '%s/%s/%s' % (
-        self.name, self.dimensions['os'], self.isolated[:10])
-    if self.buildername:
-      out += '/%s/%s' % (self.buildername, self.buildnumber or -1)
-    return out
+    task_name_suffix = ''
+    if self.builder_info:
+      task_name_suffix += '/%s/%s' % (
+        self.builder_info[0], self.builder_info[1])
 
+    return '%s/%s/%s%s' % (
+        self.request.name,
+        self.request[0].dimensions['os'],
+        self.request[0].isolated[:10],
+        task_name_suffix
+    )
   @property
   def trigger_output(self):
     """JSON results of 'trigger' step or None if not triggered.

@@ -172,10 +172,11 @@ class DartApi(recipe_api.RecipeApi):
     for shard in range(num_shards):
       if last_shard_is_local and shard == num_shards - 1:
         break
-      task = self.m.chromium_swarming.task('%s_shard_%s' % (name, (shard + 1)),
-                                  isolate_hash,
+      task = self.m.chromium_swarming.task(
+                                  name='%s_shard_%s' % (name, (shard + 1)),
+                                  isolated=isolate_hash,
                                   cipd_packages=cipd_packages,
-                                  raw_cmd=test_args +
+                                  raw_cmd= (test_args or []) +
                                   ['--shards=%s' % num_shards,
                                    '--shard=%s' % (shard + 1),
                                    '--output-directory=${ISOLATED_OUTDIR}'],
@@ -186,14 +187,22 @@ class DartApi(recipe_api.RecipeApi):
         'mac': 'Mac',
         'win': 'Windows',
       }
-      task.dimensions['os'] = os_names.get(os, os)
-      task.dimensions['cpu'] = cpu
-      task.dimensions['pool'] = pool
-      task.dimensions.pop('gpu', None)
+
+      task_request = task.request
+      task_slice = task_request[0]
+      task_dimensions = task_slice.dimensions
+      task_dimensions['os'] = os_names.get(os, os)
+      task_dimensions['cpu'] = cpu
+      task_dimensions['pool'] = pool
+      task_dimensions['gpu'] = None
+      task_slice = task_slice.with_dimensions(**task_dimensions)
       if 'shard_timeout' in self.m.properties:
-        task.hard_timeout = int(self.m.properties['shard_timeout'])
+        task_slice = (task_slice.with_execution_timeout_secs(
+          int(self.m.properties['shard_timeout'])))
       # Set a priority lower than any builder, to prioritize shards.
-      task.priority = 25
+      task_request = (task_request.with_slice(0, task_slice).
+              with_priority(25))
+      task.request = task_request
       self.m.chromium_swarming.trigger_task(task)
       tasks.append(task)
     return tasks
