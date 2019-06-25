@@ -249,20 +249,9 @@
     "name": "kill processes (2)"
   },
   {
-    "cmd": [
-      "cat",
-      ".debug.log"
-    ],
-    "cwd": "[CLEANUP]",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "debug log"
-  },
-  {
     "failure": {
       "failure": {},
-      "humanReason": "1 out of 3 aggregated steps failed: Error, could not find builder by name builders/analyzer-triggered in test-matrix"
+      "humanReason": "1 out of 2 aggregated steps failed: Error, could not find builder by name builders/analyzer-triggered in test-matrix"
     },
     "name": "$result"
   }

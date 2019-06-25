@@ -122,8 +122,6 @@ def _run_steps_impl(api):
     with api.step.defer_results():
       api.dart.test(test_data=TEST_MATRIX)
       api.dart.kill_tasks()
-      with api.context(cwd=api.path['checkout']):
-        api.dart.read_debug_log()
 
 
 def GenTests(api):

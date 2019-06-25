@@ -1322,17 +1322,6 @@
     "name": "kill processes (3)"
   },
   {
-    "cmd": [
-      "cat",
-      ".debug.log"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "debug log"
-  },
-  {
     "name": "$result"
   }
 ]
