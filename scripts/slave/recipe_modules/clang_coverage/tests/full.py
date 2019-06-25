@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'clang_coverage',
     'recipe_engine/buildbucket',
@@ -30,6 +31,7 @@ def RunSteps(api):
     api.clang_coverage.instrument(api.properties['files_to_instrument'])
   # Fake path.
   api.clang_coverage._merge_scripts_location = api.path['start_dir']
+  api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
   tests = [
       api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
@@ -294,5 +296,18 @@ def GenTests(api):
           check(steps['gsutil upload coverage metadata']
                 .output_properties['process_coverage_data_failure'] == True))
       + api.post_process(post_process.StatusFailure)
+      + api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      api.test('process java coverage')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='android-code-coverage',
+          buildnumber=54)
+      + api.step_data('read GN args', api.raw_io.output_text(
+          'jacoco_coverage = true'))
+      + api.post_process(
+          post_process.MustRun, 'process java coverage')
+      + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

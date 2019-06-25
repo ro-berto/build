@@ -11,7 +11,7 @@ from . import constants
 class GnApi(recipe_api.RecipeApi):
 
   _DEFAULT_STEP_NAME = 'read GN args'
-  _ARG_RE = re.compile('\s*(\w+)\s*=')
+  _ARG_RE = re.compile('\s*(\w+)\s*=\s*(\S+)')
   _NON_LOCAL_ARGS = frozenset(['goma_dir', 'target_sysroot'])
   _DEFAULT_MAX_TEXT_LINES = 15
 
@@ -217,3 +217,19 @@ class GnApi(recipe_api.RecipeApi):
     """
     with self.m.context(cwd=build_dir):
       self._gn_cmd(step_name, ['clean', build_dir])
+
+  def parse_gn_args(self, content):
+    """Parses string content from arg.gn to a dictionary.
+
+    Args:
+      content: The string content of arg.gn file.
+
+    Returns:
+      A dictionary of gn args.
+    """
+    result = {}
+    for line in content.splitlines():
+      match = self._ARG_RE.match(line)
+      if match:
+        result[match.group(1)] = match.group(2)
+    return result
