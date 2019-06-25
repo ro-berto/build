@@ -511,11 +511,11 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
         name='upload "%s"' % remote_name)
 
 
-# def RunIOSTests(api):
-#   directory = api.path['start_dir'].join('src', 'flutter', 'testing', 'ios',
-#                                          'IosUnitTests')
-#   with api.context(cwd=directory):
-#     api.step('iOS Unit Tests', ["./run_tests.sh", "ios_debug_sim"])
+def RunIOSTests(api):
+  directory = api.path['start_dir'].join('src', 'flutter', 'testing', 'ios',
+                                         'IosUnitTests')
+  with api.context(cwd=directory):
+    api.step('iOS Unit Tests', ["./run_tests.sh", "ios_debug_sim"])
 
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.
@@ -536,7 +536,7 @@ def BuildIOS(api):
 
   # Build all configurations.
   Build(api, 'ios_debug_sim')
-  # RunIOSTests(api)
+  RunIOSTests(api)
   Build(api, 'ios_debug')
   Build(api, 'ios_debug_arm')
   Build(api, 'ios_profile')
