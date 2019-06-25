@@ -32,21 +32,34 @@ IMPLIED_ENV_PREFIXES = {
 }
 
 # These CIPD packages will be automatically put on $PATH for all swarming tasks
-# generated from this module. The first member of the tuple is the path relative
-# to IMPLIED_BINARY_PATH which should be added to $PATH.
+# generated from this module. Each key is the name of a package to install and
+# its associated value is a dict with the following keys:
+#   - "version" (required): the version of the package to install.
+#   - "install_path" (optional): path relative to IMPLIED_BINARY_PATH to install
+#     the package to. If unspecified, the package is installed to
+#     IMPLIED_BINARY_PATH.
+#   - "env_path" (optional): path relative to the installed path to put on
+#     $PATH. If unspecified, the package's installation root is put on $PATH.
 IMPLIED_CIPD_BINARIES = {
   # Both vpython versions MUST be changed together.
-  'infra/tools/luci/vpython/${platform}':
-    ('', 'git_revision:cc09450f1c27c0034ec08b1f6d63bbc298294763'),
-  'infra/tools/luci/vpython-native/${platform}':
-    ('', 'git_revision:cc09450f1c27c0034ec08b1f6d63bbc298294763'),
+  'infra/tools/luci/vpython/${platform}': {
+      'version': 'git_revision:cc09450f1c27c0034ec08b1f6d63bbc298294763',
+  },
+  'infra/tools/luci/vpython-native/${platform}': {
+      'version': 'git_revision:cc09450f1c27c0034ec08b1f6d63bbc298294763',
+  },
 
-  'infra/tools/luci/logdog/butler/${platform}':
-    ('', 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c'),
+  'infra/tools/luci/logdog/butler/${platform}': {
+      'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
+  },
+
   # NOTE(crbug.com/842234): this isn't currently available on mips. See
   # SwarmingApi.trigger_task for hack.
-  'infra/python/cpython/${platform}':
-    ('bin', 'version:2.7.15.chromium14'),
+  'infra/python/cpython/${platform}': {
+      'install_path': 'cpython',
+      'env_path': 'bin',
+      'version': 'version:2.7.15.chromium14',
+  },
 }
 
 PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)
@@ -807,16 +820,19 @@ class SwarmingApi(recipe_api.RecipeApi):
     # it from packages to inject.
     cpu_dimension = task_slice.dimensions.get('cpu', '')
     if 'mips' in cpu_dimension:
-      for k in to_add.keys():
-        if 'cpython' in k:
-          to_add.pop(k)
+      to_add.pop('cpython', None)
 
     path_env_prefix = set()
-    for pkg, (subdir, vers) in sorted(to_add.items()):
-      path_env_prefix.add('/'.join((IMPLIED_BINARY_PATH, subdir)) if subdir
-                          else IMPLIED_BINARY_PATH)
-      vers = 'TEST_VERSION' if self._test_data.enabled else vers
-      cipd_packages.append((IMPLIED_BINARY_PATH, pkg, vers))
+    for pkg, details in sorted(to_add.items()):
+      path = IMPLIED_BINARY_PATH
+      if details.get('install_path'):
+        path = '/'.join((path, details['install_path']))
+      if details.get('env_path'):
+        path_env_prefix.add('/'.join((path, details['env_path'])))
+      else:
+        path_env_prefix.add(path)
+      vers = 'TEST_VERSION' if self._test_data.enabled else details['version']
+      cipd_packages.append((path, pkg, vers))
 
     # update implied caches
     named_caches = dict(task.named_caches or {})
