@@ -357,7 +357,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           **kwargs)
 
       jacoco_html_report_gs_path = self._compose_gs_path_for_coverage_data(
-          'java_html_report'),
+          'java_html_report')
       html_upload_step = self.m.gsutil.upload(
           source=coverage_dir.join('coverage_html'),
           bucket=_BUCKET_NAME,
@@ -376,7 +376,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           bucket=_BUCKET_NAME,
           dest=self._compose_gs_path_for_coverage_data('java_metadata'),
           name='Upload JSON metadata',
-          link_name='Coverage report',
+          link_name='Coverage metadata',
           **kwargs)
 
   def _merge_profdata(self):
