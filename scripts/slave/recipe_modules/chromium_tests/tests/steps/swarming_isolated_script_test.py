@@ -8,7 +8,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
-    'clang_coverage',
+    'code_coverage',
     'depot_tools/bot_update',
     'isolate',
     'perf_dashboard',
@@ -37,7 +37,7 @@ def RunSteps(api):
   })
   api.chromium.set_config('chromium')
   # Fake path, as the real one depends on having done a chromium checkout.
-  api.clang_coverage._merge_scripts_location = api.path['start_dir']
+  api.code_coverage._merge_scripts_location = api.path['start_dir']
 
   bot_config_object = api.chromium_tests.create_bot_config_object([
       api.chromium_tests.create_bot_id(

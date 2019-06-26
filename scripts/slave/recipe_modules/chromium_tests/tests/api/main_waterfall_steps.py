@@ -11,7 +11,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
-    'clang_coverage',
+    'code_coverage',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -220,7 +220,7 @@ def RunSteps(api, gn_args):
   builders = None
   if api.properties.get('custom_builders'):
     builders = CUSTOM_BUILDERS
-  api.clang_coverage._gn_args = gn_args
+  api.code_coverage._gn_args = gn_args
   api.chromium_tests.main_waterfall_steps(builders=builders)
 
 

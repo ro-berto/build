@@ -1565,7 +1565,7 @@ class SwarmingTest(Test):
       # test object does not specify a merge script, use the one defined by the
       # swarming task in the chromium_swarm module. (The default behavior for
       # non-coverage tests).
-      self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
+      self._merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix), additional_merge=self._merge or task.merge)
 
     if suffix == 'retry shards with patch':

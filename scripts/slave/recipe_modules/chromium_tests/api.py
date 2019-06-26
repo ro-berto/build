@@ -914,8 +914,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m, task.test_suites,
               retry_failed_shards=task.should_retry_failures_with_changes()))
 
-      if self.m.clang_coverage.using_coverage:
-        self.m.clang_coverage.process_coverage_data(task.test_suites)
+      if self.m.code_coverage.using_coverage:
+        self.m.code_coverage.process_coverage_data(task.test_suites)
 
       # An invalid result is unrecoverable.
       if invalid_test_suites:
@@ -1158,8 +1158,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       try:
         test_runner()
       finally:
-        if self.m.clang_coverage.using_coverage:
-          self.m.clang_coverage.process_coverage_data(tests)
+        if self.m.code_coverage.using_coverage:
+          self.m.code_coverage.process_coverage_data(tests)
 
     if bot_type in ['builder', 'builder_tester']:
       # Remove old files from out directory
@@ -1318,8 +1318,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
     # Must happen before without patch steps.
-    if self.m.clang_coverage.using_coverage:
-      self.m.clang_coverage.instrument(affected_files)
+    if self.m.code_coverage.using_coverage:
+      self.m.code_coverage.instrument(affected_files)
 
     tests, tests_including_triggered = self._gather_tests_to_run(bot, bot_db)
 

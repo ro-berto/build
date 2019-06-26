@@ -8,7 +8,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
-    'clang_coverage',
+    'code_coverage',
     'filter',
     'recipe_engine/json',
     'recipe_engine/platform',
@@ -79,7 +79,7 @@ _TEST_TRYBOTS = {
 
 
 def RunSteps(api, gn_args):
-  api.clang_coverage._gn_args = gn_args
+  api.code_coverage._gn_args = gn_args
   api.chromium_tests.trybot_steps(
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))

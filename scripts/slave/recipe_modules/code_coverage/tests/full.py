@@ -7,7 +7,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_tests',
-    'clang_coverage',
+    'code_coverage',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -28,9 +28,9 @@ def RunSteps(api):
       builders=None)
   api.chromium_tests.configure_build(bot_config_object)
   if 'tryserver' in mastername:
-    api.clang_coverage.instrument(api.properties['files_to_instrument'])
+    api.code_coverage.instrument(api.properties['files_to_instrument'])
   # Fake path.
-  api.clang_coverage._merge_scripts_location = api.path['start_dir']
+  api.code_coverage._merge_scripts_location = api.path['start_dir']
   api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
   tests = [
@@ -53,17 +53,17 @@ def RunSteps(api):
 
   for test in tests:
     step = test.name
-    api.clang_coverage.profdata_dir(step)
+    api.code_coverage.profdata_dir(step)
     # Protected access ok here, as this is normally done by the test object
     # itself.
-    api.clang_coverage.shard_merge(
+    api.code_coverage.shard_merge(
         step, additional_merge=getattr(test, '_merge', None))
 
-  api.clang_coverage.process_coverage_data(tests)
+  api.code_coverage.process_coverage_data(tests)
 
   # Exercise these properties to provide coverage only.
-  _ = api.clang_coverage.using_coverage
-  _ = api.clang_coverage.raw_profile_merge_script
+  _ = api.code_coverage.using_coverage
+  _ = api.code_coverage.raw_profile_merge_script
 
 
 # yapf: disable
