@@ -83,7 +83,13 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
   # Always print raw exit code of the subprocess. This is very helpful
   # for debugging, especially when one gets the "crashed or hung" message
   # with no output (exit code can have some clues, especially on Windows).
-  print 'exit code (as seen by runtest.py): %d' % result
+  if result < -100:
+    # Windows error codes such as 0xC0000005 and 0xC0000409 are much easier to
+    # recognize and differentiate in hex. In order to print them as unsigned
+    # hex we need to add 4 Gig to them.
+    print 'exit code (as seen by runtest.py): 0x%08X' % (result + (1 << 32))
+  else:
+    print 'exit code (as seen by runtest.py): %d' % result
 
   get_text_result = SUCCESS
 
