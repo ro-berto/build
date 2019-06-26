@@ -53,12 +53,17 @@ IMPLIED_CIPD_BINARIES = {
       'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
   },
 
-  # NOTE(crbug.com/842234): this isn't currently available on mips. See
+  # NOTE(crbug.com/842234): these aren't currently available on mips. See
   # SwarmingApi.trigger_task for hack.
   'infra/python/cpython/${platform}': {
       'install_path': 'cpython',
       'env_path': 'bin',
       'version': 'version:2.7.15.chromium14',
+  },
+  'infra/python/cpython3/${platform}': {
+      'install_path': 'cpython3',
+      'env_path': 'bin',
+      'version': 'version:3.8.0b1.chromium.1',
   },
 }
 
@@ -816,8 +821,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     to_add = dict(IMPLIED_CIPD_BINARIES)
 
-    # HACK(crbug.com/842234) - we don't support cpython on mips yet, so remove
-    # it from packages to inject.
+    # HACK(crbug.com/842234) - we don't support cpython or cpython3 on mips yet,
+    # so remove them from packages to inject.
     cpu_dimension = task_slice.dimensions.get('cpu', '')
     if 'mips' in cpu_dimension:
       to_add.pop('cpython', None)
