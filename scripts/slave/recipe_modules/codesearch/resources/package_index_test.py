@@ -5,6 +5,8 @@
 
 """Tests for package_index.py."""
 
+from __future__ import absolute_import
+
 import hashlib
 import json
 import os
@@ -118,7 +120,7 @@ class PackageIndexTest(unittest.TestCase):
 
     actual_dicts = self._GetDictOfUnitFilesInDir(out_dir)
     golden_dicts = self._GetDictOfUnitFilesInDir(golden_dir)
-    for key, unit_dict in actual_dicts.iteritems():
+    for key, unit_dict in actual_dicts.items():
       self.assertIn(key, golden_dicts.keys())
       self.assertEqual(golden_dicts[key], unit_dict)
 

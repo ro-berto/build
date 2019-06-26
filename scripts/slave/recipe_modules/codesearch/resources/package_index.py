@@ -5,6 +5,8 @@
 
 """A tool to create a compilation index pack and upload it to Google Storage."""
 
+from __future__ import absolute_import
+from __future__ import print_function
 
 import argparse
 import errno
@@ -101,7 +103,7 @@ class IndexPack(object):
           dict(target,
                args=_MergeFeatureArgs(gn_targets_dict, target_name, target),
                imported_files=self._FindMojomImports(target))
-          for target_name, target in gn_targets_dict.iteritems()
+          for target_name, target in gn_targets_dict.items()
           if self._IsMojomTarget(target)
       ]
 
@@ -159,7 +161,7 @@ class IndexPack(object):
             break
         else:
           # Just print a warning, don't fail completely.
-          print "couldn't resolve import %s" % imp
+          print("couldn't resolve import %s" % imp)
 
     return imports
 
@@ -178,7 +180,7 @@ class IndexPack(object):
     if fname not in self.filehashes:
       # We don't want to fail completely if the file doesn't exist.
       if not os.path.exists(fname):
-        print 'missing ' + fname
+        print('missing ' + fname)
         return
       # Derive the new filename from the SHA256 hash.
       with open(fname, 'rb') as source_file:
@@ -187,24 +189,24 @@ class IndexPack(object):
       self.filehashes[fname] = content_hash
       hash_fname = os.path.join(self.files_directory, content_hash)
       if self.verbose:
-        print ' Including source file %s as %s for compilation' % (fname,
-                                                                   hash_fname)
+        print(' Including source file %s as %s for compilation' % (fname,
+                                                                   hash_fname))
       self.kzip.writestr(hash_fname, content)
 
   def _AddUnitFile(self, unit_dictionary):
     if self.verbose:
-      print "Unit argument: %s" % unit_dictionary['argument']
+      print('Unit argument: %s' % unit_dictionary['argument'])
 
     wrapper = {'unit': unit_dictionary}
 
     # Dump the dictionary in JSON format.
-    unit_file_content = json.dumps(wrapper)
+    unit_file_content = json.dumps(wrapper).encode('utf-8')
     unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
     unit_file_path = os.path.join(self.units_directory,
                                   unit_file_content_hash)
     self.kzip.writestr(unit_file_path, unit_file_content)
     if self.verbose:
-      print 'Wrote compilation unit file %s' % unit_file_path
+      print('Wrote compilation unit file %s' % unit_file_path)
 
   def _ConvertGnPath(self, gn_path):
     """Converts gn paths into output-directory-relative paths.
@@ -245,12 +247,12 @@ class IndexPack(object):
       filepaths_fn = os.path.join(entry['directory'],
                                   entry['file'] + '.filepaths')
       if self.verbose:
-        print 'Extract source files from %s' % filepaths_fn
+        print('Extract source files from %s' % filepaths_fn)
 
       # We don't want to fail if one of the filepaths doesn't exist. However we
       # keep track of it.
       if not os.path.exists(filepaths_fn):
-        print 'missing ' + filepaths_fn
+        print('missing ' + filepaths_fn)
         continue
 
       # For some reason, the compilation database contains the same targets more
@@ -263,7 +265,7 @@ class IndexPack(object):
 
       # All file paths given in the *.filepaths file are either absolute paths
       # or relative to the directory entry in the compilation database.
-      with open(filepaths_fn, 'rb') as filepaths_file:
+      with open(filepaths_fn, 'r') as filepaths_file:
         # Each line in the '*.filepaths' file references the path to a source
         # file involved in the compilation.
         for line in filepaths_file:
@@ -372,7 +374,7 @@ class IndexPack(object):
             os.path.join(self.root_dir, self.out_dir, required_file))
         # We don't want to fail completely if the file doesn't exist.
         if path not in self.filehashes:
-          print 'missing from filehashes %s' % path
+          print('missing from filehashes %s' % path)
           continue
 
         required_input = {
@@ -417,8 +419,8 @@ class IndexPack(object):
     compile_command = _RemoveWarningSwitches(command)
 
     if self.verbose:
-      print 'Generating Translation Unit data for %s' % filename
-      print 'Compile command: %s' % compile_command
+      print('Generating Translation Unit data for %s' % filename)
+      print('Compile command: %s' % compile_command)
 
     command_list = _ShellSplit(compile_command)
     # On some platforms, the |command_list| starts with the goma executable,
@@ -442,7 +444,7 @@ class IndexPack(object):
         output_file = command_list[i][len('/Fo'):]
         break
     if not output_file:
-      print 'No output file path found for %s' % filename
+      print('No output file path found for %s' % filename)
 
     # Convert any args starting with -imsvc to use forward slashes, since this
     # is what Kythe expects.
@@ -467,7 +469,7 @@ class IndexPack(object):
     command_list.append('-DKYTHE_IS_RUNNING=1')
 
     required_inputs = []
-    with open(filepaths_fn, 'rb') as filepaths_file:
+    with open(filepaths_fn, 'r') as filepaths_file:
       for line in filepaths_file:
         fname = line.strip()
         # We should not package builtin clang header files, see
@@ -483,7 +485,7 @@ class IndexPack(object):
         fname_fullpath = os.path.normpath(
             os.path.join(directory, fname))
         if fname_fullpath not in self.filehashes:
-          print 'No information about required input file %s' % fname_fullpath
+          print('No information about required input file %s' % fname_fullpath)
           continue
 
         # Handle absolute paths - when normalizing we assume paths are
@@ -605,7 +607,7 @@ def _RemoveFilepathsFiles(root):
     for filename in fnmatch.filter(files, '*.filepaths'):
       try:
         os.remove(os.path.join(path, filename))
-      except OSError, e:
+      except OSError as e:
         if e.errno != errno.ENOENT:
           raise
 
@@ -657,7 +659,7 @@ def main():
   if os.path.exists(options.path_to_archive_output):
     os.remove(options.path_to_archive_output)
 
-  print '%s: Index generation...' % time.strftime('%X')
+  print('%s: Index generation...' % time.strftime('%X'))
   with closing(
       IndexPack(options.path_to_archive_output, root_dir,
                 options.path_to_compdb, options.path_to_gn_targets,
@@ -669,7 +671,7 @@ def main():
       # Clean up the *.filepaths files.
       _RemoveFilepathsFiles(os.path.join(root_dir, 'src'))
 
-  print '%s: Done.' % time.strftime('%X')
+  print('%s: Done.' % time.strftime('%X'))
   return 0
 
 
