@@ -508,6 +508,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.profdata_executable,
         ],
     }
+    if self.is_java_coverage:
+      new_merge['args'].extend([
+          '--java-coverage-dir',
+          self.m.chromium.output_dir.join('coverage'),
+      ])
     if additional_merge:
       new_merge['args'].extend([
           '--additional-merge-script',
