@@ -667,6 +667,7 @@ def GenTests(api):
       "swarming_task_attrs": {
         "priority": 25,
         "hard_timeout": 7200,
+        "expiration": 7200,
       },
       "tests": [
         {

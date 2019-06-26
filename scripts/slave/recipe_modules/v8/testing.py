@@ -507,11 +507,16 @@ def _trigger_swarming_task(api, task, test_step_config):
     task_dimensions['gpu'] = None
 
   task_slice = task_slice.with_dimensions(**task_dimensions)
-  task.request = task.request.with_slice(0, task_slice)
 
   # Override attributes with per-test settings.
-  for k, v in test_step_config.swarming_task_attrs.iteritems():
-    setattr(task, k, v)
+  attrs = test_step_config.swarming_task_attrs
+  if attrs.get('hard_timeout'):
+    task_slice = task_slice.with_execution_timeout_secs(attrs['hard_timeout'])
+  if attrs.get('expiration'):
+    task_slice = task_slice.with_expiration_secs(attrs['expiration'])
+  task.request = task.request.with_slice(0, task_slice)
+  if attrs.get('priority'):
+    task.request = task.request.with_priority(attrs['priority'])
 
   api.chromium_swarming.trigger_task(task)
 
