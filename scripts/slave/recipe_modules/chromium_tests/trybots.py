@@ -480,10 +480,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
       }),
-      'linux_chromium_dbg_32_ng': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'Linux Builder (dbg)(32)'
-      }),
       'linux_chromium_dbg_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)',
