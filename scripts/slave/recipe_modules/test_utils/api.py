@@ -180,35 +180,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ])
     return r
 
-  def run_tests(self, caller_api, tests, suffix, sort_by_shard=False):
-    """
-    Utility function for running a list of tests and returning the failed tests.
-
-    Args:
-      caller_api - caller's recipe API; this is needed because self.m here
-                   is different than in the caller (different recipe modules
-                   get injected depending on caller's DEPS vs. this module's
-                   DEPS)
-                   This must include the 'swarming' recipe module, in order to
-                   use the grouping logic in this method. Unfortunately we can't
-                   import this module in the test_utils module, as it would
-                   cause a circular dependency.
-      tests - iterable of objects implementing the Test interface above
-      suffix - custom suffix, e.g. "with patch", "without patch" indicating
-               context of the test run
-      sort_by_shard - sort the order of triggering depends on the number of
-                      shards.
-    Returns:
-      A tuple of (list of tests with invalid results,
-                  list of tests which failed)
-
-
-    """
-    if not hasattr(caller_api, 'chromium_swarming'):
-      self.m.python.failing_step(
-          'invalid caller_api',
-          'caller_api must include the chromium_swarming recipe module')
-
+  # Runs a set of tests once.
+  #
+  # Used as a helper function by run_tests. See full documentation there.
+  def _run_tests_once(self, caller_api, tests, suffix, sort_by_shard=False):
     local_tests = []
     swarming_tests = []
     for test in tests:
@@ -245,6 +220,81 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_tests
 
+  def run_tests(self, caller_api, tests, suffix, sort_by_shard=False,
+                retry_failed_shards=False):
+    """
+    Utility function for running a list of tests and returning the failed tests.
+
+    Args:
+      caller_api - caller's recipe API; this is needed because self.m here
+                   is different than in the caller (different recipe modules
+                   get injected depending on caller's DEPS vs. this module's
+                   DEPS)
+                   This must include the 'swarming' recipe module, in order to
+                   use the grouping logic in this method. Unfortunately we can't
+                   import this module in the test_utils module, as it would
+                   cause a circular dependency.
+      tests - iterable of objects implementing the Test interface above
+      suffix - custom suffix, e.g. "with patch", "without patch" indicating
+               context of the test run
+      sort_by_shard - sort the order of triggering depends on the number of
+                      shards.
+      retry_failed_shards: If true, attempts to retry failed shards of swarming
+                           tests.
+    Returns:
+      A tuple of (list of tests with invalid results,
+                  list of tests which failed)
+
+
+    """
+    if not hasattr(caller_api, 'chromium_swarming'):
+      self.m.python.failing_step(
+          'invalid caller_api',
+          'caller_api must include the chromium_swarming recipe module')
+    invalid_results, failed_tests = self._run_tests_once(
+            caller_api, tests, suffix,
+            sort_by_shard=sort_by_shard)
+    for t in invalid_results:
+      if t not in failed_tests:
+        failed_tests.append(t)
+    if retry_failed_shards:
+      # Assume that non swarming test retries probably won't help.
+      swarming_test_suites = []
+      for test_suite in failed_tests:
+        if test_suite.runs_on_swarming:
+          swarming_test_suites.append(test_suite)
+
+      if swarming_test_suites:
+        retry_suffix = 'retry shards'
+        if suffix:
+          retry_suffix += ' ' + suffix
+        new_swarming_invalid, _ = self._run_tests_once(
+            caller_api, swarming_test_suites, retry_suffix,
+            sort_by_shard=True)
+
+        # For swarming test suites, if we have valid test results from one of
+        # the runs of a test suite, then that test suite by definition doesn't
+        # have invalid test results.
+        # For non-swarming test suites, becuase they don't get retried in
+        # 'retry shards with patch' steps, invalid non-swarming test suites are
+        # still invalid.
+        non_swarming_invalid = [
+            t for t in invalid_results if not t.runs_on_swarming]
+        invalid_results = list(set(invalid_results).intersection(
+            set(new_swarming_invalid))) + non_swarming_invalid
+
+        # Some suites might be passing now, since we retried some tests. Remove
+        # any suites which are now fully passing.
+        # with_patch_failures_including_retry appropriately takes 'retry shards
+        # with patch' and 'with patch' runs into account.
+        def _still_failing(test):
+          valid, failures = test.failures_including_retry(suffix)
+          return not valid or failures
+
+        failed_tests = [t for t in failed_tests if _still_failing(t)]
+
+    return invalid_results, failed_tests
+
   def run_tests_with_patch(self, caller_api, tests, retry_failed_shards=False):
     """Run tests and returns failures.
 
@@ -263,44 +313,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           invalid_test_suites.
     """
     invalid_test_suites, all_failing_test_suites = self.run_tests(
-        caller_api, tests, 'with patch', sort_by_shard=True)
-
-    for t in invalid_test_suites:
-      # No need to re-add a test_suite that is already in the list.
-      if t not in all_failing_test_suites:
-        all_failing_test_suites.append(t)
-
-    if retry_failed_shards:
-      # Assume that non swarming test retries probably won't help.
-      swarming_test_suites = []
-      for test_suite in all_failing_test_suites:
-        if test_suite.runs_on_swarming:
-          swarming_test_suites.append(test_suite)
-
-      if swarming_test_suites:
-        new_swarming_invalid, _ = self.run_tests(
-            caller_api, swarming_test_suites, 'retry shards with patch',
-            sort_by_shard=True)
-
-        # For swarming test suites, if we have valid test results from one of
-        # the runs of a test suite, then that test suite by definition doesn't
-        # have invalid test results.
-        # For non-swarming test suites, becuase they don't get retried in
-        # 'retry shards with patch' steps, invalid non-swarming test suites are
-        # still invalid.
-        non_swarming_invalid = [
-            t for t in invalid_test_suites if not t.runs_on_swarming]
-        invalid_test_suites = list(set(invalid_test_suites).intersection(
-            set(new_swarming_invalid))) + non_swarming_invalid
-
-        # Some suites might be passing now, since we retried some tests. Remove
-        # any suites which are now fully passing.
-        # with_patch_failures_including_retry appropriately takes 'retry shards
-        # with patch' and 'with patch' runs into account.
-        for t in all_failing_test_suites:
-          valid, failures = t.with_patch_failures_including_retry()
-          if valid and not failures:
-            all_failing_test_suites.remove(t)
+        caller_api, tests, 'with patch', sort_by_shard=True,
+        retry_failed_shards=retry_failed_shards)
 
     # Set metadata about invalid test suites.
     for t in invalid_test_suites:

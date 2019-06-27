@@ -454,7 +454,10 @@ class Test(object):
     return data
 
   def with_patch_failures_including_retry(self):
-    """Returns test failures with the patch applied.
+    return self.failures_including_retry('with patch')
+
+  def failures_including_retry(self, suffix):
+    """Returns test failures after retries.
 
     This method only considers tests to be failures if every test run fails.
     Flaky tests are considered successes.
@@ -465,21 +468,24 @@ class Test(object):
       valid_results: A Boolean indicating whether results are valid.
       failures: A set of strings. Only valid if valid_results is True.
     """
-    with_patch_valid = self.has_valid_results('with patch')
-    if with_patch_valid:
-      failures = self.deterministic_failures('with patch')
-    retry_shards_valid = self.has_valid_results('retry shards with patch')
+    original_run_valid = self.has_valid_results(suffix)
+    if original_run_valid:
+      failures = self.deterministic_failures(suffix)
+    retry_suffix = 'retry shards'
+    if suffix:
+      retry_suffix = ' '.join([retry_suffix, suffix])
+    retry_shards_valid = self.has_valid_results(retry_suffix)
     if retry_shards_valid:
       retry_shards_failures = self.deterministic_failures(
-            'retry shards with patch')
+          retry_suffix)
 
-    if with_patch_valid and retry_shards_valid:
+    if original_run_valid and retry_shards_valid:
       # TODO(martiniss): Maybe change this behavior? This allows for failures
       # in 'retry shards with patch' which might not be reported to devs, which
       # may confuse them.
       return True, set(failures).intersection(retry_shards_failures)
 
-    if with_patch_valid:
+    if original_run_valid:
       return True, set(failures)
 
     if retry_shards_valid:
