@@ -207,6 +207,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
+      'gpu-fyi-try-android-p-pixel-2-skv-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI SkiaRenderer Vulkan (Pixel 2)',
+      }),
       'try-nougat-phone-tester': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android arm64 Builder (dbg)',
