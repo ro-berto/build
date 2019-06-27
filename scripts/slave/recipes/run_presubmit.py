@@ -2,6 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
+from recipe_engine import post_process
+import textwrap
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -24,6 +30,87 @@ DEPS = [
   'v8',
   'webrtc',
 ]
+
+def _limitSize(message_list, char_limit=450):
+  """Returns a list of strings within a certain character length.
+
+  Args:
+     * message_list (List[str]) - The message to truncate as a list
+       of lines (without line endings).
+  """
+  hint = ('The complete output can be'
+          ' found at the bottom of the presubmit stdout.')
+  char_count = 0
+  for index, message in enumerate(message_list):
+    char_count += len(message)
+    if char_count > char_limit:
+      total_errors = len(message_list)
+      oversized_msg = '... %d more error(s) (%d total)' % (
+        total_errors - index, total_errors
+      )
+      return message_list[:index] + [oversized_msg, hint]
+  return message_list
+
+
+def _createSummaryMarkdown(step_json):
+  """Returns a string with data on errors, warnings, and notifications.
+
+  Extracts the number of errors, warnings and notifications
+  from the dictionary(step_json).
+
+  Then it lists all the errors line by line.
+
+  Args:
+      * step_json = {
+        'errors': [
+          {
+            'message': string,
+            'long_text': string,
+            'items: [string],
+            'fatal': boolean
+          }
+        ],
+        'notifications': [
+          {
+            'message': string,
+            'long_text': string,
+            'items: [string],
+            'fatal': boolean
+          }
+        ],
+        'warnings': [
+          {
+            'message': string,
+            'long_text': string,
+            'items: [string],
+            'fatal': boolean
+          }
+        ]
+      }
+  """
+  errors = step_json['errors']
+  warning_count = len(step_json['warnings'])
+  notif_count = len(step_json['notifications'])
+  description = (
+    'There are %d error(s), %d warning(s),'
+    ' and %d notifications(s). Here are the errors:') % (
+      len(errors), warning_count, notif_count
+  )
+  error_messages = []
+
+  for error in errors:
+    error_message = '** ERROR **\n%s\n%s' % (
+      error['message'], error['long_text'])
+    error_messages.append(error_message)
+
+  error_messages = _limitSize(error_messages)
+  error_messages.insert(0, description)
+  if warning_count or notif_count:
+    error_messages.append(
+      ('To see notifications and warnings,'
+      ' look at the stdout of the presubmit step.')
+    )
+  return '\n\n'.join(error_messages)
 
 
 def _RunStepsInternal(api):
@@ -98,29 +185,48 @@ def _RunStepsInternal(api):
   if repo_name == 'luci_py':
     venv = abs_root.join('.vpython')
 
-  try:
-    with api.context(env=env):
-      # 8 minutes seems like a reasonable upper bound on presubmit timings.
-      # According to event mon data we have, it seems like anything longer than
-      # this is a bug, and should just instant fail.
-      #
-      # https://crbug.com/917479 This is a problem on luci-py, bump to 15
-      # minutes.
-      timeout = 900 if repo_name == 'luci_py' else 480
-      api.presubmit(*presubmit_args, venv=venv, timeout=timeout)
-  except api.step.StepFailure:
-    step_data = api.step.active_result
-    if step_data.exc_result.had_timeout:
+  raw_result = result_pb2.RawResult()
+  with api.context(env=env):
+    # 8 minutes seems like a reasonable upper bound on presubmit timings.
+    # According to event mon data we have, it seems like anything longer than
+    # this is a bug, and should just instant fail.
+    #
+    # https://crbug.com/917479 This is a problem on luci-py, bump to 15
+    # minutes.
+    timeout = 900 if repo_name == 'luci_py' else 480
+    # ok_ret='any' causes all exceptions to be ignored in this step
+    step_json = api.presubmit(*presubmit_args,
+      venv=venv, timeout=timeout, ok_ret='any')
+    # Set recipe result values
+    if step_json:
+      raw_result.summary_markdown = _createSummaryMarkdown(step_json)
+
+    retcode = api.step.active_result.retcode
+    if retcode == 0:
+      raw_result.status = common_pb2.SUCCESS
+      return raw_result
+
+    api.step.active_result.presentation.status = 'FAILURE'
+    if api.step.active_result.exc_result.had_timeout:
       # TODO(iannucci): Shouldn't we also mark failure on timeouts?
-      raise
-    if step_data.exc_result.retcode == 1:
+      raw_result.summary_markdown += '\nTimeout occurred during presubmit step.'
+    if retcode == 1:
+      raw_result.status = common_pb2.FAILURE
       api.tryserver.set_test_failure_tryjob_result()
     else:
-      # Script presubmit_support.py returns 2 on infra failures, but if we get
-      # something else or nothing at all, then it's also an infra failure.
+      raw_result.status = common_pb2.INFRA_FAILURE
       api.tryserver.set_invalid_test_results_tryjob_result()
-    raise
-
+    # Handle unexpected errors not caught by json output
+    if raw_result.summary_markdown == '':
+      raw_result.status = common_pb2.INFRA_FAILURE
+      raw_result.summary_markdown = (
+        'Something unexpected occurred'
+        ' while running presubmit checks.'
+        ' Please [file a bug](https://bugs.chromium.org'
+        '/p/chromium/issues/entry?components='
+        'Infra%3EClient%3EChrome&status=Untriaged)'
+      )
+  return raw_result
 
 def RunSteps(api):
   try:
@@ -184,7 +290,9 @@ def GenTests(api):
           buildername='%s_presubmit' % repo_name,
           repo_name=repo_name,
           gerrit_project=repo_name) +
-      api.step_data('presubmit', api.json.output({}))
+      api.step_data('presubmit', api.json.output(
+        {'errors': [], 'notifications': [], 'warnings': []}
+      ))
     )
 
   yield (
@@ -194,7 +302,15 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output({}), times_out_after=60*20)
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}),
+      times_out_after=60*20) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason,
+     ('There are 0 error(s), 0 warning(s), and 0 notifications(s).'
+      ' Here are the errors:'
+      '\nTimeout occurred during presubmit step.')) +
+    api.post_process(post_process.DropExpectation)
   )
 
   yield (
@@ -206,7 +322,9 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src',
         dry_run=True) +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
@@ -217,7 +335,9 @@ def GenTests(api):
         repo_name='infra',
         gerrit_project='infra/infra',
         runhooks=True) +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
@@ -228,7 +348,9 @@ def GenTests(api):
         repo_name='recipes_py',
         gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
@@ -240,7 +362,9 @@ def GenTests(api):
         gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
     api.platform('win', 64) +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
@@ -250,7 +374,9 @@ def GenTests(api):
         buildername='Luci-py Presubmit',
         repo_name='luci_py',
         gerrit_project='infra/luci/luci-py') +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
@@ -260,7 +386,90 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output({}, retcode=1))
+    api.step_data('presubmit', api.json.output(
+        {
+          'errors': [
+            {
+              'message': 'Missing LGTM',
+              'long_text': 'Here are some suggested OWNERS: fake@',
+              'items': [],
+              'fatal': True
+            },
+            {
+              'message': 'Syntax error in fake.py',
+              'long_text': 'Expected "," after item in list',
+              'items': [],
+              'fatal': True
+            }
+          ],
+          'notifications': [
+            {
+              'message': 'If there is a bug associated please add it.',
+              'long_text': '',
+              'items': [],
+              'fatal': False
+            }
+          ],
+          'warnings': [
+            {
+              'message': 'Line 100 has more than 81 characters',
+              'long_text': '',
+              'items': [],
+              'fatal': False
+            }
+          ]
+        }, retcode=1)
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason, textwrap.dedent('''
+        There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
+
+        ** ERROR **
+        Missing LGTM
+        Here are some suggested OWNERS: fake@
+
+        ** ERROR **
+        Syntax error in fake.py
+        Expected "," after item in list
+
+        To see notifications and warnings, look at the stdout of the presubmit step.
+      ''').strip()
+    ) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  long_message = 'Here are some suggested OWNERS:' + '\nfake@' * 100
+  yield (
+    api.test('presubmit-failure-long-message') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
+    api.step_data('presubmit', api.json.output(
+        {
+          'errors': [
+            {
+              'message': 'Missing LGTM',
+              'long_text': long_message,
+              'items': [],
+              'fatal': True
+            }
+          ],
+          'notifications': [],
+          'warnings': []
+        }, retcode=1)
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason, textwrap.dedent('''
+        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+
+        ... 1 more error(s) (1 total)
+
+        The complete output can be found at the bottom of the presubmit stdout.
+      ''').strip()
+    ) +
+    api.post_process(post_process.DropExpectation)
   )
 
   yield (
@@ -270,7 +479,62 @@ def GenTests(api):
         buildername='chromium_presubmit',
         repo_name='chromium',
         gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output({}, retcode=2))
+    api.step_data('presubmit', api.json.output(
+        {
+          'errors': [
+            {
+              'message': 'Infra Failure',
+              'long_text': '',
+              'items': [],
+              'fatal': True
+            }
+          ],
+          'notifications': [],
+          'warnings': []
+        }, retcode=2)
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason, textwrap.dedent('''
+        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+
+        ** ERROR **
+        Infra Failure
+      ''').lstrip()
+    ) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  bug_msg = (
+    'Something unexpected occurred'
+    ' while running presubmit checks.'
+    ' Please [file a bug](https://bugs.chromium.org'
+    '/p/chromium/issues/entry?components='
+    'Infra%3EClient%3EChrome&status=Untriaged)'
+  )
+  yield (
+    api.test('presubmit-failure-no-json') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
+    api.step_data('presubmit', api.json.output(None, retcode=1)) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason, bug_msg) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('presubmit-infra-failure-no-json') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
+    api.step_data('presubmit', api.json.output(None, retcode=2)) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason, bug_msg) +
+    api.post_process(post_process.DropExpectation)
   )
 
   yield (
@@ -281,7 +545,9 @@ def GenTests(api):
         repository_url='https://skia.googlesource.com/skia.git',
         gerrit_project='skia',
         solution_name='skia') +
-    api.step_data('presubmit', api.json.output({}))
+    api.step_data('presubmit', api.json.output(
+      {'errors': [], 'notifications': [], 'warnings': []}
+    ))
   )
 
   yield (
