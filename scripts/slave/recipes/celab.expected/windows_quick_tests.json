@@ -307,6 +307,32 @@
     "name": "run all tests"
   },
   {
+    "cmd": [],
+    "name": "test summary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]\\logs\\summary.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\test",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]\\packages_tests\\bin"
+      ]
+    },
+    "name": "test summary.parse summary",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

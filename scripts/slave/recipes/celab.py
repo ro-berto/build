@@ -6,6 +6,7 @@ DEPS = [
   'chromium',
   'chromium_checkout',
   'chromium_tests',
+  'test_results',
   'depot_tools/bot_update',
   'depot_tools/cipd',
   'depot_tools/gclient',
@@ -27,6 +28,8 @@ from recipe_engine.recipe_api import Property
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
+
+TEST_RESULTS_CONFIG = 'public_server'
 
 
 def _get_bin_directory(api, bin_root):
@@ -253,6 +256,7 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
         venv=True)
 
   # Run our tests and catch test failures.
+  storage_logs = '%s-logs' % pool_name
   with api.context(cwd=test_root, env_suffixes={'PATH': add_paths}):
     extra_args = []
     if test_py_args:
@@ -271,29 +275,28 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
         ] + extra_args,
         venv=True)
     except:
-      storage_logs = '%s-logs' % pool_name
-
-      try:
-        # Parse the test summary file and organize results in a readable way.
-        _ParseTestSummary(api, storage_logs, logs_dir)
-      except:
-        raise
-      finally:
-        # We upload *all* logs here (including those already uploaded).
-        # It's better to upload (small) logs twice than to not upload them at
-        # all. They are automatically deleted after 30 days (bucket policy).
-        _ZipAndUploadDirectory(
-          api,
-          storage_logs,
-          logs_dir,
-          'all_logs.zip',
-          'CELab Test Logs')
+      # We upload *all* logs, including those we reupload in _ParseTestSummary.
+      # It's better to upload (small) logs twice than to not upload them at
+      # all. They are automatically deleted after 30 days (bucket policy).
+      _ZipAndUploadDirectory(
+        api,
+        storage_logs,
+        logs_dir,
+        'all_logs.zip',
+        'CELab Test Logs')
 
       raise
     finally:
       # TODO: Clean up storage prefix when the test run ends.
       #       It's already automatically deleted after 1 day.
-      pass
+
+      # Parse the test summary file and organize results in a readable way.
+      tests_summary = _ParseTestSummary(api, storage_logs, logs_dir)
+
+      # Upload chromium results to test-results.
+      project = api.buildbucket.build.builder.project
+      if tests_summary and project == 'chromium':
+        _UploadTestResults(api, tests_summary)
 
 
 # Zips the content of a directory and uploads the zip file to a given bucket.
@@ -326,6 +329,9 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
     summary_presentation = summary_step.presentation
     tests_summary = api.json.read('parse summary', summary_path).json.output
 
+    if not tests_summary:
+      return None
+
     for test in tests_summary:
       try:
         with api.step.nest(test) as test_step:
@@ -338,26 +344,42 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
             test_presentation.status = api.step.FAILURE
             summary_presentation.status = api.step.FAILURE
 
-          if 'output' in result:
-            logs = api.file.read_text('read logs', result['output'])
-            test_presentation.logs["test.py output"] = logs.splitlines()
+            if 'output' in result:
+              logs = api.file.read_text('read logs', result['output'])
+              test_presentation.logs["test.py output"] = logs.splitlines()
 
-          # Upload logs if they exist (when test fails after Deployment starts)
-          compute_logs_dir = logs_dir.join(test)
-          if api.path.exists(compute_logs_dir):
-            upload_step = _ZipAndUploadDirectory(
-              api,
-              storage_logs,
-              compute_logs_dir,
-              test + '.zip',
-              'Compute logs')
+            # Upload logs if they exist (test fails after Deployment starts)
+            compute_logs_dir = logs_dir.join(test)
+            if api.path.exists(compute_logs_dir):
+              upload_step = _ZipAndUploadDirectory(
+                api,
+                storage_logs,
+                compute_logs_dir,
+                test + '.zip',
+                'Compute logs')
 
-            # Merge the gsutil links in the Test step.
-            upload_presentation = upload_step.presentation
-            for link in upload_presentation.links:
-              test_presentation.links[link] = upload_presentation.links[link]
+              # Merge the gsutil links in the Test step.
+              upload_presentation = upload_step.presentation
+              for link in upload_presentation.links:
+                test_presentation.links[link] = upload_presentation.links[link]
       except Exception as e:
         summary_presentation.logs["exception %s" % test] = repr(e).splitlines()
+
+    return tests_summary
+
+
+def _UploadTestResults(api, tests_summary):
+  api.test_results.set_config(TEST_RESULTS_CONFIG)
+
+  test_results = {}
+  for test in tests_summary:
+    status = 'SUCCESS' if tests_summary[test]['success'] else 'FAILURE'
+    test_results[test] = [{'status': status, 'elapsed_time_ms': 0}]
+
+  api.test_results.upload(
+      api.json.input({'per_iteration_data': [test_results]}),
+      chrome_revision=0,
+      test_type='celab_tests')
 
 
 def GenTests(api):
@@ -389,11 +411,9 @@ def GenTests(api):
                     api.json.output({
                       '1st test': {'success': False, 'output': '/some/file'},
                       '2nd test': {'success': True, 'output': '/other/file'},
-                      '3rd test': {'success': True, 'output': '/missing'}})) +
+                      '3rd test': {'success': False, 'output': '/missing'}})) +
       api.step_data('test summary.1st test.read logs',
             api.file.read_text('first\ntest\nlogs')) +
-      api.step_data('test summary.2nd test.read logs',
-            api.file.read_text('second\ntest\nlogs')) +
       api.step_data('test summary.3rd test.read logs',
             api.file.errno('EEXIST')) +
       api.path.exists(api.path['start_dir'].join('logs', '1st test'))
@@ -433,7 +453,10 @@ def GenTests(api):
       api.buildbucket.try_build(project='chromium',
                                 bucket='luci.chromium.try',
                                 builder='win-celab-try-rel',
-                                git_repo=CHROMIUM_REPO)
+                                git_repo=CHROMIUM_REPO) +
+      api.step_data('test summary.parse summary',
+                    api.json.output({
+                      '1st test': {'success': False, 'output': '/file'}}))
   )
   yield (
       api.test('chromium_no_version') +

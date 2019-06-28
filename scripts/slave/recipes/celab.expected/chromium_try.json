@@ -765,6 +765,79 @@
     "name": "run all tests"
   },
   {
+    "cmd": [],
+    "name": "test summary",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@exception 1st test@AssertionError('/file is not absolute',)@@@",
+      "@@@STEP_LOG_END@exception 1st test@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]\\logs\\summary.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]\\packages_tests\\bin"
+      ]
+    },
+    "name": "test summary.parse summary",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"1st test\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"output\": \"/file\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"success\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test summary.1st test",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"1st test\": [{\"elapsed_time_ms\": 0, \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.win",
+      "--builder-name",
+      "win-celab-try-rel",
+      "--build-number",
+      "0",
+      "--test-type",
+      "celab_tests",
+      "--chrome-revision",
+      "0",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]\\packages_tests\\bin"
+      ]
+    },
+    "name": "Upload to test-results [celab_tests]"
+  },
+  {
     "name": "$result"
   }
 ]
