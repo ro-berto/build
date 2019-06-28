@@ -53,6 +53,7 @@ from slave import performance_log_processor
 from slave import results_dashboard
 from slave import slave_utils
 from slave import telemetry_utils
+from slave import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
@@ -1027,11 +1028,24 @@ def _MainIOS(options, args, extra_env):
 
 def _MainLinux(options, args, extra_env):
   """Runs the test on Linux."""
+  import platform
+  xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
+                           'third_party', 'xvfb', platform.architecture()[0])
+
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
   build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+  if options.slave_name:
+    slave_name = options.slave_name
+  else:
+    slave_name = slave_utils.SlaveBuildName(build_dir)
   bin_dir = os.path.join(build_dir, options.target)
+
+  # Figure out what we want for a special frame buffer directory.
+  special_xvfb_dir = None
+  if options.factory_properties.get('chromeos'):
+    special_xvfb_dir = xvfb_path
 
   telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
@@ -1089,7 +1103,22 @@ def _MainLinux(options, args, extra_env):
       log_processor_class, options, telemetry_info)
 
   try:
+    start_xvfb = False
     json_file_name = None
+
+    # TODO(dpranke): checking on test_exe is a temporary hack until we
+    # can change the buildbot master to pass --xvfb instead of --no-xvfb
+    # for these two steps. See
+    # https://code.google.com/p/chromium/issues/detail?id=179814
+    start_xvfb = (options.xvfb or
+                  'layout_test_wrapper' in test_exe or
+                  'devtools_perf_test_wrapper' in test_exe)
+    if start_xvfb:
+      xvfb.StartVirtualX(
+          slave_name, bin_dir,
+          with_wm=(options.factory_properties.get('window_manager', 'True') ==
+                   'True'),
+          server_dir=special_xvfb_dir)
 
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
@@ -1108,6 +1137,8 @@ def _MainLinux(options, args, extra_env):
     result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
+    if start_xvfb:
+      xvfb.StopVirtualX(slave_name)
     if _UsingGtestJson(options):
       if options.use_symbolization_script:
         _SymbolizeSnippetsInJSON(options, json_file_name)
@@ -1404,6 +1435,11 @@ def main():
                            default=False,
                            help='treat first argument as a python script'
                                 'to run.')
+  option_parser.add_option('--xvfb', action='store_true', dest='xvfb',
+                           default=True,
+                           help='Start virtual X server on Linux.')
+  option_parser.add_option('--no-xvfb', action='store_false', dest='xvfb',
+                           help='Do not start virtual X server on Linux.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
   option_parser.add_option('--chartjson-file', default='',
