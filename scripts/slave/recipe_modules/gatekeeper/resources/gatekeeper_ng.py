@@ -138,7 +138,7 @@ def get_builder_section(gatekeeper_section, builder):
   return None
 
 
-def check_builds(master_builds, master_jsons, gatekeeper_config):
+def check_builds(master_builds, gatekeeper_config):
   """Given a gatekeeper configuration, see which builds have failed."""
   succeeded_builds = []
   failed_builds = []
@@ -482,7 +482,7 @@ def _http_req_auth(url, method, body, http):
   return resp.status, content
 
 
-def submit_email(email_app, build_data, simulate, creds):
+def submit_email(email_app, build_data, simulate):
   """Submit json to a mailer app which sends out the alert email."""
   if simulate:
     logging.info("Simulate: Sending e-mail via [%s]: %s", email_app, build_data)
@@ -668,7 +668,7 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
 def notify_failures(failed_builds, sheriff_url, default_from_email,
                     email_app_url, domain, filter_domain,
-                    disable_domain_filter, simulate, creds):
+                    disable_domain_filter, simulate):
   # Email everyone that should be notified.
   emails_to_send = []
   for failed_build in failed_builds:
@@ -755,7 +755,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     watchers = list(reduce(operator.or_, [set(e[0]) for e in g], set()))
     build_data = json.loads(k)
     build_data['recipients'] = watchers
-    submit_email(email_app_url, build_data, simulate, creds)
+    submit_email(email_app_url, build_data, simulate)
 
 
 def simulate_build_failure(build_db, master, builder, *steps):
@@ -958,7 +958,7 @@ def main(argv):
 
   if not simulate:
     master_jsons, build_jsons = build_scan.get_updated_builds(
-        masters, build_db, int(args.parallelism), args.service_account_path)
+        masters, build_db, int(args.parallelism))
   else:
     master_jsons, build_jsons = simulate_build_failure(
         build_db, args.simulate_master, args.simulate_builder,
@@ -971,7 +971,7 @@ def main(argv):
 
   (failure_tuples, success_tuples, successful_builder_steps,
       current_builds_successful) = check_builds(
-        build_jsons, master_jsons, gatekeeper_config)
+        build_jsons, gatekeeper_config)
 
   # Write failure / success information back to the build_db.
   propagate_build_status_back_to_db(failure_tuples, success_tuples, build_db)
@@ -1010,8 +1010,7 @@ def main(argv):
     notify_failures(new_failures, args.sheriff_url,
                     args.default_from_email, args.email_app_url,
                     args.email_domain, args.filter_domain,
-                    args.disable_domain_filter, simulate,
-                    args.service_account_path)
+                    args.disable_domain_filter, simulate)
   finally:
     if not args.skip_build_db_update and not simulate:
       build_scan_db.save_build_db(build_db, gatekeeper_config,

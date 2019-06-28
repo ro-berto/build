@@ -23,15 +23,11 @@ from infra_libs.luci_auth import LUCICredentials
 import build_scan_db
 
 
-# Buildbot status enum.
-SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
-
 MAX_ATTEMPTS = 4
-URL_TIMEOUT = 60
 
 BUILDER_WILDCARD = '*'
 
-ENDPOINT_ROOT = 'https://luci-milo.appspot.com/prpc/'
+LUCI_MILO_ENDPOINT = 'https://luci-milo.appspot.com/prpc/'
 
 
 @contextmanager
@@ -52,13 +48,13 @@ def MultiPool(processes):
     pool.join()
 
 
-def _get_from_milo(endpoint, data, milo_creds=None, http=None):
+def _get_from_milo(endpoint, data, http=None):
   headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'User-Agent': 'Python-httplib2/2.7 -- build_scan.py',
   }
-  url =  ENDPOINT_ROOT + endpoint
+  url = LUCI_MILO_ENDPOINT + endpoint
   if not http:
     http = httplib2.Http()
   http = LUCICredentials().authorize(http)
@@ -72,7 +68,7 @@ def _get_from_milo(endpoint, data, milo_creds=None, http=None):
       return json.loads(content[4:])
     if resp.status == 404:
       return {'corrupted': True}
-    if attempts > MAX_ATTEMPTS:
+    if attempts > MAX_ATTEMPTS or 400 <= resp.status < 500:
       msg = "Error encountered during URL Fetch: %s" % content
       logging.error(msg)
       raise ValueError(msg)
@@ -85,7 +81,7 @@ def _get_from_milo(endpoint, data, milo_creds=None, http=None):
     time.sleep(time_to_sleep)
 
 
-def get_root_json(master_url, milo_creds):
+def get_root_json(master_url):
   """Pull down root JSON which contains builder and build info."""
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   name = master_url.rstrip('/').split('/')[-1]
@@ -95,7 +91,7 @@ def get_root_json(master_url, milo_creds):
     'name': name,
     'exclude_deprecated': True,
   }
-  resp = _get_from_milo(endpoint, json.dumps(req), milo_creds)
+  resp = _get_from_milo(endpoint, json.dumps(req))
   data = zlib.decompress(base64.b64decode(resp['data']), zlib.MAX_WBITS | 16)
   return json.loads(data)
 
@@ -177,21 +173,20 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
   return new_builds
 
 
-def find_new_builds_per_master(masters, build_db, milo_creds):
+def find_new_builds_per_master(masters, build_db):
   """Given a list of masters, find new builds and collect them under a dict."""
   builds = {}
   master_jsons = {}
   for master, builders in masters.iteritems():
-    root_json = get_root_json(master, milo_creds)
+    root_json = get_root_json(master)
     master_jsons[master] = root_json
-    builds[master] = find_new_builds(
-        master, builders, root_json, build_db)
+    builds[master] = find_new_builds(master, builders, root_json, build_db)
   return builds, master_jsons
 
 
 def get_build_json(url_tuple):
   """Downloads the json of a specific build."""
-  master_url, builder, buildnum, milo_creds = url_tuple
+  master_url, builder, buildnum = url_tuple
 
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   master_name = master_url.rstrip('/').split('/')[-1]
@@ -203,7 +198,7 @@ def get_build_json(url_tuple):
     'build_num': int(buildnum),
     'exclude_deprecated': True,
   }
-  resp = _get_from_milo(endpoint, json.dumps(data), milo_creds)
+  resp = _get_from_milo(endpoint, json.dumps(data))
   if resp.get('corrupted', None) is None:
     resp = json.loads(base64.b64decode(resp['data']))
   else:
@@ -211,7 +206,7 @@ def get_build_json(url_tuple):
   return (resp, master_url, builder, buildnum)
 
 
-def get_build_jsons(master_builds, processes, milo_creds):
+def get_build_jsons(master_builds, processes):
   """Get all new builds on specified masters.
 
   This takes a dict in the form of [master][builder][build], formats that URL
@@ -222,7 +217,7 @@ def get_build_jsons(master_builds, processes, milo_creds):
   for master, builder_dict in master_builds.iteritems():
     for builder, new_builds in builder_dict.iteritems():
       for buildnum in new_builds:
-        url_list.append((master, builder, buildnum, milo_creds))
+        url_list.append((master, builder, buildnum))
 
   # Prevent map from hanging, see http://bugs.python.org/issue12157.
   if url_list:
@@ -284,10 +279,9 @@ def get_options():
   return options, args
 
 
-def get_updated_builds(masters, build_db, parallelism, milo_creds):
-  new_builds, master_jsons = find_new_builds_per_master(
-      masters, build_db, milo_creds)
-  build_jsons = get_build_jsons(new_builds, parallelism, milo_creds)
+def get_updated_builds(masters, build_db, parallelism):
+  new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
+  build_jsons = get_build_jsons(new_builds, parallelism)
   propagate_build_json_to_db(build_db, build_jsons)
   return master_jsons, build_jsons
 
