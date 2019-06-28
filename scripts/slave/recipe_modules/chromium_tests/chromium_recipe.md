@@ -1,5 +1,10 @@
 # Chromium Recipes: Reference Doc
 
+THIS DOCUMENT IS DEPRECATED. IT WILL BE REMOVED SHORTLY.
+
+https://chromium.googlesource.com/chromium/src.git/+/master/docs/infra/new_builder.md
+is much more up to date.
+
 [TOC]
 
 ## I just want to....
