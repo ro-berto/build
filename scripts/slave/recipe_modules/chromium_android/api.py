@@ -19,10 +19,6 @@ from recipe_engine import recipe_api
 _RESULT_DETAILS_LINK = 'result_details (logcats, flakiness links)'
 
 
-def _TimestampToIsoFormat(timestamp):
-  return datetime.datetime.utcfromtimestamp(timestamp).strftime('%Y%m%dT%H%M%S')
-
-
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
@@ -735,26 +731,6 @@ class AndroidApi(recipe_api.RecipeApi):
           **kwargs)
 
 
-  def _run_sharded_tests(self, config, test_trace=None,
-                         write_buildbot_json=False):
-    args = [
-        'perf',
-        '--release',
-        '--verbose',
-        '--steps', config,
-        '--blacklist-file', self.blacklist_file,
-        '--num-retries', '0',
-        '--collect-chartjson-data'
-    ]
-    if write_buildbot_json:
-      args.extend(['--write-buildbot-json'])
-    if test_trace:
-      args.extend(['--trace-output', test_trace])
-
-    with self.m.context(cwd=self.m.path['checkout'],
-                        env=self.m.chromium.get_env()):
-      self.test_runner('Sharded Perf Tests', args)
-
   def _upload_trace_results(self, trace_json_path, test_name):
     dest = '{builder}/trace_{buildnumber}_{name}.html'.format(
         builder=self.m.buildbucket.builder_name,
@@ -781,124 +757,6 @@ class AndroidApi(recipe_api.RecipeApi):
         bucket='chromium-testrunner-trace',
         dest=dest,
         link_name='Test Trace')
-
-  def run_sharded_perf_tests(self, config, test_type_transform=None,
-                             upload_archives_to_bucket=None,
-                             timestamp_as_point_id=False):
-    """Run the perf tests from the given config file.
-
-    config: the path of the config file containing perf tests.
-    test_type_transform: a lambda transforming the test name to the
-      test_type to upload to.
-    upload_archives_to_bucket: an optional string, if given will create an
-      archive of all output files per test and upload to the bucket specified.
-    timestamp_as_point_id: if True, will use a unix timestamp as a point_id to
-      identify values in the perf dashboard; otherwise the default (commit
-      position) is used.
-    """
-    if test_type_transform is None:
-      test_type_transform = lambda x: x
-
-    with self.m.tempfile.temp_dir('test_runner_trace') as trace_dir:
-      test_trace_path = self.m.path.join(trace_dir, 'test_trace.json')
-
-      # test_runner.py actually runs the tests and records the results
-      self._run_sharded_tests(
-          config,
-          test_trace=test_trace_path,
-          # Need some extra buildbot data in archives when going to upload.
-          write_buildbot_json=bool(upload_archives_to_bucket))
-
-      self._upload_trace_results(test_trace_path, 'perf')
-
-    # now obtain the list of tests that were executed.
-    with self.m.context(env=self.m.chromium.get_env()):
-      result = self.test_runner(
-          'get perf test list',
-          ['perf', '--steps', config, '--output-json-list',
-           self.m.json.output(), '--blacklist-file', self.blacklist_file],
-          step_test_data=lambda: self.m.json.test_api.output([
-              {'test': 'perf_test.foo', 'device_affinity': 0,
-               'end_time': 1443438432.949711, 'has_archive': True},
-              {'test': 'perf_test.foo.reference', 'device_affinity': 0},
-              {'test': 'page_cycler.foo', 'device_affinity': 0}]),
-      )
-    perf_tests = result.json.output
-
-    if perf_tests and isinstance(perf_tests[0], dict):
-      perf_tests = sorted(perf_tests,
-          key=lambda x: (x['device_affinity'], x['test']))
-    else:
-      # TODO(phajdan.jr): restore coverage after moving to chromium/src .
-      perf_tests = [{'test': v} for v in perf_tests]  # pragma: no cover
-
-    failures = []
-    for test_data in perf_tests:
-      test_name = str(test_data['test'])  # un-unicode
-      test_type = test_type_transform(test_name)
-      annotate = self.m.chromium.get_annotate_by_test_name(test_name)
-      test_end_time = int(test_data.get('end_time', 0))
-      if not test_end_time:
-        test_end_time = int(self.m.time.time())
-      point_id = test_end_time if timestamp_as_point_id else None
-
-      if upload_archives_to_bucket and test_data.get('has_archive'):
-        archive = self.m.path.mkdtemp('perf_archives').join('output_dir.zip')
-      else:
-        archive = None
-      print_step_cmd = ['perf', '--print-step', test_name, '--verbose',
-                        '--adb-path', self.m.adb.adb_path(),
-                        '--blacklist-file', self.blacklist_file]
-      if archive:
-        print_step_cmd.extend(['--get-output-dir-archive', archive])
-
-      try:
-        with self.handle_exit_codes():
-          env = self.m.chromium.get_env()
-          env['CHROMIUM_OUTPUT_DIR'] = self.m.chromium.output_dir
-          with self.m.context(env=env):
-            self.m.chromium.runtest(
-              self.c.test_runner,
-              print_step_cmd,
-              name=test_name,
-              perf_dashboard_id=test_type,
-              point_id=point_id,
-              test_type=test_type,
-              annotate=annotate,
-              results_url='https://chromeperf.appspot.com',
-              perf_id=self.m.buildbucket.builder_name,
-              chartjson_file=True,
-              venv=True)
-      except self.m.step.StepFailure as f:
-        # Only warn for failures on reference builds.
-        if test_name.endswith('.reference'):
-          if f.result.presentation.status == self.m.step.FAILURE:
-            f.result.presentation.status = self.m.step.WARNING
-          else:
-            failures.append(f)
-        else:
-          failures.append(f)
-      finally:
-        if 'device_affinity' in test_data:
-          self.m.step.active_result.presentation.step_text += (
-              self.m.test_utils.format_step_text(
-                  [['Device Affinity: %s' % test_data['device_affinity']]]))
-
-      if archive:
-        dest = '{builder}/{test}/{timestamp}_build_{buildnumber}.zip'.format(
-          builder=self.m.buildbucket.builder_name,
-          test=test_name,
-          timestamp=_TimestampToIsoFormat(test_end_time),
-          buildnumber=self.m.buildbucket.build.number)
-        self.m.gsutil.upload(
-          name='upload %s output dir archive' % test_name,
-          source=archive,
-          bucket=upload_archives_to_bucket,
-          dest=dest,
-          link_name='output_dir.zip')
-
-    if failures:
-      raise self.m.step.StepFailure('sharded perf tests failed %s' % failures)
 
   def run_telemetry_browser_test(self, test_name, browser='android-chromium'):
     """Run a telemetry browser test."""

@@ -28,28 +28,6 @@ BUILDERS = freeze({
         'build': True,
     },
     'tester': {},
-    'perf_runner': {
-        'perf_config': 'sharded_perf_tests.json',
-    },
-    'perf_runner_user_build': {
-        'perf_config': 'sharded_perf_tests.json',
-        'skip_wipe': True,
-    },
-    'perf_runner_disable_location': {
-        'perf_config': 'sharded_perf_tests.json',
-        'disable_location': True,
-    },
-    'perf_runner_allow_low_battery': {
-        'perf_config': 'sharded_perf_tests.json',
-        'min_battery_level': 50,
-    },
-    'perf_adb_vendor_keys': {
-        'adb_vendor_keys': True,
-    },
-    'perf_runner_allow_high_battery_temp': {
-        'perf_config': 'sharded_perf_tests.json',
-        'max_battery_temp': 500,
-    },
     'gerrit_try_builder': {
         'build': True,
         'skip_wipe': True,
@@ -90,13 +68,8 @@ BUILDERS = freeze({
         'result_details': True,
         'store_tombstones': True,
     },
-    'upload_archives_to_bucket': {
-      'perf_config': 'sharded_perf_tests.json',
-      'archives_bucket': 'my-bucket',
-    },
-    'timestamp_as_point_id': {
-      'perf_config': 'sharded_perf_tests.json',
-      'timestamp_as_point_id': True
+    'disable_location_tester': {
+        'disable_location': True,
     },
     'telemetry_browser_tests_tester': {
         'run_telemetry_browser_tests': True,
@@ -185,8 +158,6 @@ def RunSteps(api, buildername):
     api.chromium_android.provision_devices(
         skip_wipe=config.get('skip_wipe', False),
         disable_location=config.get('disable_location', False),
-        min_battery_level=config.get('min_battery_level'),
-        max_battery_temp=config.get('max_battery_temp'),
         reboot_timeout=1800)
 
     api.chromium_android.common_tests_setup_steps(skip_wipe=True)
@@ -196,14 +167,6 @@ def RunSteps(api, buildername):
 
   api.chromium_android.monkey_test()
 
-  try:
-    if config.get('perf_config'):
-      api.chromium_android.run_sharded_perf_tests(
-          config=config.get('perf_config'),
-          upload_archives_to_bucket=config.get('archives_bucket'),
-          timestamp_as_point_id=config.get('timestamp_as_point_id', False))
-  except api.step.StepFailure as f:
-    failure = f
   api.chromium_android.run_instrumentation_suite(
       name='WebViewInstrumentationTest',
       apk_under_test=api.chromium_android.apk_path(
@@ -327,22 +290,6 @@ def GenTests(api):
          properties_for('tester') +
          api.override_step_data('device_status',
                                 api.json.output([{}, {}])))
-
-  yield (api.test('perf_tests_failure') +
-      properties_for('perf_runner') +
-      api.step_data('perf_test.foo', retcode=1))
-
-  yield (api.test('perf_tests_infra_failure') +
-      properties_for('perf_runner') +
-      api.step_data('perf_test.foo', retcode=87))
-
-  yield (api.test('perf_tests_reference_failure') +
-      properties_for('perf_runner') +
-      api.step_data('perf_test.foo.reference', retcode=1))
-
-  yield (api.test('perf_tests_infra_reference_failure') +
-      properties_for('perf_runner') +
-      api.step_data('perf_test.foo.reference', retcode=87))
 
   yield (api.test('gerrit_refs') +
       api.properties.generic(
