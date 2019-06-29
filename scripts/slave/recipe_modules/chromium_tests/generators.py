@@ -17,6 +17,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       buildbucket_build_id
       buildername
       buildnumber
+      got_cr_revision
       got_revision
       mastername
       patch_issue
@@ -55,6 +56,10 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       'buildbucket_build_id': build.id,
       'buildername': build.builder.builder,
       'buildnumber': build.number,
+      # This is only ever set on builders where the primary repo is not
+      # Chromium, such as V8 or WebRTC.
+      'got_cr_revision':
+          bot_update_step.presentation.properties.get('got_cr_revision'),
       'got_revision': (
           bot_update_step.presentation.properties.get('got_revision',
           bot_update_step.presentation.properties.get('got_src_revision'))),
