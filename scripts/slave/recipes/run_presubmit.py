@@ -45,14 +45,15 @@ def _limitSize(message_list, char_limit=450):
     char_count += len(message)
     if char_count > char_limit:
       total_errors = len(message_list)
-      oversized_msg = ('**Error size > %d chars  '
-      'There are %d more error(s) (%d total)**') % (
+      oversized_msg = ('**Error size > %d chars, '
+      'there are %d more error(s) (%d total)**') % (
         char_limit, total_errors - index, total_errors
       )
       if index == 0:
         # Show at minimum part of the first error message
-        return ['\n'.join(
-          _limitSize(message_list[index].splitlines())
+        first_message = message_list[index].replace('\n\n', '\n')
+        return ['\n\n'.join(
+          _limitSize(first_message.splitlines())
           )
         ]
       return message_list[:index] + [oversized_msg, hint]
@@ -99,18 +100,21 @@ def _createSummaryMarkdown(step_json):
   warning_count = len(step_json['warnings'])
   notif_count = len(step_json['notifications'])
   description = (
-    '### There are %d error(s), %d warning(s),'
+    'There are %d error(s), %d warning(s),'
     ' and %d notifications(s). Here are the errors:') % (
       len(errors), warning_count, notif_count
   )
   error_messages = []
 
   for error in errors:
+    # markdown represents new lines with 2 spaces
+    # replacing the \n with \n\n because \n gets replaced with an empty space.
+    # This way it will work on both markdown and plain text.
     error_messages.append(
-      '**ERROR**\n```\n%s\n%s\n```' % (
-      error['message'], error['long_text'])
+      '**ERROR**\n\n%s\n\n%s' % (
+      error['message'].replace('\n', '\n\n'),
+      error['long_text'].replace('\n', '\n\n'))
     )
-
 
   error_messages = _limitSize(error_messages)
   # Description is not counted in the total message size.
@@ -118,7 +122,7 @@ def _createSummaryMarkdown(step_json):
   error_messages.insert(0, description)
   if warning_count or notif_count:
     error_messages.append(
-      ('--- ##### To see notifications and warnings,'
+      ('To see notifications and warnings,'
       ' look at the stdout of the presubmit step.')
     )
   return '\n\n'.join(error_messages)
@@ -220,8 +224,8 @@ def _RunStepsInternal(api):
     api.step.active_result.presentation.status = 'FAILURE'
     if api.step.active_result.exc_result.had_timeout:
       # TODO(iannucci): Shouldn't we also mark failure on timeouts?
-      raw_result.summary_markdown += ('\n```\nTimeout occurred '
-        'during presubmit step.\n```')
+      raw_result.summary_markdown += ('\n\nTimeout occurred '
+        'during presubmit step.')
     if retcode == 1:
       raw_result.status = common_pb2.FAILURE
       api.tryserver.set_test_failure_tryjob_result()
@@ -319,9 +323,9 @@ def GenTests(api):
       times_out_after=60*20) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.ResultReason,
-     ('### There are 0 error(s), 0 warning(s), and 0 notifications(s).'
+     ('There are 0 error(s), 0 warning(s), and 0 notifications(s).'
       ' Here are the errors:'
-      '\n```\nTimeout occurred during presubmit step.\n```')) +
+      '\n\nTimeout occurred during presubmit step.')) +
     api.post_process(post_process.DropExpectation)
   )
 
@@ -424,7 +428,7 @@ def GenTests(api):
           ],
           'warnings': [
             {
-              'message': 'Line 100 has more than 81 characters',
+              'message': 'Line 100 has more than 80 characters',
               'long_text': '',
               'items': [],
               'fatal': False
@@ -434,21 +438,21 @@ def GenTests(api):
     ) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.ResultReason, textwrap.dedent('''
-        ### There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
+        There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
 
         **ERROR**
-        ```
+
         Missing LGTM
+
         Here are some suggested OWNERS: fake@
-        ```
 
         **ERROR**
-        ```
-        Syntax error in fake.py
-        Expected "," after item in list
-        ```
 
-        --- ##### To see notifications and warnings, look at the stdout of the presubmit step.
+        Syntax error in fake.py
+
+        Expected "," after item in list
+
+        To see notifications and warnings, look at the stdout of the presubmit step.
       ''').strip()
     ) +
     api.post_process(post_process.DropExpectation)
@@ -479,22 +483,34 @@ def GenTests(api):
     ) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.ResultReason, textwrap.dedent('''
-        ### There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
         **ERROR**
-        ```
+
         Missing LGTM
+
         Here are some suggested OWNERS:
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
+
         reallyLongFakeAccountNameEmail@chromium.org
-        **Error size > 450 chars  There are 2 more error(s) (15 total)**
+
+        **Error size > 450 chars, there are 1 more error(s) (13 total)**
+
         **The complete output can be found at the bottom of the presubmit stdout.**
       ''').strip()
     ) +
@@ -524,14 +540,13 @@ def GenTests(api):
     ) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.ResultReason, textwrap.dedent('''
-        ### There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
+        There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
         **ERROR**
-        ```
+
         Infra Failure
 
-        ```
-      ''').strip()
+      ''').lstrip()
     ) +
     api.post_process(post_process.DropExpectation)
   )
