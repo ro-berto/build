@@ -121,6 +121,27 @@ SPEC = {
         'source_side_spec_file': 'chromium.linux.json',
       },
     },
+   'V8 Blink Linux Layout NG': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'v8_tot',
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     # Bot names should be in sync with chromium.linux's names to retrieve the
     # same test configuration files.
     'Linux Tests (dbg)(1)': {
