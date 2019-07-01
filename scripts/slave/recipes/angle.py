@@ -41,7 +41,8 @@ def _CheckoutSteps(api):
     # 'angle'.  To make both cases work, the angle DEPS file pulls deps and runs
     # hooks relative to the variable "root" which is set to . by default and
     # then to 'angle' on bots here:
-    api.gclient.c.solutions[0].custom_vars = {'angle_root': 'angle'}
+    api.gclient.c.solutions[0].custom_vars['angle_root'] = 'angle'
+    api.gclient.c.solutions[0].custom_vars['checkout_src_internal'] = True
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
