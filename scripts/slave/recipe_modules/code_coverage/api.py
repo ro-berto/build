@@ -512,6 +512,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       new_merge['args'].extend([
           '--java-coverage-dir',
           self.m.chromium.output_dir.join('coverage'),
+          '--jacococli-path',
+          self.m.path['checkout'].join(
+              'third_party', 'jacoco', 'lib', 'jacococli.jar'),
+          '--merged-jacoco-filename',
+          self._dir_name_for_step(step_name),
       ])
     if additional_merge:
       new_merge['args'].extend([
