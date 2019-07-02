@@ -375,22 +375,6 @@ TRYBOTS = freeze({
       }, analyze_mode='compile'),
     },
   },
-  'tryserver.chromium.chrome': {
-    'builders': {
-        'chromeos-betty-chrome': simple_bot({
-          'mastername': 'chromium.chrome',
-          'buildername': 'chromeos-betty-google-rel',
-        }),
-        'linux-chromeos-chrome': simple_bot({
-          'mastername': 'chromium.chrome',
-          'buildername': 'linux-chromeos-google-rel',
-        }),
-        'linux-chrome': simple_bot({
-          'mastername': 'chromium.chrome',
-          'buildername': 'linux-google-rel',
-        }),
-    },
-  },
   'tryserver.chromium.linux': {
     'builders': {
       'cast_shell_linux': simple_bot({
@@ -890,15 +874,6 @@ TRYBOTS = freeze({
       'Win x64 Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
         'buildername': 'win64-builder-perf',
-      }),
-    },
-  },
-  'tryserver.chrome.win': {
-    'builders': {
-      # Optional Official trybot.
-      'win_chrome_official': simple_bot({
-        'mastername': 'chromium.chrome',
-        'buildername': 'win-google-rel',
       }),
     },
   },
