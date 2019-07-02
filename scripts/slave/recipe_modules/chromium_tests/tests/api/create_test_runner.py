@@ -20,7 +20,9 @@ def RunSteps(api):
 
   test_runner = api.chromium_tests.create_test_runner(
       tests=[api.chromium_tests.steps.LocalGTestTest('base_unittests')],
-      serialize_tests=api.properties.get('serialize_tests'))
+      serialize_tests=api.properties.get('serialize_tests'),
+      retry_failed_shards=api.properties.get('retry_failed_shards')
+  )
   test_runner()
 
 
@@ -43,5 +45,15 @@ def GenTests(api):
           bot_id='test_bot_id',
           buildnumber=123,
           serialize_tests=True) +
+      api.override_step_data('base_unittests', retcode=1)
+  )
+  yield (
+      api.test('retry_failed_shards') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123,
+          retry_failed_shards=True) +
       api.override_step_data('base_unittests', retcode=1)
   )
