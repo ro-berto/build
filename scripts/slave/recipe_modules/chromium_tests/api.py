@@ -833,7 +833,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-
   def _build_and_isolate_failing_tests(self, failing_tests, bot_update_step,
                                        suffix):
     """Builds and isolates test suites in |failing_tests|.
@@ -1188,6 +1187,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return True
 
     return False
+
+  def deapply_deps(self, bot_update_step):
+    with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+      bot_update_json = bot_update_step.json.output
+      self.m.bot_update._resolve_fixed_revisions(bot_update_json)
+      # NOTE: 'ignore_input_commit=True' gets a checkout using the commit
+      # before the tested commit, effectively deapplying the gitiles commit
+      # (latest commit currently being tested) and reverts back to DEPS
+      # revisions.
+      self.m.bot_update.ensure_checkout(
+          patch=False, update_presentation=False, ignore_input_commit=True)
+
+    with self.m.context(cwd=self.m.path['checkout']):
+      # NOTE: "without patch" phrase is used to keep consistency with the API
+      self.m.chromium.runhooks(name='runhooks (without patch)')
+
+  def depsbot_steps(self, builders=None, bots=None):
+    self.run_tests_with_and_without_changes(
+      builders=builders, mirrored_bots=bots,
+      deapply_changes=self.deapply_deps)
 
   def trybot_steps(self, builders=None, trybots=None):
     self.run_tests_with_and_without_changes(
