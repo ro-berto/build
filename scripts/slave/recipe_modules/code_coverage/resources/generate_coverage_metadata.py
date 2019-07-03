@@ -206,10 +206,7 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
 
 
 def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
-  """Converts the given Clang file coverage data to coverage metadata format.
-
-  Coverage metadata format:
-  https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+  """Converts the given file coverage data to line-based coverage info.
 
   Args:
     src_path (str): The absolute path to the root directory of the checkout.
@@ -240,25 +237,24 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
                   well as the line itself.
 
   Returns:
-    A json containing the coverage data for the given file and conforms to the
-    coverage metadata format.
+    A json containing the coverage info for the given file.
   """
   segments = file_coverage_data['segments']
   if not segments:
     return None
 
   filename = file_coverage_data['filename']
-  rel_file_path = os.path.relpath(filename, src_path)
+  src_file = os.path.relpath(filename, src_path)
   line_data, block_data = _extract_coverage_info(segments)
   line_data = sorted(line_data.items(), key=lambda x: x[0])
-  if diff_mapping and rel_file_path in diff_mapping:
-    line_mapping = diff_mapping[rel_file_path]
+  if diff_mapping and src_file in diff_mapping:
+    line_mapping = diff_mapping[src_file]
     line_data, block_data = _rebase_line_and_block_data(line_data, block_data,
                                                         line_mapping)
 
   lines, uncovered_blocks = _to_compressed_format(line_data, block_data)
   data = {
-      'path': '//' + rel_file_path,
+      'path': src_file,
       'total_lines': file_coverage_data['summary']['lines']['count'],
       'lines': lines,
   }
@@ -669,6 +665,24 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       'Generating & loading coverage metadata with "llvm-cov export" '
       'took %.0f minutes', minutes)
 
+  file_git_metadata = {}
+  if not diff_mapping:
+    logging.info('Retrieving file git metadata...')
+    start_time = time.time()
+    all_files = []
+    for datum in data['data']:
+      for file_data in datum['files']:
+        filename = file_data['filename']
+        src_file = os.path.relpath(filename, src_path)
+        if not src_file.startswith('//'):
+          src_file = '//' + src_file  # Prefix the file path with '//'.
+        all_files.append(src_file)
+    file_git_metadata = repository_util.GetFileRevisions(
+        src_path, 'DEPS', all_files)
+    minutes = (time.time() - start_time) / 60
+    logging.info('Retrieving git metadata for %d files took %.0f minutes',
+                 len(all_files), minutes)
+
   logging.info('Processing coverage data ...')
   start_time = time.time()
   compressed_files = []
@@ -681,14 +695,20 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       if component_mapping:
         _add_file_to_directory_summary(directory_summaries, src_path, file_data)
 
+      file_path = record['path']
+      if not file_path.startswith('//'):
+        file_path = '//' + file_path  # Prefix the file path with '//'.
+        record['path'] = file_path
+
+      git_metadata = file_git_metadata.get(file_path)
+      if git_metadata:
+        record['revision'] = git_metadata[0]
+        record['timestamp'] = git_metadata[1]
+
   component_summaries = {}
   if component_mapping:
     component_summaries = _aggregate_dirs_and_components(
         directory_summaries, component_mapping)
-
-  if not diff_mapping:
-    repository_util.AddGitRevisionsToCoverageFilesMetadata(
-        compressed_files, src_path, 'DEPS')
 
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
