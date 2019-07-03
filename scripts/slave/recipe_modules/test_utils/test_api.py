@@ -160,7 +160,37 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
   def generate_json_test_results(self, shard_indices,
                                  isolated_script_passing, benchmark_enabled,
                                  customized_test_results,
-                                 add_shard_index):
+                                 add_shard_index, artifacts):
+    # pylint: disable=line-too-long
+    """Generates fake test results in the JSON test results format.
+
+    See https://chromium.googlesource.com/chromium/src/+/master/docs/testing/json_test_results_format.md
+    for documentation on the format.
+
+    Args:
+      shard_indices: A list of shard indices to use.
+      isolated_script_passing: A boolean denoting whether the generated results
+          should mark the tests as passing or not.
+      benchmark_enabled: A boolean denoting whether the tests should actually
+          be shown as run or not.
+      customized_test_results: A dict containing test results to use instead of
+          generating new results.
+      add_shard_index: A boolean denoting whether to add the shard index to
+          failing test results or not.
+      artifacts: A dict of test basenames to dicts of test names to artifacts
+          to add. For example, the following dict would add two screenshot
+          artifacts to test1.Test1:
+          {
+            'test1': {
+              'Test1': {
+                'screenshot': ['some/path.png', 'another/path.png'],
+              },
+            },
+          }
+
+    Returns:
+      A list containing JSON test results for each shard.
+    """
     per_shard_results = []
     for i in shard_indices:
       if customized_test_results:
@@ -228,6 +258,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         jsonish_results['num_failures_by_type']['FAIL'] = 2
       else:
         tests_run = {}
+
+      for test_basename, subtests in tests_run.iteritems():
+        for test_name, test_dict in subtests.iteritems():
+          test_artifacts = artifacts.get(test_basename, {}).get(test_name, {})
+          if test_artifacts:
+            test_dict['artifacts'] = test_artifacts
+
       jsonish_results['tests'] = tests_run
       per_shard_results.append(jsonish_results)
     return per_shard_results
@@ -247,9 +284,22 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     corrupt=False,
                                     unknown=False,
                                     customized_test_results=None,
-                                    add_shard_index=False
+                                    add_shard_index=False, artifacts=None
                                     ):
-    """Produces a test results' compatible json for isolated script tests. """
+    """Produces a test results' compatible json for isolated script tests.
+
+    Args:
+      artifacts: A dict of test basenames to dicts of test names to artifacts
+          to add. Only used if use_json_test_format is True. For example, the
+          following dict would add two screenshot artifacts to test1.Test1:
+          {
+            'test1': {
+              'Test1': {
+                'screenshot': ['some/path.png', 'another/path.png'],
+              },
+            },
+          }
+    """
     if not missing_shards:
       missing_shards = []
     if not empty_shards:
@@ -274,9 +324,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         per_shard_chartjson_results.append(chartjsonish_results)
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
+      artifacts = artifacts or {}
       per_shard_results = self.generate_json_test_results(
           shard_indices, isolated_script_passing, benchmark_enabled,
-          customized_test_results, add_shard_index)
+          customized_test_results, add_shard_index, artifacts)
     else:
       if valid is None:
         valid = True

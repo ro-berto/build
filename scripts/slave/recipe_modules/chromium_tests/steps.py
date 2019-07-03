@@ -11,6 +11,7 @@ import json
 import re
 import string
 import struct
+import urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine.types import freeze
@@ -1284,9 +1285,81 @@ class JSONResultsHandler(ResultsHandler):
 
     presentation.step_text += api.test_utils.format_step_text(step_text)
 
+    # Handle any artifacts that the test produced if necessary.
+    self._add_links_to_artifacts(api, results, presentation)
+
   def validate_results(self, api, results):
     test_results = api.test_utils.create_results_from_json(results)
     return test_results.canonical_result_format()
+
+  def _add_links_to_artifacts(self, api, results, presentation):
+    # Add any links to artifacts that are already available.
+    # TODO(https://crbug.com/980274): Either handle the case of artifacts whose
+    # paths are filepaths, or add the ability for merge scripts to upload
+    # artifacts to a storage bucket and update the path to the URL before
+    # getting to this point.
+    if not results.valid or results.version == 'simplified':
+      return
+    artifacts = self._find_artifacts(results.raw)
+
+    # We don't want to flood Milo with links if a bunch of artifacts are
+    # generated, so put a cap on the number we're willing to show.
+    max_links = 10
+    num_links = 0
+    for artifact_map in artifacts.values():
+      for artifact_paths in artifact_map.values():
+        num_links += len(artifact_paths)
+
+    bulk_log = []
+    for test_name, test_artifacts in artifacts.items():
+      for artifact_type, artifact_paths in test_artifacts.items():
+        for path in artifact_paths:
+          link_title = '%s for %s' % (artifact_type, test_name)
+          if num_links < max_links:
+            presentation.links[link_title] = path
+          else:
+            bulk_log.append('%s: %s' % (link_title, path))
+    if bulk_log:
+      log_title = (
+          'Too many artifacts produced to link individually, click for links')
+      presentation.logs[log_title] = bulk_log
+
+  def _find_artifacts(self, raw_results):
+    """Finds artifacts in the given JSON results.
+
+    Currently, only finds artifacts whose paths are HTTPS URLs, see
+    https://crbug.com/980274 for more details.
+
+    Returns:
+      A dict of full test names to dicts of artifact types to paths.
+    """
+    tests = raw_results.get('tests', {})
+    path_delimiter = raw_results.get('path_delimiter', '.')
+    return self._recurse_artifacts(tests, '', path_delimiter)
+
+  def _recurse_artifacts(self, sub_results, name_so_far, path_delimiter):
+    is_leaf_node = 'actual' in sub_results and 'expected' in sub_results
+    if is_leaf_node:
+      if 'artifacts' not in sub_results:
+        return {}
+      url_artifacts = {}
+      for artifact_type, artifact_paths in sub_results['artifacts'].items():
+        for artifact_path in artifact_paths:
+          parse_result = urlparse.urlparse(artifact_path)
+          if parse_result.scheme == 'https' and parse_result.netloc:
+            url_artifacts.setdefault(artifact_type, []).append(artifact_path)
+      return {name_so_far: url_artifacts} if url_artifacts else {}
+
+    artifacts = {}
+    for key, val in sub_results.items():
+      if isinstance(val, (dict, collections.OrderedDict)):
+        updated_name = name_so_far + path_delimiter + str(key)
+        # Strip off the leading delimiter if this is the first iteration
+        if not name_so_far:
+          updated_name = updated_name[1:]
+        artifacts.update(
+            self._recurse_artifacts(val, updated_name, path_delimiter))
+    return artifacts
 
 
 class FakeCustomResultsHandler(ResultsHandler):
