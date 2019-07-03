@@ -100,17 +100,25 @@ def _RetrieveRevisionFromGit(args):
 
   Args:
     args (tuple): A tuple <root_dir, checkout_dir, path> where
-      * root_dir (str): Absolute path to the directory of the root checkout.
-      * checkout_dir (str): Path to the directory of a dependency checkout.
-      * path (str): Path to the file to retrieve the revision, relative path to
-                    the directory of the root checkout.
+      * root_dir (str): System absolute path to the root checkout.
+      * checkout_dir (str): Source absolute path to the root of a dependency
+                            checkout.
+      * path (str): Source absolute path to the file to retrieve the revision.
+
+  Returns:
+    A tuple of three elements:
+      1. Source absolute path to the file.
+      2. Git hash of the commit when the file was most recently updated.
+      3. Time stamp of the commit when the file was most recently updated.
   """
   assert len(args) == 3, 'Got %d args, but expected 3' % (len(args))
   root_dir, checkout_dir, path = args
 
-  assert checkout_dir.startswith('//')
+  assert checkout_dir.startswith('//'), (
+      '%s is expected to start with //' % checkout_dir)
   cwd = os.path.join(root_dir, checkout_dir[2:])
 
+  assert path.starts_with('//'), '%s is expected to start with //' % path
   path_in_dep_repo = path[len(checkout_dir):]
   try:
     git_output = subprocess.check_output(
@@ -137,7 +145,8 @@ def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
     checkouts (list): A list of source absolute paths to checkout directories.
 
   Returns:
-    A dict mapping from a checkout to the list of committed files.
+    A dict mapping from a checkout (in source absolute path) to the list of
+    committed files (in source absolute path).
   """
   all_files = collections.defaultdict(set)
   for checkout in checkouts:
@@ -155,10 +164,15 @@ def GetFileRevisions(root_dir, deps_file_path, file_paths):
   """Returns a dict mapping from the path to its git revision for given files.
 
   Args:
-    root_dir (str): Absolute path to the directory of the root checkout.
+    root_dir (str): System absolute path to the directory of the root checkout.
     deps_file_path (str): Relative path to the DEPS file in the root checkout.
-    file_paths (list): The list of file paths to retrieve git revisions for.
-        Each file path is relative to the root checkout.
+    file_paths (list): The list of source absolute file paths to retrieve git
+                       revisions for.
+
+  Returns:
+    A dict that maps from file source absolute paths to tuples of two elements:
+      1. Git hash of the commit when the file was most recently updated.
+      2. Time stamp of the commit when the file was most recently updated.
   """
   file_data = []
   timer = _Timer()
@@ -177,6 +191,7 @@ def GetFileRevisions(root_dir, deps_file_path, file_paths):
 
   timer.Start()
   for path in file_paths:
+    assert path.startswith('//'), '%s is expected to start with //' % path
     for checkout in checkouts:
       if path.startswith(checkout) and path in all_files.get(checkout, []):
         file_data.append((root_dir, checkout, path))
