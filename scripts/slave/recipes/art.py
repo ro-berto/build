@@ -241,17 +241,6 @@ def setup_target(api,
   # The path to the chroot directory on the device where ART and its
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
-  # Likewise, the Time Zone Data APEX is not yet supported by the ART Buildbot
-  # setup (see b/132169989). As a workaround, we
-  # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
-  #   generate the Time Zone Data files in `/system/etc/tzdata_module/etc/tz` on
-  #   device (these files are normally put in the Time Zone APEX on device);
-  # - set `ANDROID_TZDATA_ROOT` to '/system/etc/tzdata_module' on the ART
-  #   Buildbot (via `ART_TEST_ANDROID_TZDATA_ROOT`).
-  #
-  # TODO(b/132169989): Remove this when the ART Buildbot has full support for
-  # the Time Zone Data APEX.
-  android_tzdata_root_dir='/system/etc/tzdata_module'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
@@ -298,7 +287,6 @@ def setup_target(api,
       })
 
   env.update({ 'ART_TEST_CHROOT' : chroot_dir })
-  env.update({ 'ART_TEST_ANDROID_TZDATA_ROOT' : android_tzdata_root_dir })
 
   checkout(api)
   clobber(api)
