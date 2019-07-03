@@ -19,6 +19,29 @@ DEPS = [
     'recipe_engine/step'
 ]
 
+
+step_test_data = { "linux": {
+  "build_steps": [
+    {
+      "name": "Build Wabt",
+      "command": ["waterfall/src/build.py", "--no-sync",
+                  "--no-test", "--build-include=wabt"]
+    }
+  ],
+  "test_steps": [
+    {
+      "name": "Emscripten testsuite (upstream)",
+      "command": ["waterfall/src/build.py", "--no-sync",
+                  "--no-build", "--test-include=emtest"]
+    },
+    {
+      "name": "Emscripten testsuite (asm2wasm)",
+      "command": ["waterfall/src/build.py", "--no-sync",
+                  "--no-build", "--test-include=emtest-asm"]
+    }
+  ]
+}}
+
 def RunSteps(api):
   api.gclient.set_config('emscripten_releases')
   goma_dir = api.goma.ensure_goma()
@@ -44,30 +67,28 @@ def RunSteps(api):
                '--v8-dir=%s' % cache_dir.join('v8'),
                '--install-dir=%s' % install_dir]
   build_only_flags = dir_flags + ['--no-sync', '--no-test']
-  test_only_flags = dir_flags + ['--no-sync', '--no-build']
 
   api.file.ensure_directory('Ensure install dir', install_dir)
   with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
+  # Get list of build.py build and test steps
+  bot_steps = api.file.read_json('Read steps from JSON',
+                                 sync_dir.join('bots.json'),
+                                 test_data=step_test_data)
+
+  builder = api.buildbucket.builder_name
+  assert builder in ('linux', 'mac', 'win')
+
   # Depot tools on path is for ninja
   with api.depot_tools.on_path():
     with api.context(env=env):
       try:
-        api.python('Build Wabt', waterfall_build,
-                   build_only_flags + ['--build-include=wabt'])
-        api.python('Build Binaryen', waterfall_build,
-                   build_only_flags + ['--build-include=binaryen'])
-        api.python('Build V8', waterfall_build,
-                   build_only_flags + ['--build-include=v8'])
-        api.python('Build LLVM', waterfall_build,
-                   build_only_flags + ['--build-include=llvm',
-                                       '--no-tool-tests'])
-        api.python('Build fastcomp', waterfall_build,
-                   build_only_flags + ['--build-include=fastcomp'])
-        api.python('Build Emscripten', waterfall_build,
-                   build_only_flags + ['--build-include=emscripten'])
+        for step in bot_steps[builder]['build_steps']:
+          script = sync_dir.join(step['command'][0])
+          args = step['command'][1:]
+          api.python(step['name'], script, dir_flags + args)
       except api.step.StepFailure as e:
         # If any of these builds fail, testing won't be meaningful.
         exit_status = e.retcode
@@ -82,9 +103,10 @@ def RunSteps(api):
                  build_only_flags + ['--build-include=archive'])
 
       with api.step.defer_results():
-        for name, flag in (('upstream', 'emtest'), ('asm2wasm', 'emtest-asm')):
-          api.python('Emscripten testsuite (%s)' % name, waterfall_build,
-                     test_only_flags + ['--test-include=%s' % flag])
+        for step in bot_steps[builder]['test_steps']:
+          script = sync_dir.join(step['command'][0])
+          args = step['command'][1:]
+          api.python(step['name'], script, dir_flags + args)
 
 
 def GenTests(api):
