@@ -333,17 +333,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     coverage_dir = self.m.chromium.output_dir.join('coverage')
 
     with self.m.step.nest('process java coverage'):
-      self.m.python(
-          'Generate JaCoCo HTML report',
-          self.m.path['checkout'].join(
-              'build', 'android', 'generate_jacoco_report.py'),
-          args=['--format', 'html',
-                '--coverage-dir', coverage_dir,
-                '--sources-json-dir', self.m.chromium.output_dir,
-                '--output-dir', coverage_dir.join('coverage_html')],
-          infra_step=True,
-          **kwargs)
-
+      coverage_metadata_file = coverage_dir.join('coverage.json')
       self.m.python(
           'Generate JSON metadata',
           self.m.path['checkout'].join(
@@ -351,32 +341,41 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           args=['--format', 'json',
                 '--coverage-dir', coverage_dir,
                 '--sources-json-dir', self.m.chromium.output_dir,
-                '--output-file', coverage_dir.join('coverage.json'),
-                '--cleanup'],
+                '--output-file', coverage_metadata_file],
           infra_step=True,
           **kwargs)
-
-      jacoco_html_report_gs_path = self._compose_gs_path_for_coverage_data(
-          'java_html_report')
-      html_upload_step = self.m.gsutil.upload(
-          source=coverage_dir.join('coverage_html'),
-          bucket=_BUCKET_NAME,
-          dest=jacoco_html_report_gs_path,
-          link_name=None,
-          args=['-r'],
-          multithreaded=True,
-          name='Upload JaCoCo HTML report',
-          **kwargs)
-      html_upload_step.presentation.links['JaCoCo HTML report'] = (
-          'https://storage.cloud.google.com/%s/%s/index.html' %
-          (_BUCKET_NAME, jacoco_html_report_gs_path))
-
       self.m.gsutil.upload(
-          source=coverage_dir.join('coverage.json'),
+          source=coverage_metadata_file,
           bucket=_BUCKET_NAME,
           dest=self._compose_gs_path_for_coverage_data('java_metadata'),
           name='Upload JSON metadata',
           link_name='Coverage metadata',
+          **kwargs)
+
+      jacoco_html_report_dir = coverage_dir.join('coverage_html')
+      self.m.python(
+          'Generate JaCoCo HTML report',
+          self.m.path['checkout'].join(
+              'build', 'android', 'generate_jacoco_report.py'),
+          args=['--format', 'html',
+                '--coverage-dir', coverage_dir,
+                '--sources-json-dir', self.m.chromium.output_dir,
+                '--output-dir', jacoco_html_report_dir,
+                '--cleanup'],
+          infra_step=True,
+          **kwargs)
+      # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
+      output_zip = coverage_dir.join('jacoco_html_report.zip')
+      self.m.zip.directory(
+          step_name='Zip generated JaCoCo HTML report files',
+          directory=jacoco_html_report_dir,
+          output=output_zip)
+      self.m.gsutil.upload(
+          source=output_zip,
+          bucket=_BUCKET_NAME,
+          dest=self._compose_gs_path_for_coverage_data('java_html_report'),
+          link_name='JaCoCo HTML report',
+          name='Upload zipped JaCoCo HTML report',
           **kwargs)
 
   def _merge_profdata(self):
