@@ -145,7 +145,7 @@
       "--root=[CACHE]\\builder\\angle",
       "gen",
       "//out/release_x86",
-      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=false target_cpu=\"x86\"",
+      "--args=build_angle_gles1_conform_tests=true is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=false target_cpu=\"x86\"",
       "--check"
     ],
     "cwd": "[CACHE]\\builder\\angle",
