@@ -276,6 +276,7 @@
   * [pdfium](#recipes-pdfium)
   * [perf_dashboard:examples/full](#recipes-perf_dashboard_examples_full)
   * [pinpoint/builder](#recipes-pinpoint_builder)
+  * [presubmit](#recipes-presubmit)
   * [puppet_service_account:examples/full](#recipes-puppet_service_account_examples_full) &mdash; Small example of using the puppet_service_account api.
   * [remote_run_test](#recipes-remote_run_test) &mdash; Checks that properties get to recipes from remote_run properly.
   * [repo:examples/full](#recipes-repo_examples_full)
@@ -5244,6 +5245,11 @@ test_type is expected to be 'corpus', 'javascript', or 'pixel'
 [DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/pinpoint/builder.py#14)(api):**
+### *recipes* / [presubmit](/scripts/slave/recipes/presubmit.py)
+
+[DEPS](/scripts/slave/recipes/presubmit.py#11): [v8](#recipe_modules-v8), [webrtc](#recipe_modules-webrtc), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/presubmit][depot_tools/recipe_modules/presubmit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/presubmit.py#30)(api):**
 ### *recipes* / [puppet\_service\_account:examples/full](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py#7): [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
