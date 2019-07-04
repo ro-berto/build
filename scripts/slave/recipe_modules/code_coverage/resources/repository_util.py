@@ -118,7 +118,7 @@ def _RetrieveRevisionFromGit(args):
       '%s is expected to start with //' % checkout_dir)
   cwd = os.path.join(root_dir, checkout_dir[2:])
 
-  assert path.starts_with('//'), '%s is expected to start with //' % path
+  assert path.startswith('//'), '%s is expected to start with //' % path
   path_in_dep_repo = path[len(checkout_dir):]
   try:
     git_output = subprocess.check_output(
@@ -213,3 +213,36 @@ def GetFileRevisions(root_dir, deps_file_path, file_paths):
     path, git_hash, timestamp = result
     all_result[path] = (git_hash, timestamp)
   return all_result
+
+
+def AddGitRevisionsToCoverageFilesMetadata(files_coverage_data, src_path,
+                                           deps_file_path):
+  """Add git revisions to a list File in coverage metadata format.
+
+  Coverage metadata format:
+  https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+
+  Args:
+    files_coverage_data (list): A list of File in coverage metadata format, and
+                                it is going to be mutated by this function.
+    src_path (str): Absolute path to the source root.
+    deps_file_path (str): Relative path to the DEPS file that manages
+                          dependencies.
+  """
+  logging.info('Retrieving file git metadata...')
+  start_time = time.time()
+
+  all_files = [file_record['path'] for file_record in files_coverage_data]
+  file_git_metadata = GetFileRevisions(src_path, deps_file_path, all_files)
+  for file_record in files_coverage_data:
+    git_metadata = file_git_metadata.get(file_record['path'])
+    if not git_metadata:
+      logging.warn('Failed to retrive git metadata for %s', file_record['path'])
+      continue
+
+    file_record['revision'], file_record['timestamp'] = git_metadata
+
+  minutes = (time.time() - start_time) / 60
+  logging.info(
+      'Retrieving and filling in git metadata for %d files took %.0f '
+      'minutes', len(all_files), minutes)

@@ -125,7 +125,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     }
     expected_record = {
         'path':
-            'base/base.cc',
+            '//base/base.cc',
         'total_lines':
             7,
         'lines': [
@@ -181,7 +181,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     }
     expected_record = {
         'path':
-            'base/base.cc',
+            '//base/base.cc',
         'total_lines':
             6,
         'lines': [
@@ -274,7 +274,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
     expected_record = {
         'path':
-            'base/base.cc',
+            '//base/base.cc',
         'total_lines':
             7,
         'lines': [
