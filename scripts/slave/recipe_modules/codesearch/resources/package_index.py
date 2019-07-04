@@ -184,7 +184,7 @@ class IndexPack(object):
         return
       # Derive the new filename from the SHA256 hash.
       with open(fname, 'rU') as source_file:
-        content = source_file.read().encode('utf-8')
+        content = source_file.read()
       content_hash = hashlib.sha256(content).hexdigest()
       self.filehashes[fname] = content_hash
       hash_fname = os.path.join(self.files_directory, content_hash)
