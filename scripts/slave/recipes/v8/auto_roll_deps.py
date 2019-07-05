@@ -22,6 +22,7 @@ DEPS = [
   'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
+  'ts_mon',
   'v8',
 ]
 
@@ -36,9 +37,6 @@ deps = {
     Var('chromium_git') + '/v8/v8.git' + '@' +  Var('v8_revision'),
 }
 """
-
-# Location of the infra-python package's run script.
-_RUN_PY = '/opt/infra-python/run.py'
 
 
 def V8RevisionFrom(deps):
@@ -172,23 +170,13 @@ def RunSteps(api):
         monitoring_state = result.json.output['monitoring_state']
   finally:
     if not api.runtime.is_experimental:
-      counter_config = {
-        'name': '/v8/autoroller/count',
-        'project': 'v8-roll',
-        'result': monitoring_state,
-        'value': 1,
-      }
-      api.python(
-          'upload stats',
-          _RUN_PY,
-          [
-            'infra.tools.send_ts_mon_values',
-            '--ts-mon-target-type', 'task',
-            '--ts-mon-task-service-name', 'auto-roll',
-            '--ts-mon-task-job-name', 'roll',
-            '--counter', api.json.dumps(counter_config),
-          ],
-      )
+      api.ts_mon.send_value(
+          name='/v8/autoroller/count',
+          value=1,
+          fields={'project': 'v8-roll', 'result': monitoring_state},
+          service_name='auto-roll',
+          job_name='roll',
+          step_name='upload_stats')
 
 
 def GenTests(api):

@@ -1,25 +1,6 @@
 [
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
-      "--url",
-      "https://v8-roll.appspot.com/status",
-      "--status-json",
-      "/path/to/tmp/json",
-      "--outfile",
-      "/path/to/tmp/"
-    ],
-    "name": "check roll status",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Rolling deactivated@@@",
-      "@@@STEP_LOG_LINE@stdout@0@@@",
-      "@@@STEP_LOG_END@stdout@@@"
-    ]
-  },
-  {
-    "cmd": [
       "cipd",
       "ensure",
       "-root",
@@ -53,19 +34,42 @@
       "--ts-mon-target-type",
       "fake-hostname",
       "--ts-mon-task-service-name",
-      "auto-roll",
+      "luci",
       "--ts-mon-task-job-name",
-      "roll",
+      "recipe",
       "--counter-file",
-      "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\", \"value\": 1}"
+      "{\"name\": \"/example/metric\", \"value\": 42}"
     ],
-    "name": "upload_stats",
+    "name": "upload ts_mon metrics",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@counter_config@{@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/v8/autoroller/count\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"project\": \"v8-roll\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"result\": \"deactivated\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"value\": 1@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/example/metric\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"value\": 42@@@",
+      "@@@STEP_LOG_LINE@counter_config@}@@@",
+      "@@@STEP_LOG_END@counter_config@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/infra-python/run.py",
+      "infra.tools.send_ts_mon_values",
+      "--ts-mon-target-type",
+      "example_target",
+      "--ts-mon-task-service-name",
+      "example_service",
+      "--ts-mon-task-job-name",
+      "example_job",
+      "--counter-file",
+      "{\"foo\": \"bar\", \"name\": \"/example/metric\", \"value\": 42}"
+    ],
+    "name": "custom upload step name",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@counter_config@{@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"foo\": \"bar\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/example/metric\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"value\": 42@@@",
       "@@@STEP_LOG_LINE@counter_config@}@@@",
       "@@@STEP_LOG_END@counter_config@@@"
     ]

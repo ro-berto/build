@@ -46,6 +46,7 @@
   * [test_utils](#recipe_modules-test_utils)
   * [traceback](#recipe_modules-traceback)
   * [trigger](#recipe_modules-trigger) &mdash; This recipe module allows triggering builds within the same master.
+  * [ts_mon](#recipe_modules-ts_mon)
   * [v8](#recipe_modules-v8)
   * [webrtc](#recipe_modules-webrtc)
   * [zip](#recipe_modules-zip)
@@ -296,6 +297,7 @@
   * [test_utils:tests/test_results](#recipes-test_utils_tests_test_results)
   * [traceback:examples/full](#recipes-traceback_examples_full)
   * [trigger:examples/full](#recipes-trigger_examples_full)
+  * [ts_mon:tests/example](#recipes-ts_mon_tests_example)
   * [v8](#recipes-v8)
   * [v8/archive](#recipes-v8_archive) &mdash; Recipe for archiving officially tagged v8 builds.
   * [v8/auto_roll_deps](#recipes-v8_auto_roll_deps)
@@ -3404,6 +3406,44 @@ Examples:
             'when_timestamp': 1416859562,
         }]
     })
+### *recipe_modules* / [ts\_mon](/scripts/slave/recipe_modules/ts_mon)
+
+[DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+
+#### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&mdash; **def [send\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, value, fields=None, service_name='luci', job_name='recipe', target=None, step_name='upload ts_mon metrics'):**
+
+Sends a value to the ts_mon monitoring service.
+
+Based on https://cs.chromium.org/chromium/infra/infra/tools/send_ts_mon_values/.
+
+Note that the candinality of all possible combinations of different values
+passed to fields should be less than 5000, i.e. do not use unique
+identifiers or timestamps and instead use values from a known small set.
+
+Additionally, the reported values for each unique combination of field
+values get downsampled by ts_mon according to the following rules:
+ - no downsampling for 12 hrs
+ - keep at most 1 data point for each min for the next 1 week
+ - keep at most 1 data point for 5 mins interval for the next 12 weeks
+ - Keep at most 1 data point for 30 mins interval for the next 52 weeks
+
+Therefore, please keep in mind that for metrics reported with high frequency
+(which can also be caused by having them reported at low frequency, but from
+large number of bots), the graphs may change as a result of downsampling and
+thus users may see different values in the past than what was reported
+originally and what was used to generate alerts.
+
+Arguments:
+  name: Name of the metric, which is automatically prefixed with
+      /chrome/infra, i.e. /foo/bar will become /chrome/infra/foo/bar.
+  value: The value to be reported.
+  fields: Dictionary with fields to be associated with the value.
+  service_name: Name of the ts_mon service.
+  job_name: Name of the ts_mon job.
+  target: Target reporting the value, defaults to the current hostname.
+  step_name: Name of the step sending information to ts_mon.
 ### *recipe_modules* / [v8](/scripts/slave/recipe_modules/v8)
 
 [DEPS](/scripts/slave/recipe_modules/v8/__init__.py#5): [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [docker](#recipe_modules-docker), [gn](#recipe_modules-gn), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/cq][recipe_engine/recipe_modules/cq], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
@@ -5371,6 +5411,11 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/trigger/examples/full.py#5): [trigger](#recipe_modules-trigger), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/trigger/examples/full.py#11)(api):**
+### *recipes* / [ts\_mon:tests/example](/scripts/slave/recipe_modules/ts_mon/tests/example.py)
+
+[DEPS](/scripts/slave/recipe_modules/ts_mon/tests/example.py#5): [ts\_mon](#recipe_modules-ts_mon)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/ts_mon/tests/example.py#10)(api):**
 ### *recipes* / [v8](/scripts/slave/recipes/v8.py)
 
 [DEPS](/scripts/slave/recipes/v8.py#10): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
@@ -5387,11 +5432,11 @@ Recipe for archiving officially tagged v8 builds.
 &mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#54)(api, bot_config, ref, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)
 
-[DEPS](/scripts/slave/recipes/v8/auto_roll_deps.py#7): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/v8/auto_roll_deps.py#7): [chromium](#recipe_modules-chromium), [ts\_mon](#recipe_modules-ts_mon), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_deps.py#49)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_deps.py#47)(api):**
 
-&mdash; **def [V8RevisionFrom](/scripts/slave/recipes/v8/auto_roll_deps.py#44)(deps):**
+&mdash; **def [V8RevisionFrom](/scripts/slave/recipes/v8/auto_roll_deps.py#42)(deps):**
 ### *recipes* / [v8/auto\_roll\_push](/scripts/slave/recipes/v8/auto_roll_push.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_roll_push.py#5): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

@@ -273,20 +273,55 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/infra-python",
+      "-ensure-file",
+      "infra/infra_python/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/infra_python/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "/opt/infra-python/run.py",
+      "[CACHE]/infra-python/run.py",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
-      "task",
+      "fake-hostname",
       "--ts-mon-task-service-name",
       "auto-roll",
       "--ts-mon-task-job-name",
       "roll",
-      "--counter",
+      "--counter-file",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"inconsistent\", \"value\": 1}"
     ],
-    "name": "upload stats"
+    "name": "upload_stats",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@counter_config@{@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/v8/autoroller/count\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"project\": \"v8-roll\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"result\": \"inconsistent\",@@@",
+      "@@@STEP_LOG_LINE@counter_config@  \"value\": 1@@@",
+      "@@@STEP_LOG_LINE@counter_config@}@@@",
+      "@@@STEP_LOG_END@counter_config@@@"
+    ]
   },
   {
     "name": "$result"
