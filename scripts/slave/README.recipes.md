@@ -3412,11 +3412,13 @@ Examples:
 
 #### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [send\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, value, fields=None, service_name='luci', job_name='recipe', target=None, step_name='upload ts_mon metrics'):**
+&mdash; **def [send\_counter\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, value, fields=None, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
 
 Sends a value to the ts_mon monitoring service.
 
-Based on https://cs.chromium.org/chromium/infra/infra/tools/send_ts_mon_values/.
+Based on the ts_mon monitoring pipeline and script for sending data to it:
+https://cs.chromium.org/chromium/infra/infra/tools/send_ts_mon_values/.
+Internal users can read more about ts_mon at go/brown-bag-timeseries-basics.
 
 Note that the candinality of all possible combinations of different values
 passed to fields should be less than 5000, i.e. do not use unique
@@ -3440,9 +3442,8 @@ Arguments:
       /chrome/infra, i.e. /foo/bar will become /chrome/infra/foo/bar.
   value: The value to be reported.
   fields: Dictionary with fields to be associated with the value.
-  service_name: Name of the ts_mon service.
-  job_name: Name of the ts_mon job.
-  target: Target reporting the value, defaults to the current hostname.
+  service_name: Name of the service being monitored.
+  job_name: Name of this job instance of the task.
   step_name: Name of the step sending information to ts_mon.
 ### *recipe_modules* / [v8](/scripts/slave/recipe_modules/v8)
 

@@ -28,9 +28,8 @@ class TSMonApi(recipe_api.RecipeApi):
         self.m.cipd.EnsureFile().add_package(
             'infra/infra_python/${platform}', 'latest'))
 
-  def send_value(self, name, value, fields=None, service_name='luci',
-                 job_name='recipe', target=None,
-                 step_name='upload ts_mon metrics'):
+  def send_counter_value(self, name, value, fields=None, service_name='luci',
+                         job_name='recipe', step_name='upload ts_mon metrics'):
     """Sends a value to the ts_mon monitoring service.
 
     Based on the ts_mon monitoring pipeline and script for sending data to it:
@@ -59,9 +58,8 @@ class TSMonApi(recipe_api.RecipeApi):
           /chrome/infra, i.e. /foo/bar will become /chrome/infra/foo/bar.
       value: The value to be reported.
       fields: Dictionary with fields to be associated with the value.
-      service_name: Name of the ts_mon service.
-      job_name: Name of the ts_mon job.
-      target: Target reporting the value, defaults to the current hostname.
+      service_name: Name of the service being monitored.
+      job_name: Name of this job instance of the task.
       step_name: Name of the step sending information to ts_mon.
     """
     self._ensure_infra_python()
@@ -69,15 +67,9 @@ class TSMonApi(recipe_api.RecipeApi):
     counter_config = {'name': name, 'value': value}
     counter_config.update(fields or {})
 
-    if target is None:
-      if self._test_data.enabled:
-        target = 'fake-hostname'
-      else:  # pragma: no cover
-        target = socket.gethostname()
-
     result = self.m.python(step_name, self._infra_python_path.join('run.py'), [
       SEND_TS_MON_VALUES,
-      '--ts-mon-target-type', target,
+      '--ts-mon-target-type', 'task',
       '--ts-mon-task-service-name', service_name,
       '--ts-mon-task-job-name', job_name,
       '--counter-file', self.m.json.input(counter_config),

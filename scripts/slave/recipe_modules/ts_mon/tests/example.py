@@ -8,14 +8,13 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.ts_mon.send_value('/example/metric', 42)
-  api.ts_mon.send_value(
+  api.ts_mon.send_counter_value('/example/metric', 42)
+  api.ts_mon.send_counter_value(
       name='/example/metric',
       value=42,
       fields={'foo': 'bar'},
       service_name='example_service',
       job_name='example_job',
-      target='example_target',
       step_name='custom upload step name')
 
 

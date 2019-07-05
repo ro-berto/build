@@ -51,7 +51,7 @@
       "[CACHE]/infra-python/run.py",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
-      "fake-hostname",
+      "task",
       "--ts-mon-task-service-name",
       "auto-roll",
       "--ts-mon-task-job-name",
