@@ -88,10 +88,12 @@ def _RunStepsCelab(api):
 
 
 def _RunStepsChromium(api):
-  version = api.properties.get('celab_version')
+  # TODO(https://crbug.com/977332): Parse celab_version from the .vpython file.
+  version = 'ewVkoqiGDczXj334qRCQ8uSvGl6dd6XQGAcdbmgwpbsC'
+
   tests = api.properties.get('tests')
-  if not version or not tests:
-    raise ValueError('Chromium bots must define `celab_version` and `tests`.')
+  if not tests:
+    raise ValueError('Chromium bots must define `tests`.')
 
   # Build Chromium binaries from source and get CELab from CIPD.
   checkout = _CheckoutChromiumRepo(api)
@@ -446,7 +448,7 @@ def GenTests(api):
   )
   yield (
       api.test('chromium_try') +
-      api.properties(tests='chromium.test', celab_version='version:1.0.0',
+      api.properties(tests='chromium.test',
                      pool_name='chromium-try', pool_size=5,
                      mastername='tryserver.chromium.win', bot_id='test_bot') +
       api.platform('win', 64) +
@@ -459,9 +461,8 @@ def GenTests(api):
                       '1st test': {'success': False, 'output': '/file'}}))
   )
   yield (
-      api.test('chromium_no_version') +
-      api.properties(tests='chromium.test',
-                     mastername='tryserver.chromium.win', bot_id='test_bot') +
+      api.test('chromium_no_tests') +
+      api.properties(mastername='tryserver.chromium.win', bot_id='test_bot') +
       api.platform('win', 64) +
       api.buildbucket.try_build(project='chromium',
                                 bucket='luci.chromium.try',

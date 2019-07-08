@@ -212,7 +212,7 @@
       "    _RunStepsCelab(api)",
       "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 87, in _RunStepsCelab",
       "    tests)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 227, in _RunTests",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 229, in _RunTests",
       "    raise ValueError('pool_name and pool_size must be defined with `tests`.')",
       "ValueError: pool_name and pool_size must be defined with `tests`."
     ]

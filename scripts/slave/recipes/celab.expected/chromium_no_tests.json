@@ -17,14 +17,14 @@
       "    return callable_obj(*props, **additional_args)",
       "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 62, in RunSteps",
       "    _RunStepsChromium(api)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 94, in _RunStepsChromium",
-      "    raise ValueError('Chromium bots must define `celab_version` and `tests`.')",
-      "ValueError: Chromium bots must define `celab_version` and `tests`."
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 96, in _RunStepsChromium",
+      "    raise ValueError('Chromium bots must define `tests`.')",
+      "ValueError: Chromium bots must define `tests`."
     ]
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('Chromium bots must define `celab_version` and `tests`.',)"
+      "humanReason": "Uncaught Exception: ValueError('Chromium bots must define `tests`.',)"
     },
     "name": "$result"
   }

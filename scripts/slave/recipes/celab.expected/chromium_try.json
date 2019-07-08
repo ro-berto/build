@@ -632,7 +632,7 @@
       "-root",
       "[START_DIR]\\packages",
       "-ensure-file",
-      "infra/celab/celab/${platform} version:1.0.0",
+      "infra/celab/celab/${platform} ewVkoqiGDczXj334qRCQ8uSvGl6dd6XQGAcdbmgwpbsC",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -641,7 +641,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.0.0---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-ewVkoqiGDczXj334\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/celab/celab/${platform}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
