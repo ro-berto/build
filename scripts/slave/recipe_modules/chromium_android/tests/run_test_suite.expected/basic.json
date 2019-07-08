@@ -8,7 +8,7 @@
       "-t",
       "1200",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "name": "test_suite"
   },

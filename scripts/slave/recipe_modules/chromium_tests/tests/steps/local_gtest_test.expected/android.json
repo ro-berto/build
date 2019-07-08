@@ -11,7 +11,7 @@
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "name": "base_unittests (with patch)"
   },
@@ -60,7 +60,7 @@
       "--json-results-file",
       "/path/to/tmp/json",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "name": "base_unittests (without patch)"
   },

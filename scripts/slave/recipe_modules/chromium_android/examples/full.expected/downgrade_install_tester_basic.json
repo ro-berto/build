@@ -329,7 +329,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-d",
       "abc123",
       "--downgrade",
@@ -346,7 +346,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -362,7 +362,7 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Root devices",
@@ -392,7 +392,7 @@
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
       "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -410,7 +410,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v"
     ],
     "env": {
@@ -431,7 +431,7 @@
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
@@ -545,7 +545,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v"
     ],
     "env": {
@@ -566,7 +566,7 @@
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
@@ -676,7 +676,7 @@
       "-u",
       "[START_DIR]/src/build/android/provision_devices.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--output-device-blacklist",
@@ -699,7 +699,7 @@
       "-u",
       "[START_DIR]/src/build/symlink.py",
       "-f",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "~/adb"
     ],
     "infra_step": true,
@@ -718,7 +718,7 @@
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
       "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -743,7 +743,7 @@
       "--",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
@@ -762,7 +762,7 @@
       "RECIPE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -780,7 +780,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v"
     ],
     "env": {
@@ -795,7 +795,7 @@
       "-u",
       "[START_DIR]/src/build/android/provision_devices.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--output-device-blacklist",
@@ -823,7 +823,7 @@
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
@@ -937,7 +937,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "BUILDTYPE": "Release",
@@ -966,7 +966,7 @@
       "Additional.apk",
       "--release",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release"
@@ -981,7 +981,7 @@
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"

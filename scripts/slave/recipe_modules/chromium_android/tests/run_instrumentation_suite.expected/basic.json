@@ -11,7 +11,7 @@
       "5",
       "--release",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "None/out/Release"

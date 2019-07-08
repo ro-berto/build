@@ -5,7 +5,7 @@
       "-u",
       "None/build/symlink.py",
       "-f",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "~/adb"
     ],
     "infra_step": true,
@@ -24,7 +24,7 @@
       "--",
       "None/build/android/adb_logcat_monitor.py",
       "None/out/logcat",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -46,7 +46,7 @@
       "--",
       "None/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "None/out/bad_devices.json"
     ],
@@ -65,7 +65,7 @@
       "RECIPE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb"
+      "None/third_party/android_sdk/public/platform-tools/adb"
     ],
     "infra_step": true,
     "name": "authorize_adb_devices"
@@ -80,7 +80,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--enable-usb-reset"
     ],
@@ -93,7 +93,7 @@
       "-u",
       "None/build/android/provision_devices.py",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "None/out/bad_devices.json",
       "--output-device-blacklist",
@@ -123,7 +123,7 @@
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
@@ -240,7 +240,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['None/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['None/third_party/android_sdk/public/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "Set up ASAN on devices.List adb devices",
@@ -257,7 +257,7 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Set up ASAN on devices.Root devices",
@@ -284,7 +284,7 @@
       "07a00ca4"
     ],
     "env": {
-      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb"
+      "ADB": "None/third_party/android_sdk/public/platform-tools/adb"
     },
     "infra_step": true,
     "name": "Set up ASAN on devices.07a00ca4",
@@ -298,7 +298,7 @@
       "-u",
       "None/third_party/catapult/devil/devil/android/tools/wait_for_devices.py",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--timeout",
       "150",
@@ -432,7 +432,7 @@
       "07a00ca4"
     ],
     "env": {
-      "ADB": "None/third_party/android_tools/sdk/platform-tools/adb"
+      "ADB": "None/third_party/android_sdk/public/platform-tools/adb"
     },
     "infra_step": true,
     "name": "Tear down ASAN on devices.07a00ca4",
@@ -446,7 +446,7 @@
       "-u",
       "None/third_party/catapult/devil/devil/android/tools/wait_for_devices.py",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "-v",
       "--timeout",
       "150",

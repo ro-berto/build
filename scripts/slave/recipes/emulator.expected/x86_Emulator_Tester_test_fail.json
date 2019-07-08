@@ -667,7 +667,7 @@
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
       "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -681,7 +681,7 @@
       "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--output-device-blacklist",
@@ -704,7 +704,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -721,7 +721,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -735,7 +735,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -749,7 +749,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -763,7 +763,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -777,7 +777,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -791,7 +791,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -805,7 +805,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -819,7 +819,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -833,7 +833,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -847,7 +847,7 @@
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"

@@ -21,7 +21,7 @@
       "--blacklist-file",
       "None/out/bad_devices.json",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "--release"
     ],
     "env": {

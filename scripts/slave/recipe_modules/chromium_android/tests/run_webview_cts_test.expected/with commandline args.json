@@ -5,7 +5,7 @@
       "-u",
       "None/build/android/adb_command_line.py",
       "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "None/third_party/android_sdk/public/platform-tools/adb",
       "--name",
       "webview-command-line",
       "--webview-test-flag"

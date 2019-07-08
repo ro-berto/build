@@ -182,7 +182,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "--release"
     ],
     "env": {

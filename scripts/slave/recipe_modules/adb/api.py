@@ -24,7 +24,7 @@ class AdbApi(recipe_api.RecipeApi):
     if self._custom_adb_path:
       return self._custom_adb_path
     return self.m.path['checkout'].join(
-        'third_party', 'android_tools', 'sdk', 'platform-tools', 'adb')
+        'third_party', 'android_sdk', 'public', 'platform-tools', 'adb')
 
   def list_devices(self, step_test_data=None, **kwargs):
     cmd = [

@@ -326,7 +326,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
-      "['[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb', 'devices']",
+      "['[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
     ],
     "name": "List adb devices",
@@ -342,7 +342,7 @@
       "python",
       "-u",
       "\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print 'Attempting to root device %s ...' % (device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print 'Finished rooting device %s' % (device)\n",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "014E1F310401C009"
     ],
     "name": "Root devices",
@@ -372,7 +372,7 @@
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
       "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -390,7 +390,7 @@
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "-v"
     ],
     "env": {
@@ -412,7 +412,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "BUILDTYPE": "Release",
@@ -441,7 +441,7 @@
       "Additional.apk",
       "--release",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release"
@@ -456,7 +456,7 @@
       "--verbose",
       "--tool=asan",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
