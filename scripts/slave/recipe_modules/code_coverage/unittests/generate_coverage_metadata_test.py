@@ -344,21 +344,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                              [4, 4, 0, True, False], [6, 3, 0, True, True],
                              [7, 2, 0, False, False]],
                 'summary': {
-                    'functions': {
-                        'count': 1,
-                        'covered': 1,
-                        'percent': 100
-                    },
                     'lines': {
                         'count': 7,
                         'covered': 4,
                         'percent': 57
-                    },
-                    'regions': {
-                        'count': 6,
-                        'covered': 4,
-                        'notcovered': 2,
-                        'percent': 67
                     },
                 },
                 'filename':
@@ -452,21 +441,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                         [7, 2, 0, False, False],
                     ],
                     'summary': {
-                        'functions': {
-                            'count': 1,
-                            'covered': 1,
-                            'percent': 100
-                        },
                         'lines': {
                             'count': 7,
                             'covered': 4,
                             'percent': 57
-                        },
-                        'regions': {
-                            'count': 6,
-                            'covered': 4,
-                            'notcovered': 2,
-                            'percent': 67
                         },
                     },
                     'filename':
@@ -477,16 +455,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                                  [1, 25, 0, False, False]],
                     'summary': {
                         'lines': {
-                            'count': 1,
-                            'covered': 1,
-                            'percent': 100,
-                        },
-                        'functions': {
-                            'count': 1,
-                            'covered': 1,
-                            'percent': 100,
-                        },
-                        'regions': {
                             'count': 1,
                             'covered': 1,
                             'percent': 100,
@@ -516,38 +484,18 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     expected_compressed_components = [{
         'dirs': [
             {
-                'path':
-                    '//dir1/',
-                'name':
-                    'dir1/',
+                'path': '//dir1/',
+                'name': 'dir1/',
                 'summaries': [{
-                    'covered': 4,
-                    'total': 6,
-                    'name': 'region'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'function'
-                }, {
                     'covered': 4,
                     'total': 7,
                     'name': 'line'
                 }]
             },
             {
-                'path':
-                    '//dir2/',
-                'name':
-                    'dir2/',
+                'path': '//dir2/',
+                'name': 'dir2/',
                 'summaries': [{
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'region'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'function'
-                }, {
                     'covered': 1,
                     'total': 1,
                     'name': 'line'
@@ -558,14 +506,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'Test>Component',
         'summaries': [{
             'covered': 5,
-            'total': 7,
-            'name': 'region'
-        }, {
-            'covered': 2,
-            'total': 2,
-            'name': 'function'
-        }, {
-            'covered': 5,
             'total': 8,
             'name': 'line'
         }]
@@ -575,19 +515,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertListEqual(expected_compressed_components,
                          compressed_data['components'])
 
-    expected_compressed_summaries = [{
-        'covered': 5,
-        'total': 7,
-        'name': 'region'
-    }, {
-        'covered': 2,
-        'total': 2,
-        'name': 'function'
-    }, {
-        'covered': 5,
-        'total': 8,
-        'name': 'line'
-    }]
+    expected_compressed_summaries = [{'covered': 5, 'total': 8, 'name': 'line'}]
 
     self.assertListEqual(expected_compressed_summaries,
                          compressed_data['summaries'])
@@ -596,38 +524,18 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         {
             'dirs': [
                 {
-                    'path':
-                        '//dir1/',
-                    'name':
-                        'dir1/',
+                    'path': '//dir1/',
+                    'name': 'dir1/',
                     'summaries': [{
-                        'covered': 4,
-                        'total': 6,
-                        'name': 'region'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'function'
-                    }, {
                         'covered': 4,
                         'total': 7,
                         'name': 'line'
                     }]
                 },
                 {
-                    'path':
-                        '//dir2/',
-                    'name':
-                        'dir2/',
+                    'path': '//dir2/',
+                    'name': 'dir2/',
                     'summaries': [{
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'region'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'function'
-                    }, {
                         'covered': 1,
                         'total': 1,
                         'name': 'line'
@@ -636,14 +544,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             ],
             'files': [],
             'summaries': [{
-                'covered': 5,
-                'total': 7,
-                'name': 'region'
-            }, {
-                'covered': 2,
-                'total': 2,
-                'name': 'function'
-            }, {
                 'covered': 5,
                 'total': 8,
                 'name': 'line'
@@ -654,33 +554,15 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         {
             'dirs': [],
             'files': [{
-                'name':
-                    'file1.cc',
-                'path':
-                    '//dir1/file1.cc',
+                'name': 'file1.cc',
+                'path': '//dir1/file1.cc',
                 'summaries': [{
-                    'covered': 4,
-                    'total': 6,
-                    'name': 'region'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'function'
-                }, {
                     'covered': 4,
                     'total': 7,
                     'name': 'line'
                 }]
             }],
             'summaries': [{
-                'covered': 4,
-                'total': 6,
-                'name': 'region'
-            }, {
-                'covered': 1,
-                'total': 1,
-                'name': 'function'
-            }, {
                 'covered': 4,
                 'total': 7,
                 'name': 'line'
@@ -691,33 +573,15 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         {
             'dirs': [],
             'files': [{
-                'name':
-                    'file2.cc',
-                'path':
-                    '//dir2/file2.cc',
+                'name': 'file2.cc',
+                'path': '//dir2/file2.cc',
                 'summaries': [{
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'region'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'function'
-                }, {
                     'covered': 1,
                     'total': 1,
                     'name': 'line'
                 }]
             }],
             'summaries': [{
-                'covered': 1,
-                'total': 1,
-                'name': 'region'
-            }, {
-                'covered': 1,
-                'total': 1,
-                'name': 'function'
-            }, {
                 'covered': 1,
                 'total': 1,
                 'name': 'line'

@@ -401,13 +401,12 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
       return json.load(f)
 
 
-def _merge_summary(a, b):
+def _merge_summary(merge_dest, merge_src):
   """Merges to 'summaries' fields in metadata format.
 
-  This adds the 'total' and 'covered' field of each feature in the second
-  parameter to the corresponding field in the first parameter.
-
-  Returns a reference the updated first parameter.
+  Two sumaries are required to have the exact same metrics, and this method
+  adds the 'total' and 'covered' field of each metric in the second parameter
+  to the corresponding field in the first parameter.
 
   Each parameter is expected to be in the following format:
   [{'name': 'line', 'total': 10, 'covered': 9},
@@ -415,94 +414,84 @@ def _merge_summary(a, b):
    {'name': 'function', 'total': 10, 'covered': 9}]
   """
 
-  def make_dict(summary_list):
-    return {item['name']: item for item in summary_list}
+  def get_metrics(summaries):
+    return {s['name'] for s in summaries}
 
-  a_dict = make_dict(a)
-  b_dict = make_dict(b)
-  for feature in a_dict:
+  assert get_metrics(merge_dest) == get_metrics(merge_src), (
+      '%s and %s are expected to have the same metrics' % (merge_dest,
+                                                           merge_src))
+
+  merge_src_dict = {i['name']: i for i in merge_src}
+  for merge_dest_item in merge_dest:
     for field in ('total', 'covered'):
-      a_dict[feature][field] += b_dict[feature][field]
-  return a
+      merge_dest_item[field] += merge_src_dict[merge_dest_item['name']][field]
 
 
-def _convert_file_summary(file_summary):
-  """Convert llvm-cov summay to metadata format"""
-  # llvm-cov uses 'lines', 'regions', 'functions', whereas metadata uses
-  # 'line', 'region', 'function'.
+def _new_summaries(reference_summaries):
+  """Returns new summaries with the same metrics as the reference one."""
   return [{
-      'name': k[:-1],
-      'covered': v['covered'],
-      'total': v['count']
-  } for k, v in file_summary.iteritems()]
-
-
-def _merge_into_dir(directory, file_summary):
-  _merge_summary(directory['summaries'], _convert_file_summary(file_summary))
-  return directory
-
-
-def _new_summaries():
-  return [{
-      'name': 'region',
+      'name': summary['name'],
       'covered': 0,
       'total': 0
-  }, {
-      'name': 'function',
-      'covered': 0,
-      'total': 0
-  }, {
-      'name': 'line',
-      'covered': 0,
-      'total': 0
-  }]
+  } for summary in reference_summaries]
 
 
-def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
-  """Summarize for each directory, the summary information of its files.
+def _add_file_summaries_to_directories(directory_summaries, file_path,
+                                       metadata_summaries):
+  """Aggregates summaries for directories.
 
-  By incrementing the summary for each of its ancestors by the values in the
-  coverage summary of the file.
+  The aggregation is done by incrementing the summary for each of its ancestor
+  directories by the values in the coverage summary of the file.
 
-  This is expected to be called with the data for each instrumented file.
+  Coverage metadata format:
+  https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+
+  Args:
+    directory_summaires (dict): A dict whose keys are source absolute paths to
+                                directories and corresponding values are other
+                                dicts representing group coverage data that
+                                conforms to the coverage metadata format.
+    file_path (str): Source absolute path to the file.
+    metadata_summaries (dict): A list that conforms to the summaries in coverage
+                               metadata format.
   """
+  assert file_path.startswith('//'), file_path
 
-  def new_dir(path):
+  def new_dir_metadata(path, reference_summaries):
     return {
         'dirs': [],
         'files': [],
         'path': path,
-        'summaries': _new_summaries(),
+        'summaries': _new_summaries(reference_summaries),
     }
 
-  full_filename = file_data['filename']
-  src_file = '//' + os.path.relpath(full_filename, src_path)
-  filename = os.path.basename(src_file)
-  summary = file_data['summary']
+  def merge_summary_to_dir(directory_summaries, dir_path, metadata_summaries):
+    """Merges summaries to a directory."""
+    if dir_path not in directory_summaries:
+      directory_summaries[dir_path] = new_dir_metadata(dir_path,
+                                                       metadata_summaries)
 
-  parent = os.path.dirname(src_file)
+    _merge_summary(directory_summaries[dir_path]['summaries'],
+                   metadata_summaries)
+
+  filename = os.path.basename(file_path)
+  parent = os.path.dirname(file_path)
   while parent != '//':
-    if parent + '/' not in directory_summaries:
-      directory_summaries[parent + '/'] = new_dir(parent + '/')
-
-    directory_summaries[parent + '/'] = _merge_into_dir(
-        directory_summaries[parent + '/'], summary)
+    # In the coverage data format, dirs end with '/'.
+    merge_summary_to_dir(directory_summaries, parent + '/', metadata_summaries)
     parent = os.path.dirname(parent)
 
-  if '//' not in directory_summaries:
-    directory_summaries['//'] = new_dir('//')
-  directory_summaries['//'] = _merge_into_dir(directory_summaries['//'],
-                                              summary)
+  merge_summary_to_dir(directory_summaries, '//', metadata_summaries)
 
   # Directories need a trailing slash as per the metadata format.
-  directory = os.path.dirname(src_file)
+  directory = os.path.dirname(file_path)
   if directory != '//':
     directory += '/'
 
   directory_summaries[directory]['files'].append({
       'name': filename,
-      'path': src_file,
-      'summaries': _convert_file_summary(summary),
+      'path': file_path,
+      'summaries': metadata_summaries,
   })
 
 
@@ -567,13 +556,12 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
         component_summaries[component] = {
             'path': component,
             'dirs': [],
-            'summaries': _new_summaries(),
+            'summaries': _new_summaries(inner_dir_summary['summaries']),
         }
       component_summaries[component]['dirs'].append(inner_dir_summary)
       # Accumulate counts for each component.
-      component_summaries[component]['summaries'] = _merge_summary(
-          component_summaries[component]['summaries'],
-          inner_dir_summary['summaries'])
+      _merge_summary(component_summaries[component]['summaries'],
+                     inner_dir_summary['summaries'])
   return component_summaries
 
 
@@ -679,7 +667,11 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       compressed_files.append(record)
 
       if component_mapping:
-        _add_file_to_directory_summary(directory_summaries, src_path, file_data)
+        metadata_summaries = _convert_clang_summary_to_metadata(
+            file_data['summary'])
+
+        _add_file_summaries_to_directories(directory_summaries, record['path'],
+                                           metadata_summaries)
 
   component_summaries = {}
   if component_mapping:
@@ -704,6 +696,27 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       minutes)
 
   return compressed_data
+
+
+def _convert_clang_summary_to_metadata(clang_summary):
+  """Converts Clang summary format to metadata format.
+
+  Args:
+    clang_summary (dict): A dict whose keys are ('lines', 'regions',
+                          'functions'), and corresponding values are other
+                          dicts with format: {'covered': int, 'count': int}.
+
+  Returns:
+    A list that conforms to the summaries in coverage metadata format:
+    https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
+  """
+  # Clang uses 'lines', 'regions', 'functions', whereas it's preferrable to use
+  # singular forms in metadata format.
+  return [{
+      'name': k[:-1],
+      'covered': v['covered'],
+      'total': v['count']
+  } for k, v in sorted(clang_summary.iteritems())]
 
 
 def _create_index_html(output_dir):
