@@ -208,7 +208,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           ['chromedriver_py_tests', 'chrome'],
           ['chromedriver_replay_unittests', 'chrome'],
           ['chrome_all_tast_tests', 'chrome'],
-          ['cros_vm_sanity_test', 'chrome'],
+          ['cros_browser_sanity_test', 'chrome'],
           ['xr_browser_tests', 'xr_browser_tests_binary'],
           ['content_shell_crash_test', 'content_shell'],
           ['.*webkit_layout_tests', 'content_shell'],
