@@ -70,6 +70,9 @@ class IndexPack(object):
     self.verbose = verbose
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
+    # Maps back from SHA256 hash to source file name. Used to debug cases where
+    # duplicate files are added to the zip.
+    self.filenames_by_hash = {}
 
     # Create the kzip. We write data directly into the zip file rather than
     # creating a temporary directory with the structure we want and then zipping
@@ -170,6 +173,17 @@ class IndexPack(object):
     """Closes the underlying zipfile.ZipFile, flushing it to disk."""
     self.kzip.close()
 
+  def _SetFileHashEntry(self, fname, content_hash):
+    """Stores the filename and hash in the relevant dicts.
+
+    Returns:
+      True if the filehash hasn't been seen before, otherwise False."""
+    self.filehashes[fname] = content_hash
+    if content_hash in self.filenames_by_hash:
+      return False
+    self.filenames_by_hash[content_hash] = fname
+    return True
+
   def _AddDataFile(self, fname):
     """Adds a data file to the archive.
 
@@ -186,7 +200,12 @@ class IndexPack(object):
       with open(fname, 'rU') as source_file:
         content = source_file.read()
       content_hash = hashlib.sha256(content).hexdigest()
-      self.filehashes[fname] = content_hash
+      # Check if we've already seen this hash before.
+      if not self._SetFileHashEntry(fname, content_hash):
+        print('WARNING: not including source file:  %s' % fname)
+        print('   because it has the same hash as:  %s' %
+              self.filenames_by_hash[content_hash])
+        return
       hash_fname = os.path.join(self.files_directory, content_hash)
       if self.verbose:
         print(' Including source file %s as %s for compilation' % (fname,
