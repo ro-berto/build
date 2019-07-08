@@ -718,8 +718,8 @@ class DartApi(recipe_api.RecipeApi):
     arch = self._get_option(
       builder_fragments,
       ['ia32', 'x64', 'arm', 'armv6', 'armv5te', 'arm64', 'simarm', 'simarmv6',
-      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64', 'armsimdbc', 'armsimdbc64'
-      ],
+      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64', 'armsimdbc',
+      'armsimdbc64', 'simarm_x64'],
       'x64')
     runtime = self._get_option(
       builder_fragments,

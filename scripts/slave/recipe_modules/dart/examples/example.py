@@ -81,7 +81,7 @@ TEST_MATRIX = {
   "builder_configurations": [
     {
       "builders": [
-        "vm-kernel-win-release-x64",
+        "vm-kernel-win-release-simarm_x64",
       ],
       "meta": {},
       "steps": [{
@@ -363,7 +363,7 @@ def GenTests(api):
           new_workflow_enabled=True) +
       api.buildbucket.ci_build(revision = '3456abce78ef',
           build_number=1357,
-          builder='vm-kernel-win-release-x64',
+          builder='vm-kernel-win-release-simarm_x64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       api.step_data('upload testing fileset test',

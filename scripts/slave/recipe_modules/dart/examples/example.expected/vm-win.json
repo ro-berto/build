@@ -138,7 +138,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\vm_kernel_win_release_x64"
+      "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -165,7 +165,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -254,7 +254,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -293,7 +293,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -321,7 +321,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -368,9 +368,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"dart\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-simarm_x64\", \"project\": \"dart\"}",
       "--buildbot-buildername",
-      "vm-kernel-win-release-x64",
+      "vm-kernel-win-release-simarm_x64",
       "--buildbot-slavename",
       "win-dart-123"
     ],
@@ -455,7 +455,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-win-release-x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-win-release-simarm_x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
@@ -800,13 +800,13 @@
       "python",
       "-u",
       "[CACHE]\\builder\\sdk\\tools\\gn.py",
-      "-ax64",
+      "-asimarm_x64",
       "-mrelease",
       "--bytecode"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -827,7 +827,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -853,11 +853,11 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\vm_kernel_win_release_x64"
+      "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -882,10 +882,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -926,7 +926,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -955,7 +955,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -982,10 +982,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1024,10 +1024,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1055,10 +1055,10 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_simarm_x64",
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1106,15 +1106,15 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"dart\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-simarm_x64\", \"project\": \"dart\"}",
       "--buildbot-buildername",
-      "vm-kernel-win-release-x64",
+      "vm-kernel-win-release-simarm_x64",
       "--buildbot-slavename",
       "win-dart-123"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -1150,7 +1150,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -1227,7 +1227,7 @@
       "--priority",
       "25",
       "--task-name",
-      "test1_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357",
+      "test1_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1251,7 +1251,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-win-release-x64",
+      "buildername:vm-kernel-win-release-simarm_x64",
       "--tag",
       "buildnumber:1357",
       "--tag",
@@ -1261,7 +1261,7 @@
       "--tag",
       "slavename:win-dart-123",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-win-release-x64",
+      "spec_name:dart.ci:vm-kernel-win-release-simarm_x64",
       "--tag",
       "stepname:test1_shard_1 on Windows",
       "--cipd-package",
@@ -1302,7 +1302,7 @@
       "--write-logs",
       "--clean-exit",
       "foo",
-      "-ndartk-win-release-x64",
+      "-ndartk-win-release-simarm_x64",
       "language_2",
       "co19_2",
       "--exclude_suite=co19",
@@ -1313,7 +1313,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1327,9 +1327,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1357,7 +1357,7 @@
       "--priority",
       "25",
       "--task-name",
-      "test1_shard_2/Windows/test_hash/vm-kernel-win-release-x64/1357",
+      "test1_shard_2/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1381,7 +1381,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-win-release-x64",
+      "buildername:vm-kernel-win-release-simarm_x64",
       "--tag",
       "buildnumber:1357",
       "--tag",
@@ -1391,7 +1391,7 @@
       "--tag",
       "slavename:win-dart-123",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-win-release-x64",
+      "spec_name:dart.ci:vm-kernel-win-release-simarm_x64",
       "--tag",
       "stepname:test1_shard_2 on Windows",
       "--cipd-package",
@@ -1432,7 +1432,7 @@
       "--write-logs",
       "--clean-exit",
       "foo",
-      "-ndartk-win-release-x64",
+      "-ndartk-win-release-simarm_x64",
       "language_2",
       "co19_2",
       "--exclude_suite=co19",
@@ -1443,7 +1443,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1457,9 +1457,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_2/Windows/test_hash/vm-kernel-win-release-x64/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test1_shard_2/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_2/Windows/test_hash/vm-kernel-win-release-x64/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test1_shard_2/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1483,14 +1483,14 @@
       "--clean-exit",
       "foo",
       "--bar",
-      "-ndartk-win-release-x64",
+      "-ndartk-win-release-simarm_x64",
       "--copy-coredumps",
       "--output-directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1506,12 +1506,12 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-simarm_x64\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-simarm_x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-simarm_x64\\\", \\\"parent_fileset\\\": \\\"trigger_hash\\\", \\\"parent_fileset_name\\\": \\\"trigger\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-simarm_x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1571,7 +1571,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1602,7 +1602,7 @@
       "--priority",
       "25",
       "--task-name",
-      "test3_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357",
+      "test3_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1626,7 +1626,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-win-release-x64",
+      "buildername:vm-kernel-win-release-simarm_x64",
       "--tag",
       "buildnumber:1357",
       "--tag",
@@ -1636,7 +1636,7 @@
       "--tag",
       "slavename:win-dart-123",
       "--tag",
-      "spec_name:dart.ci:vm-kernel-win-release-x64",
+      "spec_name:dart.ci:vm-kernel-win-release-simarm_x64",
       "--tag",
       "stepname:test3_shard_1 on Windows",
       "--cipd-package",
@@ -1674,7 +1674,7 @@
       "--write-results",
       "--write-logs",
       "--clean-exit",
-      "-ndartk-win-release-x64",
+      "-ndartk-win-release-simarm_x64",
       "foo",
       "--bar",
       "--copy-coredumps",
@@ -1684,7 +1684,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1698,9 +1698,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test3_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"test3_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test3_shard_1/Windows/test_hash/vm-kernel-win-release-x64/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test3_shard_1/Windows/test_hash/vm-kernel-win-release-simarm_x64/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1722,7 +1722,7 @@
       "--write-results",
       "--write-logs",
       "--clean-exit",
-      "-ndartk-win-release-x64",
+      "-ndartk-win-release-simarm_x64",
       "foo",
       "--bar",
       "--copy-coredumps",
@@ -1733,7 +1733,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -2022,7 +2022,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/latest",
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/latest",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
@@ -2118,7 +2118,7 @@
       "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-win-release-x64/approved_results.json",
+      "gs://dart-test-results-approved-results/builders/vm-kernel-win-release-simarm_x64/approved_results.json",
       "LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
@@ -2134,7 +2134,7 @@
       "tools/bots/apply_preapprovals.dart",
       "LATEST/approved_results.json",
       "--upload",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-win-release-x64/approved_results.json"
+      "gs://dart-test-results-approved-results/builders/vm-kernel-win-release-simarm_x64/approved_results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
@@ -2238,7 +2238,7 @@
       "[CACHE]\\builder\\sdk\\LATEST\\results.json",
       "",
       "[CACHE]\\builder\\sdk\\LATEST\\flaky.json",
-      "vm-kernel-win-release-x64",
+      "vm-kernel-win-release-simarm_x64",
       "1357",
       "1234567",
       "3456abce78ef",
@@ -2437,14 +2437,14 @@
       "----",
       "cp",
       "3456abce78ef",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/revision"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/revision"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/revision@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/revision@@@"
     ]
   },
   {
@@ -2457,14 +2457,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/logs.json"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/logs.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload logs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/logs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/logs.json@@@"
     ]
   },
   {
@@ -2477,14 +2477,14 @@
       "----",
       "cp",
       "{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t01\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t01\",\"time_ms\":451,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n{\"name\":\"co19_2/Language/Classes/Abstract_Instance_Members/inherited_t02\",\"configuration\":\"dartk-linux-product-x64\",\"suite\":\"co19_2\",\"test_name\":\"Language/Classes/Abstract_Instance_Members/inherited_t02\",\"time_ms\":496,\"result\":\"CompileTimeError\",\"expected\":\"CompileTimeError\",\"matches\":true,\"commit_time\":1551185312,\"commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"build_number\":\"2404\",\"builder_name\":\"vm-kernel-linux-product-x64\",\"bot_name\":\"trusty-dart-68765ebb-us-central1-b-2ls0\",\"flaky\":false,\"previous_flaky\":false,\"previous_result\":\"CompileTimeError\",\"previous_commit_hash\":\"f0042a32250a8a6193e6d07e2b6508b13f43c864\",\"previous_commit_time\":1551185312,\"previous_build_number\":2403,\"changed\":false}\n",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/results.json"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/results.json@@@"
     ]
   },
   {
@@ -2497,14 +2497,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/flaky.json"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/flaky.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload flaky.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/flaky.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/flaky.json@@@"
     ]
   },
   {
@@ -2517,14 +2517,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-win-release-x64.json"
+      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-win-release-simarm_x64.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
-    "name": "upload new results.gsutil upload flaky_current_vm-kernel-win-release-x64.json",
+    "name": "upload new results.gsutil upload flaky_current_vm-kernel-win-release-simarm_x64.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-win-release-x64.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_vm-kernel-win-release-simarm_x64.json@@@"
     ]
   },
   {
@@ -2537,14 +2537,14 @@
       "----",
       "cp",
       "LATEST/approved_results.json",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/approved_results.json"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/approved_results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload approved_results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/approved_results.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/approved_results.json@@@"
     ]
   },
   {
@@ -2557,14 +2557,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/runs.json"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/runs.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil upload runs.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/1357/runs.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/1357/runs.json@@@"
     ]
   },
   {
@@ -2577,14 +2577,14 @@
       "----",
       "cp",
       "1357",
-      "gs://dart-test-results/builders/vm-kernel-win-release-x64/latest"
+      "gs://dart-test-results/builders/vm-kernel-win-release-simarm_x64/latest"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "infra_step": true,
     "name": "upload new results.gsutil update \"latest\" reference",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-x64/latest@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-win-release-simarm_x64/latest@@@"
     ]
   },
   {
@@ -2639,7 +2639,7 @@
       "tools/approve_results.dart",
       "--automated-approver",
       "-b",
-      "vm-kernel-win-release-x64",
+      "vm-kernel-win-release-simarm_x64",
       "--successes-only",
       "-y"
     ],

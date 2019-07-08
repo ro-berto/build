@@ -500,7 +500,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-win-release-x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"vm-kernel-win-release-simarm_x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
