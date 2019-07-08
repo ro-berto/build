@@ -1,18 +1,17 @@
 # This file has 'set noparent' because src/ side code has a dependency on the
-# APIs provided. Changes here may cause subtle breakage unless coordinated.
-# See https://goto.google.com/vpegg for context.
+# APIs provided. Changes here may cause subtle breakages. Root level owners of
+# this directory are familiar with this code and its interactions with
+# chromium/src. Talk to one of the owners for more context.
 
 set noparent
 dpranke@chromium.org
-eyaich@chromium.org
+erikchen@chromium.org
+gbeaty@chromium.org
 jbudorick@chromium.org
 martiniss@chromium.org
-sergeyberezin@chromium.org
-sergiyb@chromium.org
 tikuta@chromium.org
 
 per-file chromium_android*=bpastene@chromium.org
-per-file chromium_android*=jbudorick@chromium.org
 per-file chromium_clang.py=hans@chromium.org
 per-file chromium_clang.py=thakis@chromium.org
 per-file chromium_dawn.py=kbr@chromium.org
@@ -21,28 +20,21 @@ per-file chromium_fyi.py=thakis@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
 per-file chromium_gpu*=ynovikov@chromium.org
 per-file chromium_perf*=crouleau@chromium.org
-per-file chromium_webrtc*.py=ehmaldonado@chromium.org
 per-file chromium_webrtc*.py=phoglund@chromium.org
+per-file chromium_webrtc*.py=oprypin@chromium.org
 per-file client_openscreen*.py=file://scripts/slave/recipes/openscreen.expected/OWNERS
 per-file client_v8_*=machenbach@chromium.org
-per-file tryserver_chromium_perf.py=dtu@chromium.org
-per-file tryserver_chromium_perf.py=prasadv@chromium.org
-per-file tryserver_chromium_perf.py=robertocn@chromium.org
 per-file tryserver_chromium_perf.py=simonhatch@chromium.org
 per-file tryserver_webrtc.py=phoglund@chromium.org
 
 # Waterfall owners should be able to update trybots.py.
-per-file trybots.py=dtu@chromium.org
-per-file trybots.py=eakuefner@chromium.org
-per-file trybots.py=jbudorick@chromium.org
 per-file trybots.py=kbr@chromium.org
-per-file trybots.py=ynovikov@chromium.org
-per-file trybots.py=ehmaldonado@chromium.org
+per-file trybots.py=hans@chromium.org
+per-file trybots.py=oprypin@chromium.org
 per-file trybots.py=phoglund@chromium.org
-per-file trybots.py=prasadv@chromium.org
-per-file trybots.py=robertocn@chromium.org
 per-file trybots.py=simonhatch@chromium.org
 per-file trybots.py=thakis@chromium.org
+per-file trybots.py=ynovikov@chromium.org
 
 # For goma canary bots config.
 per-file chromium_fyi.py=file://scripts/slave/goma/GOMA_OWNERS
