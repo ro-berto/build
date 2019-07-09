@@ -6,6 +6,7 @@ from recipe_engine import post_process
 
 DEPS = [
     'chromium',
+    'recipe_engine/assertions',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
 ]
@@ -16,18 +17,11 @@ def RunSteps(api):
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'),
       TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
 
-  gn_args = api.chromium.mb_lookup('test_mastername', 'test_buildername')
+  gn_args = api.chromium.mb_lookup(
+      'test_mastername', 'test_buildername',
+      recursive=api.properties.get('recursive', False))
   expected_gn_args = api.properties.get('expected_gn_args')
-  assert gn_args == expected_gn_args, (
-      'expected:\n%s\n\nactual:\n%s' % (expected_gn_args, gn_args))
-
-_MB_LOOKUP_OUTPUT_TEMPLATE = '''
-
-Writing """\\
-%s""" to _path_/args.gn
-
-/fake-path/chromium/src/buildtools/linux64/gn gen _path_
-'''
+  api.assertions.assertEqual(gn_args, expected_gn_args)
 
 def GenTests(api):
   gn_args = '\n'.join((
@@ -46,9 +40,9 @@ def GenTests(api):
   yield (
       api.test('basic')
       + api.properties(expected_gn_args=gn_args)
-      + api.step_data(
-          'lookup GN args',
-          stdout=api.raw_io.output_text(_MB_LOOKUP_OUTPUT_TEMPLATE % gn_args))
+      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
+      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                         ['--quiet'])
       + api.post_process(post_process.StepTextContains, 'lookup GN args',
                          expected_step_text)
       + api.post_process(post_process.DropExpectation)
@@ -59,25 +53,21 @@ def GenTests(api):
       + api.properties(target_platform='chromeos',
                        target_cros_board='x86-generic')
       + api.properties(expected_gn_args=gn_args)
-      + api.step_data(
-          'lookup GN args',
-          stdout=api.raw_io.output_text(_MB_LOOKUP_OUTPUT_TEMPLATE % gn_args))
+      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
+      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                         ['--quiet'])
       + api.post_process(post_process.StepTextContains, 'lookup GN args',
                          expected_step_text)
       + api.post_process(post_process.DropExpectation)
   )
 
-  output = '\n'.join(('output', 'not', 'in', '"mb lookup"', 'format'))
   yield (
-      api.test('bad mb output')
-      + api.step_data('lookup GN args',
-                      stdout=api.raw_io.output_text(output))
+      api.test('recursive')
+      + api.properties(expected_gn_args=gn_args, recursive=True)
+      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
+      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                         ['--recursive'])
       + api.post_process(post_process.StepTextContains, 'lookup GN args',
-                         ['Failed to extract GN args'])
-      + api.post_process(post_process.LogContains, 'lookup GN args',
-                         'mb lookup output', [output])
-      + api.post_process(post_process.StatusAnyFailure)
-      + api.post_process(post_process.ResultReasonRE,
-                         'Failed to extract GN args')
+                         expected_step_text)
       + api.post_process(post_process.DropExpectation)
   )

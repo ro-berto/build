@@ -315,7 +315,8 @@
       "--config-file",
       "[BUILDER_CACHE]/Linux_Swarm/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]/client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Swarm/src",
     "env": {

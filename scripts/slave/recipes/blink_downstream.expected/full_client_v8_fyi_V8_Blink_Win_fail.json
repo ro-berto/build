@@ -247,7 +247,8 @@
       "--config-file",
       "[BUILDER_CACHE]\\V8_Blink_Win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client"
+      "[GOMA_CACHE]\\client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win\\src",
     "env": {
@@ -1901,7 +1902,8 @@
       "--config-file",
       "[BUILDER_CACHE]\\V8_Blink_Win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]\\client"
+      "[GOMA_CACHE]\\client",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win\\src",
     "env": {

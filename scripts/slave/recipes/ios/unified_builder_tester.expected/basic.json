@@ -377,7 +377,8 @@
       "-b",
       "ios",
       "--config-file",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl"
+      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
     "env": {

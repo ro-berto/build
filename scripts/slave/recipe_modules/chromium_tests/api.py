@@ -382,7 +382,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
       mb_mastername=None, mb_buildername=None,
-      mb_phase=None, mb_config_path=None,
+      mb_phase=None, mb_config_path=None, mb_recursive_lookup=False,
       override_bot_type=None):
     """Runs compile and related steps for given builder.
 
@@ -431,6 +431,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 mb_buildername=mb_buildername,
                                 mb_phase=mb_phase,
                                 mb_config_path=mb_config_path,
+                                mb_recursive_lookup=mb_recursive_lookup,
                                 android_version_code=android_version_code,
                                 android_version_name=android_version_name)
       except self.m.step.StepFailure:
@@ -629,8 +630,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None, mb_phase=None,
-                         mb_config_path=None, android_version_code=None,
-                         android_version_name=None):
+                         mb_config_path=None, mb_recursive_lookup=False,
+                         android_version_code=None, android_version_name=None):
     use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
@@ -642,6 +643,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              use_goma=use_goma,
                              isolated_targets=isolated_targets,
                              name='generate_build_files%s' % name_suffix,
+                             recursive_lookup=mb_recursive_lookup,
                              android_version_code=android_version_code,
                              android_version_name=android_version_name)
       if use_goma:

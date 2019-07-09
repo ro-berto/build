@@ -1124,9 +1124,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           env=env):
         return self.m.python(**step_kwargs)
 
-  _LOOKUP_ARGS_RE = re.compile(r'Writing """\\?\s*(.*)""" to _path_/args.gn',
-                               re.DOTALL)
-
   @_with_chromium_layout
   def mb_analyze(self, mastername, buildername, analyze_input,
                  name=None, mb_path=None, mb_config_path=None,
@@ -1172,7 +1169,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
-                mb_path=None, mb_config_path=None,
+                mb_path=None, mb_config_path=None, recursive=False,
                 chromium_config=None, phase=None, use_goma=True,
                 android_version_code=None, android_version_name=None,
                 gn_args_location=None, gn_args_max_text_lines=None):
@@ -1192,6 +1189,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.
+      recursive: Whether the lookup should recursively expand imported args
+        files.
       chromium_config: The chromium config object to use. If not provided,
         self.c will be used.
       gn_args_location: Controls where the GN args for the build should be
@@ -1206,6 +1205,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       The content of the args.gn file.
     """
     name = name or 'lookup GN args'
+    additional_args = ['--recursive' if recursive else '--quiet']
     result = self.run_mb_cmd(
         name, 'lookup', mastername, buildername,
         mb_path=mb_path,
@@ -1215,29 +1215,16 @@ class ChromiumApi(recipe_api.RecipeApi):
         use_goma=use_goma,
         android_version_code=android_version_code,
         android_version_name=android_version_name,
+        additional_args=additional_args,
         ok_ret='any',
         stdout=self.m.raw_io.output_text(),
         step_test_data=lambda: self.m.raw_io.test_api.stream_output(
-            '\n'
-            'Writing """\\\n'
             'goma_dir = "/b/build/slave/cache/goma_client"\n'
             'target_cpu = "x86"\n'
             'use_goma = true\n'
-            '""" to _path_/args.gn.\n'
-            '\n'
-            '/fake-path/chromium/src/buildtools/linux64/gn gen _path_'
         ))
 
-    match = self._LOOKUP_ARGS_RE.search(result.stdout)
-
-    if not match:
-      result.presentation.step_text = (
-          'Failed to extract GN args from output of "mb lookup"')
-      result.presentation.logs['mb lookup output'] = result.stdout.splitlines()
-      result.presentation.status = self.m.step.EXCEPTION
-      raise self.m.step.InfraFailure('Failed to extract GN args')
-
-    gn_args = match.group(1)
+    gn_args = result.stdout
     if gn_args is not None:
       reformatted_gn_args = self.m.gn.reformat_args(gn_args)
       self.m.gn.present_args(result, reformatted_gn_args,
@@ -1252,7 +1239,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              isolated_targets=None, build_dir=None, phase=None,
              android_version_code=None, android_version_name=None,
              gn_args_location=None, gn_args_max_text_lines=None,
-             **kwargs):
+             recursive_lookup=False, **kwargs):
     """Generate the build files in the source tree.
 
     Args:
@@ -1277,6 +1264,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         gn.TEXT or gn.LOGS, respectively.
       gn_args_max_text_lines: The maximum number of lines of GN args to display
         in the step_text when using the default behavior for displaying GN args.
+      recursive_lookup: Whether the lookup of the GN arguments should
+        recursively expand imported args files.
+
 
     Returns:
       The content of the args.gn file.
@@ -1288,6 +1278,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         mastername, buildername,
         mb_path=mb_path, mb_config_path=mb_config_path,
         phase=phase, use_goma=use_goma,
+        recursive=recursive_lookup,
         android_version_code=android_version_code,
         android_version_name=android_version_name,
         gn_args_location=gn_args_location,

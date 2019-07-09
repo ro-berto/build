@@ -88,7 +88,8 @@
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl"
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
+      "--quiet"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
