@@ -5538,7 +5538,7 @@
       "--destdir",
       "[CLEANUP]/tmp_tmp_25/sizes",
       "--addr2line-binary",
-      "[START_DIR]/src/third_party/android_ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line"
+      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -6618,7 +6618,7 @@
       "--destdir",
       "[CLEANUP]/tmp_tmp_32/sizes",
       "--addr2line-binary",
-      "[START_DIR]/src/third_party/android_ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-addr2line"
+      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-addr2line"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"

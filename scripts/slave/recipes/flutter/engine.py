@@ -214,7 +214,7 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
     library_path = checkout.join(lib_flutter_path)
     destionation_dir = temp_dir.join('sizes')
     addr2line = checkout.join(
-        'third_party/android_ndk/toolchains/' + android_triple +
+        'third_party/android_tools/ndk/toolchains/' + android_triple +
         '-4.9/prebuilt/linux-x86_64/bin/' + android_triple + '-addr2line')
     args = [
         '--library', library_path, '--destdir', destionation_dir,
