@@ -117,6 +117,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         ],
         'summary': {
             'lines': {
+                'covered': 4,
                 'count': 7,
             }
         },
@@ -128,6 +129,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             '//base/base.cc',
         'total_lines':
             7,
+        'summaries': [{
+            'covered': 4,
+            'name': 'line',
+            'total': 7,
+        }],
         'lines': [
             {
                 'first': 1,
@@ -173,6 +179,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         ],
         'summary': {
             'lines': {
+                'covered': 6,
                 'count': 6,
             }
         },
@@ -184,6 +191,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             '//base/base.cc',
         'total_lines':
             6,
+        'summaries': [{
+            'covered': 6,
+            'name': 'line',
+            'total': 6,
+        }],
         'lines': [
             {
                 'first': 102,
@@ -255,6 +267,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         ],
         'summary': {
             'lines': {
+                'covered': 2,
                 'count': 7,
             }
         },
@@ -277,6 +290,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             '//base/base.cc',
         'total_lines':
             7,
+        'summaries': [{
+            'covered': 2,
+            'name': 'line',
+            'total': 7,
+        }],
         'lines': [
             {
                 'first': 10,
@@ -382,20 +400,25 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'lines': [{
             'count': 1,
             'last': 11,
-            'first': 10
+            'first': 10,
         }, {
             'count': 0,
             'last': 16,
-            'first': 16
+            'first': 16,
         }],
         'total_lines':
             7,
+        'summaries': [{
+            'covered': 4,
+            'name': 'line',
+            'total': 7,
+        }],
         'uncovered_blocks': [{
             'ranges': [{
                 'last': 24,
-                'first': 18
+                'first': 18,
             }],
-            'line': 10
+            'line': 10,
         }]
     }]
     self.maxDiff = None
@@ -489,7 +512,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'summaries': [{
                     'covered': 4,
                     'total': 7,
-                    'name': 'line'
+                    'name': 'line',
                 }]
             },
             {
@@ -498,7 +521,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'summaries': [{
                     'covered': 1,
                     'total': 1,
-                    'name': 'line'
+                    'name': 'line',
                 }]
             },
         ],
@@ -507,7 +530,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'summaries': [{
             'covered': 5,
             'total': 8,
-            'name': 'line'
+            'name': 'line',
         }]
     }]
 
@@ -529,7 +552,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'summaries': [{
                         'covered': 4,
                         'total': 7,
-                        'name': 'line'
+                        'name': 'line',
                     }]
                 },
                 {
@@ -538,7 +561,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'summaries': [{
                         'covered': 1,
                         'total': 1,
-                        'name': 'line'
+                        'name': 'line',
                     }]
                 },
             ],
@@ -559,13 +582,13 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'summaries': [{
                     'covered': 4,
                     'total': 7,
-                    'name': 'line'
+                    'name': 'line',
                 }]
             }],
             'summaries': [{
                 'covered': 4,
                 'total': 7,
-                'name': 'line'
+                'name': 'line',
             }],
             'path':
                 '//dir1/'
@@ -578,13 +601,13 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'summaries': [{
                     'covered': 1,
                     'total': 1,
-                    'name': 'line'
+                    'name': 'line',
                 }]
             }],
             'summaries': [{
                 'covered': 1,
                 'total': 1,
-                'name': 'line'
+                'name': 'line',
             }],
             'path':
                 '//dir2/'
@@ -608,18 +631,23 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             }],
             'total_lines':
                 7,
+            'summaries': [{
+                'covered': 4,
+                'name': 'line',
+                'total': 7,
+            }],
             'uncovered_blocks': [{
                 'ranges': [{
                     'last': 24,
                     'first': 18,
                 }],
-                'line': 2
+                'line': 2,
             }, {
                 'ranges': [{
                     'last': -1,
                     'first': 4,
                 }],
-                'line': 4
+                'line': 4,
             }],
             'revision':
                 'hash1',
@@ -631,9 +659,14 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'lines': [{
                 'count': 1,
                 'last': 1,
-                'first': 1
+                'first': 1,
             }],
             'total_lines': 1,
+            'summaries': [{
+                'covered': 1,
+                'name': 'line',
+                'total': 1,
+            }],
             'revision': 'hash2',
             'timestamp': 5678,
         },

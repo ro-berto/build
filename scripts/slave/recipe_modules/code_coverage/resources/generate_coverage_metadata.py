@@ -258,9 +258,14 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   lines, uncovered_blocks = _to_compressed_format(line_data, block_data)
   data = {
-      'path': '//' + rel_file_path,
-      'total_lines': file_coverage_data['summary']['lines']['count'],
-      'lines': lines,
+      'path':
+          '//' + rel_file_path,
+      'total_lines':
+          file_coverage_data['summary']['lines']['count'],
+      'lines':
+          lines,
+      'summaries':
+          _convert_clang_summary_to_metadata(file_coverage_data['summary']),
   }
   if uncovered_blocks:
     data['uncovered_blocks'] = uncovered_blocks
