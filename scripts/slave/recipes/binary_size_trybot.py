@@ -81,9 +81,12 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
         api.tryserver.gerrit_change.change,
         api.tryserver.gerrit_change.patchset)
     author = revision_info['commit']['author']['email']
+    commit_message = revision_info['commit']['message']
+    is_revert = commit_message.startswith('Revert')
     # get_footer returns a list of footer values.
-    size_footers = api.tryserver.get_footer(
-        'Binary-Size', patch_text=revision_info['commit']['message'])
+    has_size_footer = bool(api.tryserver.get_footer('Binary-Size',
+                                                    patch_text=commit_message))
+    allow_regressions = is_revert or has_size_footer
 
     suffix = ' (with patch)'
     bot_config = {}
@@ -130,7 +133,7 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
         _CreateDiffs(api, apk_name, author, without_results_dir,
                      with_results_dir, results_path, staging_dir)
         _CheckForUndocumentedIncrease(api, results_path, staging_dir,
-                                      size_footers)
+                                      allow_regressions)
 
 
 def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
@@ -163,7 +166,8 @@ def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
   return results_dir
 
 
-def _CheckForUndocumentedIncrease(api, results_path, staging_dir, size_footers):
+def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
+                                  allow_regressions):
   step_result = api.json.read(
       _RESULT_JSON_STEP_NAME, results_path,
       step_test_data=lambda: api.json.test_api.output({
@@ -203,7 +207,7 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir, size_footers):
         url = url.replace('{{' + filename + '}}', archived_url)
       step_result.presentation.links[link['name']] = url
 
-  if result_json['status_code'] != 0 and not size_footers:
+  if not allow_regressions and result_json['status_code'] != 0:
     step_result.presentation.status = api.step.FAILURE
     raise api.step.StepFailure('Undocumented size increase detected')
 
@@ -244,7 +248,7 @@ def _ArchiveArtifact(api, staging_dir, filename):
 
 
 def GenTests(api):
-  def props(name, size_footer=False, **kwargs):
+  def props(name, commit_message='message', size_footer=False, **kwargs):
     kwargs.setdefault('path_config', 'kitchen')
     kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     revision_info = {
@@ -253,7 +257,7 @@ def GenTests(api):
             'author': {
                 'email': 'foo@bar.com',
             },
-            'message': 'message',
+            'message': commit_message,
         }
     }
     footer_json = {}
@@ -325,6 +329,20 @@ def GenTests(api):
   )
   yield (
       props('pass_because_of_size_footer', size_footer=True) +
+      override_analyze() +
+      api.override_step_data(
+         _RESULT_JSON_STEP_NAME,
+         api.json.output({
+             'status_code': 1,
+             'summary': '\n!summary!',
+             'archive_filenames': [],
+             'links': [],
+         })) +
+      api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME) +
+      api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      props('pass_because_of_revert', commit_message='Revert some change') +
       override_analyze() +
       api.override_step_data(
          _RESULT_JSON_STEP_NAME,
