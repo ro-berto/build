@@ -231,7 +231,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=ia32 use_goma=1",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
@@ -260,7 +260,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "lookup GN args",
     "~followup_annotations": [
@@ -287,7 +287,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "generate_build_files"
   },
@@ -336,7 +336,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -406,7 +406,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "compile"
   },
@@ -438,7 +438,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "compile confirm no-op"
   },
@@ -670,7 +670,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -692,7 +692,7 @@
       "--emulators"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices"
@@ -707,7 +707,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "android_webview_unittests",
     "~followup_annotations": [
@@ -724,7 +724,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "base_unittests"
   },
@@ -738,7 +738,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "cc_unittests"
   },
@@ -752,7 +752,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "components_unittests"
   },
@@ -766,7 +766,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "events_unittests"
   },
@@ -780,7 +780,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "gl_tests"
   },
@@ -794,7 +794,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "ipc_tests"
   },
@@ -808,7 +808,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "skia_unittests"
   },
@@ -822,7 +822,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "sql_unittests"
   },
@@ -836,7 +836,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "ui_android_unittests"
   },
@@ -850,7 +850,7 @@
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "ui_touch_selection_unittests"
   },
@@ -877,7 +877,7 @@
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
@@ -905,7 +905,7 @@
     ],
     "env": {
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"

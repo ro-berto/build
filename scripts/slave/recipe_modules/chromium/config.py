@@ -597,7 +597,7 @@ def android_asan(_):
 def android_common(c):
   c.env.PATH.extend([
       c.CHECKOUT_PATH.join(
-          'third_party', 'android_tools', 'sdk', 'platform-tools'),
+          'third_party', 'android_sdk', 'public', 'platform-tools'),
       c.CHECKOUT_PATH.join('build', 'android')])
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])

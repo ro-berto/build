@@ -15,7 +15,7 @@
       "-v"
     ],
     "env": {
-      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
+      "PATH": "None/third_party/android_sdk/public/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices",

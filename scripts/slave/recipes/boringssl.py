@@ -250,7 +250,7 @@ def RunSteps(api):
     # Set up paths.
     bot_utils = api.path['checkout'].join('util', 'bot')
     go_env = bot_utils.join('go', 'env.py')
-    adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
+    adb_path = bot_utils.join('android_sdk', 'public', 'platform-tools', 'adb')
     sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform),
                               'sde' + _GetHostExeSuffix(api.platform))
     build_dir = api.path['checkout'].join('build')

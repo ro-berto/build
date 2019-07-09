@@ -74,7 +74,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "target_arch=arm",
-      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
