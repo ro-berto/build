@@ -3412,7 +3412,7 @@ Examples:
 
 #### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [send\_counter\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, value, fields=None, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
+&mdash; **def [send\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, metric_type, value, fields=None, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
 
 Sends a value to the ts_mon monitoring service.
 
@@ -3440,6 +3440,9 @@ originally and what was used to generate alerts.
 Arguments:
   name: Name of the metric, which is automatically prefixed with
       /chrome/infra, i.e. /foo/bar will become /chrome/infra/foo/bar.
+  metric_type: Type of the metric: 'gauge', 'float', 'string', 'bool',
+      'counter' or 'cumulative'. See documentation linked above to
+      understand which type of metric you need.
   value: The value to be reported.
   fields: Dictionary with fields to be associated with the value.
   service_name: Name of the service being monitored.

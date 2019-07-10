@@ -4,7 +4,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/infra-python",
+      "[CACHE]/infra_python",
       "-ensure-file",
       "infra/infra_python/${platform} latest",
       "-json-output",
@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/infra-python/run.py",
+      "[CACHE]/infra_python/run.py",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
@@ -40,20 +40,21 @@
       "--counter-file",
       "{\"name\": \"/example/metric\", \"value\": 42}"
     ],
+    "infra_step": true,
     "name": "upload ts_mon metrics",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@counter_config@{@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/example/metric\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"value\": 42@@@",
-      "@@@STEP_LOG_LINE@counter_config@}@@@",
-      "@@@STEP_LOG_END@counter_config@@@"
+      "@@@STEP_LOG_LINE@metric_data@{@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"name\": \"/example/metric\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"value\": 42@@@",
+      "@@@STEP_LOG_LINE@metric_data@}@@@",
+      "@@@STEP_LOG_END@metric_data@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/infra-python/run.py",
+      "[CACHE]/infra_python/run.py",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
@@ -61,17 +62,18 @@
       "example_service",
       "--ts-mon-task-job-name",
       "example_job",
-      "--counter-file",
-      "{\"foo\": \"bar\", \"name\": \"/example/metric\", \"value\": 42}"
+      "--float-file",
+      "{\"foo\": \"bar\", \"name\": \"/example/metric\", \"value\": 42.0}"
     ],
+    "infra_step": true,
     "name": "custom upload step name",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@counter_config@{@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"foo\": \"bar\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/example/metric\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"value\": 42@@@",
-      "@@@STEP_LOG_LINE@counter_config@}@@@",
-      "@@@STEP_LOG_END@counter_config@@@"
+      "@@@STEP_LOG_LINE@metric_data@{@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"foo\": \"bar\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"name\": \"/example/metric\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"value\": 42.0@@@",
+      "@@@STEP_LOG_LINE@metric_data@}@@@",
+      "@@@STEP_LOG_END@metric_data@@@"
     ]
   },
   {

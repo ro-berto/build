@@ -8,10 +8,11 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.ts_mon.send_counter_value('/example/metric', 42)
-  api.ts_mon.send_counter_value(
+  api.ts_mon.send_value('/example/metric', 'counter', 42)
+  api.ts_mon.send_value(
       name='/example/metric',
-      value=42,
+      metric_type='float',
+      value=42.0,
       fields={'foo': 'bar'},
       service_name='example_service',
       job_name='example_job',

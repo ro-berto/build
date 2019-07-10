@@ -276,7 +276,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/infra-python",
+      "[CACHE]/infra_python",
       "-ensure-file",
       "infra/infra_python/${platform} latest",
       "-json-output",
@@ -301,7 +301,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/infra-python/run.py",
+      "[CACHE]/infra_python/run.py",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
@@ -312,15 +312,16 @@
       "--counter-file",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"inconsistent\", \"value\": 1}"
     ],
+    "infra_step": true,
     "name": "upload_stats",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@counter_config@{@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"name\": \"/v8/autoroller/count\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"project\": \"v8-roll\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"result\": \"inconsistent\",@@@",
-      "@@@STEP_LOG_LINE@counter_config@  \"value\": 1@@@",
-      "@@@STEP_LOG_LINE@counter_config@}@@@",
-      "@@@STEP_LOG_END@counter_config@@@"
+      "@@@STEP_LOG_LINE@metric_data@{@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"name\": \"/v8/autoroller/count\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"project\": \"v8-roll\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"result\": \"inconsistent\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@  \"value\": 1@@@",
+      "@@@STEP_LOG_LINE@metric_data@}@@@",
+      "@@@STEP_LOG_END@metric_data@@@"
     ]
   },
   {

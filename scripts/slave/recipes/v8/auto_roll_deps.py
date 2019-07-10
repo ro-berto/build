@@ -170,8 +170,9 @@ def RunSteps(api):
         monitoring_state = result.json.output['monitoring_state']
   finally:
     if not api.runtime.is_experimental:
-      api.ts_mon.send_counter_value(
+      api.ts_mon.send_value(
           name='/v8/autoroller/count',
+          metric_type='counter',
           value=1,
           fields={'project': 'v8-roll', 'result': monitoring_state},
           service_name='auto-roll',
