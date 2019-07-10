@@ -17,6 +17,7 @@ import sys
 import time
 import zlib
 
+import aggregation_util
 import repository_util
 
 
@@ -406,170 +407,6 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
       return json.load(f)
 
 
-def _merge_summary(merge_dest, merge_src):
-  """Merges to 'summaries' fields in metadata format.
-
-  Two sumaries are required to have the exact same metrics, and this method
-  adds the 'total' and 'covered' field of each metric in the second parameter
-  to the corresponding field in the first parameter.
-
-  Each parameter is expected to be in the following format:
-  [{'name': 'line', 'total': 10, 'covered': 9},
-   {'name': 'region', 'total': 10, 'covered': 9},
-   {'name': 'function', 'total': 10, 'covered': 9}]
-  """
-
-  def get_metrics(summaries):
-    return {s['name'] for s in summaries}
-
-  assert get_metrics(merge_dest) == get_metrics(merge_src), (
-      '%s and %s are expected to have the same metrics' % (merge_dest,
-                                                           merge_src))
-
-  merge_src_dict = {i['name']: i for i in merge_src}
-  for merge_dest_item in merge_dest:
-    for field in ('total', 'covered'):
-      merge_dest_item[field] += merge_src_dict[merge_dest_item['name']][field]
-
-
-def _new_summaries(reference_summaries):
-  """Returns new summaries with the same metrics as the reference one."""
-  return [{
-      'name': summary['name'],
-      'covered': 0,
-      'total': 0
-  } for summary in reference_summaries]
-
-
-def _add_file_summaries_to_directories(directory_summaries, file_path,
-                                       metadata_summaries):
-  """Aggregates summaries for directories.
-
-  The aggregation is done by incrementing the summary for each of its ancestor
-  directories by the values in the coverage summary of the file.
-
-  Coverage metadata format:
-  https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/findit/model/proto/code_coverage.proto
-
-  Args:
-    directory_summaires (dict): A dict whose keys are source absolute paths to
-                                directories and corresponding values are other
-                                dicts representing group coverage data that
-                                conforms to the coverage metadata format.
-    file_path (str): Source absolute path to the file.
-    metadata_summaries (dict): A list that conforms to the summaries in coverage
-                               metadata format.
-  """
-  assert file_path.startswith('//'), file_path
-
-  def new_dir_metadata(path, reference_summaries):
-    return {
-        'dirs': [],
-        'files': [],
-        'path': path,
-        'summaries': _new_summaries(reference_summaries),
-    }
-
-  def merge_summary_to_dir(directory_summaries, dir_path, metadata_summaries):
-    """Merges summaries to a directory."""
-    if dir_path not in directory_summaries:
-      directory_summaries[dir_path] = new_dir_metadata(dir_path,
-                                                       metadata_summaries)
-
-    _merge_summary(directory_summaries[dir_path]['summaries'],
-                   metadata_summaries)
-
-  filename = os.path.basename(file_path)
-  parent = os.path.dirname(file_path)
-  while parent != '//':
-    # In the coverage data format, dirs end with '/'.
-    merge_summary_to_dir(directory_summaries, parent + '/', metadata_summaries)
-    parent = os.path.dirname(parent)
-
-  merge_summary_to_dir(directory_summaries, '//', metadata_summaries)
-
-  # Directories need a trailing slash as per the metadata format.
-  directory = os.path.dirname(file_path)
-  if directory != '//':
-    directory += '/'
-
-  directory_summaries[directory]['files'].append({
-      'name': filename,
-      'path': file_path,
-      'summaries': metadata_summaries,
-  })
-
-
-def _aggregate_dirs_and_components(directory_summaries, component_mapping):
-  """Adds every directory's summary to:
-
-     - Its parent's "dirs" field,
-     - To its component, if one is defined for it and its immediate parent
-       doesn't already count it.
-  Args:
-    directory_summaries (dict): Maps directory paths to its summary in metadata
-        format.
-
-  Returns:
-    A dict mapping components to component coverage summaries.
-  """
-
-  def _ancestor_in_mapping_as_same_component(path, component, mapping):
-    """Returns true if any of the ancestors of path map to the same component.
-
-    Args:
-      path(str): A path to a dir, like //thid_party/blink/common
-      component(str): A component.
-      mapping(mapping): collection to check if ancestors (e.g.
-          //third_party/blink and //third_party) map to the same component.
-    """
-    while len(path) > 2:  # Stop at '//'
-      path = '/'.join(path.split('/')[:-1])
-      if path in mapping and mapping[path] == component:
-        return True
-    return False
-
-  component_summaries = {}  # Result.
-  dirs_to_component = {}
-  # sort lexicographically, parents should come before the children.
-  for directory in sorted(directory_summaries.keys()):
-    if not directory or directory == '//':
-      # Root dir has no parent.
-      continue
-    while directory.endswith('/'):
-      directory = directory[:-1]
-    parent, dirname = os.path.split(directory)
-
-    if parent != '//':
-      parent += '/'
-    # this summary is used in both the parent dir, and the component entry.
-    inner_dir_summary = {
-        'name': dirname + '/',
-        'path': directory + '/',
-        'summaries': directory_summaries[directory + '/']['summaries'],
-    }
-    directory_summaries[parent]['dirs'].append(inner_dir_summary)
-    component = None
-    if directory != '//':
-      component = component_mapping.get(directory[len('//'):])
-    # Do not add to summary if any ancestor is already considered. To avoid
-    # double-counting.
-    if component and not _ancestor_in_mapping_as_same_component(
-        directory, component, dirs_to_component):
-      dirs_to_component[directory] = component
-      if component not in component_summaries:
-        component_summaries[component] = {
-            'path': component,
-            'dirs': [],
-            'summaries': _new_summaries(inner_dir_summary['summaries']),
-        }
-      component_summaries[component]['dirs'].append(inner_dir_summary)
-      # Accumulate counts for each component.
-      _merge_summary(component_summaries[component]['summaries'],
-                     inner_dir_summary['summaries'])
-  return component_summaries
-
-
 def _split_metadata_in_shards_if_necessary(
     output_dir, compressed_files, directory_summaries, component_summaries):
   """Splits the metadata in a sharded manner if there are too many files.
@@ -664,28 +501,22 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   logging.info('Processing coverage data ...')
   start_time = time.time()
-  compressed_files = []
-  directory_summaries = {}
+  files_coverage_data = []
   for datum in data['data']:
     for file_data in datum['files']:
       record = _to_compressed_file_record(src_path, file_data, diff_mapping)
-      compressed_files.append(record)
+      files_coverage_data.append(record)
 
-      if component_mapping:
-        metadata_summaries = _convert_clang_summary_to_metadata(
-            file_data['summary'])
-
-        _add_file_summaries_to_directories(directory_summaries, record['path'],
-                                           metadata_summaries)
-
-  component_summaries = {}
+  per_directory_coverage_data = {}
+  per_component_coverage_data = {}
   if component_mapping:
-    component_summaries = _aggregate_dirs_and_components(
-        directory_summaries, component_mapping)
+    per_directory_coverage_data, per_component_coverage_data = (
+        aggregation_util.get_aggregated_coverage_data_from_files(
+            files_coverage_data, component_mapping))
 
   if not diff_mapping:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
-        compressed_files, src_path, 'DEPS')
+        files_coverage_data, src_path, 'DEPS')
 
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
@@ -694,7 +525,8 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   start_time = time.time()
 
   compressed_data = _split_metadata_in_shards_if_necessary(
-      output_dir, compressed_files, directory_summaries, component_summaries)
+      output_dir, files_coverage_data, per_directory_coverage_data,
+      per_component_coverage_data)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Dumping aggregated data (without all.json.gz) took %.0f minutes',
