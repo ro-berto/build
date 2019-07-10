@@ -632,7 +632,7 @@
       "-root",
       "[START_DIR]\\packages",
       "-ensure-file",
-      "infra/celab/celab/${platform} ewVkoqiGDczXj334qRCQ8uSvGl6dd6XQGAcdbmgwpbsC",
+      "infra/celab/celab/${platform} t5ee9dgnv7arG5o74SeesxNLMN-f5Z-RLd0IX9YQvrcC",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -641,7 +641,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-ewVkoqiGDczXj334\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-t5ee9dgnv7arG5o7\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/celab/celab/${platform}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",

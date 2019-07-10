@@ -89,7 +89,7 @@ def _RunStepsCelab(api):
 
 def _RunStepsChromium(api):
   # TODO(https://crbug.com/977332): Parse celab_version from the .vpython file.
-  version = 'ewVkoqiGDczXj334qRCQ8uSvGl6dd6XQGAcdbmgwpbsC'
+  version = 't5ee9dgnv7arG5o74SeesxNLMN-f5Z-RLd0IX9YQvrcC'
 
   tests = api.properties.get('tests')
   if not tests:
