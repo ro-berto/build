@@ -284,7 +284,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/send_ts_mon_values",
+      "[START_DIR]/send_ts_mon_values",
       "-ensure-file",
       "infra/send_ts_mon_values/all latest",
       "-json-output",
@@ -309,7 +309,7 @@
     "cmd": [
       "vpython",
       "-vpython-spec",
-      "[CACHE]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
+      "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
       "-u",
       "-m",
       "infra.tools.send_ts_mon_values",
@@ -322,7 +322,7 @@
       "--counter-file",
       "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"stale_roll\", \"value\": 1}"
     ],
-    "cwd": "[CACHE]/send_ts_mon_values",
+    "cwd": "[START_DIR]/send_ts_mon_values",
     "infra_step": true,
     "name": "upload_stats",
     "~followup_annotations": [

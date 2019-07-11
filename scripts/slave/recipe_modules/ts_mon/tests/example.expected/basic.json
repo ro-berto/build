@@ -4,7 +4,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/send_ts_mon_values",
+      "[START_DIR]/send_ts_mon_values",
       "-ensure-file",
       "infra/send_ts_mon_values/all latest",
       "-json-output",
@@ -29,7 +29,7 @@
     "cmd": [
       "vpython",
       "-vpython-spec",
-      "[CACHE]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
+      "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
       "-u",
       "-m",
       "infra.tools.send_ts_mon_values",
@@ -42,7 +42,7 @@
       "--counter-file",
       "{\"name\": \"/example/metric\", \"value\": 42}"
     ],
-    "cwd": "[CACHE]/send_ts_mon_values",
+    "cwd": "[START_DIR]/send_ts_mon_values",
     "infra_step": true,
     "name": "upload ts_mon metrics",
     "~followup_annotations": [
@@ -57,7 +57,7 @@
     "cmd": [
       "vpython",
       "-vpython-spec",
-      "[CACHE]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
+      "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
       "-u",
       "-m",
       "infra.tools.send_ts_mon_values",
@@ -70,7 +70,7 @@
       "--float-file",
       "{\"foo\": \"bar\", \"name\": \"/example/metric\", \"value\": 42.0}"
     ],
-    "cwd": "[CACHE]/send_ts_mon_values",
+    "cwd": "[START_DIR]/send_ts_mon_values",
     "infra_step": true,
     "name": "custom upload step name",
     "~followup_annotations": [
