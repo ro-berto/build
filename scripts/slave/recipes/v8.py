@@ -20,6 +20,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/scheduler',
   'recipe_engine/step',
   'recipe_engine/swarming',
   'recipe_engine/url',
@@ -518,17 +519,11 @@ def GenTests(api):
     api.v8.test(
         'client.v8',
         'V8 Foobar',
-        'bisect_override_changes',
+        'bisect_override_triggers',
         enable_swarming=False,
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.properties(
-        override_changes=[
-          {'revision': 'a1', 'when': 1},
-          {'revision': 'a2', 'when': 2},
-          {'revision': 'a3', 'when': 3},
-        ],
-    ) +
+    api.properties(override_triggers=['a1', 'a2', 'a3']) +
     api.v8.fail('Check') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
@@ -605,8 +600,7 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.v8.fail('Check') +
-    api.url.json(
-        'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
+    api.scheduler(triggers=[api.v8.example_scheduler_trigger()]) +
     api.override_step_data(
         'Bisect.Get change range',
         api.v8.example_bisection_range_one_change(),

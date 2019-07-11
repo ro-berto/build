@@ -14,6 +14,9 @@ from recipe_engine.post_process import DoesNotRun, Filter, MustRun
 from . import builders
 from . import testing
 
+from PB.go.chromium.org.luci.scheduler.api.scheduler.v1 import (
+    triggers as triggers_pb2)
+
 # Excerpt of the v8 version file.
 VERSION_FILE_TMPL = """
 #define V8_MAJOR_VERSION 3
@@ -326,25 +329,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'tags': [],
     }])
 
-  def example_buildbot_changes(self):
-    return {
-      'sourceStamp': {
-        'changes': [
-          {'revision': 'a1', 'when': 1},
-          {'revision': 'a2', 'when': 2},
-          {'revision': 'a3', 'when': 3},
-        ]
-      }
-    }
-
-  def example_one_buildbot_change(self):
-    return {
-      'sourceStamp': {
-        'changes': [
-          {'revision': 'a1'},
-        ]
-      }
-    }
+  def example_scheduler_trigger(self, key='a'):
+    return triggers_pb2.Trigger(id=key, gitiles=dict(
+      repo='https://chromium.googlesource.com/v8/v8',
+      ref='refs/heads/master',
+      revision=key*40,
+    ))
 
   def example_bisection_range(self):
     # Gitiles returns changes in the order child -> parent.
@@ -555,6 +545,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             buildername=buildername,
             **kwargs
         ) +
+        self.m.scheduler(triggers=[
+          self.example_scheduler_trigger('a'),
+          self.example_scheduler_trigger('b'),
+        ]) +
         self.m.platform('linux', 64) +
         self.m.runtime(is_luci=True, is_experimental=False)
     )

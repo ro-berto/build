@@ -391,32 +391,13 @@
   },
   {
     "cmd": [
-      "prpc",
-      "call",
-      "-format=json",
-      "luci-milo.appspot.com",
-      "milo.Buildbot.GetBuildbotBuildJSON"
-    ],
-    "infra_step": true,
-    "name": "Bisect.Fetch changes",
-    "stdin": "{\"buildNum\": 571, \"builder\": \"V8 Foobar\", \"master\": \"client.v8\"}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"data\": \"eyJzb3VyY2VTdGFtcCI6IHsiY2hhbmdlcyI6IFt7InJldmlzaW9uIjogImExIiwgIndoZW4iOiAxfSwgeyJyZXZpc2lvbiI6ICJhMiIsICJ3aGVuIjogMn0sIHsicmV2aXNpb24iOiAiYTMiLCAid2hlbiI6IDN9XX19\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
       "--json-file",
       "/path/to/tmp/json",
       "--url",
-      "https://chromium.googlesource.com/v8/v8/+log/a1~2..a3",
+      "https://chromium.googlesource.com/v8/v8/+log/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~2..aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--format",
       "json",
       "--log-limit",

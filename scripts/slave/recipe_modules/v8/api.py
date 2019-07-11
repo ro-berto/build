@@ -1450,40 +1450,18 @@ class V8Api(recipe_api.RecipeApi):
     ], step_name=step_name)
 
   def get_change_range(self):
-    if self.m.properties.get('override_changes'):
+    if self.m.properties.get('override_triggers'):
       # This can be used for manual testing or on a staging builder that
       # simulates a change range.
-      changes = self.m.properties['override_changes']
-      step_result = self.m.step('Override changes', cmd=None)
-      step_result.presentation.logs['changes'] = self.m.json.dumps(
-        changes, indent=2).splitlines()
+      triggers = self.m.properties['override_triggers']
+      step_result = self.m.step('Override triggers', cmd=None)
+      step_result.presentation.logs['triggers'] = self.m.json.dumps(
+        triggers, indent=2).splitlines()
+      oldest_change = triggers[0]
+      newest_change = triggers[-1]
     else:
-      # TODO(sergiyb): Migrate from Milo API to buildbucket v2.
-      data_json = self.m.step(
-          'Fetch changes',
-          [
-            'prpc', 'call', '-format=json', MILO_HOST,
-            'milo.Buildbot.GetBuildbotBuildJSON'
-          ],
-          stdin=self.m.json.input({
-            'master': self.m.properties['mastername'],
-            'builder': self.m.buildbucket.builder_name,
-            'buildNum': self.m.buildbucket.build.number,
-          }),
-          stdout=self.m.json.output(),
-          infra_step=True,
-          step_test_data=lambda: self.m.json.test_api.output_stream({
-            'data': base64.b64encode(
-              self.m.json.dumps(self.test_api.example_buildbot_changes())),
-          }),
-      ).stdout
-      change_json = self.m.json.loads(base64.b64decode(data_json['data']))
-      changes = change_json['sourceStamp']['changes']
-
-    assert changes
-    changes = sorted(changes, key=lambda c: c['when'])
-    oldest_change = changes[0]['revision']
-    newest_change = changes[-1]['revision']
+      oldest_change = self.m.scheduler.triggers[0].gitiles.revision
+      newest_change = self.m.scheduler.triggers[-1].gitiles.revision
 
     # Commits is a list of gitiles commit dicts in reverse chronological order.
     commits, _ = self.m.gitiles.log(
