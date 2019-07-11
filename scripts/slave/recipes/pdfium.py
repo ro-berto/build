@@ -844,7 +844,6 @@ def GenTests(api):
       api.properties(clang=True,
                      memory_tool='asan',
                      rel=True,
-                     target_cpu='x86',
                      mastername='client.pdfium',
                      bot_id='test_slave') +
       gen_ci_build(api, 'windows_asan')
@@ -856,7 +855,6 @@ def GenTests(api):
       api.properties(clang=True,
                      memory_tool='asan',
                      rel=True,
-                     target_cpu='x86',
                      xfa=True,
                      mastername='client.pdfium',
                      bot_id='test_slave') +
