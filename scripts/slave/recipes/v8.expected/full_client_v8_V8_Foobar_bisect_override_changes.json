@@ -391,15 +391,24 @@
   },
   {
     "cmd": [],
-    "name": "Bisect.Override triggers",
+    "name": "Bisect.Override changes",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@triggers@[@@@",
-      "@@@STEP_LOG_LINE@triggers@  \"a1\", @@@",
-      "@@@STEP_LOG_LINE@triggers@  \"a2\", @@@",
-      "@@@STEP_LOG_LINE@triggers@  \"a3\"@@@",
-      "@@@STEP_LOG_LINE@triggers@]@@@",
-      "@@@STEP_LOG_END@triggers@@@"
+      "@@@STEP_LOG_LINE@changes@[@@@",
+      "@@@STEP_LOG_LINE@changes@  {@@@",
+      "@@@STEP_LOG_LINE@changes@    \"revision\": \"a1\", @@@",
+      "@@@STEP_LOG_LINE@changes@    \"when\": 1@@@",
+      "@@@STEP_LOG_LINE@changes@  }, @@@",
+      "@@@STEP_LOG_LINE@changes@  {@@@",
+      "@@@STEP_LOG_LINE@changes@    \"revision\": \"a2\", @@@",
+      "@@@STEP_LOG_LINE@changes@    \"when\": 2@@@",
+      "@@@STEP_LOG_LINE@changes@  }, @@@",
+      "@@@STEP_LOG_LINE@changes@  {@@@",
+      "@@@STEP_LOG_LINE@changes@    \"revision\": \"a3\", @@@",
+      "@@@STEP_LOG_LINE@changes@    \"when\": 3@@@",
+      "@@@STEP_LOG_LINE@changes@  }@@@",
+      "@@@STEP_LOG_LINE@changes@]@@@",
+      "@@@STEP_LOG_END@changes@@@"
     ]
   },
   {
