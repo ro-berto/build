@@ -116,6 +116,7 @@ FAKE_BUILDERS = {
         'win_mojo',
         'win_x64_archive',
         # These are pure LUCI bots, no equivalent buildbot bot.
+        'gpu-fyi-try-win-xr-builder',
         'gpu-fyi-try-win7-amd-dbg',
         'gpu-fyi-try-win7-amd-dqp',
         'gpu-fyi-try-win7-amd-rel',
