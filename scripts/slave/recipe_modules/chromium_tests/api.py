@@ -1203,7 +1203,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # NOTE: "without patch" phrase is used to keep consistency with the API
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def depsbot_steps(self, builders=None, bots=None):
+  def integration_steps(self, builders=None, bots=None):
     self.run_tests_with_and_without_changes(
       builders=builders, mirrored_bots=bots,
       deapply_changes=self.deapply_deps)

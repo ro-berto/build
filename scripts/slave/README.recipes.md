@@ -116,8 +116,8 @@
   * [chromium_clang_coverage_tot](#recipes-chromium_clang_coverage_tot)
   * [chromium_codesearch](#recipes-chromium_codesearch)
   * [chromium_codesearch_initiator](#recipes-chromium_codesearch_initiator) &mdash; A recipe for picking a stable HEAD revision for chromium/src.
-  * [chromium_depsbot](#recipes-chromium_depsbot)
   * [chromium_gsutil:examples/full](#recipes-chromium_gsutil_examples_full)
+  * [chromium_integration](#recipes-chromium_integration)
   * [chromium_libfuzzer](#recipes-chromium_libfuzzer)
   * [chromium_libfuzzer_clang_tot](#recipes-chromium_libfuzzer_clang_tot)
   * [chromium_libfuzzer_trybot](#recipes-chromium_libfuzzer_trybot)
@@ -135,9 +135,9 @@
   * [chromium_tests:tests/api/create_bot_db_from_master_dict](#recipes-chromium_tests_tests_api_create_bot_db_from_master_dict)
   * [chromium_tests:tests/api/create_test_runner](#recipes-chromium_tests_tests_api_create_test_runner)
   * [chromium_tests:tests/api/deapply_patch](#recipes-chromium_tests_tests_api_deapply_patch)
-  * [chromium_tests:tests/api/depsbot_steps](#recipes-chromium_tests_tests_api_depsbot_steps)
   * [chromium_tests:tests/api/download_and_unzip_build](#recipes-chromium_tests_tests_api_download_and_unzip_build)
   * [chromium_tests:tests/api/get_common_args_for_scripts](#recipes-chromium_tests_tests_api_get_common_args_for_scripts)
+  * [chromium_tests:tests/api/integration_steps](#recipes-chromium_tests_tests_api_integration_steps)
   * [chromium_tests:tests/api/main_waterfall_steps](#recipes-chromium_tests_tests_api_main_waterfall_steps)
   * [chromium_tests:tests/api/package_build](#recipes-chromium_tests_tests_api_package_build)
   * [chromium_tests:tests/api/prepare_checkout](#recipes-chromium_tests_tests_api_prepare_checkout)
@@ -1497,8 +1497,6 @@ Returns:
 
 &mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#824)(self, bot_update_step):**
 
-&mdash; **def [depsbot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1206)(self, builders=None, bots=None):**
-
 &mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#706)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
 
 &mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#289)(self, source_side_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, bot_update_step):**
@@ -1539,6 +1537,8 @@ TODO:
 
 Returns a tuple: list of tests, and list of tests on the triggered
 testers.
+
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1206)(self, builders=None, bots=None):**
 
 &mdash; **def [is\_precommit\_mode](/scripts/slave/recipe_modules/chromium_tests/api.py#148)(self):**
 
@@ -4250,16 +4250,16 @@ recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#57)(api):**
-### *recipes* / [chromium\_depsbot](/scripts/slave/recipes/chromium_depsbot.py)
-
-[DEPS](/scripts/slave/recipes/chromium_depsbot.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_depsbot.py#19)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#11)(api):**
+### *recipes* / [chromium\_integration](/scripts/slave/recipes/chromium_integration.py)
+
+[DEPS](/scripts/slave/recipes/chromium_integration.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_integration.py#19)(api):**
 ### *recipes* / [chromium\_libfuzzer](/scripts/slave/recipes/chromium_libfuzzer.py)
 
 [DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4345,11 +4345,6 @@ index packs (used to generate xrefs) are all generated from the same revision.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/deapply_patch.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/deapply_patch.py#12)(api):**
-### *recipes* / [chromium\_tests:tests/api/depsbot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/depsbot_steps.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/depsbot_steps.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/depsbot_steps.py#19)(api):**
 ### *recipes* / [chromium\_tests:tests/api/download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/download_and_unzip_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/download_and_unzip_build.py#3): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4360,6 +4355,11 @@ index packs (used to generate xrefs) are all generated from the same revision.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#13)(api):**
+### *recipes* / [chromium\_tests:tests/api/integration\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/integration_steps.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/integration_steps.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/integration_steps.py#19)(api):**
 ### *recipes* / [chromium\_tests:tests/api/main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#11): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
