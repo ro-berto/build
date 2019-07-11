@@ -1,7 +1,6 @@
 {
     "chromiumos": {
         "masters": {
-            "https://build.chromium.org/p/chromiumos": ["*"],
             "https://build.chromium.org/p/chromium.chromiumos": ["*"]
         }
     },
@@ -76,25 +75,6 @@
         "set-status": true,
         "status-url": "https://nativeclient-status.appspot.com",
         "track-revisions": true
-    },
-    "nacl-sdk": {
-        "masters": {
-            "https://build.chromium.org/p/client.nacl.sdk": ["*"]
-        },
-        "revision-properties": "got_revision_cp",
-        "track-revisions": true
-    },
-    "nacl-ports": {
-        "build-db": "nacl_ports_build_db.json",
-        "masters": {
-            "https://build.chromium.org/p/client.nacl.ports": ["*"]
-        },
-        "open-tree": true,
-        "password-file": "/creds/gatekeeper/nacl_ports_status_password",
-        "revision-properties": "got_revision_cp",
-        "set-status": true,
-        "status-url": "https://naclports-status.appspot.com",
-        "track-revisions": false
     },
     "pdfium": {
         "build-db": "pdfium_build_db.json",
