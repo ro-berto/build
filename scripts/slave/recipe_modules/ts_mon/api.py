@@ -7,26 +7,20 @@ import socket
 from recipe_engine import recipe_api
 
 
-# Path to the send_ts_mon_values package in infra-python.
-SEND_TS_MON_VALUES = 'infra.tools.send_ts_mon_values'
-
-
 class TSMonApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(TSMonApi, self).__init__(**kwargs)
-    self._infra_python_path = None
+    self._send_ts_mon_pkg_path = None
 
   def _ensure_infra_python(self):
-    if self._infra_python_path:
+    if self._send_ts_mon_pkg_path:
       return
 
-    # TODO(tmrts): Create a smaller CIPD package that just contains the package
-    # send_ts_mon_values and its dependencies and fetch it here instead.
-    self._infra_python_path = self.m.path['cache'].join('infra_python')
+    self._send_ts_mon_pkg_path = self.m.path['cache'].join('send_ts_mon_values')
     self.m.cipd.ensure(
-        self._infra_python_path,
+        self._send_ts_mon_pkg_path,
         self.m.cipd.EnsureFile().add_package(
-            'infra/infra_python/${platform}', 'latest'))
+            'infra/send_ts_mon_values/all', 'latest'))
 
   def send_value(self, name, metric_type, value, fields=None,
                  service_name='luci', job_name='recipe',
@@ -76,12 +70,19 @@ class TSMonApi(recipe_api.RecipeApi):
     metric_data = {'name': name, 'value': value}
     metric_data.update(fields or {})
 
-    result = self.m.python(step_name, self._infra_python_path.join('run.py'), [
-      SEND_TS_MON_VALUES,
-      '--ts-mon-target-type', 'task',
-      '--ts-mon-task-service-name', service_name,
-      '--ts-mon-task-job-name', job_name,
-      '--%s-file' % metric_type, self.m.json.input(metric_data),
-    ], infra_step=True)
+    with self.m.context(cwd=self._send_ts_mon_pkg_path):
+      result = self.m.python(
+          step_name,
+          '-m',
+          [
+            'infra.tools.send_ts_mon_values',
+            '--ts-mon-target-type', 'task',
+            '--ts-mon-task-service-name', service_name,
+            '--ts-mon-task-job-name', job_name,
+            '--%s-file' % metric_type, self.m.json.input(metric_data),
+          ],
+          infra_step=True,
+          venv=self._send_ts_mon_pkg_path.join(
+              'infra', 'tools', 'send_ts_mon_values', 'standalone.vpython'))
     result.presentation.logs['metric_data'] = self.m.json.dumps(
         metric_data, indent=2, separators=(',', ': ')).splitlines()

@@ -3408,11 +3408,11 @@ Examples:
     })
 ### *recipe_modules* / [ts\_mon](/scripts/slave/recipe_modules/ts_mon)
 
-[DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
-#### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [send\_value](/scripts/slave/recipe_modules/ts_mon/api.py#31)(self, name, metric_type, value, fields=None, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
+&mdash; **def [send\_value](/scripts/slave/recipe_modules/ts_mon/api.py#25)(self, name, metric_type, value, fields=None, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
 
 Sends a value to the ts_mon monitoring service.
 

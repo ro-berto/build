@@ -4,9 +4,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/infra_python",
+      "[CACHE]/send_ts_mon_values",
       "-ensure-file",
-      "infra/infra_python/${platform} latest",
+      "infra/send_ts_mon_values/all latest",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -17,7 +17,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/infra_python/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/send_ts_mon_values/all\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -27,9 +27,11 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "[CACHE]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
       "-u",
-      "[CACHE]/infra_python/run.py",
+      "-m",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
@@ -40,6 +42,7 @@
       "--counter-file",
       "{\"name\": \"/example/metric\", \"value\": 42}"
     ],
+    "cwd": "[CACHE]/send_ts_mon_values",
     "infra_step": true,
     "name": "upload ts_mon metrics",
     "~followup_annotations": [
@@ -52,9 +55,11 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "[CACHE]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
       "-u",
-      "[CACHE]/infra_python/run.py",
+      "-m",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",
       "task",
@@ -65,6 +70,7 @@
       "--float-file",
       "{\"foo\": \"bar\", \"name\": \"/example/metric\", \"value\": 42.0}"
     ],
+    "cwd": "[CACHE]/send_ts_mon_values",
     "infra_step": true,
     "name": "custom upload step name",
     "~followup_annotations": [
