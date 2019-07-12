@@ -640,218 +640,34 @@
     "name": "read vpython file"
   },
   {
-    "cmd": [
-      "cipd.bat",
-      "ensure",
-      "-root",
-      "[START_DIR]\\packages",
-      "-ensure-file",
-      "infra/celab/celab/${platform} celab_package_version",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-celab_package_ve\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/celab/celab/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [],
-    "name": "setup tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]\\hosts"
-    ],
-    "infra_step": true,
-    "name": "setup tests.init host_dir if not exists",
+    "name": "RECIPE CRASH (Uncaught exception)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_EXCEPTION@@@",
+      "The recipe has crashed at point 'Uncaught exception'!",
+      "",
+      "Traceback (most recent call last):",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/engine.py\", in run_steps",
+      "    raw_result = recipe_obj.run_steps(api, engine)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/recipe_deps.py\", in run_steps",
+      "    properties_def, api=api)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in invoke_with_properties",
+      "    arg_names, **additional_args)",
+      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
+      "    return callable_obj(*props, **additional_args)",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 63, in RunSteps",
+      "    _RunStepsChromium(api)",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 120, in _RunStepsChromium",
+      "    version = _GetCelabVersionFromVPython(api, test_root.join(\".vpython\"))",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 107, in _GetCelabVersionFromVPython",
+      "    raise ValueError('Couldn\\'t find CELab version in vpython file: %s' % path)",
+      "ValueError: Couldn't find CELab version in vpython file: [START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\.vpython"
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]\\logs"
-    ],
-    "infra_step": true,
-    "name": "setup tests.init logs_dir if not exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd.bat",
-      "ensure",
-      "-root",
-      "[START_DIR]\\packages_tests",
-      "-ensure-file",
-      "infra/gcloud/${platform} version:251.0.0.chromium0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "setup tests.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:251.0.0.\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/gcloud/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "generate_host_files.py",
-      "--template",
-      "template.host.textpb",
-      "--projects",
-      "chromium-try-001;chromium-try-002;chromium-try-003;chromium-try-004;chromium-try-005",
-      "--storage_bucket",
-      "chromium-try-assets",
-      "--storage_prefix",
-      "test-run-8945511751514863184",
-      "--destination_dir",
-      "[START_DIR]\\hosts"
-    ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\infra",
-    "name": "setup tests.generate host files",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "run_tests.py",
-      "--tests",
-      "chromium.test",
-      "--hosts",
-      "[START_DIR]\\hosts",
-      "--test_py",
-      "test.py",
-      "--shared_provider_storage",
-      "chromium-try-assets",
-      "--error_logs_dir",
-      "[START_DIR]\\logs",
-      "--noprogress",
-      "-v",
-      "1",
-      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[START_DIR]\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[START_DIR]\\src\\out\\Release_x64\\chromedriver.exe"
-    ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
-    "env_suffixes": {
-      "PATH": [
-        "[START_DIR]\\packages_tests\\bin"
-      ]
+    "failure": {
+      "humanReason": "Uncaught Exception: ValueError(\"Couldn't find CELab version in vpython file: [START_DIR]\\\\src\\\\chrome\\\\browser\\\\policy\\\\e2e_test\\\\.vpython\",)"
     },
-    "name": "run all tests"
-  },
-  {
-    "cmd": [],
-    "name": "test summary",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@exception 1st test@AssertionError('/file is not absolute',)@@@",
-      "@@@STEP_LOG_END@exception 1st test@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]\\logs\\summary.json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
-    "env_suffixes": {
-      "PATH": [
-        "[START_DIR]\\packages_tests\\bin"
-      ]
-    },
-    "name": "test summary.parse summary",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"1st test\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"/file\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"success\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "test summary.1st test",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
-      "--input-json",
-      "{\"per_iteration_data\": [{\"1st test\": [{\"elapsed_time_ms\": 0, \"status\": \"FAILURE\"}]}]}",
-      "--master-name",
-      "tryserver.chromium.win",
-      "--builder-name",
-      "win-celab-try-rel",
-      "--build-number",
-      "0",
-      "--test-type",
-      "celab_tests",
-      "--chrome-revision",
-      "0",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
-    "env_suffixes": {
-      "PATH": [
-        "[START_DIR]\\packages_tests\\bin"
-      ]
-    },
-    "name": "Upload to test-results [celab_tests]"
-  },
-  {
     "name": "$result"
   }
 ]

@@ -25,6 +25,7 @@ DEPS = [
 ]
 
 from recipe_engine.recipe_api import Property
+import re
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
@@ -87,10 +88,26 @@ def _RunStepsCelab(api):
       tests)
 
 
-def _RunStepsChromium(api):
-  # TODO(https://crbug.com/977332): Parse celab_version from the .vpython file.
-  version = 't5ee9dgnv7arG5o74SeesxNLMN-f5Z-RLd0IX9YQvrcC'
+def _GetCelabVersionFromVPython(api, path):
+  output = api.file.read_text("read vpython file", path)
 
+  anything_except_closing = '[^>]*'
+  pattern = '<'
+  pattern += anything_except_closing
+  pattern += 'name:\s*"infra/celab/celab/windows-amd64"'
+  pattern += anything_except_closing
+  pattern += 'version:\s*"(.*)"'
+  pattern += anything_except_closing
+  pattern += '>'
+
+  match = re.search(pattern, output)
+  if match:
+    return match.groups(1)[0]
+
+  raise ValueError('Couldn\'t find CELab version in vpython file: %s' % path)
+
+
+def _RunStepsChromium(api):
   tests = api.properties.get('tests')
   if not tests:
     raise ValueError('Chromium bots must define `tests`.')
@@ -99,6 +116,8 @@ def _RunStepsChromium(api):
   checkout = _CheckoutChromiumRepo(api)
   test_root = checkout.join('chrome', 'browser', 'policy', 'e2e_test')
   chromium_bin_dir = _BuildChromiumFromSource(api, test_root)
+
+  version = _GetCelabVersionFromVPython(api, test_root.join(".vpython"))
   celab_bin_dir = _GetCelabFromCipd(api, version)
 
   # Run tests for all chromium bots.
@@ -456,6 +475,11 @@ def GenTests(api):
                                 bucket='luci.chromium.try',
                                 builder='win-celab-try-rel',
                                 git_repo=CHROMIUM_REPO) +
+      api.step_data('read vpython file',
+            api.file.read_text('''wheel: <
+              name: "infra/celab/celab/windows-amd64"
+              version: "celab_package_version"
+            >''')) +
       api.step_data('test summary.parse summary',
                     api.json.output({
                       '1st test': {'success': False, 'output': '/file'}}))
@@ -468,6 +492,22 @@ def GenTests(api):
                                 bucket='luci.chromium.try',
                                 builder='win-celab-try-rel',
                                 git_repo=CHROMIUM_REPO) +
+      api.expect_exception('ValueError')
+  )
+  yield (
+      api.test('chromium_no_celab_package') +
+      api.properties(tests='chromium.test',
+                     mastername='tryserver.chromium.win', bot_id='test_bot') +
+      api.platform('win', 64) +
+      api.buildbucket.try_build(project='chromium',
+                                bucket='luci.chromium.try',
+                                builder='win-celab-try-rel',
+                                git_repo=CHROMIUM_REPO) +
+      api.step_data('read vpython file',
+            api.file.read_text('''wheel: <
+              name: "infra/other/package"
+              version: "package_version"
+            >''')) +
       api.expect_exception('ValueError')
   )
   yield (
