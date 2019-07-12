@@ -17,6 +17,8 @@ def RunSteps(api):
       service_name='example_service',
       job_name='example_job',
       step_name='custom upload step name')
+  api.ts_mon.send_values_batch(
+      '/example/metric', 'counter', [(42, {'a': 1}), (43, {'a': 2})])
 
 
 def GenTests(api):

@@ -3409,7 +3409,7 @@ Examples:
     })
 ### *recipe_modules* / [ts\_mon](/scripts/slave/recipe_modules/ts_mon)
 
-[DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipe_modules/ts_mon/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 #### **class [TSMonApi](/scripts/slave/recipe_modules/ts_mon/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -3449,6 +3449,25 @@ Arguments:
       understand which type of metric you need.
   value: The value to be reported.
   fields: Dictionary with fields to be associated with the value.
+  service_name: Name of the service being monitored.
+  job_name: Name of this job instance of the task.
+  step_name: Name of the step sending information to ts_mon.
+
+&mdash; **def [send\_values\_batch](/scripts/slave/recipe_modules/ts_mon/api.py#70)(self, name, metric_type, value_fields, service_name='luci', job_name='recipe', step_name='upload ts_mon metrics'):**
+
+Sends multiple values to the ts_mon monitoring service in batch mode.
+
+This method allows to send multiple values to the same metric in a batch.
+See doc for the send_value method above for various caveats.
+
+Arguments:
+  name: Name of the metric, which is automatically prefixed with
+      /chrome/infra, i.e. /foo/bar will become /chrome/infra/foo/bar.
+  metric_type: Type of the metric: 'gauge', 'float', 'string', 'bool',
+      'counter' or 'cumulative'. See documentation for send_value method to
+      understand which type of metric you need.
+  value_fields: List of tuples (value, fields), where each tuple represents
+      a separate value to be sent with its own set of fields.
   service_name: Name of the service being monitored.
   job_name: Name of this job instance of the task.
   step_name: Name of the step sending information to ts_mon.

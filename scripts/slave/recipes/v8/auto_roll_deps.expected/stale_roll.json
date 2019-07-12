@@ -326,12 +326,14 @@
     "infra_step": true,
     "name": "upload_stats",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@metric_data@{@@@",
-      "@@@STEP_LOG_LINE@metric_data@  \"name\": \"/v8/autoroller/count\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@  \"project\": \"v8-roll\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@  \"result\": \"stale_roll\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@  \"value\": 1@@@",
-      "@@@STEP_LOG_LINE@metric_data@}@@@",
+      "@@@STEP_LOG_LINE@metric_data@[@@@",
+      "@@@STEP_LOG_LINE@metric_data@  {@@@",
+      "@@@STEP_LOG_LINE@metric_data@    \"name\": \"/v8/autoroller/count\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@    \"project\": \"v8-roll\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@    \"result\": \"stale_roll\",@@@",
+      "@@@STEP_LOG_LINE@metric_data@    \"value\": 1@@@",
+      "@@@STEP_LOG_LINE@metric_data@  }@@@",
+      "@@@STEP_LOG_LINE@metric_data@]@@@",
       "@@@STEP_LOG_END@metric_data@@@"
     ]
   },
