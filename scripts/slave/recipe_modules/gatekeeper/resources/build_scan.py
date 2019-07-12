@@ -28,6 +28,9 @@ MAX_ATTEMPTS = 4
 BUILDER_WILDCARD = '*'
 
 LUCI_MILO_ENDPOINT = 'https://luci-milo.appspot.com/prpc/'
+LUCI_MIGRATION_ENDPOINT = 'https://luci-migration.appspot.com/masters/'
+BUILDBUCKET_ENDPOINT = (
+    'https://cr-buildbucket.appspot.com/prpc/buildbucket.v2.Builds/')
 
 
 @contextmanager
@@ -48,52 +51,102 @@ def MultiPool(processes):
     pool.join()
 
 
-def _get_from_milo(endpoint, data, http=None):
+def fetch(method, url, data=None, http=None):
   headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'User-Agent': 'Python-httplib2/2.7 -- build_scan.py',
   }
-  url = LUCI_MILO_ENDPOINT + endpoint
   if not http:
     http = httplib2.Http()
   http = LUCICredentials().authorize(http)
-  logging.info('fetching %s with %s' % (url, data))
+  logging.info('%s %s with %s' % (method, url, data))
 
   attempts = 0
   while True:
-    resp, content = http.request(url, 'POST', body=data, headers=headers)
+    resp, content = http.request(url, method, body=data, headers=headers)
     if resp.status == 200:
-      # Remove the jsonp header.
-      return json.loads(content[4:])
-    if resp.status == 404:
-      return {'corrupted': True}
+      return content
     if attempts > MAX_ATTEMPTS or 400 <= resp.status < 500:
-      msg = "Error encountered during URL Fetch: %s" % content
+      msg = '%s error when fetching %s %s with %s: %s' % (
+          resp.status, method, url, data, content)
       logging.error(msg)
       raise ValueError(msg)
 
     attempts += 1
     time_to_sleep = 2 ** attempts
     logging.info(
-      "url fetch encountered %d, sleeping for %d seconds and retrying..." % (
-          resp.status, time_to_sleep))
+        'url fetch encountered %d, sleeping for %d seconds and retrying...' % (
+            resp.status, time_to_sleep))
     time.sleep(time_to_sleep)
 
 
+def call_buildbucket(method, data, http=None):
+  response = fetch(
+      'POST', BUILDBUCKET_ENDPOINT + method, json.dumps(data), http)
+  return json.loads(response[4:])
+
+
+def _get_from_milo(method, data, http=None):
+  try:
+    response = fetch(
+        'POST', LUCI_MILO_ENDPOINT + method, data, http)
+  except ValueError as e:
+    logging.warning('Marking as corrupted: ' + e.message)
+    return {'corrupted': True}
+  return json.loads(response[4:])
+
+
+def get_buildbucket_builds(project, bucket, builders):
+  """Fetch new builds for all builders in |builders|.
+
+  Args:
+    project: The buildbucket project for the builders.
+    bucket: The buildbucket bucket for the builders.
+    builders: The list of builders to check.
+
+  Returns:
+    For each builder (in the same order they were passed), a list
+    [{endTime, number}] of builds with the end time and build number.
+  """
+  search_build_requests = [
+    {
+      'searchBuilds': {
+        'pageSize': 100,
+        'fields': 'builds.*.endTime,builds.*.number',
+        'predicate': {
+          'builder': {
+            'project': project,
+            'bucket': bucket,
+            'builder': builder,
+          },
+        },
+      }
+    }
+    for builder in builders]
+
+  request = {'requests': search_build_requests}
+  responses = call_buildbucket('Batch', request)['responses']
+
+  return [response['searchBuilds'].get('builds', [])
+          for response in responses]
+
+
 def get_root_json(master_url):
-  """Pull down root JSON which contains builder and build info."""
+  """Pull down root JSON which contains builder info."""
+  # TODO(ehmaldonado): Switch from master-based config to buildbucket-based
+  # config.
   # Assumes we have something like https://build.chromium.org/p/chromium.perf
   name = master_url.rstrip('/').split('/')[-1]
+  url = LUCI_MIGRATION_ENDPOINT + name + '?format=json'
+  response = json.loads(fetch('GET', url))
 
-  endpoint = 'milo.Buildbot/GetCompressedMasterJSON'
-  req = {
-    'name': name,
-    'exclude_deprecated': True,
-  }
-  resp = _get_from_milo(endpoint, json.dumps(req))
-  data = zlib.decompress(base64.b64decode(resp['data']), zlib.MAX_WBITS | 16)
-  return json.loads(data)
+  _, project, bucket = response['bucket'].split('.', 2)
+  builders = [
+      builder for builder, builder_info in response['builders'].iteritems()
+      if builder_info['is_prod']]
+
+  return {'project': project, 'bucket': bucket, 'builders': builders}
 
 
 def find_new_builds(master_url, builderlist, root_json, build_db):
@@ -118,19 +171,28 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
     if finished:
       last_finished_build[builder] = max(finished)
 
-  for buildername, builder in root_json['builders'].iteritems():
-    if (BUILDER_WILDCARD not in builderlist) and (
-        buildername not in builderlist):
-      logging.debug('ignoring %s:%s because not in builder whitelist',
-                    master_url, buildername)
-      continue
+  builders = root_json['builders']
+  if BUILDER_WILDCARD not in builderlist:
+    builders = builderlist
+  if not builders:
+    return new_builds
 
-    # cachedBuilds are the builds in the cache, while currentBuilds are the
-    # currently running builds. Thus cachedBuilds can be unfinished or finished,
-    # while currentBuilds are always unfinished.
-    cached_builds = builder.get('cachedBuilds') or []
-    current_builds = builder.get('currentBuilds') or []
-    candidate_builds = set(cached_builds + current_builds)
+  all_builds = get_buildbucket_builds(
+      root_json['project'], root_json['bucket'], builders)
+
+  logging.info(
+      'buildbucket output for %s (project: %s, bucket: %s):',
+      master_url, root_json['project'], root_json['bucket'])
+  for buildername, builds in zip(builders, all_builds):
+    candidate_builds = [
+        build['number'] for build in builds if 'number' in build]
+    current_builds = [
+        build['number'] for build in builds
+        if 'endTime' not in build and 'number' in build]
+    logging.info(
+        'builder: %s, current builds: %s, candidate builds: %s',
+        buildername, current_builds, candidate_builds)
+
     if buildername in last_finished_build:
       new_builds[buildername] = [
           buildnum for buildnum in candidate_builds
@@ -150,22 +212,13 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
         # builds yet.) In this state all the finished builds will be loaded in,
         # firing off an email storm any time the build_db changes or a new
         # builder is added. We set the last finished build here to prevent that.
-        finished = set(cached_builds) - set(current_builds)
+        finished = set(candidate_builds) - set(current_builds)
         if finished:
           build_db.masters[master_url].setdefault(buildername, {})[
               max(finished)] = build_scan_db.gen_build(finished=True)
 
         new_builds[buildername] = current_builds
 
-  logging.info('milo output for %s:', master_url)
-  for builder in sorted(root_json['builders'].keys()):
-    data = root_json['builders'][builder]
-    logging.info(
-        'builder: %s, current builds: %s, cached builds: %s',
-        builder,
-        data.get('currentBuilds') or [],
-        data.get('cachedBuilds') or [],
-    )
   logging.info('new builds for %s:', master_url)
   for builder in sorted(new_builds.keys()):
     logging.info('builder: %s, new builds: %s', builder, new_builds[builder])
