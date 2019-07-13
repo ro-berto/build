@@ -347,7 +347,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self.m.gsutil.upload(
           source=coverage_metadata_file,
           bucket=_BUCKET_NAME,
-          dest=self._compose_gs_path_for_coverage_data('java_metadata'),
+          dest=self._compose_gs_path_for_coverage_data('java_metadata/'),
           name='Upload JSON metadata',
           link_name='Coverage metadata',
           **kwargs)
@@ -373,7 +373,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self.m.gsutil.upload(
           source=output_zip,
           bucket=_BUCKET_NAME,
-          dest=self._compose_gs_path_for_coverage_data('java_html_report'),
+          dest=self._compose_gs_path_for_coverage_data('java_html_report/'),
           link_name='JaCoCo HTML report',
           name='Upload zipped JaCoCo HTML report',
           **kwargs)
