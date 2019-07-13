@@ -224,9 +224,10 @@ def _RunStepsInternal(api):
     api.step.active_result.presentation.status = 'FAILURE'
     if api.step.active_result.exc_result.had_timeout:
       # TODO(iannucci): Shouldn't we also mark failure on timeouts?
+      raw_result.status = common_pb2.FAILURE
       raw_result.summary_markdown += ('\n\nTimeout occurred '
         'during presubmit step.')
-    if retcode == 1:
+    elif retcode == 1:
       raw_result.status = common_pb2.FAILURE
       api.tryserver.set_test_failure_tryjob_result()
     else:
@@ -538,7 +539,7 @@ def GenTests(api):
           'warnings': []
         }, retcode=2)
     ) +
-    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.StatusException) +
     api.post_process(post_process.ResultReason, textwrap.dedent('''
         There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
@@ -566,7 +567,7 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output(None, retcode=1)) +
-    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.StatusException) +
     api.post_process(post_process.ResultReason, bug_msg) +
     api.post_process(post_process.DropExpectation)
   )
@@ -579,7 +580,7 @@ def GenTests(api):
         repo_name='chromium',
         gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output(None, retcode=2)) +
-    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.StatusException) +
     api.post_process(post_process.ResultReason, bug_msg) +
     api.post_process(post_process.DropExpectation)
   )
