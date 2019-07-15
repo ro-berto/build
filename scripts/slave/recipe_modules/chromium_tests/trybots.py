@@ -216,6 +216,16 @@ TRYBOTS = freeze({
         'buildername': 'Android arm64 Builder (dbg)',
         'tester': 'Nougat Phone Tester',
       }),
+      'android-oreo-arm64-dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android arm64 Builder (dbg)',
+        'tester': 'Oreo Phone Tester',
+      }),
+      'android-pie-arm64-dbg': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android arm64 Builder (dbg)',
+        'tester': 'android-pie-arm64-dbg',
+      }),
     },
   },
   'tryserver.chromium.angle': {
