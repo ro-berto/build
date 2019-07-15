@@ -1009,6 +1009,7 @@ SPEC['builders'].update([
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
     stock_config('linux-tcmalloc-rel'),
+    stock_config('linux-wpt-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
     stock_config('win-pixel-builder-rel',
