@@ -1348,6 +1348,12 @@ class V8Api(recipe_api.RecipeApi):
       'parent_buildername': self.m.buildbucket.builder_name,
       'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
     }
+    if self.m.scheduler.triggers:
+      sched_trs = self.m.scheduler.triggers
+      if sched_trs[0].HasField('gitiles'):
+        properties['oldest_gitiles_revision'] = sched_trs[0].gitiles.revision
+      if sched_trs[-1].HasField('gitiles'):
+        properties['newest_gitiles_revision'] = sched_trs[-1].gitiles.revision
     if self.revision_cp:
       properties['parent_got_revision_cp'] = self.revision_cp
     if self.m.tryserver.is_tryserver:
@@ -1450,40 +1456,34 @@ class V8Api(recipe_api.RecipeApi):
     ], step_name=step_name)
 
   def get_change_range(self):
-    if self.m.properties.get('override_changes'):
+    if self.m.properties.get('override_triggers'):
       # This can be used for manual testing or on a staging builder that
       # simulates a change range.
-      changes = self.m.properties['override_changes']
-      step_result = self.m.step('Override changes', cmd=None)
-      step_result.presentation.logs['changes'] = self.m.json.dumps(
-        changes, indent=2).splitlines()
+      triggers = self.m.properties['override_triggers']
+      step_result = self.m.step('Override triggers', cmd=None)
+      step_result.presentation.logs['triggers'] = self.m.json.dumps(
+        triggers, indent=2).splitlines()
+      oldest_change = triggers[0]
+      newest_change = triggers[-1]
     else:
-      # TODO(sergiyb): Migrate from Milo API to buildbucket v2.
-      data_json = self.m.step(
-          'Fetch changes',
-          [
-            'prpc', 'call', '-format=json', MILO_HOST,
-            'milo.Buildbot.GetBuildbotBuildJSON'
-          ],
-          stdin=self.m.json.input({
-            'master': self.m.properties['mastername'],
-            'builder': self.m.buildbucket.builder_name,
-            'buildNum': self.m.buildbucket.build.number,
-          }),
-          stdout=self.m.json.output(),
-          infra_step=True,
-          step_test_data=lambda: self.m.json.test_api.output_stream({
-            'data': base64.b64encode(
-              self.m.json.dumps(self.test_api.example_buildbot_changes())),
-          }),
-      ).stdout
-      change_json = self.m.json.loads(base64.b64decode(data_json['data']))
-      changes = change_json['sourceStamp']['changes']
+      oldest_trigger = self.m.scheduler.triggers[0]
+      if oldest_trigger.HasField('gitiles'):
+        # This is a builder and has gitiles triggers with revision ranges.
+        oldest_change = oldest_trigger.gitiles.revision
+      else:
+        # This is a tester and we pass down revision ranges from the parent
+        # builder via buildbucket trigger properties.
+        assert oldest_trigger.HasField('buildbucket')
+        oldest_change = oldest_trigger.buildbucket.properties[
+            'oldest_gitiles_revision']
 
-    assert changes
-    changes = sorted(changes, key=lambda c: c['when'])
-    oldest_change = changes[0]['revision']
-    newest_change = changes[-1]['revision']
+      newest_trigger = self.m.scheduler.triggers[-1]
+      if newest_trigger.HasField('gitiles'):
+        newest_change = newest_trigger.gitiles.revision
+      else:
+        assert newest_trigger.HasField('buildbucket')
+        newest_change = newest_trigger.buildbucket.properties[
+            'newest_gitiles_revision']
 
     # Commits is a list of gitiles commit dicts in reverse chronological order.
     commits, _ = self.m.gitiles.log(

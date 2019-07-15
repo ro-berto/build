@@ -14,6 +14,9 @@ from recipe_engine.post_process import DoesNotRun, Filter, MustRun
 from . import builders
 from . import testing
 
+from PB.go.chromium.org.luci.scheduler.api.scheduler.v1 import (
+    triggers as triggers_pb2)
+
 # Excerpt of the v8 version file.
 VERSION_FILE_TMPL = """
 #define V8_MAJOR_VERSION 3
@@ -326,25 +329,18 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'tags': [],
     }])
 
-  def example_buildbot_changes(self):
-    return {
-      'sourceStamp': {
-        'changes': [
-          {'revision': 'a1', 'when': 1},
-          {'revision': 'a2', 'when': 2},
-          {'revision': 'a3', 'when': 3},
-        ]
-      }
-    }
+  def example_scheduler_buildbucket_trigger(self, key='a'):
+    trigger = triggers_pb2.Trigger(id=key)
+    trigger.buildbucket.properties['oldest_gitiles_revision'] = 40*key
+    trigger.buildbucket.properties['newest_gitiles_revision'] = 40*key
+    return trigger
 
-  def example_one_buildbot_change(self):
-    return {
-      'sourceStamp': {
-        'changes': [
-          {'revision': 'a1'},
-        ]
-      }
-    }
+  def example_scheduler_gitiles_trigger(self, key='a'):
+    return triggers_pb2.Trigger(id=key, gitiles=dict(
+      repo='https://chromium.googlesource.com/v8/v8',
+      ref='refs/heads/master',
+      revision=key*40,
+    ))
 
   def example_bisection_range(self):
     # Gitiles returns changes in the order child -> parent.
@@ -573,6 +569,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
           parent_build_config=parent_build_config,
       )
+      test += self.m.scheduler(triggers=[
+        self.example_scheduler_buildbucket_trigger('a'),
+        self.example_scheduler_buildbucket_trigger('b'),
+      ])
       if kwargs.get('enable_swarming', True):
         # Assume each tester is triggered with the required hashes for all
         # tests. Assume extra_isolate hashes for each extra test specified by
@@ -584,6 +584,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=swarm_hashes,
         )
+    else:  # triggering builder
+      test += self.m.scheduler(triggers=[
+        self.example_scheduler_gitiles_trigger('a'),
+        self.example_scheduler_gitiles_trigger('b'),
+      ])
 
     if mastername.startswith('tryserver'):
       test += self.m.properties(
