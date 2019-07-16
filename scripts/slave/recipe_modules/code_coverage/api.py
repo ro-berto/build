@@ -669,6 +669,6 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         stdout=self.m.json.output())
 
     if step_result.stdout:
-      step_result.presentation.status = self.m.step.FAILURE
+      step_result.presentation.text = 'Found invalid profraw files'
       step_result.presentation.properties[
           'bad_coverage_profiles'] = step_result.stdout
