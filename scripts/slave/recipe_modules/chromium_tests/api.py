@@ -1233,10 +1233,34 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           unrecoverable_test_suites)
         raise self.m.step.StepFailure(exit_message)
 
-  def _format_unrecoverable_failures(self, unrecoverable_test_suites):
-    failures = [suite.name + ' failed.' for suite in unrecoverable_test_suites]
+  def _format_unrecoverable_failures(self, unrecoverable_test_suites,
+                                     size_limit=10):
+    """Creates list of failed tests formatted using markdown.
 
-    return ' '.join(failures)
+       Args:
+        unrecoverable_test_suites: List of failed Test
+        (definition can be found in steps.py) objects
+
+       Returns:
+        String containing a markdown formatted list of test failures
+    """
+    test_size = len(unrecoverable_test_suites)
+    header = '%d Test Suite(s) failed.' % test_size
+    test_summary_lines = [header]
+    if self._test_data.enabled:
+      size_limit = self._test_data.get('change_size_limit', 2)
+    for index, test in enumerate(unrecoverable_test_suites):
+      if index >= size_limit:
+        hint = '...%d more test(s)...' % (test_size - index)
+        test_summary_lines.append(hint)
+        return '\n\n'.join(test_summary_lines)
+      name = test.name
+      deterministic_failures = test.deterministic_failures('with patch')
+      test_summary_lines.append('**%s** failed because of:' % name)
+      for failure in deterministic_failures:
+        test_summary_lines.append('- ' + failure)
+
+    return '\n\n'.join(test_summary_lines)
 
   def _lookup_bot_metadata(self, builders, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the

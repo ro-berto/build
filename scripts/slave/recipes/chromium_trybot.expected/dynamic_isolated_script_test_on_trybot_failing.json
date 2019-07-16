@@ -2267,7 +2267,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "telemetry_gpu_unittests failed."
+      "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- test2.Test2\n\n- test1.Test1"
     },
     "name": "$result"
   }

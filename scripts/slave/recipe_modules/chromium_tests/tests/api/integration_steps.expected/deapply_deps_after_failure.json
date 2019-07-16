@@ -2212,7 +2212,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "blink_web_tests failed."
+      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed because of:\n\n- test2.Test2\n\n- test1.Test1"
     },
     "name": "$result"
   }

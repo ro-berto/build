@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
+import textwrap
 
 DEPS = [
     'chromium_swarming',
@@ -14,6 +15,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/buildbucket',
     'recipe_engine/runtime',
     'test_utils',
 ]
@@ -620,4 +622,60 @@ def GenTests(api):
             post_process.MustRun, 'generate coverage metadata for 2 tests') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
+  )
+
+  canned_test = api.test_utils.canned_gtest_output
+
+  def multiple_base_unittests_additional_compile_target():
+    return api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
+            'Linux Tests Code Coverage': {
+                'gtest_tests': [
+                  'base_unittests1',
+                  'base_unittests2',
+                  'base_unittests3'
+                ],
+            },
+        }
+    )
+
+  yield (
+    api.test('many_invalid_results') +
+    api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          path_config='kitchen'
+    ) +
+    api.runtime(is_experimental=False, is_luci=True) +
+    multiple_base_unittests_additional_compile_target() +
+    api.filter.suppress_analyze() +
+    api.chromium_tests.change_size_limit(2) +
+    api.override_step_data('base_unittests1 (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data('base_unittests1 (without patch)',
+                           api.test_utils.gtest_results(None, retcode=1)) +
+    api.override_step_data('base_unittests2 (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data('base_unittests2 (without patch)',
+                           api.test_utils.gtest_results(None, retcode=1)) +
+    api.override_step_data('base_unittests3 (with patch)',
+                           canned_test(passing=False)) +
+    api.override_step_data('base_unittests3 (without patch)',
+                           api.test_utils.gtest_results(None, retcode=1)) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.ResultReason,
+        textwrap.dedent('''\
+        3 Test Suite(s) failed.
+
+        **base_unittests1** failed because of:
+
+        - Test.Two
+
+        **base_unittests2** failed because of:
+
+        - Test.Two
+
+        ...1 more test(s)...''')
+    ) +
+    api.post_process(post_process.DropExpectation)
   )

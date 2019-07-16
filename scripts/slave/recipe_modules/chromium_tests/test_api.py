@@ -35,6 +35,16 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     """
     return handle_bot_config_errors
 
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def change_size_limit(size_limit):
+    """Returns an integer that limits test failure format size.
+
+       This controls how many test failures are listed in the
+       the string returned from _format_unrecoverable_failures()
+    """
+    return size_limit
+
   def platform(self, bot_ids):
     bot_config= bdb_module.BotConfig(self.builders, bot_ids)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.

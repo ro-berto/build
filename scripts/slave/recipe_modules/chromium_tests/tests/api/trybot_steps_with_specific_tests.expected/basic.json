@@ -1475,7 +1475,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "base_unittests failed."
+      "humanReason": "1 Test Suite(s) failed.\n\n**base_unittests** failed because of:\n\n- Test.Two"
     },
     "name": "$result"
   }
