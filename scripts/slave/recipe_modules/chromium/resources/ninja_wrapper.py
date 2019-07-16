@@ -38,6 +38,7 @@ The wrapper writes detailed info in JSON format:
 import argparse
 import collections
 import json
+import os
 import re
 import subprocess
 import sys
@@ -86,6 +87,22 @@ class WarningCollector(object):
 # TODO(yichunli): Improve by checking whether a file is in the build dir.
 def is_auto_generated(file_name):
   return _AUTO_GENERATED_RE.match(file_name)
+
+
+def prune_virtual_env():
+  # Set by VirtualEnv, no need to keep it.
+  os.environ.pop('VIRTUAL_ENV', None)
+
+  # Set by VPython, if scripts want it back they have to set it explicitly.
+  os.environ.pop('PYTHONNOUSERSITE', None)
+
+  # Look for "activate_this.py" in this path, which is installed by VirtualEnv.
+  # This mechanism is used by vpython as well to sanitize VirtualEnvs from
+  # $PATH.
+  os.environ['PATH'] = os.pathsep.join([
+    p for p in os.environ.get('PATH', '').split(os.pathsep)
+    if not os.path.isfile(os.path.join(p, 'activate_this.py'))
+  ])
 
 
 def run_ninja_tool(ninja_cmd, warning_collector):
@@ -429,6 +446,15 @@ def parse_args(args):
 
 
 def main():
+  # NOTE: Based on related handling in depot_tools/gn.py.
+  # Prune all evidence of VPython/VirtualEnv out of the environment. This means
+  # that we 'unwrap' vpython VirtualEnv path/env manipulation. Invocations of
+  # `python` from GN should never inherit the gn.py's own VirtualEnv. This also
+  # helps to ensure that generated ninja files do not reference python.exe from
+  # the VirtualEnv generated from depot_tools' own .vpython file (or lack
+  # thereof), but instead reference the default python from the PATH.
+  prune_virtual_env()
+
   options = parse_args(sys.argv[1:])
   ninja_cmd = options.ninja_cmd
 
