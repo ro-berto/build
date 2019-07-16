@@ -67,7 +67,6 @@ BOT_CONFIGS = {
     ],
     'reviewers': [
       'machenbach@chromium.org',
-      'sergiyb@chromium.org',
       'tmrts@chromium.org',
     ],
     'show_commit_log': False,

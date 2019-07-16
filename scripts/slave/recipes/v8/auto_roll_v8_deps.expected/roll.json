@@ -560,7 +560,7 @@
       "-m",
       "Rolling v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client/+log/380e326..380e326",
       "-m",
-      "TBR=machenbach@chromium.org,sergiyb@chromium.org,tmrts@chromium.org"
+      "TBR=machenbach@chromium.org,tmrts@chromium.org"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
