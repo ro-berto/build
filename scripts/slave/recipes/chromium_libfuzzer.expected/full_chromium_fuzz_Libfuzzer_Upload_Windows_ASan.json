@@ -458,6 +458,7 @@
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
+      "--no_prune_venv",
       "--",
       "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",

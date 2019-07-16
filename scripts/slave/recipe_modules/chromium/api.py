@@ -235,6 +235,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.raw_io.output(add_output_log='on_failure',
                               name='failure_summary'),
     ]
+    if kwargs.get('no_prune_venv'):
+      kwargs.pop('no_prune_venv')
+      script_args.append('--no_prune_venv')
     script_args.append('--')
     script_args.extend(ninja_command)
 
@@ -319,6 +322,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       StepFailure or InfraFailure if it fails to build or
       occurs something failure on goma steps.
     """
+    # TODO(martiniss): This is a terrible hack and needs to be removed. See
+    # https://crbug.com/984451 for more information
+    kwargs['no_prune_venv'] = True
 
     build_exit_status = None
 

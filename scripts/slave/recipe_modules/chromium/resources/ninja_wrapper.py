@@ -441,11 +441,19 @@ def parse_args(args):
                             'build_target'))
   parser.add_argument('--failure_output',
                       help=('Save output of failed build edges in file.'))
+  parser.add_argument('--no_prune_venv', action='store_true',
+                      help='Don\'t prune the virtual environment when calling'
+                      ' ninja. This is a hack; don\'t use this unless you talk'
+                      ' to infra-dev@chromium.org')
+
   options = parser.parse_args(args)
   return options
 
 
 def main():
+  options = parse_args(sys.argv[1:])
+  ninja_cmd = options.ninja_cmd
+
   # NOTE: Based on related handling in depot_tools/gn.py.
   # Prune all evidence of VPython/VirtualEnv out of the environment. This means
   # that we 'unwrap' vpython VirtualEnv path/env manipulation. Invocations of
@@ -453,10 +461,11 @@ def main():
   # helps to ensure that generated ninja files do not reference python.exe from
   # the VirtualEnv generated from depot_tools' own .vpython file (or lack
   # thereof), but instead reference the default python from the PATH.
-  prune_virtual_env()
+  # TODO(martiniss): This is a terrible hack and needs to be removed. See
+  # https://crbug.com/984451 for more information
+  if not options.no_prune_venv:
+    prune_virtual_env()
 
-  options = parse_args(sys.argv[1:])
-  ninja_cmd = options.ninja_cmd
 
   # If first argument isn't file's name, calls ninja directly.
   if not options.ninja_info_output:
