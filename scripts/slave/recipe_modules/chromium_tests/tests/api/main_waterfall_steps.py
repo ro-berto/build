@@ -309,7 +309,8 @@ def GenTests(api):
       api.post_process(
             post_process.MustRun, 'base_unittests') +
       api.post_process(
-            post_process.MustRun, 'generate coverage metadata for 1 tests') +
+            post_process.MustRun,
+            'process clang code coverage data.generate metadata for 1 tests') +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
     )

@@ -523,7 +523,8 @@ def GenTests(api):
             post_process.DoesNotRun, 'base_unittests (without patch)') +
       api.post_process(
             # Only generates coverage data for the with patch step.
-            post_process.MustRun, 'generate coverage metadata for 1 tests') +
+            post_process.MustRun,
+            'process clang code coverage data.generate metadata for 1 tests') +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
@@ -569,7 +570,8 @@ def GenTests(api):
       api.post_process(
             # Generates coverage data for the with patch and retry shards with
             # patch steps.
-            post_process.MustRun, 'generate coverage metadata for 2 tests') +
+            post_process.MustRun,
+            'process clang code coverage data.generate metadata for 2 tests') +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
@@ -619,7 +621,8 @@ def GenTests(api):
       api.post_process(
             # Generates coverage data for the with patch and retry shards with
             # patch steps. Without patch steps are always ignored.
-            post_process.MustRun, 'generate coverage metadata for 2 tests') +
+            post_process.MustRun,
+            'process clang code coverage data.generate metadata for 2 tests') +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
