@@ -126,7 +126,6 @@ SPEC = {
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
-        'v8_tot',
         'show_v8_revision',
       ],
       'chromium_config_kwargs': {
