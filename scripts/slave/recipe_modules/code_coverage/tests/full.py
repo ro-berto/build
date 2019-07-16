@@ -245,7 +245,7 @@ def GenTests(api):
   )
 
   yield (
-      api.test('raise failure')
+      api.test('raise failure for full-codebase coverage')
       + api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
@@ -260,6 +260,31 @@ def GenTests(api):
       + api.post_process(post_process.StatusFailure)
       + api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('do not raise failure for per-cl coverage')
+      + api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          buildnumber=54)
+      + api.properties(
+          files_to_instrument=[
+            'some/path/to/file.cc',
+            'some/other/path/to/file.cc',
+          ])
+      + api.buildbucket.try_build(
+          project='chromium', builder='linux-coverage-rel')
+      + api.step_data(
+          ('process clang code coverage data.generate metadata for %s tests' %
+           _NUM_TESTS),
+          retcode=1)
+      + api.post_check(lambda check, steps: check(steps[
+              'process clang code coverage data.gsutil upload coverage metadata'
+          ].output_properties['process_coverage_data_failure'] == True))
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
   yield (
       api.test('process java coverage')
       + api.properties.generic(

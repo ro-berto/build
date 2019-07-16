@@ -320,7 +320,12 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
-        raise
+
+        if not self._is_per_cl_coverage:
+          # Do not raise coverage steps exception for per-cl coverage because
+          # per-cl coverage is integrated into Chromium try jobs, coverage steps
+          # are expected to be non-fatal.
+          raise
 
   def process_java_coverage_data(self, **kwargs):
     """Creates JaCoCo HTML report and metadata to upload to storage bucket.
