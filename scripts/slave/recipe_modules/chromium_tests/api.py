@@ -351,9 +351,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.report_stats()
 
       if failed_tests:
-        failed_tests_names = [t.name for t in failed_tests]
         raise self.m.step.StepFailure(
-            '%d tests failed: %r' % (len(failed_tests), failed_tests_names))
+            self._format_unrecoverable_failures(failed_tests, suffix))
 
     return test_runner
 
@@ -1230,11 +1229,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.tryserver.set_do_not_retry_build()
 
         exit_message = self._format_unrecoverable_failures(
-          unrecoverable_test_suites)
+          unrecoverable_test_suites, 'with patch')
         raise self.m.step.StepFailure(exit_message)
 
   def _format_unrecoverable_failures(self, unrecoverable_test_suites,
-                                     size_limit=10):
+                                     suffix, size_limit=10):
     """Creates list of failed tests formatted using markdown.
 
        Args:
@@ -1255,8 +1254,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         test_summary_lines.append(hint)
         return '\n\n'.join(test_summary_lines)
       name = test.name
-      deterministic_failures = test.deterministic_failures('with patch')
-      test_summary_lines.append('**%s** failed because of:' % name)
+      deterministic_failures = test.deterministic_failures(suffix)
+      if deterministic_failures:
+        test_summary_lines.append('**%s** failed because of:' % name)
+      else:
+        test_summary_lines.append('**%s** failed.' % name)
       for failure in deterministic_failures:
         test_summary_lines.append('- ' + failure)
 

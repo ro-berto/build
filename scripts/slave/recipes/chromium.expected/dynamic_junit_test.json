@@ -804,7 +804,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 tests failed: ['base_junit_tests']"
+      "humanReason": "1 Test Suite(s) failed.\n\n**base_junit_tests** failed because of:\n\n- Test.Two"
     },
     "name": "$result"
   }

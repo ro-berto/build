@@ -405,7 +405,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 tests failed: ['telemetry_gpu_unittests']"
+      "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed."
     },
     "name": "$result"
   }

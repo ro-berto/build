@@ -956,7 +956,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 tests failed: ['base_unittests on NVIDIA GPU on Linux']"
+      "humanReason": "1 Test Suite(s) failed.\n\n**base_unittests on NVIDIA GPU on Linux** failed because of:\n\n- Test.Two"
     },
     "name": "$result"
   }
