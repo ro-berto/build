@@ -252,9 +252,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     error_list = error_re.findall(filtered_summary)
     if error_list:
       error_list = self._limit_error_list(error_list, char_limit)
-      notification = 'List of errors:'
+      notification = '**Compile failure**\n\nList of errors:'
       error_list.insert(0, notification)
-      return '\n\n'.join(error_list)
+      return '\n\n- '.join(error_list)
 
     # No matches found
     return ('No lines that look like "...error:..." '
