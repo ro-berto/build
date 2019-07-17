@@ -838,7 +838,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Step('compile (with patch)') (retcode: 1)"
+      "humanReason": "Infra compile failure:\n\n Step('compile (with patch)') (retcode: 1)"
     },
     "name": "$result"
   }

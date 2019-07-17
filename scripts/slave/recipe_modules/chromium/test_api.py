@@ -7,6 +7,25 @@ from recipe_engine import recipe_test_api
 
 class ChromiumTestApi(recipe_test_api.RecipeTestApi):
 
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def change_char_size_limit(size_limit):
+    """Returns an integer that limits compile failure format size.
+
+       This controls how many characters the compile failure summary can have.
+    """
+    return size_limit
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def change_line_limit(line_limit):
+    """Returns an integer that limits compile failure line size
+
+       This controls how many characters each line in
+       the compile failure summary can have.
+    """
+    return line_limit
+
   def override_version(self, major=64, minor=0, build=3282, patch=0):
     assert isinstance(major, int)
     assert isinstance(minor, int)

@@ -8,9 +8,11 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/runtime',
+  'recipe_engine/raw_io',
 ]
 
 from recipe_engine import post_process
+import textwrap
 
 
 def RunSteps(api):
@@ -123,5 +125,124 @@ def GenTests(api):
           chromium_apply_config=['clang_tot']) +
       api.post_process(post_process.StepCommandContains, 'clang_revision',
                                                         ['--use-tot-clang']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  gomacc_path = ('/b/s/w/ir/cache/goma/client/gomacc '
+        '../../third_party/llvm-build/Release+Asserts/bin/clang++ '
+        'long string of commands\n'
+  )
+
+  yield (
+      api.test('compile_failure_summary') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.chromium.change_line_limit(50) +
+      api.override_step_data('compile', api.raw_io.output(
+          gomacc_path +
+          textwrap.dedent("""
+            [1/1] CXX a.o
+            filename:row:col: error: error info
+          """).strip(),
+          name='failure_summary'), retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          textwrap.dedent("""
+            ```
+            /b...
+            [1/1] CXX a.o
+            filename:row:col: error: error info
+            ```
+          """).strip()) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('compile_error_summary') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.chromium.change_char_size_limit(150) +
+      api.override_step_data('compile', api.raw_io.output(
+          gomacc_path +
+          textwrap.dedent("""
+          [1/1] CXX a.o
+          filename:row:col: error: error 1 info
+          More stuff that happened in the error
+          filename:row:col: error: error 2 info
+          Actual code of where the error happened
+          """),
+          name='failure_summary'), retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          textwrap.dedent("""\
+          List of errors:
+
+          filename:row:col: error: error 1 info
+
+          filename:row:col: error: error 2 info""")) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('compile_failure_long_summary') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.chromium.change_char_size_limit(150) +
+      api.override_step_data('compile', api.raw_io.output(
+          gomacc_path +
+          textwrap.dedent("""
+          [1/1] CXX a.o
+          filename:row:col: error: error 1 info
+          More stuff that happened in the error
+          filename:row:col: error: error 2 info
+          Actual code of where the error happened
+          filename:row:col: error: error 3 info
+          filename:row:col: error: error 4 info
+          More stuff that happened in the error
+          filename:row:col: error: error 5 info
+          filename:row:col: error: error 6 info
+          """),
+          name='failure_summary'), retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          textwrap.dedent("""\
+          List of errors:
+
+          filename:row:col: error: error 1 info
+
+          filename:row:col: error: error 2 info
+
+          filename:row:col: error: error 3 info
+
+          filename:row:col: error: error 4 info
+
+          filename:row:col: error: error 5 info
+
+          **...1 error(s) (6 total)...**""")) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('compile_failure_no_re_match') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.override_step_data('compile', api.raw_io.output(
+          gomacc_path +
+          textwrap.dedent("""
+          [1/1] CXX a.o
+          filename error 1 info
+          More stuff that happened in the error
+          filename error 2 info
+          Actual code of where the error happened
+          filename error 3 info
+          More stuff that happened in the error
+          filename error 4 info
+          """),
+          name='failure_summary'), retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          textwrap.dedent("""\
+          No lines that look like "...error:..." found in the compile output.
+          Refer to raw_io.output[failure_summary] for more information.""")) +
       api.post_process(post_process.DropExpectation)
   )

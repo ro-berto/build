@@ -1002,7 +1002,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: Step('test r1.compile') (retcode: 1)"
+      "humanReason": "Infra compile failure:\n\n Step('test r1.compile') (retcode: 1)"
     },
     "name": "$result"
   }

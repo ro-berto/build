@@ -209,6 +209,58 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
+  def _limit_error_list(self, error_list, char_limit):
+    """Limits combined length of strings in the error list."""
+    char_count = 0
+    for index, error in enumerate(error_list):
+      if char_count > char_limit:
+        error_size = len(error_list)
+        hint = ('**...%d error(s) (%d total)...**'
+                % (error_size - index, error_size))
+        return error_list[:index] + [hint]
+      char_count += len(error)
+    return error_list
+
+  def _format_compile_failures(self, failure_summary,
+                               char_limit=700, line_limit=1000):
+    """Removes non-vital information from summary and adds markdown.
+
+    Args:
+      failure_summary: string of error information from a compile step,
+      char_limit: max size failure summary can be
+
+    Returns:
+      A string containing a markdown formatted failure summary of
+      the step that failed.
+    """
+    if self._test_data.enabled:
+      char_limit = self._test_data.get('change_char_size_limit', 150)
+      line_limit = self._test_data.get('change_line_limit', 50)
+
+    summary_lines = failure_summary.splitlines()
+    for index in range(len(summary_lines)):
+      if len(summary_lines[index]) > line_limit:
+        crop_point = int(line_limit / 20)
+        summary_lines[index] = summary_lines[index][:crop_point] + '...'
+
+    filtered_summary = '\n'.join(summary_lines)
+    # Show the error message
+    if len(filtered_summary) < char_limit:
+      return '```\n%s\n```' % filtered_summary
+    # The normal error summary is too large. Extract a list of errors.
+    error_re = re.compile(r'.+error:.+')
+    error_list = error_re.findall(filtered_summary)
+    if error_list:
+      error_list = self._limit_error_list(error_list, char_limit)
+      notification = 'List of errors:'
+      error_list.insert(0, notification)
+      return '\n\n'.join(error_list)
+
+    # No matches found
+    return ('No lines that look like "...error:..." '
+            'found in the compile output.\n'
+            'Refer to raw_io.output[failure_summary] for more information.')
+
   def _run_ninja(self, ninja_command, name=None, ninja_env=None,
                  **kwargs):
     """
@@ -222,8 +274,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       ninja_env: Environment for ninja.
 
     Raises:
-      StepFailure or InfraFailure if it fails to build or
-      occurs something failure on goma steps.
+      StepFailure when compile step, or compile confirm no-op step fails,
+      or a no-op build wasn't a no-op
     """
 
     script = self.resource('ninja_wrapper.py')
@@ -244,23 +296,31 @@ class ChromiumApi(recipe_api.RecipeApi):
     example_json = {'failures': [{
         'output_nodes': ['a.o'],
         'rule': 'CXX',
-        'output': 'error info',
+        'output': '''\
+        filename:row:col: error: error info''',
         'dependencies': ['b/a.cc']
     }]}
     example_failure_output = textwrap.dedent("""\
-    [1/1] CXX a.o
-    error info
+        [1/1] CXX a.o
+        filename:row:col: error: error info
     """)
     step_test_data = (lambda: self.m.json.test_api.output(
                           example_json, name='ninja_info') +
                       self.m.raw_io.test_api.output(
-                          example_failure_output, name='failure_summary'))
+                            example_failure_output, name='failure_summary'))
     try:
         with self.m.context(env=ninja_env):
           self.m.python(name or 'compile', script=script,
                         args=script_args,
                         step_test_data=step_test_data,
                         **kwargs)
+    except self.m.step.StepFailure as ex:
+        # TODO(debrian): Hacky solution, needs to be fixed later
+        if ex.result.raw_io and ex.result.raw_io.output:
+          failure_summary = self._format_compile_failures(
+              ex.result.raw_io.output)
+          ex.reason = failure_summary
+        raise
     finally:
       clang_crashreports_script = self.m.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')
@@ -319,8 +379,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env: Environment controlling goma behavior.
 
     Raises:
-      StepFailure or InfraFailure if it fails to build or
-      occurs something failure on goma steps.
+      - StepFailure when _run_ninja fails
+      - InfraFailure when an unexpected goma failure occurs
     """
     # TODO(martiniss): This is a terrible hack and needs to be removed. See
     # https://crbug.com/984451 for more information
@@ -362,6 +422,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       target: Custom config name to use in the output directory (defaults to
         "Release" or "Debug").
       use_goma_module (bool): If True, use the goma recipe module.
+
+    Raises:
+      - StepFailure when compile step fails
+      - InfraFailure when goma failure occurs
     """
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -562,7 +626,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         fake_step.presentation.step_text = failure_result_code
         props = fake_step.presentation.properties
         props['extra_result_code'] = [failure_result_code]
-        raise self.m.step.InfraFailure('Infra compile failure: %s' % ex)
+        raise self.m.step.InfraFailure('Infra compile failure:\n\n %s' % ex)
 
       raise
 
