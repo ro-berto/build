@@ -538,7 +538,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#292)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#292)(self, args=None, goma_dir=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -559,6 +559,7 @@ This workflow:
 
 Args:
   args (list): Initial argument list, expanded based on other values.
+  goma_dir: Goma client path used inside chromite.
 Returns: (Step) the 'cbuildbot' execution step.
 
 &mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#235)(self, args=None, goma_canary=False):**
@@ -2351,7 +2352,7 @@ A symlink (on mac/linux) is enough, though.
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#80)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#521)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#540)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2380,7 +2381,7 @@ Raises:
 
 &emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#75)(self):**
 
-&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#134)(self):**
+&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#138)(self):**
 
 Returns true if debug mode is turned on.
 
@@ -2393,15 +2394,25 @@ Uses value from property "$build/goma:{"debug":true}" if configured
 
 &emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#121)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#163)(self, client_type=None):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#167)(self, client_type=None, additional_platforms=None):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#197)(self):**
+ensure goma is installed.
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#201)(self):**
+Args:
+  client_type: client type to be installed. default is release.
+  additional_platforms: additional platforms to be installed.
+                        the downloaded cipd packages will be stored under
+                        self.extra_package_path with the platform name.
+
+&emsp; **@property**<br>&mdash; **def [extra\_package\_path](/scripts/slave/recipe_modules/goma/api.py#125)(self):**
+
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#216)(self):**
+
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#220)(self):**
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#63)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#125)(self):**
+&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#129)(self):**
 
 Returns number of jobs for parallel build using Goma.
 
@@ -2412,7 +2423,7 @@ Uses value from property "$build/goma:{"jobs": JOBS}" if configured
 
 &emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#100)(self):**
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#143)(self):**
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#147)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
@@ -2423,14 +2434,14 @@ This function caches the _recommended_jobs.
 
 &emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#67)(self):**
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#265)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#284)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#348)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#367)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -4685,7 +4696,7 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/cros/swarming.py#7): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#16)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

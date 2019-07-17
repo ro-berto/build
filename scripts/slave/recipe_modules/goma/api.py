@@ -123,6 +123,10 @@ class GomaApi(recipe_api.RecipeApi):
     return self.default_cache_path_per_slave.join('client')
 
   @property
+  def extra_package_path(self):
+    return self.default_cache_path_per_slave.join('extra')
+
+  @property
   def jobs(self):
     """Returns number of jobs for parallel build using Goma.
 
@@ -160,7 +164,15 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._recommended_jobs
 
-  def ensure_goma(self, client_type=None):
+  def ensure_goma(self, client_type=None, additional_platforms=None):
+    """ensure goma is installed.
+
+    Args:
+      client_type: client type to be installed. default is release.
+      additional_platforms: additional platforms to be installed.
+                            the downloaded cipd packages will be stored under
+                            self.extra_package_path with the platform name.
+    """
     if self._local_dir:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
@@ -182,14 +194,21 @@ class GomaApi(recipe_api.RecipeApi):
           self.m.cipd.set_service_account_credentials(
               self.service_account_json_path)
 
-          goma_package = ('infra_internal/goma/client/%s' %
-              self.m.cipd.platform_suffix())
+          def Download(platform, output_dir):
+            goma_package = ('infra_internal/goma/client/%s' % platform)
+            self.m.cipd.ensure(output_dir, {goma_package: client_type})
+
+          platform = self.m.cipd.platform_suffix()
           # For Windows there's only 64-bit goma client.
           if self.m.platform.is_win:
-            goma_package = goma_package.replace('386', 'amd64')
-          ref = client_type
+            platform = platform.replace('386', 'amd64')
           self._goma_dir = self.default_client_path
-          self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
+          Download(platform, self._goma_dir)
+          if additional_platforms:
+            assert isinstance(additional_platforms, list) or isinstance(
+                additional_platforms, tuple)
+            for platform in additional_platforms:
+              Download(platform, self.extra_package_path.join(platform))
         finally:
           self.m.cipd.set_service_account_credentials(None)
         return self._goma_dir

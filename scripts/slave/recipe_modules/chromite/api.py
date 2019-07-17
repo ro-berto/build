@@ -289,7 +289,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # python2 a context manager to insert that directory at the front of PATH.
     return self.m.context(env_prefixes={'PATH': [python_bin]})
 
-  def run(self, args=None):
+  def run(self, args=None, goma_dir=None):
     """Runs the configured 'cbuildbot' build.
 
     This workflow uses the registered configuration dictionary to make master-
@@ -309,6 +309,7 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     Args:
       args (list): Initial argument list, expanded based on other values.
+      goma_dir: Goma client path used inside chromite.
     Returns: (Step) the 'cbuildbot' execution step.
     """
     # Assert correct configuration.
@@ -355,8 +356,10 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     cbb_args.extend(['--git-cache-dir', self.m.path['cache'].join('git')])
 
+    if goma_dir is None:
+      goma_dir = self.m.goma.goma_dir
     cbb_args.extend([
-        '--goma_dir', self.m.goma.goma_dir,
+        '--goma_dir', goma_dir,
         '--goma_client_json', self.m.goma.service_account_json_path])
 
     # Add custom args, if there are any.

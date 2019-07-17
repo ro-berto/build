@@ -10,7 +10,8 @@ DEPS = [
 
 def RunSteps(api):
   client_type = api.m.properties.get('client_type')
-  api.goma.ensure_goma(client_type=client_type)
+  additional_platforms = api.m.properties.get('additional_platforms')
+  api.goma.ensure_goma(client_type=client_type, additional_platforms=additional_platforms)
 
 
 def GenTests(api):
@@ -25,4 +26,9 @@ def GenTests(api):
   yield (
     api.test('latest') +
     api.properties(client_type='latest')
+  )
+  yield (
+    api.test('additional_canary') +
+    api.properties(client_type='candidate') +
+    api.properties(additional_platforms=['chromeos-amd64'])
   )

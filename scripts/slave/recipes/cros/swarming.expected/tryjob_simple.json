@@ -81,6 +81,34 @@
     ]
   },
   {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/extra/chromeos-amd64",
+      "-ensure-file",
+      "infra_internal/goma/client/chromeos-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/chromeos-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "system_python"
   },
@@ -181,7 +209,7 @@
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
-      "[CACHE]/goma/client",
+      "[CACHE]/goma/extra/chromeos-amd64",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
       "--remote-trybot",
