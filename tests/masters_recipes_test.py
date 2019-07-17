@@ -21,7 +21,6 @@ MAIN_WATERFALL_MASTERS = [
 
 
 TRYSERVER_MASTERS = [
-    'master.tryserver.chromium.mac',
 ]
 
 
