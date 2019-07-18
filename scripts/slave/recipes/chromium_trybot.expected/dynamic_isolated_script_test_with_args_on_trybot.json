@@ -455,6 +455,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"telemetry_gpu_unittests\"]}",
+      "/path/to/tmp/json",
+      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -469,7 +471,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -558,6 +564,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "telemetry_gpu_unittests\n",
       "//out/Release"
@@ -569,6 +577,10 @@
     },
     "name": "generate_build_files (with patch)",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@telemetry_gpu_unittests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

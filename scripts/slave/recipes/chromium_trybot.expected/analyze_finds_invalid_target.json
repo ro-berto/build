@@ -14,6 +14,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "/path/to/tmp/json",
+      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -29,7 +31,10 @@
       "@@@STEP_LOG_LINE@json.output@    \"another one\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
     ]
   },
   {

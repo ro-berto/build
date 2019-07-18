@@ -232,6 +232,8 @@
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -242,6 +244,10 @@
     "name": "build.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]

@@ -2,11 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+import textwrap
+
 DEPS = [
   'chromium',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/json',
 ]
 
 def RunSteps(api):
@@ -57,4 +61,104 @@ def GenTests(api):
       api.properties(
           use_explicit_isolate_map_path=True,
           chromium_apply_config=['chromium_official'])
+  )
+
+  yield (
+      api.test('mac_failure') +
+      api.platform('mac', 64) +
+      api.properties(target_platform='mac') +
+      api.step_data('generate_build_files',
+          api.json.output({
+            'output': 'ERROR at line 5: missing )'
+          }, name="failure_summary"),
+          retcode=1
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          'ERROR at line 5: missing )') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('win_failure') +
+      api.platform('win', 64) +
+      api.properties(target_platform='win') +
+      api.step_data('generate_build_files',
+          api.json.output({
+            'output': 'ERROR at line 5: missing )'
+          }, name="failure_summary"),
+          retcode=1
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          'ERROR at line 5: missing )') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('mb_error_list') +
+      api.chromium.change_char_size_limit(70) +
+      api.step_data('generate_build_files',
+          api.json.output({
+            'output': textwrap.dedent(
+              """
+                ERROR at //view_unittest.cc:38:11: Can't include header here.
+                #include "ui/compositor_extra/shadow.h"
+                :          ^---------------------------
+                The target:
+                //ui/views:views_unittests
+                is including a file from the target:
+                //ui/compositor_extra:compositor_extra
+              """
+            ).strip()
+          }, name="failure_summary"),
+          retcode=1
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason, textwrap.dedent(
+        """
+          Step **generate_build_files** failed.
+
+          List of errors:
+
+          - ERROR at //view_unittest.cc:38:11: Can't include header here.
+        """
+      ).strip()) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('mb_long_error_list') +
+      api.chromium.change_char_size_limit(70) +
+      api.step_data('generate_build_files',
+          api.json.output({
+            'output': textwrap.dedent(
+              """
+                ERROR at //view_unittest.cc:38:11: Can't include header here.
+                #include "ui/compositor_extra/shadow.h"
+                :          ^---------------------------
+                ERROR at //view_unittest.cc:38:12: Can't include header here.
+                #include "ui/compositor_extra/shadow2.h"
+                ERROR at //view_unittest.cc:38:13: Can't include header here.
+                #include "ui/compositor_extra/shadow3.h"
+              """
+            ).strip()
+          }, name="failure_summary"),
+          retcode=1
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason, textwrap.dedent(
+        """
+          Step **generate_build_files** failed.
+
+          List of errors:
+
+          - ERROR at //view_unittest.cc:38:11: Can't include header here.
+
+          - ERROR at //view_unittest.cc:38:12: Can't include header here.
+
+          - **...1 error(s) (3 total)...**
+        """
+      ).strip()) +
+      api.post_process(post_process.DropExpectation)
   )

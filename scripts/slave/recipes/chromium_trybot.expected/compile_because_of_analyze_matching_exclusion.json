@@ -14,6 +14,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "/path/to/tmp/json",
+      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -28,7 +30,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

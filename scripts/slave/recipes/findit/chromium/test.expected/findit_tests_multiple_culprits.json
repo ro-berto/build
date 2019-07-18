@@ -703,6 +703,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -716,6 +718,10 @@
     "name": "test r4.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
@@ -1775,6 +1781,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -1788,6 +1796,10 @@
     "name": "test r5.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
@@ -2808,6 +2820,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -2821,6 +2835,10 @@
     "name": "test r6.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
@@ -3838,6 +3856,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -3851,6 +3871,10 @@
     "name": "test r2.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
@@ -4860,6 +4884,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -4873,6 +4899,10 @@
     "name": "test r3.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

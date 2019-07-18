@@ -271,6 +271,8 @@
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "blink_web_tests_exparchive\n",
       "//out/Release"
@@ -282,6 +284,10 @@
     },
     "name": "generate_build_files (with patch)",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests_exparchive@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

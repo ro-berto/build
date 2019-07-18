@@ -365,6 +365,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "tab_capture_end2end_tests\n",
       "//out/Release"
@@ -376,6 +378,10 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@tab_capture_end2end_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

@@ -38,6 +38,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"compile1\", \"compile2\"], \"files\": [\"file1\", \"file2\"], \"test_targets\": [\"test1\", \"test2\"]}",
+      "/path/to/tmp/json",
+      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "None",
@@ -52,7 +54,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

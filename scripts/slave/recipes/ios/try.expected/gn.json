@@ -418,6 +418,8 @@
       "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json_output",
+      "/path/to/tmp/json",
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
@@ -427,7 +429,13 @@
       "GOMA_USE_LOCAL": "false",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "generate build files (mb) (with patch)"
+    "name": "generate build files (mb) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [
@@ -488,6 +496,8 @@
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
+      "/path/to/tmp/json",
+      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
@@ -502,7 +512,11 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

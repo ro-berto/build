@@ -361,6 +361,8 @@
       "[CACHE]/goma/client",
       "--android-version-code=987600200",
       "--android-version-name=123.1.9876.2",
+      "--json_output",
+      "/path/to/tmp/json",
       "//out/Debug"
     ],
     "cwd": "[START_DIR]/src",
@@ -369,7 +371,13 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [],
