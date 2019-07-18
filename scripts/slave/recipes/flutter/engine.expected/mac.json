@@ -902,21 +902,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/ui_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test UI"
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/out/host_debug_unopt/embedder_unittests"
     ],
     "cwd": "[START_DIR]/src/out/host_debug_unopt",
