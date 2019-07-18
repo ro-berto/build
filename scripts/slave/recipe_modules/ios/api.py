@@ -629,6 +629,8 @@ class iOSApi(recipe_api.RecipeApi):
           test.get('test args') or []),
       '--config-variable', 'xcode_parallelization', (
           'true' if test.get('xcode parallelization') else 'false'),
+      '--config-variable', 'xcodebuild_device_runner', (
+          'true' if test.get('xcodebuild device runner') else 'false'),
       '--config-variable', 'test_cases', self.m.json.dumps(test_cases or []),
       '--config-variable', 'xctest', (
         'true' if test.get('xctest') else 'false'),
@@ -770,7 +772,8 @@ class iOSApi(recipe_api.RecipeApi):
         "xctest": <(xctest), \
         "test_cases": <(test_cases), \
         "restart": <(restart), \
-        "xcode_parallelization": <(xcode_parallelization)}',
+        "xcode_parallelization": <(xcode_parallelization), \
+        "xcodebuild_device_runner": <(xcodebuild_device_runner)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', self.__config.get('retries', '3'),
       '--shards', '<(shards)',

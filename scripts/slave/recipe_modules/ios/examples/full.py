@@ -953,6 +953,50 @@ def GenTests(api):
   )
 
   yield (
+    api.test('xcodebuild_device_runner')
+    + api.platform('mac', 64)
+    + api.properties(
+      mastername='chromium.fyi',
+      bot_id='fake-vm',
+    )
+    + api.buildbucket.ci_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    + api.ios.make_test_build_config({
+      'xcode build version': '11M336w',
+      'additional files': [
+        'fake/file/path1/',
+        'fake/file/path2/',
+      ],
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'tests': [
+        {
+          'xcodebuild device runner': True,
+          'app': 'fake test',
+          'device type': 'Real device',
+          'os': '12.0.1',
+        },
+        {
+          'app': 'fake test2',
+          'device type': 'Real device',
+          'os': '12.0.1',
+        }
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
+
+  yield (
     api.test('use_trusted_cert')
     + api.platform('mac', 64)
     + api.properties(
