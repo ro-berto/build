@@ -174,23 +174,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'Linux ARM': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['arm'],
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      'archive_build': False,
-    },
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
     # is here so that a try bot can be added.

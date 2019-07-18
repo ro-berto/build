@@ -659,12 +659,6 @@
           "fuchsia-fyi-x64-rel": {
             "forgiving_optional": ["*"]
           },
-          "Linux ARM": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
           "Linux Xenial": {
             "tree_notify": [
               "thomasanderson@chromium.org"
