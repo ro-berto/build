@@ -428,8 +428,7 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium_swarming.check_client_version()
 
     self.m.chromium_swarming.set_default_dimension('pool', 'Chrome')
-    # TODO(machenbach): Bump to 16.04.
-    self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-14.04')
+    self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
     self.m.chromium_swarming.set_default_dimension('gpu', 'none')
     # TODO(machenbach): Investigate if this is causing a priority inversion
     # with tasks not specifying cores=8. See http://crbug.com/735388

@@ -75,7 +75,7 @@
       "--priority",
       "25",
       "--task-name",
-      "Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -92,7 +92,7 @@
       "quantum",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "noodle",
@@ -122,7 +122,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Mjsunit - sweet",
+      "stepname:Mjsunit - sweet on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -169,7 +169,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Mjsunit - sweet"
+    "name": "trigger tests.[trigger] Mjsunit - sweet on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -192,7 +192,7 @@
       "--priority",
       "25",
       "--task-name",
-      "Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "Mjsunit - sweet/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -209,7 +209,7 @@
       "quantum",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "noodle",
@@ -239,7 +239,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Mjsunit - sweet",
+      "stepname:Mjsunit - sweet on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -286,7 +286,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Mjsunit - sweet (2)"
+    "name": "trigger tests.[trigger] Mjsunit - sweet on Ubuntu-16.04 (2)"
   },
   {
     "cmd": [
@@ -305,7 +305,7 @@
       "--priority",
       "100",
       "--task-name",
-      "Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "Mjsunit - everything/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -322,7 +322,7 @@
       "quantum",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "override",
@@ -352,7 +352,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Mjsunit - everything",
+      "stepname:Mjsunit - everything on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -401,7 +401,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Mjsunit - everything"
+    "name": "trigger tests.[trigger] Mjsunit - everything on Ubuntu-16.04"
   },
   {
     "allow_subannotations": true,

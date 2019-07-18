@@ -68,7 +68,7 @@
       "--priority",
       "25",
       "--task-name",
-      "Check/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "Check/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -85,7 +85,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -162,7 +162,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Check"
+    "name": "trigger tests.[trigger] Check on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -181,7 +181,7 @@
       "--priority",
       "25",
       "--task-name",
-      "Test262/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "Test262/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -198,7 +198,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -228,7 +228,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Test262",
+      "stepname:Test262 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -276,7 +276,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Test262"
+    "name": "trigger tests.[trigger] Test262 on Ubuntu-16.04"
   },
   {
     "allow_subannotations": true,
@@ -338,7 +338,7 @@
       "@@@STEP_LOG_LINE@test-name@Not available. Please look up the builder's configuration.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Trigger flake bisect on command line:@@@",
-      "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'timeout_sec=60' -p 'variant=\"default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-14.04\", \"pool:Chrome\"]' -p 'test_name=\"suite-name/dir/test-name\"' -p 'build_config=\"Release\"' -p 'isolated_name=\"bot_default\"' -p 'bisect_mastername=\"client.v8\"' -p 'extra_args=[]' -p 'total_timeout_sec=120'@@@",
+      "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'timeout_sec=60' -p 'variant=\"default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:Chrome\"]' -p 'test_name=\"suite-name/dir/test-name\"' -p 'build_config=\"Release\"' -p 'isolated_name=\"bot_default\"' -p 'bisect_mastername=\"client.v8\"' -p 'extra_args=[]' -p 'total_timeout_sec=120'@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Run #1@@@",
       "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",

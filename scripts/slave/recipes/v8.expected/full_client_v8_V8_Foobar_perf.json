@@ -68,7 +68,7 @@
       "--priority",
       "25",
       "--task-name",
-      "JSTests1/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "JSTests1/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -85,7 +85,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests1",
+      "stepname:JSTests1 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -150,7 +150,7 @@
       "--buildbot",
       "--run-count=2"
     ],
-    "name": "trigger tests.[trigger] JSTests1"
+    "name": "trigger tests.[trigger] JSTests1 on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -169,7 +169,7 @@
       "--priority",
       "25",
       "--task-name",
-      "JSTests2/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "JSTests2/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -186,7 +186,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -216,7 +216,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests2",
+      "stepname:JSTests2 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -251,7 +251,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests2"
+    "name": "trigger tests.[trigger] JSTests2 on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -270,7 +270,7 @@
       "--priority",
       "25",
       "--task-name",
-      "JSTests3/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "JSTests3/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -287,7 +287,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -317,7 +317,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests3",
+      "stepname:JSTests3 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -352,7 +352,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests3"
+    "name": "trigger tests.[trigger] JSTests3 on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -371,7 +371,7 @@
       "--priority",
       "25",
       "--task-name",
-      "JSTests4/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "JSTests4/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -388,7 +388,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -418,7 +418,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests4",
+      "stepname:JSTests4 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -453,7 +453,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests4"
+    "name": "trigger tests.[trigger] JSTests4 on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -472,7 +472,7 @@
       "--priority",
       "25",
       "--task-name",
-      "JSTests5/Ubuntu-14.04/[dummy has/V8 Foobar/571",
+      "JSTests5/Ubuntu-16.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -489,7 +489,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -519,7 +519,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests5",
+      "stepname:JSTests5 on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -554,7 +554,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests5"
+    "name": "trigger tests.[trigger] JSTests5 on Ubuntu-16.04"
   },
   {
     "cmd": [
@@ -598,9 +598,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests1",
+    "name": "JSTests1 on Ubuntu-16.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -675,9 +675,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests2",
+    "name": "JSTests2 on Ubuntu-16.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -752,9 +752,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests3",
+    "name": "JSTests3 on Ubuntu-16.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -829,9 +829,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests4",
+    "name": "JSTests4 on Ubuntu-16.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -906,9 +906,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests5",
+    "name": "JSTests5 on Ubuntu-16.04",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",

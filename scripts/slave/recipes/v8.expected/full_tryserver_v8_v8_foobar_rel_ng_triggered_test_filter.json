@@ -79,7 +79,7 @@
       "--priority",
       "30",
       "--task-name",
-      "Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/-1",
+      "Check/Ubuntu-16.04/[dummy has/v8_foobar_rel_ng_triggered/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -96,7 +96,7 @@
       "none",
       "--dimension",
       "os",
-      "Ubuntu-14.04",
+      "Ubuntu-16.04",
       "--dimension",
       "pool",
       "Chrome",
@@ -126,7 +126,7 @@
       "--tag",
       "spec_name:v8.try:v8_foobar_rel_ng_triggered",
       "--tag",
-      "stepname:Check",
+      "stepname:Check on Ubuntu-16.04",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -177,7 +177,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Check"
+    "name": "trigger tests.[trigger] Check on Ubuntu-16.04"
   },
   {
     "allow_subannotations": true,
