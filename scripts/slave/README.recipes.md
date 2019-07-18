@@ -2614,6 +2614,10 @@ Args:
 
 APIs for interacting with isolates.
 
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#344)(self, first_dir, second_dir, values):**
+
+Archive different files of 2 builds.
+
 &mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#74)(self, targets):**
 
 Asserts that all the targets in the passed list are present as keys in
@@ -2632,11 +2636,11 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#344)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#373)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#366)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#402)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
