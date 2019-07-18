@@ -91,7 +91,7 @@ def GenTests(api):
   yield generate_builder(bucketname, buildername, revision=None,
                          suffix='_forced')
   yield generate_builder(bucketname, buildername, revision='a' * 40,
-                         failing_test='rtc_unittests',
+                         failing_test='rtc_unittests on Ubuntu-16.04',
                          suffix='_failing_test')
   yield generate_builder(bucketname, 'Android32 (M Nexus5X)', revision='a' * 40,
                          fail_android_archive=True, suffix='_failing_archive')

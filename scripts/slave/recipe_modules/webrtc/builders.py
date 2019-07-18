@@ -266,7 +266,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86',
         }
       },
@@ -279,7 +279,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86',
         }
       },
@@ -314,7 +314,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -327,7 +327,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         },
         'baremetal_swarming_dimensions': {
@@ -393,7 +393,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -407,7 +407,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -421,7 +421,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -435,7 +435,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -449,7 +449,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1184,7 +1184,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1197,7 +1197,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         },
         'baremetal_swarming_dimensions': {
@@ -1237,7 +1237,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86',
         }
       },
@@ -1250,7 +1250,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86',
         }
       },
@@ -1286,7 +1286,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1310,7 +1310,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1324,7 +1324,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1338,7 +1338,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1352,7 +1352,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
@@ -1366,7 +1366,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
+          'os': 'Ubuntu-16.04',
           'cpu': 'x86-64',
         }
       },
