@@ -219,6 +219,8 @@ class ChromiumApi(recipe_api.RecipeApi):
                 % (error_size - index, error_size))
         return error_list[:index] + [hint]
       char_count += len(error)
+      # Wrap in code tags so code doesn't get interpreted as markdown
+      error_list[index] = '```%s```' % error
     return error_list
 
   def _format_compile_failures(self, failure_summary,

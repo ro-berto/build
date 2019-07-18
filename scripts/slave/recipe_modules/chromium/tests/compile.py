@@ -179,9 +179,9 @@ def GenTests(api):
 
           List of errors:
 
-          - filename:row:col: error: error 1 info
+          - ```filename:row:col: error: error 1 info```
 
-          - filename:row:col: error: error 2 info""")) +
+          - ```filename:row:col: error: error 2 info```""")) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -212,15 +212,15 @@ def GenTests(api):
 
           List of errors:
 
-          - filename:row:col: error: error 1 info
+          - ```filename:row:col: error: error 1 info```
 
-          - filename:row:col: error: error 2 info
+          - ```filename:row:col: error: error 2 info```
 
-          - filename:row:col: error: error 3 info
+          - ```filename:row:col: error: error 3 info```
 
-          - filename:row:col: error: error 4 info
+          - ```filename:row:col: error: error 4 info```
 
-          - filename:row:col: error: error 5 info
+          - ```filename:row:col: error: error 5 info```
 
           - **...1 error(s) (6 total)...**""")) +
       api.post_process(post_process.DropExpectation)
