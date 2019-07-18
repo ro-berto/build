@@ -410,8 +410,6 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
-      "/path/to/tmp/json",
-      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -426,11 +424,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -502,8 +496,6 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--json_output",
-      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -511,13 +503,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files (with patch)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
-    ]
+    "name": "generate_build_files (with patch)"
   },
   {
     "cmd": [],

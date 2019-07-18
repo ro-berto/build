@@ -11,7 +11,6 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/properties',
   'recipe_engine/runtime',
-  'recipe_engine/json',
 ]
 
 
@@ -40,63 +39,5 @@ def GenTests(api):
       api.runtime(is_experimental=False, is_luci=True) +
       api.post_process(post_process.MustRun, 'analyze') +
       api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('analyze_failure') +
-      api.properties.tryserver(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.step_data('analyze',
-          api.json.output({
-            'output': 'ERROR at line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          'ERROR at line 5: missing )') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('analyze_failure_no_output') +
-      api.properties.tryserver(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.step_data('analyze',
-          api.json.output({'output': ''}, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          "Step('analyze') (retcode: 1)") +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('analyze_failure_no_re') +
-      api.properties.tryserver(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.chromium.change_char_size_limit(5) +
-      api.step_data('analyze',
-          api.json.output({
-            'output': 'line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          ('No lines that look like "...ERROR at..." '
-            'found in the compile output.\n'
-            'Refer to stdout for more information.')) +
       api.post_process(post_process.DropExpectation)
   )

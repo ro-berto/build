@@ -303,8 +303,6 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--json_output",
-      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
@@ -312,13 +310,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [
@@ -432,8 +424,6 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"//foo/bar:target2\", \"//foo/bar:target3\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json_output",
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/src",
@@ -450,10 +440,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"//foo/bar:target2\", @@@",

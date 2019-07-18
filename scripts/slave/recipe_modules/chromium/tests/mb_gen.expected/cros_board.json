@@ -319,8 +319,6 @@
       "[CACHE]/goma/client",
       "--android-version-code=3",
       "--android-version-name=example",
-      "--json_output",
-      "/path/to/tmp/json",
       "--swarming-targets-file",
       "base_unittests_run\n",
       "//out_x86-generic/Release"
@@ -337,10 +335,6 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@base_unittests_run@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

@@ -236,8 +236,6 @@
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
-      "--json_output",
-      "/path/to/tmp/json",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nslow_tests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/win_x64_clang_dbg_win10"
@@ -249,10 +247,6 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",

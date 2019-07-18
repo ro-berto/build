@@ -267,8 +267,6 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--json_output",
-      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
@@ -276,13 +274,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [

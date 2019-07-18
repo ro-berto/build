@@ -115,8 +115,6 @@
       "V8 Foobar",
       "--config-file",
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
-      "--json_output",
-      "/path/to/tmp/json",
       "--swarming-targets-file",
       "bot_default\nperf\n",
       "//out/Release"
@@ -127,10 +125,6 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@  \"output\": \"ERROR at //path/file: error message\"@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@perf@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
