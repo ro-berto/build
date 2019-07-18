@@ -1604,19 +1604,19 @@ Usage is generally discouraged.
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#764)(self, bot_config, tests=None):**
 ### *recipe_modules* / [code\_coverage](/scripts/slave/recipe_modules/code_coverage)
 
-[DEPS](/scripts/slave/recipe_modules/code_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [swarming\_client](#recipe_modules-swarming_client), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/code_coverage/__init__.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [swarming\_client](#recipe_modules-swarming_client), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [ClangCoverageApi](/scripts/slave/recipe_modules/code_coverage/api.py#32)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 This module contains apis to interact with llvm-cov and llvm-profdata.
 
-&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#121)(self):**
+&emsp; **@property**<br>&mdash; **def [cov\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#123)(self):**
 
 Returns the path to the llvm-cov executable.
 
-&emsp; **@property**<br>&mdash; **def [gn\_args](/scripts/slave/recipe_modules/code_coverage/api.py#71)(self):**
+&emsp; **@property**<br>&mdash; **def [gn\_args](/scripts/slave/recipe_modules/code_coverage/api.py#73)(self):**
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#250)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#252)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1624,17 +1624,17 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [is\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#80)(self):**
+&emsp; **@property**<br>&mdash; **def [is\_clang\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#82)(self):**
 
-&emsp; **@property**<br>&mdash; **def [is\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#86)(self):**
+&emsp; **@property**<br>&mdash; **def [is\_java\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#88)(self):**
 
-&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/code_coverage/api.py#91)(self):**
+&emsp; **@property**<br>&mdash; **def [merge\_scripts\_location](/scripts/slave/recipe_modules/code_coverage/api.py#93)(self):**
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#133)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#135)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#290)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#292)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1642,7 +1642,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#277)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#279)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1650,7 +1650,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#330)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#332)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1660,7 +1660,7 @@ uploads them to the code-coverage-data storage bucket.
 Args:
   **kwargs: Kwargs for python and gsutil steps.
 
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#145)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#147)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1669,22 +1669,22 @@ Args:
       save in in this dir. None for getting the parent directory to contain
       the dirs for all steps.
 
-&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#116)(self):**
+&emsp; **@property**<br>&mdash; **def [profdata\_executable](/scripts/slave/recipe_modules/code_coverage/api.py#118)(self):**
 
 Returns the path to the llvm-profdata executable.
 
-&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/code_coverage/api.py#103)(self):**
+&emsp; **@property**<br>&mdash; **def [raw\_profile\_merge\_script](/scripts/slave/recipe_modules/code_coverage/api.py#105)(self):**
 
 Returns the location of a script that merges raw profiles from shards.
 
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#126)(self):**
+&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/code_coverage/api.py#128)(self):**
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#507)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#509)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
@@ -1693,11 +1693,11 @@ See the docstring for the `merge` parameter of api.chromium_swarming.task.
 |additional_merge| is an additional merge script. This will be invoked from
 the clang coverage merge script.
 
-&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/code_coverage/api.py#98)(self):**
+&emsp; **@property**<br>&mdash; **def [step\_merge\_script](/scripts/slave/recipe_modules/code_coverage/api.py#100)(self):**
 
 Returns the script that merges indexed profiles from multiple targets.
 
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#169)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/code_coverage/api.py#171)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)

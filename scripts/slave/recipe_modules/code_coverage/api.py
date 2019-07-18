@@ -7,7 +7,7 @@ import re
 
 from recipe_engine import recipe_api
 
-_BUCKET_NAME = 'code-coverage-data'
+_DEFAULT_BUCKET_NAME = 'code-coverage-data'
 
 # Name of the file to store the component map.
 _COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
@@ -32,7 +32,7 @@ _EXCLUDE_SOURCES = {
 class ClangCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to interact with llvm-cov and llvm-profdata."""
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, properties, *args, **kwargs):
     super(ClangCoverageApi, self).__init__(*args, **kwargs)
     # A single temporary directory to contain the profile data for all targets
     # in the build.
@@ -52,6 +52,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._merge_scripts_location = None
     # The map of gn args in args.gn file.
     self._gn_args = {}
+    # The bucket to which code coverage data should be uploaded.
+    self._gs_bucket = properties.gs_bucket or _DEFAULT_BUCKET_NAME
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -360,7 +362,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           **kwargs)
       self.m.gsutil.upload(
           source=coverage_dir.join('all.json.gz'),
-          bucket=_BUCKET_NAME,
+          bucket=self._gs_bucket,
           dest=self._compose_gs_path_for_coverage_data(
               'java_metadata/all.json.gz'),
           name='Upload JSON metadata',
@@ -387,7 +389,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           output=output_zip)
       self.m.gsutil.upload(
           source=output_zip,
-          bucket=_BUCKET_NAME,
+          bucket=self._gs_bucket,
           dest=self._compose_gs_path_for_coverage_data(
               'java_html_report/jacoco_html_report.zip'),
           link_name='JaCoCo HTML report',
@@ -412,12 +414,12 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     gs_path = self._compose_gs_path_for_coverage_data('merged.profdata')
     upload_step = self.m.gsutil.upload(
         merged_profdata,
-        _BUCKET_NAME,
+        self._gs_bucket,
         gs_path,
         link_name=None,
         name='upload merged.profdata')
     upload_step.presentation.links['merged.profdata'] = (
-        'https://storage.cloud.google.com/%s/%s' % (_BUCKET_NAME, gs_path))
+        'https://storage.cloud.google.com/%s/%s' % (self._gs_bucket, gs_path))
     upload_step.presentation.properties['merged_profdata_gs_path'] = gs_path
 
     return merged_profdata
@@ -494,7 +496,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     html_report_gs_path = self._compose_gs_path_for_coverage_data('html_report')
     upload_step = self.m.gsutil.upload(
         self.report_dir,
-        _BUCKET_NAME,
+        self._gs_bucket,
         html_report_gs_path,
         link_name=None,
         args=['-r'],
@@ -502,7 +504,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         name='upload html report')
     upload_step.presentation.links['html report'] = (
         'https://storage.cloud.google.com/%s/%s/index.html' %
-        (_BUCKET_NAME, html_report_gs_path))
+        (self._gs_bucket, html_report_gs_path))
 
   def shard_merge(self, step_name, additional_merge=None):
     """Returns a merge object understood by the swarming module.
@@ -634,17 +636,18 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       gs_path = self._compose_gs_path_for_coverage_data('metadata')
       upload_step = self.m.gsutil.upload(
           self.metadata_dir,
-          _BUCKET_NAME,
+          self._gs_bucket,
           gs_path,
           link_name=None,
           args=['-r'],
           multithreaded=True,
           name='upload coverage metadata')
       upload_step.presentation.links['metadata report'] = (
-          'https://storage.cloud.google.com/%s/%s/index.html' % (_BUCKET_NAME,
-                                                                 gs_path))
+          'https://storage.cloud.google.com/%s/%s/index.html' % (
+              self._gs_bucket, gs_path))
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
-      upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
+      upload_step.presentation.properties['coverage_gs_bucket'] = (
+          self._gs_bucket)
 
   def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files):
     """Generates the line number mapping from bot to Gerrit.
