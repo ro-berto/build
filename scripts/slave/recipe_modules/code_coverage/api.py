@@ -328,11 +328,10 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           raise
 
   def process_java_coverage_data(self, **kwargs):
-    """Creates JaCoCo HTML report and metadata to upload to storage bucket.
+    """Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
-    Creates an JaCoCo HTML report and metadata using generate_jacoco_report.py,
-    and uploads the HTML report and metadata to the code-coverage-data storage
-    bucket.
+    Generates Java coverage metadata and JaCoCo HTML report by scripts, and
+    uploads them to the code-coverage-data storage bucket.
 
     Args:
       **kwargs: Kwargs for python and gsutil steps.
@@ -340,22 +339,30 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     coverage_dir = self.m.chromium.output_dir.join('coverage')
 
     with self.m.step.nest('process java coverage'):
-      coverage_metadata_file = coverage_dir.join('coverage.json')
+      component_mapping_path = self._generate_component_mapping()
+      args = [
+          '--src-path',
+          self.m.path['checkout'],
+          '--output-dir',
+          coverage_dir,
+          '--coverage-dir',
+          coverage_dir,
+          '--sources-json-dir',
+          self.m.chromium.output_dir,
+          '--component-mapping-path',
+          component_mapping_path,
+      ]
       self.m.python(
-          'Generate JSON metadata',
-          self.m.path['checkout'].join('build', 'android',
-                                       'generate_jacoco_report.py'),
-          args=[
-              '--format', 'json', '--coverage-dir', coverage_dir,
-              '--sources-json-dir', self.m.chromium.output_dir, '--output-file',
-              coverage_metadata_file
-          ],
+          'Generate Java coverage metadata',
+          self.resource('generate_coverage_metadata_for_java.py'),
+          args=args,
           infra_step=True,
           **kwargs)
       self.m.gsutil.upload(
-          source=coverage_metadata_file,
+          source=coverage_dir.join('all.json.gz'),
           bucket=_BUCKET_NAME,
-          dest=self._compose_gs_path_for_coverage_data('java_metadata/'),
+          dest=self._compose_gs_path_for_coverage_data(
+              'java_metadata/all.json.gz'),
           name='Upload JSON metadata',
           link_name='Coverage metadata',
           **kwargs)
@@ -381,7 +388,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self.m.gsutil.upload(
           source=output_zip,
           bucket=_BUCKET_NAME,
-          dest=self._compose_gs_path_for_coverage_data('java_html_report/'),
+          dest=self._compose_gs_path_for_coverage_data(
+              'java_html_report/jacoco_html_report.zip'),
           link_name='JaCoCo HTML report',
           name='Upload zipped JaCoCo HTML report',
           **kwargs)

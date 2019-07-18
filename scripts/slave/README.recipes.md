@@ -1652,11 +1652,10 @@ Args:
 
 &mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#330)(self, \*\*kwargs):**
 
-Creates JaCoCo HTML report and metadata to upload to storage bucket.
+Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
-Creates an JaCoCo HTML report and metadata using generate_jacoco_report.py,
-and uploads the HTML report and metadata to the code-coverage-data storage
-bucket.
+Generates Java coverage metadata and JaCoCo HTML report by scripts, and
+uploads them to the code-coverage-data storage bucket.
 
 Args:
   **kwargs: Kwargs for python and gsutil steps.
@@ -1685,7 +1684,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#499)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#507)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
