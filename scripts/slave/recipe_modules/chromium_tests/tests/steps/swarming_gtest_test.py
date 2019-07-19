@@ -168,6 +168,6 @@ def GenTests(api):
           post_process.StepCommandContains, '[trigger] base_unittests', [
               '--env',
               'LLVM_PROFILE_FILE',
-              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw']) +
+              '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw']) +
       api.post_process(post_process.DropExpectation)
   )

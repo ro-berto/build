@@ -1636,7 +1636,7 @@ class SwarmingTest(Test):
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
       task_slice = task_slice.with_env_vars(**{
           'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
+              '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw',
       })
 
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
