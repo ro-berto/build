@@ -666,19 +666,7 @@ def GenTests(api):
     api.override_step_data('base_unittests3 (without patch)',
                            api.test_utils.gtest_results(None, retcode=1)) +
     api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.ResultReason,
-        textwrap.dedent('''\
-        3 Test Suite(s) failed.
-
-        **base_unittests1** failed because of:
-
-        - Test.Two
-
-        **base_unittests2** failed because of:
-
-        - Test.Two
-
-        ...1 more test(s)...''')
-    ) +
+    api.post_process(post_process.ResultReasonRE,
+        r'3 Test Suite\(s\) failed.*') +
     api.post_process(post_process.DropExpectation)
   )

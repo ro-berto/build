@@ -1640,12 +1640,15 @@ class SwarmingTest(Test):
       })
 
       # Wrap the merge script specific to the test type (i.e. gtest vs isolated
-      # script tests) in a coverage that know how to merge coverage data. If the
+      # script tests) in a wrapper that knows how to merge coverage data. If the
       # test object does not specify a merge script, use the one defined by the
       # swarming task in the chromium_swarm module. (The default behavior for
       # non-coverage tests).
       self._merge = api.chromium_tests.m.code_coverage.shard_merge(
           self.step_name(suffix), additional_merge=self._merge or task.merge)
+
+    if suffix.startswith('retry shards'):
+      task_slice = task_slice.with_idempotent(False)
 
     if suffix == 'retry shards with patch':
       task.task_to_retry = self._tasks['with patch']
@@ -1653,7 +1656,6 @@ class SwarmingTest(Test):
           '\'retry_shards_with_patch\' expects that the \'with patch\' phase '
           'has already run, but it apparently hasn\'t.')
       task.shard_indices = task.task_to_retry.failed_shards
-      task_slice = task_slice.with_idempotent(False)
       # Test suite failure is determined by merging and examining the JSON
       # output from the shards. Failed shards are determined by looking at the
       # swarming output [retcode !=0 or state != 'SUCCESS']. It is possible that

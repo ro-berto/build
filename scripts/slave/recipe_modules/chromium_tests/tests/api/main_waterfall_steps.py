@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
+    'test_utils',
 ]
 
 PROPERTIES = {
@@ -216,6 +217,10 @@ CUSTOM_BUILDERS = {
 }
 
 
+def NotIdempotent(check, step_odict, step):
+  check('Idempotent flag unexpected',
+        '--idempotent' not in step_odict[step].cmd)
+
 def RunSteps(api, gn_args):
   builders = None
   if api.properties.get('custom_builders'):
@@ -306,11 +311,21 @@ def GenTests(api):
               },
           }
       ) +
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(True),
+              internal_failure=True)) +
       api.post_process(
-            post_process.MustRun, 'base_unittests') +
+          post_process.MustRun, 'base_unittests (retry shards)') +
       api.post_process(
             post_process.MustRun,
-            'process clang code coverage data.generate metadata for 1 tests') +
+            'process clang code coverage data.'
+            'generate metadata for 2 tests') +
+      api.post_process(
+          NotIdempotent,
+          'test_pre_run (retry shards).[trigger] base_unittests (retry shards)'
+      ) +
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
     )
