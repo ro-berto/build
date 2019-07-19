@@ -75,6 +75,8 @@ def RunHostTests(api, out_dir, exe_extension=''):
       [directory.join('runtime_unittests' + exe_extension)])
     api.step('Test Shell',
       [directory.join('shell_unittests' + exe_extension)])
+    api.step('Test UI',
+      [directory.join('ui_unittests' + exe_extension)])
 
     if not api.platform.is_win:
       api.step('Test Embedder API',
