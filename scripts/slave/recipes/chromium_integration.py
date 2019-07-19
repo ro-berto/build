@@ -67,31 +67,48 @@ def GenTests(api):
       )
     )
 
+  def blink_test(
+      succeeds_with_patch,
+      succeeds_retry_with_patch=None,
+      succeeds_without_patch=None):
+    if succeeds_without_patch is not None:
+      assert succeeds_retry_with_patch is not None
+
+    def test_result(is_successful):
+      return api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=is_successful, swarming=True,
+                  isolated_script_passing=is_successful,
+                  isolated_script_retcode=0 if is_successful else 125),
+              failure=not is_successful)
+
+    result = blink_test_setup()
+
+    result += api.override_step_data(
+        'blink_web_tests (with patch)',
+        test_result(succeeds_with_patch))
+
+    if succeeds_retry_with_patch is not None:
+      result += api.override_step_data(
+          'blink_web_tests (retry shards with patch)',
+          test_result(succeeds_retry_with_patch))
+
+      if succeeds_without_patch is not None:
+        result += api.override_step_data(
+            'blink_web_tests (without patch)',
+            test_result(succeeds_without_patch))
+
+    return result
+
   yield (
     api.test('bug_introduced_by_commit') +
-    blink_test_setup() +
-    api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (retry shards with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (without patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=True, swarming=True,
-                isolated_script_passing=True))) +
+    blink_test(
+        succeeds_with_patch=False,
+        succeeds_retry_with_patch=False,
+        succeeds_without_patch=True) +
     api.post_process(post_process.MustRun, 'blink_web_tests (with patch)') +
     api.post_process(
-      post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
+        post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
     api.post_process(post_process.MustRun, 'blink_web_tests (without patch)') +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
@@ -99,31 +116,14 @@ def GenTests(api):
 
   yield (
     api.test('bug_introduced_by_chromium') +
-    blink_test_setup() +
-    api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (retry shards with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (without patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False),
-            failure=True)) +
+    blink_test(
+        succeeds_with_patch=False,
+        succeeds_retry_with_patch=False,
+        succeeds_without_patch=False) +
     api.post_process(
-      post_process.MustRun, 'blink_web_tests (with patch)') +
+        post_process.MustRun, 'blink_web_tests (with patch)') +
     api.post_process(
-      post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
+        post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
     api.post_process(post_process.MustRun, 'blink_web_tests (without patch)') +
     api.post_process(post_process.StatusSuccess) +
     api.post_process(post_process.DropExpectation)
@@ -131,19 +131,9 @@ def GenTests(api):
 
   yield (
     api.test('flaky_test') +
-    blink_test_setup() +
-    api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (retry shards with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=True, swarming=True,
-                isolated_script_passing=True))) +
+    blink_test(
+        succeeds_with_patch=False,
+        succeeds_retry_with_patch=True) +
     api.post_process(post_process.MustRun, 'blink_web_tests (with patch)') +
     api.post_process(
       post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
