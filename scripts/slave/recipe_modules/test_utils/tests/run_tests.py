@@ -21,9 +21,11 @@ PROPERTIES = {
   'abort_on_failure': Property(default=False),
   'test_swarming': Property(default=False),
   'test_name': Property(default='MockTest'),
+  'retry_invalid_shards': Property(default=False),
 }
 
-def RunSteps(api, test_swarming, test_name, abort_on_failure):
+def RunSteps(api, test_swarming, test_name, abort_on_failure,
+             retry_invalid_shards):
   api.chromium.set_config('chromium')
   api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
@@ -33,6 +35,11 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure):
       api.chromium_tests.steps.MockTest):
     def __init__(self, name, api):
       super(MockSwarmingTest, self).__init__(name=name, api=api)
+
+    def has_valid_results(self, suffix):
+      if self.name.endswith('invalid_results'):
+        return False
+      return super(MockSwarmingTest, self).has_valid_results(suffix)
 
   if test_swarming:
     tests = [
@@ -49,7 +56,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure):
     ]
 
   _, failed_tests = api.test_utils.run_tests(
-      api.chromium_tests.m, tests, '')
+      api.chromium_tests.m, tests, '',
+      retry_invalid_shards=retry_invalid_shards)
   if failed_tests:
     raise api.step.StepFailure(
         'failed: %s' % ' '.join(t.name for t in failed_tests))
@@ -187,6 +195,31 @@ def GenTests(api):
       api.override_step_data('base_unittests', retcode=infra_code) +
       api.post_process(post_process.DoesNotRun, 'test2') +
       api.post_process(post_process.StatusException) +
+      api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      api.test('retry_invalid_swarming') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123,
+          test_name='base_unittests_invalid_results',
+          test_swarming=True,
+          retry_invalid_shards=True,
+          swarm_hashes={
+            'base_unittests_invalid_results': '[dummy hash for base_unittests]',
+            'base_unittests_invalid_results_2':
+                '[dummy hash for base_unittests_2]',
+          }) +
+      api.chromium_swarming.wait_for_finished_task_set([
+          ([], 1),
+          ([['10000'], ['110000']], 1),
+      ]) +
+      api.post_process(post_process.MustRun,
+                       'base_unittests_invalid_results (retry shards)') +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests_invalid_results_2 (retry shards)') +
       api.post_process(post_process.DropExpectation)
   )
 

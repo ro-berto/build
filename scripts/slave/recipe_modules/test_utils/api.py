@@ -221,7 +221,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return invalid_results, failed_tests
 
   def run_tests(self, caller_api, tests, suffix, sort_by_shard=False,
-                retry_failed_shards=False):
+                retry_failed_shards=False, retry_invalid_shards=False):
     """
     Utility function for running a list of tests and returning the failed tests.
 
@@ -240,10 +240,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
       sort_by_shard - sort the order of triggering depends on the number of
                       shards.
       retry_failed_shards: If true, attempts to retry failed shards of swarming
-                           tests.
+                           tests, typically used with retry_invalid_shards.
+      retry_invalid_shards: If true, attempts to retry shards of swarming tests
+                            without valid results.
     Returns:
       A tuple of (list of tests with invalid results,
-                  list of tests which failed)
+                  list of tests which failed including invalid results)
 
 
     """
@@ -254,13 +256,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_results, failed_tests = self._run_tests_once(
             caller_api, tests, suffix,
             sort_by_shard=sort_by_shard)
-    for t in invalid_results:
-      if t not in failed_tests:
-        failed_tests.append(t)
-    if retry_failed_shards:
-      # Assume that non swarming test retries probably won't help.
+    failed_and_invalid_tests = list(set(failed_tests + invalid_results))
+    if retry_failed_shards or retry_invalid_shards:
+      tests_to_retry = set()
+      if retry_failed_shards:
+        tests_to_retry.update(failed_tests)
+      if retry_invalid_shards:
+        tests_to_retry.update(invalid_results)
+
       swarming_test_suites = []
-      for test_suite in failed_tests:
+      for test_suite in tests_to_retry:
+        # Assume that non swarming test retries probably won't help.
         if test_suite.runs_on_swarming:
           swarming_test_suites.append(test_suite)
 
@@ -291,9 +297,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
           valid, failures = test.failures_including_retry(suffix)
           return not valid or failures
 
-        failed_tests = [t for t in failed_tests if _still_failing(t)]
+        failed_and_invalid_tests = [
+            t for t in failed_and_invalid_tests if _still_failing(t)]
 
-    return invalid_results, failed_tests
+    return invalid_results, failed_and_invalid_tests
 
   def run_tests_with_patch(self, caller_api, tests, retry_failed_shards=False):
     """Run tests and returns failures.
@@ -314,7 +321,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     invalid_test_suites, all_failing_test_suites = self.run_tests(
         caller_api, tests, 'with patch', sort_by_shard=True,
-        retry_failed_shards=retry_failed_shards)
+        retry_failed_shards=retry_failed_shards,
+        retry_invalid_shards=retry_failed_shards)
 
     # Set metadata about invalid test suites.
     for t in invalid_test_suites:
