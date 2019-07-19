@@ -67,6 +67,10 @@ TEST_CONFIGS = freeze({
     'name': 'Benchmarks',
     'tests': ['benchmarks'],
   },
+  'check-bytecode-baseline': {
+    'tool': 'check-bytecode-baseline',
+    'isolated_target': 'generate-bytecode-expectations',
+  },
   'd8testing': {
     'name': 'Check - d8',
     'tests': ['d8_default'],
@@ -689,6 +693,7 @@ class V8CompositeSwarmingTest(BaseTest):
       c.run(**kwargs)
     return TestResults.empty()
 
+
 class V8CheckInitializers(V8GenericSwarmingTest):
   @property
   def title(self):
@@ -699,6 +704,21 @@ class V8CheckInitializers(V8GenericSwarmingTest):
     return [
       'tools/check-static-initializers.sh',
       self.api.v8.relative_path_to_d8,
+    ]
+
+
+class V8CheckBytecodeBaseline(V8GenericSwarmingTest):
+  @property
+  def title(self):
+    return 'Bytecode-Baseline'
+
+  @property
+  def command(self):
+    return [
+      self.api.path.join(
+          'out', self.api.chromium.c.build_config_fs,
+          'generate-bytecode-expectations'),
+      '--check-baseline',
     ]
 
 
@@ -774,6 +794,7 @@ TOOL_TO_TEST = freeze({
 
 
 TOOL_TO_TEST_SWARMING = freeze({
+  'check-bytecode-baseline': V8CheckBytecodeBaseline,
   'check-static-initializers': V8CheckInitializers,
   'jsfunfuzz': V8Fuzzer,
   'run-gcmole': V8GCMole,

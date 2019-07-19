@@ -489,6 +489,19 @@ def GenTests(api):
     api.v8.test(
         'client.v8',
         'V8 Foobar',
+        'bytecode_baseline',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "check-bytecode-baseline"}]}',
+    ) +
+    api.post_process(MustRun, 'Bytecode-Baseline on Ubuntu-16.04') +
+    api.post_process(DropExpectation)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
         'perf',
         parent_buildername='V8 Foobar - builder',
         parent_bot_config=release_bot_config,
