@@ -1164,7 +1164,7 @@
       "--second-build-dir",
       "[CACHE]/builder/src/out/Release.2",
       "--json-input",
-      "[\"base_unittest\", \"flatc\"]",
+      "[\"base_unittest\", \"flatc\", \"args.gn\"]",
       "--output",
       "[CLEANUP]/deterministic_build_tmp_1/deterministic_build_diffs.tgz"
     ],

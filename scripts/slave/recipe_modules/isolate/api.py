@@ -346,9 +346,23 @@ class IsolateApi(recipe_api.RecipeApi):
     GS_BUCKET = 'chrome-determinism'
     TARBALL_NAME = 'deterministic_build_diffs.tgz'
 
+    # compare_build_artifacts.py --json-output produces a json object that
+    # looks like
+    # {
+    #   'expected_diffs': [ ...filenames... ],
+    #   'unexpected_diffs': [ ...filenames... ],
+    #   'deps_diff': [ ...filenames... ],
+    # }
+    # Join all three filename lists in the values into a single list.
     diffs = list(itertools.chain.from_iterable(values.itervalues()))
     if not diffs:  # pragma: no cover
       return
+
+    # args.gn won't be different, but it's useful to have it in the archive:
+    # It's tiny, contains useful information, and compare_build_artifacts.py
+    # reads it to check if this is a component build. So having this in the
+    # archive makes running compare_build_artifacts.py locally easier.
+    diffs.append('args.gn')
 
     with self.m.tempfile.temp_dir('deterministic_build') as t:
       output = self.m.path.join(t, TARBALL_NAME)

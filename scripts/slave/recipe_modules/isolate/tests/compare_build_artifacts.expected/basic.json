@@ -39,7 +39,7 @@
       "--second-build-dir",
       "second_dir",
       "--json-input",
-      "[\"base_unittest\", \"flatc\"]",
+      "[\"base_unittest\", \"flatc\", \"args.gn\"]",
       "--output",
       "[CLEANUP]/deterministic_build_tmp_1/deterministic_build_diffs.tgz"
     ],
