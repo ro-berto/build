@@ -85,16 +85,6 @@ def RunHostTests(api, out_dir, exe_extension=''):
         [directory.join('flutter_channels_unittests' + exe_extension)])
 
 
-def BuildFuchsiaArtifactsAndUpload(api):
-  with api.depot_tools.on_path():
-    api.goma.start()
-    checkout = api.path['start_dir'].join('src')
-    build_script = str(checkout.join(
-      'build/fuchsia/build_fuchsia_artifacts.py'))
-    cmd = ['python', build_script, '--upload']
-    api.step('Build Fuchsia Artifacts & Upload', cmd)
-
-
 def RunGN(api, *args):
   # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
   with api.depot_tools.on_path():
@@ -344,7 +334,13 @@ def BuildLinux(api):
 
 def BuildFuchsia(api):
   if api.properties.get('build_host', True):
-    BuildFuchsiaArtifactsAndUpload(api)
+    RunGN(api, '--runtime-mode', 'debug', '--fuchsia')
+    RunGN(api, '--runtime-mode', 'profile', '--fuchsia')
+    RunGN(api, '--runtime-mode', 'release', '--fuchsia')
+    Build(api, 'fuchsia_debug')
+    Build(api, 'fuchsia_profile')
+    Build(api, 'fuchsia_release')
+    # TODO(cbracken): build and upload CIPD package
 
 
 def TestObservatory(api):
