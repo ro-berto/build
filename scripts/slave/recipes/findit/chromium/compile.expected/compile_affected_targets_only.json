@@ -867,6 +867,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"a\", \"a_run\", \"b\", \"b_run\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "/path/to/tmp/json",
+      "--json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -889,6 +891,9 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"a\", @@@",
@@ -954,6 +959,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -963,7 +970,9 @@
     },
     "name": "test r2.generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

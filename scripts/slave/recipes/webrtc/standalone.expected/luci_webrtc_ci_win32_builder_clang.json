@@ -193,6 +193,8 @@
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
+      "--json-output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
       "//out/Win32_Builder_Clang"
@@ -204,6 +206,8 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@isac_fix_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",

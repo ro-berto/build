@@ -205,6 +205,8 @@
       "bwe_test_logging",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/bwe_test_logging"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -213,7 +215,11 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [],
@@ -558,6 +564,8 @@
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/dummy_audio_file_devices_no_protobuf"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -566,7 +574,11 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "name": "generate_build_files (2)"
+    "name": "generate_build_files (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [],
@@ -911,6 +923,8 @@
       "rtti_no_sctp",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/rtti_no_sctp"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -919,7 +933,11 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "name": "generate_build_files (3)"
+    "name": "generate_build_files (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [],

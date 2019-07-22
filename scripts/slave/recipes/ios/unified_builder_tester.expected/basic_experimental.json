@@ -389,6 +389,8 @@
       "ios",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -399,7 +401,11 @@
       "fake env var 1": "fake env value 1",
       "fake env var 2": "fake env value 2"
     },
-    "name": "generate build files (mb)"
+    "name": "generate build files (mb)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [

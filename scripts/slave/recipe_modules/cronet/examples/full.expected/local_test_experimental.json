@@ -284,6 +284,8 @@
       "local_test",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Debug"
     ],
     "cwd": "[START_DIR]/src",
@@ -291,7 +293,11 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [

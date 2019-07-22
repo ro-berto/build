@@ -325,6 +325,8 @@
       "local",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -332,7 +334,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [
@@ -470,6 +476,8 @@
       "goma",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release.2"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -477,7 +485,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files (2)"
+    "name": "generate_build_files (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [

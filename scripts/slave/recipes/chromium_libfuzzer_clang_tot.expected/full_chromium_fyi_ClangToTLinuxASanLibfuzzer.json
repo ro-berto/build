@@ -246,13 +246,19 @@
       "ClangToTLinuxASanLibfuzzer",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "allow_subannotations": true,

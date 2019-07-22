@@ -585,6 +585,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -594,7 +596,9 @@
     },
     "name": "test r3.generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -664,6 +668,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -673,7 +679,9 @@
     },
     "name": "test r3.generate_build_files (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -1267,6 +1275,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1276,7 +1286,9 @@
     },
     "name": "test r2.generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -1346,6 +1358,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1355,7 +1369,9 @@
     },
     "name": "test r2.generate_build_files (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

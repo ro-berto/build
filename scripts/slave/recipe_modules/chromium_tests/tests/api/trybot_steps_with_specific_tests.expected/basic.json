@@ -819,6 +819,8 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "base_unittests\n",
       "//out/Release"
@@ -830,6 +832,8 @@
     },
     "name": "generate_build_files (without patch)",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@base_unittests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

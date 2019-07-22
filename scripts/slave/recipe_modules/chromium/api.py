@@ -7,6 +7,7 @@ import contextlib
 import functools
 import re
 import textwrap
+import json
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -1200,22 +1201,35 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args.extend(self._mb_isolate_map_file_args())
     mb_args.extend(self._mb_build_dir_args(build_dir))
     mb_args.extend([self.m.json.input(analyze_input), self.m.json.output()])
-    return self.run_mb_cmd(
-        name, 'analyze', mastername, buildername,
-        mb_path=mb_path,
-        mb_config_path=mb_config_path,
-        chromium_config=chromium_config,
-        phase=phase,
-        # Ignore goma for analysis.
-        use_goma=False,
-        additional_args=mb_args,
-        step_test_data=lambda: self.m.json.test_api.output(
-            {
-                'status': 'No dependency',
-                'compile_targets': [],
-                'test_targets': [],
-            }),
-        **kwargs)
+    mb_args.extend([
+      '--json-output',
+      self.m.json.output(name="failure_summary")
+    ])
+
+    step_test_data = (
+        lambda: self.m.json.test_api.output(
+                {
+                    'status': 'No dependency',
+                    'compile_targets': [],
+                    'test_targets': [],
+                }
+              ) +
+              self.m.json.test_api.output(
+                {}, name='failure_summary'
+              )
+    )
+    with self.mb_failure_handler(name):
+      return self.run_mb_cmd(
+          name, 'analyze', mastername, buildername,
+          mb_path=mb_path,
+          mb_config_path=mb_config_path,
+          chromium_config=chromium_config,
+          phase=phase,
+          # Ignore goma for analysis.
+          use_goma=False,
+          additional_args=mb_args,
+          step_test_data=step_test_data,
+          **kwargs)
 
   @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
@@ -1334,7 +1348,13 @@ class ChromiumApi(recipe_api.RecipeApi):
         gn_args_location=gn_args_location,
         gn_args_max_text_lines=gn_args_max_text_lines)
 
-    mb_args = []
+    mb_args = ['--json-output', self.m.json.output(name="failure_summary")]
+
+    step_test_data = (
+        lambda: self.m.json.test_api.output(
+                {}, name='failure_summary'
+              )
+    )
 
     mb_args.extend(self._mb_isolate_map_file_args())
 
@@ -1347,18 +1367,20 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args.extend(self._mb_build_dir_args(build_dir))
 
     name = name or 'generate_build_files'
-    result = self.run_mb_cmd(
-        name, 'gen', mastername, buildername,
-        mb_path=mb_path, mb_config_path=mb_config_path,
-        phase=phase, use_goma=use_goma,
-        android_version_code=android_version_code,
-        android_version_name=android_version_name,
-        additional_args=mb_args,
-        **kwargs)
+    with self.mb_failure_handler(name):
+      result = self.run_mb_cmd(
+          name, 'gen', mastername, buildername,
+          mb_path=mb_path, mb_config_path=mb_config_path,
+          phase=phase, use_goma=use_goma,
+          android_version_code=android_version_code,
+          android_version_name=android_version_name,
+          additional_args=mb_args,
+          step_test_data=step_test_data,
+          **kwargs)
 
-    if isolated_targets:
-      result.presentation.logs['swarming-targets-file.txt'] = (
-          sorted_isolated_targets)
+      if isolated_targets:
+        result.presentation.logs['swarming-targets-file.txt'] = (
+            sorted_isolated_targets)
 
     return gn_args
 
@@ -1381,6 +1403,49 @@ class ChromiumApi(recipe_api.RecipeApi):
                     android_version_name=android_version_name,
                     additional_args=args,
                     **kwargs)
+
+  @contextlib.contextmanager
+  def mb_failure_handler(self, name):
+    try:
+      yield
+    except self.m.step.StepFailure as ex:
+      if ex.result.json.outputs:
+        failure_summary = ex.result.json.outputs['failure_summary']
+        if failure_summary and failure_summary['output']:
+          ex.reason = self._format_mb_failures(name, failure_summary['output'])
+      raise
+
+  def _format_mb_failures(self, step_name, error_message, char_limit=700):
+    """Adds markdown to mb failure and reformats if message is too long.
+
+       Args:
+        error_message: (string) output message written by mb command
+          to json output
+        char_limit: (number) limits overall message size
+
+       Returns:
+        String of formatted error messages
+    """
+
+    if self._test_data.enabled:
+      char_limit = self._test_data.get('change_char_size_limit', 150)
+
+    if len(error_message) <= char_limit:
+      return error_message
+
+    # Extract error lines (...ERROR at...)
+    error_re = re.compile(r'.*ERROR\s+at.+')
+    error_list = error_re.findall(error_message)
+    if error_list:
+      error_list = self._limit_error_list(error_list, char_limit)
+      notification = 'Step **%s** failed.\n\nList of errors:' % step_name
+      error_list.insert(0, notification)
+      return '\n\n- '.join(error_list)
+
+    # No matches found
+    return ('No lines that look like "...ERROR at..." '
+            'found in the compile output.\n'
+            'Refer to stdout for more information.')
 
   def taskkill(self):
     self.m.build.python(

@@ -370,6 +370,8 @@
       "ios-simulator",
       "--config-file",
       "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Debug-iphonesimulator"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src",
@@ -378,7 +380,11 @@
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "generate build files (mb) (with patch)"
+    "name": "generate build files (mb) (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [
@@ -439,6 +445,8 @@
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "/path/to/tmp/json",
+      "--json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src",
@@ -453,7 +461,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {

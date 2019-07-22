@@ -39,6 +39,8 @@
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"compile1\", \"compile2\"], \"files\": [\"file1\", \"file2\"], \"test_targets\": [\"test1\", \"test2\"]}",
+      "/path/to/tmp/json",
+      "--json-output",
       "/path/to/tmp/json"
     ],
     "cwd": "None",
@@ -56,6 +58,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"compile1\", @@@",

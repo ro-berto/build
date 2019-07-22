@@ -224,6 +224,8 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "AppRTCMobile_test_apk\nandroid_instrumentation_test_apk\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
       "//out/android_arm64_dbg"
@@ -236,6 +238,8 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobile_test_apk@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@android_instrumentation_test_apk@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",

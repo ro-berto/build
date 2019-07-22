@@ -604,6 +604,8 @@
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "--swarming-targets-file",
       "services_unittests\n",
       "//out/Release"
@@ -616,6 +618,8 @@
     "name": "test r1.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@services_unittests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]

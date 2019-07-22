@@ -408,6 +408,8 @@
       "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--json-output",
+      "/path/to/tmp/json",
       "//out/Release-iphoneos"
     ],
     "cwd": "[BUILDER_CACHE]/ios/src",
@@ -417,7 +419,11 @@
       "GOMA_USE_LOCAL": "false",
       "LANDMINES_VERBOSE": "1"
     },
-    "name": "generate build files (mb)"
+    "name": "generate build files (mb)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
   },
   {
     "cmd": [],
