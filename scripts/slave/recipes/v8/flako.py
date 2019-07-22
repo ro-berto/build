@@ -627,7 +627,7 @@ def GenTests(api):
             isolated_name='foo_isolated',
             build_config='Debug',
             repetitions=64,
-            swarming_dimensions=['os:Ubuntu-14.04', 'cpu:x86-64'],
+            swarming_dimensions=['os:Ubuntu-16.04', 'cpu:x86-64'],
             test_name='mjsunit/foobar',
             timeout_sec=20,
             to_revision='a0',

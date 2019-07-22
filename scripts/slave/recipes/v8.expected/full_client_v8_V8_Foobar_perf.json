@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests1 on Ubuntu-16.04",
+      "stepname:JSTests1",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -150,7 +150,7 @@
       "--buildbot",
       "--run-count=2"
     ],
-    "name": "trigger tests.[trigger] JSTests1 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] JSTests1"
   },
   {
     "cmd": [
@@ -216,7 +216,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests2 on Ubuntu-16.04",
+      "stepname:JSTests2",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -251,7 +251,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests2 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] JSTests2"
   },
   {
     "cmd": [
@@ -317,7 +317,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests3 on Ubuntu-16.04",
+      "stepname:JSTests3",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -352,7 +352,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests3 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] JSTests3"
   },
   {
     "cmd": [
@@ -418,7 +418,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests4 on Ubuntu-16.04",
+      "stepname:JSTests4",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -453,7 +453,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests4 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] JSTests4"
   },
   {
     "cmd": [
@@ -519,7 +519,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:JSTests5 on Ubuntu-16.04",
+      "stepname:JSTests5",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -554,7 +554,7 @@
       "--buildbot",
       "--run-count=1"
     ],
-    "name": "trigger tests.[trigger] JSTests5 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] JSTests5"
   },
   {
     "cmd": [
@@ -598,7 +598,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests1 on Ubuntu-16.04",
+    "name": "JSTests1",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -675,7 +675,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests2 on Ubuntu-16.04",
+    "name": "JSTests2",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -752,7 +752,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests3 on Ubuntu-16.04",
+    "name": "JSTests3",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -829,7 +829,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests4 on Ubuntu-16.04",
+    "name": "JSTests4",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -906,7 +906,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "JSTests5 on Ubuntu-16.04",
+    "name": "JSTests5",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

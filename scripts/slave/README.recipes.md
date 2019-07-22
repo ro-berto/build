@@ -3996,11 +3996,11 @@ Summary of the recipe flow:
 Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#228)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#224)(api):**
 
 &mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#51)(config, bits, platform, swarming_shards, swarming_priority=35):**
 
-&mdash; **def [build](/scripts/slave/recipes/blink_downstream.py#98)(api, suffix):**
+&mdash; **def [build](/scripts/slave/recipes/blink_downstream.py#94)(api, suffix):**
 
 Compiles and isolates the checked-out code.
 

@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:GCMole ia32 on Ubuntu-16.04",
+      "stepname:GCMole ia32",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -146,7 +146,7 @@
       "tools/gcmole/run-gcmole.py",
       "ia32"
     ],
-    "name": "trigger tests.[trigger] GCMole ia32 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] GCMole ia32"
   },
   {
     "cmd": [
@@ -212,7 +212,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:GCMole x64 on Ubuntu-16.04",
+      "stepname:GCMole x64",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -243,7 +243,7 @@
       "tools/gcmole/run-gcmole.py",
       "x64"
     ],
-    "name": "trigger tests.[trigger] GCMole x64 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] GCMole x64"
   },
   {
     "cmd": [
@@ -309,7 +309,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:GCMole arm on Ubuntu-16.04",
+      "stepname:GCMole arm",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -340,7 +340,7 @@
       "tools/gcmole/run-gcmole.py",
       "arm"
     ],
-    "name": "trigger tests.[trigger] GCMole arm on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] GCMole arm"
   },
   {
     "cmd": [
@@ -406,7 +406,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:GCMole arm64 on Ubuntu-16.04",
+      "stepname:GCMole arm64",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -437,7 +437,7 @@
       "tools/gcmole/run-gcmole.py",
       "arm64"
     ],
-    "name": "trigger tests.[trigger] GCMole arm64 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] GCMole arm64"
   },
   {
     "cmd": [
@@ -481,7 +481,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "GCMole ia32 on Ubuntu-16.04",
+    "name": "GCMole ia32",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -558,7 +558,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "GCMole x64 on Ubuntu-16.04",
+    "name": "GCMole x64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -635,7 +635,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "GCMole arm on Ubuntu-16.04",
+    "name": "GCMole arm",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -712,7 +712,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "GCMole arm64 on Ubuntu-16.04",
+    "name": "GCMole arm64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",

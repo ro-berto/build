@@ -665,7 +665,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:audio_decoder_unittests on Ubuntu-16.04",
+      "stepname:audio_decoder_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -697,7 +697,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] audio_decoder_unittests on Ubuntu-16.04",
+    "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -775,7 +775,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:common_audio_unittests on Ubuntu-16.04",
+      "stepname:common_audio_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -807,7 +807,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] common_audio_unittests on Ubuntu-16.04",
+    "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -885,7 +885,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:common_video_unittests on Ubuntu-16.04",
+      "stepname:common_video_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -917,7 +917,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] common_video_unittests on Ubuntu-16.04",
+    "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -995,7 +995,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:low_bandwidth_audio_test on Ubuntu-16.04",
+      "stepname:low_bandwidth_audio_test",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1027,7 +1027,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] low_bandwidth_audio_test on Ubuntu-16.04",
+    "name": "[trigger] low_bandwidth_audio_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1109,7 +1109,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_tests on Ubuntu-16.04",
+      "stepname:modules_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1141,7 +1141,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_tests on Ubuntu-16.04",
+    "name": "[trigger] modules_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1223,7 +1223,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_tests on Ubuntu-16.04",
+      "stepname:modules_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1255,7 +1255,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_tests on Ubuntu-16.04 (2)",
+    "name": "[trigger] modules_tests (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1337,7 +1337,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1369,7 +1369,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04",
+    "name": "[trigger] modules_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1451,7 +1451,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1483,7 +1483,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04 (2)",
+    "name": "[trigger] modules_unittests (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1565,7 +1565,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1597,7 +1597,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04 (3)",
+    "name": "[trigger] modules_unittests (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1679,7 +1679,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1711,7 +1711,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04 (4)",
+    "name": "[trigger] modules_unittests (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1793,7 +1793,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1825,7 +1825,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04 (5)",
+    "name": "[trigger] modules_unittests (5)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1907,7 +1907,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:modules_unittests on Ubuntu-16.04",
+      "stepname:modules_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1939,7 +1939,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] modules_unittests on Ubuntu-16.04 (6)",
+    "name": "[trigger] modules_unittests (6)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2021,7 +2021,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:peerconnection_unittests on Ubuntu-16.04",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2053,7 +2053,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] peerconnection_unittests on Ubuntu-16.04",
+    "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2135,7 +2135,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:peerconnection_unittests on Ubuntu-16.04",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2167,7 +2167,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] peerconnection_unittests on Ubuntu-16.04 (2)",
+    "name": "[trigger] peerconnection_unittests (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2249,7 +2249,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:peerconnection_unittests on Ubuntu-16.04",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2281,7 +2281,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] peerconnection_unittests on Ubuntu-16.04 (3)",
+    "name": "[trigger] peerconnection_unittests (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2363,7 +2363,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:peerconnection_unittests on Ubuntu-16.04",
+      "stepname:peerconnection_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2395,7 +2395,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] peerconnection_unittests on Ubuntu-16.04 (4)",
+    "name": "[trigger] peerconnection_unittests (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2473,7 +2473,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_media_unittests on Ubuntu-16.04",
+      "stepname:rtc_media_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2505,7 +2505,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_media_unittests on Ubuntu-16.04",
+    "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2583,7 +2583,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_pc_unittests on Ubuntu-16.04",
+      "stepname:rtc_pc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2615,7 +2615,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_pc_unittests on Ubuntu-16.04",
+    "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2693,7 +2693,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_stats_unittests on Ubuntu-16.04",
+      "stepname:rtc_stats_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2725,7 +2725,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_stats_unittests on Ubuntu-16.04",
+    "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2807,7 +2807,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2839,7 +2839,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04",
+    "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2921,7 +2921,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2953,7 +2953,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04 (2)",
+    "name": "[trigger] rtc_unittests (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3035,7 +3035,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3067,7 +3067,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04 (3)",
+    "name": "[trigger] rtc_unittests (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3149,7 +3149,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3181,7 +3181,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04 (4)",
+    "name": "[trigger] rtc_unittests (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3263,7 +3263,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3295,7 +3295,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04 (5)",
+    "name": "[trigger] rtc_unittests (5)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3377,7 +3377,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:rtc_unittests on Ubuntu-16.04",
+      "stepname:rtc_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3409,7 +3409,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] rtc_unittests on Ubuntu-16.04 (6)",
+    "name": "[trigger] rtc_unittests (6)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3487,7 +3487,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:slow_tests on Ubuntu-16.04",
+      "stepname:slow_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3519,7 +3519,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] slow_tests on Ubuntu-16.04",
+    "name": "[trigger] slow_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3597,7 +3597,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:system_wrappers_unittests on Ubuntu-16.04",
+      "stepname:system_wrappers_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3629,7 +3629,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] system_wrappers_unittests on Ubuntu-16.04",
+    "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3707,7 +3707,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:test_support_unittests on Ubuntu-16.04",
+      "stepname:test_support_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3739,7 +3739,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] test_support_unittests on Ubuntu-16.04",
+    "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3817,7 +3817,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:tools_unittests on Ubuntu-16.04",
+      "stepname:tools_unittests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3849,7 +3849,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] tools_unittests on Ubuntu-16.04",
+    "name": "[trigger] tools_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3931,7 +3931,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:video_engine_tests on Ubuntu-16.04",
+      "stepname:video_engine_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -3963,7 +3963,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] video_engine_tests on Ubuntu-16.04",
+    "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4045,7 +4045,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:video_engine_tests on Ubuntu-16.04",
+      "stepname:video_engine_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -4077,7 +4077,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] video_engine_tests on Ubuntu-16.04 (2)",
+    "name": "[trigger] video_engine_tests (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4159,7 +4159,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:video_engine_tests on Ubuntu-16.04",
+      "stepname:video_engine_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -4191,7 +4191,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] video_engine_tests on Ubuntu-16.04 (3)",
+    "name": "[trigger] video_engine_tests (3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4273,7 +4273,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:video_engine_tests on Ubuntu-16.04",
+      "stepname:video_engine_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -4305,7 +4305,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] video_engine_tests on Ubuntu-16.04 (4)",
+    "name": "[trigger] video_engine_tests (4)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4383,7 +4383,7 @@
       "--tag",
       "spec_name:webrtc.ci:Linux32 Debug",
       "--tag",
-      "stepname:webrtc_nonparallel_tests on Ubuntu-16.04",
+      "stepname:webrtc_nonparallel_tests",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -4415,7 +4415,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] webrtc_nonparallel_tests on Ubuntu-16.04",
+    "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4507,7 +4507,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "audio_decoder_unittests on Ubuntu-16.04",
+    "name": "audio_decoder_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4568,7 +4568,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"audio_decoder_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"audio_decoder_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"audio_decoder_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -4648,7 +4648,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "common_audio_unittests on Ubuntu-16.04",
+    "name": "common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4709,7 +4709,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -4789,7 +4789,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "common_video_unittests on Ubuntu-16.04",
+    "name": "common_video_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4850,7 +4850,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_video_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_video_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_video_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -4930,7 +4930,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "low_bandwidth_audio_test on Ubuntu-16.04",
+    "name": "low_bandwidth_audio_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4991,7 +4991,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_test on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5071,7 +5071,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "modules_tests on Ubuntu-16.04",
+    "name": "modules_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5138,7 +5138,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_tests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5220,7 +5220,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "modules_unittests on Ubuntu-16.04",
+    "name": "modules_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5311,7 +5311,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5401,7 +5401,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "peerconnection_unittests on Ubuntu-16.04",
+    "name": "peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5480,7 +5480,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"peerconnection_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5566,7 +5566,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "rtc_media_unittests on Ubuntu-16.04",
+    "name": "rtc_media_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5627,7 +5627,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_media_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_media_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_media_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5707,7 +5707,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "rtc_pc_unittests on Ubuntu-16.04",
+    "name": "rtc_pc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5768,7 +5768,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_pc_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_pc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_pc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5848,7 +5848,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "rtc_stats_unittests on Ubuntu-16.04",
+    "name": "rtc_stats_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5909,7 +5909,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_stats_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -5989,7 +5989,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "rtc_unittests on Ubuntu-16.04",
+    "name": "rtc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6080,7 +6080,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6170,7 +6170,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "slow_tests on Ubuntu-16.04",
+    "name": "slow_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6231,7 +6231,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"slow_tests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"slow_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"slow_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6311,7 +6311,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "system_wrappers_unittests on Ubuntu-16.04",
+    "name": "system_wrappers_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6372,7 +6372,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"system_wrappers_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"system_wrappers_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"system_wrappers_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6452,7 +6452,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "test_support_unittests on Ubuntu-16.04",
+    "name": "test_support_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6513,7 +6513,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test_support_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6593,7 +6593,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "tools_unittests on Ubuntu-16.04",
+    "name": "tools_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6654,7 +6654,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"tools_unittests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6734,7 +6734,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "video_engine_tests on Ubuntu-16.04",
+    "name": "video_engine_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6813,7 +6813,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"video_engine_tests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"video_engine_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"video_engine_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -6899,7 +6899,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "webrtc_nonparallel_tests on Ubuntu-16.04",
+    "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6960,7 +6960,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_nonparallel_tests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",

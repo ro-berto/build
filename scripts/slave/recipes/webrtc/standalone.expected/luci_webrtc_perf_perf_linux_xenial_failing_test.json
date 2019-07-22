@@ -140,7 +140,7 @@
       "--tag",
       "spec_name:webrtc.perf:Perf Linux Xenial",
       "--tag",
-      "stepname:isac_fix_test on Ubuntu-16.04",
+      "stepname:isac_fix_test",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -171,7 +171,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] isac_fix_test on Ubuntu-16.04",
+    "name": "[trigger] isac_fix_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -249,7 +249,7 @@
       "--tag",
       "spec_name:webrtc.perf:Perf Linux Xenial",
       "--tag",
-      "stepname:low_bandwidth_audio_perf_test on Ubuntu-16.04",
+      "stepname:low_bandwidth_audio_perf_test",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -280,7 +280,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] low_bandwidth_audio_perf_test on Ubuntu-16.04",
+    "name": "[trigger] low_bandwidth_audio_perf_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -358,7 +358,7 @@
       "--tag",
       "spec_name:webrtc.perf:Perf Linux Xenial",
       "--tag",
-      "stepname:webrtc_perf_tests on Ubuntu-16.04",
+      "stepname:webrtc_perf_tests",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -393,7 +393,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "[trigger] webrtc_perf_tests on Ubuntu-16.04",
+    "name": "[trigger] webrtc_perf_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -485,7 +485,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "isac_fix_test on Ubuntu-16.04",
+    "name": "isac_fix_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -546,7 +546,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"isac_fix_test on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"isac_fix_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"isac_fix_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -663,7 +663,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "low_bandwidth_audio_perf_test on Ubuntu-16.04",
+    "name": "low_bandwidth_audio_perf_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -724,7 +724,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_perf_test on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_perf_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_perf_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -841,7 +841,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "webrtc_perf_tests on Ubuntu-16.04",
+    "name": "webrtc_perf_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -883,7 +883,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_perf_tests on Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",

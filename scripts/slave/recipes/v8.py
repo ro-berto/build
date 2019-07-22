@@ -460,7 +460,7 @@ def GenTests(api):
         parent_bot_config=release_bot_config,
         parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
     ) +
-    api.override_step_data('Fuzz on Ubuntu-16.04', step_test_data)
+    api.override_step_data('Fuzz', step_test_data)
   )
 
   yield (
@@ -494,7 +494,7 @@ def GenTests(api):
         parent_bot_config=release_bot_config,
         parent_test_spec='{"tests": [{"name": "check-bytecode-baseline"}]}',
     ) +
-    api.post_process(MustRun, 'Bytecode-Baseline on Ubuntu-16.04') +
+    api.post_process(MustRun, 'Bytecode-Baseline') +
     api.post_process(DropExpectation)
   )
 

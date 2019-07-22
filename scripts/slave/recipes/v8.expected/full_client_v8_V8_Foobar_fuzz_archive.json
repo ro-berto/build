@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Fuzz on Ubuntu-16.04",
+      "stepname:Fuzz",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -147,7 +147,7 @@
       "out/Release/d8",
       "${ISOLATED_OUTDIR}/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
-    "name": "trigger tests.[trigger] Fuzz on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] Fuzz"
   },
   {
     "cmd": [
@@ -191,7 +191,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "Fuzz on Ubuntu-16.04",
+    "name": "Fuzz",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",

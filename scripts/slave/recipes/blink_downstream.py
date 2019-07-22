@@ -60,10 +60,6 @@ def V8Builder(config, bits, platform, swarming_shards, swarming_priority=35):
     'swarming_priority': swarming_priority,
     'testing': {
       'platform': platform,
-      # Swarming adds this suffix when the os dimension deviates from default.
-      # TODO(machenbach): When the default is switched to Xenial, this logic
-      # here can be removed.
-      'step_suffix': ' on Ubuntu-16.04' if platform == 'linux' else ''
     },
   }
 
@@ -322,13 +318,13 @@ def GenTests(api):
                     'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
             api.test(test_name + suffix) +
             api.override_step_data(
-                with_patch + bot_config['testing']['step_suffix'],
+                with_patch,
                 canned_test(
                     passing=pass_first, isolated_script_passing=pass_first))
         )
         if not pass_first:
           test += api.override_step_data(
-              without_patch + bot_config['testing']['step_suffix'],
+              without_patch,
               canned_test(passing=False, isolated_script_passing=False))
         tests.append(test)
 
@@ -341,10 +337,10 @@ def GenTests(api):
     api.test('minimal_pass_continues') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(
-        with_patch + ' on Ubuntu-16.04',
+        with_patch,
         canned_test(passing=False, isolated_script_passing=False)) +
     api.override_step_data(
-        without_patch + ' on Ubuntu-16.04',
+        without_patch,
         canned_test(passing=True, isolated_script_passing=True))
   )
 
@@ -353,7 +349,7 @@ def GenTests(api):
     api.test('invalid_results') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(
-        with_patch + ' on Ubuntu-16.04',
+        with_patch,
         api.test_utils.canned_isolated_script_output(passing=False,
                                                      valid=False,
                                                      swarming=True)) +
@@ -370,7 +366,7 @@ def GenTests(api):
     api.test('blink_web_tests_unexpected_error') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(
-        with_patch + ' on Ubuntu-16.04',
+        with_patch,
         canned_test(
             passing=False,
             isolated_script_passing=False,
@@ -385,7 +381,7 @@ def GenTests(api):
   yield (
     api.test('blink_web_tests_interrupted') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
-    api.override_step_data(with_patch + ' on Ubuntu-16.04',
+    api.override_step_data(with_patch,
         canned_test(
             passing=False,
             isolated_script_passing=False,

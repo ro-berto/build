@@ -115,7 +115,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Check on Ubuntu-16.04",
+      "stepname:Check",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -162,7 +162,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Check on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] Check"
   },
   {
     "cmd": [
@@ -228,7 +228,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Test262 on Ubuntu-16.04",
+      "stepname:Test262",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -276,7 +276,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "trigger tests.[trigger] Test262 on Ubuntu-16.04"
+    "name": "trigger tests.[trigger] Test262"
   },
   {
     "allow_subannotations": true,
@@ -605,7 +605,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Retry on Ubuntu-16.04",
+      "stepname:Retry",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -654,7 +654,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "Bisect a0.[trigger] Retry on Ubuntu-16.04",
+    "name": "Bisect a0.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
@@ -823,7 +823,7 @@
       "--tag",
       "spec_name:v8.ci:V8 Foobar",
       "--tag",
-      "stepname:Retry on Ubuntu-16.04",
+      "stepname:Retry",
       "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -872,7 +872,7 @@
       "${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "Bisect a1.[trigger] Retry on Ubuntu-16.04",
+    "name": "Bisect a1.[trigger] Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",

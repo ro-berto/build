@@ -49,7 +49,7 @@
     },
     "name": "browser_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -81,7 +81,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests\", @@@",
