@@ -21,24 +21,6 @@ def RunSteps(api):
   if cbb_extra_args and isinstance(cbb_extra_args, basestring):
     cbb_extra_args = json.loads(cbb_extra_args)
 
-  # Look for the Findit integration properties and set cbuildbot args.
-  branch = api.properties.get('cbb_branch')
-  # gitiles trigger revision of the annealing manifest.
-  rev = api.properties.get('revision')
-  if rev and branch == 'master':
-    cbb_extra_args += ['--cbb_snapshot_revision', rev]
-  findit_json = api.properties.get('findit_bisect')
-  if findit_json:
-    # Parse the string into JSON dict.
-    findit_json = json.loads(findit_json)
-    snapshot_rev = findit_json['revision']
-    if snapshot_rev:
-      cbb_extra_args += ['--cbb_snapshot_revision', snapshot_rev]
-    build_packages = findit_json.get('targets')
-    if build_packages:
-      # Format of flag is a space separated string of packages.
-      cbb_extra_args += ['--cbb_build_packages', ' '.join(build_packages)]
-
   # Apply our adjusted configuration.
   api.chromite.configure(
       api.properties,
@@ -152,48 +134,6 @@ def GenTests(api):
           cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
           cbb_goma_canary=True,
           email='user@google.com',
-          **common_properties
-      )
-  )
-
-  # Test that gitiles trigger converts the revision property into the
-  # correct cbuildbot flag --cbb_snapshot_revision if triggering a
-  # master-postsubmit job on the master branch.
-  yield (
-      api.test('snapshot_revision')
-      + api.properties(
-          cbb_branch='master',
-          cbb_config='master-postsubmit',
-          email='user@google.com',
-          revision='hash1234',
-          **common_properties
-      )
-  )
-
-  # Test that the gitiles trigger doesn't set the cbb_snapshot_revision flag
-  # if not on master branch.
-  yield (
-      api.test('snapshot_revision_non_master')
-      + api.properties(
-          cbb_branch='some_branch',
-          cbb_config='master-postsubmit',
-          email='user@google.com',
-          revision='hash1111',
-          **common_properties
-      )
-  )
-
-  # Test a ChromeOS Findit invocation from the BuildRerunCompileFailureInput
-  # proto as properties.
-  yield (
-      api.test('findit_integration')
-      + api.properties(
-          cbb_config='caroline-postsubmit',
-          cbb_branch='master',
-          email='user@google.com',
-          findit_bisect=
-              '{ "revision": "cbef1234", '
-              '"targets": [ "sys-apps/mosys", "chromeos-base/cryptohome" ] }',
           **common_properties
       )
   )
