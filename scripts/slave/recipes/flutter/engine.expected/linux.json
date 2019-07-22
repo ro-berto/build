@@ -6742,8 +6742,10 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]/src/build/fuchsia/build_fuchsia_artifacts.py",
-      "--upload"
+      "[START_DIR]/src/flutter/tools/fuchsia/build_fuchsia_artifacts.py",
+      "--upload",
+      "--engine-version",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"

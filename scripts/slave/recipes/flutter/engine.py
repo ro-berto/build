@@ -91,9 +91,10 @@ def BuildFuchsiaArtifactsAndUpload(api):
   with api.depot_tools.on_path():
     api.goma.start()
     checkout = api.path['start_dir'].join('src')
+    git_rev = api.buildbucket.gitiles_commit.id
     build_script = str(checkout.join(
-      'build/fuchsia/build_fuchsia_artifacts.py'))
-    cmd = ['python', build_script, '--upload']
+      'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
+    cmd = ['python', build_script, '--upload', '--engine-version', git_rev]
     api.step('Build Fuchsia Artifacts & Upload', cmd)
 
 
