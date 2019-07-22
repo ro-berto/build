@@ -99,7 +99,7 @@ def generate_tests(api, phase, bot):
         SwarmingPerfTest('isac_fix_test'),
         SwarmingPerfTest('low_bandwidth_audio_perf_test'),
         SwarmingPerfTest('webrtc_perf_tests', args=[
-            '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
+            '--test_artifacts_dir', '${ISOLATED_OUTDIR}',
             '--save_worst_frame',
             '--nologs',
         ]),

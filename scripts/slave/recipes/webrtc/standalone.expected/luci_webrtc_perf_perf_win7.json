@@ -400,7 +400,7 @@
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
-      "--test-artifacts-dir",
+      "--test_artifacts_dir",
       "${ISOLATED_OUTDIR}",
       "--save_worst_frame",
       "--nologs"
