@@ -83,6 +83,7 @@ SPEC = {
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -138,6 +139,7 @@ SPEC = {
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

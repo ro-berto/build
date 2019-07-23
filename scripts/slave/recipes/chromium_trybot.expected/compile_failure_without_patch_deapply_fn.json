@@ -78,7 +78,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -394,6 +394,45 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/.clang-coverage"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "create .clang-coverage"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::code_coverage]/resources/write_paths_to_instrument.py",
+      "--write-to",
+      "[CACHE]/builder/src/.clang-coverage/files_to_instrument.txt",
+      "--src-path",
+      "[CACHE]/builder/src",
+      "--build-path",
+      "[CACHE]/builder/src/out/Release",
+      "foo.cc"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "save paths of affected files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -941,7 +980,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",

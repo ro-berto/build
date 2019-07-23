@@ -27,7 +27,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -311,6 +311,44 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/.clang-coverage"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "create .clang-coverage"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::code_coverage]/resources/write_paths_to_instrument.py",
+      "--write-to",
+      "[CACHE]/builder/src/.clang-coverage/files_to_instrument.txt",
+      "--src-path",
+      "[CACHE]/builder/src",
+      "--build-path",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "save paths of affected files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -1285,7 +1323,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
