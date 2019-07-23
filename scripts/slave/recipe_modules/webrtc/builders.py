@@ -349,6 +349,7 @@ BUILDERS = freeze({
         ],
         'triggers': [
           'luci.webrtc.perf/Perf Linux Trusty',
+          'luci.webrtc.perf/Perf Linux Xenial',
         ],
       },
       'Linux64 Debug (ARM)': {
@@ -669,7 +670,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'perf_id': 'webrtc-linux-large-tests',
+        'perf_id': 'webrtc-linux-tests-xenial',
         'bot_type': 'tester',
         'parent_buildername': 'Linux64 Builder',
         'testing': {'platform': 'linux'},
