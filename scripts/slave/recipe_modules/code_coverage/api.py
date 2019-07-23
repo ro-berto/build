@@ -365,14 +365,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           args=args,
           infra_step=True,
           **kwargs)
-      self.m.gsutil.upload(
+      gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
+      upload_step = self.m.gsutil.upload(
           source=coverage_dir.join('all.json.gz'),
           bucket=self._gs_bucket,
-          dest=self._compose_gs_path_for_coverage_data(
-              'java_metadata/all.json.gz'),
+          dest='%s/all.json.gz' % gs_path,
           name='Upload JSON metadata',
           link_name='Coverage metadata',
           **kwargs)
+      upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
+      upload_step.presentation.properties['coverage_gs_bucket'] = (
+          self._gs_bucket)
 
       jacoco_html_report_dir = coverage_dir.join('coverage_html')
       self.m.python(
