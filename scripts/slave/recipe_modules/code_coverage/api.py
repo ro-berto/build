@@ -29,11 +29,11 @@ _EXCLUDE_SOURCES = {
 }
 
 
-class ClangCoverageApi(recipe_api.RecipeApi):
-  """This module contains apis to interact with llvm-cov and llvm-profdata."""
+class CodeCoverageApi(recipe_api.RecipeApi):
+  """This module contains apis to generate code coverage data."""
 
   def __init__(self, properties, *args, **kwargs):
-    super(ClangCoverageApi, self).__init__(*args, **kwargs)
+    super(CodeCoverageApi, self).__init__(*args, **kwargs)
     # A single temporary directory to contain the profile data for all targets
     # in the build.
     self._base_profdata_dir = None
