@@ -191,25 +191,25 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Pixel 2)',
       }),
-      'gpu-fyi-try-android-p-pixel-2-32-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
-      }),
-      'gpu-fyi-try-android-p-pixel-2-32-deqp-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
-      }),
-      'gpu-fyi-try-android-p-pixel-2-64-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
-      }),
-      'gpu-fyi-try-android-p-pixel-2-64-deqp-vk': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
-      }),
       'gpu-fyi-try-android-p-pixel-2-skv-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI SkiaRenderer Vulkan (Pixel 2)',
+      }),
+      'gpu-fyi-try-android-q-pixel-2-deqp-vk-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
+      }),
+      'gpu-fyi-try-android-q-pixel-2-deqp-vk-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
+      }),
+      'gpu-fyi-try-android-q-pixel-2-vk-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
+      }),
+      'gpu-fyi-try-android-q-pixel-2-vk-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
       }),
       'try-nougat-phone-tester': simple_bot({
         'mastername': 'chromium.android',
