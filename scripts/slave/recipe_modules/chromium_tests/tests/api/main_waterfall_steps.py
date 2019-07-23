@@ -13,6 +13,7 @@ DEPS = [
     'chromium_tests',
     'code_coverage',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
@@ -226,6 +227,8 @@ def RunSteps(api, gn_args):
   if api.properties.get('custom_builders'):
     builders = CUSTOM_BUILDERS
   api.code_coverage._gn_args = gn_args
+  api.path.mock_add_paths(
+      api.code_coverage.profdata_dir().join('merged.profdata'))
   api.chromium_tests.main_waterfall_steps(builders=builders)
 
 

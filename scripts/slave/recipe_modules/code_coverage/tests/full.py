@@ -33,6 +33,10 @@ def RunSteps(api):
   api.code_coverage._merge_scripts_location = api.path['start_dir']
   api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
+  if api.properties.get('mock_merged_profdata', True):
+    api.path.mock_add_paths(
+        api.code_coverage.profdata_dir().join('merged.profdata'))
+
   tests = [
       api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
       api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
@@ -281,6 +285,22 @@ def GenTests(api):
       + api.post_check(lambda check, steps: check(steps[
               'process clang code coverage data.gsutil upload coverage metadata'
           ].output_properties['process_coverage_data_failure'] == True))
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('merged profdata does not exist')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54)
+      + api.properties(
+          mock_merged_profdata = False)
+      + api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.skip processing because no '
+          'profdata was generated')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

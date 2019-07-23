@@ -12,6 +12,7 @@ DEPS = [
     'code_coverage',
     'filter',
     'recipe_engine/json',
+    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -82,6 +83,8 @@ _TEST_TRYBOTS = {
 
 def RunSteps(api, gn_args):
   api.code_coverage._gn_args = gn_args
+  api.path.mock_add_paths(
+      api.code_coverage.profdata_dir().join('merged.profdata'))
   api.chromium_tests.trybot_steps(
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))
