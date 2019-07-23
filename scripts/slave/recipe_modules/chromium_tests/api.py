@@ -1163,7 +1163,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # If using coverage we want to retry invalid shards as they may fail
         # due to an existing issue with occassional corruption of collected
         # coverage data.
-        retry_invalid_shards=self.m.code_coverage.using_coverage,
+        # TODO(crbug.com/986927): Re-enable this once the issue is debugged.
+        # retry_invalid_shards=self.m.code_coverage.using_coverage,
     )
     with self.wrap_chromium_tests(bot.settings, tests):
       try:
