@@ -1431,7 +1431,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       char_limit = self._test_data.get('change_char_size_limit', 150)
 
     if len(error_message) <= char_limit:
-      return error_message
+      return '```\n%s\n```' % error_message
 
     # Extract error lines (...ERROR at...)
     error_re = re.compile(r'.*ERROR\s+at.+')

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+import textwrap
 
 DEPS = [
   'chromium',
@@ -57,8 +58,11 @@ def GenTests(api):
           retcode=1
       ) +
       api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          'ERROR at line 5: missing )') +
+      api.post_process(post_process.ResultReason, textwrap.dedent('''
+          ```
+          ERROR at line 5: missing )
+          ```
+      ''').strip()) +
       api.post_process(post_process.DropExpectation)
   )
 
