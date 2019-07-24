@@ -258,7 +258,19 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
     api.step('flutter analyze', [
         'dart', '--enable-asserts', 'dev/bots/analyze.dart', '--dart-sdk',
         just_built_dart_sdk], timeout=20*60) # 20 minutes
-    api.step('flutter test', test_cmd + test_args, timeout=120*60) # 2 hours
+    shards = ['tests', 
+              # 'web_tests', - disabled due to flakiness
+              #                https://github.com/flutter/flutter/pull/35792
+              'tool_tests',
+              'tool_coverage',
+              'build_tests',
+              'coverage',
+              'integration_tests',
+              'add2app_test']
+    for shard in shards:
+      with api.context(env={'SHARD': shard}):
+        api.step('flutter test %s' % (shard),
+                 test_cmd + test_args, timeout=120*60) # 2 hours
 
 
 def RunSteps(api):
