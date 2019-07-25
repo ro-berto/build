@@ -149,12 +149,16 @@ def check_builds(master_builds, gatekeeper_config):
   current_builds_successful = True
 
   for build_json, master_url, builder, buildnum in sorted_builds:
+    if build_json.get('corrupted', False):
+      continue
+
     gatekeeper_sections = gatekeeper_config.get(master_url, [])
     for gatekeeper_section in gatekeeper_sections:
       section_hash = gatekeeper_ng_config.gatekeeper_section_hash(
           gatekeeper_section)
 
-      gatekeeper = get_builder_section(gatekeeper_section, builder)
+      gatekeeper = get_builder_section(
+          gatekeeper_section, build_json['builderName'])
       if not gatekeeper:
         succeeded_builds.append((master_url, builder, buildnum))
         continue
@@ -176,14 +180,14 @@ def check_builds(master_builds, gatekeeper_config):
       subject_template = gatekeeper.get(
           'subject_template', gatekeeper_ng_config.DEFAULTS[
              'subject_template'])
-      finished = [s for s in steps if s.get('endTime')]
+      finished = [s for s in steps if s.get('isFinished')]
       close_tree = gatekeeper.get('close_tree', True)
       respect_build_status = gatekeeper.get('respect_build_status', False)
 
-      # We ignore INFRA_FAILURE since it is usually infrastructure-related
-      # instead of actual test errors.
+      # We ignore EXCEPTION and RETRY here since those are usually
+      # infrastructure-related instead of actual test errors.
       successful_steps = set(s['name'] for s in finished
-                             if s['status'] != 'FAILURE')
+                             if s.get('results', [FAILURE])[0] != FAILURE)
 
       successful_builder_steps[master_url][builder].update(successful_steps)
 
@@ -202,12 +206,12 @@ def check_builds(master_builds, gatekeeper_config):
       unsatisfied_steps = failed_steps & closing_optional
 
       # Build is not yet finished, don't penalize on unstarted/unfinished steps.
-      if 'endTime' in build_json:
+      if build_json.get('results', None) is None:
         unsatisfied_steps &= finished_steps
 
       # If the entire build failed.
-      if (not unsatisfied_steps and build_json.get('status') == 'FAILURE' and
-          respect_build_status):
+      if (not unsatisfied_steps and 'results' in build_json and
+          build_json['results'] == FAILURE and respect_build_status):
         unsatisfied_steps.add('[overall build status]')
 
       buildbot_url = master_url
@@ -266,11 +270,13 @@ def get_build_properties(build_json, properties):
 
   Sets a property to None if it's not in the build.
   """
-  values = build_json['input'].get('properties', {})
-  return {
-    p: values.get(p)
-    for p in set(properties)
-  }
+
+  properties = set(properties)
+  result = dict.fromkeys(properties)  # Populates dict with {key: None}.
+  for p in build_json.get('properties', []):
+    if p[0] in properties:
+      result[p[0]] = p[1]
+  return result
 
 
 @contextmanager
@@ -332,21 +338,21 @@ def reject_old_revisions(failed_builds, build_db):
                   'keeping all failures.')
     return failed_builds
 
-  def build_number(build):
-    """Sorting key that returns a build's build number
+  def build_start_time(build):
+    """Sorting key that returns a build's build start time.
 
-    By using reversed build number, we sort such that the latest builds come
+    By using reversed start time, we sort such that the latest builds come
     first. This gives us a crude approximation of revision order, which means
     we can update triggered_revisions with the highest revision first. Note that
     this isn't perfect, but the likelihood of multiple failures occurring in the
     same minute is low and multi-revision sorting is potentially error-prone. An
     action-log based approach would obviate this hack.
     """
-    return build['build']['number']
+    return build['build'].get('times', [None])[0]
 
   kept_builds = []
-  for build in sorted(failed_builds, key=build_number, reverse=True):
-    builder = build['build']['builder']['builder']
+  for build in sorted(failed_builds, key=build_start_time, reverse=True):
+    builder = build['build']['builderName']
     buildnum = build['build']['number']
     with log_section(build['base_url'], builder, buildnum):
       # get_build_properties will return a dict with all the keys given to it.
@@ -582,24 +588,30 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
 
 def generate_build_url(build):
   """Creates a URL to reference the build."""
-  # TODO(crbug.com/878912): Use 'https://{buildbucket_hostname}/build/{id}'
-  # which redirects to the right place.
+
+  # Luci builds have a view_path.
+  if 'view_path' in build['build']:
+    return 'https://ci.chromium.org%s' % (
+      urllib.quote(build['build']['view_path'])
+    )
+
   return '%s/builders/%s/builds/%d' % (
       build['base_url'].rstrip('/'),
-      urllib.quote(build['build']['builder']['builder']),
+      urllib.quote(build['build']['builderName']),
       build['build']['number']
   )
 
 
-# TODO(crbug.com/878912): Remove once chromium-build app is modified to accept
-# string status.
-def to_buildbot_status(status):
-  if status == 'SUCCESS':
-    return 0
-  if status == 'INFRA_FAILURE':
-    return 4
-  # FAILURE
-  return 2
+def get_results_string(result_value):
+  """Returns a string for a BuildBot result value (SUCCESS, FAILURE, etc.)."""
+  return {
+      SUCCESS: 'success',
+      WARNINGS: 'warnings',
+      FAILURE: 'failure',
+      SKIPPED: 'skipped',
+      EXCEPTION: 'exception',
+      RETRY: 'retry',
+  }.get(result_value, 'unknown')
 
 
 def close_tree_if_necessary(build_db, failed_builds, username, password,
@@ -622,13 +634,12 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
   template_build = closing_builds[0]
   template_vars = {
-      # TODO(crbug.com/878912): Get a blamelist for the build.
-      'blamelist': '',
+      'blamelist': ','.join(template_build['build']['blame']),
       'build_url': generate_build_url(template_build),
-      'builder_name': template_build['build']['builder']['builder'],
+      'builder_name': template_build['build']['builderName'],
       'project_name': template_build['project_name'],
       'unsatisfied': ','.join(template_build['unsatisfied']),
-      'result': template_build['build']['status'],
+      'result': get_results_string(template_build['build'].get('results')),
   }
 
   # First populate un-transformed build properties
@@ -664,16 +675,14 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     waterfall_url = failed_build['base_url'].rstrip('/')
     build_url = generate_build_url(failed_build)
     project_name = failed_build['project_name']
-    # TODO(crbug.com/878912): Get the fromaddr for the build.
-    fromaddr = default_from_email
+    fromaddr = failed_build['build'].get('fromAddr', default_from_email)
 
     tree_notify = failed_build['tree_notify']
 
     if failed_build['unsatisfied'] <= failed_build['forgiving_steps']:
       blamelist = set()
     else:
-      # TODO(crbug.com/878912): Get a blamelist for the build.
-      blamelist = set()
+      blamelist = set(failed_build['build']['blame'])
 
     sheriffs = get_sheriffs(failed_build['sheriff_classes'], sheriff_url)
     watchers = list(tree_notify | blamelist | sheriffs)
@@ -683,42 +692,50 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
         'from_addr': fromaddr,
         'project_name': project_name,
         'subject_template': failed_build['subject_template'],
-        # TODO(ehmaldonado): Remove. It is required to be present by
-        # chromium-build, even though it never uses it.
         'steps': [],
         'unsatisfied': list(failed_build['unsatisfied']),
         'waterfall_url': waterfall_url,
     }
 
-    # TODO(crbug.com/878912): Get reason for the build.
-    build_data['builderName'] = failed_build['build']['builder']['builder'],
-    build_data['number'] = failed_build['build']['number']
+    for field in ['builderName', 'number', 'reason']:
+      build_data[field] = failed_build['build'][field]
 
-    # The default value here is FAILURE. In the case of failing on an unfinished
+    # The default value here is 2. In the case of failing on an unfinished
     # build, the build won't have a result yet. As of now, chromium-build treats
     # anything as 'not failure' as warning. Since we can't get into
     # notify_failures without a failure, it makes sense to have the default
-    # value be FAILURE here.
-    build_data['result'] = to_buildbot_status(
-        failed_build['build'].get('status', 'FAILURE'))
-    # TODO(crbug.com/878912): Get a blamelist and changes for the build.
+    # value be failure (2) here.
+    build_data['result'] = failed_build['build'].get('results', 2)
     build_data['blamelist'] = failed_build['build']['blame']
-    # TODO(ehmaldonado): Remove. 'changes' is required to be present, but is
-    # never used. We only care about revisions.
-    build_data['changes'] = []
+    build_data['changes'] = failed_build['build'].get('sourceStamp', {}).get(
+        'changes', [])
 
     build_data['revisions'] = [x['revision'] for x in build_data['changes']]
+
+    for step in failed_build['build']['steps']:
+      new_step = {}
+      for field, default in [('text', ''), ('name', '')]:
+        new_step[field] = step.get(field) or default
+      new_step['logs'] = step.get('logs') or []
+      new_step['started'] = step.get('isStarted', False)
+      new_step['urls'] = step.get('urls') or {}
+      new_step['results'] = step.get('results', [0, None])[0]
+      build_data['steps'].append(new_step)
 
     if email_app_url and watchers:
       emails_to_send.append((watchers, json.dumps(build_data, sort_keys=True)))
 
+    builder = failed_build['build']['builderName']
+    buildnum = failed_build['build']['number']
+    result = failed_build['build'].get('results')
+    steps = failed_build['unsatisfied']
     logging.info(
         'to %s: failure with result %s in %s build %s: %s' % (
             ', '.join(watchers),
-            failed_build['build'].get('status'),
-            failed_build['build']['builderName'],
-            failed_build['build']['number'],
-            list(failed_build['unsatisfied'])))
+            result,
+            builder,
+            buildnum,
+            list(steps)))
     if not email_app_url:
       logging.warn('no email_app_url specified, no email sent!')
 
@@ -750,22 +767,24 @@ def simulate_build_failure(build_db, master, builder, *steps):
       'builders': [builder],
   }
   build_json = (
-    {
-      'builderName': builder,
-      'number': 0,
-      'steps': [{
-        'name': s,
-        'endTime': True,
-        'summary_markdown': [
-          'Simulated Build Step',
-        ],
-        'logs': [],
-      } for s in steps],
-      'status': 'FAILURE',
-    },
-    master,
-    builder,
-    0,
+      {
+        'builderName': builder,
+        'number': 0,
+        'steps': [{
+          'name': s,
+          'isFinished': True,
+          'text': [
+            'Simulated Build Step',
+          ],
+          'logs': [],
+        } for s in steps],
+        'results': FAILURE,
+        'reason': 'simulation',
+        'blame': ['you'],
+      },
+      master,
+      builder,
+      0,
   )
   build_db.masters.setdefault(master, {})
   build_db.masters[master].setdefault(builder, {})

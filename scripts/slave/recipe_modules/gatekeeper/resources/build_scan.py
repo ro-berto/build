@@ -87,6 +87,16 @@ def call_buildbucket(method, data, http=None):
   return json.loads(response[4:])
 
 
+def _get_from_milo(method, data, http=None):
+  try:
+    response = fetch(
+        'POST', LUCI_MILO_ENDPOINT + method, data, http)
+  except ValueError as e:
+    logging.warning('Marking as corrupted: ' + e.message)
+    return {'corrupted': True}
+  return json.loads(response[4:])
+
+
 def get_buildbucket_builds(project, bucket, builders):
   """Fetch new builds for all builders in |builders|.
 
@@ -227,44 +237,48 @@ def find_new_builds_per_master(masters, build_db):
   return builds, master_jsons
 
 
-def get_build_json(request_tuple):
-  """Used by get_build_jsons to download the json of a specific build."""
-  master_url, builder, buildnum, bucket, project = request_tuple
-  request = {
-    'builder': {
-      'project': project,
-      'bucket': bucket,
-      'builder': builder,
-    },
-    'buildNumber': buildnum,
-    'fields': 'endTime,steps,input,builder,number,status',
+def get_build_json(url_tuple):
+  """Downloads the json of a specific build."""
+  master_url, builder, buildnum = url_tuple
+
+  # Assumes we have something like https://build.chromium.org/p/chromium.perf
+  master_name = master_url.rstrip('/').split('/')[-1]
+
+  endpoint = 'milo.Buildbot/GetBuildbotBuildJSON'
+  data = {
+    'master': master_name,
+    'builder': builder,
+    'build_num': int(buildnum),
+    'exclude_deprecated': True,
   }
-  resp = call_buildbucket('GetBuild', request)
+  resp = _get_from_milo(endpoint, json.dumps(data))
+  if resp.get('corrupted', None) is None:
+    resp = json.loads(base64.b64decode(resp['data']))
+  else:
+    resp = {'corrupted': True}
   return (resp, master_url, builder, buildnum)
 
 
-def get_build_jsons(master_builds, master_jsons, processes):
+def get_build_jsons(master_builds, processes):
   """Get all new builds on specified masters.
 
   This takes a dict in the form of [master][builder][build], formats that URL
   and appends that to url_list. Then, it forks out and queries each build_url
   for build information.
   """
-  request_tuples = []
+  url_list = []
   for master, builder_dict in master_builds.iteritems():
-    project = master_jsons[master]['project']
-    bucket = master_jsons[master]['bucket']
     for builder, new_builds in builder_dict.iteritems():
       for buildnum in new_builds:
-        request_tuples.append((master, builder, buildnum, bucket, project))
+        url_list.append((master, builder, buildnum))
 
   # Prevent map from hanging, see http://bugs.python.org/issue12157.
-  if request_tuples:
+  if url_list:
     # The async/get is so that ctrl-c can interrupt the scans.
     # See http://stackoverflow.com/questions/1408356/
     # keyboard-interrupts-with-pythons-multiprocessing-pool
     with MultiPool(processes) as pool:
-      builds = filter(bool, pool.map_async(get_build_json, request_tuples).get(
+      builds = filter(bool, pool.map_async(get_build_json, url_list).get(
           9999999))
   else:
     builds = []
@@ -279,9 +293,9 @@ def propagate_build_json_to_db(build_db, builds):
     if not build:
       build = build_scan_db.gen_build()
 
-    # TODO(ehmaldonado): Rewrite this to make the intent clearer. It is
-    # confusing as is, since finished and succeeded are orthogonal things.
-    if build_json.get('endTime', None) is not None:
+    if build_json.get('corrupted', None) is not None:
+      build = build._replace(corrupted=True, finished=True)
+    elif build_json.get('results', None) is not None:
       build = build._replace(finished=True)  # pylint: disable=W0212
     else:
       # Builds can't be marked succeeded unless they are finished.
@@ -320,7 +334,7 @@ def get_options():
 
 def get_updated_builds(masters, build_db, parallelism):
   new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
-  build_jsons = get_build_jsons(new_builds, master_jsons, parallelism)
+  build_jsons = get_build_jsons(new_builds, parallelism)
   propagate_build_json_to_db(build_db, build_jsons)
   return master_jsons, build_jsons
 
