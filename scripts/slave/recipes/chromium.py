@@ -47,7 +47,7 @@ def RunSteps(api):
     return
 
   with api.chromium.chromium_layout():
-    api.chromium_tests.main_waterfall_steps()
+    return api.chromium_tests.main_waterfall_steps()
 
 
 def GenTests(api):

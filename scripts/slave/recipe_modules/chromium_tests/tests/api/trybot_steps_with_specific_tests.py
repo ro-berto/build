@@ -66,7 +66,7 @@ def RunSteps(api, mastername, buildername):
   if skip_deapply_patch:
     api.chromium_tests._should_retry_with_patch_deapplied = lambda x: False
 
-  api.chromium_tests.trybot_steps()
+  return api.chromium_tests.trybot_steps()
 
 
 def GenTests(api):

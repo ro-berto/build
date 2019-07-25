@@ -101,7 +101,7 @@ def RunSteps(api, buildername, mastername):
   test_runner = api.chromium_tests.create_test_runner(test_config.all_tests())
   with api.chromium_tests.wrap_chromium_tests(
       bot_config, test_config.all_tests()):
-    test_runner()
+    return test_runner()
 
 
 def GenTests(api):

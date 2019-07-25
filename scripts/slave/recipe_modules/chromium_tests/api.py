@@ -13,6 +13,9 @@ import traceback
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 from . import bot_config_and_test_db as bdb_module
 from . import builders as chromium_tests_builders
 from . import generators
@@ -354,8 +357,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.report_stats()
 
       if failed_tests:
-        raise self.m.step.StepFailure(
-            self._format_unrecoverable_failures(failed_tests, suffix))
+        return result_pb2.RawResult(
+            status=common_pb.FAILURE,
+            summary_markdown=self._format_unrecoverable_failures(
+                failed_tests, suffix)
+        )
 
     return test_runner
 
@@ -1167,11 +1173,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # retry_invalid_shards=self.m.code_coverage.using_coverage,
     )
     with self.wrap_chromium_tests(bot.settings, tests):
-      try:
-        test_runner()
-      finally:
-        if self.m.code_coverage.using_coverage:
-          self.m.code_coverage.process_coverage_data(tests)
+      test_failure_summary = test_runner()
+
+      if self.m.code_coverage.using_coverage:
+        self.m.code_coverage.process_coverage_data(tests)
+
+      if test_failure_summary:
+        return test_failure_summary
 
     if bot_type in ['builder', 'builder_tester']:
       # Remove old files from out directory
@@ -1207,12 +1215,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def integration_steps(self, builders=None, bots=None):
-    self.run_tests_with_and_without_changes(
+    return self.run_tests_with_and_without_changes(
       builders=builders, mirrored_bots=bots,
       deapply_changes=self.deapply_deps)
 
   def trybot_steps(self, builders=None, trybots=None):
-    self.run_tests_with_and_without_changes(
+    return self.run_tests_with_and_without_changes(
       builders=builders, mirrored_bots=trybots,
       deapply_changes=self.deapply_patch)
 
@@ -1232,9 +1240,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not self._contains_invalid_results(unrecoverable_test_suites):
           self.m.tryserver.set_do_not_retry_build()
 
-        exit_message = self._format_unrecoverable_failures(
-          unrecoverable_test_suites, 'with patch')
-        raise self.m.step.StepFailure(exit_message)
+        return result_pb2.RawResult(
+            summary_markdown=self._format_unrecoverable_failures(
+                unrecoverable_test_suites, 'with patch'),
+            status=common_pb.FAILURE)
 
   def _format_unrecoverable_failures(self, unrecoverable_test_suites,
                                      suffix, size_limit=10):

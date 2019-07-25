@@ -23,7 +23,7 @@ def RunSteps(api):
       serialize_tests=api.properties.get('serialize_tests'),
       retry_failed_shards=api.properties.get('retry_failed_shards')
   )
-  test_runner()
+  return test_runner()
 
 
 def GenTests(api):
