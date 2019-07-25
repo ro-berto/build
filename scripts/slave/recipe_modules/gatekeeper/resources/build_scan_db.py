@@ -23,7 +23,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Bump each time there is an incompatible change in build_db.
-BUILD_DB_VERSION = 6
+BUILD_DB_VERSION = 7
 
 
 _BuildDB = collections.namedtuple('BuildDB', [
@@ -39,7 +39,6 @@ _BuildDBBuild = collections.namedtuple('BuildDBBuild', [
     'finished',  # True if the build has finished, False otherwise.
     'succeeded',  # True if finished and would have not closed the tree.
     'triggered',  # {section: [steps which triggered the section]}
-    'corrupted',  # True if we couldn't get the builder information from MILO.
 ])
 
 
@@ -105,7 +104,6 @@ def gen_build(**kwargs):
       ('finished', False),
       ('succeeded', False),
       ('triggered', {}),
-      ('corrupted', False),
   ]
 
   for key, default in defaults:
