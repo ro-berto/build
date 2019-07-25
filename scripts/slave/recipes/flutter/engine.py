@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/osx_sdk',
   'goma',
@@ -687,6 +688,15 @@ def GetCheckout(api):
   api.gclient.c = src_cfg
   api.gclient.c.got_revision_mapping['src/flutter'] = 'got_engine_revision'
   api.bot_update.ensure_checkout()
+  if (api.runtime.is_experimental and
+      'git_url' in api.properties and
+      'git_ref' in api.properties):
+    src = api.path['start_dir'].join('src')
+    with api.context(cwd=src):
+      api.git.checkout(
+        api.properties['git_url'],
+        ref=api.properties['git_ref'],
+        recursive=True)
   api.gclient.runhooks()
 
 def RunSteps(api):
@@ -761,3 +771,17 @@ def GenTests(api):
     api.runtime(is_luci=True, is_experimental=True) +
     api.properties(goma_jobs=1024)
   )
+  yield (api.test('pull_request') +
+         api.buildbucket.ci_build(
+            builder='Linux Host Engine',
+            git_repo=GIT_REPO,
+            project='flutter') +
+         api.runtime(is_luci=True, is_experimental=True) +
+         api.properties(
+            git_url = 'https://github.com/flutter/engine',
+            goma_jobs=200,
+            git_ref = 'pulls/1/head',
+            build_host=True,
+            build_android_aot=True,
+            build_android_debug=True,
+            build_android_vulkan=True))

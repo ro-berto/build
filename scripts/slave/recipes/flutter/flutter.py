@@ -281,9 +281,17 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
       api.step('prepare, create and publish a flutter archive', step_args)
 
 def RunSteps(api):
+  git_url = \
+    'https://chromium.googlesource.com/external/github.com/flutter/flutter'
   git_ref = api.buildbucket.gitiles_commit.ref
+  if (api.runtime.is_experimental and
+      'git_url' in api.properties and
+      'git_ref' in api.properties):
+    git_url = api.properties['git_url']
+    git_ref = api.properties['git_ref']
+
   git_hash = api.git.checkout(
-      'https://chromium.googlesource.com/external/github.com/flutter/flutter',
+      git_url,
       ref=git_ref,
       recursive=True,
       set_got_revision=True,
@@ -374,4 +382,11 @@ def GenTests(api):
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(shard='coverage',
                         coveralls_lcov_version='5.1.0',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
+  yield (api.test('pull_request') +
+         api.runtime(is_luci=True, is_experimental=True) +
+         api.properties(git_url = 'https://github.com/flutter/flutter',
+                        git_ref = 'pulls/1/head',
+                        shard = 'tests',
+                        cocoapods_version='1.5.3',
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
