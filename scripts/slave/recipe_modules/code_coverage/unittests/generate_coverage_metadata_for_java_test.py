@@ -27,7 +27,6 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
               'last': 1,
               'count': 1,
           }],
-          'total_lines': 1,
           'summaries': [{
               'name': 'line',
               'covered': 1,
@@ -215,8 +214,6 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
                 'last': 1,
                 'first': 1
             }],
-            'total_lines':
-                1,
             'path':
                 '//dir/file.java',
             'summaries': [{

@@ -127,8 +127,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     expected_record = {
         'path':
             '//base/base.cc',
-        'total_lines':
-            7,
         'summaries': [{
             'covered': 4,
             'name': 'line',
@@ -189,8 +187,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     expected_record = {
         'path':
             '//base/base.cc',
-        'total_lines':
-            6,
         'summaries': [{
             'covered': 6,
             'name': 'line',
@@ -288,8 +284,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     expected_record = {
         'path':
             '//base/base.cc',
-        'total_lines':
-            7,
         'summaries': [{
             'covered': 2,
             'name': 'line',
@@ -406,8 +400,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'last': 16,
             'first': 16,
         }],
-        'total_lines':
-            7,
         'summaries': [{
             'covered': 4,
             'name': 'line',
@@ -629,8 +621,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'last': 7,
                 'first': 5,
             }],
-            'total_lines':
-                7,
             'summaries': [{
                 'covered': 4,
                 'name': 'line',
@@ -661,7 +651,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'last': 1,
                 'first': 1,
             }],
-            'total_lines': 1,
             'summaries': [{
                 'covered': 1,
                 'name': 'line',

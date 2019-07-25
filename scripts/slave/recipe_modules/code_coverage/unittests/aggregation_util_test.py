@@ -27,7 +27,6 @@ class AggregationUtilTest(unittest.TestCase):
                 'last': 1,
                 'count': 1,
             }],
-            'total_lines': 1,
             'summaries': [{
                 'name': 'line',
                 'covered': 1,
@@ -116,7 +115,6 @@ class AggregationUtilTest(unittest.TestCase):
                 'last': 1,
                 'count': 1,
             }],
-            'total_lines': 1,
             'summaries': [{
                 'name': 'line',
                 'covered': 1,
@@ -130,7 +128,6 @@ class AggregationUtilTest(unittest.TestCase):
                 'last': 2,
                 'count': 1,
             }],
-            'total_lines': 2,
             'summaries': [{
                 'name': 'line',
                 'covered': 2,

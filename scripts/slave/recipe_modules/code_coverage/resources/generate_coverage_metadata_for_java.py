@@ -128,13 +128,6 @@ def _get_file_coverage_data(file_path, source_file):
 
   # Add coverage metrics per source file.
   file_coverage['summaries'] = get_coverage_metric_summaries(source_file)
-
-  # TODO(yliuyliu): Remove this when 'total_lines' is removed from proto.
-  for summary in file_coverage['summaries']:
-    if summary['name'] == 'line':
-      file_coverage['total_lines'] = summary['total']
-      break
-
   return file_coverage
 
 

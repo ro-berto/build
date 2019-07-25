@@ -261,8 +261,6 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   data = {
       'path':
           '//' + rel_file_path,
-      'total_lines':
-          file_coverage_data['summary']['lines']['count'],
       'lines':
           lines,
       'summaries':
