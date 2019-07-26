@@ -239,7 +239,7 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'Android FYI Release (Nexus 5X)',
+            'buildername': 'ANGLE GPU Android Release (Nexus 5X)',
           },
         ],
       },

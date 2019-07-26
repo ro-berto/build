@@ -1570,6 +1570,20 @@ SPEC = {
     # configurations because we don't have the capacity to run all of
     # the tests on the GPU try servers. And to specify tests for
     # ANGLE's try servers separately from the gpu.fyi waterfall.
+    'ANGLE GPU Android Release (Nexus 5X)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'android',
+    },
     'ANGLE GPU Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
