@@ -465,6 +465,10 @@ class V8Api(recipe_api.RecipeApi):
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
     env = {}
+    # TODO(machenbach): Remove when resolving: https://crbug.com/986701
+    if self.m.chromium.c.HOST_PLATFORM == 'mac':
+      env['MAC_TOOLCHAIN_INSTALLER'] = (
+          self.m.chromium.get_mac_toolchain_installer())
     self.m.chromium.runhooks(env=env, **kwargs)
 
   @property
