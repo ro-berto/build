@@ -359,10 +359,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail.exe",
-      "--cloudtail-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail.pid"
+      "[TMP_BASE]\\cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "env": {
@@ -2057,10 +2057,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail.exe",
-      "--cloudtail-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail.pid"
+      "[TMP_BASE]\\cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "env": {
