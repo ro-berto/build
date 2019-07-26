@@ -215,6 +215,9 @@ class TestResults(object):
           # runs as pass.
           # Skipped tests are not counted.
           self.pass_fail_counts[test]['pass_count'] += 1
+        else:
+          self.pass_fail_counts[test]['fail_count'] = 0
+
 
   def add_result(self, name, expected, actual=None):
     """Adds a test result to a 'json test results' compatible object.
@@ -288,6 +291,8 @@ class GTestResults(object):
             self.pass_fail_counts[test_fullname]['pass_count'] += 1
           elif cur_result['status'] != 'SKIPPED':
             self.pass_fail_counts[test_fullname]['fail_count'] += 1
+          else:
+            self.pass_fail_counts[test_fullname]['fail_count'] = 0
           self.raw_results[test_fullname].append(cur_result['status'])
 
           ascii_log = cur_result['output_snippet'].encode('ascii',
