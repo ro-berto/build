@@ -184,10 +184,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/src/out/Release.1"
+      "[CACHE]/builder/src/out/Debug.1"
     ],
     "infra_step": true,
-    "name": "rmtree [CACHE]/builder/src/out/Release.1"
+    "name": "rmtree [CACHE]/builder/src/out/Debug.1"
   },
   {
     "cmd": [
@@ -197,10 +197,38 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/src/out/Release.2"
+      "[CACHE]/builder/src/out/Debug.2"
     ],
     "infra_step": true,
-    "name": "rmtree [CACHE]/builder/src/out/Release.2"
+    "name": "rmtree [CACHE]/builder/src/out/Debug.2"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmglob",
+      "[CACHE]/builder/src/out/Debug",
+      "*.isolate"
+    ],
+    "infra_step": true,
+    "name": "rm old .isolate"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmglob",
+      "[CACHE]/builder/src/out/Debug",
+      "*.isolated"
+    ],
+    "infra_step": true,
+    "name": "rm old .isolated"
   },
   {
     "cmd": [],
@@ -262,7 +290,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -288,14 +316,14 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -317,12 +345,12 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -345,7 +373,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Deterministic_Fuchsia"
+      "[CACHE]/goma/data/Deterministic_Fuchsia__dbg_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -369,7 +397,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia__dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -427,7 +455,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "20",
       "all"
@@ -445,7 +473,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "20",
       "all",
@@ -561,9 +589,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -577,9 +605,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia (dbg)\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
@@ -629,32 +657,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[CACHE]/builder/src/out/Release",
-      "[CACHE]/builder/src/out/Release.1"
-    ],
-    "name": "Move [CACHE]/builder/src/out/Release to [CACHE]/builder/src/out/Release.1",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -680,14 +688,14 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Release.2"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -709,12 +717,12 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "//out/Release"
+      "//out/Release.2"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -737,7 +745,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Deterministic_Fuchsia"
+      "[CACHE]/goma/data/Deterministic_Fuchsia__dbg_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -761,7 +769,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia__dbg_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -819,7 +827,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "-j",
       "20",
       "all"
@@ -837,7 +845,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "-j",
       "20",
       "all",
@@ -953,9 +961,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Release.2",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release.2\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -969,9 +977,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia (dbg)\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "Deterministic Fuchsia",
+      "Deterministic Fuchsia (dbg)",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
@@ -1021,31 +1029,11 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[CACHE]/builder/src/out/Release",
-      "[CACHE]/builder/src/out/Release.2"
-    ],
-    "name": "Move [CACHE]/builder/src/out/Release to [CACHE]/builder/src/out/Release.2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
-      "[CACHE]/builder/src/out/Release.1",
+      "[CACHE]/builder/src/out/Debug",
       "--second-build-dir",
-      "[CACHE]/builder/src/out/Release.2",
+      "[CACHE]/builder/src/out/Debug.2",
       "--target-platform",
       "fuchsia",
       "--json-output",
@@ -1064,7 +1052,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"base_unittest\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -1073,9 +1062,9 @@
       "-u",
       "[CACHE]/builder/src/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
-      "[CACHE]/builder/src/out/Release.1",
+      "[CACHE]/builder/src/out/Debug",
       "--second-build-dir",
-      "[CACHE]/builder/src/out/Release.2",
+      "[CACHE]/builder/src/out/Debug.2",
       "--json-input",
       "[\"base_unittest\", \"flatc\", \"args.gn\"]",
       "--output",
@@ -1093,12 +1082,12 @@
       "----",
       "cp",
       "[CLEANUP]/deterministic_build_tmp_1/deterministic_build_diffs.tgz",
-      "gs://chrome-determinism/Deterministic Fuchsia/571/deterministic_build_diffs.tgz"
+      "gs://chrome-determinism/Deterministic Fuchsia (dbg)/571/deterministic_build_diffs.tgz"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic Fuchsia/571/deterministic_build_diffs.tgz@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic Fuchsia (dbg)/571/deterministic_build_diffs.tgz@@@"
     ]
   },
   {
@@ -1115,6 +1104,10 @@
     "name": "rmtree [CLEANUP]/deterministic_build_tmp_1"
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('compare_build_artifacts') (retcode: 1)"
+    },
     "name": "$result"
   }
 ]

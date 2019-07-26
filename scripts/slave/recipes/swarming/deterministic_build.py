@@ -94,10 +94,10 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'linux',
     'targets': ['all'],
   },
-  'Deterministic Fuchsia': {
+  'Deterministic Fuchsia (dbg)': {
     'chromium_config': 'chromium',
     'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
+      'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 64,
       'TARGET_PLATFORM': 'fuchsia',
     },
@@ -178,7 +178,7 @@ def RunSteps(api, buildername):
   # build in the usual build dir and a clobber build in a differently-named
   # build dir and then compares the outputs.
   # TODO(thakis): Do this on all platforms, https://crbug.com/899438
-  check_different_build_dirs = target_platform in ['linux', 'win']
+  check_different_build_dirs = target_platform in ['fuchsia', 'linux', 'win']
 
   # Since disk lacks in Mac, we need to remove files before build.
   # In check_different_build_dirs, only the .2 build dir exists here.
