@@ -20,7 +20,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['fuchsia']",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -213,7 +213,7 @@
       "-root",
       "[CACHE]/goma/client",
       "-ensure-file",
-      "infra_internal/goma/client/mac-amd64 release",
+      "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -227,35 +227,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -272,10 +244,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -293,7 +262,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -303,7 +272,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -320,7 +288,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -332,7 +300,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
@@ -350,7 +317,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -360,38 +327,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate .isolate files"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
-      "--src-dir",
-      "[CACHE]/builder/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [],
@@ -407,7 +345,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Mac_deterministic__dbg_"
+      "[CACHE]/goma/data/Deterministic_Fuchsia"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -429,10 +367,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_deterministic__dbg_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -498,7 +435,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "First build"
@@ -520,7 +456,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "First build confirm no-op"
@@ -634,7 +569,7 @@
       "--build-step-name",
       "First build",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -642,9 +577,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Mac deterministic (dbg)\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
@@ -719,7 +654,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -729,7 +664,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args (2)",
@@ -746,7 +680,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -758,7 +692,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files (2)",
@@ -776,7 +709,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -786,38 +719,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate .isolate files (2)"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
-      "--src-dir",
-      "[CACHE]/builder/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "name": "clang_revision (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [],
@@ -833,7 +737,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Mac_deterministic__dbg_"
+      "[CACHE]/goma/data/Deterministic_Fuchsia"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -855,10 +759,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_deterministic__dbg_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Deterministic_Fuchsia",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -924,7 +827,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Second build"
@@ -946,7 +848,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Second build confirm no-op"
@@ -1060,7 +961,7 @@
       "--build-step-name",
       "Second build",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -1068,9 +969,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Mac deterministic (dbg)\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Fuchsia\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "Mac deterministic (dbg)",
+      "Deterministic Fuchsia",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",
@@ -1146,7 +1047,7 @@
       "--second-build-dir",
       "[CACHE]/builder/src/out/Release.2",
       "--target-platform",
-      "mac",
+      "fuchsia",
       "--json-output",
       "/path/to/tmp/json",
       "--ninja-path",
@@ -1163,8 +1064,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"base_unittest\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1193,12 +1093,12 @@
       "----",
       "cp",
       "[CLEANUP]/deterministic_build_tmp_1/deterministic_build_diffs.tgz",
-      "gs://chrome-determinism/Mac deterministic (dbg)/571/deterministic_build_diffs.tgz"
+      "gs://chrome-determinism/Deterministic Fuchsia/571/deterministic_build_diffs.tgz"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Mac deterministic (dbg)/571/deterministic_build_diffs.tgz@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic Fuchsia/571/deterministic_build_diffs.tgz@@@"
     ]
   },
   {
@@ -1215,10 +1115,6 @@
     "name": "rmtree [CLEANUP]/deterministic_build_tmp_1"
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "Step('compare_build_artifacts') (retcode: 1)"
-    },
     "name": "$result"
   }
 ]

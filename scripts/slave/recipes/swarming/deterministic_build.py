@@ -94,6 +94,18 @@ DETERMINISTIC_BUILDERS = freeze({
     'platform': 'linux',
     'targets': ['all'],
   },
+  'Deterministic Fuchsia': {
+    'chromium_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 64,
+      'TARGET_PLATFORM': 'fuchsia',
+    },
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['fuchsia'],
+    'platform': 'linux',
+    'targets': ['all'],
+  },
 })
 
 # Trybots to mirror the actions of builders
@@ -245,7 +257,7 @@ def GenTests(api):
       api.properties.scheduled() +
       api.properties.generic(buildername=buildername,
                              mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
+      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64) +
       api.properties(configuration='Release')
     )
     yield (
@@ -253,7 +265,7 @@ def GenTests(api):
       api.properties.scheduled() +
       api.properties.generic(buildername=buildername,
                              mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
+      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64) +
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )
@@ -267,7 +279,7 @@ def GenTests(api):
       api.properties.generic(buildername=trybotname,
                              mastername=mastername) +
       api.platform(DETERMINISTIC_BUILDERS[
-          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 64) +
       api.properties(configuration='Release')
     )
     yield (
@@ -276,7 +288,7 @@ def GenTests(api):
       api.properties.generic(buildername=trybotname,
                               mastername=mastername) +
       api.platform(DETERMINISTIC_BUILDERS[
-          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 64) +
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )
