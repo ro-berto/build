@@ -175,6 +175,14 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 5)',
       }),
+      'gpu-fyi-try-android-m-nexus-5x-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Nexus 5X)',
+      }),
+      'gpu-fyi-try-android-m-nexus-5x-deqp-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI dEQP Release (Nexus 5X)',
+      }),
       'gpu-fyi-try-android-l-nexus-6-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 6)',
@@ -214,6 +222,10 @@ TRYBOTS = freeze({
       'gpu-fyi-try-android-q-pixel-2-vk-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
+      }),
+      'gpu-try-android-m-nexus-5x-64': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'Android Release (Nexus 5X)',
       }),
       'try-nougat-phone-tester': simple_bot({
         'mastername': 'chromium.android',
@@ -659,6 +671,11 @@ TRYBOTS = freeze({
         'buildername': 'GPU Linux Builder (dbg)',
         'tester': 'Linux Debug (NVIDIA)',
       }),
+      'gpu-try-linux-nvidia-rel': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Linux Builder',
+        'tester': 'Linux Release (NVIDIA)',
+      }),
       'linux-trusty-rel':simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'linux-trusty-rel',
@@ -1051,6 +1068,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu',
         'buildername': 'GPU Win Builder (dbg)',
         'tester': 'Win10 Debug (NVIDIA)',
+      }),
+      'gpu-try-win10-nvidia-rel': simple_bot({
+        'mastername': 'chromium.gpu',
+        'buildername': 'GPU Win Builder',
+        'tester': 'Win10 Release (NVIDIA)',
       }),
     },
   },
