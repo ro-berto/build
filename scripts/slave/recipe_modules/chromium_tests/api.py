@@ -1048,7 +1048,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot = self._lookup_bot_metadata(builders)
     self._report_builders(bot.settings)
     self.configure_build(bot.settings)
-    update_step, bot_db = self.prepare_checkout(bot.settings)
+    update_step, bot_db = self.prepare_checkout(
+        bot.settings, timeout=3600)
 
     bot_type = bot.settings.get('bot_type')
     if bot_type == 'tester':
@@ -1381,7 +1382,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # This rolls chromium checkout, applies the patch, runs gclient sync to
     # update all DEPS.
-    bot_update_step, bot_db = self.prepare_checkout(bot.settings)
+    bot_update_step, bot_db = self.prepare_checkout(
+        bot.settings, timeout=3600)
 
     self.m.chromium_swarming.configure_swarming(
       'chromium', precommit=True)

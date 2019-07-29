@@ -105,6 +105,7 @@
     },
     "infra_step": true,
     "name": "bot_update",
+    "timeout": 3600,
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
