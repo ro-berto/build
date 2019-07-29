@@ -51,6 +51,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._enable_ats = properties.get('enable_ats', False)
     self._goma_server_host = properties.get('server_host', False)
     self._goma_rpc_extra_params = properties.get('rpc_extra_params', False)
+    self._use_luci_auth = properties.get('use_luci_auth', False)
 
     self._client_type = 'release'
 
@@ -179,8 +180,9 @@ class GomaApi(recipe_api.RecipeApi):
 
       with self.m.context(infra_steps=True):
         try:
-          self.m.cipd.set_service_account_credentials(
-              self.service_account_json_path)
+          if not self._use_luci_auth:
+            self.m.cipd.set_service_account_credentials(
+                self.service_account_json_path)
 
           goma_package = ('infra_internal/goma/client/%s' %
               self.m.cipd.platform_suffix())
@@ -217,14 +219,23 @@ class GomaApi(recipe_api.RecipeApi):
       InfraFailure if it fails to start cloudtail
     """
 
+    cloudtail_args = [
+        'start',
+        '--cloudtail-path',
+        self.cloudtail_exe,
+        '--pid-file',
+        self.m.raw_io.output_text(leak_to=self.cloudtail_pid_file)
+    ]
+    if not self._use_luci_auth:
+      cloudtail_args.extend([
+          '--cloudtail-service-account-json',
+          self.cloudtail_service_account_json_path,
+      ])
+
     self.m.build.python(
       name='start cloudtail',
       script=self.resource('cloudtail_utils.py'),
-      args=['start', '--cloudtail-path', self.cloudtail_exe,
-            '--cloudtail-service-account-json',
-            self.cloudtail_service_account_json_path,
-            '--pid-file', self.m.raw_io.output_text(
-                leak_to=self.cloudtail_pid_file)],
+      args=cloudtail_args,
       step_test_data=(
           lambda: self.m.raw_io.test_api.output_text('12345')),
       infra_step=True)
@@ -280,7 +291,7 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
           self.m.path['tmp_base'].join('crash_report_id'))
 
-      if not self._local_dir:
+      if not self._local_dir and not self._use_luci_auth:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
             self.service_account_json_path)
 
@@ -421,6 +432,8 @@ class GomaApi(recipe_api.RecipeApi):
         '--upload-compiler-proxy-info',
         '--log-url-json-file', self.m.json.output(),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+        # TODO(jbudorick): move this behind use_luci_auth once
+        # upload_goma_logs learns to support luci ambient auth.
         '--bigquery-service-account-json',
         self.bigquery_service_account_json_path,
     ]
