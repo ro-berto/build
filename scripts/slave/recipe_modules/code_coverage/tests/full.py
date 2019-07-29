@@ -311,7 +311,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='android-code-coverage',
           buildnumber=54)
-      + api.step_data('read GN args', api.raw_io.output_text(
+      + api.step_data('check GN args for coverage', api.raw_io.output_text(
           'jacoco_coverage = true'))
       + api.post_process(
           post_process.MustRun, 'process java coverage')
