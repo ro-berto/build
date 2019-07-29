@@ -1201,8 +1201,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def deapply_deps(self, bot_update_step):
     with self.m.context(cwd=self.m.chromium_checkout.working_dir):
-      bot_update_json = bot_update_step.json.output
-      self.m.bot_update._resolve_fixed_revisions(bot_update_json)
+      # If tests fail, we want to fix Chromium revision only. Tests will use
+      # the dependencies versioned in 'src' tree.
+      self.m.bot_update.resolve_fixed_revision(
+          bot_update_step.json.output, 'src')
+
       # NOTE: 'ignore_input_commit=True' gets a checkout using the commit
       # before the tested commit, effectively deapplying the gitiles commit
       # (latest commit currently being tested) and reverts back to DEPS

@@ -1548,7 +1548,7 @@ TODO:
 Returns a tuple: list of tests, and list of tests on the triggered
 testers.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1217)(self, builders=None, bots=None):**
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1220)(self, builders=None, bots=None):**
 
 &mdash; **def [is\_precommit\_mode](/scripts/slave/recipe_modules/chromium_tests/api.py#151)(self):**
 
@@ -1580,7 +1580,7 @@ Note that:
 
 &mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#690)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1227)(self, builders, mirrored_bots, deapply_changes):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1230)(self, builders, mirrored_bots, deapply_changes):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#254)(self, update_step):**
 
@@ -1601,7 +1601,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#622)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1222)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1225)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#106)(self):**
 
