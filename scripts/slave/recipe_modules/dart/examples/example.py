@@ -87,7 +87,7 @@ TEST_MATRIX = {
       "steps": [{
         "name": "gn",
         "script": "tools/gn.py",
-        "arguments": ["--bytecode"]
+        "arguments": ["--bytecode", "--gen-snapshot=${build_root}/gen_snapshot"]
       }, {
         "name": "build",
         "script": "tools/build.py",

@@ -461,7 +461,8 @@
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bytecode\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bytecode\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--gen-snapshot=${build_root}/gen_snapshot\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"gn\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/gn.py\"@@@",
@@ -802,7 +803,8 @@
       "[CACHE]\\builder\\sdk\\tools\\gn.py",
       "-asimarm_x64",
       "-mrelease",
-      "--bytecode"
+      "--bytecode",
+      "--gen-snapshot=[CACHE]\\builder\\sdk\\out\\ReleaseSIMARM_X64/gen_snapshot"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {

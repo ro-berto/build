@@ -732,12 +732,17 @@ class DartApi(recipe_api.RecipeApi):
       co19_version = self.m.gclient('get co19 version',
           ['getdep', '-r', 'sdk/tests/co19_2/src:dart/third_party/co19'],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+    out = 'xcodebuild' if self.m.platform.name == 'mac' else 'out'
+    build_root = self.m.path['checkout'].join(
+        out, mode.capitalize() + arch.upper())
     environment = {'system': system,
                    'mode': mode,
                    'arch': arch,
+                   'build_root': build_root,
                    'copy-coredumps': False,
                    'checked_in_sdk_version': checked_in_sdk_version,
-                   'co19_version': co19_version}
+                   'co19_version': co19_version,
+                   'out': out}
     environment['commit'] = {
       'commit_hash': str(self.m.buildbucket.gitiles_commit.id),
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
