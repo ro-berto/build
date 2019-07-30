@@ -716,7 +716,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
         'to %s: failure with result %s in %s build %s: %s' % (
             ', '.join(watchers),
             failed_build['build'].get('status'),
-            failed_build['build']['builderName'],
+            failed_build['build']['builder']['builder'],
             failed_build['build']['number'],
             list(failed_build['unsatisfied'])))
     if not email_app_url:
@@ -751,7 +751,9 @@ def simulate_build_failure(build_db, master, builder, *steps):
   }
   build_json = (
     {
-      'builderName': builder,
+      'builder': {
+        'builder': builder,
+      },
       'number': 0,
       'steps': [{
         'name': s,
