@@ -691,6 +691,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     }
 
     # TODO(crbug.com/878912): Get reason for the build.
+    build_data['reason'] = ''
     build_data['builderName'] = failed_build['build']['builder']['builder'],
     build_data['number'] = failed_build['build']['number']
 
