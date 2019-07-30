@@ -16,7 +16,6 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gsutil',
-  'depot_tools/osx_sdk',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/commit_position',
@@ -87,11 +86,10 @@ def RunSteps(api, triggers, v8_tot):
     api.chromium.ensure_goma()
 
   with api.step.nest('build'):
-    with api.osx_sdk('mac'):  # this is no-op on non-Mac hosts
-      depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
-      with api.context(env_prefixes={'PATH': [depot_tools_path]}):
-        api.chromium.run_gn(use_goma=True)
-        api.chromium.compile(use_goma_module=True)
+    depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
+    with api.context(env_prefixes={'PATH': [depot_tools_path]}):
+      api.chromium.run_gn(use_goma=True)
+      api.chromium.compile(use_goma_module=True)
 
   build_output_path = api.chromium.c.build_dir.join(
       api.chromium.c.build_config_fs)

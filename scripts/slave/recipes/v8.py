@@ -869,7 +869,7 @@ def GenTests(api):
                   build_config='Release',
       ) +
       api.platform('mac', 64) +
-      api.v8.check_in_any_arg('build.install xcode', 'mac') +
+      api.post_process(MustRun, 'initialization.ensure_installed') +
       api.post_process(DropExpectation)
   )
 

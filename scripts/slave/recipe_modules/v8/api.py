@@ -464,12 +464,7 @@ class V8Api(recipe_api.RecipeApi):
       # Only ensure goma if we want to use it. Otherwise it might break bots
       # that don't support the goma executables.
       self.m.chromium.ensure_goma()
-    env = {}
-    # TODO(machenbach): Remove when resolving: https://crbug.com/986701
-    if self.m.chromium.c.HOST_PLATFORM == 'mac':
-      env['MAC_TOOLCHAIN_INSTALLER'] = (
-          self.m.chromium.get_mac_toolchain_installer())
-    self.m.chromium.runhooks(env=env, **kwargs)
+    self.m.chromium.runhooks(**kwargs)
 
   @property
   def bot_type(self):
@@ -647,9 +642,17 @@ class V8Api(recipe_api.RecipeApi):
     # If target_cpu is not set, gn defaults to 64 bits.
     return 64  # pragma: no cover
 
-  @property
-  def osx_sdk_kind(self):
-    return 'ios' if self.m.chromium.c.TARGET_PLATFORM == 'ios' else 'mac'
+  @contextlib.contextmanager
+  def ensure_osx_sdk_if_needed(self):
+    """Ensures the sdk is installed for wrapped steps when building for ios.
+
+    When building for mac we use the src-side hermetic toolchain.
+    """
+    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+      with self.m.osx_sdk('ios'):
+        yield
+    else:
+      yield
 
   def _upload_build_dependencies(self, deps):
     values = {
@@ -715,7 +718,7 @@ class V8Api(recipe_api.RecipeApi):
       out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
         'out'. Note that it is not a path, but just the name of the directory.
     """
-    with self.m.osx_sdk(self.osx_sdk_kind):  # this is no-op on non-Mac hosts
+    with self.ensure_osx_sdk_if_needed():
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
 
@@ -775,7 +778,7 @@ class V8Api(recipe_api.RecipeApi):
         self.m.v8.bot_config.get('binary_size_tracking'))
 
   def collect_post_compile_metrics(self):
-    with self.m.osx_sdk(self.osx_sdk_kind):  # this is no-op on non-Mac hosts
+    with self.ensure_osx_sdk_if_needed():
       if self.bot_config.get('track_build_dependencies', False):
         with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
           deps = self.m.python(
