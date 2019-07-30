@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import MustRun
+from recipe_engine import post_process
 
 DEPS = [
   'chromium',
@@ -83,5 +83,11 @@ def GenTests(api):
         api.chromium_swarming.canned_summary_output(
             api.test_utils.canned_isolated_script_output(
                 passing=True, swarming=True,
-                isolated_script_passing=True)))
+                isolated_script_passing=True))) +
+    api.post_process(post_process.MustRun, 'blink_web_tests (with patch)') +
+    api.post_process(
+        post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
+    api.post_process(post_process.MustRun, 'blink_web_tests (without patch)') +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )

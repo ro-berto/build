@@ -946,7 +946,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_tests:tests/api/integration_steps\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_integration\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1202,7 +1202,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_tests:tests/api/integration_steps\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_integration\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -2063,7 +2063,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_tests:tests/api/integration_steps\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_integration\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -2090,13 +2090,13 @@
     },
     "name": "blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>2 passed, 0 failed (2 total)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>0 passed, 2 failed (2 total)<br/><br/>Unexpected Failures:<br/>* test1.Test1<br/>* test2.Test2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"successes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test1.Test1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test2.Test2\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"successes\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"times\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test1.Test1\": 0.1, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"test2.Test2\": 0.1@@@",
@@ -2107,8 +2107,8 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"125\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": true, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
@@ -2117,8 +2117,8 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"failures\\\": [], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"successes\\\": [], \\\"failures\\\": [\\\"test1.Test1\\\", \\\"test2.Test2\\\"], \\\"valid\\\": true, \\\"times\\\": {\\\"test2.Test2\\\": 0.1, \\\"test1.Test1\\\": 0.1}}\", @@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": true, \\\"exit_code\\\": \\\"125\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
@@ -2138,7 +2138,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (failed)@https://chromium-swarm.appspot.com/user/task/120000@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -2190,7 +2191,7 @@
       "python",
       "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
-      "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",
+      "{\"failures\": [], \"ignored\": [\"test1.Test1\", \"test2.Test2\"]}",
       "--build-number",
       "0",
       "--builder-name",
@@ -2220,46 +2221,11 @@
     },
     "name": "blink_web_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@<br/>Tests ignored as they also fail without patch:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "FindIt Flakiness",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"Failing With Patch Tests That Caused Build Failure\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"blink_web_tests (with patch)\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@      \"test1.Test1\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@      \"test2.Test2\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness\": {}@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "TRYJOB DO NOT RETRY",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@do_not_retry@true@@@"
-    ]
-  },
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed because of:\n\n- test2.Test2\n\n- test1.Test1"
-    },
     "name": "$result"
   }
 ]
