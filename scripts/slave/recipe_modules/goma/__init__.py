@@ -41,6 +41,9 @@ PROPERTIES = {
       server_host=Single(str),
       # Extra parameters to append to RPC path in `server_host`.
       rpc_extra_params=Single(str),
+      # Whether to use ambient luci auth rather than puppet-provided
+      # credentials.
+      use_luci_auth=Single(bool),
     ),
     default={},
   ),

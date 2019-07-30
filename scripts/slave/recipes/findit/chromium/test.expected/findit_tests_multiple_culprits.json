@@ -823,10 +823,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1899,10 +1899,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2936,10 +2936,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -3970,10 +3970,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -4996,10 +4996,10 @@
       "start",
       "--cloudtail-path",
       "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
