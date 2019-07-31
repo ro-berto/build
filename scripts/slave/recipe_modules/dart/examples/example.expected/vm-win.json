@@ -805,7 +805,7 @@
       "-asimarm_x64",
       "-mrelease",
       "--bytecode",
-      "--gen-snapshot=[CACHE]\\builder\\sdk\\out\\ReleaseSIMARM_X64/gen_snapshot"
+      "--gen-snapshot=out/ReleaseSIMARM_X64/gen_snapshot"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {

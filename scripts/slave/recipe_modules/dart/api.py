@@ -733,8 +733,7 @@ class DartApi(recipe_api.RecipeApi):
           ['getdep', '-r', 'sdk/tests/co19_2/src:dart/third_party/co19'],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     out = 'xcodebuild' if self.m.platform.name == 'mac' else 'out'
-    build_root = self.m.path['checkout'].join(
-        out, mode.capitalize() + arch.upper())
+    build_root = out + '/' + mode.capitalize() + arch.upper()
     environment = {'system': system,
                    'mode': mode,
                    'arch': arch,
