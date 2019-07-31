@@ -140,7 +140,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win10 FYI Exp Release (NVIDIA)': {
+    'Win10 FYI x64 Exp Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -148,10 +148,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -174,7 +174,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win10 FYI Release (NVIDIA GeForce GTX 1660)': {
+    'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -182,10 +182,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -276,7 +276,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win10 FYI Release (AMD RX 550)': {
+    'Win10 FYI x64 Release (AMD RX 550)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -284,10 +284,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -327,7 +327,7 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win10 FYI Exp Release (Intel HD 630)': {
+    'Win10 FYI x64 Exp Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -335,10 +335,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
