@@ -5,12 +5,15 @@
 
 """upload goma related logs."""
 
+from __future__ import print_function
+
 import argparse
 import collections
 import json
 import os
 import sys
 
+from infra_libs import luci_auth
 from slave import goma_utils
 
 GOMA_LOGS_PROJECT = 'goma-logs'
@@ -22,32 +25,36 @@ def GetBigQueryClient(service_account_json):
   Args:
     service_account_json: a JSON file for BigQuery service account.
   """
-  if not service_account_json:
+  if service_account_json:
+    # TODO(yyanagisawa): remove following debug print.
+    #                    (crbug.com/822042)
+
+    for env in ('PYTHONPATH', 'VPYTHON_CLEAR_PYTHONPATH'):
+      print('%s=%s' % (env, os.environ.get(env, '<not set>')),
+            file=sys.stderr)
+    print('sys.path=%s' % sys.path, file=sys.stderr)
+
+    # TODO(yyanagisawa): move this back to the top line when flakiness solved
+    #                    (crbug.com/822042)
+    try:
+      from google.cloud import bigquery
+      from google.oauth2 import service_account
+    except ImportError as e:
+      print(e, file=sys.stderr)
+      for p in sys.path:
+        print('path=%s' % p, file=sys.stderr)
+        for root, dirs, files in os.walk(p):
+          print(' root=%s, dirs=%s, files=%s' % (root, dirs, files),
+                file=sys.stderr)
+        print()
+      raise
+
+    creds = service_account.Credentials.from_service_account_file(
+        service_account_json)
+  elif luci_auth.available():
+    creds = luci_auth.LUCICredentials()
+  else:
     return None
-
-  # TODO(yyanagisawa): remove following debug print.
-  #                    (crbug.com/822042)
-
-  for env in ('PYTHONPATH', 'VPYTHON_CLEAR_PYTHONPATH'):
-    print >> sys.stderr, '%s=%s' % (env, os.environ.get(env, '<not set>'))
-  print >> sys.stderr, 'sys.path=%s' % sys.path
-
-  # TODO(yyanagisawa): move this back to the top line when flakiness solved
-  #                    (crbug.com/822042)
-  try:
-    from google.cloud import bigquery
-    from google.oauth2 import service_account
-  except ImportError as e:
-    print >> sys.stderr, e
-    for p in sys.path:
-      print 'path=%s' % p
-      for root, dirs, files in os.walk(p):
-        print >> sys.stderr, ' root=%s, dirs=%s, files=%s' % (root, dirs, files)
-      print
-    raise
-
-  creds = service_account.Credentials.from_service_account_file(
-      service_account_json)
   return bigquery.client.Client(project=GOMA_LOGS_PROJECT, credentials=creds)
 
 
@@ -124,6 +131,8 @@ def main():
   parser.add_argument('--bigquery-service-account-json', default='',
                       metavar='FILENAME',
                       help='Service account json for BigQuery')
+  parser.add_argument('--bigquery-upload', action='store_true',
+                      help='upload to BigQuery')
 
   # Builder ID.
   parser.add_argument('--builder-id-json', default='',
@@ -195,8 +204,10 @@ def main():
   #                    (crbug.com/822042)
   # Without Build ID, we do not use BigQuery.  Let me minimize the
   # points that cause crbug.com/822042.
-  if args.build_id:
+  if args.build_id and args.bigquery_upload:
     bqclient = GetBigQueryClient(args.bigquery_service_account_json)
+    if not bqclient:
+      raise Exception('Unable to create BigQuery client.')
 
   if args.goma_stats_file and args.build_id and bqclient:
     # TODO(yyanagisawa): move this back to the top line when flakiness is solved

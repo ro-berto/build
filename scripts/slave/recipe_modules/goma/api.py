@@ -450,11 +450,13 @@ class GomaApi(recipe_api.RecipeApi):
         '--upload-compiler-proxy-info',
         '--log-url-json-file', self.m.json.output(),
         '--gsutil-py-path', self.m.depot_tools.gsutil_py_path,
-        # TODO(jbudorick): move this behind use_luci_auth once
-        # upload_goma_logs learns to support luci ambient auth.
-        '--bigquery-service-account-json',
-        self.bigquery_service_account_json_path,
+        '--bigquery-upload',
     ]
+    if not self._use_luci_auth:
+      args += [
+          '--bigquery-service-account-json',
+          self.bigquery_service_account_json_path,
+      ]
 
     json_test_data = {
       'compiler_proxy_log': (

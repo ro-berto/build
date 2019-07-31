@@ -8,7 +8,7 @@
 import json
 import os
 
-from infra_libs import bigquery
+from infra_libs import bqh
 from slave.goma import compile_events_pb2
 from slave import goma_utils
 
@@ -113,10 +113,10 @@ def SendCompileEvent(goma_stats_file, goma_counterz_file,
         event.exit_status = compile_events_pb2.CompileEvent.DIED_WITH_LOG_FATAL
 
     # BQ uploader.
-    bigquery.helper.send_rows(bqclient,
-                              COMPILE_EVENTS_DATASET,
-                              COMPILE_EVENTS_TABLE,
-                              [event])
+    bqh.send_rows(bqclient,
+                  COMPILE_EVENTS_DATASET,
+                  COMPILE_EVENTS_TABLE,
+                  [event])
     print 'Uploaded CompileEvent to BQ %s.%s' % (
         COMPILE_EVENTS_DATASET, COMPILE_EVENTS_TABLE)
   except Exception, inst:  # safety net
