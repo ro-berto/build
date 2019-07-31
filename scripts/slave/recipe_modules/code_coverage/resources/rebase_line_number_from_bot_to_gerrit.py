@@ -25,9 +25,11 @@ import argparse
 import json
 import logging
 import os
+import subprocess
 import sys
 import tempfile
 
+import diff_util
 import gerrit_util
 
 
@@ -70,16 +72,36 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
       'have file content fetched from Gerrit')
 
   file_to_line_num_mapping = {}
-  for i in range(len(sources_to_rebase)):
-    abs_local_file_path = os.path.join(src_path, sources_to_rebase[i])
+  for filename, content in zip(sources_to_rebase, gerrit_files_content):
+    local_file_path = os.path.join(src_path, filename)
     gerrit_file = tempfile.NamedTemporaryFile()
-    gerrit_file.write(gerrit_files_content[i])
-    gerrit_file.flush()
+    try:
+      gerrit_file.write(content)
+      gerrit_file.flush()
 
-    file_to_line_num_mapping[
-        sources_to_rebase[i]] = gerrit_util.generate_line_number_mapping(
-            abs_local_file_path, gerrit_file.name)
-    gerrit_file.close()
+      diff_cmd = [
+          'git', 'diff', '--no-index', local_file_path, gerrit_file.name
+      ]
+      diff_output = None
+
+      # 'diff' command returns 0 if two files are the same, 1 if differences are
+      # found, >1 if an error occurred.
+      diff_output = subprocess.check_output(diff_cmd)
+    except subprocess.CalledProcessError as e:
+      if e.returncode != 1:
+        raise
+
+      diff_output = e.output
+    finally:
+      gerrit_file.close()
+
+    diff_lines = diff_output.splitlines()
+    with open(local_file_path) as f:
+      local_lines = f.read().splitlines()
+    gerrit_lines = content.splitlines()
+    file_to_line_num_mapping[filename] = (
+        diff_util.generate_line_number_mapping(diff_lines, local_lines,
+                                               gerrit_lines))
 
   return file_to_line_num_mapping
 

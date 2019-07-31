@@ -64,9 +64,9 @@ class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
 
     file_on_bot_path = file_on_bot.name
     rebase_line_number_from_bot_to_gerrit.rebase_line_number(
-            self.host, self.project, self.change, self.patchset,
-            os.path.dirname(file_on_bot_path),
-            [os.path.basename(file_on_bot_path), 'non_exist_file'])
+        self.host, self.project, self.change, self.patchset,
+        os.path.dirname(file_on_bot_path),
+        [os.path.basename(file_on_bot_path), 'non_exist_file'])
 
     mocked_fetch_files_content.assert_called_with(
         self.host, self.project, self.change, self.patchset,
