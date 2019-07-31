@@ -1250,7 +1250,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             status=common_pb.FAILURE)
 
   def _format_unrecoverable_failures(self, unrecoverable_test_suites,
-                                     suffix, size_limit=10):
+                                     suffix, size_limit=5, failure_limit=4):
     """Creates list of failed tests formatted using markdown.
 
        Args:
@@ -1265,6 +1265,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_summary_lines = [header]
     if self._test_data.enabled:
       size_limit = self._test_data.get('change_size_limit', 2)
+      failure_limit = size_limit
     for index, test in enumerate(unrecoverable_test_suites):
       if index >= size_limit:
         hint = '...%d more test(s)...' % (test_size - index)
@@ -1276,7 +1277,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         test_summary_lines.append('**%s** failed because of:' % name)
       else:
         test_summary_lines.append('**%s** failed.' % name)
-      for failure in deterministic_failures:
+
+      for index, failure in enumerate(deterministic_failures):
+        if index >= failure_limit:
+          failure_size = len(deterministic_failures)
+          hint = '...%d more failure(s) (%d total)...' % (
+              failure_size - index, failure_size)
+          test_summary_lines.append(hint)
+          return '\n\n'.join(test_summary_lines)
         test_summary_lines.append('- ' + failure)
 
     return '\n\n'.join(test_summary_lines)

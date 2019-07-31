@@ -809,7 +809,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- test1.Test2-2\n\n- test1.Test1\n\n- test1.Test2"
+      "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- test1.Test2-2\n\n- test1.Test1\n\n...1 more failure(s) (3 total)..."
     },
     "name": "$result"
   }
