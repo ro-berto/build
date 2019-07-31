@@ -60,7 +60,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8",
       "test-art-host-gtest64"
     ],

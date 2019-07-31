@@ -41,7 +41,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8"
     ],
     "env": {
@@ -61,7 +62,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8",
       "dump-oat-boot-x86"
     ],
@@ -115,7 +117,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8"
     ],
     "env": {
@@ -132,7 +135,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8",
       "dump-oat-boot-x86_64"
     ],
@@ -186,7 +190,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8"
     ],
     "env": {
@@ -203,7 +208,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8",
       "dump-oat-boot-arm"
     ],
@@ -257,7 +263,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8"
     ],
     "env": {
@@ -274,7 +281,8 @@
   },
   {
     "cmd": [
-      "make",
+      "build/soong/soong_ui.bash",
+      "--make-mode",
       "-j8",
       "dump-oat-boot-arm64"
     ],

@@ -3959,7 +3959,7 @@ Checks that properties get to recipes from annotated_run properly
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#637)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#643)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#59)(api):**
 
@@ -3967,11 +3967,11 @@ Checks that properties get to recipes from annotated_run properly
 
 &mdash; **def [full\_checkout](/scripts/slave/recipes/art.py#64)(api):**
 
-&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#471)(api, read_barrier):**
+&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#473)(api, read_barrier):**
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#74)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
-&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#232)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#234)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
 ### *recipes* / [binary\_size\_trybot](/scripts/slave/recipes/binary_size_trybot.py)
 
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#8): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile], [recipe\_engine/time][recipe_engine/recipe_modules/time]

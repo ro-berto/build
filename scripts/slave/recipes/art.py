@@ -143,8 +143,10 @@ def setup_host_x86(api,
              [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
 
     with api.step.defer_results():
-      api.step('test gtest',
-          ['make', '-j8', 'test-art-host-gtest%d' % bitness])
+      api.step('test gtest', ['build/soong/soong_ui.bash',
+                              '--make-mode',
+                              '-j8',
+                              'test-art-host-gtest%d' % bitness])
 
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j8',
@@ -488,9 +490,13 @@ def setup_aosp_builder(api, read_barrier):
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
         api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
-        api.step('Build %s' % build, ['make', '-j8'])
-        api.step('Dump oat boot %s' % build,
-                 ['make', '-j8', 'dump-oat-boot-%s' % build])
+        api.step('Build %s' % build, ['build/soong/soong_ui.bash',
+                                      '--make-mode',
+                                      '-j8'])
+        api.step('Dump oat boot %s' % build, ['build/soong/soong_ui.bash',
+                                              '--make-mode',
+                                              '-j8',
+                                              'dump-oat-boot-%s' % build])
         api.step('Post clean %s' % build, ['rm', '-rf', 'out'])
 
 
