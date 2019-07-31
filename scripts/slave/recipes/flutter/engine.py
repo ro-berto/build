@@ -347,7 +347,12 @@ def BuildLinux(api):
 
 
 def BuildFuchsia(api):
-  if api.properties.get('build_host', True):
+  # Default whether we build fuchsia to whether we're building the host.
+  # This will enable us to transition to building Fuchsia separately without
+  # removing it from the current build.
+  # TODO(dnfield): Remove this once we've added a dedicated Fuchsia builder.
+  if api.properties.get('build_fuchsia',
+                        api.properties.get('build_host', True)):
     BuildFuchsiaArtifactsAndUpload(api)
 
 
@@ -752,6 +757,7 @@ def GenTests(api):
       api.properties(
         goma_jobs=1024,
         build_host=True,
+        build_fuchsia=True,
         build_android_aot=True,
         build_android_debug=True,
         build_android_vulkan=True,
