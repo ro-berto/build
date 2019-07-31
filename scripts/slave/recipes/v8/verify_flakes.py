@@ -44,7 +44,7 @@ TEST_CONFIG = [{
   'swarming_dimensions': [
     'cpu:x86-64-avx2',
     'gpu:none',
-    'os:Ubuntu-14.04',
+    'os:Ubuntu-16.04',
     'pool:Chrome'
   ],
   'test_name': 'cctest/test-cpu-profiler/FunctionCallSample',

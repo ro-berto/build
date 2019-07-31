@@ -93,7 +93,7 @@
       "@@@STEP_LOG_LINE@flake config@  \"swarming_dimensions\": [@@@",
       "@@@STEP_LOG_LINE@flake config@    \"cpu:x86-64-avx2\", @@@",
       "@@@STEP_LOG_LINE@flake config@    \"gpu:none\", @@@",
-      "@@@STEP_LOG_LINE@flake config@    \"os:Ubuntu-14.04\", @@@",
+      "@@@STEP_LOG_LINE@flake config@    \"os:Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@flake config@    \"pool:Chrome\"@@@",
       "@@@STEP_LOG_LINE@flake config@  ], @@@",
       "@@@STEP_LOG_LINE@flake config@  \"test_name\": \"cctest/test-cpu-profiler/FunctionCallSample\", @@@",
