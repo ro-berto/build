@@ -1,0 +1,18 @@
+// Copyright 2019 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipes.build.android.sdk_packager;
+
+message SdkCipdPackage {
+  // Name of the SDK package to create as reported by sdkmanager.
+  string sdk_package_name = 1;
+  // Path to the yaml file relative to chromium/src.
+  string cipd_yaml = 2;
+}
+
+message InputProperties {
+  // CIPD packages to create from Android SDK packages.
+  repeated SdkCipdPackage packages = 1;
+}
