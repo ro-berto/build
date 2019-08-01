@@ -63,6 +63,9 @@ DETERMINISTIC_BUILDERS = freeze({
   },
   'Deterministic Linux (dbg)': {
     'chromium_config': 'chromium',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+    },
     'gclient_config': 'chromium',
     'platform': 'linux',
     'targets': ['all'],
@@ -156,12 +159,6 @@ def RunSteps(api, buildername):
   else:
     recipe_config = DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[buildername]]
 
-  if recipe_config.get('chromium_config_kwargs'):
-    target_platform = recipe_config['chromium_config_kwargs'].get(
-        'TARGET_PLATFORM')
-  else:
-    target_platform = recipe_config.get('platform')
-
   # Set up a named cache so runhooks doesn't redownload everything on each run.
   solution_path = api.path['cache'].join('builder')
   api.file.ensure_directory('init cache if not exists', solution_path)
@@ -178,7 +175,8 @@ def RunSteps(api, buildername):
   # build in the usual build dir and a clobber build in a differently-named
   # build dir and then compares the outputs.
   # TODO(thakis): Do this on all platforms, https://crbug.com/899438
-  check_different_build_dirs = target_platform in ['fuchsia', 'linux', 'win']
+  check_different_build_dirs = (
+      api.chromium.c.TARGET_PLATFORM in ['fuchsia', 'linux', 'win'])
 
   # Since disk lacks in Mac, we need to remove files before build.
   # In check_different_build_dirs, only the .2 build dir exists here.
@@ -217,8 +215,8 @@ def RunSteps(api, buildername):
   # Do the second build and move the build artifact to the temp directory.
   build_dir, target = None, None
   if check_different_build_dirs:
-    build_dir = '//out/Release.2'
-    target = 'Release.2'
+    target = '%s.2' % api.chromium.c.build_config_fs
+    build_dir = '//out/%s' % target
 
   api.chromium.mb_gen(api.properties.get('mastername'), buildername,
                       build_dir=build_dir,

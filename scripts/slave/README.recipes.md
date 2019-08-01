@@ -5412,11 +5412,11 @@ Recipe to test the deterministic build.
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#129)(api, recipe_config):**
+&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#132)(api, recipe_config):**
 
-&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#117)(api, src_dir, dst_dir):**
+&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#120)(api, src_dir, dst_dir):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#153)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#156)(api, buildername):**
 ### *recipes* / [swarming/heartbeat](/scripts/slave/recipes/swarming/heartbeat.py)
 
 [DEPS](/scripts/slave/recipes/swarming/heartbeat.py#11): [chromium\_swarming](#recipe_modules-chromium_swarming), [swarming\_client](#recipe_modules-swarming_client), [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
