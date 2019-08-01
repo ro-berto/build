@@ -95,9 +95,16 @@ def BuildFuchsiaArtifactsAndUpload(api):
     git_rev = api.buildbucket.gitiles_commit.id
     build_script = str(checkout.join(
       'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
-    cmd = ['python', build_script, '--upload', '--engine-version', git_rev]
+    cmd = ['python', build_script, '--engine-version', git_rev]
+    if not api.runtime.is_experimental:
+      cmd.append('--upload')
     api.step('Build Fuchsia Artifacts & Upload', cmd)
-
+    with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
+      stamp_file = temp_dir.join('fuchsia.stamp')
+      api.file.write_text('fuchsia.stamp', stamp_file, '')
+      remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
+      api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
+          name='upload "fuchsia.stamp"')
 
 def RunGN(api, *args):
   # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
@@ -678,30 +685,25 @@ def BuildObjcDoc(api):
 
 
 def GetCheckout(api):
+  git_url = GIT_REPO
+  git_id = api.buildbucket.gitiles_commit.id
+  git_ref = api.buildbucket.gitiles_commit.ref
+  if api.runtime.is_experimental and (
+      'git_url' in api.properties and 'git_ref' in api.properties):
+    git_url = api.properties['git_url']
+    git_id = api.properties['git_ref']
+    git_ref = api.properties['git_ref']
+
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = 'src/flutter'
-  soln.url = \
-      'https://chromium.googlesource.com/external/github.com/flutter/engine'
-  soln.revision = api.buildbucket.gitiles_commit.id
-  # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
+  soln.url = git_url
+  soln.revision = git_id
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
-  src_cfg.target_os = set(['android'])
-  src_cfg.repo_path_map[
-    'https://chromium.googlesource.com/external/github.com/flutter/flutter'
-  ] = ('src/flutter', 'HEAD')
+  src_cfg.repo_path_map[git_url] = ('src/flutter', git_ref)
   api.gclient.c = src_cfg
   api.gclient.c.got_revision_mapping['src/flutter'] = 'got_engine_revision'
   api.bot_update.ensure_checkout()
-  if (api.runtime.is_experimental and
-      'git_url' in api.properties and
-      'git_ref' in api.properties):
-    src = api.path['start_dir'].join('src')
-    with api.context(cwd=src):
-      api.git.checkout(
-        api.properties['git_url'],
-        ref=api.properties['git_ref'],
-        recursive=True)
   api.gclient.runhooks()
 
 def RunSteps(api):
@@ -780,13 +782,13 @@ def GenTests(api):
   yield (api.test('pull_request') +
          api.buildbucket.ci_build(
             builder='Linux Host Engine',
-            git_repo=GIT_REPO,
+            git_repo='https://github.com/flutter/engine',
             project='flutter') +
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(
             git_url = 'https://github.com/flutter/engine',
             goma_jobs=200,
-            git_ref = 'pulls/1/head',
+            git_ref = 'refs/pull/1/head',
             build_host=True,
             build_android_aot=True,
             build_android_debug=True,

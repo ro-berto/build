@@ -386,7 +386,7 @@ def GenTests(api):
   yield (api.test('pull_request') +
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(git_url = 'https://github.com/flutter/flutter',
-                        git_ref = 'pulls/1/head',
+                        git_ref = 'refs/pull/1/head',
                         shard = 'tests',
                         cocoapods_version='1.5.3',
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL))

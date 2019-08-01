@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/flutter', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/flutter', 'url': 'https://chromium.googlesource.com/external/github.com/flutter/engine'}]",
       "--revision_mapping_file",
       "{\"got_engine_revision\": \"src/flutter\"}",
       "--git-cache-dir",
@@ -6757,9 +6757,9 @@
     "cmd": [
       "python",
       "[START_DIR]/src/flutter/tools/fuchsia/build_fuchsia_artifacts.py",
-      "--upload",
       "--engine-version",
-      "2d72510e447ab60a9728aeea2362d8be2cbd7789"
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--upload"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -6771,6 +6771,81 @@
       ]
     },
     "name": "Build Fuchsia Artifacts & Upload"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CLEANUP]/tmp_tmp_33/fuchsia.stamp"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "fuchsia.stamp",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@fuchsia.stamp@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]/tmp_tmp_33/fuchsia.stamp",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/fuchsia/fuchsia.stamp"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"fuchsia.stamp\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/fuchsia/fuchsia.stamp@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_33"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for fuchsia_stamp"
   },
   {
     "name": "$result"

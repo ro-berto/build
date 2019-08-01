@@ -16,7 +16,7 @@
       "git",
       "fetch",
       "origin",
-      "pulls/1/head",
+      "refs/pull/1/head",
       "--recurse-submodules",
       "--progress",
       "--tags"
