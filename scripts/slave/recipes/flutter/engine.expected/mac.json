@@ -5349,7 +5349,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshots.py",
       "--dst",
       "[START_DIR]/src/out/debug",
       "--arm64-out-dir",
@@ -5383,7 +5383,7 @@
       ]
     },
     "name": "Zip ios artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_armv7\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot_armv7\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_arm64\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot_arm64\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -5474,7 +5474,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshots.py",
       "--dst",
       "[START_DIR]/src/out/profile",
       "--arm64-out-dir",
@@ -5508,7 +5508,7 @@
       ]
     },
     "name": "Zip ios-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_11/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_armv7\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot_armv7\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_arm64\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot_arm64\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_11/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -5601,7 +5601,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshots.py",
       "--dst",
       "[START_DIR]/src/out/release",
       "--arm64-out-dir",
@@ -5635,7 +5635,7 @@
       ]
     },
     "name": "Zip ios-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_armv7\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot_armv7\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot_arm64\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot_arm64\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_12/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [

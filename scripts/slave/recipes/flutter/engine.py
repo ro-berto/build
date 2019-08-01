@@ -500,7 +500,7 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
   # Package the multi-arch gen_snapshot for macOS.
   create_macos_gen_snapshot_cmd = [
-    checkout.join('flutter/sky/tools/create_macos_gen_snapshot.py'),
+    checkout.join('flutter/sky/tools/create_macos_gen_snapshots.py'),
     '--dst',
     label_dir,
     '--arm64-out-dir',
@@ -516,7 +516,8 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   # Upload the artifacts to cloud storage.
   artifacts = [
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
-    'out/%s/gen_snapshot' % label,
+    'out/%s/gen_snapshot_armv7' % label,
+    'out/%s/gen_snapshot_arm64' % label,
     'out/%s/Flutter.framework.zip' % label,
   ]
   UploadArtifacts(api, bucket_name, artifacts)
