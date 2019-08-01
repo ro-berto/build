@@ -2006,6 +2006,37 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-scopes",
+      "https://www.googleapis.com/auth/cloud-platform",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "upload new results.get access token for default account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "[CACHE]/builder/sdk/tools/bots/post_results_to_pubsub.dart",
+      "-f",
+      "",
+      "-a",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "upload new results.publish results to pub/sub",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/approve_results.dart",
       "--automated-approver",

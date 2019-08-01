@@ -421,6 +421,7 @@ class DartApi(recipe_api.RecipeApi):
       name='update "latest" reference',
       ok_ret='any' if self._report_new_results() else {0})
     self._upload_results_to_bq(results_str)
+    self._publish_results(results_str)
 
 
   def _upload_result(self, builder, build_number, filename, result_str):
@@ -430,6 +431,19 @@ class DartApi(recipe_api.RecipeApi):
       'builders/%s/%s/%s' % (builder, build_number, filename),
       name='upload %s' % filename, ok_ret='any'
       if self._report_new_results() else {0})
+
+
+  def _publish_results(self, results_str):
+    access_token = self.m.service_account.default().get_access_token(
+      ['https://www.googleapis.com/auth/cloud-platform'])
+    self.m.step(
+        'publish results to pub/sub',
+        [self.dart_executable(),
+         self.m.path['checkout'].join('tools', 'bots',
+                                      'post_results_to_pubsub.dart'),
+         '-f', self.m.raw_io.input_text(results_str),
+         '-a', self.m.raw_io.input_text(access_token)],
+         ok_ret='any')
 
 
   def _extend_results_records(
