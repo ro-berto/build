@@ -25,6 +25,22 @@ def GetBigQueryClient(service_account_json):
   Args:
     service_account_json: a JSON file for BigQuery service account.
   """
+
+  # TODO(yyanagisawa): move this back to the top line when flakiness solved
+  #                    (crbug.com/822042)
+  try:
+    from google.cloud import bigquery
+    from google.oauth2 import service_account
+  except ImportError as e:
+    print(e, file=sys.stderr)
+    for p in sys.path:
+      print('path=%s' % p, file=sys.stderr)
+      for root, dirs, files in os.walk(p):
+        print(' root=%s, dirs=%s, files=%s' % (root, dirs, files),
+              file=sys.stderr)
+      print()
+    raise
+
   if service_account_json:
     # TODO(yyanagisawa): remove following debug print.
     #                    (crbug.com/822042)
@@ -33,21 +49,6 @@ def GetBigQueryClient(service_account_json):
       print('%s=%s' % (env, os.environ.get(env, '<not set>')),
             file=sys.stderr)
     print('sys.path=%s' % sys.path, file=sys.stderr)
-
-    # TODO(yyanagisawa): move this back to the top line when flakiness solved
-    #                    (crbug.com/822042)
-    try:
-      from google.cloud import bigquery
-      from google.oauth2 import service_account
-    except ImportError as e:
-      print(e, file=sys.stderr)
-      for p in sys.path:
-        print('path=%s' % p, file=sys.stderr)
-        for root, dirs, files in os.walk(p):
-          print(' root=%s, dirs=%s, files=%s' % (root, dirs, files),
-                file=sys.stderr)
-        print()
-      raise
 
     creds = service_account.Credentials.from_service_account_file(
         service_account_json)
