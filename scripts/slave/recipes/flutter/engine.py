@@ -274,7 +274,7 @@ def BuildLinuxAndroid(api):
   if api.properties.get('build_android_aot', True):
     # Build and upload engines for the runtime modes that use AOT compilation.
     aot_variants = [
-      ('arm', 'android_%s', 'android-arm-%s', 'clang_x86',
+      ('arm', 'android_%s', 'android-arm-%s', 'clang_x64',
       'arm-linux-androideabi'),
       ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
       'aarch64-linux-android'),
@@ -448,13 +448,13 @@ def BuildMac(api):
     Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
 
     UploadArtifacts(api, "android-arm-profile" , [
-      'out/android_profile/clang_x86/gen_snapshot',
+      'out/android_profile/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
     UploadArtifacts(api, "android-arm64-profile" , [
       'out/android_profile_arm64/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
     UploadArtifacts(api, "android-arm-release" , [
-      'out/android_release/clang_x86/gen_snapshot',
+      'out/android_release/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
     UploadArtifacts(api, "android-arm64-release" , [
       'out/android_release_arm64/clang_x64/gen_snapshot',
