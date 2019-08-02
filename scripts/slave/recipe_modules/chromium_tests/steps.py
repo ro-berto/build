@@ -1581,6 +1581,10 @@ class SwarmingTest(Test):
     return True
 
   @property
+  def isolate_coverage_data(self):
+    return bool(self._isolate_coverage_data)
+
+  @property
   def shards(self):
     return self._shards
 

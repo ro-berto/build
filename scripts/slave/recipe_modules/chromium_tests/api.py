@@ -1167,11 +1167,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_runner = self.create_test_runner(
         tests,
         serialize_tests=bot.settings.get('serialize_tests'),
-        # If using coverage we want to retry invalid shards as they may fail
-        # due to an existing issue with occassional corruption of collected
-        # coverage data.
-        # TODO(crbug.com/986927): Re-enable this once the issue is debugged.
-        # retry_invalid_shards=self.m.code_coverage.using_coverage,
+        # If any tests export coverage data we want to retry invalid shards due
+        # to an existing issue with occasional corruption of collected coverage
+        # data.
+        retry_invalid_shards=any(
+            t.runs_on_swarming and t.isolate_coverage_data for t in tests),
     )
     with self.wrap_chromium_tests(bot.settings, tests):
       test_failure_summary = test_runner()
