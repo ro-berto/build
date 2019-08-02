@@ -13,7 +13,6 @@ import json
 import os
 import sys
 
-from infra_libs import luci_auth
 from slave import goma_utils
 
 GOMA_LOGS_PROJECT = 'goma-logs'
@@ -51,8 +50,6 @@ def GetBigQueryClient(service_account_json):
   if service_account_json:
     creds = service_account.Credentials.from_service_account_file(
         service_account_json)
-  elif luci_auth.available():
-    creds = luci_auth.LUCICredentials()
   else:
     return None
   return bigquery.client.Client(project=GOMA_LOGS_PROJECT, credentials=creds)
