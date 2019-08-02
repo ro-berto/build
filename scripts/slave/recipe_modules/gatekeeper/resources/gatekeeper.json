@@ -540,24 +540,22 @@
         ],
 
         "forgive_all": "true",
+        "closing_optional": [
+          "*"
+        ],
 
         "builders": {
-          "*": {
-            "closing_optional": [
-              "*"
-            ]
-          }
+          "*": {}
         }
       }
     ],
     "https://build.chromium.org/p/client.crashpad": [
       {
+        "closing_optional": [
+          "*"
+        ],
         "builders": {
-          "*": {
-            "closing_optional": [
-              "*"
-            ]
-          }
+          "*": {}
         }
       }
     ],
@@ -567,10 +565,9 @@
         "tree_notify": [
           "catapult-sheriff@chromium.org"
         ],
+        "forgiving_optional": ["*"],
         "builders": {
-          "*": {
-            "forgiving_optional": ["*"]
-          }
+          "*": {}
         }
       }
     ],
@@ -614,10 +611,11 @@
         ],
         "categories": [
           "chromium_tree_closer",
-          "experimental_tests"
+          "experimental_tests",
+          "webrtc_all"
         ],
         "builders": {
-          "*": { "categories": [ "webrtc_all"] }
+          "*": {}
         },
         "excluded_builders": [
           "*UWP*"
