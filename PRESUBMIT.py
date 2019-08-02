@@ -130,6 +130,15 @@ def CommitChecks(input_api, output_api):
         path,
         whitelist))
 
+  recipes_resources = input_api.glob(
+      join('scripts', 'slave', 'recipes', '*', '*.resources'))
+  for path in recipes_resources:
+    tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
+        input_api,
+        output_api,
+        path,
+        whitelist))
+
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
