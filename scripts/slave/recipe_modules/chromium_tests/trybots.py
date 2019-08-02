@@ -109,6 +109,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'android-oreo-arm64-rel',
       }),
+      'android-pie-x86-fyi-rel': simple_bot({
+        'mastername': 'chromium.android.fyi',
+        'buildername': 'android-pie-x86-fyi-rel',
+      }),
       'android_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'android-archive-rel',

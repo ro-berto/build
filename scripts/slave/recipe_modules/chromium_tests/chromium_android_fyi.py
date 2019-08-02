@@ -157,5 +157,21 @@ SPEC = {
       },
     },
 
+    'android-pie-x86-fyi-rel': {
+      'chromium_config': 'android',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'x86_builder',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
   },
 }
