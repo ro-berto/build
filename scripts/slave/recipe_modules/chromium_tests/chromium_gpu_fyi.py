@@ -26,23 +26,6 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
-    'GPU FYI Win Builder DEPS ANGLE': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'checkout_dir': 'win',
-    },
     'GPU FYI Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -83,132 +66,7 @@ SPEC = {
       # than the common case.
       'checkout_dir': 'win',
     },
-    'GPU FYI XR Win Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'checkout_dir': 'win',
-      # This causes the builder to upload isolates to a location where Pinpoint
-      # can access them in addition to the usual isolate server. This is
-      # necessary because "Win10 FYI Release XR Perf (NVIDIA)", which is a
-      # child of this builder, uploads perf results, and Pinpoint may trigger
-      # additional builds on this builder during a bisect.
-      'perf_isolate_lookup': True,
-    },
-    'Win7 FYI Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI dEQP Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win dEQP Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI x64 Exp Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win x64 Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win x64 Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI Release XR Perf (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI XR Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI Debug (NVIDIA)': {
+    'Win7 FYI Debug (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -242,18 +100,18 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win7 FYI Debug (AMD)': {
+    'Win7 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
+        'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder (dbg)',
+      'parent_buildername': 'GPU FYI Win Builder',
       'testing': {
         'platform': 'win',
       },
@@ -271,74 +129,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU FYI Win dEQP Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI x64 Release (AMD RX 550)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win x64 Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI Release (Intel HD 630)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI dEQP Release (Intel HD 630)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win dEQP Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win10 FYI x64 Exp Release (Intel HD 630)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -378,6 +168,23 @@ SPEC = {
       },
       'checkout_dir': 'win',
     },
+    'GPU FYI Win x64 Builder DEPS ANGLE': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'checkout_dir': 'win',
+    },
     'GPU FYI Win x64 dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -400,6 +207,159 @@ SPEC = {
       # of disk space, and this is expected to be a corner case rather
       # than the common case.
       'checkout_dir': 'win',
+    },
+    'Win10 FYI x64 Debug (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Exp Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Exp Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Release (AMD RX 550)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 dEQP Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 dEQP Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'Win10 FYI x64 dEQP Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win x64 dEQP Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
     },
     'Win7 FYI x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
@@ -430,6 +390,46 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU FYI Win x64 dEQP Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
+    'GPU FYI XR Win x64 Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'checkout_dir': 'win',
+      # This causes the builder to upload isolates to a location where Pinpoint
+      # can access them in addition to the usual isolate server. This is
+      # necessary because "Win10 FYI x64 Release XR Perf (NVIDIA)", which is a
+      # child of this builder, uploads perf results, and Pinpoint may trigger
+      # additional builds on this builder during a bisect.
+      'perf_isolate_lookup': True,
+    },
+    'Win10 FYI x64 Release XR Perf (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI XR Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -1314,7 +1314,7 @@ SPEC = {
     # here only in order to allow the associated src-side JSON entries
     # to be read, and the "optional" GPU tryservers to be specified in
     # terms of them.
-    'Optional Win10 Release (NVIDIA)': {
+    'Optional Win10 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -1322,15 +1322,15 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
     },
-    'Optional Win10 Release (Intel HD 630)': {
+    'Optional Win10 x64 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -1338,10 +1338,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
@@ -1547,7 +1547,7 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'ANGLE GPU Win10 Release (NVIDIA)': {
+    'ANGLE GPU Win10 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -1555,15 +1555,15 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },
     },
-    'ANGLE GPU Win10 Release (Intel HD 630)': {
+    'ANGLE GPU Win10 x64 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -1571,10 +1571,10 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
+        'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
+      'parent_buildername': 'GPU FYI Win x64 Builder',
       'testing': {
         'platform': 'win',
       },

@@ -359,19 +359,9 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'win-angle-rel': {
+      'win-angle-rel-32': {
         'retry_failed_shards': False,
         'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'ANGLE GPU Win10 Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'ANGLE GPU Win10 Release (Intel HD 630)',
-          },
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Win Builder',
@@ -379,23 +369,43 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'win_angle_deqp_rel_ng': {
+      'win-angle-rel-64': {
+        'retry_failed_shards': False,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win x64 Builder',
+            'tester': 'ANGLE GPU Win10 x64 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win x64 Builder',
+            'tester': 'ANGLE GPU Win10 x64 Release (Intel HD 630)',
+          },
+        ],
+      },
+      'win-angle-deqp-rel-32': {
         'retry_failed_shards': False,
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Win dEQP Builder',
-            'tester': 'Win10 FYI dEQP Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win dEQP Builder',
             'tester': 'Win7 FYI dEQP Release (AMD)',
           },
+        ],
+      },
+      'win-angle-deqp-rel-64': {
+        'retry_failed_shards': False,
+        'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win dEQP Builder',
-            'tester': 'Win10 FYI dEQP Release (Intel HD 630)',
+            'buildername': 'GPU FYI Win x64 dEQP Builder',
+            'tester': 'Win10 FYI x64 dEQP Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win x64 dEQP Builder',
+            'tester': 'Win10 FYI x64 dEQP Release (Intel HD 630)',
           },
         ],
       },
@@ -988,32 +998,32 @@ TRYBOTS = freeze({
         'bot_ids': [
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder DEPS ANGLE',
-            'tester': 'Optional Win10 Release (NVIDIA)',
+            'buildername': 'GPU FYI Win x64 Builder DEPS ANGLE',
+            'tester': 'Optional Win10 x64 Release (NVIDIA)',
           },
           {
             'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder DEPS ANGLE',
-            'tester': 'Optional Win10 Release (Intel HD 630)',
+            'buildername': 'GPU FYI Win x64 Builder DEPS ANGLE',
+            'tester': 'Optional Win10 x64 Release (Intel HD 630)',
           },
         ],
       },
       # Manually triggered GPU trybots.
-      'gpu-fyi-try-win-xr-builder': simple_bot({
+      'gpu-fyi-try-win-xr-builder-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI XR Win Builder',
+        'buildername': 'GPU FYI XR Win x64 Builder',
       }, analyze_mode='compile'),
-      'gpu-fyi-try-win7-amd-dbg': simple_bot({
+      'gpu-fyi-try-win7-amd-dbg-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder (dbg)',
         'tester': 'Win7 FYI Debug (AMD)',
       }),
-      'gpu-fyi-try-win7-amd-dqp': simple_bot({
+      'gpu-fyi-try-win7-amd-dqp-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win dEQP Builder',
         'tester': 'Win7 FYI dEQP Release (AMD)',
       }),
-      'gpu-fyi-try-win7-amd-rel': simple_bot({
+      'gpu-fyi-try-win7-amd-rel-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (AMD)',
@@ -1023,7 +1033,7 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Win x64 dEQP Builder',
         'tester': 'Win7 FYI x64 dEQP Release (NVIDIA)',
       }),
-      'gpu-fyi-try-win7-nvidia-rel': simple_bot({
+      'gpu-fyi-try-win7-nvidia-rel-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (NVIDIA)',
@@ -1033,40 +1043,40 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win7 FYI x64 Release (NVIDIA)',
       }),
-      'gpu-fyi-try-win10-intel-dqp': simple_bot({
+      'gpu-fyi-try-win10-intel-dqp-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Win dEQP Builder',
-        'tester': 'Win10 FYI dEQP Release (Intel HD 630)',
+        'buildername': 'GPU FYI Win x64 dEQP Builder',
+        'tester': 'Win10 FYI x64 dEQP Release (Intel HD 630)',
       }),
       'gpu-fyi-try-win10-intel-exp-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win10 FYI x64 Exp Release (Intel HD 630)',
       }),
-      'gpu-fyi-try-win10-intel-rel': simple_bot({
+      'gpu-fyi-try-win10-intel-rel-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Win Builder',
-        'tester': 'Win10 FYI Release (Intel HD 630)',
+        'buildername': 'GPU FYI Win x64 Builder',
+        'tester': 'Win10 FYI x64 Release (Intel HD 630)',
       }),
-      'gpu-fyi-try-win10-nvidia-dbg': simple_bot({
+      'gpu-fyi-try-win10-nvidia-dbg-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Win Builder (dbg)',
-        'tester': 'Win10 FYI Debug (NVIDIA)',
+        'buildername': 'GPU FYI Win x64 Builder (dbg)',
+        'tester': 'Win10 FYI x64 Debug (NVIDIA)',
       }),
-      'gpu-fyi-try-win10-nvidia-dqp': simple_bot({
+      'gpu-fyi-try-win10-nvidia-dqp-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Win dEQP Builder',
-        'tester': 'Win10 FYI dEQP Release (NVIDIA)',
+        'buildername': 'GPU FYI Win x64 dEQP Builder',
+        'tester': 'Win10 FYI x64 dEQP Release (NVIDIA)',
       }),
       'gpu-fyi-try-win10-nvidia-exp-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win10 FYI x64 Exp Release (NVIDIA)',
       }),
-      'gpu-fyi-try-win10-nvidia-rel': simple_bot({
+      'gpu-fyi-try-win10-nvidia-rel-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Win Builder',
-        'tester': 'Win10 FYI Release (NVIDIA)',
+        'buildername': 'GPU FYI Win x64 Builder',
+        'tester': 'Win10 FYI x64 Release (NVIDIA)',
       }),
       'gpu-try-win10-nvidia-dbg': simple_bot({
         'mastername': 'chromium.gpu',
