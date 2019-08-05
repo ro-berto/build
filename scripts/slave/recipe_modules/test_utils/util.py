@@ -74,7 +74,7 @@ class TestResults(object):
     unreliable = False
     if self.raw:
       global_tags = self.raw.get('global_tags', [])
-      unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
+      unreliable = 'UNRELIABLE_RESULTS' in global_tags
 
     # If the results are interrupted or unreliable, then they're not valid
     valid = self.valid
@@ -335,10 +335,11 @@ class GTestResults(object):
 
   def canonical_result_format(self):
     """Returns a dictionary with results in canonical format."""
-    global_tags = self.raw.get('global_tags')
-    unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
+    global_tags = self.raw.get('global_tags', [])
+    unreliable = 'UNRELIABLE_RESULTS' in global_tags
+    interrupted = 'CAUGHT_TERMINATION_SIGNAL' in global_tags
     return canonical.result_format(
-        valid=self.valid and not unreliable,
+        valid=self.valid and not unreliable and not interrupted,
         failures=sorted(self.unique_failures),
         total_tests_ran=self.total_tests_ran,
         pass_fail_counts=self.pass_fail_counts,
