@@ -786,7 +786,7 @@ def GenTests(api):
   yield (
     api.test('use_skia_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          builder='mac10.12_blink_rel',
+          builder='mac10.12-blink-rel',
           repository='https://skia.googlesource.com/skia',
           patch_repository_url='https://skia.googlesource.com/skia',
           patch_project='skia') +
@@ -796,7 +796,7 @@ def GenTests(api):
   yield (
     api.test('use_v8_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
-          builder='mac10.12_blink_rel',
+          builder='mac10.12-blink-rel',
           repository='https://chromium.googlesource.com/v8/v8',
           patch_repository_url='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +

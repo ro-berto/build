@@ -15,13 +15,7 @@ def simple_bot(bot_id, analyze_mode=None):
 TRYBOTS = freeze({
   'tryserver.blink': {
     'builders': {
-      # TODO(dpranke): Remove the _ versions of the builders once the
-      # src code has been updated.
       'linux-blink-rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'linux-blink-rel-dummy',
-      }),
-      'linux_trusty_blink_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-rel-dummy',
       }),
@@ -29,15 +23,7 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'mac10.10-blink-rel-dummy',
       }),
-      'mac10.10_blink_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'mac10.10-blink-rel-dummy',
-      }),
       'mac10.11-blink-rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'mac10.11-blink-rel-dummy',
-      }),
-      'mac10.11_blink_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'mac10.11-blink-rel-dummy',
       }),
@@ -45,15 +31,7 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'mac10.12-blink-rel-dummy',
       }),
-      'mac10.12_blink_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'mac10.12-blink-rel-dummy',
-      }),
       'mac10.13_retina-blink-rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.13 (retina)',
-      }),
-      'mac10.13_retina_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.13 (retina)',
       }),
@@ -61,23 +39,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'mac10.13-blink-rel-dummy',
       }),
-      'mac10.13_blink_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'mac10.13-blink-rel-dummy',
-      }),
       'win7-blink-rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'win7-blink-rel-dummy',
       }),
-      'win7_blink_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'win7-blink-rel-dummy',
-      }),
       'win10-blink-rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'win10-blink-rel-dummy',
-      }),
-      'win10_blink_rel': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'win10-blink-rel-dummy',
       }),
