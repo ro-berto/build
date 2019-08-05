@@ -185,7 +185,7 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   CopyArtifacts(api, engine_src,
     flutter.join('bin', 'cache', 'artifacts', 'engine', 'android-arm-release',
                  'linux-x64'),
-    ['out/android_release/clang_x86/gen_snapshot'])
+    ['out/android_release/clang_x64/gen_snapshot'])
 
   flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine',
                                      'common', 'flutter_patched_sdk')
@@ -258,7 +258,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
     api.step('flutter analyze', [
         'dart', '--enable-asserts', 'dev/bots/analyze.dart', '--dart-sdk',
         just_built_dart_sdk], timeout=20*60) # 20 minutes
-    shards = ['tests', 
+    shards = ['tests',
               # 'web_tests', - disabled due to flakiness
               #                https://github.com/flutter/flutter/pull/35792
               'tool_tests',

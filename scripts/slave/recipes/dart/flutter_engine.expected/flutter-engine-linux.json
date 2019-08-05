@@ -3910,7 +3910,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/android_release/clang_x86/gen_snapshot",
+      "[CACHE]/builder/src/out/android_release/clang_x64/gen_snapshot",
       "[CACHE]/builder/flutter/bin/cache/artifacts/engine/android-arm-release/linux-x64/gen_snapshot"
     ],
     "cwd": "[CACHE]/builder/flutter",
