@@ -947,6 +947,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--swarming-targets-file",
+      "bot_default\ntest262\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -959,6 +961,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -980,8 +985,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
-      "d8"
+      "20"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1002,7 +1006,6 @@
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
-      "d8",
       "-d",
       "explain",
       "-n"
@@ -1015,6 +1018,42 @@
     "name": "Bisect a0.compile confirm no-op",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
+      "--eventlog-endpoint",
+      "prod",
+      "--verbose",
+      "--blacklist",
+      "*.pyc",
+      "--blacklist",
+      "*.swp",
+      "--blacklist",
+      ".git",
+      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
+      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+    ],
+    "name": "Bisect a0.isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@"
     ]
   },
   {
@@ -1380,6 +1419,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--swarming-targets-file",
+      "bot_default\ntest262\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -1392,6 +1433,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -1413,8 +1457,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
-      "d8"
+      "20"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1435,7 +1478,6 @@
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
-      "d8",
       "-d",
       "explain",
       "-n"
@@ -1448,6 +1490,42 @@
     "name": "Bisect a2.compile confirm no-op",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
+      "--eventlog-endpoint",
+      "prod",
+      "--verbose",
+      "--blacklist",
+      "*.pyc",
+      "--blacklist",
+      "*.swp",
+      "--blacklist",
+      ".git",
+      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
+      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+    ],
+    "name": "Bisect a2.isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@"
     ]
   },
   {
@@ -1851,6 +1929,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--swarming-targets-file",
+      "bot_default\ntest262\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -1863,6 +1943,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -1884,8 +1967,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
-      "d8"
+      "20"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1906,7 +1988,6 @@
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
-      "d8",
       "-d",
       "explain",
       "-n"
@@ -1919,6 +2000,42 @@
     "name": "Bisect a1.compile confirm no-op",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
+      "--eventlog-endpoint",
+      "prod",
+      "--verbose",
+      "--blacklist",
+      "*.pyc",
+      "--blacklist",
+      "*.swp",
+      "--blacklist",
+      ".git",
+      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json",
+      "[BUILDER_CACHE]/v8/out/Release/test262.isolated.gen.json"
+    ],
+    "name": "Bisect a1.isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@"
     ]
   },
   {

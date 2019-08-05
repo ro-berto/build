@@ -605,8 +605,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
-      "d8"
+      "20"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -627,7 +626,6 @@
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
-      "d8",
       "-d",
       "explain",
       "-n"

@@ -1047,7 +1047,7 @@ class V8Api(recipe_api.RecipeApi):
     self.test_duration_sec = self.m.time.time() - start_time_sec
     return test_results
 
-  def maybe_bisect(self, test_results):
+  def maybe_bisect(self, test_results, test_spec):
     """Build-local bisection for one failure."""
     # Don't activate for branch or fyi bots.
     if self.m.properties['mastername'] not in ['client.v8', 'client.v8.ports']:
@@ -1077,9 +1077,6 @@ class V8Api(recipe_api.RecipeApi):
     # Suppress using shards to be able to rerun single tests.
     self.c.testing.may_shard = False
 
-    # Only rebuild the target of the test to retry.
-    targets = [failure.failure_dict.get('target_name', 'All')]
-
     test = self.create_test(failure.test_step_config)
     def test_func(_):
       return test.rerun(failure_dict=failure.failure_dict)
@@ -1089,8 +1086,11 @@ class V8Api(recipe_api.RecipeApi):
         if not self.is_pure_swarming_tester:
           self.checkout(revision, update_presentation=False)
         if self.bot_type == 'builder_tester':
+          # TODO(machenbach): Only compile on demand. We could first check if
+          # download_isolated_json already provides isolated targets for this
+          # revision. Only compile if not.
           self.runhooks()
-          self.compile(targets=targets)
+          self.compile(test_spec)
         elif self.bot_type == 'tester':
           if test.uses_swarming:
             self.download_isolated_json(revision)

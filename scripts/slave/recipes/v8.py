@@ -174,7 +174,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
   if v8.should_test:
     test_results = v8.runtests(tests)
-    v8.maybe_bisect(test_results)
+    v8.maybe_bisect(test_results, test_spec)
 
     if not api.tryserver.is_tryserver and test_results.is_negative:
       # Let the overall build fail for failures and flakes.
@@ -567,7 +567,8 @@ def GenTests(api):
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.v8.fail('Check') +
     api.v8.fail('Bisect a2.Retry') +
-    api.time.step(120)
+    api.time.step(120) +
+    api.post_process(MustRun, 'Bisect a0.isolate tests')
   )
 
   # Bisect over range a1, a2, a3. Assume a3 is the culprit. This is a tester
