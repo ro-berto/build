@@ -279,7 +279,7 @@
       "----",
       "cp",
       "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
-      "gs://flutter_infra/flutter/experimental/coverage/lcov.info"
+      "gs://flutter_infra/flutter/coverage/lcov.info"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -299,7 +299,7 @@
     "infra_step": true,
     "name": "gsutil upload coverage data",
     "~followup_annotations": [
-      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/experimental/coverage/lcov.info@@@"
+      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/coverage/lcov.info@@@"
     ]
   },
   {

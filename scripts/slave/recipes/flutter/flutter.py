@@ -120,75 +120,6 @@ def GetCloudPath(api, git_hash, path):
     return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
 
-
-def BuildExamples(api, git_hash, flutter_executable):
-
-  def BuildAndArchive(api, app_dir, apk_name):
-    app_path = api.path['checkout'].join(app_dir)
-    gradle_zip_path = api.path['checkout'].join('dev', 'bots',
-                                                GetGradleZipFileName(api))
-    gradlew_properties = app_path.join('android', 'gradle', 'wrapper',
-                                      'gradle-wrapper.properties')
-    gradlew_contents = api.file.read_text('read gradle-wrapper.properties',
-                                          gradlew_properties)
-    replacement = r'distributionUrl=file\:///' + \
-                  str(gradle_zip_path).replace('\\', '/').lstrip('/')
-    api.file.write_text('set gradle-wrapper.properties', gradlew_properties,
-                        re.sub(r'distributionUrl=http.+\.zip',
-                                replacement,
-                                gradlew_contents))
-
-    with api.context(cwd=app_path):
-      api.step('flutter build apk %s' % api.path.basename(app_dir),
-               [flutter_executable, '-v', 'build', 'apk'])
-
-      if api.platform.is_mac:
-        app_name = api.path.basename(app_dir)
-        # Disable codesigning since this bot has no developer cert.
-        api.step(
-            'flutter build ios %s' % app_name,
-            [flutter_executable, '-v', 'build', 'ios', '--no-codesign'],
-        )
-        api.step(
-            'flutter build ios debug %s' % app_name,
-            [
-                flutter_executable, '-v', 'build', 'ios', '--no-codesign',
-                '--debug'
-            ],
-        )
-        api.step(
-            'flutter build ios simulator %s' % app_name,
-            [flutter_executable, '-v', 'build', 'ios', '--simulator'],
-        )
-
-    # This is linux just to have only one bot archive at once.
-    if api.platform.is_linux:
-      cloud_path = GetCloudPath(api, git_hash, 'examples/%s' % apk_name)
-      apk_path = app_path.join('build', 'app', 'outputs', 'apk', 'app.apk')
-      api.gsutil.upload(
-          apk_path,
-          BUCKET_NAME,
-          cloud_path,
-          link_name=apk_name,
-          name='upload %s' % apk_name)
-
-  # TODO(eseidel): We should not have to hard-code the desired apk name here.
-  BuildAndArchive(api, api.path.join('examples', 'stocks'), 'Stocks.apk')
-  BuildAndArchive(api, api.path.join('examples', 'flutter_gallery'),
-                  'Gallery.apk')
-
-  # Windows uses exclusive file locking.  On LUCI, if these processes remain
-  # they will cause the build to fail because the builder won't be able to
-  # clean up.
-  # This might fail if there's not actually a process running, which is fine.
-  # If it actually fails to kill the task, the job will just fail anyway.
-  if api.platform.is_win:
-    def KillAll(name, exe_name):
-      api.step(name, ['taskkill', '/f', '/im', exe_name, '/t'], ok_ret='any')
-    KillAll('stop gradle daemon', 'java.exe')
-    KillAll('stop dart', 'dart.exe')
-    KillAll('stop adb', 'adb.exe')
-
 def GetGradleDistributionUrl(api):
   return api.properties['gradle_dist_url']
 
@@ -359,8 +290,6 @@ def RunSteps(api):
                   checkout.join('dev', 'bots', 'test.dart')])
       if shard == 'coverage':
         UploadFlutterCoverage(api)
-      elif shard == 'tests':
-        BuildExamples(api, git_hash, flutter_executable)
 
 def GenTests(api):
   for experimental in (True, False):
@@ -378,8 +307,13 @@ def GenTests(api):
             api.runtime(is_luci=True, is_experimental=experimental))
         yield test
 
-  yield (api.test('linux_master_coverage') +
+  yield (api.test('linux_master_coverage_exp') +
          api.runtime(is_luci=True, is_experimental=True) +
+         api.properties(shard='coverage',
+                        coveralls_lcov_version='5.1.0',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
+  yield (api.test('linux_master_coverage') +
+         api.runtime(is_luci=True, is_experimental=False) +
          api.properties(shard='coverage',
                         coveralls_lcov_version='5.1.0',
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
