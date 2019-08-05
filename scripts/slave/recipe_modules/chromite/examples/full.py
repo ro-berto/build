@@ -5,30 +5,15 @@
 from recipe_engine import post_process
 
 DEPS = [
-  'chromite',
-  'depot_tools/gitiles',
-  'recipe_engine/properties',
+    'chromite',
+    'depot_tools/gitiles',
+    'recipe_engine/buildbucket',
+    'recipe_engine/properties',
 ]
 
 
-_TEST_CONFIG = {
-  '_default': {
-    'foo': 'bar',
-    'baz': 'qux',
-  },
-  '_templates': {
-    'woot': {
-      'baz': 'templated',
-    }
-  },
-  'myconfig': {
-    '_template': 'woot',
-    'local': 'variable',
-  },
-}
-
 def RunSteps(api):
-  api.chromite.set_config('base')
+  api.chromite.set_config('chromiumos_coverage')
 
   # goma.py checkout/build exercise.
   api.chromite.checkout(
@@ -36,32 +21,67 @@ def RunSteps(api):
       branch=api.properties.get('branch', None))
   api.chromite.setup_board('amd64-generic', args=['--cache-dir', '.cache'])
   api.chromite.build_packages('amd64-generic')
-  api.chromite.cros_sdk('cros_sdk', ['echo', 'hello'],
-                        environ={ 'var1': 'value' })
+  api.chromite.cros_sdk(
+      'cros_sdk', ['echo', 'hello'], environ={'var1': 'value'})
 
   # Normal build exercise.
-  api.chromite.cbuildbot('cbuildbot', 'amd64-generic-full',
-                         args=['--clobber', '--build-dir', '/here/there'])
+  api.chromite.cbuildbot(
+      'cbuildbot',
+      'amd64-generic-full',
+      args=['--clobber', '--build-dir', '/here/there'])
+
+  # Cover how things are actually launched in Prod
+  api.chromite.run_cbuildbot()
 
 
 def GenTests(api):
   yield (
       api.test('basic') +
       # chromite module uses path['root'] which exists only in Buildbot.
-      api.properties(path_config='buildbot')
-  )
+      api.properties(path_config='buildbot', cbb_config='auron-paladin') +
+      api.buildbucket.try_build(
+          'basic',
+          git_repo='https://chromium.googlesource.com/chromiumos/manifest',
+          revision='deadbeef'))
 
   yield (
       api.test('pass_repo_sync_args') +
       # chromite module uses path['root'] which exists only in Buildbot.
-      api.properties(path_config='buildbot',
-                     repo_sync_args=['-j16'])
-  )
+      api.properties(
+          path_config='buildbot',
+          cbb_config='auron-paladin',
+          repo_sync_args=['-j16']) +
+      api.buildbucket.try_build(
+          'basic',
+          git_repo='https://chromium.googlesource.com/chromiumos/manifest',
+          revision='deadbeef'))
+
+  yield (api.test('chromiumos_coverage') +
+         # chromite module uses path['root'] which exists only in Buildbot.
+         api.properties(
+             path_config='buildbot',
+             clobber=None,
+             cbb_config='cros-x86-generic-tot-chrome-pfq-informational',
+             cbb_master_build_id='24601',
+             cbb_branch='master',
+             config_repo='https://fake.googlesource.com/myconfig/repo') +
+         api.buildbucket.try_build(
+             'chromiumos.coverage',
+             build_number=12345,
+             git_repo='https://chromium.googlesource.com/chromium/src',
+             revision='b8819267417da248aa4fe829c5fcf0965e17b0c3') +
+         api.post_process(post_process.MustRun, 'setup board') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             post_process.DropExpectation))
 
   yield (
       api.test('pass_branch') +
       # chromite module uses path['root'] which exists only in Buildbot.
-      api.properties(path_config='buildbot',
-                     branch='foobarnch') +
-      api.post_process(post_process.DropExpectation)
-  )
+      api.properties(
+          path_config='buildbot',
+          cbb_config='auron-paladin',
+          branch='foobarnch') + api.post_process(post_process.DropExpectation) +
+      api.buildbucket.try_build(
+          'basic',
+          git_repo='https://chromium.googlesource.com/chromiumos/manifest',
+          revision='deadbeef'))

@@ -41,8 +41,8 @@ class ChromiteApi(recipe_api.RecipeApi):
         'CBB_DEBUG': self.m.properties.get('cbb_debug') is not None,
         'CBB_CLOBBER': 'clobber' in self.m.properties,
     }
-    if 'buildnumber' in self.m.properties:
-      defaults['CBB_BUILD_NUMBER'] = int(self.m.properties['buildnumber'])
+    if self.m.buildbucket.build.number:
+      defaults['CBB_BUILD_NUMBER'] = self.m.buildbucket.build.number
 
     build_id = self.m.buildbucket.build.id
     if build_id:
@@ -58,13 +58,8 @@ class ChromiteApi(recipe_api.RecipeApi):
       value (str): The value to scan for.
     Returns (bool): True if the value was found.
     """
-    def remove_tail(v, tail):
-      if v.endswith(tail):
-        v = v[:-len(tail)]
-      return v
-
     for v in self.c.repositories.get(repo_type_key, ()):
-      if remove_tail(v, '.git') == remove_tail(value, '.git'):
+      if v == value:
         return True
     return False
 
@@ -214,7 +209,7 @@ class ChromiteApi(recipe_api.RecipeApi):
       KWARGS: Additional keyword arguments to forward to the configuration.
     """
     master = properties.get('mastername')
-    builder = properties.get('buildername')
+    builder = self.m.buildbucket.builder_name
 
     if master is None:
       self.set_config('master_swarming', **KWARGS)
@@ -317,8 +312,8 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     # Load properties from the commit being processed. This requires both a
     # repository and revision to proceed.
-    repository = self.m.properties.get('repository')
-    revision = self.m.properties.get('revision')
+    repository = self.m.tryserver.gerrit_change_repo_url
+    revision = self.m.buildbucket.gitiles_commit.id
     if repository and revision:
       # Pull more information from the commit if it came from certain known
       # repositories.
@@ -326,7 +321,7 @@ class ChromiteApi(recipe_api.RecipeApi):
           self.check_repository('chromium', repository)):
         # If our change comes from a Chromium repository, add the
         # '--chrome_version' flag.
-        self.c.cbb.chrome_version = self.m.properties['revision']
+        self.c.cbb.chrome_version = self.m.buildbucket.gitiles_commit.id
 
       # This change comes from a manifest repository. Load configuration
       # parameters from the manifest command.

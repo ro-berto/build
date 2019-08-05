@@ -4,6 +4,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gitiles',
   'depot_tools/infra_paths',
+  'depot_tools/tryserver',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
