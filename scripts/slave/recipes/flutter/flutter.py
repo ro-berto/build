@@ -290,6 +290,19 @@ def RunSteps(api):
                   checkout.join('dev', 'bots', 'test.dart')])
       if shard == 'coverage':
         UploadFlutterCoverage(api)
+      # Windows uses exclusive file locking.  On LUCI, if these processes remain
+      # they will cause the build to fail because the builder won't be able to
+      # clean up.
+      # This might fail if there's not actually a process running, which is
+      # fine.
+      # If it actually fails to kill the task, the job will just fail anyway.
+      if api.platform.is_win:
+        def KillAll(name, exe_name):
+          api.step(name, ['taskkill', '/f', '/im', exe_name, '/t'],
+                    ok_ret='any')
+        KillAll('stop gradle daemon', 'java.exe')
+        KillAll('stop dart', 'dart.exe')
+        KillAll('stop adb', 'adb.exe')
 
 def GenTests(api):
   for experimental in (True, False):
