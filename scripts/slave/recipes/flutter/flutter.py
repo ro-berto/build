@@ -152,6 +152,9 @@ def InstallGradle(api, checkout):
 def UploadFlutterCoverage(api):
   """Uploads the Flutter coverage output to cloud storage and Coveralls.
   """
+  if not api.properties.get('upload_packages', False):
+    return
+
   # Upload latest coverage to cloud storage.
   checkout = api.path['checkout']
   flutter_package_dir = checkout.join('packages', 'flutter')
@@ -306,34 +309,36 @@ def RunSteps(api):
 
 def GenTests(api):
   for experimental in (True, False):
-    for platform in ('mac', 'linux', 'win'):
-      for branch in ('master', 'dev', 'beta', 'stable'):
-        git_ref = 'refs/heads/' + branch
-        test = (
-            api.test('%s_%s%s' % (platform, branch,
-                                  '_experimental' if experimental else '')) +
-            api.platform(platform, 64) +
-            api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-            api.properties(shard='tests',
-                            cocoapods_version='1.5.3',
-                            gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
-            api.runtime(is_luci=True, is_experimental=experimental))
-        yield test
+    for should_upload in (True, False):
+      yield (api.test('linux_master_coverage_%s%s' % (
+                          '_experimental' if experimental else '',
+                          '_upload' if should_upload else '')) +
+         api.runtime(is_luci=True, is_experimental=experimental) +
+         api.properties(shard='coverage',
+                        coveralls_lcov_version='5.1.0',
+                        upload_packages=should_upload,
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
+      for platform in ('mac', 'linux', 'win'):
+        for branch in ('master', 'dev', 'beta', 'stable'):
+          git_ref = 'refs/heads/' + branch
+          test = (
+              api.test('%s_%s%s%s' % (platform, branch,
+                                    '_experimental' if experimental else '',
+                                    '_upload' if should_upload else '')) +
+              api.platform(platform, 64) +
+              api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
+              api.properties(shard='tests',
+                             cocoapods_version='1.5.3',
+                             gradle_dist_url=DEFAULT_GRADLE_DIST_URL,
+                             upload_packages=should_upload) +
+              api.runtime(is_luci=True, is_experimental=experimental))
+          yield test
 
-  yield (api.test('linux_master_coverage_exp') +
-         api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(shard='coverage',
-                        coveralls_lcov_version='5.1.0',
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
-  yield (api.test('linux_master_coverage') +
-         api.runtime(is_luci=True, is_experimental=False) +
-         api.properties(shard='coverage',
-                        coveralls_lcov_version='5.1.0',
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
   yield (api.test('pull_request') +
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(git_url = 'https://github.com/flutter/flutter',
                         git_ref = 'refs/pull/1/head',
                         shard = 'tests',
                         cocoapods_version='1.5.3',
+                        should_upload=False,
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL))

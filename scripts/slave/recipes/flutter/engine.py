@@ -32,6 +32,9 @@ BUCKET_NAME = 'flutter_infra'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
 
+def ShouldUploadPackages(api):
+  return api.properties.get('upload_packages', False)
+
 def GetCloudPath(api, path):
   git_hash = api.buildbucket.gitiles_commit.id
   if api.runtime.is_experimental:
@@ -96,15 +99,17 @@ def BuildFuchsiaArtifactsAndUpload(api):
     build_script = str(checkout.join(
       'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
     cmd = ['python', build_script, '--engine-version', git_rev]
-    if not api.runtime.is_experimental:
+    if not api.runtime.is_experimental and ShouldUploadPackages(api):
       cmd.append('--upload')
     api.step('Build Fuchsia Artifacts & Upload', cmd)
-    with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
-      stamp_file = temp_dir.join('fuchsia.stamp')
-      api.file.write_text('fuchsia.stamp', stamp_file, '')
-      remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
-      api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
-          name='upload "fuchsia.stamp"')
+
+    if ShouldUploadPackages(api):
+      with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
+        stamp_file = temp_dir.join('fuchsia.stamp')
+        api.file.write_text('fuchsia.stamp', stamp_file, '')
+        remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
+        api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
+            name='upload "fuchsia.stamp"')
 
 def RunGN(api, *args):
   # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
@@ -136,8 +141,9 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
     AddFiles(api, pkg, file_paths)
 
     pkg.zip('Zip %s %s' % (platform, archive_name))
-    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
-        name='upload "%s"' % remote_name)
+    if ShouldUploadPackages(api):
+      api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
+          name='upload "%s"' % remote_name)
 
 
 def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
@@ -153,8 +159,9 @@ def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
     pkg = api.zip.make_package(parent_dir, local_zip)
     pkg.add_directory(parent_dir.join(folder_name))
     pkg.zip('Zip %s' % folder_name)
-    api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
-        name='upload %s' % remote_name)
+    if ShouldUploadPackages(api):
+      api.gsutil.upload(local_zip, BUCKET_NAME, remote_zip,
+          name='upload %s' % remote_name)
 
 
 def UploadDartPackage(api, package_name):
@@ -245,12 +252,13 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
     api.python('generate treemap for %s' % upload_dir, script_path, args)
 
     remote_name = GetCloudPath(api, upload_dir)
-    result = api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
-        args=['-r'], name='upload treemap for %s' % lib_flutter_path,
-                               link_name=None)
-    result.presentation.links['Open Treemap'] = (
-        'https://storage.googleapis.com/%s/%s/sizes/index.html' % (
-            BUCKET_NAME, remote_name))
+    if ShouldUploadPackages(api):
+      result = api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
+          args=['-r'], name='upload treemap for %s' % lib_flutter_path,
+                                 link_name=None)
+      result.presentation.links['Open Treemap'] = (
+          'https://storage.googleapis.com/%s/%s/sizes/index.html' % (
+              BUCKET_NAME, remote_name))
 
 
 def BuildLinuxAndroid(api):
@@ -529,8 +537,9 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     pkg.zip('Zip Flutter.dSYM')
     remote_name = '%s/Flutter.dSYM.zip' % bucket_name
     remote_zip = GetCloudPath(api, remote_name)
-    api.gsutil.upload(dsym_zip, BUCKET_NAME, remote_zip,
-        name='upload "%s"' % remote_name)
+    if ShouldUploadPackages(api):
+      api.gsutil.upload(dsym_zip, BUCKET_NAME, remote_zip,
+          name='upload "%s"' % remote_name)
 
 
 def RunIOSTests(api):
@@ -651,11 +660,11 @@ def BuildJavadoc(api):
       api.step('build javadoc', javadoc_cmd)
     api.zip.directory('archive javadoc', temp_dir,
                       checkout.join('out/android_javadoc.zip'))
-
-  api.gsutil.upload(checkout.join('out/android_javadoc.zip'),
-                    BUCKET_NAME,
-                    GetCloudPath(api, 'android-javadoc.zip'),
-                    name='upload javadoc')
+  if ShouldUploadPackages(api):
+    api.gsutil.upload(checkout.join('out/android_javadoc.zip'),
+                      BUCKET_NAME,
+                      GetCloudPath(api, 'android-javadoc.zip'),
+                      name='upload javadoc')
 
 @contextmanager
 def InstallJazzy(api):
@@ -679,10 +688,11 @@ def BuildObjcDoc(api):
     api.zip.directory('archive obj-c doc', temp_dir,
                       checkout.join('out/ios-objcdoc.zip'))
 
-  api.gsutil.upload(checkout.join('out/ios-objcdoc.zip'),
-                    BUCKET_NAME,
-                    GetCloudPath(api, 'ios-objcdoc.zip'),
-                    name='upload obj-c doc')
+    if ShouldUploadPackages(api):
+      api.gsutil.upload(checkout.join('out/ios-objcdoc.zip'),
+                        BUCKET_NAME,
+                        GetCloudPath(api, 'ios-objcdoc.zip'),
+                        name='upload obj-c doc')
 
 
 def GetCheckout(api):
@@ -750,25 +760,28 @@ def RunSteps(api):
 # pylint: enable=line-too-long
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
-    test = (
-      api.test(platform) + api.platform(platform, 64) +
-      api.buildbucket.ci_build(
-        builder='%s Engine' % platform.capitalize(),
-        git_repo=GIT_REPO,
-        project='flutter',
-      ) +
-      api.properties(
-        goma_jobs=1024,
-        build_host=True,
-        build_fuchsia=True,
-        build_android_aot=True,
-        build_android_debug=True,
-        build_android_vulkan=True,
+    for should_upload in (True, False):
+      test = (
+        api.test('%s%s' % (platform, '_upload' if should_upload else '')) +
+        api.platform(platform, 64) +
+        api.buildbucket.ci_build(
+          builder='%s Engine' % platform.capitalize(),
+          git_repo=GIT_REPO,
+          project='flutter',
+        ) +
+        api.properties(
+          goma_jobs=1024,
+          build_host=True,
+          build_fuchsia=True,
+          build_android_aot=True,
+          build_android_debug=True,
+          build_android_vulkan=True,
+          upload_packages=should_upload,
+        )
       )
-    )
-    if platform == 'mac':
-      test += (api.properties(jazzy_version='0.8.4'))
-    yield test
+      if platform == 'mac':
+        test += (api.properties(jazzy_version='0.8.4'))
+      yield test
 
   yield (
     api.test('experimental') +
