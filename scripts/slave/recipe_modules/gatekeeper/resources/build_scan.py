@@ -27,8 +27,9 @@ MAX_ATTEMPTS = 4
 
 BUILDER_WILDCARD = '*'
 
-LUCI_MILO_ENDPOINT = 'https://luci-milo.appspot.com/prpc/'
-LUCI_MIGRATION_ENDPOINT = 'https://luci-migration.appspot.com/masters/'
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+MASTER_MAP_JSON = os.path.join(THIS_DIR, 'master_map.json')
+
 BUILDBUCKET_ENDPOINT = (
     'https://cr-buildbucket.appspot.com/prpc/buildbucket.v2.Builds/')
 
@@ -122,23 +123,6 @@ def get_buildbucket_builds(project, bucket, builders):
           for response in responses]
 
 
-def get_root_json(master_url):
-  """Pull down root JSON which contains builder info."""
-  # TODO(ehmaldonado): Switch from master-based config to buildbucket-based
-  # config.
-  # Assumes we have something like https://build.chromium.org/p/chromium.perf
-  name = master_url.rstrip('/').split('/')[-1]
-  url = LUCI_MIGRATION_ENDPOINT + name + '?format=json'
-  response = json.loads(fetch('GET', url))
-
-  _, project, bucket = response['bucket'].split('.', 2)
-  builders = [
-      builder for builder, builder_info in response['builders'].iteritems()
-      if builder_info['is_prod']]
-
-  return {'project': project, 'bucket': bucket, 'builders': builders}
-
-
 def find_new_builds(master_url, builderlist, root_json, build_db):
   """Given a dict of previously-seen builds, find new builds on each builder.
 
@@ -218,10 +202,13 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
 
 def find_new_builds_per_master(masters, build_db):
   """Given a list of masters, find new builds and collect them under a dict."""
+  with open(MASTER_MAP_JSON) as f:
+    master_map = json.load(f)
+
   builds = {}
   master_jsons = {}
   for master, builders in masters.iteritems():
-    root_json = get_root_json(master)
+    root_json = master_map[master]
     master_jsons[master] = root_json
     builds[master] = find_new_builds(master, builders, root_json, build_db)
   return builds, master_jsons
