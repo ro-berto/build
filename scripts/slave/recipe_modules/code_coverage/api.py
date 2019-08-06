@@ -621,9 +621,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     args.extend(binaries)
     if self._is_per_cl_coverage:
       args.append('--sources')
-      args.extend([
-          self.m.path['checkout'].join(s) for s in self._affected_source_files
-      ])
+      args.extend(self._affected_source_files)
 
       # In order to correctly display the (un)covered line numbers on Gerrit.
       # Per-cl metadata's line numbers need to be rebased because the base
