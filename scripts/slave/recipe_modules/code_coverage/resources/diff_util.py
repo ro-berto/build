@@ -103,7 +103,7 @@ def parse_added_line_num_from_unified_diff(diff_lines):
 
 
 def generate_line_number_mapping(diff_lines, from_file_lines, to_file_lines):
-  """Generates a mapping of unchanged between two files on the file system.
+  """Generates a mapping of unchanged lines between two files.
 
   Args:
     diff_lines (list of str): Unified diff.
