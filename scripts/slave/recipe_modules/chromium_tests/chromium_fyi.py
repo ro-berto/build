@@ -795,21 +795,6 @@ SPEC = {
       'testing': { 'platform': 'win', },
     },
 
-    'Linux Clang Analyzer': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'analysis'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'chromeos-amd64-generic-rel-vm-tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

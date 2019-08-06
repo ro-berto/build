@@ -383,9 +383,10 @@ def official(c):
   c.compile_py.mode = 'official'
   c.cros_sdk.external = False
 
-@config_ctx(deps=['compiler'])
-def analysis(c):
-  c.gn_args.append('use_clang_static_analyzer=true')
+@config_ctx()
+def official_no_clobber(c):
+  c.compile_py.mode = 'official'
+  c.cros_sdk.external = False
 
 @config_ctx(deps=['compiler'])
 def asan(c):
