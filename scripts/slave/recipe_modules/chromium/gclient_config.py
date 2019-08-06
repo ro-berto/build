@@ -146,6 +146,24 @@ def chromeos_kevin(c):  # pragma: no cover
 def fuchsia(c):
   c.target_os.add('fuchsia')
 
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_bootable_arm64(c):  # pragma: no cover
+  """Downloads boot images for running ARM64 binaries on QEMU."""
+
+  c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.arm64'
+
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_bootable_x64(c):  # pragma: no cover
+  """Downloads boot images for running x64 binaries on QEMU."""
+
+  c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.x64'
+
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_nobootable(c):  # pragma: no cover
+  """Bypasses the boot image download step."""
+
+  c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = ''
+
 @CONFIG_CTX()
 def win(c):
   c.target_os.add('win')
