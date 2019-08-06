@@ -304,10 +304,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           tuple(tests))
     return tests
 
-  # TODO(martiniss): Remove this
-  def generate_tests_from_test_spec(self, *args): # pragma: no cover
-    return self.generate_tests_from_source_side_spec(*args)
-
   def read_source_side_spec(self, source_side_spec_file):
     source_side_spec_path = self.m.chromium.c.source_side_spec_dir.join(
         source_side_spec_file)
