@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
   'chromium',
   'chromium_tests',
@@ -24,7 +26,7 @@ def RunSteps(api):
     test_config = api.chromium_tests.get_tests(bot_config, bot_db)
     compile_targets = api.chromium_tests.get_compile_targets(
         bot_config, bot_db, test_config.all_tests())
-    api.chromium_tests.compile_specific_targets(
+    return api.chromium_tests.compile_specific_targets(
         bot_config, update_step, bot_db,
         compile_targets, test_config.all_tests())
 
@@ -45,4 +47,24 @@ def GenTests(api):
                 ],
             },
         })
+  )
+
+  yield (
+    api.test('compile_failure') +
+    api.properties.generic(mastername='tryserver.chromium.perf',
+                           buildername='Android Compile Perf') +
+    api.chromium_tests.read_source_side_spec(
+        'chromium.perf', {
+            'Android One Perf': {
+                'isolated_scripts': [
+                    {
+                        'isolate_name': 'telemetry_perf_tests',
+                        'name': 'benchmark',
+                    },
+                ],
+            },
+        }) +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )

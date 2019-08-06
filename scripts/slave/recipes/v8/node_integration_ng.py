@@ -5,8 +5,10 @@
 """Recipe to test v8/node.js integration."""
 
 from recipe_engine.recipe_api import Property
-from recipe_engine.post_process import Filter, ResultReasonRE, StatusFailure
+from recipe_engine.post_process import (
+    Filter, ResultReasonRE, StatusFailure, DropExpectation)
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 from PB.google.rpc import code as rpc_code_pb2
 
@@ -89,7 +91,9 @@ def RunSteps(api, triggers, v8_tot):
     depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
     with api.context(env_prefixes={'PATH': [depot_tools_path]}):
       api.chromium.run_gn(use_goma=True)
-      api.chromium.compile(use_goma_module=True)
+      raw_result = api.chromium.compile(use_goma_module=True)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
   build_output_path = api.chromium.c.build_dir.join(
       api.chromium.c.build_config_fs)
@@ -274,4 +278,15 @@ def GenTests(api):
       api.post_process(ResultReasonRE, 'Flakes in build') +
       api.post_process(Filter(
           'test default', 'test default (retry)', 'test default (flakes)'))
+  )
+
+  yield (
+    test(
+      'compile_failure',
+      platform='linux',
+      is_trybot=True,
+    ) +
+    api.step_data('build.compile', retcode=1) +
+    api.post_process(StatusFailure) +
+    api.post_process(DropExpectation)
   )

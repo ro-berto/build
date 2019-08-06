@@ -578,6 +578,8 @@
       "/tmp/Debug",
       "--ninja-log-command-file",
       "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Debug\", \"-j\", 20, \"All\"]",
+      "--build-exit-status",
+      "1",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
@@ -640,7 +642,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Failing build because ninja reported work to do.\n        This means that after completing a compile, another was run and\n        it resulted in still having work to do (that is, a no-op build\n        wasn't a no-op). Consult the first \"ninja explain:\" line for a\n        likely culprit."
+      "humanReason": "```\nFailing build because ninja reported work to do.\nTh...\nit...\nwa...\nlikely culprit.\n```"
     },
     "name": "$result"
   }

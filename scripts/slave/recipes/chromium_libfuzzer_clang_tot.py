@@ -4,6 +4,8 @@
 
 import re
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'archive',
@@ -48,8 +50,10 @@ def RunSteps(api):
   api.chromium.runhooks()
   api.chromium.mb_gen(mastername, buildername, use_goma=False)
 
-  api.chromium.compile(targets=['empty_fuzzer'],
+  raw_result = api.chromium.compile(targets=['empty_fuzzer'],
                        use_goma_module=True)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   config_kwargs = bot_config.get('chromium_config_kwargs', dict())
   build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
@@ -62,3 +66,14 @@ def RunSteps(api):
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
+
+  yield (
+      api.test('compile_failure') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='ClangToTLinuxASanLibfuzzer',
+          path_config='kitchen') +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )

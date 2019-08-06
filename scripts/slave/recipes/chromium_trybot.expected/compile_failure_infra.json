@@ -879,17 +879,8 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "TRYJOB FAILURE",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@COMPILE_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "failure": {
-      "humanReason": "Infra compile failure:\n\n Step('compile (with patch)') (retcode: 1)"
+      "humanReason": "Infra compile failure: ```\nStep('compile (with patch)') failed. (retcode=1)\nNo failure summary provided\n```"
     },
     "name": "$result"
   }

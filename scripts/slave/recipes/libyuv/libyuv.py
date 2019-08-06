@@ -7,6 +7,8 @@ Recipe for building and running tests for Libyuv stand-alone.
 """
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -35,7 +37,9 @@ def RunSteps(api):
   if libyuv.should_build:
     with libyuv.ensure_sdk():
       api.chromium.run_gn(use_goma=True)
-      api.chromium.compile(use_goma_module=True)
+      raw_result = api.chromium.compile(use_goma_module=True)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
     if libyuv.should_upload_build:
       libyuv.package_build()
 
@@ -104,3 +108,11 @@ def GenTests(api):
 
   yield generate_builder('tryserver.libyuv', 'linux', revision=None,
                          suffix='_forced')
+
+  yield (
+    generate_builder('tryserver.libyuv', 'linux', revision=None,
+                         suffix='_compile_failed') +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

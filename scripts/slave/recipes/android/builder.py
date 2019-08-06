@@ -5,6 +5,8 @@
 from contextlib import contextmanager
 from recipe_engine import recipe_api
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -188,7 +190,9 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   targets = list(bot_config.get('targets', []))
   targets += _GetChromiumTestsCompileTargets(
       api, mastername, buildername, update_step)
-  api.chromium.compile(targets, use_goma_module=True)
+  raw_result = api.chromium.compile(targets, use_goma_module=True)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   for apk_name in bot_config.get('resource_sizes_apks', ()):
     apk_path = api.chromium_android.apk_path(apk_name)
@@ -231,3 +235,19 @@ def GenTests(api):
             patchset='1',
             revision='a' * 40,
             got_revision='a' * 40))
+
+  yield(
+    api.test('compile_failure') +
+    api.properties.generic(
+        mastername='chromium.perf',
+        repository='svn://svn.chromium.org/chrome/trunk/src',
+        buildnumber=257,
+        buildername='Android Builder Perf',
+        issue='8675309',
+        patchset='1',
+        revision='a' * 40,
+        got_revision='a' * 40) +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

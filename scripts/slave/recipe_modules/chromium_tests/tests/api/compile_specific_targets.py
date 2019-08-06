@@ -49,7 +49,7 @@ def RunSteps(api):
         builders=builders)
   api.chromium_tests.configure_build(bot_config_object)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
-  api.chromium_tests.compile_specific_targets(
+  return api.chromium_tests.compile_specific_targets(
       bot_config_object, update_step, bot_db,
       compile_targets=['base_unittests'],
       tests_including_triggered=tests,
@@ -71,7 +71,7 @@ def GenTests(api):
           mastername='chromium.linux',
           buildername='Linux Tests',
           swarming_gtest=True) +
-      api.override_step_data('compile', retcode=1)
+      api.step_data('compile', retcode=1)
   )
 
   yield (
@@ -79,7 +79,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel') +
-      api.override_step_data('compile (with patch)', retcode=1)
+      api.step_data('compile (with patch)', retcode=1)
   )
 
   yield (

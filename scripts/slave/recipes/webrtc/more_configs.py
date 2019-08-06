@@ -5,6 +5,8 @@
 import functools
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 DEPS = [
@@ -139,7 +141,9 @@ def RunSteps(api):
   for phase in phases:
     webrtc.configure_isolate(phase)
     webrtc.run_mb(phase)
-    webrtc.compile(phase)
+    raw_result = webrtc.compile(phase)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
     webrtc.isolate()
 
     if webrtc.bot.should_test:
@@ -154,3 +158,15 @@ def GenTests(api):
     master_config = builders[bucketname]
     for buildername in master_config['builders'].keys():
       yield generate_builder(bucketname, buildername, revision='a' * 40)
+
+  yield (
+    generate_builder(
+      'luci.webrtc.ci',
+      'Linux (more configs)',
+      revision='b' * 40,
+      suffix='_fail_compile',
+      fail_compile=True
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

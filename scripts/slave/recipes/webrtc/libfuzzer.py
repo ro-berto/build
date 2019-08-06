@@ -4,6 +4,7 @@
 
 import functools
 
+from recipe_engine import post_process
 from recipe_engine.types import freeze
 
 
@@ -84,7 +85,7 @@ def RunSteps(api):
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets, use_goma_module=True)
+  return api.chromium.compile(targets=targets, use_goma_module=True)
 
 
 def GenTests(api):
@@ -97,3 +98,14 @@ def GenTests(api):
       yield (generate_builder(bucketname, buildername, revision='a' * 40) +
              api.step_data('calculate targets',
                  stdout=api.raw_io.output_text('target1 target2 target3')))
+  yield (
+      generate_builder(
+        'luci.webrtc.ci',
+        'Linux64 Release (Libfuzzer)',
+        revision='a' * 40,
+        suffix='_compile_failure',
+        fail_compile=True
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )

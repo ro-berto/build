@@ -193,11 +193,14 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
         # Should not use "analyze" to skip tests at the first revision, because
         # if a skipped test fails at the second revision in the sub range, the
         # second revision is not necessarily the culprit.
-        test_results[first_revision], tests_failed_in_potential_green = (
+        (test_results[first_revision],
+            tests_failed_in_potential_green, compile_failure) = (
             api.findit.compile_and_test_at_revision(
                 api, target_mastername, target_buildername, target_testername,
                 first_revision, tests_have_not_found_culprit,
                 use_analyze=False, test_repeat_count=test_repeat_count))
+        if compile_failure:
+          return compile_failure
       else:
         tests_failed_in_potential_green = {}
 
@@ -218,10 +221,12 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           # Since tests_to_run are tests that passed in previous revision,
           # whichever test that fails now will find current revision is the
           # culprit.
-          test_results[revision], tests_failed_in_revision = (
+          test_results[revision], tests_failed_in_revision, compile_failure = (
               api.findit.compile_and_test_at_revision(
                   api, target_mastername, target_buildername, target_testername,
                   revision, tests_to_run, use_analyze, test_repeat_count))
+          if compile_failure:
+            return compile_failure
 
           flaky_tests_in_revision = _get_flaky_tests(test_results[revision])
           reliable_failed_tests_in_revision = _get_reduced_test_dict(
@@ -253,11 +258,15 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
             tests_run_on_good_revision[step].append(test)
 
       if tests_run_on_good_revision:
-        test_results[good_revision], tests_failed_in_revision = (
-          api.findit.compile_and_test_at_revision(
-            api, target_mastername, target_buildername, target_testername,
-            good_revision, tests_run_on_good_revision, use_analyze,
-            test_repeat_count))
+        (test_results[good_revision],
+            tests_failed_in_revision, compile_failure) = (
+                api.findit.compile_and_test_at_revision(
+                    api, target_mastername, target_buildername,
+                    target_testername, good_revision,
+                    tests_run_on_good_revision, use_analyze, test_repeat_count)
+            )
+        if compile_failure:
+          return compile_failure
         if tests_failed_in_revision:
           # Some tests also failed on good revision, they should be flaky.
           # Should remove them from culprits.
@@ -1349,5 +1358,89 @@ def GenTests(api):
                   }
               }
           }) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('first_revision_compile_failure') +
+      props(
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+          use_analyze=False, good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3', 'r6']) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          }, step_prefix='test r5.') +
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output(
+              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+      api.step_data('test r5.compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('second_revision_compile_failure') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          }, step_prefix='test r1.') +
+      api.step_data('test r1.compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('third_revision_compile_failure') +
+      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+            'win', 'Win7 Tests (1)') +
+      api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
+          'Win7 Tests (1)': {
+            'gtest_tests': [
+              {
+                'test': 'gl_tests',
+                'swarming': {'can_use_on_swarming_builders': True},
+              },
+            ],
+          },
+        }, step_prefix='test r0.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
+              'Win7 Tests (1)': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          }, step_prefix='test r1.') +
+      api.override_step_data(
+          'test r1.gl_tests (r1)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.simulated_gtest_output(
+                  failed_test_names=['Test.One', 'Test.Two'],
+                  passed_test_names=['Test.Three']),
+              failure=True)
+      ) +
+      api.step_data('test r0.compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

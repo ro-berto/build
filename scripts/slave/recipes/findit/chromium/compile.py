@@ -8,6 +8,8 @@ from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 
 DEPS = [
     'chromium',
@@ -107,21 +109,18 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
       # No compile target exists, or is impacted by the given revision.
       return CompileResult.SKIPPED
 
-    try:
-      api.chromium_tests.compile_specific_targets(
-          bot_config,
-          bot_update_step,
-          bot_db,
-          compile_targets,
-          tests_including_triggered=[],
-          mb_mastername=target_mastername,
-          mb_buildername=target_buildername,
-          override_bot_type='builder_tester')
-      return CompileResult.PASSED
-    except api.step.InfraFailure:
-      raise
-    except api.step.StepFailure:
+    failure = api.chromium_tests.compile_specific_targets(
+        bot_config,
+        bot_update_step,
+        bot_db,
+        compile_targets,
+        tests_including_triggered=[],
+        mb_mastername=target_mastername,
+        mb_buildername=target_buildername,
+        override_bot_type='builder_tester')
+    if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED
+    return CompileResult.PASSED
 
 
 def _is_flaky_compile(compile_result, revision_being_checked, last_revision):
@@ -498,7 +497,7 @@ def GenTests(api):
                                  'found': ['target_name'],
                                  'not_found': [],
                              })) +
-      api.override_step_data(
+      api.step_data(
           'test r1.compile', retcode=1) +
       api.step_data(
           'test r1.postprocess_for_goma.goma_jsonstatus',

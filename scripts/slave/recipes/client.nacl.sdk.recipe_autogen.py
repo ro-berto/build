@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 DEPS = [
     'build',
     'chromium',
@@ -49,7 +52,9 @@ def sdk_multi_steps(api):
                         api.properties.get('buildername'))
 
     # compile step
-    api.chromium.compile(['chrome'], use_goma_module=True)
+    raw_result = api.chromium.compile(['chrome'], use_goma_module=True)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
     # annotated_steps step
     api.build.python(
@@ -93,7 +98,9 @@ def sdk_multirel_steps(api):
                         api.properties.get('buildername'))
 
     # compile step
-    api.chromium.compile(['chrome'], use_goma_module=True)
+    raw_result = api.chromium.compile(['chrome'], use_goma_module=True)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
     # annotated_steps step
     api.build.python(
@@ -122,7 +129,7 @@ def RunSteps(api):
     else:
         api.chromium.set_config('chromium')
         api.chromium.ensure_goma()
-        dispatch_directory[buildername](api)
+        return dispatch_directory[buildername](api)
 
 
 def GenTests(api):
@@ -172,3 +179,25 @@ def GenTests(api):
         mastername='client.nacl.sdk') + api.properties(
             buildername='nonexistent_builder') + api.properties(
                 bot_id='TestSlave'))
+    yield (
+        api.test('compile_failure_multi') +
+        api.properties(
+            mastername='client.nacl.sdk',
+            buildername='mac-sdk-multi',
+            bot_id='TestSlave'
+        ) +
+        api.step_data('compile', retcode=1) +
+        api.post_process(post_process.StatusFailure) +
+        api.post_process(post_process.DropExpectation)
+    )
+    yield (
+        api.test('compile_failure_multirel') +
+        api.properties(
+            mastername='client.nacl.sdk',
+            buildername='mac-sdk-multirel',
+            bot_id='TestSlave'
+        ) +
+        api.step_data('compile', retcode=1) +
+        api.post_process(post_process.StatusFailure) +
+        api.post_process(post_process.DropExpectation)
+    )

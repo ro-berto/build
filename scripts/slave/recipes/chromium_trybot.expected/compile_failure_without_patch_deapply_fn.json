@@ -1309,9 +1309,23 @@
     },
     "name": "compile (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output[ninja_info] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[ninja_info] (exception)@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
+      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
+      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
       "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
       "@@@STEP_FAILURE@@@"
     ]
@@ -1488,7 +1502,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('compile (without patch)') (retcode: 1)"
+      "humanReason": "```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```"
     },
     "name": "$result"
   }

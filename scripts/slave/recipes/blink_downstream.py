@@ -29,6 +29,7 @@ import functools
 
 from recipe_engine import post_process
 from recipe_engine.types import freeze
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'build/build',
@@ -97,11 +98,19 @@ def build(api, suffix):
   Args:
     api: Recipe module api.
     suffix: Step name suffix to disambiguate repeated calls.
+
+  Returns:
+    When a compile failure occurs
+      a RawResult object with the compile step's status and failure message
+    else
+      None
   """
-  api.chromium_tests.run_mb_and_compile(
+  raw_result = api.chromium_tests.run_mb_and_compile(
       ['blink_tests'], ['blink_web_tests_exparchive'],
       name_suffix=suffix,
   )
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   api.isolate.isolate_tests(
           api.chromium.output_dir,
@@ -218,7 +227,7 @@ class DetermineToTFailuresTool(DetermineFailuresTool):
     self.api.bot_update.ensure_checkout(
         ignore_input_commit=True, update_presentation=False)
 
-    build(self.api, ' (without patch)')
+    return build(self.api, ' (without patch)')
 
 
 def RunSteps(api):
@@ -270,7 +279,9 @@ def RunSteps(api):
     with api.context(cwd=api.path['checkout']):
       api.chromium.runhooks()
 
-    build(api, ' (with patch)')
+    compile_failure = build(api, ' (with patch)')
+    if compile_failure:
+      return compile_failure
 
     new_failures_tool_cls = DetermineToTFailuresTool
     if 'future' in buildername:
@@ -386,4 +397,11 @@ def GenTests(api):
             passing=False,
             isolated_script_passing=False,
             isolated_script_retcode=130))
+  )
+  yield (
+    api.test('compile_failure') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )

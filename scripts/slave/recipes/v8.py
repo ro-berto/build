@@ -4,7 +4,8 @@
 
 from recipe_engine import recipe_test_api
 from recipe_engine.post_process import (
-    Filter, DoesNotRun, DropExpectation, MustRun, ResultReasonRE, StepException)
+    Filter, DoesNotRun, DropExpectation, MustRun,
+    ResultReasonRE, StepException, StatusFailure)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -162,7 +163,9 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
     if v8.should_build:
       with api.step.nest('build'):
-        v8.compile(test_spec)
+        compile_failure = v8.compile(test_spec)
+        if compile_failure:
+          return compile_failure
       if api.v8.should_collect_post_compile_metrics:
         with api.step.nest('measurements'):
           api.v8.collect_post_compile_metrics()
@@ -329,6 +332,32 @@ def GenTests(api):
       TestFailures(wrong_results=True, flakes=False) +
       api.expect_exception('AssertionError') +
       api.post_process(DropExpectation)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'compile_failure',
+    ) +
+    api.step_data('build.compile', retcode=1) +
+    api.post_process(StatusFailure) +
+    api.post_process(DropExpectation)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'compile_bisect_failure',
+    ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.override_step_data(
+        'Check', api.v8.output_json(
+            has_failures=True, wrong_results=False, flakes=False)) +
+    api.step_data('Bisect a2.compile', retcode=1) +
+    api.post_process(StatusFailure) +
+    api.post_process(DropExpectation)
   )
 
   yield (

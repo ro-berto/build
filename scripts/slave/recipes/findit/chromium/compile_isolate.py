@@ -15,6 +15,9 @@ from recipe_engine import post_process
 from recipe_engine.config import List
 from recipe_engine.recipe_api import Property
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 
 DEPS = [
     'chromium',
@@ -83,6 +86,8 @@ def RunSteps(api, target_mastername, target_testername,
       'previously_checked_out_revision': checked_out_revision
   }
 
+  raw_result = result_pb2.RawResult(status=common_pb.FAILURE)
+
   try:
     if tests:
       # Default to first one. For example, the following three test targets
@@ -95,7 +100,7 @@ def RunSteps(api, target_mastername, target_testername,
 
       assert compile_targets, 'Test %s has no compile target' % tests[0].name
 
-      api.m.chromium_tests.compile_specific_targets(
+      raw_result = api.m.chromium_tests.compile_specific_targets(
           bot_config,
           bot_update_step,
           bot_db,
@@ -104,7 +109,11 @@ def RunSteps(api, target_mastername, target_testername,
           mb_mastername=target_mastername,
           mb_buildername=target_buildername,
           override_bot_type='builder_tester')
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
+
       report['isolated_tests'] = api.isolate.isolated_tests
+      raw_result.status = common_pb.SUCCESS
   except api.step.InfraFailure:
     report['metadata']['infra_failure'] = True
     raise
@@ -114,7 +123,7 @@ def RunSteps(api, target_mastername, target_testername,
     api.python.succeeding_step(
         'report', [json.dumps(report, indent=2)], as_log='report')
 
-  return report
+  return raw_result
 
 
 def GenTests(api):
@@ -273,7 +282,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
   yield (
-      api.test('failed_to_compile') +
+      api.test('failed_to_compile_goma') +
       props(['browser_tests'], 'findit_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
@@ -305,5 +314,25 @@ def GenTests(api):
           )
       ) +
       api.post_process(verify_report, None) +
+      api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      api.test('compile_failure') +
+      props(['browser_tests'], 'findit_tester') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
+              'findit_tester': {
+                  'gtest_tests': [
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                              'shards': 1},
+                      },
+                  ],
+              },
+          }, step_suffix=' (2)') +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

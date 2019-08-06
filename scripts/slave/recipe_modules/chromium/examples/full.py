@@ -22,7 +22,7 @@ def RunSteps(api):
   buildername = api.properties.get('buildername')
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
-  failfast = api.properties.get('failfast', False);
+  failfast = api.properties.get('failfast', False)
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
@@ -45,7 +45,7 @@ def RunSteps(api):
                         android_version_code=3,
                         android_version_name="example")
 
-    api.chromium.compile(
+    return api.chromium.compile(
         targets=['All'], out_dir=out_dir,
         use_goma_module=use_goma_module)
 

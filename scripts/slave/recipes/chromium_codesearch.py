@@ -6,6 +6,8 @@ from recipe_engine import config
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 DEPS = [
   'build',
   'chromium',
@@ -211,8 +213,10 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
-  api.chromium.compile(targets, use_goma_module=True,
+  raw_result = api.chromium.compile(targets, use_goma_module=True,
                        out_dir='out', target=gen_repo_out_dir or 'Debug')
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()

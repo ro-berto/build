@@ -8,6 +8,9 @@ import json
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
@@ -22,6 +25,7 @@ DEPS = [
 
 PROPERTIES = {
     'gn_args': Property(default={'fake': 'map'}),
+    'fail_compile': Property(default=False, kind=bool)
 }
 
 CUSTOM_BUILDERS = {
@@ -222,14 +226,24 @@ def NotIdempotent(check, step_odict, step):
   check('Idempotent flag unexpected',
         '--idempotent' not in step_odict[step].cmd)
 
-def RunSteps(api, gn_args):
+def RunSteps(api, gn_args, fail_compile):
   builders = None
   if api.properties.get('custom_builders'):
     builders = CUSTOM_BUILDERS
   api.code_coverage._gn_args = gn_args
   api.path.mock_add_paths(
       api.code_coverage.profdata_dir().join('merged.profdata'))
-  api.chromium_tests.main_waterfall_steps(builders=builders)
+
+  # override compile_specific_targets to control compile step failure state
+  def compile_override(*args, **kwargs):
+    return result_pb2.RawResult(
+        status=common_pb2.FAILURE,
+        summary_markdown='Compile step failed.'
+    )
+  if fail_compile:
+    api.chromium_tests.compile_specific_targets = compile_override
+
+  return api.chromium_tests.main_waterfall_steps(builders=builders)
 
 
 def GenTests(api):
@@ -746,5 +760,16 @@ def GenTests(api):
           TriggersBuilderWithProperties,
           builder='Multiple Triggers: Mixed',
           properties=['swarm_hashes']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('compile_failure') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Builder') +
+      api.properties(fail_compile=True) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason, 'Compile step failed.') +
       api.post_process(post_process.DropExpectation)
   )

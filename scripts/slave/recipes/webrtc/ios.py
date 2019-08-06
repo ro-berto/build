@@ -5,6 +5,8 @@
 import functools
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 DEPS = [
@@ -447,7 +449,9 @@ def RunSteps(api):
 
   with webrtc.ensure_sdk():
     webrtc.run_mb_ios()
-    webrtc.compile()
+    raw_result = webrtc.compile()
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
   if webrtc.bot.should_test:
     with api.step.nest('isolate'):
@@ -479,3 +483,16 @@ def GenTests(api):
           # The version is just a placeholder, don't bother updating it:
           api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}})
       )
+
+  yield (
+    generate_builder(
+      'luci.webrtc.ci',
+      'iOS32 Debug',
+      revision='b' * 40,
+      suffix='_fail_compile',
+      fail_compile=True
+    ) +
+    api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}}) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

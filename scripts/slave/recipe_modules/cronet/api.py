@@ -8,6 +8,7 @@ import sys
 
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 class CronetApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -78,7 +79,7 @@ class CronetApi(recipe_api.RecipeApi):
           mastername,
           buildername,
           use_goma=use_goma)
-    self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
+    return self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
 
 
   def get_version(self):
@@ -175,8 +176,11 @@ class CronetApi(recipe_api.RecipeApi):
         """,
         args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
               self.m.path['checkout'].join('.landmines')])
-    self.build(targets=['quic_server'],
+    raw_result = self.build(targets=['quic_server'],
                mastername='chromium.linux', buildername='Linux Builder')
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
+
     data_dir = self.m.path.mkdtemp('perf_data')
     args = ['--output-format', 'histograms', '--output-dir', data_dir]
     self.m.python('performance test',

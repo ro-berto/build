@@ -14,6 +14,8 @@ import random
 import re
 import urllib
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 # pylint: disable=relative-import
 from builders import TestSpec
 from recipe_engine.types import freeze
@@ -717,6 +719,12 @@ class V8Api(recipe_api.RecipeApi):
           infra/mb/mb_config.py in the checkout.
       out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
         'out'. Note that it is not a path, but just the name of the directory.
+
+    Returns:
+      if there is a compile failure:
+        RawResult object with compile step status and failure message
+      else:
+        None
     """
     with self.ensure_osx_sdk_if_needed():
       use_goma = (self.m.chromium.c.compile_py.compiler and
@@ -767,7 +775,9 @@ class V8Api(recipe_api.RecipeApi):
 
       if use_goma:
         kwargs['use_goma_module'] = True
-      self.m.chromium.compile(out_dir=out_dir, **kwargs)
+      raw_result = self.m.chromium.compile(out_dir=out_dir, **kwargs)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
       self.isolate_tests(isolate_targets, out_dir=out_dir)
 
@@ -1090,7 +1100,11 @@ class V8Api(recipe_api.RecipeApi):
           # download_isolated_json already provides isolated targets for this
           # revision. Only compile if not.
           self.runhooks()
-          self.compile(test_spec)
+          compile_failure = self.compile(test_spec)
+          if compile_failure:
+            # TODO: Consider changing control flow
+            # to handle returning of compile failures
+            raise self.m.step.StepFailure(compile_failure.summary_markdown)
         elif self.bot_type == 'tester':
           if test.uses_swarming:
             self.download_isolated_json(revision)

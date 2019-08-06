@@ -7,6 +7,7 @@ import json
 from recipe_engine.config import Dict
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
+from recipe_engine import post_process
 
 
 DEPS = [
@@ -81,10 +82,12 @@ def RunSteps(api, target_mastername, target_testername,
   }
 
   try:
-    test_results[test_revision], _ = (
+    test_results[test_revision], _, compile_failure = (
         api.findit.compile_and_test_at_revision(
           api, target_mastername, target_buildername, target_testername,
           test_revision, tests, False, test_repeat_count, skip_tests))
+    if compile_failure:
+      return compile_failure
   except api.step.InfraFailure:
     test_results[test_revision] = api.findit.TestResult.INFRA_FAILED
     report['metadata']['infra_failure'] = True
@@ -231,4 +234,23 @@ def GenTests(api):
               api.test_utils.simulated_isolated_script_output(
                   flaky_test_names=['fast/dummy/test.html'],
                   path_delimiter='/')))
+  )
+
+  yield (
+      api.test('compile_failure') +
+      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {'can_use_on_swarming_builders': False},
+                      },
+                  ],
+              },
+          }, step_prefix='test r0.') +
+      api.step_data('test r0.compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

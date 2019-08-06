@@ -415,7 +415,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if targets:
       targets = ['default'] + targets
 
-    self.m.chromium.compile(targets=targets, use_goma_module=True)
+    return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
   def isolate(self):
     self.m.isolate.isolate_tests(self.m.chromium.output_dir,

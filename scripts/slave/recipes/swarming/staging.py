@@ -13,6 +13,8 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 """
 
 from recipe_engine.recipe_api import Property
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -85,8 +87,10 @@ def RunSteps(api, buildername, mastername):
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium_tests.compile_specific_targets(
+  raw_result = api.chromium_tests.compile_specific_targets(
       bot_config, update_step, bot_db, compile_targets, test_config.all_tests())
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   platform_to_os = {
       'android': 'Android',
@@ -185,4 +189,31 @@ def GenTests(api):
             'browser_tests': 'deadbeef',
         })
     )
+  )
+
+  yield (
+    api.test('compile_failure') +
+    api.properties(
+        buildername='Linux Swarm',
+        mastername='chromium.swarm',
+        bot_id='TestSlave',
+        buildnumber=123,
+        path_config='kitchen') +
+    api.chromium_tests.read_source_side_spec(
+        'chromium.swarm', {
+            'Linux Swarm': {
+                'gtest_tests': [
+                    {
+                        'test': 'browser_tests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True,
+                            'shards': 2,
+                         }
+                    },
+                ],
+            },
+        }) +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )

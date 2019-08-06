@@ -4,6 +4,8 @@
 
 import re
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'archive',
@@ -227,7 +229,9 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets, use_goma_module=True)
+  raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   # Make sure 32 bit archives are distinguished from 64 bit ones.
   kwargs = {}
@@ -255,3 +259,15 @@ def GenTests(api):
           mastername='chromium.fuzz',
           buildername='Libfuzzer Upload Mac ASan',
           path_config='kitchen'))
+
+  yield (
+      api.test('compile_failure') +
+      api.platform.name('mac') +
+      api.properties.generic(
+          mastername='chromium.fuzz',
+          buildername='Libfuzzer Upload Mac ASan',
+          path_config='kitchen') +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )

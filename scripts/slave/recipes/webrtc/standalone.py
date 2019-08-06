@@ -5,6 +5,8 @@
 # Recipe for building and running tests for WebRTC stand-alone.
 
 import functools
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 DEPS = [
@@ -60,7 +62,10 @@ def RunSteps(api):
 
   if webrtc.bot.should_build:
     webrtc.run_mb()
-    webrtc.compile()
+    raw_result = webrtc.compile()
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
+
     webrtc.isolate()
 
   webrtc.get_binary_sizes()
@@ -93,6 +98,17 @@ def GenTests(api):
   yield generate_builder(bucketname, buildername, revision='a' * 40,
                          failing_test='rtc_unittests',
                          suffix='_failing_test')
+  yield (
+    generate_builder(
+      bucketname,
+      buildername,
+      revision='b' * 40,
+      suffix='_fail_compile',
+      fail_compile=True
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
   yield generate_builder(bucketname, 'Android32 (M Nexus5X)', revision='a' * 40,
                          fail_android_archive=True, suffix='_failing_archive')
 

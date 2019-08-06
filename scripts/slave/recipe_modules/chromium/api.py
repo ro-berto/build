@@ -12,6 +12,9 @@ import json
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input_text('\n'.join(tests))
@@ -276,11 +279,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       name: Name of compile step.
       ninja_env: Environment for ninja.
 
+    Returns:
+      A named tuple with the fields
+        - failure_summary: string of the error that occurred during the step,
+        - retcode: return code of the step
+
     Raises:
-      StepFailure when compile step, or compile confirm no-op step fails,
-      or a no-op build wasn't a no-op
+      InfraFailure from compile step
+      StepFailure from compile confirm no-op step
     """
 
+    CompileResult = collections.namedtuple('CompileResult',
+                                           'failure_summary retcode')
     script = self.resource('ninja_wrapper.py')
 
     script_args = [
@@ -312,18 +322,30 @@ class ChromiumApi(recipe_api.RecipeApi):
                       self.m.raw_io.test_api.output(
                             example_failure_output, name='failure_summary'))
     try:
-        with self.m.context(env=ninja_env):
-          self.m.python(name or 'compile', script=script,
-                        args=script_args,
-                        step_test_data=step_test_data,
-                        **kwargs)
+      with self.m.context(env=ninja_env):
+        ninja_step_result = self.m.python(name or 'compile', script=script,
+                                          args=script_args,
+                                          step_test_data=step_test_data,
+                                          **kwargs)
     except self.m.step.StepFailure as ex:
-        # TODO(debrian): Hacky solution, needs to be fixed later
-        if ex.result.raw_io and ex.result.raw_io.output:
-          failure_summary = self._format_compile_failures(
-              ex.result.raw_io.output)
-          ex.reason = failure_summary
-        raise
+      ninja_step_result = ex.result
+      if ninja_step_result.retcode != 1:
+        raise self.m.step.InfraFailure(
+            ninja_step_result.name,
+            result=ninja_step_result
+        )
+
+      failure_summary = ('Step(\'%s\') failed. (retcode=%d)'
+            '\nNo failure summary provided') % (
+                ninja_step_result.name, ninja_step_result.retcode)
+      if ninja_step_result.raw_io.output:
+        failure_summary = ninja_step_result.raw_io.output
+
+      return CompileResult(
+          failure_summary=failure_summary,
+          retcode=ninja_step_result.retcode
+      )
+
     finally:
       clang_crashreports_script = self.m.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')
@@ -351,18 +373,25 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     if ninja_no_work in step_result.stdout:
       # No dependency issue found.
-      return
+      return CompileResult(
+          failure_summary='No dependency issues found',
+          retcode= ninja_step_result.exc_result.retcode
+      )
 
     step_result.presentation.step_text = (
         "This should have been a no-op, but it wasn't.")
 
     step_result.presentation.status = self.m.step.FAILURE
-    raise self.m.step.StepFailure(
-        """Failing build because ninja reported work to do.
-        This means that after completing a compile, another was run and
-        it resulted in still having work to do (that is, a no-op build
-        wasn't a no-op). Consult the first "ninja explain:" line for a
-        likely culprit.""")
+    return CompileResult(
+        failure_summary=textwrap.dedent("""
+            Failing build because ninja reported work to do.
+            This means that after completing a compile, another was run and
+            it resulted in still having work to do (that is, a no-op build
+            wasn't a no-op). Consult the first "ninja explain:" line for a
+            likely culprit.
+         """).strip(),
+        retcode=1
+    )
 
   def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
                            ninja_log_outdir=None, ninja_log_compiler=None,
@@ -381,8 +410,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
 
+    Returns:
+      A named tuple with the fields
+        - failure_summary: string of the error that occurred during the step,
+        - retcode: return code of the step
+
     Raises:
-      - StepFailure when _run_ninja fails
       - InfraFailure when an unexpected goma failure occurs
     """
     # TODO(martiniss): This is a terrible hack and needs to be removed. See
@@ -393,23 +426,19 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     self.m.goma.start(goma_env)
 
-    try:
-      if not self.c.compile_py.goma_use_local:
-        # Do not allow goma to invoke local compiler.
-        ninja_env['GOMA_USE_LOCAL'] = 'false'
+    if not self.c.compile_py.goma_use_local:
+      # Do not allow goma to invoke local compiler.
+      ninja_env['GOMA_USE_LOCAL'] = 'false'
 
-      self._run_ninja(ninja_command, name, ninja_env, **kwargs)
-      build_exit_status = 0
-    except self.m.step.StepFailure as e:
-      build_exit_status = e.retcode
-      raise e
+    ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
+    build_exit_status = ninja_result.retcode
 
-    finally:
-      self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
-                       ninja_log_compiler=ninja_log_compiler,
-                       ninja_log_command=ninja_command,
-                       build_exit_status=build_exit_status,
-                       build_step_name=name)
+    self.m.goma.stop(ninja_log_outdir=ninja_log_outdir,
+                     ninja_log_compiler=ninja_log_compiler,
+                     ninja_log_command=ninja_command,
+                     build_exit_status=build_exit_status,
+                     build_step_name=name)
+    return ninja_result
 
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.
@@ -426,8 +455,10 @@ class ChromiumApi(recipe_api.RecipeApi):
         "Release" or "Debug").
       use_goma_module (bool): If True, use the goma recipe module.
 
+    Returns:
+      A RawResult object with the compile step's status and failure message
+
     Raises:
-      - StepFailure when compile step fails
       - InfraFailure when goma failure occurs
     """
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
@@ -549,19 +580,18 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     assert 'cwd' not in kwargs
 
-
     if not use_goma_module:
       compile_exit_status = 1
       try:
         with optional_system_python:
           with self.m.context(
               cwd=self.m.context.cwd or self.m.path['checkout']):
-            self._run_ninja(
+            ninja_result = self._run_ninja(
                 ninja_command=command,
                 name=name or 'compile',
                 ninja_env=ninja_env,
                 **kwargs)
-        compile_exit_status = 0
+            compile_exit_status = ninja_result.retcode
       except self.m.step.StepFailure as e:
         compile_exit_status = e.retcode
         raise e
@@ -581,12 +611,17 @@ class ChromiumApi(recipe_api.RecipeApi):
             args=upload_ninja_log_args,
             venv=True)
 
-      return
-
+      if ninja_result.retcode:
+        return result_pb2.RawResult(
+            status=common_pb.FAILURE,
+            summary_markdown=self._format_compile_failures(
+                                ninja_result.failure_summary)
+        )
+      return result_pb2.RawResult(status=common_pb.SUCCESS)
     try:
       with optional_system_python:
         with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          self._run_ninja_with_goma(
+          ninja_result = self._run_ninja_with_goma(
               ninja_command=command,
               ninja_env=ninja_env,
               name=name or 'compile',
@@ -595,43 +630,61 @@ class ChromiumApi(recipe_api.RecipeApi):
               ninja_log_compiler=self.c.compile_py.compiler or 'goma',
               **kwargs)
     except self.m.step.StepFailure as ex:
-      # Handle failures caused by goma.
-      failure_result_code = ''
+      # If there is an infra failure raised at this point that means
+      # goma did not get to start, so no need to handle it
+      if ex.retcode != 1:
+        raise ex
+      # Goma failure
+      return self._handle_goma_failures(ex.reason)
+    # It's possible for the StepFailure of the compile step to have
+    # a goma failure, so to avoid the message getting repeated it
+    # will be handled here
+    if ninja_result.retcode:
+      failure_summary = self._format_compile_failures(
+                                    ninja_result.failure_summary)
+      return self._handle_goma_failures(failure_summary)
+    return result_pb2.RawResult(status=common_pb.SUCCESS)
 
-      json_status = self.m.goma.jsonstatus['notice'][0]
+  def _handle_goma_failures(self, failure_summary):
+    failure_result_code = ''
 
-      if (not json_status.get('infra_status')):
-        failure_result_code = 'GOMA_SETUP_FAILURE'
-      elif json_status['infra_status']['ping_status_code'] != 200:
-        failure_result_code = 'GOMA_PING_FAILURE'
-      elif json_status['infra_status'].get('num_user_error', 0) > 0:
-        failure_result_code = 'GOMA_BUILD_ERROR'
+    json_status = self.m.goma.jsonstatus['notice'][0]
 
-      if failure_result_code:
-        assert len(failure_result_code) <= 20
-        # FIXME(yyanagisawa): mark the active step exception on goma error.
-        #
-        # This is workaround to make goma error recognized as infra exception.
-        # 1. even if self.m.step.InfraFailure is raised, the step is not shown
-        #    as EXCEPTION step in milo.  We need to make status EXCEPTION to
-        #    make the step annotated as STEP_EXCEPTION. (crbug.com/856914)
-        # 2. I believe it natural to mark compile step exception but we cannot.
-        #    since this step is executed after compile step, it is recognized as
-        #    finalized step, and we cannot edit such a step.  Let us touch
-        #    active result instead.
-        #    However, if we pick the active step, the last step of
-        #    'postprocess_goma' would be chosen, and it is confusing.
-        #    Let us create a fake step to represent the case.
-        #    It might be better than both not showing exception and marking
-        #    'stop cloudtail' as exception.
-        fake_step = self.m.step('infra status', [])
-        fake_step.presentation.status = self.m.step.EXCEPTION
-        fake_step.presentation.step_text = failure_result_code
-        props = fake_step.presentation.properties
-        props['extra_result_code'] = [failure_result_code]
-        raise self.m.step.InfraFailure('Infra compile failure:\n\n %s' % ex)
+    if not json_status.get('infra_status'):
+      failure_result_code = 'GOMA_SETUP_FAILURE'
+    elif json_status['infra_status']['ping_status_code'] != 200:
+      failure_result_code = 'GOMA_PING_FAILURE'
+    elif json_status['infra_status'].get('num_user_error', 0) > 0:
+      failure_result_code = 'GOMA_BUILD_ERROR'
 
-      raise
+    if failure_result_code:
+      assert len(failure_result_code) <= 20
+      # FIXME(yyanagisawa): mark the active step exception on goma error.
+      #
+      # This is workaround to make goma error recognized as infra exception.
+      # 1. even if self.m.step.InfraFailure is raised, the step is not shown
+      #    as EXCEPTION step in milo.  We need to make status EXCEPTION to
+      #    make the step annotated as STEP_EXCEPTION. (crbug.com/856914)
+      # 2. I believe it natural to mark compile step exception but we cannot.
+      #    since this step is executed after compile step, it is recognized as
+      #    finalized step, and we cannot edit such a step.  Let us touch
+      #    active result instead.
+      #    However, if we pick the active step, the last step of
+      #    'postprocess_goma' would be chosen, and it is confusing.
+      #    Let us create a fake step to represent the case.
+      #    It might be better than both not showing exception and marking
+      #    'stop cloudtail' as exception.
+      fake_step = self.m.step('infra status', [])
+      fake_step.presentation.status = self.m.step.EXCEPTION
+      fake_step.presentation.step_text = failure_result_code
+      props = fake_step.presentation.properties
+      props['extra_result_code'] = [failure_result_code]
+      raise self.m.step.InfraFailure('Infra compile failure: %s'
+                                      % failure_summary)
+    return result_pb2.RawResult(
+        status=common_pb.FAILURE,
+        summary_markdown=failure_summary
+    )
 
   @recipe_util.returns_placeholder
   def test_launcher_filter(self, tests):

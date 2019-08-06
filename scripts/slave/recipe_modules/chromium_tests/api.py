@@ -439,7 +439,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     However, recipes used by Findit for culprit finding may still set
     (mb_mastername, mb_buildername) = (mastername, buildername) to exactly match
-    a given continuous builder."""
+    a given continuous builder.
+
+    Returns:
+      RawResult object with compile step status and failure message
+    """
 
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
@@ -462,22 +466,22 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.tryserver.is_tryserver:
         name_suffix=' (with patch)'
 
-      try:
-        android_version_name, android_version_code = (
-            self.get_android_version_details(bot_config, log_details=True))
+      android_version_name, android_version_code = (
+          self.get_android_version_details(bot_config, log_details=True))
 
-        self.run_mb_and_compile(compile_targets, isolated_targets,
-                                name_suffix=name_suffix,
-                                mb_mastername=mb_mastername,
-                                mb_buildername=mb_buildername,
-                                mb_phase=mb_phase,
-                                mb_config_path=mb_config_path,
-                                mb_recursive_lookup=mb_recursive_lookup,
-                                android_version_code=android_version_code,
-                                android_version_name=android_version_name)
-      except self.m.step.StepFailure:
+      raw_result = self.run_mb_and_compile(compile_targets, isolated_targets,
+                              name_suffix=name_suffix,
+                              mb_mastername=mb_mastername,
+                              mb_buildername=mb_buildername,
+                              mb_phase=mb_phase,
+                              mb_config_path=mb_config_path,
+                              mb_recursive_lookup=mb_recursive_lookup,
+                              android_version_code=android_version_code,
+                              android_version_name=android_version_name)
+
+      if raw_result.status != common_pb.SUCCESS:
         self.m.tryserver.set_compile_failure_tryjob_result()
-        raise
+        return raw_result
 
       if isolated_targets:
         has_patch = self.m.tryserver.is_tryserver
@@ -510,6 +514,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               }]),
               self.m.isolate.isolate_server,
               self.m.isolate.isolated_tests)
+      return raw_result
 
   def package_build(self, mastername, buildername, update_step, bot_db,
                     reasons=None):
@@ -708,8 +713,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if use_goma:
         use_goma_module = True
 
-    self.m.chromium.compile(compile_targets, name='compile%s' % name_suffix,
-                            use_goma_module=use_goma_module)
+    return self.m.chromium.compile(
+        compile_targets,
+        name='compile%s' % name_suffix,
+        use_goma_module=use_goma_module
+    )
 
   def download_and_unzip_build(self, mastername, buildername, update_step,
                                bot_db, build_archive_url=None,
@@ -851,6 +859,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                        set swarming properties.
       suffix: Should be 'without patch'. Used to annotate steps and swarming
               properties.
+
+    Returns:
+      A RawResult object with the failure message and status
     """
     compile_targets = list(itertools.chain(
         *[t.compile_targets() for t in failing_tests]))
@@ -862,8 +873,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for t in failing_tests if t.uses_isolate]
       if failing_swarming_tests:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-      self.run_mb_and_compile(compile_targets, failing_swarming_tests,
-                              ' (%s)' % suffix)
+      raw_result = self.run_mb_and_compile(
+          compile_targets,
+          failing_swarming_tests,
+          ' (%s)' % suffix
+      )
+      if raw_result and raw_result.status != common_pb.SUCCESS:
+        return raw_result
+
       if failing_swarming_tests:
         swarm_hashes_property_name = 'swarm_hashes'
         if 'got_revision_cp' in bot_update_step.presentation.properties:
@@ -915,8 +932,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
 
     Returns:
-      An array of test suites which irrecoverably failed. If all test suites
-      succeeded, returns an empty array.
+      A Tuple of
+        A RawResult object with the failure message and status
+          A non-None value here means test were not run and compile failed,
+        An array of test suites which irrecoverably failed.
+          If all test suites succeeded, returns an empty array.
     """
     with self.wrap_chromium_tests(task.bot.settings, task.test_suites):
       # Run the test. The isolates have already been created.
@@ -930,26 +950,29 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       # An invalid result is unrecoverable.
       if invalid_test_suites:
-        return invalid_test_suites
+        return None, invalid_test_suites
 
       # If there are no failures, we're done.
       if not failing_tests:
-        return []
+        return None, []
 
       # If there are failures but we shouldn't deapply the patch, then we're
       # done.
       if not self._should_retry_with_patch_deapplied(task.affected_files):
         for t in failing_tests:
           self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-        return failing_tests
+        return None, failing_tests
 
       deapply_changes(task.bot_update_step)
-      self._build_and_isolate_failing_tests(failing_tests, task.bot_update_step,
-                                            'without patch')
+      raw_result = self._build_and_isolate_failing_tests(
+          failing_tests, task.bot_update_step, 'without patch')
+      if raw_result and raw_result.status != common_pb.SUCCESS:
+        return raw_result, []
+
       self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
                                   sort_by_shard=True)
 
-      return self._find_unrecoverable_test_suites(failing_tests)
+      return None, self._find_unrecoverable_test_suites(failing_tests)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
@@ -1045,6 +1068,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return result.json.output
 
   def main_waterfall_steps(self, mb_config_path=None, builders=None):
+    """Compiles and runs tests for chromium recipe.
+
+    Returns:
+      - A RawResult object with the status of the build
+        and a failure message if a failure occurred.
+      - None if no failures
+    """
     bot = self._lookup_bot_metadata(builders)
     self._report_builders(bot.settings)
     self.configure_build(bot.settings)
@@ -1121,10 +1151,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     compile_targets = self.get_compile_targets(
         bot.settings, bot_db, test_config.all_tests())
-    self.compile_specific_targets(
+    compile_result = self.compile_specific_targets(
         bot.settings, update_step, bot_db,
         compile_targets, test_config.all_tests(),
         mb_config_path=mb_config_path)
+
+    if compile_result and compile_result.status != common_pb.SUCCESS:
+      return compile_result
 
     additional_trigger_properties = {}
     if isolate_transfer:
@@ -1230,12 +1263,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_tests_with_and_without_changes(self, builders, mirrored_bots,
                                          deapply_changes):
-    task = self._calculate_tests_to_run(
-      builders=builders, mirrored_bots=mirrored_bots)
+    """Compile and run tests for chromium_trybot recipe.
+
+    Returns:
+      - A RawResult object with the status of the build and
+      failure message if an error occurred.
+      - None if no failures
+    """
+    raw_result, task = self._calculate_tests_to_run(
+        builders=builders, mirrored_bots=mirrored_bots)
+    if raw_result and raw_result.status != common_pb.SUCCESS:
+      return raw_result
+
     self.m.python.succeeding_step('mark: before_tests', '')
     if task.test_suites:
-      unrecoverable_test_suites = self._run_tests_with_retries(
+      compile_failure, unrecoverable_test_suites = self._run_tests_with_retries(
         task, deapply_changes)
+      if compile_failure:
+        return compile_failure
+
       self.m.chromium_swarming.report_stats()
 
       self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
@@ -1376,7 +1422,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                      are in ChromiumTestsApi.
 
     Returns:
-      task: Configuration of the build/test.
+      A Tuple of
+        RawResult object with the status of compile step
+          and the failure message if it failed
+        Configuration of the build/test.
     """
     bot = self._lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
 
@@ -1407,13 +1456,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_targets, compile_targets = self._determine_compilation_targets(
         bot, affected_files, bot_db)
     # Compiles and isolates test suites.
+    raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if compile_targets:
       tests = self._tests_in_compile_targets(test_targets, tests)
       tests_including_triggered = self._tests_in_compile_targets(
           test_targets, tests_including_triggered)
 
       compile_targets = sorted(set(compile_targets))
-      self.compile_specific_targets(
+      raw_result = self.compile_specific_targets(
           bot.settings,
           bot_update_step,
           bot_db,
@@ -1430,7 +1480,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    return Task(bot, tests, bot_update_step, affected_files)
+    return raw_result, Task(bot, tests, bot_update_step, affected_files)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""

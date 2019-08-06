@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 DEPS = [
@@ -15,7 +16,9 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium_clang')
 
-  api.chromium.compile()
+  raw_result = api.chromium.compile()
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   api.chromium.sizes(
       platform=api.properties.get('platform'),
@@ -51,4 +54,15 @@ def GenTests(api):
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id')
+  )
+
+  yield (
+      api.test('compile_failure') +
+      api.properties(
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id') +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

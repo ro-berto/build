@@ -414,7 +414,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
-    api.override_step_data('compile (without patch)', retcode=1)
+    api.step_data('compile (without patch)', retcode=1)
   )
 
   yield (

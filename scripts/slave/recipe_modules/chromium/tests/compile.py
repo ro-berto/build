@@ -9,13 +9,22 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/runtime',
   'recipe_engine/raw_io',
+  'recipe_engine/json',
 ]
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
+from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 import textwrap
 
+PROPERTIES = {
+  'use_goma': Property(default=True, kind=bool),
+}
 
-def RunSteps(api):
+
+def RunSteps(api, use_goma):
   api.chromium.set_config(
       api.properties.get('chromium_config', 'chromium_clang'),
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'),
@@ -31,8 +40,7 @@ def RunSteps(api):
 
   api.chromium.c.compile_py.goma_max_active_fail_fallback_tasks = 1
   api.chromium.ensure_goma()
-  api.chromium.compile(use_goma_module=True)
-
+  return api.chromium.compile(use_goma_module=use_goma)
 
 def GenTests(api):
   yield (
@@ -52,6 +60,25 @@ def GenTests(api):
       api.path.exists(api.path['checkout'].join(
           'tools', 'clang', 'scripts', 'process_crashreports.py')) +
       api.post_process(post_process.MustRun, 'process clang crashes') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('infra_failure') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.override_step_data('compile', retcode=2) +
+      api.post_process(post_process.StatusException) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('infra_failure_without_goma') +
+      api.properties(buildername='test_buildername') +
+      api.properties(mastername='test_mastername') +
+      api.properties(use_goma=False) +
+      api.override_step_data('compile', retcode=2) +
+      api.post_process(post_process.StatusException) +
       api.post_process(post_process.DropExpectation)
   )
 

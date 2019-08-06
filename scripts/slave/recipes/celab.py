@@ -25,6 +25,10 @@ DEPS = [
 ]
 
 from recipe_engine.recipe_api import Property
+from recipe_engine import post_process
+
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 import re
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
@@ -60,7 +64,9 @@ def RunSteps(api):
   if project == 'celab':
     _RunStepsCelab(api)
   elif project == 'chromium':
-    _RunStepsChromium(api)
+    compile_failure = _RunStepsChromium(api)
+    if compile_failure:
+      return compile_failure
   else:
     raise ValueError('Invalid `project`. Accepted values: celab, chromium.')
 
@@ -115,7 +121,9 @@ def _RunStepsChromium(api):
   # Build Chromium binaries from source and get CELab from CIPD.
   checkout = _CheckoutChromiumRepo(api)
   test_root = checkout.join('chrome', 'browser', 'policy', 'e2e_test')
-  chromium_bin_dir = _BuildChromiumFromSource(api, test_root)
+  chromium_bin_dir, raw_result = _BuildChromiumFromSource(api, test_root)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   version = _GetCelabVersionFromVPython(api, test_root.join(".vpython"))
   celab_bin_dir = _GetCelabFromCipd(api, version)
@@ -207,13 +215,13 @@ def _CheckoutChromiumRepo(api):
 def _BuildChromiumFromSource(api, test_root):
   with api.chromium.chromium_layout():
     compile_targets = ['chrome/installer/mini_installer', 'chromedriver']
-    api.chromium_tests.run_mb_and_compile(
+    raw_result = api.chromium_tests.run_mb_and_compile(
       compile_targets,
       isolated_targets=[],
       mb_config_path=test_root.join('infra', 'config.pyl'),
       name_suffix=' (with patch)')
 
-  return api.chromium.output_dir
+  return api.chromium.output_dir, raw_result
 
 
 def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
@@ -514,4 +522,18 @@ def GenTests(api):
       api.test('invalid_project') +
       api.buildbucket.ci_build(project='other-project') +
       api.expect_exception('ValueError')
+  )
+  yield (
+      api.test('compile_failure') +
+      api.properties(tests='chromium.test',
+                     pool_name='chromium-try', pool_size=5,
+                     mastername='tryserver.chromium.win', bot_id='test_bot') +
+      api.platform('win', 64) +
+      api.buildbucket.try_build(project='chromium',
+                                bucket='luci.chromium.try',
+                                builder='win-celab-try-rel',
+                                git_repo=CHROMIUM_REPO) +
+      api.step_data('compile (with patch)', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

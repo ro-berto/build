@@ -645,7 +645,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure:\n\n Step('compile') (retcode: 1)"
+      "humanReason": "Infra compile failure: ```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```"
     },
     "name": "$result"
   }

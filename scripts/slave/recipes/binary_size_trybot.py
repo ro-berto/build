@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 from recipe_engine import recipe_api
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 DEPS = [
   'chromium',
   'chromium_android',
@@ -102,21 +104,25 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
 
     api.chromium.ensure_goma()
     with api.tempfile.temp_dir('binary-size-trybot') as staging_dir:
-      with_results_dir = _BuildAndMeasure(
+      with_results_dir, raw_result = _BuildAndMeasure(
           api, True, compile_targets, apk_name, staging_dir)
+
+      if raw_result and raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
       with api.context(cwd=api.chromium_checkout.working_dir):
         api.bot_update.deapply_patch(bot_update_step)
 
       with api.context(cwd=api.path['checkout']):
         suffix = ' (without patch)'
-        try:
-          api.chromium.runhooks(name='runhooks' + suffix)
-          without_results_dir = _BuildAndMeasure(
-              api, False, compile_targets, apk_name, staging_dir)
-        except api.step.StepFailure:
+
+        api.chromium.runhooks(name='runhooks' + suffix)
+        without_results_dir, raw_result = _BuildAndMeasure(
+            api, False, compile_targets, apk_name, staging_dir)
+
+        if raw_result and raw_result.status != common_pb.SUCCESS:
           api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
-          return
+          return raw_result
 
       # Re-apply patch so that the diff scripts can be tested via tryjobs.
       # We could build without-patch first to avoid having to apply the patch
@@ -140,7 +146,11 @@ def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
   suffix = ' (with patch)' if with_patch else ' (without patch)'
   results_basename = 'with_patch' if with_patch else 'without_patch'
 
-  api.chromium_tests.run_mb_and_compile(compile_targets, None, suffix)
+  raw_result = api.chromium_tests.run_mb_and_compile(
+      compile_targets, None, suffix)
+
+  if raw_result.status != common_pb.SUCCESS:
+    return None, raw_result
 
   results_dir = staging_dir.join(results_basename)
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
@@ -163,7 +173,7 @@ def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
   size_path = results_dir.join(apk_name + '.size')
   api.chromium_android.supersize_archive(
       apk_path, size_path, step_suffix=suffix)
-  return results_dir
+  return results_dir, None
 
 
 def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
@@ -294,6 +304,13 @@ def GenTests(api):
       override_analyze(no_changes=True) +
       api.post_process(post_process.MustRun, 'analyze') +
       api.post_process(post_process.DoesNotRunRE, r'.*build') +
+      api.post_process(post_process.DropExpectation)
+  )
+  yield (
+      props('compile_failure') +
+      override_analyze() +
+      api.override_step_data('compile (with patch)', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
   yield (

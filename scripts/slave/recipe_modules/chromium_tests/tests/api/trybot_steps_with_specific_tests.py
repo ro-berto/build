@@ -7,6 +7,9 @@ import json
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
@@ -20,10 +23,13 @@ DEPS = [
 PROPERTIES = {
   'mastername': Property(default=None, kind=str),
   'buildername': Property(default=None, kind=str),
+  'fail_calculate_tests': Property(default=False, kind=bool),
+  'fail_mb_and_compile': Property(default=False, kind=bool),
 }
 
 
-def RunSteps(api, mastername, buildername):
+def RunSteps(api, mastername, buildername,
+             fail_calculate_tests, fail_mb_and_compile):
   bot = api.chromium_tests._lookup_bot_metadata(builders={})
 
   api.chromium_tests.configure_build(bot.settings)
@@ -56,10 +62,23 @@ def RunSteps(api, mastername, buildername):
   def config_override(**kwargs):
     task = api.chromium_tests.Task(bot, [test], update_step, affected_files)
     task.should_retry_failures_with_changes = lambda: retry_failed_shards
-
-    return task
+    raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
+    if fail_calculate_tests:
+      raw_result.summary_markdown = (
+          'Compile step failed from "_calculate_tests_to_run".')
+      raw_result.status = common_pb.FAILURE
+    return raw_result, task
 
   api.chromium_tests._calculate_tests_to_run = config_override
+
+  def compile_override(*args, **kwargs):
+    return result_pb2.RawResult(
+        status=common_pb.FAILURE,
+        summary_markdown='Compile step failed from "run_mb_and_compile".'
+    )
+
+  if fail_mb_and_compile:
+      api.chromium_tests.run_mb_and_compile = compile_override
 
   skip_deapply_patch = api.properties.get(
       'skip_deapply_patch', False)
@@ -82,6 +101,38 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True))
+  )
+
+  yield (
+      api.test('calculate_tests_compile_failure') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          fail_calculate_tests=True
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+            'Compile step failed from "_calculate_tests_to_run".') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('run_mb_and_compile_failure') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          fail_mb_and_compile=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+            'Compile step failed from "run_mb_and_compile".') +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

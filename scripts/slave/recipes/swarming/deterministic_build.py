@@ -10,6 +10,8 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -205,8 +207,10 @@ def RunSteps(api, buildername):
     api.properties.get('mastername'), buildername,
     phase='local' if compare_local else None)
 
-  api.chromium.compile(targets, name='First build',
+  raw_result = api.chromium.compile(targets, name='First build',
                        use_goma_module=not compare_local)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
@@ -225,8 +229,11 @@ def RunSteps(api, buildername):
   api.chromium.mb_isolate_everything(
     api.properties.get('mastername'), buildername, build_dir=build_dir,
     phase='goma' if compare_local else None)
-  api.chromium.compile(targets, name='Second build', use_goma_module=True,
-                       target=target)
+  raw_result = api.chromium.compile(targets, name='Second build',
+      use_goma_module=True, target=target)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
+
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
                        str(api.chromium.output_dir).rstrip('\\/') + '.2')
@@ -290,3 +297,29 @@ def GenTests(api):
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )
+
+  yield (
+    api.test('first_build_compile_fail') +
+    api.properties.scheduled() +
+    api.properties.generic(buildername='android-deterministic-dbg',
+                            mastername=mastername) +
+    api.platform(
+      DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'], 64) +
+    api.properties(configuration='Release') +
+    api.step_data('First build', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('second_build_compile_fail') +
+    api.properties.scheduled() +
+    api.properties.generic(buildername='android-deterministic-dbg',
+                            mastername=mastername) +
+    api.platform(
+      DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'], 64) +
+    api.properties(configuration='Release') +
+    api.step_data('Second build', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

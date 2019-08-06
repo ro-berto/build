@@ -4,7 +4,9 @@
 
 from recipe_engine import recipe_api
 from recipe_engine.recipe_api import Property
+from recipe_engine import post_process
 from recipe_engine.types import freeze
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'depot_tools/bot_update',
@@ -80,7 +82,9 @@ def RunSteps(api, mastername, buildername):
     # TODO(agrieve): Remove _apk suffix in favour of bin/run_${target} once GYP
     #     is gone. http://crbug.com/599919
     targets.append(target + '_apk')
-  api.chromium.compile(targets=targets, use_goma_module=True)
+  raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   api.emulator.install_emulator_deps(api_level=builder.get('api_level'))
 
@@ -125,4 +129,14 @@ def GenTests(api):
         buildername='x86 Emulator Tester',
         mastername='chromium.android.fyi') +
       api.step_data('android_webview_unittests', retcode=2)
+  )
+
+  yield (
+      api.test('compile_failure') +
+      api.properties.generic(
+        buildername='x86 Emulator Tester',
+        mastername='chromium.android.fyi') +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

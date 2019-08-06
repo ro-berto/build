@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -55,12 +57,14 @@ def RunSteps(api):
                        chromium_apply_config=chromium_apply_config)
 
   use_goma = builder_config.get('use_goma', True)
-  cronet.build(use_goma=use_goma)
+  raw_result = cronet.build(use_goma=use_goma)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   cronet.upload_package(kwargs['BUILD_CONFIG'])
   cronet.sizes('sample-perf-id')
   cronet.run_tests()
-  cronet.run_perf_tests('sample-perf-id')
+  return cronet.run_perf_tests('sample-perf-id')
 
 def GenTests(api):
   for bot_id in BUILDERS.iterkeys():
@@ -82,3 +86,20 @@ def GenTests(api):
         api.test(bot_id + "_experimental") +
         props
     )
+
+  yield (
+    api.test('compile_failure') +
+    api.properties.generic(
+      buildername='local_test',
+      revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+      repository='https://chromium.googlesource.com/chromium/src',
+      branch='master',
+      project='src',
+      got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+      got_revision_cp='refs/heads/master@{#291141}',
+      git_revision='a' * 40
+    ) +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

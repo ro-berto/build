@@ -10,7 +10,7 @@ import re
 
 from recipe_engine.config import Single
 from recipe_engine.post_process import (
-    DoesNotRun, DropExpectation, Filter, MustRun)
+    DoesNotRun, DropExpectation, Filter, MustRun, StatusFailure)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -79,14 +79,16 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
 
       if version not in tags:
         api.step('Skipping due to missing tag.', cmd=None)
-        return
+        return None, None
 
     # This automatically deletes build_dir since we specify clobber above.
     api.v8.runhooks()
 
   build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   with api.step.nest('build' + step_suffix):
-    api.v8.compile()
+    compile_failure = api.v8.compile()
+    if compile_failure:
+      return None, compile_failure
 
   with api.step.nest('make archive' + step_suffix) as parent:
     # Make a list of files to archive.
@@ -136,7 +138,7 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
           project='v8-internal',
           bucket='ci',
           step_name='trigger refbuild bundler')
-      return
+      return None, None
 
     # Upload to google storage bucket.
     build_config = 'rel' if api.chromium.c.BUILD_CONFIG == 'Release' else 'dbg'
@@ -168,7 +170,7 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
 
     parent.presentation.links['download'] = (
         ARCHIVE_LINK % (gs_path_suffix, archive_name))
-    return version
+    return version, None
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform):
@@ -197,18 +199,28 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
 
   if build_config == 'Debug':
     # Debug binaries require libraries to be present in the same archive to run.
-    make_archive(api, bot_config, ref, None, 'all')
+    version, compile_failure = make_archive(api, bot_config, ref, None, 'all')
+    if compile_failure:
+      return compile_failure
   else:
-    version = make_archive(api, bot_config, ref, None, 'exe')
+    version, compile_failure = make_archive(api, bot_config, ref, None, 'exe')
+    if compile_failure:
+      return compile_failure
     if not version:
       return
-    make_archive(api, bot_config, ref, version, 'lib', ' (libs)', '-libs')
+    version, compile_failure = make_archive(
+        api, bot_config, ref, version, 'lib', ' (libs)', '-libs')
+    if compile_failure:
+      return compile_failure
 
     # Upload first build for the latest milestone to a known location. We use
     # these binaries for running reference perf tests.
     if (RELEASE_BRANCH_RE.match(ref) and
         FIRST_BUILD_IN_MILESTONE_RE.match(version)):
-      make_archive(api, bot_config, ref, version, 'ref', ' (ref)')
+      version, compile_failure = make_archive(
+          api, bot_config, ref, version, 'ref', ' (ref)')
+      if compile_failure:
+        return compile_failure
 
 
 def GenTests(api):
@@ -408,4 +420,119 @@ def GenTests(api):
           'make archive.gsutil upload',
           'make archive.gsutil upload json',
       ))
+  )
+
+  # Test coverage for compile failures
+  yield (
+        api.test(
+          api.v8.test_name(
+            'client.v8.official', 'V8 Foobar', 'debug_compile_failure')
+        ) +
+        api.properties.generic(mastername='client.v8.official',
+                               path_config='kitchen',
+                               build_config='Debug',
+                               target_bits=64) +
+        api.buildbucket.ci_build(
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder='V8 Foobar',
+            git_ref='refs/branch-heads/3.4',
+            revision='a'*40
+        ) +
+        api.platform('linux', 64) +
+        api.v8.version_file(17, 'head', prefix='sync.') +
+        api.override_step_data(
+            'sync.git describe',
+            api.raw_io.stream_output('3.4.3.17')) +
+        api.v8.check_param_equals(
+            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+        api.runtime(is_luci=True, is_experimental=False) +
+      api.step_data('build.compile', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+        api.test(
+          api.v8.test_name(
+            'client.v8.official', 'V8 Foobar', 'release_compile_failure')
+        ) +
+        api.properties.generic(mastername='client.v8.official',
+                               path_config='kitchen',
+                               build_config='Release',
+                               target_bits=64) +
+        api.buildbucket.ci_build(
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder='V8 Foobar',
+            git_ref='refs/branch-heads/3.4',
+            revision='a'*40
+        ) +
+        api.platform('linux', 64) +
+        api.v8.version_file(17, 'head', prefix='sync.') +
+        api.override_step_data(
+            'sync.git describe',
+            api.raw_io.stream_output('3.4.3.17')) +
+        api.v8.check_param_equals(
+            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+        api.runtime(is_luci=True, is_experimental=False) +
+      api.step_data('build.compile', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+        api.test(
+          api.v8.test_name(
+            'client.v8.official', 'V8 Foobar', 'release_libs_compile_failure')
+        ) +
+        api.properties.generic(mastername='client.v8.official',
+                               path_config='kitchen',
+                               build_config='Release',
+                               target_bits=64) +
+        api.buildbucket.ci_build(
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder='V8 Foobar',
+            git_ref='refs/branch-heads/3.4',
+            revision='a'*40
+        ) +
+        api.platform('linux', 64) +
+        api.v8.version_file(17, 'head', prefix='sync.') +
+        api.override_step_data(
+            'sync.git describe',
+            api.raw_io.stream_output('3.4.3.17')) +
+        api.v8.check_param_equals(
+            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+        api.runtime(is_luci=True, is_experimental=False) +
+      api.step_data('build (libs).compile', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+      api.test(
+        api.v8.test_name(
+          'client.v8.official', 'V8 Foobar', 'milestone_compile_failure')
+      ) +
+      api.properties.generic(mastername=mastername,
+                             path_config='kitchen',
+                             build_config='Release',
+                             target_bits=64) +
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder=buildername,
+        git_ref='refs/branch-heads/3.4',
+        revision='a' * 40,
+      ) +
+      api.v8.version_file(0, 'head', prefix='sync.') +
+      api.override_step_data(
+          'sync.git describe', api.raw_io.stream_output('3.4.3')) +
+      api.step_data('build (ref).compile', retcode=1) +
+      api.post_process(StatusFailure) +
+      api.post_process(DropExpectation)
   )

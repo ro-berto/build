@@ -7,6 +7,7 @@ import json
 import re
 
 from recipe_engine import recipe_api
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 # This has no special meaning, just a placeholder for expectations data.
@@ -156,6 +157,22 @@ class FinditApi(recipe_api.RecipeApi):
       skip_tests (bool):
           If True, do not actually run the tests. Useful when we only want to
           isolate the targets for running elsewhere.
+
+    Returns:
+      A Tuple of
+        - Test result dictionary of the form:
+          {
+            'failed test name':
+              {
+                'status': TestResult status,
+                'valid': bool
+              }
+          }
+        - dictionary of failed tests of the form:
+          {
+            'test name': list of tests
+          }
+        - RawResult object with compile step status and failure message
     """
 
     results = {}
@@ -212,7 +229,7 @@ class FinditApi(recipe_api.RecipeApi):
               break
 
       if actual_compile_targets:
-        api.m.chromium_tests.compile_specific_targets(
+        raw_result = api.m.chromium_tests.compile_specific_targets(
             bot_config,
             bot_update_step,
             bot_db,
@@ -222,6 +239,8 @@ class FinditApi(recipe_api.RecipeApi):
             mb_buildername=target_buildername,
             override_bot_type='builder_tester')
 
+        if raw_result.status != common_pb.SUCCESS:
+          return None, None, raw_result
       for test in actual_tests_to_run:
         try:
           test.test_options = api.m.chromium_tests.steps.TestOptions(
@@ -243,7 +262,7 @@ class FinditApi(recipe_api.RecipeApi):
                   'status': self.TestResult.SKIPPED,
                   'valid': True
               } for x in requested_tests.keys()
-          }, defaultdict(list)
+          }, defaultdict(list), None
 
         _, failed_tests = api.m.test_utils.run_tests(
             api.chromium_tests.m, actual_tests_to_run,
@@ -289,7 +308,7 @@ class FinditApi(recipe_api.RecipeApi):
               'valid': True,
           }
 
-      return results, failed_tests_dict
+      return results, failed_tests_dict, None
 
   def configure_and_sync(self, api, target_mastername, target_testername,
                          revision, builders=None):

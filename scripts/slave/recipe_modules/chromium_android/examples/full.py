@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
     'adb',
@@ -126,7 +128,9 @@ def RunSteps(api, buildername):
   api.chromium_android.host_info()
 
   if config.get('build', False):
-    api.chromium.compile(use_goma_module=True)
+    raw_result = api.chromium.compile(use_goma_module=True)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
     api.chromium_android.make_zip_archive(
         'zip_build_product', 'archive.zip', include_filters=['*.apk'],
         exclude_filters=['*.so', '*.a'])
@@ -323,3 +327,11 @@ def GenTests(api):
          properties_for('asan') +
          api.override_step_data('Set up ASAN on devices.wait_for_devices',
                                 retcode=87))
+
+  yield (
+    api.test('compile_failure') +
+    properties_for('basic_builder') +
+    api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )

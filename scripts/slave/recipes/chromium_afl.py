@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'archive',
@@ -81,7 +83,9 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
-  api.chromium.compile(targets=targets, use_goma_module=True)
+  raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   api.archive.clusterfuzz_archive(
           build_dir=api.chromium.output_dir,
@@ -100,3 +104,14 @@ def GenTests(api):
            api.step_data('calculate no_clusterfuzz',
                stdout=api.raw_io.output_text('target1'))
            )
+
+  yield (
+      api.test('compile_failure') +
+      api.properties.generic(
+          mastername='chromium.fuzz',
+          buildername='Afl Upload Linux ASan'
+      ) +
+      api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
