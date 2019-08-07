@@ -1578,7 +1578,8 @@
   {
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
-      "--android"
+      "--android",
+      "--no-lto"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1591,7 +1592,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android"
+    "name": "gn --android --no-lto"
   },
   {
     "cmd": [],
@@ -3022,7 +3023,8 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--android-cpu=x64"
+      "--android-cpu=x64",
+      "--no-lto"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -3035,7 +3037,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --android-cpu=x64"
+    "name": "gn --android --android-cpu=x64 --no-lto"
   },
   {
     "cmd": [],
@@ -3314,7 +3316,8 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--android-cpu=x86"
+      "--android-cpu=x86",
+      "--no-lto"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -3327,7 +3330,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --android-cpu=x86"
+    "name": "gn --android --android-cpu=x86 --no-lto"
   },
   {
     "cmd": [],

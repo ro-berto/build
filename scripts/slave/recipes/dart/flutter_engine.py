@@ -67,12 +67,13 @@ def TestEngine(api, checkout_dir):
 
 def BuildLinuxAndroidx86(api, checkout_dir):
   for x86_variant in ['x64', 'x86']:
-    RunGN(api, checkout_dir, '--android', '--android-cpu=' + x86_variant)
+    RunGN(api, checkout_dir, '--android', '--android-cpu=' + x86_variant,
+          '--no-lto')
     Build(api, checkout_dir, 'android_debug_' + x86_variant)
 
 
 def BuildLinuxAndroidArm(api, checkout_dir):
-  RunGN(api, checkout_dir, '--android')
+  RunGN(api, checkout_dir, '--android', '--no-lto')
   Build(api, checkout_dir, 'android_debug')
   Build(api, checkout_dir, 'android_debug', ':dist')
   RunGN(api, checkout_dir, '--android', '--runtime-mode=release',
