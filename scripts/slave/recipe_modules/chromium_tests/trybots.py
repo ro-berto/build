@@ -617,6 +617,11 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Linux Builder',
         'tester': 'Linux FYI Release (Intel HD 630)',
       }),
+      'gpu-fyi-try-linux-intel-skv': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Linux Builder',
+        'tester': 'Linux FYI SkiaRenderer Vulkan (Intel HD 630)',
+      }),
       'gpu-fyi-try-linux-nvidia-dbg': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Builder (dbg)',
