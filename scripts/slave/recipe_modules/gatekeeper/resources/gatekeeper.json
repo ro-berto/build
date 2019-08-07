@@ -372,7 +372,6 @@
         "builders": {
           "Deterministic Linux": {
             "categories": [
-              "chromium_tree_closer",
               "experimental_tests"
             ],
             "tree_notify": [
@@ -385,7 +384,6 @@
           },
           "linux-ozone-rel": {
             "categories": [
-              "chromium_tree_closer",
               "experimental_tests"
             ],
             "tree_notify": [
