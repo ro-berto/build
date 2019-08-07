@@ -94,6 +94,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -111,6 +112,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -221,6 +223,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "SHARD": "tests",
@@ -246,6 +249,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -270,6 +274,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -294,6 +299,7 @@
     ],
     "cwd": "[START_DIR]\\flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"

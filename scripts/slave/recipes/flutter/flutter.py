@@ -196,6 +196,8 @@ def RunSteps(api):
       # Setup our own pub_cache to not affect other slaves on this machine,
       # and so that the pre-populated pub cache is contained in the package.
       'PUB_CACHE': pub_cache,
+      # Windows Packaging script assumes this is set.
+      'DEPOT_TOOLS': str(api.depot_tools.root),
   }
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'

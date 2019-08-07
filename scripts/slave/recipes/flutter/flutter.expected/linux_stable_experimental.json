@@ -98,6 +98,7 @@
       "https://chromium.googlesource.com/external/github.com/flutter/flutter"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -124,6 +125,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -150,6 +152,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -174,6 +177,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -204,6 +208,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -228,6 +233,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -254,6 +260,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -276,6 +283,7 @@
       "doctor"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -297,6 +305,7 @@
       "update-packages"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -323,6 +332,7 @@
       "[START_DIR]/archive"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -352,6 +362,7 @@
       "[START_DIR]/archive"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -377,6 +388,7 @@
       "--branch=stable"
     ],
     "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
