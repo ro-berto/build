@@ -94,15 +94,12 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin"
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
       ]
     },
     "name": "flutter doctor"
@@ -114,15 +111,12 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin"
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
       ]
     },
     "name": "download dependencies"
@@ -155,106 +149,11 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/flutter/dev/bots/download_android_tools.py",
-      "-t",
-      "sdk"
-    ],
-    "env": {
-      "JAVA_HOME": "[CACHE]/java"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/java/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download android tools"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
-      "--url",
-      "https://services.gradle.org/distributions/gradle-4.10.2-all.zip",
-      "--status-json",
-      "/path/to/tmp/json",
-      "--outfile",
-      "[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip"
-    ],
-    "env": {
-      "JAVA_HOME": "[CACHE]/java"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/java/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download gradle"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/unzip.py"
-    ],
-    "env": {
-      "JAVA_HOME": "[CACHE]/java"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/java/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "unzip gradle",
-    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip\"}"
-  },
-  {
-    "cmd": [
-      "sh",
-      "-c",
-      "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
-    ],
-    "env": {
-      "JAVA_HOME": "[CACHE]/java"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/java/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "print installed android SDK components"
-  },
-  {
-    "cmd": [
       "dart",
       "[START_DIR]/flutter/dev/bots/test.dart"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]/java",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "tests"
@@ -263,7 +162,6 @@
       "PATH": [
         "[START_DIR]/flutter/bin",
         "[START_DIR]/flutter/bin/cache/dart-sdk/bin",
-        "[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin",
         "[CACHE]/java/bin"
       ]
     },

@@ -4,7 +4,6 @@
 
 from contextlib import contextmanager
 import re
-from urlparse import urlparse
 
 DEPS = [
     'build',
@@ -31,8 +30,6 @@ DEPS = [
 
 BUCKET_NAME = 'flutter_infra'
 PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
-DEFAULT_GRADLE_DIST_URL = \
-    'https://services.gradle.org/distributions/gradle-4.10.2-all.zip'
 
 @contextmanager
 def _PlatformSDK(api):
@@ -41,17 +38,7 @@ def _PlatformSDK(api):
       with InstallOpenJDK(api):
         yield
   elif api.platform.is_mac:
-    # pylint: disable=line-too-long
-    # See https://github.com/flutter/infra/blob/master/config/cr-buildbucket.cfg#L138
-    # for how the version is passed in.
-    # pylint: enable=line-too-long
-    with api.osx_sdk('ios'):
-      with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
-        with api.context(env={
-          'CP_REPOS_DIR': api.path['cache'].join('cocoapods', 'repos')
-        }):
-          api.step('pod setup', ['pod', 'setup', '--verbose'])
-          yield
+    yield
   elif api.platform.is_linux:
     with InstallOpenJDK(api):
         yield
@@ -82,18 +69,6 @@ def InstallOpenJDK(api):
     env_prefixes={'PATH': [java_cache_dir.join('bin')]}
   )
 
-@contextmanager
-def InstallGem(api, gem_name, gem_version):
-  gem_dir = api.path['start_dir'].join('gems')
-  api.file.ensure_directory('mkdir gems', gem_dir)
-  with api.context(cwd=gem_dir):
-    api.step('install ' + gem_name, ['gem', 'install', '-V', gem_name + ':' +
-      gem_version, '--install-dir', '.'])
-  with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
-    'PATH': [gem_dir.join('bin')]
-  }):
-    yield
-
 def EnsureCloudKMS(api, version=None):
   with api.step.nest('ensure_cloudkms'):
     with api.context(infra_steps=True):
@@ -119,35 +94,6 @@ def GetCloudPath(api, git_hash, path):
   if api.runtime.is_experimental:
     return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
-
-def GetGradleDistributionUrl(api):
-  return api.properties['gradle_dist_url']
-
-def GetGradleZipFileName(api):
-  url = urlparse(GetGradleDistributionUrl(api))
-  return url.path.split('/')[-1]
-
-def GetGradleDirName(api):
-  return GetGradleZipFileName(api).replace('.zip', '')
-
-def InstallGradle(api, checkout):
-  gradle_zip_file_name = GetGradleZipFileName(api)
-  api.url.get_file(
-      GetGradleDistributionUrl(api),
-      checkout.join('dev', 'bots', gradle_zip_file_name),
-      step_name='download gradle')
-  api.zip.unzip('unzip gradle',
-                checkout.join('dev', 'bots', gradle_zip_file_name),
-                checkout.join('dev', 'bots', 'gradle'))
-  sdkmanager_executable = 'sdkmanager.bat' if api.platform.is_win \
-                                           else 'sdkmanager'
-  sdkmanager_list_cmd = ['cmd.exe',
-                         '/C'] if api.platform.is_win else ['sh', '-c']
-  sdkmanager_list_cmd.append(
-      '%s --list' % checkout.join('dev', 'bots', 'android_tools', 'sdk',
-                                  'tools', 'bin', sdkmanager_executable))
-  api.step('print installed android SDK components', sdkmanager_list_cmd)
-
 
 def UploadFlutterCoverage(api):
   """Uploads the Flutter coverage output to cloud storage and Coveralls.
@@ -234,13 +180,10 @@ def RunSteps(api):
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
-  gradle_bin = checkout.join('dev', 'bots', 'gradle', GetGradleDirName(api),
-                             'bin')
 
   path_prefixes = [
     flutter_bin,
     dart_bin,
-    gradle_bin,
   ]
 
   env_prefixes = {'PATH': path_prefixes}
@@ -253,9 +196,6 @@ def RunSteps(api):
       # Setup our own pub_cache to not affect other slaves on this machine,
       # and so that the pre-populated pub cache is contained in the package.
       'PUB_CACHE': pub_cache,
-      # Needed for Windows to be able to refer to Python scripts in depot_tools.
-      'DEPOT_TOOLS': str(api.depot_tools.root),
-      'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
@@ -277,12 +217,6 @@ def RunSteps(api):
     api.step('download dependencies', [flutter_executable, 'update-packages'])
 
   with _PlatformSDK(api):
-    with api.depot_tools.on_path():
-      api.python('download android tools',
-                 checkout.join('dev', 'bots', 'download_android_tools.py'),
-                 ['-t', 'sdk'])
-      InstallGradle(api, checkout)
-
     with api.context(env=env, env_prefixes=env_prefixes, cwd=checkout):
       shard = api.properties['shard']
       shard_env = env
@@ -316,8 +250,7 @@ def GenTests(api):
          api.runtime(is_luci=True, is_experimental=experimental) +
          api.properties(shard='coverage',
                         coveralls_lcov_version='5.1.0',
-                        upload_packages=should_upload,
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
+                        upload_packages=should_upload))
       for platform in ('mac', 'linux', 'win'):
         for branch in ('master', 'dev', 'beta', 'stable'):
           git_ref = 'refs/heads/' + branch
@@ -328,8 +261,6 @@ def GenTests(api):
               api.platform(platform, 64) +
               api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
               api.properties(shard='tests',
-                             cocoapods_version='1.5.3',
-                             gradle_dist_url=DEFAULT_GRADLE_DIST_URL,
                              upload_packages=should_upload) +
               api.runtime(is_luci=True, is_experimental=experimental))
           yield test
@@ -339,6 +270,4 @@ def GenTests(api):
          api.properties(git_url = 'https://github.com/flutter/flutter',
                         git_ref = 'refs/pull/1/head',
                         shard = 'tests',
-                        cocoapods_version='1.5.3',
-                        should_upload=False,
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
+                        should_upload=False))
