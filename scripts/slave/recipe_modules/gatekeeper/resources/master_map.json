@@ -638,7 +638,6 @@
       "Linux V8 FYI Release - pointer compression (NVIDIA)",
       "Mac V8 FYI Release (Intel)",
       "V8 Android GN (dbg)",
-      "V8 Blink Linux Layout NG",
       "V8 Linux - full debug",
       "V8 Linux - noembed",
       "V8 Linux - noembed - debug",
@@ -652,11 +651,12 @@
       "V8 Linux64 - gcov coverage",
       "V8 Linux64 - node.js integration ng",
       "V8 iOS - sim",
+      "V8 Blink Linux",
+      "V8 Blink Linux Debug",
+      "V8 Blink Mac",
+      "V8 Blink Win",
       "V8-Blink Linux 64",
-      "V8-Blink Linux 64 (dbg)",
       "V8-Blink Linux 64 - future",
-      "V8-Blink Mac",
-      "V8-Blink Win",
       "Win V8 FYI Release (NVIDIA)"
     ],
     "project": "v8"
