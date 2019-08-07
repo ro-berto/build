@@ -77,8 +77,9 @@ def fetch(method, url, data=None, http=None):
     attempts += 1
     time_to_sleep = 2 ** attempts
     logging.info(
-        'url fetch encountered %d, sleeping for %d seconds and retrying...' % (
-            resp.status, time_to_sleep))
+        '%s error when fetching %s %s with %s. '
+        'Sleeping for %d seconds and retrying...' % (
+            resp.status, method, url, data, time_to_sleep))
     time.sleep(time_to_sleep)
 
 
@@ -88,7 +89,23 @@ def call_buildbucket(method, data, http=None):
   return json.loads(response[4:])
 
 
-def get_buildbucket_builds(project, bucket, builders):
+def get_builds_for_builder(args):
+  project, bucket, builder = args
+  request = {
+    'pageSize': 100,
+    'fields': 'builds.*.endTime,builds.*.number',
+    'predicate': {
+      'builder': {
+        'project': project,
+        'bucket': bucket,
+        'builder': builder,
+      },
+    },
+  }
+  return call_buildbucket('SearchBuilds', request)
+
+
+def get_builds_for_builders(project, bucket, builders, processes):
   """Fetch new builds for all builders in |builders|.
 
   Args:
@@ -100,30 +117,23 @@ def get_buildbucket_builds(project, bucket, builders):
     For each builder (in the same order they were passed), a list
     [{endTime, number}] of builds with the end time and build number.
   """
-  search_build_requests = [
-    {
-      'searchBuilds': {
-        'pageSize': 100,
-        'fields': 'builds.*.endTime,builds.*.number',
-        'predicate': {
-          'builder': {
-            'project': project,
-            'bucket': bucket,
-            'builder': builder,
-          },
-        },
-      }
-    }
-    for builder in builders]
+  request_tuples = [(project, bucket, builder) for builder in builders]
+  # Prevent map from hanging, see http://bugs.python.org/issue12157.
+  if request_tuples:
+    # The async/get is so that ctrl-c can interrupt the scans.
+    # See http://stackoverflow.com/questions/1408356/
+    # keyboard-interrupts-with-pythons-multiprocessing-pool
+    with MultiPool(processes) as pool:
+      builds = filter(
+          bool, pool.map_async(get_builds_for_builder, request_tuples).get(
+              9999999))
+  else:
+    builds = []
 
-  request = {'requests': search_build_requests}
-  responses = call_buildbucket('Batch', request)['responses']
-
-  return [response['searchBuilds'].get('builds', [])
-          for response in responses]
+  return builds
 
 
-def find_new_builds(master_url, builderlist, root_json, build_db):
+def find_new_builds(master_url, builderlist, root_json, build_db, processes):
   """Given a dict of previously-seen builds, find new builds on each builder.
 
   Note that we use the 'cachedBuilds' here since it should be faster, and this
@@ -151,8 +161,8 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
   if not builders:
     return new_builds
 
-  all_builds = get_buildbucket_builds(
-      root_json['project'], root_json['bucket'], builders)
+  all_builds = get_builds_for_builders(
+      root_json['project'], root_json['bucket'], builders, processes)
 
   logging.info(
       'buildbucket output for %s (project: %s, bucket: %s):',
@@ -200,7 +210,7 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
   return new_builds
 
 
-def find_new_builds_per_master(masters, build_db):
+def find_new_builds_per_master(masters, build_db, processes):
   """Given a list of masters, find new builds and collect them under a dict."""
   with open(MASTER_MAP_JSON) as f:
     master_map = json.load(f)
@@ -210,7 +220,8 @@ def find_new_builds_per_master(masters, build_db):
   for master, builders in masters.iteritems():
     root_json = master_map[master]
     master_jsons[master] = root_json
-    builds[master] = find_new_builds(master, builders, root_json, build_db)
+    builds[master] = find_new_builds(
+        master, builders, root_json, build_db, processes)
   return builds, master_jsons
 
 
@@ -306,7 +317,8 @@ def get_options():
 
 
 def get_updated_builds(masters, build_db, parallelism):
-  new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
+  new_builds, master_jsons = find_new_builds_per_master(
+      masters, build_db, parallelism)
   build_jsons = get_build_jsons(new_builds, master_jsons, parallelism)
   propagate_build_json_to_db(build_db, build_jsons)
   return master_jsons, build_jsons
@@ -328,7 +340,7 @@ def main():
     build_db = build_scan_db.get_build_db(options.build_db)
 
   _, build_jsons = get_updated_builds(
-      masters, build_db, options.parallelism, options.milo_creds)
+      masters, build_db, int(options.parallelism))
 
   for _, master_url, builder, buildnum in build_jsons:
     print '%s:%s:%s' % (master_url, builder, buildnum)

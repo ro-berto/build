@@ -138,8 +138,6 @@
       "Jumbo Win x64",
       "Linux Builder Goma Canary",
       "Linux Viz",
-      "Linux remote_run Builder",
-      "Linux remote_run Tester",
       "Linux x64 Goma Canary (clobber)",
       "Linux x64 Goma Canary LocalOutputCache",
       "Mac Builder (dbg) Goma Canary",
@@ -193,17 +191,21 @@
       "linux-wpt-fyi-rel",
       "mac-code-coverage-generation",
       "mac-hermetic-upgrade-rel",
-      "mac-jumbo-rel",
       "mac-mojo-rel",
       "mac-osxbeta-rel",
       "win-annotator-rel",
       "win-celab-builder-rel",
       "win-celab-tester-rel",
-      "win-jumbo-rel",
       "win-pixel-builder-rel",
       "win-pixel-tester-rel"
     ],
-    "project": "chromium"
+    "project": "chromium",
+    "comments": [
+      "TODO(crbug.com/991661):  Restore builders when bug is fixed.",
+      "mac-jumbo-rel, win-jumbo-rel, Linux remote_run Builder, and ",
+      "Linux remote_run Tester are skipped because buildbucket returns 500",
+      "when searching builds for them."
+    ]
   },
   "https://build.chromium.org/p/chromium.gpu": {
     "bucket": "ci",
