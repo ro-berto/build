@@ -180,7 +180,6 @@
       "linux-annotator-rel",
       "linux-blink-animation-use-time-delta",
       "linux-blink-heap-concurrent-marking-tsan-rel",
-      "linux-blink-heap-unified-gc",
       "linux-blink-heap-verification",
       "linux-chromeos-code-coverage",
       "linux-chromeos-oobe-code-coverage",
