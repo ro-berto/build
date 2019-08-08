@@ -2,7 +2,10 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Writes an input file for the partial code coverage compile wrapper."""
+"""Writes an input file for the partial code coverage compile wrapper.
+
+https://chromium.googlesource.com/chromium/src/+/refs/heads/master/docs/clang_code_coverage_wrapper.md
+"""
 
 import argparse
 import os
@@ -40,7 +43,6 @@ def main():
     ]
     contents = ''.join(rebased_paths)
     out_file.write(contents)
-    print contents
 
 
 if __name__ == '__main__':
