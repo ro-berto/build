@@ -190,6 +190,7 @@ FAKE_BUILDERS = {
         'gpu-try-linux-nvidia-rel',
         'linux-dcheck-off-rel',
         'linux-jumbo-rel',
+        'linux-viz-rel',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.

@@ -574,6 +574,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'Mojo ChromiumOS',
       }),
+      'linux-viz-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'Linux Viz',
+      }),
       'linux_vr': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'VR Linux',
