@@ -190,7 +190,7 @@ SPEC = {
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
+        'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
       'compile_targets': [
