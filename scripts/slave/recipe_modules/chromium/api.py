@@ -1017,7 +1017,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # On Mac, when mac toolchain installation is not enabled in the recipe, the
     # toolchain is installed in runhooks, which requires the installer binary.
-    if self.c.HOST_PLATFORM == 'mac' and not self.c.mac_toolchain.enabled:
+    if self.c.HOST_PLATFORM == 'mac':
       runhooks_env['MAC_TOOLCHAIN_INSTALLER'] = (
           self.get_mac_toolchain_installer())
       if not self.m.runtime.is_luci:
