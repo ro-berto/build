@@ -502,6 +502,10 @@ def clang_tot_mac(c):
   # the iOS SDK to be able to build compiler-rt runtimes for both mac and ios.
   c.mac_toolchain.kind = 'ios'
 
+  # Despite the tot bots needing system xcode for building clang, they still
+  # also need hermetic xcode for building chrome.
+  c.env.FORCE_MAC_TOOLCHAIN = 1
+
 @config_ctx(includes=['clang_tot_linux', 'asan'])
 def clang_tot_linux_asan(_):
   pass

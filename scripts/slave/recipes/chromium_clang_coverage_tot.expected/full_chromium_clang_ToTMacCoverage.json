@@ -279,6 +279,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -324,6 +325,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -352,6 +354,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
