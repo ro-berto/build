@@ -491,7 +491,10 @@ def clang_tot_linux(_):
 
 # mac_toolchain causes the bots to download system Xcode. The clang tot
 # bots need system Xcode to build clang; hermetic Xcode isn't sufficient.
-@config_ctx(includes=['ninja', 'clang', 'clang_tot', 'mac_toolchain']) # No goma
+# All LUCI bots currently have to explicitly set no_mac_toolchain_cipd_creds
+# for the toolchain download to work.
+@config_ctx(includes=['ninja', 'clang', 'clang_tot',
+            'mac_toolchain', 'no_mac_toolchain_cipd_creds'])  # No goma.
 def clang_tot_mac(c):
   fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
 
