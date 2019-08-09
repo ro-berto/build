@@ -162,6 +162,86 @@
   },
   {
     "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/src/build/mac_files"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.delete deprecated Xcode cache",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9c40b",
+      "-output-dir",
+      "[CACHE]/xcode_ios_9c40b.app",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_9c40b.app"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "ensure_goma"
   },
   {
@@ -194,33 +274,6 @@
   },
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
@@ -228,10 +281,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -276,7 +326,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -305,7 +354,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",

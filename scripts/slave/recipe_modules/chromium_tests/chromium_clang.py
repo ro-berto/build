@@ -16,9 +16,7 @@ def config(name,
            official=False):
   cfg = {
     'chromium_config': chromium_config,
-    'chromium_apply_config': [
-      'mb',
-    ],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['clang_tot'],
     'chromium_config_kwargs': {
@@ -273,7 +271,7 @@ SPEC = {
     },
     'CrWinAsan(dll)': {
       'chromium_config': 'chromium_win_clang_asan_tot',
-      'chromium_apply_config': ['mb',],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['clang_tot'],
       'chromium_config_kwargs': {
@@ -357,9 +355,9 @@ SPEC = {
     },
     'ToTMac': {
       'chromium_config': 'clang_tot_mac',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['clang_tot'],
-      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -379,6 +377,7 @@ SPEC = {
     },
     'ToTMacOfficial': {
       'chromium_config': 'clang_tot_mac',
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['clang_tot', 'chrome_internal'],
       'swarming_server': 'https://chrome-swarming.appspot.com',
@@ -389,7 +388,6 @@ SPEC = {
         'gpu': None,
         'pool': 'chrome.tests',
       },
-      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

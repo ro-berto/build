@@ -22,8 +22,8 @@ BUILDERS = freeze({
   'chromium.clang': {
     'builders': {
       'ToTMacCoverage': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['clang_tot'],
+        'chromium_config': 'clang_tot_mac',
+        'chromium_apply_config': [],
         'gclient_apply_config': ['clang_tot'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -32,8 +32,8 @@ BUILDERS = freeze({
         },
       },
       'ToTLinuxCoverage': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['clang_tot'],
+        'chromium_config': 'clang_tot_linux',
+        'chromium_apply_config': [],
         'gclient_apply_config': ['clang_tot'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -62,7 +62,10 @@ def RunSteps(api):
 
 def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
   api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
+
+  api.chromium.ensure_toolchains()
   api.chromium.ensure_goma()
+
   api.chromium.runhooks()
   clang_revision_file = api.path['checkout'].join(
       'third_party', 'llvm-build', 'Release+Asserts', 'cr_build_revision')
