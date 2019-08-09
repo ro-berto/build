@@ -217,14 +217,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/mac_toolchain.py"
-    ],
-    "name": "update mac toolchain"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[START_DIR]/src/build/fuchsia/update_sdk.py"
     ],
     "name": "update fuchsia sdk"

@@ -67,7 +67,14 @@ def GenTests(api):
 
   yield from_config('clang_tot_linux')
 
-  yield from_config('clang_tot_mac')
+  yield (
+      api.test('clang_tot_mac') +
+      api.platform('mac', 64) +
+      api.properties(
+          chromium_config='clang_tot_mac_asan',
+          target_platform='mac') +
+      api.post_process(post_process.DropExpectation)
+  )
 
   yield from_config('clang_tot_linux_asan')
 

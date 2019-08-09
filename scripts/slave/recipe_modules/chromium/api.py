@@ -959,7 +959,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not self.c.mac_toolchain.enabled:
       return
     xcode_build_version = self.c.mac_toolchain.xcode_build_version.lower()
-    kind = self.c.TARGET_PLATFORM
+    kind = self.c.mac_toolchain.kind or self.c.TARGET_PLATFORM
     cipd_credentials = self.c.mac_toolchain.cipd_credentials
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named
     # cache. Make sure it exists, to avoid downloading Xcode on every build.

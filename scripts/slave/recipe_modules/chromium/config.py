@@ -85,6 +85,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       installer_cipd_package = Single(basestring),
       installer_version = Single(basestring),
       installer_cmd = Single(basestring),
+      kind = Single(basestring),
       # CIPD cannot distribute Xcode publicly, hence its package requires
       # credentials on buildbot slaves. LUCI bots should NOT set this var, to
       # let CIPD use credentials from the LUCI context.
@@ -488,9 +489,15 @@ def chromium_win_clang_asan_tot(_):
 def clang_tot_linux(_):
   pass
 
-@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
+# mac_toolchain causes the bots to download system Xcode. The clang tot
+# bots need system Xcode to build clang; hermetic Xcode isn't sufficient.
+@config_ctx(includes=['ninja', 'clang', 'clang_tot', 'mac_toolchain']) # No goma
 def clang_tot_mac(c):
   fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
+
+  # The 'ios' kind includes both mac and ios sdks. The clang tot bots need
+  # the iOS SDK to be able to build compiler-rt runtimes for both mac and ios.
+  c.mac_toolchain.kind = 'ios'
 
 @config_ctx(includes=['clang_tot_linux', 'asan'])
 def clang_tot_linux_asan(_):
