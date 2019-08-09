@@ -364,7 +364,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           'Generate Java coverage metadata',
           self.resource('generate_coverage_metadata_for_java.py'),
           args=args,
-          infra_step=True,
           **kwargs)
       gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
       upload_step = self.m.gsutil.upload(
@@ -388,7 +387,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
               jacoco_html_report_dir, '--cleanup'
           ],
-          infra_step=True,
           **kwargs)
       # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
       output_zip = coverage_dir.join('jacoco_html_report.zip')
