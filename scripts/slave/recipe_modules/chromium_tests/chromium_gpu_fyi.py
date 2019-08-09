@@ -1090,6 +1090,26 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    'GPU FYI Perf Android 64 Builder': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'android',
+      # This causes the builder to upload isolates to a location where Pinpoint
+      # can access them in addition to the usual isolate server. This is
+      # necessary because "Android FYI 64 Perf (Pixel 2)", which is a
+      # child of this builder, uploads perf results, and Pinpoint may trigger
+      # additional builds on this builder during a bisect.
+      'perf_isolate_lookup': True,
+    },
     'Android FYI Release (Nexus 5)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
@@ -1294,6 +1314,22 @@ SPEC = {
         'platform': 'linux',
       },
       'checkout_dir': 'android',
+    },
+    'Android FYI 64 Perf (Pixel 2)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'chromium_config_kwargs': {
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'arm64_builder_rel_mb',
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Perf Android 64 Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'android',
+      'serialize_tests': True,
     },
 
     'GPU Fake Linux Builder': {
