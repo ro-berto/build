@@ -140,10 +140,14 @@ def RunSteps(api):
             'rtti_no_sctp']
   for phase in phases:
     webrtc.configure_isolate(phase)
-    webrtc.run_mb(phase)
-    raw_result = webrtc.compile(phase)
+    raw_result = webrtc.run_mb(phase)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
+
+    compile_result = webrtc.compile(phase)
+    if compile_result.status != common_pb.SUCCESS:
+      return compile_result
+
     webrtc.isolate()
 
     if webrtc.bot.should_test:
@@ -169,4 +173,16 @@ def GenTests(api):
     ) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      generate_builder(
+        'luci.webrtc.ci',
+        'Linux (more configs)',
+        revision='a' * 40,
+        suffix='_mb_gen_failure',
+        fail_mb_gen=True
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

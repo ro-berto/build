@@ -48,8 +48,10 @@ def sdk_multi_steps(api):
       api.chromium.runhooks()
 
     # generate_build_files step
-    api.chromium.mb_gen(api.properties.get('mastername'),
-                        api.properties.get('buildername'))
+    _, raw_result = api.chromium.mb_gen(api.properties.get('mastername'),
+            api.properties.get('buildername'))
+    if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
     # compile step
     raw_result = api.chromium.compile(['chrome'], use_goma_module=True)
@@ -94,8 +96,10 @@ def sdk_multirel_steps(api):
       api.chromium.runhooks()
 
     # generate_build_files step
-    api.chromium.mb_gen(api.properties.get('mastername'),
+    _, raw_result = api.chromium.mb_gen(api.properties.get('mastername'),
                         api.properties.get('buildername'))
+    if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
     # compile step
     raw_result = api.chromium.compile(['chrome'], use_goma_module=True)
@@ -198,6 +202,34 @@ def GenTests(api):
             bot_id='TestSlave'
         ) +
         api.step_data('compile', retcode=1) +
+        api.post_process(post_process.StatusFailure) +
+        api.post_process(post_process.DropExpectation)
+    )
+    yield (
+        api.test('mb_gen_multi_failure') +
+        api.properties(
+            mastername='client.nacl.sdk',
+            buildername='mac-sdk-multi',
+            revision='a' * 40,
+            got_revision='a' * 40,
+            buildnumber='42',
+            bot_id='TestSlave'
+        ) +
+        api.step_data('generate_build_files', retcode=1) +
+        api.post_process(post_process.StatusFailure) +
+        api.post_process(post_process.DropExpectation)
+    )
+    yield (
+        api.test('mb_gen_multirel_failure') +
+        api.properties(
+            mastername='client.nacl.sdk',
+            buildername='mac-sdk-multirel',
+            revision='a' * 40,
+            got_revision='a' * 40,
+            buildnumber='42',
+            bot_id='TestSlave'
+        ) +
+        api.step_data('generate_build_files', retcode=1) +
         api.post_process(post_process.StatusFailure) +
         api.post_process(post_process.DropExpectation)
     )

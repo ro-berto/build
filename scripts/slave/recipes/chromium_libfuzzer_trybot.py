@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 from recipe_engine.types import freeze
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -75,7 +76,10 @@ def RunSteps(api):
 
       api.chromium.runhooks()
       api.chromium.ensure_goma()
-      api.chromium.mb_gen(mastername, buildername, use_goma=True)
+      _, raw_result = api.chromium.mb_gen(
+          mastername, buildername, use_goma=True)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
       # Calculate the GN labels of all fuzz targets.
       all_fuzz_labels = api.gn.refs(
@@ -96,8 +100,10 @@ def RunSteps(api):
 
       # Run MB one more time since filter calls above wipes out the specified
       # goma dir.
-      api.chromium.mb_gen(
+      _, raw_result = api.chromium.mb_gen(
           mastername, buildername, use_goma=True, gn_args_location=api.gn.LOGS)
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
 
       # Convert the GN labels to ninja targets and pass them into compile.
       affected_fuzz_targets = list(api.gn.ls(
@@ -136,6 +142,35 @@ def GenTests(api):
             'test_targets': []})) +
     api.step_data('list gn targets',
         stdout=api.raw_io.output_text('target2'))
+  )
+
+  yield (
+    api.test('mb_gen_failure') +
+    api.properties.tryserver(mastername='tryserver.chromium.linux',
+                             buildername='linux-libfuzzer-asan-rel') +
+    api.step_data('generate_build_files', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('mb_gen_failure_2') +
+    api.properties.tryserver(mastername='tryserver.chromium.linux',
+                             buildername='linux-libfuzzer-asan-rel') +
+    api.step_data('calculate all_fuzzers',
+        stdout=api.raw_io.output_text(
+            '//foo/bar:target1\n//foo/bar:target2\n//foo/bar:target3')) +
+    api.step_data('calculate no_fuzzers',
+        stdout=api.raw_io.output_text('//foo/bar:target1')) +
+    api.override_step_data(
+        'analyze',
+        api.json.output({
+            'status': 'Found dependency',
+            'compile_targets': ['//foo/bar:target2'],
+            'test_targets': []})) +
+    api.step_data('generate_build_files (2)', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )
 
   yield (

@@ -6,6 +6,8 @@ import functools
 
 from recipe_engine import post_process
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 DEPS = [
@@ -68,7 +70,9 @@ def RunSteps(api):
   webrtc.checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  webrtc.run_mb()
+  raw_result = webrtc.run_mb()
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   with api.context(cwd=api.path['checkout']):
     step_result = api.python('calculate targets',
@@ -98,6 +102,7 @@ def GenTests(api):
       yield (generate_builder(bucketname, buildername, revision='a' * 40) +
              api.step_data('calculate targets',
                  stdout=api.raw_io.output_text('target1 target2 target3')))
+
   yield (
       generate_builder(
         'luci.webrtc.ci',
@@ -105,6 +110,18 @@ def GenTests(api):
         revision='a' * 40,
         suffix='_compile_failure',
         fail_compile=True
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      generate_builder(
+        'luci.webrtc.ci',
+        'Linux64 Release (Libfuzzer)',
+        revision='a' * 40,
+        suffix='_mb_gen_failure',
+        fail_mb_gen=True
       ) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)

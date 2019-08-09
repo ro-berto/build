@@ -7,6 +7,7 @@ import json
 import re
 
 from recipe_engine import recipe_api
+from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
@@ -114,8 +115,10 @@ class FinditApi(recipe_api.RecipeApi):
     """
     # Run mb to generate or update ninja build files.
     if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.mb_gen(mb_mastername, mb_buildername,
+      _, raw_result = self.m.chromium.mb_gen(mb_mastername, mb_buildername,
                              name='generate_build_files')
+      if raw_result.status != common_pb.SUCCESS:
+        return None, raw_result
 
     # Run ninja to check existences of targets.
     args = ['--target-build-dir', self.m.chromium.output_dir]
@@ -125,7 +128,8 @@ class FinditApi(recipe_api.RecipeApi):
     args.extend(['--json-output', self.m.json.output()])
     step = self.m.python(
         'check_targets', self.resource('check_target_existence.py'), args=args)
-    return step.json.output['found']
+    return step.json.output['found'], result_pb2.RawResult(
+                                        status=common_pb.SUCCESS)
 
   def compile_and_test_at_revision(self, api, target_mastername,
                                    target_buildername, target_testername,

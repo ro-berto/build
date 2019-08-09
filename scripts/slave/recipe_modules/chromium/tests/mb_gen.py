@@ -26,7 +26,7 @@ def RunSteps(api):
     api.chromium.c.project_generator.isolate_map_paths = [
         api.path['checkout'].join(
             'testing', 'buildbot', 'gn_isolate_map.pyl')]
-  api.chromium.mb_gen(
+  _, raw_result = api.chromium.mb_gen(
       mastername='test_mastername',
       buildername='test_buildername',
       phase='test_phase',
@@ -34,6 +34,7 @@ def RunSteps(api):
       android_version_code=3,
       android_version_name='example')
 
+  return raw_result
 
 def GenTests(api):
   yield api.test('basic')
@@ -166,5 +167,15 @@ def GenTests(api):
           - **...1 error(s) (3 total)...**
         """
       ).strip()) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('no_failure_summary') +
+      api.step_data('generate_build_files', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.ResultReason,
+          'Step(\'generate_build_files\') failed (retcode: 1).'
+          '\n\nNo summary provided.') +
       api.post_process(post_process.DropExpectation)
   )

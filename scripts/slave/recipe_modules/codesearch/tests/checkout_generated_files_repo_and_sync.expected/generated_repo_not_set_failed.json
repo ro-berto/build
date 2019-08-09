@@ -180,7 +180,7 @@
       "    api.codesearch.checkout_generated_files_repo_and_sync()",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/recipe_api.py\", in _inner",
       "    return func(*a, **kw)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/api.py\", line 238, in checkout_generated_files_repo_and_sync",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/api.py\", line 243, in checkout_generated_files_repo_and_sync",
       "    'Trying to check out generated files repo,'",
       "AssertionError: Trying to check out generated files repo, but the repo is not indicated"
     ]

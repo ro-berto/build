@@ -13,6 +13,7 @@ import functools
 import random
 import re
 import urllib
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
@@ -721,9 +722,9 @@ class V8Api(recipe_api.RecipeApi):
         'out'. Note that it is not a path, but just the name of the directory.
 
     Returns:
-      if there is a compile failure:
+      if failure:
         RawResult object with compile step status and failure message
-      else:
+      else
         None
     """
     with self.ensure_osx_sdk_if_needed():
@@ -750,7 +751,7 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.chromium.c.project_generator.tool == 'mb':
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
-        gn_args = self.m.chromium.mb_gen(
+        gn_args, raw_result = self.m.chromium.mb_gen(
             self.m.properties['mastername'],
             self.m.buildbucket.builder_name,
             use_goma=use_goma,
@@ -764,7 +765,8 @@ class V8Api(recipe_api.RecipeApi):
         # Update the build environment dictionary, which is printed to the
         # user on test failures for easier build reproduction.
         self._update_build_environment(gn_args)
-
+        if raw_result.status != common_pb.SUCCESS:
+          return raw_result
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
         if 'gn_args' in self.build_environment:

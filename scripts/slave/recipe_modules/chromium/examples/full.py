@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.post_process import Filter
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -40,10 +41,14 @@ def RunSteps(api):
 
     mb_config_path = api.properties.get('mb_config_path')
 
-    api.chromium.mb_gen(mastername, buildername, use_goma=True,
-                        mb_config_path=mb_config_path,
-                        android_version_code=3,
-                        android_version_name="example")
+    _, raw_result = api.chromium.mb_gen(
+        mastername, buildername, use_goma=True,
+        mb_config_path=mb_config_path,
+        android_version_code=3,
+        android_version_name="example")
+
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
     return api.chromium.compile(
         targets=['All'], out_dir=out_dir,
@@ -232,4 +237,24 @@ def GenTests(api):
              buildnumber='77457',
              out_dir='/tmp',
          )
+  )
+
+  yield (
+      api.test('mb_gen_failure') +
+      api.properties(
+        mastername='chromium.chromiumos',
+        buildername='chromeos-amd64-generic-rel',
+        bot_id='build1-a1',
+        buildnumber='77457',
+        out_dir='/tmp',
+      ) +
+      api.override_step_data('generate_build_files',
+        api.json.output(
+            { 'output': 'mb gen step failed.' },
+            name='failure_summary',
+            retcode=1
+        )
+      ) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )

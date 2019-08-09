@@ -389,10 +389,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self._isolated_targets:
       self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-    self.m.chromium.mb_gen(
+    _, raw_result = self.m.chromium.mb_gen(
       self.mastername, self.buildername, phase=phase, use_goma=True,
       mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
       isolated_targets=self._isolated_targets)
+    return raw_result
 
   def run_mb_ios(self):
     # Match the out path that ios recipe module uses.
@@ -402,12 +403,13 @@ class WebRTCApi(recipe_api.RecipeApi):
     # this override.
 
     with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
-      self.m.chromium.mb_gen(
+      _, raw_result = self.m.chromium.mb_gen(
         self.mastername, self.buildername, use_goma=True,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         # mb isolate is not supported (and not needed) on iOS. The ios recipe
         # module does isolation itself, it basically just includes the .app file
         isolated_targets=None)
+    return raw_result
 
   def compile(self, phase=None):
     del phase

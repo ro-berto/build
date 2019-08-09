@@ -185,7 +185,10 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.chromium.runhooks()
 
   if bot_config.get('run_mb'):
-    api.chromium.mb_gen(mastername, buildername, use_goma=True)
+    _, raw_result = api.chromium.mb_gen(
+        mastername, buildername, use_goma=True)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
   targets = list(bot_config.get('targets', []))
   targets += _GetChromiumTestsCompileTargets(
@@ -248,6 +251,21 @@ def GenTests(api):
         revision='a' * 40,
         got_revision='a' * 40) +
     api.step_data('compile', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('mb_gen_failure') +
+    api.properties.generic(buildername='Android Builder Perf',
+        repository='svn://svn.chromium.org/chrome/trunk/src',
+        buildnumber=257,
+        mastername='chromium.perf',
+        issue='8675309',
+        patchset='1',
+        revision='a' * 40,
+        got_revision='a' * 40) +
+    api.step_data('generate_build_files', retcode=1) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )

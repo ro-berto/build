@@ -61,10 +61,13 @@ def RunSteps(api):
   webrtc.configure_isolate()
 
   if webrtc.bot.should_build:
-    webrtc.run_mb()
-    raw_result = webrtc.compile()
+    raw_result =  webrtc.run_mb()
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
+
+    compile_result = webrtc.compile()
+    if compile_result.status != common_pb.SUCCESS:
+      return compile_result
 
     webrtc.isolate()
 
@@ -106,6 +109,16 @@ def GenTests(api):
       suffix='_fail_compile',
       fail_compile=True
     ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
+  yield (
+    generate_builder(
+      bucketname,
+      buildername,
+      revision='a' * 40,
+      fail_mb_gen=True,
+      suffix='_mb_gen_failure') +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )

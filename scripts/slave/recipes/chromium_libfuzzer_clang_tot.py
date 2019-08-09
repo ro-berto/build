@@ -48,7 +48,10 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.mb_gen(mastername, buildername, use_goma=False)
+  _, raw_result = api.chromium.mb_gen(
+      mastername, buildername, use_goma=False)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
   raw_result = api.chromium.compile(targets=['empty_fuzzer'],
                        use_goma_module=True)
@@ -74,6 +77,17 @@ def GenTests(api):
           buildername='ClangToTLinuxASanLibfuzzer',
           path_config='kitchen') +
       api.step_data('compile', retcode=1) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('mb_gen_failure') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='ClangToTLinuxASanLibfuzzer',
+          path_config='kitchen') +
+      api.step_data('generate_build_files', retcode=1) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

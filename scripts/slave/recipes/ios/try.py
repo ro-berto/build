@@ -21,7 +21,9 @@ def RunSteps(api):
   api.ios.checkout()
   # Ensure try bots mirror configs from chromium.mac.
   api.ios.read_build_config(master_name='chromium.mac')
-  api.ios.build(analyze=True, suffix='with patch')
+  compile_failure = api.ios.build(analyze=True, suffix='with patch')
+  if compile_failure:
+    return compile_failure
   api.ios.test_swarming(retry_failed_shards=True)
 
 def GenTests(api):
@@ -509,4 +511,46 @@ def GenTests(api):
       ],
     })
     + api.step_data('bot_update', retcode=87)
+  )
+
+  yield (
+    api.test('mb_gen_failure')
+    + try_build()
+    + api.platform('mac', 64)
+    + api.properties(
+      issue='123456',
+      mastername='tryserver.fake',
+      patchset=1,
+      bot_id='fake-vm',
+      path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator-gn',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': 'fake xcode version',
+      'gn_args': [
+        'is_debug=true',
+        'ios_enable_code_signing=false',
+        'target_cpu="x86"',
+        'target_os="ios"',
+        'use_goma=true',
+      ],
+      'use_analyze': True,
+      'mb_type': 'gn',
+      'tests': [
+        {
+          'app': 'fake tests',
+          'device type': 'fake device',
+          'os': '8.1',
+        },
+      ],
+    })
+    + api.step_data('generate build files (mb) (with patch)', retcode=1)
+    + api.post_process(post_process.StatusFailure)
+    + api.post_process(post_process.DropExpectation)
   )

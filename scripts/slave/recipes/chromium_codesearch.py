@@ -5,6 +5,8 @@
 from recipe_engine import config
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
+from recipe_engine import post_process
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
@@ -204,9 +206,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   # by that step may be deleted (if they've been unchanged for the past week).
   api.codesearch.cleanup_old_generated()
 
-  api.codesearch.generate_compilation_database(
+  _, raw_result = api.codesearch.generate_compilation_database(
       targets, mastername='chromium.infra.codesearch',
       buildername=api.buildbucket.builder_name)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
+
   api.codesearch.generate_gn_target_list()
 
   # If the compile fails, abort execution and don't upload the pack. When we
@@ -357,4 +362,14 @@ def GenTests(api):
                       SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
     api.properties.generic(buildername='codesearch-gen-chromium-linux') +
     api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+    api.test(
+        'full_%s_mb_gen_fail' %
+        _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
+    api.properties.generic(buildername='codesearch-gen-chromium-linux') +
+    api.step_data('generate build files', retcode=1) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )

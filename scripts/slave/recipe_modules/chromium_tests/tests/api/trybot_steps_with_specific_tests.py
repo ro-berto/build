@@ -65,7 +65,7 @@ def RunSteps(api, mastername, buildername,
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if fail_calculate_tests:
       raw_result.summary_markdown = (
-          'Compile step failed from "_calculate_tests_to_run".')
+          'Compile failed from "_calculate_tests_to_run".')
       raw_result.status = common_pb.FAILURE
     return raw_result, task
 
@@ -74,7 +74,7 @@ def RunSteps(api, mastername, buildername,
   def compile_override(*args, **kwargs):
     return result_pb2.RawResult(
         status=common_pb.FAILURE,
-        summary_markdown='Compile step failed from "run_mb_and_compile".'
+        summary_markdown='Compile failed from "run_mb_and_compile".'
     )
 
   if fail_mb_and_compile:
@@ -104,7 +104,7 @@ def GenTests(api):
   )
 
   yield (
-      api.test('calculate_tests_compile_failure') +
+      api.test('calculate_test_compile_failure') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
@@ -112,12 +112,12 @@ def GenTests(api):
       ) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason,
-            'Compile step failed from "_calculate_tests_to_run".') +
+        'Compile failed from "_calculate_tests_to_run".') +
       api.post_process(post_process.DropExpectation)
   )
 
   yield (
-      api.test('run_mb_and_compile_failure') +
+      api.test('mb_and_compile_failure') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
@@ -131,7 +131,7 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(False), failure=True)) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason,
-            'Compile step failed from "run_mb_and_compile".') +
+        'Compile failed from "run_mb_and_compile".') +
       api.post_process(post_process.DropExpectation)
   )
 

@@ -27,8 +27,9 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
   def generate_builder(self, builders, bucketname, buildername, revision,
                        parent_got_revision=None, failing_test=None,
-                        fail_compile=False, suffix='', is_chromium=False,
-                        fail_android_archive=False, is_experimental=False):
+                       fail_compile=False, fail_mb_gen=False, suffix='',
+                       is_chromium=False, fail_android_archive=False,
+                       is_experimental=False):
     mastername = builders[bucketname]['settings'].get('mastername', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -65,6 +66,11 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
+    if fail_mb_gen:
+      test += self.step_data('generate_build_files', retcode=1)
+
+    if fail_mb_gen:
+      test += self.step_data('generate_build_files', retcode=1)
 
     if failing_test:
       # Unfortunately, we have no idea what type of test this is and what would
