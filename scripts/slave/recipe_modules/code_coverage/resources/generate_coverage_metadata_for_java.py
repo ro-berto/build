@@ -311,7 +311,7 @@ def main():
   try:
     cmd += ['--xml', temp]
 
-    cmd_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+    cmd_output = subprocess.check_output(cmd)
     logging.info('JaCoCo XML report generated: %r', cmd_output)
 
     # Command tends to exit with status 0 when it actually failed.
