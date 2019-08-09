@@ -225,6 +225,7 @@
   * [findit/chromium/export_bot_db](#recipes-findit_chromium_export_bot_db) &mdash; Export the bot db to cloud storage.
   * [findit/chromium/flake](#recipes-findit_chromium_flake)
   * [findit/chromium/preemptive_bot_update](#recipes-findit_chromium_preemptive_bot_update) &mdash; Checkout the chromium src tree at the latest revision.
+  * [findit/chromium/single_revision](#recipes-findit_chromium_single_revision)
   * [findit/chromium/test](#recipes-findit_chromium_test)
   * [findit/chromium/update_components](#recipes-findit_chromium_update_components) &mdash; Traverse the source tree and update a cloud file with component mappings.
   * [findit:examples/full](#recipes-findit_examples_full)
@@ -4971,6 +4972,11 @@ jobs they have as low latency as possible in their bot_update steps.
 &mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#70)(api):**
 
 &mdash; **def [TargetMasterAndBuilder](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#64)(api):**
+### *recipes* / [findit/chromium/single\_revision](/scripts/slave/recipes/findit/chromium/single_revision.py)
+
+[DEPS](/scripts/slave/recipes/findit/chromium/single_revision.py#17): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/single_revision.py#34)(api, properties):**
 ### *recipes* / [findit/chromium/test](/scripts/slave/recipes/findit/chromium/test.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/test.py#14): [adb](#recipe_modules-adb), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
