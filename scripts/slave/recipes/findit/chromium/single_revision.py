@@ -9,10 +9,12 @@ from recipe_engine.config import Dict
 from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
-                                        StepCommandContains, StatusSuccess)
+                                        StepCommandContains, StatusFailure,
+                                        StatusSuccess, ResultReason)
 from recipe_engine.recipe_api import Property
 
 from PB.recipes.build.findit.chromium.single_revision import InputProperties
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
     'chromium',
@@ -57,13 +59,15 @@ def RunSteps(api, properties):
 
   # 5. Build what's needed.
   if compile_targets:
-    api.chromium_tests.compile_specific_targets(
+    compile_result = api.chromium_tests.compile_specific_targets(
         bot_config,
         bot_update_step,
         bot_db,
         compile_targets,
         tests_including_triggered=test_objects,
         **compile_kwargs)
+    if compile_result.status != common_pb.SUCCESS:
+      return compile_result
 
   # 6. Run the tests.
   _run_tests(api, bot_config, test_objects, properties.tests,
@@ -297,6 +301,14 @@ def GenTests(api):
       + api.post_process(StepCommandContains, 'compile', ['base_unittests'])
       + api.post_process(_StepCommandNotContains, 'compile', 'missing_target')
       + api.post_process(StatusSuccess)
+      + api.post_process(DropExpectation)
+  )
+
+  yield (
+      api.test('compile_failure')
+      + _common(api)
+      + api.step_data('compile', retcode=1)
+      + api.post_process(StatusFailure)
       + api.post_process(DropExpectation)
   )
 
