@@ -114,12 +114,15 @@ def TestObservatory(api, checkout_dir):
 def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   src_cfg.target_os = set(['android'])
-  commits = json.loads(api.gitiles.download_file(
-      'https://dart.googlesource.com/linear_sdk_flutter_engine',
-      COMMITS_JSON,
-      api.buildbucket.gitiles_commit.id,
-      step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
-          json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
+  commits = {}
+  # tryjobs don't have a gitiles_commit
+  if api.buildbucket.gitiles_commit.id:
+    commits = json.loads(api.gitiles.download_file(
+        'https://dart.googlesource.com/linear_sdk_flutter_engine',
+        COMMITS_JSON,
+        api.buildbucket.gitiles_commit.id,
+        step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
+            json.dumps({ENGINE_REPO: 'bar', SDK_REPO: 'foo'}))))
   engine_rev = commits.get(ENGINE_REPO, 'HEAD')
   flutter_rev = commits.get(FLUTTER_REPO, 'HEAD')
   sdk_rev = commits.get(SDK_REPO, 'HEAD')
