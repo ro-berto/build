@@ -1,4 +1,16 @@
 {
+  "https://build.chromium.org/p/chrome": {
+    "bucket": "ci",
+    "builders": [
+      "chromeos-betty-google-rel",
+      "chromeos-kevin-google-rel",
+      "linux-chromeos-google-rel",
+      "linux-google-rel",
+      "mac-google-rel",
+      "win-google-rel",
+    ],
+    "project": "chrome"
+  },
   "https://build.chromium.org/p/chromium": {
     "bucket": "ci",
     "builders": [
