@@ -778,6 +778,7 @@
       "gpu-fyi-try-linux-intel-dqp",
       "gpu-fyi-try-linux-intel-exp",
       "gpu-fyi-try-linux-intel-rel",
+      "gpu-fyi-try-linux-intel-skv",
       "gpu-fyi-try-linux-nvidia-dbg",
       "gpu-fyi-try-linux-nvidia-dqp",
       "gpu-fyi-try-linux-nvidia-exp",
@@ -813,6 +814,7 @@
       "linux_mojo_chromeos",
       "linux_optional_gpu_tests_rel",
       "linux_upload_clang",
+      "linux-viz-rel",
       "linux_vr"
     ],
     "project": "chromium"
