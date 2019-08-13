@@ -17,7 +17,7 @@
       "--revision",
       "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -98,7 +98,7 @@
       "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
       "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

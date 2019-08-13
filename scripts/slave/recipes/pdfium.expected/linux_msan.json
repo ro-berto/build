@@ -33,7 +33,7 @@
       "pdfium@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -337,6 +337,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux_msan\", \"project\": \"pdfium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux_msan",
       "--buildbot-mastername",

@@ -17,7 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -164,7 +165,7 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@working_dir: Path([START_DIR])@@@",
+      "@@@STEP_LOG_LINE@details@working_dir: Path([CACHE], 'builder')@@@",
       "@@@STEP_LOG_LINE@details@affected_files: []@@@",
       "@@@STEP_LOG_END@details@@@"
     ]

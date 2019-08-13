@@ -105,7 +105,7 @@
       "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -166,7 +166,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -193,7 +193,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -222,7 +222,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -256,7 +256,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -280,7 +280,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -311,7 +311,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -350,7 +350,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -378,7 +378,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -419,6 +419,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"dart2js-strong-linux-x64-firefox-try\", \"project\": \"dart\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "dart2js-strong-linux-x64-firefox-try"
     ],
@@ -426,7 +427,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -459,7 +460,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1015,7 +1016,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1149,7 +1150,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1189,7 +1190,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1214,7 +1215,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1257,7 +1258,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1827,7 +1828,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1904,7 +1905,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-strong-linux-x64-firefox-try"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

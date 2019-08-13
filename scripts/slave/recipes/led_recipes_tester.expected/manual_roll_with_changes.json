@@ -37,7 +37,7 @@
       "infra/recipes-py@origin/master"
     ],
     "cwd": "[CACHE]/recipe_engine",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -162,7 +162,7 @@
       "build@HEAD"
     ],
     "cwd": "[CACHE]/build",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -596,7 +596,7 @@
       "client-py@HEAD"
     ],
     "cwd": "[CACHE]/client_py",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

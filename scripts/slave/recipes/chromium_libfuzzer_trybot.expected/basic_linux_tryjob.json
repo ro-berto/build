@@ -18,6 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
@@ -62,10 +63,11 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -215,7 +217,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "target_arch=x64"
@@ -244,7 +246,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -267,19 +269,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux-libfuzzer-asan-rel",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -293,21 +295,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux-libfuzzer-asan-rel",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -328,10 +330,10 @@
       "--as=label",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:libfuzzer_main"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -353,10 +355,10 @@
       "--as=label",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -375,7 +377,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -391,10 +393,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/trybot_analyze_config.json",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -419,14 +421,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux-libfuzzer-asan-rel",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"//foo/bar:target2\", \"//foo/bar:target3\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
@@ -434,7 +436,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"

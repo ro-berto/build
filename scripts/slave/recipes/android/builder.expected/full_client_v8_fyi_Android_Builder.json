@@ -51,7 +51,7 @@
       "--revision",
       "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -627,6 +627,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.v8.fyi\", \"builder\": \"Android Builder\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android Builder",
       "--buildbot-mastername",

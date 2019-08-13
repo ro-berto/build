@@ -17,7 +17,8 @@
       "--revision",
       "src@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -200,7 +201,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -242,12 +243,11 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -261,19 +261,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.fuzz",
       "-b",
       "Libfuzzer Upload Mac ASan",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -288,21 +288,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fuzz",
       "-b",
       "Libfuzzer Upload Mac ASan",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -324,10 +324,10 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:libfuzzer_main"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -349,10 +349,10 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -383,7 +383,7 @@
       "python",
       "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
-      "[START_DIR]/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -415,7 +415,7 @@
       "0777",
       "[CACHE]/goma/data/Libfuzzer_Upload_Mac_ASan"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -432,7 +432,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -471,7 +471,7 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -496,13 +496,13 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "target2",
       "v8_target3"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -516,7 +516,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "target2",
@@ -525,7 +525,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -545,7 +545,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -578,7 +578,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -600,7 +600,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -635,9 +635,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"target2\", \"v8_target3\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -654,6 +654,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Mac ASan\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Libfuzzer Upload Mac ASan",
       "--buildbot-mastername",
@@ -661,7 +662,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -691,7 +692,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -722,7 +723,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--platform",
       "mac",
       "--output",
@@ -751,7 +752,7 @@
       "[CLEANUP]/chrome_staging",
       "libfuzzer-mac-release-170242",
       "[\"file1\", \"file2\"]",
-      "[START_DIR]/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "name": "zipping"

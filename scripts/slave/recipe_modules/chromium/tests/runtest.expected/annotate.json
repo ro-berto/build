@@ -39,6 +39,7 @@
       "base_unittests",
       "A\nt\nE\nx\ni\nt\n*"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

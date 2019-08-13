@@ -39,7 +39,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -362,6 +362,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.angle\", \"builder\": \"windows\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "windows",
       "--buildbot-mastername",

@@ -41,7 +41,7 @@
       "--revision",
       "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -602,6 +602,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.testing.master\", \"builder\": \"mb_test\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mb_test",
       "--buildbot-mastername",
@@ -727,6 +728,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=sample-perf-id",
+      "--use-histograms",
       "[START_DIR]/src/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",
@@ -774,6 +776,7 @@
       "[START_DIR]/src/out/Release/apks/CronetSample.apk",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -1673,6 +1676,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.testing.master\", \"builder\": \"mb_test\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mb_test",
       "--buildbot-mastername",

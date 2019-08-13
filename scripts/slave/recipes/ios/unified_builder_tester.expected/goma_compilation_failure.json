@@ -18,6 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -61,7 +62,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -209,7 +211,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/ios/build/bots/chromium.fake/ios.json",
+      "[CACHE]/builder/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -313,9 +315,7 @@
       "-xcode-version",
       "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9c40b.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -343,7 +343,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -359,19 +359,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.fake",
       "-b",
       "ios",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -387,21 +387,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fake",
       "-b",
       "ios",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release-iphoneos"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -487,12 +487,12 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/Release-iphoneos",
       "-j",
       "50",
       "fake test"
     ],
-    "cwd": "[START_DIR]/src/out/Release-iphoneos",
+    "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -601,9 +601,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/Release-iphoneos",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Release-iphoneos\", \"-j\", \"50\", \"fake test\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\", \"fake test\"]",
       "--build-exit-status",
       "1",
       "--ninja-log-compiler",
@@ -618,6 +618,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios",
       "--buildbot-mastername",

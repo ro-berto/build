@@ -17,7 +17,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -188,6 +188,7 @@
       "--build-number=123",
       "base_unittests"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

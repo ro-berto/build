@@ -60,7 +60,7 @@
       "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

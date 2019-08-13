@@ -49,7 +49,7 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -474,6 +474,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.nacl.sdk\", \"builder\": \"linux-sdk-multi\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux-sdk-multi",
       "--buildbot-mastername",

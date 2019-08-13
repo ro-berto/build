@@ -35,6 +35,7 @@
       "--revision=some_sha",
       "base_unittests"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

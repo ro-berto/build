@@ -77,7 +77,7 @@
       "v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -164,7 +164,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

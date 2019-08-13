@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/ios_simulator"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -33,7 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator",
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -77,8 +62,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -226,7 +211,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator/src/ios/build/bots/chromium.mac/ios-simulator.json",
+      "[CACHE]/builder/src/ios/build/bots/chromium.mac/ios-simulator.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -291,9 +276,7 @@
       "-xcode-version",
       "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9c40b.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -321,7 +304,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -337,17 +320,17 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -362,19 +345,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -395,7 +378,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "~followup_annotations": [
@@ -408,7 +391,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator/src/testing/buildbot/trybot_analyze_config.json",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -434,14 +417,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
@@ -449,7 +432,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -495,10 +478,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "name": "bootstrap swarming.swarming.py --version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -518,9 +501,9 @@
       "/path/to/tmp/json",
       "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode_parallelization\": <(xcode_parallelization),         \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
-      "[BUILDER_CACHE]/ios_simulator/template.isolate"
+      "[CACHE]/builder/template.isolate"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [

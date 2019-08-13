@@ -30,6 +30,7 @@
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -116,6 +117,7 @@
       "--test-launcher-batch-limit=1",
       "--gtest_filter=Test.Two"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

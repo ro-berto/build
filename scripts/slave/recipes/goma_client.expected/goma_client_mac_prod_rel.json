@@ -18,7 +18,7 @@
       "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
       "--gerrit_no_reset"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

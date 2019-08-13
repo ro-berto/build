@@ -33,7 +33,7 @@
       "angle@HEAD"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -334,6 +334,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.angle\", \"builder\": \"linux\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",

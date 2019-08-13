@@ -27,7 +27,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/gate_keeper"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure cache"

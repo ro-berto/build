@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -34,8 +19,8 @@
       "--revision",
       "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -196,7 +181,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -219,7 +204,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
@@ -235,19 +220,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8.fyi",
       "-b",
       "V8-Blink Linux 64 - future",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -261,14 +246,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8.fyi",
       "-b",
       "V8-Blink Linux 64 - future",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
@@ -277,7 +262,7 @@
       "blink_web_tests_exparchive\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -306,7 +291,7 @@
       "0777",
       "[GOMA_CACHE]/data/V8_Blink_Linux_64___future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -323,7 +308,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -361,7 +346,7 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -386,12 +371,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "blink_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -404,7 +389,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "blink_tests",
@@ -412,7 +397,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -431,7 +416,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -464,7 +449,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -486,7 +471,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -521,9 +506,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release\", \"-j\", 20, \"blink_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"blink_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -540,6 +525,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"V8-Blink Linux 64 - future\", \"project\": \"v8\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "V8-Blink Linux 64 - future",
       "--buildbot-mastername",
@@ -547,7 +533,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -577,7 +563,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -592,7 +578,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client",
+      "[CACHE]/builder/src/tools/swarming_client",
       "archive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -610,11 +596,11 @@
       "--blacklist",
       ".git",
       "--isolate",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release/blink_web_tests_exparchive.isolate",
+      "[CACHE]/builder/src/out/Release/blink_web_tests_exparchive.isolate",
       "--isolated",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out/Release/blink_web_tests_exparchive.isolated"
+      "[CACHE]/builder/src/out/Release/blink_web_tests_exparchive.isolated"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "name": "isolate blink_web_tests_exparchive (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -633,7 +619,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -730,13 +716,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch)",
     "~followup_annotations": [
@@ -760,7 +746,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -857,13 +843,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch) (2)",
     "~followup_annotations": [
@@ -887,7 +873,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -984,13 +970,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch) (3)",
     "~followup_annotations": [
@@ -1014,7 +1000,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -1111,13 +1097,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch) (4)",
     "~followup_annotations": [
@@ -1141,7 +1127,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -1238,13 +1224,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch) (5)",
     "~followup_annotations": [
@@ -1268,7 +1254,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -1365,13 +1351,13 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json",
       "--num-retries=3",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectations",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectations",
       "--additional-expectations",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/v8/tools/blink_tests/TestExpectationsFuture",
+      "[CACHE]/builder/src/v8/tools/blink_tests/TestExpectationsFuture",
       "--additional-driver-flag",
       "--js-flags=--future"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch) (6)",
     "~followup_annotations": [
@@ -1406,7 +1392,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure swarming.ensure_installed",
     "~followup_annotations": [
@@ -1440,7 +1426,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/third_party/blink/tools/merge_web_test_results.py",
+      "[CACHE]/builder/src/third_party/blink/tools/merge_web_test_results.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
@@ -1537,7 +1523,7 @@
       "--results-dir",
       "[START_DIR]/layout-test-results",
       "--build-dir",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64___future/src/out",
+      "[CACHE]/builder/src/out",
       "--build-number",
       "0",
       "--builder-name",
@@ -1552,7 +1538,7 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
+    "cwd": "[CACHE]/builder",
     "name": "archive results for webkit_layout_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64_-_future/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",

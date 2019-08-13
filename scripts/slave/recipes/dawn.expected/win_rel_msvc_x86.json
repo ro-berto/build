@@ -39,7 +39,7 @@
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -363,6 +363,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"win\", \"project\": \"dawn\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win"
     ],

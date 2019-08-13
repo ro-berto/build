@@ -41,7 +41,7 @@
       "--revision",
       "src@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -409,6 +409,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=android_cronet_local_test_builder",
+      "--use-histograms",
       "[START_DIR]/src/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Debug",

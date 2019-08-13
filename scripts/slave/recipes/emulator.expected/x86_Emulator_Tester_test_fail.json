@@ -17,7 +17,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -568,6 +568,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.android.fyi\", \"builder\": \"x86 Emulator Tester\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "x86 Emulator Tester",
       "--buildbot-mastername",

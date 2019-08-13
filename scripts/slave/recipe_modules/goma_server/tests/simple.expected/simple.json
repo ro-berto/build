@@ -54,7 +54,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "refs/changes/40/4840/2",

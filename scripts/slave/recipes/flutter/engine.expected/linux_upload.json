@@ -17,7 +17,7 @@
       "--revision",
       "src/flutter@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -121,8 +121,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --unoptimized"
@@ -367,6 +371,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -446,8 +451,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --full-dart-sdk"
@@ -466,8 +475,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized"
@@ -485,8 +498,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release"
@@ -730,6 +747,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -1018,6 +1036,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -1306,6 +1325,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -2014,8 +2034,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=arm --no-lto"
@@ -2259,6 +2283,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -2450,8 +2475,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=arm64 --no-lto"
@@ -2695,6 +2724,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -2886,8 +2916,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=x86 --no-lto"
@@ -3131,6 +3165,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -3322,8 +3357,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --android-cpu=x64 --no-lto"
@@ -3567,6 +3606,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -3984,6 +4024,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -4193,8 +4234,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --enable-vulkan"
@@ -4438,6 +4483,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -4501,8 +4547,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=profile --android-cpu=arm"
@@ -4746,6 +4796,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -5001,8 +5052,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=release --android-cpu=arm"
@@ -5246,6 +5301,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -5571,8 +5627,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
@@ -5816,6 +5876,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -6071,8 +6132,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --android --runtime-mode=release --android-cpu=arm64"
@@ -6316,6 +6381,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Linux Engine"
     ],
@@ -6680,8 +6746,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6709,8 +6779,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6743,8 +6817,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6766,8 +6844,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Build Fuchsia Artifacts & Upload"
@@ -6788,8 +6870,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6815,8 +6901,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6840,8 +6930,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,

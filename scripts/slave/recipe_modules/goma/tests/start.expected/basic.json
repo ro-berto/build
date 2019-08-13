@@ -214,6 +214,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"test_buildername\", \"project\": \"project\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "test_buildername"
     ],

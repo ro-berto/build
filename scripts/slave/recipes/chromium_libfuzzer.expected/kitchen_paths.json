@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -32,8 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -216,7 +201,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -258,12 +243,11 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -277,19 +261,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.fuzz",
       "-b",
       "Libfuzzer Upload Mac ASan",
       "--config-file",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -304,21 +288,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fuzz",
       "-b",
       "Libfuzzer Upload Mac ASan",
       "--config-file",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -340,10 +324,10 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:libfuzzer_main"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -365,10 +349,10 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -399,7 +383,7 @@
       "python",
       "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -431,7 +415,7 @@
       "0777",
       "[GOMA_CACHE]/data/Libfuzzer_Upload_Mac_ASan"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -448,7 +432,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -487,7 +471,7 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -512,13 +496,13 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "target2",
       "v8_target3"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -532,7 +516,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "target2",
@@ -541,7 +525,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -561,7 +545,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -594,7 +578,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -616,7 +600,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -651,9 +635,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release\", \"-j\", 20, \"target2\", \"v8_target3\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -668,6 +652,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.fuzz\", \"builder\": \"Libfuzzer Upload Mac ASan\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Libfuzzer Upload Mac ASan",
       "--buildbot-mastername",
@@ -675,7 +660,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -705,7 +690,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -736,7 +721,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--platform",
       "mac",
       "--output",
@@ -765,7 +750,7 @@
       "[CLEANUP]/chrome_staging",
       "libfuzzer-mac-release-170242",
       "[\"file1\", \"file2\"]",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "name": "zipping"

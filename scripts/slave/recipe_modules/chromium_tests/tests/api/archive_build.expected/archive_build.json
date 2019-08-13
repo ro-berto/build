@@ -17,7 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -196,7 +197,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -212,7 +213,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -227,7 +228,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
@@ -243,14 +244,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-archive-rel\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
@@ -265,12 +266,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -286,7 +287,7 @@
       "python",
       "RECIPE_REPO[build]/scripts/slave/chromium/archive_build.py",
       "--src-dir",
-      "[START_DIR]/src",
+      "[CACHE]/builder/src",
       "--build-name",
       "Linux_x64",
       "--staging-dir",

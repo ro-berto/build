@@ -17,7 +17,7 @@
       "--revision",
       "src/flutter@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -235,8 +235,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --no-lto --full-dart-sdk --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -258,8 +262,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -503,6 +511,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -791,6 +800,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -1318,8 +1328,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --enable-vulkan --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -1563,6 +1577,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -1628,8 +1643,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -1651,8 +1670,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -1673,8 +1696,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -1696,8 +1723,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --android-cpu=arm64 --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -1942,6 +1973,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -2231,6 +2263,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -2520,6 +2553,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -2809,6 +2843,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -3131,8 +3166,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode debug --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3155,8 +3194,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3179,8 +3222,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode debug --simulator --no-lto --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3201,8 +3248,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode profile --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3224,8 +3275,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode profile --ios-cpu=arm --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3246,8 +3301,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode release --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3269,8 +3328,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --ios --runtime-mode release --ios-cpu=arm --mac-sdk-path [CACHE]/builder/mac_sdk"
@@ -3514,6 +3577,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -3818,6 +3882,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -4106,6 +4171,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -4394,6 +4460,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -4682,6 +4749,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -4970,6 +5038,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -5258,6 +5327,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Mac Engine"
     ],
@@ -5910,8 +5980,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5939,8 +6013,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5973,8 +6051,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5996,8 +6078,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Build Fuchsia Artifacts & Upload"
@@ -6018,8 +6104,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6045,8 +6135,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6070,8 +6164,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,

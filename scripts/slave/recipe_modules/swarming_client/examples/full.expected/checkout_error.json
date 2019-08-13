@@ -21,7 +21,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "sample_sha",

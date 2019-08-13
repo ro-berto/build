@@ -35,6 +35,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>;RECIPE_REPO[depot_tools]"
@@ -79,10 +80,11 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -232,7 +234,7 @@
       "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "target_arch=x64"
@@ -283,19 +285,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
       "tryserver.chromium.win",
       "-b",
       "win-celab-try-rel",
       "--config-file",
-      "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\infra\\config.pyl",
+      "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\infra\\config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -309,21 +311,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.chromium.win",
       "-b",
       "win-celab-try-rel",
       "--config-file",
-      "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\infra\\config.pyl",
+      "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\infra\\config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release_x64"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -350,7 +352,7 @@
       "0777",
       "[CACHE]\\goma\\data\\win_celab_try_rel"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -367,7 +369,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -405,7 +407,7 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -430,13 +432,13 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "20",
       "chrome/installer/mini_installer",
       "chromedriver"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -449,7 +451,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "20",
       "chrome/installer/mini_installer",
@@ -458,7 +460,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -477,7 +479,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -510,7 +512,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -532,7 +534,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -567,9 +569,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"chrome/installer/mini_installer\", \"chromedriver\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"chrome/installer/mini_installer\", \"chromedriver\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -586,6 +588,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"luci.chromium.try\", \"builder\": \"win-celab-try-rel\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "win-celab-try-rel",
       "--buildbot-mastername",
@@ -593,7 +596,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -623,7 +626,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -641,7 +644,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\.vpython",
+      "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\.vpython",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -752,7 +755,7 @@
       "--destination_dir",
       "[START_DIR]\\hosts"
     ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test\\infra",
+    "cwd": "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\infra",
     "name": "setup tests.generate host files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -776,9 +779,9 @@
       "--noprogress",
       "-v",
       "1",
-      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[START_DIR]\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[START_DIR]\\src\\out\\Release_x64\\chromedriver.exe"
+      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe"
     ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
+    "cwd": "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]\\packages_tests\\bin"
@@ -803,7 +806,7 @@
       "[START_DIR]\\logs\\summary.json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
+    "cwd": "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]\\packages_tests\\bin"
@@ -851,7 +854,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[START_DIR]\\src\\chrome\\browser\\policy\\e2e_test",
+    "cwd": "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test",
     "env_suffixes": {
       "PATH": [
         "[START_DIR]\\packages_tests\\bin"

@@ -17,7 +17,7 @@
       "--revision",
       "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -210,7 +210,7 @@
       "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
       "RUNTEST": "RECIPE_REPO[build]/scripts/slave/runtest.py"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -331,6 +331,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.nacl\", \"builder\": \"precise_64-newlib-arm_qemu-pnacl-dbg\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "precise_64-newlib-arm_qemu-pnacl-dbg",
       "--buildbot-mastername",

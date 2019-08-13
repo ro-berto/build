@@ -313,7 +313,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1024,6 +1024,7 @@
       "[START_DIR]/src/out/Release/apks/Example.apk",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

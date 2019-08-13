@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['ios', 'mac']",
@@ -32,8 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -85,7 +70,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/iOS_API_Framework_Builder/src",
+    "cwd": "[CACHE]/builder/src",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -235,9 +220,7 @@
       "-xcode-version",
       "10a254a",
       "-output-dir",
-      "[CACHE]/xcode_ios_10a254a.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_10a254a.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -260,7 +243,7 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools_webrtc/ios/build_ios_libs.py",
+      "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "-c"
     ],
     "name": "cleanup"
@@ -269,7 +252,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/tools_webrtc/ios/build_ios_libs.py",
+      "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "--use-goma",
       "--extra-gn-args=goma_dir=\"[GOMA_CACHE]/client\"",
       "--verbose",
@@ -388,6 +371,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.client.webrtc\", \"builder\": \"iOS API Framework Builder\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "iOS API Framework Builder",
       "--buildbot-mastername",
@@ -431,7 +415,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
       "--base-dir",
-      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs",
+      "[CACHE]/builder/src/out_ios_libs",
       "--output",
       "/path/to/tmp/json",
       "--",
@@ -454,7 +438,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out_ios_libs/WebRTC.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/webrtc_ios_api_framework.zip\", \"root\": \"[CACHE]/builder/src/out_ios_libs\"}"
   },
   {
     "cmd": [

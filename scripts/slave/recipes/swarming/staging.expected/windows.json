@@ -17,21 +17,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\Windows_Swarm"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True', 'swarming_revision': ''}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -48,8 +33,8 @@
       "--revision",
       "src/tools/swarming_client@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -197,7 +182,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -209,14 +194,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CACHE]\\builder\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\Windows_Swarm\\\\src\", \"runit.py\": \"RECIPE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"TestSlave\", \"buildername\": \"Windows Swarm\", \"buildnumber\": 123, \"mastername\": \"chromium.swarm\", \"slavename\": \"TestSlave\", \"target_platform\": \"win\"}"
     ],
@@ -231,12 +216,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\testing\\buildbot\\chromium.swarm.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.swarm.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.swarm.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\Windows_Swarm\\src\\testing\\buildbot\\chromium.swarm.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.swarm.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Windows Swarm\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -292,7 +277,7 @@
       "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
@@ -310,7 +295,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -319,19 +304,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows Swarm",
       "--config-file",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -345,14 +330,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows Swarm",
       "--config-file",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
       "--json-output",
@@ -361,7 +346,7 @@
       "browser_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -390,7 +375,7 @@
       "0777",
       "[GOMA_CACHE]\\data\\Windows_Swarm"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -407,7 +392,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -445,7 +430,7 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -470,12 +455,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "browser_tests"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -488,7 +473,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "browser_tests",
@@ -496,7 +481,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -515,7 +500,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -548,7 +533,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -570,7 +555,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
@@ -605,9 +590,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\Windows_Swarm\\\\src\\\\out\\\\Release\", \"-j\", 20, \"browser_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"browser_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -622,6 +607,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Windows Swarm\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Windows Swarm",
       "--buildbot-mastername",
@@ -629,7 +615,7 @@
       "--buildbot-slavename",
       "TestSlave"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -659,7 +645,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -674,7 +660,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -691,7 +677,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release\\browser_tests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Release\\browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -709,11 +695,11 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "name": "find isolated tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -731,7 +717,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -818,7 +804,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "test_pre_run.[trigger] browser_tests on Windows-10",
     "~followup_annotations": [
@@ -842,7 +828,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Windows_Swarm\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--env",
       "GTEST_SHARD_INDEX",
@@ -929,7 +915,7 @@
       "--",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "test_pre_run.[trigger] browser_tests on Windows-10 (2)",
     "~followup_annotations": [
@@ -964,7 +950,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "ensure swarming.ensure_installed",
     "~followup_annotations": [
@@ -1119,7 +1105,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [browser_tests on Windows-10]"
   },
   {
@@ -1128,7 +1114,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "name": "Tests statistics",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 0:01:03 <br/>@@@",
@@ -1151,7 +1137,7 @@
       "--target",
       "Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "process_dumps"
   },

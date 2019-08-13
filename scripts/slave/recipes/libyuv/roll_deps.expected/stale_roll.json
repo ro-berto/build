@@ -17,7 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -81,7 +82,7 @@
       "-p",
       "status=open"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -105,11 +106,11 @@
       "-i",
       "123"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "SKIP_GCE_AUTH_FOR_GIT": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -127,7 +128,7 @@
       "-f",
       "master"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git checkout"
   },
@@ -138,7 +139,7 @@
       "origin",
       "master"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git pull"
   },
@@ -148,7 +149,7 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git clean"
   },
@@ -156,13 +157,13 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools_libyuv/autoroller/roll_deps.py",
+      "[CACHE]/builder/src/tools_libyuv/autoroller/roll_deps.py",
       "--clean",
       "--verbose",
       "--cq-over=2000"
     ],
-    "cwd": "[START_DIR]/src",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

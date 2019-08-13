@@ -14,7 +14,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "master",
@@ -103,7 +102,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

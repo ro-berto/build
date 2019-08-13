@@ -17,7 +17,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -166,7 +166,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[START_DIR]/generated",
+      "[CACHE]/generated",
       "--url",
       "https://chromium.googlesource.com/chromium/src/out"
     ],
@@ -175,13 +175,12 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "master",
       "--progress"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "env": {
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
@@ -195,7 +194,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git checkout"
   },
@@ -205,7 +204,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "read revision",
     "~followup_annotations": [
@@ -220,7 +219,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git clean"
   },
@@ -231,7 +230,7 @@
       "user.email",
       "git-generated-files-sync@chromium.org"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git config"
   },
@@ -242,7 +241,7 @@
       "user.name",
       "Automatic Generated Files Sync"
     ],
-    "cwd": "[START_DIR]/generated",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git config (2)"
   },
@@ -261,7 +260,7 @@
       "--dest-branch",
       "master",
       "[START_DIR]/src/out",
-      "[START_DIR]/generated"
+      "[CACHE]/generated"
     ],
     "name": "sync generated files"
   },

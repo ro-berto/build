@@ -17,7 +17,8 @@
       "--revision",
       "src@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -175,8 +176,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/build/mac_files"
+      "[CACHE]/builder/src/build/mac_files"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure xcode.delete deprecated Xcode cache",
     "~followup_annotations": [
@@ -194,6 +196,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "name": "ensure xcode.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -219,6 +222,7 @@
       "-output-dir",
       "[CACHE]/xcode_ios_9c40b.app"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure xcode.install xcode",
     "~followup_annotations": [
@@ -232,6 +236,7 @@
       "-switch",
       "[CACHE]/xcode_ios_9c40b.app"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure xcode.select xcode",
     "~followup_annotations": [
@@ -255,6 +260,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -281,6 +287,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -304,11 +311,11 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": null,
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -326,9 +333,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/third_party/llvm-build/Release+Asserts/cr_build_revision",
+      "[CACHE]/builder/src/third_party/llvm-build/Release+Asserts/cr_build_revision",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "Read clang revision",
     "~followup_annotations": [
@@ -339,19 +347,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.clang",
       "-b",
       "ToTMacCoverage",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -366,21 +374,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.clang",
       "-b",
       "ToTMacCoverage",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -396,25 +404,26 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/code_coverage/coverage.py",
+      "[CACHE]/builder/src/tools/code_coverage/coverage.py",
       "base_unittests",
       "boringssl_crypto_tests",
       "boringssl_ssl_tests",
       "-c",
-      "[START_DIR]/src/out/Release/base_unittests",
+      "[CACHE]/builder/src/out/Release/base_unittests",
       "-c",
-      "[START_DIR]/src/out/Release/boringssl_crypto_tests",
+      "[CACHE]/builder/src/out/Release/boringssl_crypto_tests",
       "-c",
-      "[START_DIR]/src/out/Release/boringssl_ssl_tests",
+      "[CACHE]/builder/src/out/Release/boringssl_ssl_tests",
       "-b",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-o",
-      "[START_DIR]/src/out/clang_tot_coverage_report",
+      "[CACHE]/builder/src/out/clang_tot_coverage_report",
       "--coverage-tools-dir",
-      "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin",
+      "[CACHE]/builder/src/third_party/llvm-build/Release+Asserts/bin",
       "-v"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -429,9 +438,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/clang_tot_coverage_report/mac/logs/base_unittests_output.log",
+      "[CACHE]/builder/src/out/clang_tot_coverage_report/mac/logs/base_unittests_output.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "read log output of base_unittests",
     "~followup_annotations": [
@@ -448,9 +458,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/clang_tot_coverage_report/mac/logs/boringssl_crypto_tests_output.log",
+      "[CACHE]/builder/src/out/clang_tot_coverage_report/mac/logs/boringssl_crypto_tests_output.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "read log output of boringssl_crypto_tests",
     "~followup_annotations": [
@@ -467,9 +478,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/clang_tot_coverage_report/mac/logs/boringssl_ssl_tests_output.log",
+      "[CACHE]/builder/src/out/clang_tot_coverage_report/mac/logs/boringssl_ssl_tests_output.log",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "read log output of boringssl_ssl_tests",
     "~followup_annotations": [
@@ -483,9 +495,10 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/out/clang_tot_coverage_report/mac/summary.json",
+      "[CACHE]/builder/src/out/clang_tot_coverage_report/mac/summary.json",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "name": "read summary.json",
     "~followup_annotations": [
       "@@@STEP_LOG_END@json.output (invalid)@@@",

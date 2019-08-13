@@ -17,7 +17,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -165,7 +166,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/ios/build/bots/chromium.fake/ios.json",
+      "[CACHE]/builder/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -221,9 +222,7 @@
       "-xcode-version",
       "9abc",
       "-output-dir",
-      "[CACHE]/xcode_ios_9abc.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9abc.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",

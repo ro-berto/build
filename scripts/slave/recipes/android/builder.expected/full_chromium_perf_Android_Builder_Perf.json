@@ -49,7 +49,7 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -616,6 +616,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.perf\", \"builder\": \"Android Builder Perf\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android Builder Perf",
       "--buildbot-mastername",
@@ -699,6 +700,7 @@
       "[START_DIR]/src/out/Release/apks/ChromeModernPublic.minimal.apks",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -770,6 +772,7 @@
       "[START_DIR]/src/out/Release/apks/ChromePublic.apk",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -841,6 +844,7 @@
       "[START_DIR]/src/out/Release/apks/MonochromePublic.minimal.apks",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
@@ -912,6 +916,7 @@
       "[START_DIR]/src/out/Release/apks/SystemWebView.apk",
       "--chartjson"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"

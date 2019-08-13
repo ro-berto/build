@@ -78,7 +78,7 @@
       "cel@HEAD"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

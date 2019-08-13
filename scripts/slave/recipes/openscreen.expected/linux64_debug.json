@@ -61,7 +61,7 @@
       "--revision",
       "openscreen@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -359,6 +359,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"builder\", \"project\": \"openscreen\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "builder"
     ],

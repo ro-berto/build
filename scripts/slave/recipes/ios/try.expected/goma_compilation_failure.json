@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/ios_simulator_gn"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -33,7 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -77,8 +62,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -226,7 +211,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
+      "[CACHE]/builder/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -334,9 +319,7 @@
       "-xcode-version",
       "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9c40b.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -364,7 +347,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -380,19 +363,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -408,21 +391,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -444,7 +427,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "~followup_annotations": [
@@ -457,7 +440,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/testing/buildbot/trybot_analyze_config.json",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -483,14 +466,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
@@ -498,7 +481,7 @@
       "--json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -617,12 +600,12 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+      "[CACHE]/builder/src/out/Debug-iphonesimulator",
       "-j",
       "50",
       "fake tests"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+    "cwd": "[CACHE]/builder/src/out/Debug-iphonesimulator",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -731,9 +714,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+      "[CACHE]/builder/src/out/Debug-iphonesimulator",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
       "--build-exit-status",
       "1",
       "--ninja-log-compiler",
@@ -748,6 +731,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios-simulator-gn\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios-simulator-gn",
       "--buildbot-mastername",

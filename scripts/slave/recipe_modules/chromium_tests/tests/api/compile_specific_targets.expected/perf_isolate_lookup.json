@@ -8,7 +8,9 @@
       "-i",
       "{\"builder_name\": \"linux-builder-perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"https://chrome-isolated.appspot.com\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "pinpoint isolate upload",
     "~followup_annotations": [

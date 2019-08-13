@@ -56,7 +56,7 @@
       "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -117,7 +117,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -144,7 +144,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -173,7 +173,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -207,7 +207,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -231,7 +231,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -262,7 +262,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -301,7 +301,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -329,7 +329,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -370,6 +370,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-simarm_x64\", \"project\": \"dart\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "vm-kernel-win-release-simarm_x64",
       "--buildbot-slavename",
@@ -379,7 +380,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -412,7 +413,7 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -813,7 +814,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -834,7 +835,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -864,7 +865,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -896,7 +897,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -933,7 +934,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -962,7 +963,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -996,7 +997,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -1038,7 +1039,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -1069,7 +1070,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -1111,6 +1112,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-simarm_x64\", \"project\": \"dart\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "vm-kernel-win-release-simarm_x64",
       "--buildbot-slavename",
@@ -1122,7 +1124,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -1158,7 +1160,7 @@
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
@@ -1320,7 +1322,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1450,7 +1452,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1497,7 +1499,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1518,7 +1520,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1578,7 +1580,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1691,7 +1693,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -1740,7 +1742,7 @@
       "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-simarm_x64-be",
       "DART_USE_CRASHPAD": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

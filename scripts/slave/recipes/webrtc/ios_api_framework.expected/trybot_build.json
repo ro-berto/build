@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/ios_api_framework"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -33,7 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_api_framework",
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -77,8 +62,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_api_framework",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -130,7 +115,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_api_framework/src",
+    "cwd": "[CACHE]/builder/src",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -280,9 +265,7 @@
       "-xcode-version",
       "10a254a",
       "-output-dir",
-      "[CACHE]/xcode_ios_10a254a.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_10a254a.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -307,7 +290,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_api_framework/src/tools_webrtc/ios/build_ios_libs.py",
+      "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "--use-goma",
       "--extra-gn-args=goma_dir=\"[GOMA_CACHE]/client\"",
       "--verbose"
@@ -424,6 +407,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.webrtc\", \"builder\": \"ios_api_framework\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios_api_framework",
       "--buildbot-mastername",
@@ -467,7 +451,7 @@
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
       "--base-dir",
-      "[BUILDER_CACHE]/ios_api_framework/src/out_ios_libs",
+      "[CACHE]/builder/src/out_ios_libs",
       "--output",
       "/path/to/tmp/json",
       "--",

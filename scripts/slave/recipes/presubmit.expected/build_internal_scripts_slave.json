@@ -61,7 +61,7 @@
       "--revision",
       "build_internal/scripts/slave@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -161,7 +161,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]

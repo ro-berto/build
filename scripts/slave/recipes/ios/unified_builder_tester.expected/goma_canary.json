@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/ios"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -33,7 +18,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/ios",
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -77,8 +62,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -226,7 +211,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios/src/ios/build/bots/chromium.fake/ios.json",
+      "[CACHE]/builder/src/ios/build/bots/chromium.fake/ios.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -329,9 +314,7 @@
       "-xcode-version",
       "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9c40b.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -359,7 +342,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -375,19 +358,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.fake",
       "-b",
       "ios",
       "--config-file",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--quiet"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -403,21 +386,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fake",
       "-b",
       "ios",
       "--config-file",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release-iphoneos"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -503,11 +486,11 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/Release-iphoneos",
       "-j",
       "50"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+    "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -613,9 +596,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/Release-iphoneos",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/ios/src/out/Release-iphoneos\", \"-j\", \"50\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -630,6 +613,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"ios\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "ios",
       "--buildbot-mastername",
@@ -677,10 +661,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[CACHE]/builder/src",
     "name": "bootstrap swarming.swarming.py --version",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -700,9 +684,9 @@
       "/path/to/tmp/json",
       "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode_parallelization\": <(xcode_parallelization),         \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)']}}]]}",
-      "[BUILDER_CACHE]/ios/template.isolate"
+      "[CACHE]/builder/template.isolate"
     ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [

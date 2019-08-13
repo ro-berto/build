@@ -17,10 +17,11 @@
       "--revision",
       "src@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -216,7 +217,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "env": {
@@ -234,11 +235,11 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
@@ -251,14 +252,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Compile Perf\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
@@ -276,7 +277,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.perf.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.perf.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -284,7 +285,7 @@
     },
     "name": "read test spec (chromium.perf.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.perf.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Android One Perf\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
@@ -303,7 +304,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.perf.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.perf.fyi.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -311,7 +312,7 @@
     },
     "name": "read test spec (chromium.perf.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.perf.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.perf.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -321,10 +322,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[START_DIR]/src/out/Release/debug_info_dumps",
-      "[START_DIR]/src/out/Release/test_logs",
-      "[START_DIR]/src/out/build_product.zip",
-      "[START_DIR]/src"
+      "[CACHE]/builder/src/out/Release/debug_info_dumps",
+      "[CACHE]/builder/src/out/Release/test_logs",
+      "[CACHE]/builder/src/out/build_product.zip",
+      "[CACHE]/builder/src"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -349,8 +350,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/build/tree_truth.sh",
-      "[START_DIR]/src",
+      "[CACHE]/builder/src/build/tree_truth.sh",
+      "[CACHE]/builder/src",
       "src"
     ],
     "env": {
@@ -362,23 +363,23 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "tryserver.chromium.perf",
       "-b",
       "Android Compile Perf",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "lookup GN args",
     "~followup_annotations": [
@@ -389,29 +390,29 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.chromium.perf",
       "-b",
       "Android Compile Perf",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[START_DIR]/src/clank/build/gn_isolate_map.pyl",
+      "[CACHE]/builder/src/clank/build/gn_isolate_map.pyl",
       "--isolate-map-file",
-      "[START_DIR]/src/testing/buildbot/gn_isolate_map.pyl",
+      "[CACHE]/builder/src/testing/buildbot/gn_isolate_map.pyl",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "generate_build_files",
     "~followup_annotations": [
@@ -435,7 +436,7 @@
       "0777",
       "[CACHE]/goma/data/Android_Compile_Perf"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -452,7 +453,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -465,7 +466,7 @@
       "GOMA_HERMETIC": "fallback",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1024",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -492,7 +493,7 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -517,7 +518,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "android_tools",
@@ -531,13 +532,13 @@
       "system_webview_apk",
       "system_webview_shell_apk"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_BUILD_TYPE": "_official",
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "compile"
   },
@@ -547,7 +548,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "android_tools",
@@ -564,13 +565,13 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_BUILD_TYPE": "_official",
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "compile confirm no-op"
   },
@@ -586,7 +587,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -619,7 +620,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -641,7 +642,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -676,9 +677,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"cc_perftests\", \"chrome_public_apk\", \"chromium_builder_perf\", \"dump_syms\", \"gpu_perftests\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"android_tools\", \"cc_perftests\", \"chrome_public_apk\", \"chromium_builder_perf\", \"dump_syms\", \"gpu_perftests\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -693,6 +694,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.chromium.perf\", \"builder\": \"Android Compile Perf\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android Compile Perf",
       "--buildbot-mastername",
@@ -700,7 +702,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -730,7 +732,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },

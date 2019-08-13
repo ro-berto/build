@@ -33,7 +33,7 @@
       "src@c14d891d44f0afff64e56ed7c9702df1d807b1ee"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -607,6 +607,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Linux\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Deterministic Linux",
       "--buildbot-mastername",
@@ -980,6 +981,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Deterministic Linux\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Deterministic Linux",
       "--buildbot-mastername",

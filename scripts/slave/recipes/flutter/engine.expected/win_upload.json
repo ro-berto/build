@@ -19,7 +19,7 @@
       "--revision",
       "src\\flutter@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -127,8 +127,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --full-dart-sdk --no-lto"
@@ -148,8 +152,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized --no-lto"
@@ -393,6 +401,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],
@@ -681,6 +690,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],
@@ -1205,8 +1215,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android"
@@ -1226,8 +1240,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64"
@@ -1246,8 +1264,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android"
@@ -1267,8 +1289,12 @@
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_REPO[depot_tools]",
         "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --android-cpu=arm64"
@@ -1513,6 +1539,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],
@@ -1802,6 +1829,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],
@@ -2091,6 +2119,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],
@@ -2380,6 +2409,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Win Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win Engine"
     ],

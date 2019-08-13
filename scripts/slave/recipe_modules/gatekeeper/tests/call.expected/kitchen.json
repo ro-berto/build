@@ -43,7 +43,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/gate_keeper"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure cache"
@@ -81,7 +81,7 @@
       "--revision-properties",
       "got_revision",
       "--build-db",
-      "[BUILDER_CACHE]/gate_keeper/blink_build_db.json",
+      "[BUILDER_CACHE]/blink_build_db.json",
       "--password-file",
       ".blink_status_password",
       "--default-from-email",

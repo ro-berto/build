@@ -32,6 +32,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
       "PATH": "<PATH>;RECIPE_REPO[depot_tools]"
     },
@@ -75,7 +76,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -222,7 +224,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\build\\vs_toolchain.py",
+      "[CACHE]\\builder\\src\\build\\vs_toolchain.py",
       "update"
     ],
     "name": "update win toolchain"
@@ -231,7 +233,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\build\\fuchsia\\update_sdk.py"
+      "[CACHE]\\builder\\src\\build\\fuchsia\\update_sdk.py"
     ],
     "name": "update fuchsia sdk"
   },
@@ -239,9 +241,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\third_party\\binutils\\download.py"
+      "[CACHE]\\builder\\src\\third_party\\binutils\\download.py"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -252,10 +254,10 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\clang\\scripts\\package.py",
+      "[CACHE]\\builder\\src\\tools\\clang\\scripts\\package.py",
       "--upload"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
