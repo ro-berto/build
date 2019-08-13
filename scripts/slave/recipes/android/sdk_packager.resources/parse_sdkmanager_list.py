@@ -133,7 +133,7 @@ def main(raw_args):
     raw = raw_input_file.read()
 
   parsed = ParseSdkManagerList(raw)
-  with open(args.json_output) as json_output_file:
+  with open(args.json_output, 'w') as json_output_file:
     json.dump(parsed, json_output_file)
 
   return 0
