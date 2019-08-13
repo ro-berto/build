@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on master 'chromium.win' against builder 'Win Builder' on master 'chromium.win'@@@",
+      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on master 'chromium.win' against builder 'Win Builder' on master 'chromium.win'<br/>running tester 'Win10 Release (NVIDIA)' on master 'chromium.gpu' against builder 'GPU Win Builder' on master 'chromium.gpu'@@@",
       "@@@STEP_LOG_LINE@bots.json@[@@@",
       "@@@STEP_LOG_LINE@bots.json@  {@@@",
       "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
@@ -18,6 +18,13 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.win\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Win7 Tests (1)\", @@@",
       "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.win\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }, @@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"GPU Win Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.gpu\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Win10 Release (NVIDIA)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.gpu\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@"
@@ -341,6 +348,24 @@
     },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "read test spec (chromium.gpu.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
