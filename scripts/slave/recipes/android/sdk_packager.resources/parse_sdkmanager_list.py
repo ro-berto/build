@@ -36,6 +36,7 @@ import argparse
 import json
 import re
 import os
+import sys
 
 
 _KNOWN_PACKAGE_INFO_TYPES = [
