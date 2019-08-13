@@ -565,7 +565,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         if self.c.compile_py.goma_high_parallel:
           # This flag is set for experiment.
           command += ['-j', 3 * self.m.goma.recommended_goma_jobs]
-        else:
+        else:  # pragma: no cover
           command += ['-j', self.m.goma.recommended_goma_jobs]
 
     if targets is not None:

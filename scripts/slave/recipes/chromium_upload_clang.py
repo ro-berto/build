@@ -114,3 +114,18 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('linux-buildbot') +
+      api.platform.name('linux') +
+      api.runtime(is_experimental=False, is_luci=False) +
+      api.properties.tryserver(
+          buildername='linux_upload_clang',
+          mastername='tryserver.chromium.linux') +
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='linux_upload_clang',
+          git_repo='https://chromium.googlesource.com/chromium/src') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )

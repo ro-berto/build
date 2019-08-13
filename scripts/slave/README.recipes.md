@@ -4195,9 +4195,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/run_gn.py#12)(api):**
 ### *recipes* / [chromium:tests/runhooks](/scripts/slave/recipe_modules/chromium/tests/runhooks.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/runhooks.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/runhooks.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/runhooks.py#11)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/runhooks.py#13)(api):**
 ### *recipes* / [chromium:tests/runtest](/scripts/slave/recipe_modules/chromium/tests/runtest.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/runtest.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -4498,9 +4498,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#67)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#68)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#9): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -5139,9 +5139,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipes/gatekeeper-failure.py#12)(api):**
 ### *recipes* / [gatekeeper:tests/call](/scripts/slave/recipe_modules/gatekeeper/tests/call.py)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#5): [gatekeeper](#recipe_modules-gatekeeper), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#5): [gatekeeper](#recipe_modules-gatekeeper), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#13)(api):**
 ### *recipes* / [git\_clone\_bundler:examples/full](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#5): [git\_clone\_bundler](#recipe_modules-git_clone_bundler), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]

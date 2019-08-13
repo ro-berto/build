@@ -49,6 +49,7 @@ def GenTests(api):
   yield (
       api.test('buildbot_annotated_run') +
       try_build() +
+      api.runtime(is_luci=False, is_experimental=False) +
       api.platform('win', 64) +
       api.properties(
           buildername='example_buildername',
@@ -59,6 +60,7 @@ def GenTests(api):
   yield (
       api.test('buildbot_remote_run') +
       try_build() +
+      api.runtime(is_luci=False, is_experimental=False) +
       api.properties(
           buildername='example_buildername',
           path_config='kitchen') + # not a typo... T_T
@@ -69,6 +71,7 @@ def GenTests(api):
   yield (
       api.test('buildbot_remote_run_kitchen') +
       try_build() +
+      api.runtime(is_luci=False, is_experimental=False) +
       api.properties(
           buildername='example_buildername',
           path_config='generic') +

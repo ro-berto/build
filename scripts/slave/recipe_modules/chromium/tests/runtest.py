@@ -76,7 +76,8 @@ def GenTests(api):
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='android')
+          target_platform='android') +
+      api.runtime(is_luci=False, is_experimental=False)
   )
 
   # In order to get coverage of the LUCI-specific code in runtest.

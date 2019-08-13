@@ -97,7 +97,11 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('linux') +
-      api.path.exists(api.path['start_dir'].join('src')) +
+      api.path.exists(
+          # buildbot path
+          api.path['start_dir'].join('src'),
+          # LUCI path
+          api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
           'buildername': 'linux_chromium_variable',
@@ -107,7 +111,11 @@ def GenTests(api):
   )
   yield (
       api.test('win') +
-      api.path.exists(api.path['start_dir'].join('src')) +
+      api.path.exists(
+          # buildbot path
+          api.path['start_dir'].join('src'),
+          # LUCI path
+          api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
           'buildername': 'win_chromium_variable',
@@ -117,7 +125,11 @@ def GenTests(api):
   )
   yield (
       api.test('mac') +
-      api.path.exists(api.path['start_dir'].join('src')) +
+      api.path.exists(
+          # buildbot path
+          api.path['start_dir'].join('src'),
+          # LUCI path
+          api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.mac',
           'buildername': 'mac_chromium_variable',

@@ -10,6 +10,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/runtime',
 ]
 
 CUSTOM_BUILDERS = {
@@ -85,6 +86,7 @@ def GenTests(api):
 
   yield (
       api.test('cross_master_trigger') +
+      api.runtime(is_luci=False, is_experimental=False) +
       api.platform.name('linux') +
       api.properties.generic(
           buildername='Fake Builder',

@@ -103,7 +103,8 @@ def GenTests(api):
       api.properties(
           target_platform='linux',
           buildername='test_buildername',
-          chromium_apply_config=['official'])
+          chromium_apply_config=['official']) +
+      api.runtime(is_luci=False, is_experimental=False)
   )
 
   yield (

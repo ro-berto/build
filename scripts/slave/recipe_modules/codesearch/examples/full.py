@@ -130,6 +130,9 @@ def GenTests(api):
     yield (api.test('%s_test_basic' % sanitize(buildername)) +
            api.properties.generic(buildername=buildername) +
            api.runtime(is_luci=True, is_experimental=False))
+    yield (api.test('%s_test_buildbot' % sanitize(buildername)) +
+           api.properties.generic(buildername=buildername) +
+           api.runtime(is_luci=False, is_experimental=False))
     yield (api.test('%s_test_experimental' % sanitize(buildername)) +
            api.properties.generic(buildername=buildername) +
            api.runtime(is_luci=True, is_experimental=True))

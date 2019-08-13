@@ -4,7 +4,9 @@
 
 DEPS = [
   'chromium',
+  'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 
@@ -31,4 +33,11 @@ def GenTests(api):
   yield (
       api.test('clobber') +
       api.properties(clobber='1')
+  )
+
+  yield (
+      api.test('mac_buildbot') +
+      api.platform.name('mac') +
+      api.properties(target_platform='mac') +
+      api.runtime(is_luci=False, is_experimental=False)
   )

@@ -678,6 +678,10 @@ def GenTests(api):
             (api.properties(clobber='') if clb else api.properties())
           )
   yield (
+      test('fugu_buildbot', 'fugu-ndebug') +
+      api.runtime(is_luci=False, is_experimental=False))
+
+  yield (
       test('x86_32_test_failure', 'host-x86-ndebug') +
       api.step_data('test jdwp interpreter', retcode=1))
 
