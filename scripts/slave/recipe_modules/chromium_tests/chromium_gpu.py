@@ -42,6 +42,39 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'GPU Win x64 Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_high_parallel',
+        'goma_enable_global_file_stat_cache',
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'checkout_dir': 'win',
+    },
+    'GPU Win x64 Builder (dbg)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -72,6 +105,40 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win Builder (dbg)',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Win10 x64 Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_high_parallel',
+        'goma_enable_global_file_stat_cache',
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Win10 x64 Debug (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win x64 Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
