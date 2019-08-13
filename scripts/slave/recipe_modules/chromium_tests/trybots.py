@@ -932,11 +932,6 @@ TRYBOTS = freeze({
             'buildername': 'Win Builder',
             'tester': 'Win7 Tests (1)',
           },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win10 Release (NVIDIA)',
-          },
         ],
       },
       'win10_chromium_x64_dbg_ng': simple_bot({
