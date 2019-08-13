@@ -338,32 +338,6 @@ def GenTests(api):
     api.v8.test(
         'client.v8',
         'V8 Foobar',
-        'mb_gen_compile_failure',
-    ) +
-    api.step_data('build.generate_build_files', retcode=1) +
-    api.post_process(StatusFailure) +
-    api.post_process(DropExpectation)
-  )
-
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Foobar',
-        'mb_gen_bisect_failure',
-    ) +
-    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.override_step_data(
-        'Check', api.v8.output_json(
-            has_failures=True, wrong_results=False, flakes=False)) +
-    api.step_data('Bisect a2.generate_build_files', retcode=1) +
-    api.post_process(StatusFailure) +
-    api.post_process(DropExpectation)
-  )
-
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Foobar',
         'compile_failure',
     ) +
     api.step_data('build.compile', retcode=1) +

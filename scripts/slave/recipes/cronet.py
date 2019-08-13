@@ -115,11 +115,3 @@ def GenTests(api):
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )
-
-  yield(
-    api.test('mb_gen_failure') +
-    api.properties.generic(buildername='local_test') +
-    api.step_data('generate_build_files', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
-  )

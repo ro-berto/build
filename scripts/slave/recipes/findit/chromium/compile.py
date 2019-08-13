@@ -7,7 +7,6 @@ import json
 from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
@@ -103,10 +102,8 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
             additional_names=None)
     else:
       # Use ninja to filter out none-existing targets.
-      compile_targets, raw_result = api.findit.existing_targets(
+      compile_targets = api.findit.existing_targets(
           compile_targets, target_mastername, target_buildername)
-      if raw_result.status != common_pb.SUCCESS:
-        return CompileResult.FAILED
 
     if not compile_targets:
       # No compile target exists, or is impacted by the given revision.
@@ -444,18 +441,6 @@ def GenTests(api):
       props() +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=1)
-  )
-
-  yield (
-      api.test('mb_gen_failed') +
-      props(compile_targets=['gen/a/b/source.cc']) +
-      base_unittests_additional_compile_target() +
-      api.override_step_data('test r0.check_targets',
-                        api.json.output({
-                            'found': ['target_name'],
-                            'not_found': [],
-                        })) +
-      api.step_data('test r1.generate_build_files', retcode=1)
   )
 
   yield (

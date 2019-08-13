@@ -23,10 +23,7 @@ def RunSteps(api):
 
   api.ios.checkout(gclient_apply_config)
   api.ios.read_build_config()
-  compile_failure = api.ios.build()
-  if compile_failure:
-    return compile_failure
-
+  api.ios.build()
   if api.runtime.is_experimental:
     result = api.step('Skip upload', [])
     result.presentation.step_text = (
@@ -230,36 +227,5 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
-    + api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-    api.test('mb_gen_failure')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=false',
-        'target_cpu="arm"',
-        'use_goma=true',
-      ],
-      'bucket': 'fake-bucket-1',
-      'tests': [
-        {
-          'app': 'fake test',
-          'device type': 'iPhone X',
-          'os': '8.0',
-        },
-      ],
-    })
-    + api.step_data('generate build files (mb)', retcode=1)
-    + api.post_process(post_process.StatusFailure)
     + api.post_process(post_process.DropExpectation)
   )

@@ -2,10 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import (Filter,
-      DropExpectation, ResultReason, StatusFailure)
-from PB.recipe_engine import result as result_pb2
-import textwrap
+from recipe_engine.post_process import Filter
 
 DEPS = [
     'chromium',
@@ -15,7 +12,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/json',
 ]
 
 BASIC_CONFIG = {
@@ -84,26 +80,6 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-rel') +
       api.step_data('compile (with patch)', retcode=1)
-  )
-
-  yield (
-      api.test('failure_mb_gen') +
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          swarming_gtest=True) +
-      api.override_step_data('generate_build_files',
-        api.json.output({
-          'output': 'ERROR at line 5: missing )',
-          'retcode': 1
-        }, name="failure_summary"), retcode=1) +
-      api.post_process(StatusFailure) +
-      api.post_process(ResultReason, textwrap.dedent('''
-          ```
-          ERROR at line 5: missing )
-          ```
-      ''').strip()) +
-      api.post_process(DropExpectation)
   )
 
   yield (

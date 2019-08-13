@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine import post_process
-
 DEPS = [
   'chromium',
   'codesearch',
@@ -21,11 +19,9 @@ def RunSteps(api):
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
-  _, raw_result = api.codesearch.generate_compilation_database(
-    api.codesearch.c.COMPILE_TARGETS,
-    mastername='test_mastername',
-    buildername='test_buildername')
-  return raw_result
+  api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS,
+                                               mastername='test_mastername',
+                                               buildername='test_buildername')
 
 
 def GenTests(api):
@@ -34,11 +30,4 @@ def GenTests(api):
   yield (
       api.test('generate_compilation_database_failed') +
       api.step_data('generate compilation database', retcode=1)
-  )
-
-  yield (
-    api.test('mb_gen_failed') +
-    api.step_data('generate build files', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
   )

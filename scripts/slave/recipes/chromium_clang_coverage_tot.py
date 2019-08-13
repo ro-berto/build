@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 from recipe_engine.types import freeze
-from recipe_engine import post_process
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
     'chromium',
@@ -59,7 +57,7 @@ def RunSteps(api):
   mastername = api.m.properties['mastername']
   buildername, bot_config = api.m.chromium.configure_bot(BUILDERS, ['mb'])
   with api.m.context(cwd=api.m.chromium_checkout.get_checkout_dir(bot_config)):
-    return _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config)
+    _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config)
 
 
 def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
@@ -75,10 +73,7 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
       'Read clang revision', clang_revision_file, test_data='332838-1')
   api.step.active_result.presentation.step_text = revision
 
-  _, raw_result = api.chromium.mb_gen(
-      mastername, buildername, use_goma=True)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
+  api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   coverage_script = 'coverage.py'
   coverage_script_path = api.path['checkout'].join('tools', 'code_coverage',
@@ -138,13 +133,3 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
-
-  yield (
-      api.test('mb_gen_failure') +
-      api.properties.generic(
-          mastername='chromium.clang',
-          buildername='ToTLinuxCoverage') +
-      api.step_data('generate_build_files', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
-  )

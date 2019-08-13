@@ -1267,7 +1267,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                 {}, name='failure_summary'
               )
     )
-    try:
+    with self.mb_failure_handler(name):
       return self.run_mb_cmd(
           name, 'analyze', mastername, buildername,
           mb_path=mb_path,
@@ -1279,12 +1279,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           additional_args=mb_args,
           step_test_data=step_test_data,
           **kwargs)
-    except self.m.step.StepFailure as ex:
-      if ex.result.json.outputs:
-        failure_summary = ex.result.json.outputs['failure_summary']
-        if failure_summary and failure_summary['output']:
-          ex.reason = self._format_mb_failures(name, failure_summary['output'])
-      raise
 
   @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
@@ -1388,9 +1382,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
 
     Returns:
-      A Tuple of
-        - The content of the args.gn file.
-        - RawResult object with gen step status and failure message
+      The content of the args.gn file.
     """
     # Get the GN args before running any other steps so that if any subsequent
     # steps fail, developers will have the information about what the GN args
@@ -1405,12 +1397,12 @@ class ChromiumApi(recipe_api.RecipeApi):
         gn_args_location=gn_args_location,
         gn_args_max_text_lines=gn_args_max_text_lines)
 
-    mb_args = ['--json-output', self.m.json.output(name='failure_summary')]
+    mb_args = ['--json-output', self.m.json.output(name="failure_summary")]
 
     step_test_data = (
-      lambda: self.m.json.test_api.output(
-              {}, name='failure_summary'
-            )
+        lambda: self.m.json.test_api.output(
+                {}, name='failure_summary'
+              )
     )
 
     mb_args.extend(self._mb_isolate_map_file_args())
@@ -1424,7 +1416,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     mb_args.extend(self._mb_build_dir_args(build_dir))
 
     name = name or 'generate_build_files'
-    try:
+    with self.mb_failure_handler(name):
       result = self.run_mb_cmd(
           name, 'gen', mastername, buildername,
           mb_path=mb_path, mb_config_path=mb_config_path,
@@ -1439,9 +1431,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         result.presentation.logs['swarming-targets-file.txt'] = (
             sorted_isolated_targets)
 
-    except self.m.step.StepFailure as ex:
-      return gn_args, self._mb_gen_failure_handler(ex.result)
-    return gn_args, result_pb2.RawResult(status=common_pb.SUCCESS)
+    return gn_args
 
   @_with_chromium_layout
   def mb_isolate_everything(self, mastername, buildername, use_goma=True,
@@ -1463,22 +1453,16 @@ class ChromiumApi(recipe_api.RecipeApi):
                     additional_args=args,
                     **kwargs)
 
-  def _mb_gen_failure_handler(self, step_result):
-    """Formats and returns failure summary as a RawResult object."""
-    if step_result.json.outputs:
-      failure_summary = step_result.json.outputs['failure_summary']
-      if failure_summary and failure_summary['output']:
-          return result_pb2.RawResult(
-              status=common_pb.FAILURE,
-              summary_markdown=self._format_mb_failures(
-                  step_result.name, failure_summary['output'])
-          )
-    return result_pb2.RawResult(
-        status=common_pb.FAILURE,
-        summary_markdown=(
-          'Step(\'%s\') failed (retcode: %d).\n\nNo summary provided.' % (
-              step_result.name, step_result.retcode))
-    )
+  @contextlib.contextmanager
+  def mb_failure_handler(self, name):
+    try:
+      yield
+    except self.m.step.StepFailure as ex:
+      if ex.result.json.outputs:
+        failure_summary = ex.result.json.outputs['failure_summary']
+        if failure_summary and failure_summary['output']:
+          ex.reason = self._format_mb_failures(name, failure_summary['output'])
+      raise
 
   def _format_mb_failures(self, step_name, error_message, char_limit=700):
     """Adds markdown to mb failure and reformats if message is too long.

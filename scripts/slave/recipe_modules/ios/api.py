@@ -6,7 +6,6 @@ import copy
 import re
 
 from recipe_engine import recipe_api
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
 class iOSApi(recipe_api.RecipeApi):
@@ -340,12 +339,6 @@ class iOSApi(recipe_api.RecipeApi):
       mb_path: Custom path to MB. Uses the default if unspecified.
       suffix: Suffix to use at the end of step names.
       use_mb: Whether or not to use mb to generate build files.
-
-    Returns:
-      if there is a failure:
-        RawResult object with compile step status and failure message
-      else
-        None
     """
     assert self.__config is not None
 
@@ -374,7 +367,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     if use_mb:
       with self.m.context(env=env):
-        _, raw_result = self.m.chromium.mb_gen(
+        self.m.chromium.mb_gen(
             self.__config['mastername'],
             self.m.buildbucket.builder_name,
             build_dir='//out/%s' % build_sub_path,
@@ -382,8 +375,6 @@ class iOSApi(recipe_api.RecipeApi):
             name='generate build files (mb)' + suffix,
             use_goma=self.use_goma,
         )
-        if raw_result.status != common_pb.SUCCESS:
-          return raw_result
     else:
       # Ensure the directory containing args.gn exists before creating the file.
       self.m.file.ensure_directory(

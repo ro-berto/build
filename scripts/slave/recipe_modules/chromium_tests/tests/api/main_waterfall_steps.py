@@ -9,7 +9,7 @@ from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
 from PB.recipe_engine import result as result_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 DEPS = [
     'chromium_swarming',
@@ -237,7 +237,7 @@ def RunSteps(api, gn_args, fail_compile):
   # override compile_specific_targets to control compile step failure state
   def compile_override(*args, **kwargs):
     return result_pb2.RawResult(
-        status=common_pb.FAILURE,
+        status=common_pb2.FAILURE,
         summary_markdown='Compile step failed.'
     )
   if fail_compile:

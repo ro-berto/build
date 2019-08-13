@@ -75,12 +75,10 @@ class CronetApi(recipe_api.RecipeApi):
           use_goma=use_goma,
           gn_path=gn_path)
     elif self.m.chromium.c.project_generator.tool == 'mb':
-      _, raw_result = self.m.chromium.mb_gen(
+      self.m.chromium.mb_gen(
           mastername,
           buildername,
           use_goma=use_goma)
-      if raw_result.status != common_pb.SUCCESS:
-        return raw_result
     return self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
 
 

@@ -697,20 +697,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.buildbucket.builder_name
       use_goma = self._use_goma()
-      _, raw_result = self.m.chromium.mb_gen(
-          mb_mastername, mb_buildername,
-          phase=mb_phase,
-          mb_config_path=mb_config_path,
-          use_goma=use_goma,
-          isolated_targets=isolated_targets,
-          name='generate_build_files%s' % name_suffix,
-          recursive_lookup=mb_recursive_lookup,
-          android_version_code=android_version_code,
-          android_version_name=android_version_name,
-      )
-      if raw_result.status != common_pb.SUCCESS:
-        return raw_result
-
+      self.m.chromium.mb_gen(mb_mastername, mb_buildername,
+                             phase=mb_phase,
+                             mb_config_path=mb_config_path,
+                             use_goma=use_goma,
+                             isolated_targets=isolated_targets,
+                             name='generate_build_files%s' % name_suffix,
+                             recursive_lookup=mb_recursive_lookup,
+                             android_version_code=android_version_code,
+                             android_version_name=android_version_name)
       if use_goma:
         use_goma_module = True
 
@@ -1156,6 +1151,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, update_step, bot_db,
         compile_targets, test_config.all_tests(),
         mb_config_path=mb_config_path)
+
     if compile_result and compile_result.status != common_pb.SUCCESS:
       return compile_result
 

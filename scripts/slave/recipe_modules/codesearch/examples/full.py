@@ -3,10 +3,8 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
-from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
   'chromium',
@@ -92,12 +90,9 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  _, raw_result = api.codesearch.generate_compilation_database(
+  api.codesearch.generate_compilation_database(
       targets, mastername='chromium.infra.codesearch',
       buildername=buildername)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
-
   api.codesearch.generate_gn_target_list()
 
   api.codesearch.cleanup_old_generated()
@@ -144,12 +139,4 @@ def GenTests(api):
     api.step_data('delete old generated files', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-win') +
     api.runtime(is_luci=True, is_experimental=False)
-  )
-
-  yield (
-    api.test('mb_gen_failed') +
-    api.properties.generic(buildername='codesearch-gen-chromium-win') +
-    api.step_data('generate build files', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
   )

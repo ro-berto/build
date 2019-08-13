@@ -6,7 +6,6 @@ from recipe_engine import recipe_api
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 from recipe_engine.types import freeze
-from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
@@ -76,10 +75,7 @@ def RunSteps(api, mastername, buildername):
   api.chromium.runhooks()
 
   if api.chromium.c.project_generator.tool == 'mb':
-    _, raw_result = api.chromium.mb_gen(
-        mastername, buildername, use_goma=True)
-    if raw_result.status != common_pb.SUCCESS:
-      return raw_result
+    api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   targets = []
   for target in builder.get('unittests', []):
@@ -141,16 +137,6 @@ def GenTests(api):
         buildername='x86 Emulator Tester',
         mastername='chromium.android.fyi') +
       api.step_data('compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('mb_gen_failure') +
-      api.properties.generic(
-        buildername='x86 Emulator Tester',
-        mastername='chromium.android.fyi') +
-      api.step_data('generate_build_files', retcode=1) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

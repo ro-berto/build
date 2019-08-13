@@ -201,12 +201,8 @@ def RunSteps(api, buildername):
   compare_local = recipe_config.get('compare_local', False)
 
   # Do a first build and move the build artifact to the temp directory.
-  _, raw_result = api.chromium.mb_gen(
-      api.properties.get('mastername'), buildername,
-      phase='local' if compare_local else None)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
-
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
+                      phase='local' if compare_local else None)
   api.chromium.mb_isolate_everything(
     api.properties.get('mastername'), buildername,
     phase='local' if compare_local else None)
@@ -226,12 +222,9 @@ def RunSteps(api, buildername):
     target = '%s.2' % api.chromium.c.build_config_fs
     build_dir = '//out/%s' % target
 
-  _, raw_result = api.chromium.mb_gen(
-      api.properties.get('mastername'), buildername,
-      build_dir=build_dir,
-      phase='goma' if compare_local else None)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
+                      build_dir=build_dir,
+                      phase='goma' if compare_local else None)
 
   api.chromium.mb_isolate_everything(
     api.properties.get('mastername'), buildername, build_dir=build_dir,
@@ -327,32 +320,6 @@ def GenTests(api):
       DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'], 64) +
     api.properties(configuration='Release') +
     api.step_data('Second build', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-    api.test('mb_gen_failure_local') +
-    api.properties.scheduled() +
-    api.properties.generic(buildername='Deterministic Linux (dbg)',
-                           mastername=mastername) +
-    api.platform(
-      DETERMINISTIC_BUILDERS['Deterministic Linux (dbg)']['platform'], 64) +
-    api.properties(configuration='Release') +
-    api.step_data('generate_build_files', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-    api.test('mb_gen_failure_goma') +
-    api.properties.scheduled() +
-    api.properties.generic(buildername='Deterministic Linux (dbg)',
-                           mastername=mastername) +
-    api.platform(
-      DETERMINISTIC_BUILDERS['Deterministic Linux (dbg)']['platform'], 64) +
-    api.properties(configuration='Release') +
-    api.step_data('generate_build_files (2)', retcode=1) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )

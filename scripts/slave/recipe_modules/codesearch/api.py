@@ -5,8 +5,6 @@
 import re
 
 from recipe_engine import recipe_api
-from PB.recipe_engine import result as result_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 # Regular expression to identify a Git hash.
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
@@ -54,14 +52,11 @@ class CodesearchApi(recipe_api.RecipeApi):
 
   def generate_compilation_database(self, targets, mastername, buildername,
                                     output_file=None, mb_config_path=None):
-    _, raw_result = self.m.chromium.mb_gen(mastername,
-                                           buildername,
-                                           build_dir=self.c.debug_path,
-                                           name='generate build files',
-                                           mb_config_path=mb_config_path)
-
-    if raw_result.status != common_pb.SUCCESS:
-      return None, raw_result
+    self.m.chromium.mb_gen(mastername,
+                           buildername,
+                           build_dir=self.c.debug_path,
+                           name='generate build files',
+                           mb_config_path=mb_config_path)
 
     output_file = output_file or self.c.compile_commands_json_file
     args = ['-p', self.c.debug_path, '-o', output_file] + list(targets)
@@ -75,7 +70,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure as e:
       raise e
 
-    return step_result, result_pb2.RawResult(status=common_pb.SUCCESS)
+    return step_result
 
   def generate_gn_target_list(self, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file

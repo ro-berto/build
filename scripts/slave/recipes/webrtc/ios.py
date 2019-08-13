@@ -448,13 +448,10 @@ def RunSteps(api):
     webrtc.apply_ios_config()
 
   with webrtc.ensure_sdk():
-    raw_result = webrtc.run_mb_ios()
+    webrtc.run_mb_ios()
+    raw_result = webrtc.compile()
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
-
-    compile_result = webrtc.compile()
-    if compile_result.status != common_pb.SUCCESS:
-      return compile_result
 
   if webrtc.bot.should_test:
     with api.step.nest('isolate'):
@@ -498,18 +495,4 @@ def GenTests(api):
     api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}}) +
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      generate_builder(
-        'luci.webrtc.ci',
-        'iOS32 Debug',
-        revision='a' * 40,
-        suffix='_mb_gen_failure',
-        fail_mb_gen=True
-      ) +
-      # The version is just a placeholder, don't bother updating it:
-      api.properties(**{'$depot_tools/osx_sdk': {'sdk_version': '10l232m'}}) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
   )

@@ -63,9 +63,7 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  _, raw_result = api.chromium.mb_gen(mastername, buildername)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
+  api.chromium.mb_gen(mastername, buildername)
 
   all_fuzzers = gn_refs(
           api,
@@ -114,16 +112,6 @@ def GenTests(api):
           buildername='Afl Upload Linux ASan'
       ) +
       api.step_data('compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('mb_gen_failure') +
-      api.properties.generic(
-          mastername='chromium.fuzz',
-          buildername='Afl Upload Linux ASan') +
-      api.step_data('generate_build_files', retcode=1) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
