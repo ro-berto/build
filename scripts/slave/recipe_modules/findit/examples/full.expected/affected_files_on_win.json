@@ -3,11 +3,11 @@
     "cmd": [
       "git",
       "diff",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~1",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789~1",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--name-only"
     ],
-    "cwd": "[CLEANUP]\\fake_checkout_tmp_1\\third_party/pdfium",
+    "cwd": "[CLEANUP]/fake_checkout_tmp_1/third_party/pdfium",
     "infra_step": true,
     "name": "git diff to analyze commit",
     "~followup_annotations": [
