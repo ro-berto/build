@@ -2251,13 +2251,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "TRYJOB DO NOT RETRY",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@do_not_retry@true@@@"
-    ]
-  },
-  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed because of:\n\n- test2.Test2\n\n- test1.Test1"

@@ -1286,14 +1286,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
 
-      if unrecoverable_test_suites:
-        if not self._contains_invalid_results(unrecoverable_test_suites):
-          self.m.tryserver.set_do_not_retry_build()
+      if not unrecoverable_test_suites:
+        return None
 
-        return result_pb2.RawResult(
-            summary_markdown=self._format_unrecoverable_failures(
-                unrecoverable_test_suites, 'with patch'),
-            status=common_pb.FAILURE)
+      if (self.m.tryserver.is_tryserver and
+          not self._contains_invalid_results(unrecoverable_test_suites)):
+        self.m.tryserver.set_do_not_retry_build()
+
+      return result_pb2.RawResult(
+          summary_markdown=self._format_unrecoverable_failures(
+              unrecoverable_test_suites, 'with patch'),
+          status=common_pb.FAILURE)
 
   def _format_unrecoverable_failures(self, unrecoverable_test_suites,
                                      suffix, size_limit=5, failure_limit=4):
