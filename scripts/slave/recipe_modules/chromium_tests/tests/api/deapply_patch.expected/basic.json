@@ -309,21 +309,6 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec (chromium.gpu.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],

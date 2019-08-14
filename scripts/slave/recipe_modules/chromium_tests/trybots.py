@@ -924,31 +924,31 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
       }),
-      'win7-rel': {
-        'retry_failed_shards': True,
-        'bot_ids': [
-          {
-            'mastername': 'chromium.win',
-            'buildername': 'Win Builder',
-            'tester': 'Win7 Tests (1)',
-          },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win10 Release (NVIDIA)',
-          },
-        ],
-      },
+      'win7-rel': simple_bot({
+        'mastername': 'chromium.win',
+        'buildername': 'Win Builder',
+        'tester': 'Win7 Tests (1)',
+      }),
       'win10_chromium_x64_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win x64 Builder (dbg)',
         'tester': 'Win10 Tests x64 (dbg)',
       }),
-      'win10_chromium_x64_rel_ng': simple_bot({
-        'mastername': 'chromium.win',
-        'buildername': 'Win x64 Builder',
-        'tester': 'Win10 Tests x64',
-      }),
+      'win10_chromium_x64_rel_ng': {
+        'retry_failed_shards': True,
+        'bot_ids': [
+          {
+            'mastername': 'chromium.win',
+            'buildername': 'Win x64 Builder',
+            'tester': 'Win10 Tests x64',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Win x64 Builder',
+            'tester': 'Win10 x64 Release (NVIDIA)',
+          },
+        ],
+      },
       'win_chromium_compile_dbg_ng': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'Win Builder (dbg)',

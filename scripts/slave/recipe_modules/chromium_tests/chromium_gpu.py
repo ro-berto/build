@@ -45,8 +45,6 @@ SPEC = {
     'GPU Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'goma_high_parallel',
-        'goma_enable_global_file_stat_cache',
         'mb',
       ],
       'gclient_config': 'chromium',
@@ -112,8 +110,6 @@ SPEC = {
     'Win10 x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'goma_high_parallel',
-        'goma_enable_global_file_stat_cache',
         'mb',
       ],
       'gclient_config': 'chromium',
