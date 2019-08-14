@@ -24,6 +24,7 @@ per-file chromium_webrtc*.py=phoglund@chromium.org
 per-file chromium_webrtc*.py=oprypin@chromium.org
 per-file client_openscreen*.py=file://scripts/slave/recipes/openscreen.expected/OWNERS
 per-file client_v8_*=machenbach@chromium.org
+per-file client_v8_*=tmrts@chromium.org
 per-file tryserver_chromium_perf.py=simonhatch@chromium.org
 per-file tryserver_webrtc.py=phoglund@chromium.org
 
