@@ -437,7 +437,12 @@ class Test(object):
     return False # pragma: no cover
 
   def step_name(self, suffix):
-    """Helper to uniformly combine tests's name with a suffix."""
+    """Helper to uniformly combine tests's name with a suffix.
+
+    Note this step_name is not necessarily the same as the step_name in actual
+    builds, since there could be post-processing on the step_name by other
+    apis, like swarming (see api.chromium_swarming.get_step_name()).
+    """
     if not suffix:
       return self.name
     return '%s (%s)' % (self.name, suffix)
@@ -1509,12 +1514,12 @@ class SwarmingTest(Test):
     gpu_vendor = vendor_ids.get(gpu_vendor_id) or '(%s)' % gpu_vendor_id
 
     os = dimensions.get('os', '')
-    if os.startswith('Mac'):
+    if os.lower().startswith('mac'):
       if dimensions.get('hidpi', '') == '1':
         os_name = 'Mac Retina'
       else:
         os_name = 'Mac'
-    elif os.startswith('Windows'):
+    elif os.lower().startswith('windows'):
       os_name = 'Windows'
     else:
       os_name = 'Linux'
@@ -2118,8 +2123,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     results = self._isolated_script_results
 
     if results:
+      # Noted when uploading to test-results, the step_name is expected to be an
+      # exact match to the step name on the build.
       self.results_handler.upload_results(
-          api, results, self.step_name(suffix), suffix)
+          api, results, step_result.step['name'], suffix)
     return step_result
 
 
@@ -2340,7 +2347,8 @@ class BlinkTest(Test):
         self.results_handler.render_results(
             api, results, step_result.presentation)
 
-        self.results_handler.upload_results(api, results, step_name, suffix)
+        self.results_handler.upload_results(
+            api, results, step_result.step['name'], suffix)
 
 
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
@@ -2821,11 +2829,10 @@ class SwarmingIosTest(SwarmingTest):
     if api.bot_update.last_returned_properties and self._upload_test_results:
       test_results = api.path.join(shard_output_dir_full_path,
                                    'full_results.json')
-      test_type = task['step name']
       if api.path.exists(test_results):
         api.test_results.upload(
           test_results,
-          test_type,
+          step_result.step['name'],
           api.bot_update.last_returned_properties.get(
             'got_revision_cp', 'refs/x@{#0}'),
           builder_name_suffix='%s-%s' % (

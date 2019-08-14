@@ -7595,7 +7595,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "video_capture_tests",
+      "video_capture_tests on Windows",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -7604,7 +7604,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [video_capture_tests]"
+    "name": "Upload to test-results [video_capture_tests on Windows]"
   },
   {
     "cmd": [
@@ -7736,7 +7736,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webrtc_perf_tests",
+      "webrtc_perf_tests on Windows",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -7745,7 +7745,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [webrtc_perf_tests]"
+    "name": "Upload to test-results [webrtc_perf_tests on Windows]"
   },
   {
     "name": "$result"

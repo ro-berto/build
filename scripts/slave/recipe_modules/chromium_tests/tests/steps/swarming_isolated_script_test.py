@@ -730,6 +730,54 @@ def GenTests(api):
   )
 
   yield (
+      api.test('dimensions_mac_intel_stable') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+            api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp='refs/heads/master@{#123456}',
+          dimensions={'gpu': '8086', 'os': 'mac-intel-stable'}) +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Mac (with patch) '
+          'on mac-intel-stable',
+          api.chromium_swarming.canned_summary_output(
+            api.test_utils.canned_isolated_script_output(
+              passing=False, swarming=True,
+              isolated_script_passing=False,
+              shards=1, use_json_test_format=True,
+              customized_test_results={
+                'interrupted': False,
+                'path_delimiter': '.',
+                'version': 3,
+                'seconds_since_epoch': 14000000,
+                'num_failures_by_type': {
+                  'FAIL': 2,
+                  'PASS': 0
+                },
+                'tests': {
+                  'test1': {
+                    'Test1': {
+                      'expected': '',
+                      'actual': 'FAIL'
+                    },
+                  }
+                },
+              }
+            ))) +
+      api.post_process(
+          post_process.StepSuccess,
+          'Upload to test-results [base_unittests on Intel GPU on Mac '
+          '(with patch) on mac-intel-stable]') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('dimensions_android') +
       api.properties.generic(
           mastername='chromium.android',

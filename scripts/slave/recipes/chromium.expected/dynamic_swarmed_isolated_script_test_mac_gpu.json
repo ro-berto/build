@@ -1031,7 +1031,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "telemetry_gpu_unittests on Intel GPU on Mac",
+      "telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1044,7 +1044,7 @@
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac]"
+    "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10]"
   },
   {
     "name": "$result"

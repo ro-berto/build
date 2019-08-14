@@ -687,7 +687,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "telemetry_gpu_unittests",
+      "telemetry_gpu_unittests on Windows",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -699,7 +699,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Upload to test-results [telemetry_gpu_unittests]"
+    "name": "Upload to test-results [telemetry_gpu_unittests on Windows]"
   },
   {
     "cmd": [

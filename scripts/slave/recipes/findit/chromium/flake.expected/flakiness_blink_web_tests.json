@@ -1375,7 +1375,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "blink_web_tests (r0)",
+      "test r0.blink_web_tests (r0)",
       "--chrome-revision",
       "170242",
       "--test-results-server",
@@ -1385,7 +1385,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r0.Upload to test-results [blink_web_tests (r0)]",
+    "name": "test r0.Upload to test-results [test r0.blink_web_tests (r0)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

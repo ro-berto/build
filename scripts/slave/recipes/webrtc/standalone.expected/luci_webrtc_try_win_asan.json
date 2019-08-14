@@ -4822,7 +4822,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "audio_decoder_unittests",
+      "audio_decoder_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -4831,7 +4831,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [audio_decoder_unittests]"
+    "name": "Upload to test-results [audio_decoder_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -4963,7 +4963,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_audio_unittests",
+      "common_audio_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -4972,7 +4972,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [common_audio_unittests]"
+    "name": "Upload to test-results [common_audio_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -5104,7 +5104,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_video_unittests",
+      "common_video_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5113,7 +5113,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [common_video_unittests]"
+    "name": "Upload to test-results [common_video_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -5245,7 +5245,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "low_bandwidth_audio_test",
+      "low_bandwidth_audio_test on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5254,7 +5254,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [low_bandwidth_audio_test]"
+    "name": "Upload to test-results [low_bandwidth_audio_test on Windows-10]"
   },
   {
     "cmd": [
@@ -5394,7 +5394,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "modules_tests",
+      "modules_tests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5403,7 +5403,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [modules_tests]"
+    "name": "Upload to test-results [modules_tests on Windows-10]"
   },
   {
     "cmd": [
@@ -5575,7 +5575,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "modules_unittests",
+      "modules_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5584,7 +5584,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [modules_unittests]"
+    "name": "Upload to test-results [modules_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -5740,7 +5740,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "peerconnection_unittests",
+      "peerconnection_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5749,7 +5749,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [peerconnection_unittests]"
+    "name": "Upload to test-results [peerconnection_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -5881,7 +5881,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "rtc_media_unittests",
+      "rtc_media_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -5890,7 +5890,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [rtc_media_unittests]"
+    "name": "Upload to test-results [rtc_media_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6022,7 +6022,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "rtc_pc_unittests",
+      "rtc_pc_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6031,7 +6031,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [rtc_pc_unittests]"
+    "name": "Upload to test-results [rtc_pc_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6163,7 +6163,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "rtc_stats_unittests",
+      "rtc_stats_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6172,7 +6172,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [rtc_stats_unittests]"
+    "name": "Upload to test-results [rtc_stats_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6344,7 +6344,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "rtc_unittests",
+      "rtc_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6353,7 +6353,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [rtc_unittests]"
+    "name": "Upload to test-results [rtc_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6485,7 +6485,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "slow_tests",
+      "slow_tests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6494,7 +6494,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [slow_tests]"
+    "name": "Upload to test-results [slow_tests on Windows-10]"
   },
   {
     "cmd": [
@@ -6626,7 +6626,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "system_wrappers_unittests",
+      "system_wrappers_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6635,7 +6635,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [system_wrappers_unittests]"
+    "name": "Upload to test-results [system_wrappers_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6767,7 +6767,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "test_support_unittests",
+      "test_support_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6776,7 +6776,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [test_support_unittests]"
+    "name": "Upload to test-results [test_support_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -6908,7 +6908,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "tools_unittests",
+      "tools_unittests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -6917,7 +6917,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [tools_unittests]"
+    "name": "Upload to test-results [tools_unittests on Windows-10]"
   },
   {
     "cmd": [
@@ -7073,7 +7073,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "video_engine_tests",
+      "video_engine_tests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -7082,7 +7082,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [video_engine_tests]"
+    "name": "Upload to test-results [video_engine_tests on Windows-10]"
   },
   {
     "cmd": [
@@ -7214,7 +7214,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webrtc_nonparallel_tests",
+      "webrtc_nonparallel_tests on Windows-10",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -7223,7 +7223,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
-    "name": "Upload to test-results [webrtc_nonparallel_tests]"
+    "name": "Upload to test-results [webrtc_nonparallel_tests on Windows-10]"
   },
   {
     "name": "$result"

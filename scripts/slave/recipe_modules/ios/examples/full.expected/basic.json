@@ -3499,7 +3499,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "fake test 0 (fake device 0 iOS 11.0) shard 2",
+      "fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
       "--build-id",
@@ -3508,7 +3508,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "Upload to test-results [fake test 0 (fake device 0 iOS 11.0) shard 2]"
+    "name": "Upload to test-results [fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)]"
   },
   {
     "cmd": [
@@ -3788,7 +3788,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "fake test 0 (fake device 0 iOS 11.0) shard 1",
+      "fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
       "--build-id",
@@ -3797,7 +3797,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "Upload to test-results [fake test 0 (fake device 0 iOS 11.0) shard 1]"
+    "name": "Upload to test-results [fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)]"
   },
   {
     "cmd": [
@@ -3901,7 +3901,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "fake test 1 (fake device 1 iOS 8.1)",
+      "fake test 1 (fake device 1 iOS 8.1) (with patch)",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
       "--build-id",
@@ -3910,7 +3910,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder/src",
-    "name": "Upload to test-results [fake test 1 (fake device 1 iOS 8.1)]"
+    "name": "Upload to test-results [fake test 1 (fake device 1 iOS 8.1) (with patch)]"
   },
   {
     "cmd": [

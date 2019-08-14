@@ -610,7 +610,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "isac_fix_test",
+      "isac_fix_test on Ubuntu-14.04",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -619,7 +619,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "Upload to test-results [isac_fix_test]"
+    "name": "Upload to test-results [isac_fix_test on Ubuntu-14.04]"
   },
   {
     "cmd": [
@@ -788,7 +788,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "low_bandwidth_audio_perf_test",
+      "low_bandwidth_audio_perf_test on Ubuntu-14.04",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -797,7 +797,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "Upload to test-results [low_bandwidth_audio_perf_test]"
+    "name": "Upload to test-results [low_bandwidth_audio_perf_test on Ubuntu-14.04]"
   },
   {
     "cmd": [
@@ -966,7 +966,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webrtc_perf_tests",
+      "webrtc_perf_tests on Ubuntu-14.04",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -975,7 +975,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
-    "name": "Upload to test-results [webrtc_perf_tests]"
+    "name": "Upload to test-results [webrtc_perf_tests on Ubuntu-14.04]"
   },
   {
     "name": "$result"
