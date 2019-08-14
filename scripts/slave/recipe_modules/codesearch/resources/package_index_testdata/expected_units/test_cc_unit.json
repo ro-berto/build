@@ -5,6 +5,8 @@
       "-fsyntax-only",
       "-DFOO=\"foo bar\"",
       "-std=c++11",
+      "-Wno-c++11-narrowing",
+      "-Wall",
       "-c",
       "test.cc",
       "-o",

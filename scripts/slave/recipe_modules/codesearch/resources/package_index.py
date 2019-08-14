@@ -432,16 +432,11 @@ class IndexPack(object):
     # above.
     unit_dictionary = {}
 
-    # Remove warning flags from the command. These are disabled later by
-    # appending -w anyway, so there's no need to bloat the index pack with
-    # them.
-    compile_command = _RemoveWarningSwitches(command)
-
     if self.verbose:
       print('Generating Translation Unit data for %s' % filename)
-      print('Compile command: %s' % compile_command)
+      print('Compile command: %s' % command)
 
-    command_list = _ShellSplit(compile_command)
+    command_list = _ShellSplit(command)
     # On some platforms, the |command_list| starts with the goma executable,
     # followed by the path to the clang executable (either clang++ or
     # clang-cl.exe). We want the clang executable to be the first parameter.
@@ -610,14 +605,6 @@ def _MergeFeatureArgs(gn_targets_dict, target_name, target):
                   for arg in parser_args[i:i+2]
                   if parser_args[i] == '--enable_feature']
   return target['args'] + feature_args
-
-
-WARNING_SWITCH_RE = re.compile(r'\s[-/][Ww]\S+')
-
-
-def _RemoveWarningSwitches(cmd_str):
-  """Removes all warning switches from a command string."""
-  return re.sub(WARNING_SWITCH_RE, '', cmd_str)
 
 
 def _RemoveFilepathsFiles(root):
