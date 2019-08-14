@@ -53,71 +53,38 @@ def Build(api, config, *targets):
     ninja_command=ninja_args)
 
 
-def RunHostTests(api, out_dir, exe_extension=''):
-  directory = api.path['start_dir'].join('src', out_dir)
-  with api.context(cwd=directory):
-    # Only run flow gold tests on Linux
-    flow_gold_args = ["--gtest_filter=-PerformanceOverlayLayer.Gold"]
-    if api.platform.is_linux:
-      flow_gold_args = [
-        '--golden-dir=%s' %
-          api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
-        '--font-file=%s' %
-          api.path['start_dir'].join('src', 'flutter', 'third_party', 'txt',
-                                     'third_party', 'fonts',
-                                     'Roboto-Regular.ttf')
-      ]
-    api.step('Test Flow',
-      [directory.join('flow_unittests' + exe_extension)] + flow_gold_args)
-
-    # Cross platform tests.
-    api.step('Test FML', [
-      directory.join('fml_unittests' + exe_extension),
-      '--gtest_filter="-*TimeSensitiveTest*"'
-    ])
-    api.step('Test Runtime',
-      [directory.join('runtime_unittests' + exe_extension)])
-    api.step('Test Shell',
-      [directory.join('shell_unittests' + exe_extension)])
-    api.step('Test UI',
-      [directory.join('ui_unittests' + exe_extension)])
-
-    if not api.platform.is_win:
-      api.step('Test Embedder API',
-        [directory.join('embedder_unittests' + exe_extension)])
-
-    if api.platform.is_mac:
-      api.step('Test Flutter Channels',
-        [directory.join('flutter_channels_unittests' + exe_extension)])
-
+def RunTests(api, out_dir, android_out_dir=None, types='all'):
+  script_path = api.path['start_dir'].join(
+      'src', 'flutter', 'testing', 'run_tests.py')
+  args = ['--variant', out_dir, '--type', types]
+  if android_out_dir:
+    args.extend(['--android-variant', android_out_dir])
+  api.python('Host Tests for %s' % out_dir, script_path, args)
 
 def BuildFuchsiaArtifactsAndUpload(api):
-  with api.depot_tools.on_path():
-    api.goma.start()
-    checkout = api.path['start_dir'].join('src')
-    git_rev = api.buildbucket.gitiles_commit.id
-    build_script = str(checkout.join(
-      'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
-    cmd = ['python', build_script, '--engine-version', git_rev]
-    if not api.runtime.is_experimental and ShouldUploadPackages(api):
-      cmd.append('--upload')
-    api.step('Build Fuchsia Artifacts & Upload', cmd)
+  api.goma.start()
+  checkout = api.path['start_dir'].join('src')
+  git_rev = api.buildbucket.gitiles_commit.id
+  build_script = str(checkout.join(
+    'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
+  cmd = ['python', build_script, '--engine-version', git_rev]
+  if not api.runtime.is_experimental and ShouldUploadPackages(api):
+    cmd.append('--upload')
+  api.step('Build Fuchsia Artifacts & Upload', cmd)
 
-    if ShouldUploadPackages(api):
-      with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
-        stamp_file = temp_dir.join('fuchsia.stamp')
-        api.file.write_text('fuchsia.stamp', stamp_file, '')
-        remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
-        api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
-            name='upload "fuchsia.stamp"')
+  if ShouldUploadPackages(api):
+    with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
+      stamp_file = temp_dir.join('fuchsia.stamp')
+      api.file.write_text('fuchsia.stamp', stamp_file, '')
+      remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
+      api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
+          name='upload "fuchsia.stamp"')
 
 def RunGN(api, *args):
-  # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
-  with api.depot_tools.on_path():
-    checkout = api.path['start_dir'].join('src')
-    gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
-    gn_cmd.extend(args)
-    api.step('gn %s' % ' '.join(args), gn_cmd)
+  checkout = api.path['start_dir'].join('src')
+  gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
+  gn_cmd.extend(args)
+  api.step('gn %s' % ' '.join(args), gn_cmd)
 
 
 # The relative_paths parameter is a list of strings and pairs of strings.
@@ -264,14 +231,16 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
 def BuildLinuxAndroid(api):
   if api.properties.get('build_android_debug', True):
     debug_variants = [
-      ('arm', 'android_debug', 'android-arm'),
-      ('arm64', 'android_debug_arm64', 'android-arm64'),
-      ('x86', 'android_debug_x86', 'android-x86'),
-      ('x64', 'android_debug_x64', 'android-x64'),
+      ('arm', 'android_debug', 'android-arm', True),
+      ('arm64', 'android_debug_arm64', 'android-arm64', False),
+      ('x86', 'android_debug_x86', 'android-x86', False),
+      ('x64', 'android_debug_x64', 'android-x64', False),
     ]
-    for android_cpu, out_dir, artifact_dir in debug_variants:
+    for android_cpu, out_dir, artifact_dir, run_tests in debug_variants:
       RunGN(api, '--android', '--android-cpu=%s' % android_cpu, '--no-lto')
       Build(api, out_dir)
+      if run_tests:
+        RunTests(api, out_dir, android_out_dir=out_dir, types='java')
       artifacts = ['out/%s/flutter.jar' % out_dir]
       if android_cpu in ['x86', 'x64']:
           artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
@@ -327,9 +296,9 @@ def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
   RunGN(api, '--runtime-mode', 'release')
   Build(api, 'host_debug_unopt')
+  RunTests(api, 'host_debug_unopt', types='dart,engine')
   Build(api, 'host_debug')
   Build(api, 'host_release')
-  RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
@@ -410,8 +379,8 @@ def BuildMac(api):
     RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto',
                '--mac-sdk-path', str(GetMacSDKDir(api)))
     Build(api, 'host_debug_unopt')
+    RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
-    RunHostTests(api, 'out/host_debug_unopt')
     host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
 
     api.zip.directory('Archive FlutterEmbedder.framework',
@@ -589,10 +558,8 @@ def BuildIOS(api):
 def BuildWindows(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
-    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
-    Build(api, 'host_debug_unopt')
     Build(api, 'host_debug')
-    RunHostTests(api, 'out\\host_debug', '.exe')
+    RunTests(api, 'host_debug', types='engine')
     UploadArtifacts(api, 'windows-x64', [
       ICU_DATA_PATH,
       'out/host_debug/flutter_tester.exe',
@@ -729,30 +696,32 @@ def RunSteps(api):
   env = {'GOMA_DIR': api.goma.goma_dir}
   env_prefixes = {'PATH': [dart_bin]}
 
-  # The context adds dart to the path, only needed for the analyze step for now.
-  with api.context(env=env, env_prefixes=env_prefixes):
-    if api.platform.is_linux:
-      AnalyzeDartUI(api)
-      if api.properties.get('build_host', True):
-        BuildLinux(api)
-        TestObservatory(api)
-      #TestEngine(api)
-      BuildLinuxAndroid(api)
-      VerifyExportedSymbols(api)
-      BuildFuchsia(api)
-
-    if api.platform.is_mac:
-      with SetupXcode(api):
-        BuildMac(api)
-        if api.properties.get('build_ios', True):
-          BuildIOS(api)
-          with InstallJazzy(api):
-            BuildObjcDoc(api)
+  # Various scripts we run assume access to depot_tools on path for `ninja`.
+  with api.depot_tools.on_path():
+    # Some scripts need dart on path, such as analyze
+    with api.context(env=env, env_prefixes=env_prefixes):
+      if api.platform.is_linux:
+        AnalyzeDartUI(api)
+        if api.properties.get('build_host', True):
+          BuildLinux(api)
+          TestObservatory(api)
+        #TestEngine(api)
+        BuildLinuxAndroid(api)
         VerifyExportedSymbols(api)
         BuildFuchsia(api)
 
-    if api.platform.is_win:
-      BuildWindows(api)
+      if api.platform.is_mac:
+        with SetupXcode(api):
+          BuildMac(api)
+          if api.properties.get('build_ios', True):
+            BuildIOS(api)
+            with InstallJazzy(api):
+              BuildObjcDoc(api)
+          VerifyExportedSymbols(api)
+          BuildFuchsia(api)
+
+      if api.platform.is_win:
+        BuildWindows(api)
 
 # pylint: disable=line-too-long
 # See https://chromium.googlesource.com/infra/luci/recipes-py/+/refs/heads/master/doc/user_guide.md

@@ -128,6 +128,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -160,6 +165,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -197,6 +207,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "install xcode"
   },
@@ -213,6 +228,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -296,6 +316,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -322,6 +347,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -357,6 +387,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -377,6 +412,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build host_debug_unopt"
@@ -406,6 +446,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -446,6 +491,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -471,6 +521,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -523,6 +578,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -555,11 +615,41 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/flutter/testing/run_tests.py",
+      "--variant",
+      "host_debug_unopt",
+      "--type",
+      "dart,engine"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Host Tests for host_debug_unopt"
   },
   {
     "cmd": [],
@@ -583,6 +673,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -611,6 +706,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -646,6 +746,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (2).start cloudtail",
     "~followup_annotations": [
@@ -666,6 +771,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build host_debug"
@@ -695,6 +805,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (2).goma_jsonstatus",
@@ -735,6 +850,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (2).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -760,6 +880,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (2).stop_goma",
@@ -812,6 +937,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (2).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -844,118 +974,16 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (2).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/flow_unittests",
-      "--gtest_filter=-PerformanceOverlayLayer.Gold"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test Flow"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/fml_unittests",
-      "--gtest_filter=\"-*TimeSensitiveTest*\""
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test FML"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/runtime_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test Runtime"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/shell_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test Shell"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/ui_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test UI"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/embedder_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test Embedder API"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/flutter_channels_unittests"
-    ],
-    "cwd": "[START_DIR]/src/out/host_debug_unopt",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "name": "Test Flutter Channels"
   },
   {
     "cmd": [
@@ -969,6 +997,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Archive FlutterEmbedder.framework",
@@ -988,6 +1021,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Archive FlutterMacOS.framework",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_debug/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/host_debug/FlutterMacOS.framework.zip\", \"root\": \"[START_DIR]/src/out/host_debug/FlutterMacOS.framework\"}"
   },
@@ -1003,6 +1041,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip darwin-x64 artifacts.zip",
@@ -1026,6 +1069,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for darwin-x64 UploadArtifacts artifacts.zip"
   },
@@ -1041,6 +1089,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip darwin-x64 FlutterEmbedder.framework.zip",
@@ -1064,6 +1117,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for darwin-x64 UploadArtifacts FlutterEmbedder.framework.zip"
   },
@@ -1079,6 +1137,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip darwin-x64 FlutterMacOS.framework.zip",
@@ -1102,6 +1165,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for darwin-x64 UploadArtifacts FlutterMacOS.framework.zip"
   },
@@ -1117,6 +1185,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip dart-sdk",
@@ -1140,6 +1213,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for Upload Dart SDK"
   },
@@ -1155,6 +1233,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip flutter_web_sdk",
@@ -1176,6 +1259,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1232,6 +1320,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (3).goma cache directory",
     "~followup_annotations": [
@@ -1258,6 +1351,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1293,6 +1391,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (3).start cloudtail",
     "~followup_annotations": [
@@ -1313,6 +1416,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build android_release_vulkan"
@@ -1342,6 +1450,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (3).goma_jsonstatus",
@@ -1382,6 +1495,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (3).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1407,6 +1525,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (3).stop_goma",
@@ -1459,6 +1582,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (3).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1489,6 +1617,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1627,6 +1760,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (4).goma cache directory",
     "~followup_annotations": [
@@ -1653,6 +1791,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1688,6 +1831,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (4).start cloudtail",
     "~followup_annotations": [
@@ -1709,6 +1857,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build android_profile flutter/lib/snapshot"
@@ -1738,6 +1891,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (4).goma_jsonstatus",
@@ -1778,6 +1936,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (4).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1803,6 +1966,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (4).stop_goma",
@@ -1855,6 +2023,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (4).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1887,6 +2060,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (4).stop cloudtail",
     "~followup_annotations": [
@@ -1917,6 +2095,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (5).goma cache directory",
     "~followup_annotations": [
@@ -1943,6 +2126,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1978,6 +2166,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (5).start cloudtail",
     "~followup_annotations": [
@@ -1999,6 +2192,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build android_profile_arm64 flutter/lib/snapshot"
@@ -2028,6 +2226,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (5).goma_jsonstatus",
@@ -2068,6 +2271,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (5).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2093,6 +2301,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (5).stop_goma",
@@ -2145,6 +2358,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (5).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2177,6 +2395,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (5).stop cloudtail",
     "~followup_annotations": [
@@ -2207,6 +2430,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (6).goma cache directory",
     "~followup_annotations": [
@@ -2233,6 +2461,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -2268,6 +2501,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (6).start cloudtail",
     "~followup_annotations": [
@@ -2289,6 +2527,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build android_release flutter/lib/snapshot"
@@ -2318,6 +2561,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (6).goma_jsonstatus",
@@ -2358,6 +2606,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (6).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2383,6 +2636,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (6).stop_goma",
@@ -2435,6 +2693,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (6).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2467,6 +2730,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (6).stop cloudtail",
     "~followup_annotations": [
@@ -2497,6 +2765,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (7).goma cache directory",
     "~followup_annotations": [
@@ -2523,6 +2796,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -2558,6 +2836,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (7).start cloudtail",
     "~followup_annotations": [
@@ -2579,6 +2862,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build android_release_arm64 flutter/lib/snapshot"
@@ -2608,6 +2896,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (7).goma_jsonstatus",
@@ -2648,6 +2941,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (7).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2673,6 +2971,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (7).stop_goma",
@@ -2725,6 +3028,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (7).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2757,6 +3065,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (7).stop cloudtail",
     "~followup_annotations": [
@@ -2775,6 +3088,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip android-arm-profile darwin-x64.zip",
@@ -2798,6 +3116,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for android-arm-profile UploadArtifacts darwin-x64.zip"
   },
@@ -2813,6 +3136,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip android-arm64-profile darwin-x64.zip",
@@ -2836,6 +3164,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for android-arm64-profile UploadArtifacts darwin-x64.zip"
   },
@@ -2851,6 +3184,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip android-arm-release darwin-x64.zip",
@@ -2874,6 +3212,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for android-arm-release UploadArtifacts darwin-x64.zip"
   },
@@ -2889,6 +3232,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip android-arm64-release darwin-x64.zip",
@@ -2910,6 +3258,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3128,6 +3481,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (8).goma cache directory",
     "~followup_annotations": [
@@ -3154,6 +3512,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3189,6 +3552,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (8).start cloudtail",
     "~followup_annotations": [
@@ -3209,6 +3577,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_debug_sim"
@@ -3238,6 +3611,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (8).goma_jsonstatus",
@@ -3278,6 +3656,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (8).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3303,6 +3686,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (8).stop_goma",
@@ -3355,6 +3743,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (8).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3387,6 +3780,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (8).stop cloudtail",
     "~followup_annotations": [
@@ -3405,6 +3803,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "iOS Unit Tests"
@@ -3433,6 +3836,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (9).goma cache directory",
     "~followup_annotations": [
@@ -3459,6 +3867,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3494,6 +3907,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (9).start cloudtail",
     "~followup_annotations": [
@@ -3514,6 +3932,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_debug"
@@ -3543,6 +3966,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (9).goma_jsonstatus",
@@ -3583,6 +4011,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (9).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3608,6 +4041,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (9).stop_goma",
@@ -3660,6 +4098,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (9).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3692,6 +4135,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (9).stop cloudtail",
     "~followup_annotations": [
@@ -3722,6 +4170,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (10).goma cache directory",
     "~followup_annotations": [
@@ -3748,6 +4201,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3783,6 +4241,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (10).start cloudtail",
     "~followup_annotations": [
@@ -3803,6 +4266,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_debug_arm"
@@ -3832,6 +4300,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (10).goma_jsonstatus",
@@ -3872,6 +4345,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (10).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -3897,6 +4375,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (10).stop_goma",
@@ -3949,6 +4432,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (10).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3981,6 +4469,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (10).stop cloudtail",
     "~followup_annotations": [
@@ -4011,6 +4504,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (11).goma cache directory",
     "~followup_annotations": [
@@ -4037,6 +4535,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -4072,6 +4575,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (11).start cloudtail",
     "~followup_annotations": [
@@ -4092,6 +4600,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_profile"
@@ -4121,6 +4634,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (11).goma_jsonstatus",
@@ -4161,6 +4679,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (11).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4186,6 +4709,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (11).stop_goma",
@@ -4238,6 +4766,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (11).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4270,6 +4803,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (11).stop cloudtail",
     "~followup_annotations": [
@@ -4300,6 +4838,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (12).goma cache directory",
     "~followup_annotations": [
@@ -4326,6 +4869,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -4361,6 +4909,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (12).start cloudtail",
     "~followup_annotations": [
@@ -4381,6 +4934,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_profile_arm"
@@ -4410,6 +4968,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (12).goma_jsonstatus",
@@ -4450,6 +5013,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (12).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4475,6 +5043,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (12).stop_goma",
@@ -4527,6 +5100,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (12).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4559,6 +5137,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (12).stop cloudtail",
     "~followup_annotations": [
@@ -4589,6 +5172,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (13).goma cache directory",
     "~followup_annotations": [
@@ -4615,6 +5203,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -4650,6 +5243,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (13).start cloudtail",
     "~followup_annotations": [
@@ -4670,6 +5268,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_release"
@@ -4699,6 +5302,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (13).goma_jsonstatus",
@@ -4739,6 +5347,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (13).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -4764,6 +5377,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (13).stop_goma",
@@ -4816,6 +5434,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (13).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -4848,6 +5471,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (13).stop cloudtail",
     "~followup_annotations": [
@@ -4878,6 +5506,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (14).goma cache directory",
     "~followup_annotations": [
@@ -4904,6 +5537,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -4939,6 +5577,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma (14).start cloudtail",
     "~followup_annotations": [
@@ -4959,6 +5602,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "build ios_release_arm"
@@ -4988,6 +5636,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (14).goma_jsonstatus",
@@ -5028,6 +5681,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (14).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -5053,6 +5711,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "postprocess_for_goma (14).stop_goma",
@@ -5105,6 +5768,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "postprocess_for_goma (14).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -5137,6 +5805,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "postprocess_for_goma (14).stop cloudtail",
     "~followup_annotations": [
@@ -5164,6 +5837,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create iOS debug Flutter.framework"
   },
   {
@@ -5178,6 +5856,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Archive Flutter.framework for debug",
@@ -5202,6 +5885,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create macOS debug gen_snapshot"
   },
   {
@@ -5216,6 +5904,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip ios artifacts.zip",
@@ -5237,6 +5930,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5263,6 +5961,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create iOS profile Flutter.framework"
   },
   {
@@ -5277,6 +5980,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Archive Flutter.framework for profile",
@@ -5301,6 +6009,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create macOS profile gen_snapshot"
   },
   {
@@ -5315,6 +6028,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip ios-profile artifacts.zip",
@@ -5336,6 +6054,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5364,6 +6087,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create iOS release Flutter.framework"
   },
   {
@@ -5378,6 +6106,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Archive Flutter.framework for release",
@@ -5402,6 +6135,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "Create macOS release gen_snapshot"
   },
   {
@@ -5416,6 +6154,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip ios-release artifacts.zip",
@@ -5439,6 +6182,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for ios-release UploadArtifacts artifacts.zip"
   },
@@ -5454,6 +6202,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Zip Flutter.dSYM",
@@ -5479,6 +6232,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "mkdir gems"
   },
@@ -5499,6 +6257,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "install gems"
   },
   {
@@ -5517,6 +6280,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "build obj-c doc"
   },
   {
@@ -5533,6 +6301,11 @@
       "PATH": [
         "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "archive obj-c doc",
@@ -5558,6 +6331,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "temp dir for BuildObjcDoc"
   },
@@ -5575,6 +6353,11 @@
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "name": "pub get for verify_exported.dart"
   },
   {
@@ -5589,6 +6372,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "Verify exported symbols on release binaries"
@@ -5733,6 +6521,11 @@
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
