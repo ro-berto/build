@@ -5,9 +5,6 @@
 from contextlib import contextmanager
 import contextlib
 
-from PB.recipes.build.flutter.engine import InputProperties
-from PB.recipes.build.flutter.engine import EnvProperties
-
 DEPS = [
   'build',
   'depot_tools/bot_update',
@@ -35,9 +32,6 @@ BUCKET_NAME = 'flutter_infra'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
 
-PROPERTIES = InputProperties
-ENV_PROPERTIES = EnvProperties
-
 def ShouldUploadPackages(api):
   return api.properties.get('upload_packages', False)
 
@@ -59,11 +53,43 @@ def Build(api, config, *targets):
     ninja_command=ninja_args)
 
 
-def RunTests(api, out_dir, types='all'):
-  script_path = api.path['start_dir'].join(
-      'src', 'flutter', 'testing', 'run_tests.py')
-  args = ['--variant', out_dir, '--type', types]
-  api.python('Host Tests for %s' % out_dir, script_path, args)
+def RunHostTests(api, out_dir, exe_extension=''):
+  directory = api.path['start_dir'].join('src', out_dir)
+  with api.context(cwd=directory):
+    # Only run flow gold tests on Linux
+    flow_gold_args = ["--gtest_filter=-PerformanceOverlayLayer.Gold"]
+    if api.platform.is_linux:
+      flow_gold_args = [
+        '--golden-dir=%s' %
+          api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
+        '--font-file=%s' %
+          api.path['start_dir'].join('src', 'flutter', 'third_party', 'txt',
+                                     'third_party', 'fonts',
+                                     'Roboto-Regular.ttf')
+      ]
+    api.step('Test Flow',
+      [directory.join('flow_unittests' + exe_extension)] + flow_gold_args)
+
+    # Cross platform tests.
+    api.step('Test FML', [
+      directory.join('fml_unittests' + exe_extension),
+      '--gtest_filter="-*TimeSensitiveTest*"'
+    ])
+    api.step('Test Runtime',
+      [directory.join('runtime_unittests' + exe_extension)])
+    api.step('Test Shell',
+      [directory.join('shell_unittests' + exe_extension)])
+    api.step('Test UI',
+      [directory.join('ui_unittests' + exe_extension)])
+
+    if not api.platform.is_win:
+      api.step('Test Embedder API',
+        [directory.join('embedder_unittests' + exe_extension)])
+
+    if api.platform.is_mac:
+      api.step('Test Flutter Channels',
+        [directory.join('flutter_channels_unittests' + exe_extension)])
+
 
 def BuildFuchsiaArtifactsAndUpload(api):
   with api.depot_tools.on_path():
@@ -235,7 +261,7 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
               BUCKET_NAME, remote_name))
 
 
-def BuildLinuxAndroid(api, swarming_task_id):
+def BuildLinuxAndroid(api):
   if api.properties.get('build_android_debug', True):
     debug_variants = [
       ('arm', 'android_debug', 'android-arm'),
@@ -261,18 +287,12 @@ def BuildLinuxAndroid(api, swarming_task_id):
     Build(api, 'android_release_vulkan')
 
   if api.properties.get('build_android_aot', True):
-    # This shard needs to build the Dart SDK to build the profile firebase app.
-    RunGN(api, '--runtime-mode', 'profile', '--unoptimized', '--no-lto')
-    Build(api, 'host_profile_unopt')
-
     # Build and upload engines for the runtime modes that use AOT compilation.
-    # Do arm64 first because we have more tests for that one, and can bail out
-    # earlier if they fail.
     aot_variants = [
-      ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
-      'aarch64-linux-android'),
       ('arm', 'android_%s', 'android-arm-%s', 'clang_x64',
       'arm-linux-androideabi'),
+      ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
+      'aarch64-linux-android'),
     ]
     for (android_cpu, out_dir, artifact_dir, clang_dir,
         android_triple) in aot_variants:
@@ -283,25 +303,6 @@ def BuildLinuxAndroid(api, swarming_task_id):
         RunGN(api, '--android', '--runtime-mode=' + runtime_mode,
               '--android-cpu=%s' % android_cpu)
         Build(api, build_output_dir)
-
-        if runtime_mode == 'profile' and android_cpu == 'arm64':
-          checkout = api.path['start_dir'].join('src')
-          scenario_app_dir = checkout.join(
-              'flutter', 'testing', 'scenario_app')
-          host_profile_dir =  checkout.join('out', 'host_profile_unopt')
-          gen_snapshot_dir = checkout.join('out', build_output_dir, 'clang_x64')
-          with api.context(cwd=checkout):
-            compile_cmd = ['./flutter/testing/scenario_app/assemble_apk.sh',
-                host_profile_dir, gen_snapshot_dir]
-            api.step('Build scenario app', compile_cmd)
-            firebase_cmd = [
-              './flutter/ci/firebase_testlab.sh',
-              scenario_app_dir.join('android', 'app', 'build', 'outputs', 'apk',
-                  'debug','app-debug.apk'),
-              api.buildbucket.gitiles_commit.id or 'testing',
-              swarming_task_id,
-            ]
-            api.step('Firebase test', firebase_cmd)
 
         UploadArtifacts(api, upload_dir, [
           'out/%s/flutter.jar' % build_output_dir,
@@ -328,7 +329,7 @@ def BuildLinux(api):
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
   Build(api, 'host_release')
-  RunTests(api, 'host_debug_unopt')
+  RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
@@ -361,7 +362,12 @@ def BuildLinux(api):
 
 
 def BuildFuchsia(api):
-  if api.properties.get('build_fuchsia', True):
+  # Default whether we build fuchsia to whether we're building the host.
+  # This will enable us to transition to building Fuchsia separately without
+  # removing it from the current build.
+  # TODO(dnfield): Remove this once we've added a dedicated Fuchsia builder.
+  if api.properties.get('build_fuchsia',
+                        api.properties.get('build_host', True)):
     BuildFuchsiaArtifactsAndUpload(api)
 
 
@@ -375,6 +381,12 @@ def TestObservatory(api):
   with api.context(cwd=checkout):
     api.step('test observatory and service protocol', test_cmd)
 
+
+#def TestEngine(api):
+#  checkout = api.path['start_dir'].join('src')
+#  test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
+#  with api.context(cwd=checkout):
+#    api.step('engine unit tests', test_cmd)
 
 def GetMacSDKDir(api):
   return api.path['cache'].join('builder', 'mac_sdk')
@@ -399,7 +411,7 @@ def BuildMac(api):
                '--mac-sdk-path', str(GetMacSDKDir(api)))
     Build(api, 'host_debug_unopt')
     Build(api, 'host_debug')
-    RunTests(api, 'host_debug_unopt')
+    RunHostTests(api, 'out/host_debug_unopt')
     host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
 
     api.zip.directory('Archive FlutterEmbedder.framework',
@@ -531,21 +543,12 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
 
 def RunIOSTests(api):
-  test_dir = api.path['start_dir'].join('src', 'flutter', 'testing')
-  ios_unit_tests = test_dir.join('ios', 'IosUnitTests')
-  scenario_app_tests = test_dir.join('scenario_app')
-
-  with api.context(cwd=ios_unit_tests):
-    api.step('iOS Unit Tests', ['./run_tests.sh', 'ios_debug_sim'])
-
-  with api.context(cwd=scenario_app_tests):
-    api.step('Scenario App Unit Tests', ['./run_ios_tests.sh', 'ios_debug_sim'])
+  directory = api.path['start_dir'].join('src', 'flutter', 'testing', 'ios',
+                                         'IosUnitTests')
+  with api.context(cwd=directory):
+    api.step('iOS Unit Tests', ["./run_tests.sh", "ios_debug_sim"])
 
 def BuildIOS(api):
-  # We need to build host_debug_unopt for testing
-  RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt')
-
   # Generate Ninja files for all valid configurations.
   RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto',
              '--mac-sdk-path', str(GetMacSDKDir(api)))
@@ -586,8 +589,10 @@ def BuildIOS(api):
 def BuildWindows(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
+    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
+    Build(api, 'host_debug_unopt')
     Build(api, 'host_debug')
-    RunTests(api, 'host_debug')
+    RunHostTests(api, 'out\\host_debug', '.exe')
     UploadArtifacts(api, 'windows-x64', [
       ICU_DATA_PATH,
       'out/host_debug/flutter_tester.exe',
@@ -662,16 +667,13 @@ def BuildJavadoc(api):
                       name='upload javadoc')
 
 @contextmanager
-def InstallGems(api):
+def InstallJazzy(api):
   gem_dir = api.path['start_dir'].join('gems')
   api.file.ensure_directory('mkdir gems', gem_dir)
   with api.context(cwd=gem_dir):
-    api.step('install jazzy', [
+    api.step('install gems', [
         'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
         '--install-dir', '.'])
-    api.step('install xcpretty', [
-          'gem', 'install', 'xcpretty:' + api.properties.get(
-              'xcpretty_version', '0.3.0'), '--install-dir', '.'])
   with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
       'PATH': [gem_dir.join('bin')]}):
     yield
@@ -715,7 +717,7 @@ def GetCheckout(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-def RunSteps(api, properties, env_properties):
+def RunSteps(api):
   GetCheckout(api)
 
   checkout = api.path['start_dir'].join('src')
@@ -724,29 +726,18 @@ def RunSteps(api, properties, env_properties):
 
   api.goma.ensure_goma()
 
-  android_home = checkout.join('third_party', 'android_tools', 'sdk')
-  api.file.ensure_directory('mkdir licenses', android_home.join('licenses'))
-  api.file.write_text('android sdk license',
-      android_home.join('licenses', 'android-sdk-license'),
-      str(properties.android_sdk_license))
-  api.file.write_text('android sdk preview license',
-      android_home.join('licenses', 'android-sdk-preview-license'),
-      str(properties.android_sdk_preview_license))
-
-  env = {
-    'GOMA_DIR': api.goma.goma_dir,
-    'ANDROID_HOME': str(android_home)
-  }
+  env = {'GOMA_DIR': api.goma.goma_dir}
   env_prefixes = {'PATH': [dart_bin]}
 
   # The context adds dart to the path, only needed for the analyze step for now.
   with api.context(env=env, env_prefixes=env_prefixes):
     if api.platform.is_linux:
+      AnalyzeDartUI(api)
       if api.properties.get('build_host', True):
-        AnalyzeDartUI(api)
         BuildLinux(api)
         TestObservatory(api)
-      BuildLinuxAndroid(api, env_properties.SWARMING_TASK_ID)
+      #TestEngine(api)
+      BuildLinuxAndroid(api)
       VerifyExportedSymbols(api)
       BuildFuchsia(api)
 
@@ -754,8 +745,8 @@ def RunSteps(api, properties, env_properties):
       with SetupXcode(api):
         BuildMac(api)
         if api.properties.get('build_ios', True):
-          with InstallGems(api):
-            BuildIOS(api)
+          BuildIOS(api)
+          with InstallJazzy(api):
             BuildObjcDoc(api)
         VerifyExportedSymbols(api)
         BuildFuchsia(api)
@@ -779,22 +770,17 @@ def GenTests(api):
           project='flutter',
         ) +
         api.properties(
-          InputProperties(
-            goma_jobs='1024',
-            build_host=True,
-            build_fuchsia=True,
-            build_android_aot=True,
-            build_android_debug=True,
-            build_android_vulkan=True,
-            upload_packages=should_upload,
-            android_sdk_license='android_sdk_hash',
-            android_sdk_preview_license='android_sdk_preview_hash',
-          ),
-        ) +
-        api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef'))
+          goma_jobs=1024,
+          build_host=True,
+          build_fuchsia=True,
+          build_android_aot=True,
+          build_android_debug=True,
+          build_android_vulkan=True,
+          upload_packages=should_upload,
+        )
       )
       if platform == 'mac':
-        test += (api.properties(InputProperties(jazzy_version='0.8.4')))
+        test += (api.properties(jazzy_version='0.8.4'))
       yield test
 
   yield (
@@ -805,9 +791,7 @@ def GenTests(api):
         project='flutter',
     ) +
     api.runtime(is_luci=True, is_experimental=True) +
-    api.properties(InputProperties(goma_jobs='1024',
-      android_sdk_license='android_sdk_hash',
-      android_sdk_preview_license='android_sdk_preview_hash'))
+    api.properties(goma_jobs=1024)
   )
   yield (api.test('pull_request') +
          api.buildbucket.ci_build(
@@ -816,14 +800,10 @@ def GenTests(api):
             project='flutter') +
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(
-           InputProperties(
             git_url = 'https://github.com/flutter/engine',
-            goma_jobs='200',
+            goma_jobs=200,
             git_ref = 'refs/pull/1/head',
             build_host=True,
-            build_fuchsia=True,
             build_android_aot=True,
             build_android_debug=True,
-            build_android_vulkan=True,
-            android_sdk_license='android_sdk_hash',
-            android_sdk_preview_license='android_sdk_preview_hash')))
+            build_android_vulkan=True))
