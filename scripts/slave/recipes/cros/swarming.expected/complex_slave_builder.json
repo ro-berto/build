@@ -211,11 +211,9 @@
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
-      "[CACHE]/goma/client",
+      "[CACHE]/goma/extra/chromeos-amd64",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
-      "--chromeos_goma_dir",
-      "[CACHE]/goma/extra/chromeos-amd64",
       "slave_config"
     ],
     "env": {
