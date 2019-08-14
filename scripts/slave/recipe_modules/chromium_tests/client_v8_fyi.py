@@ -201,6 +201,26 @@ SPEC = {
         'platform': 'win',
       },
     },
+   'V8 Blink Linux Future': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': [
+        'show_v8_revision',
+      ],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
+      'testing': {
+        'platform': 'linux',
+      },
+    },
    'V8 Blink Linux Layout NG': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
