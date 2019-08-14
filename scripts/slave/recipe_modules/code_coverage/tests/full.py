@@ -27,12 +27,12 @@ def RunSteps(api):
       [api.chromium_tests.create_bot_id(mastername, buildername)],
       builders=None)
   api.chromium_tests.configure_build(bot_config_object)
-  if 'tryserver' in mastername:
-    api.code_coverage.instrument(api.properties['files_to_instrument'])
   # Fake path.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
   api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
+  if 'tryserver' in mastername:
+    api.code_coverage.instrument(api.properties['files_to_instrument'])
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
         api.code_coverage.profdata_dir().join('merged.profdata'))
@@ -216,8 +216,7 @@ def GenTests(api):
           project='chromium/src', builder='linux-coverage-rel')
       + api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.skip processing because no source '
-          'file is changed')
+          'skip processing coverage data because no source file changed')
       + api.post_process(post_process.DropExpectation)
   )
 
@@ -306,7 +305,7 @@ def GenTests(api):
   )
 
   yield (
-      api.test('process java coverage')
+      api.test('process java coverage for full-codebase')
       + api.properties.generic(
           mastername='chromium.fyi',
           buildername='android-code-coverage',
@@ -314,7 +313,78 @@ def GenTests(api):
       + api.step_data('check GN args for coverage', api.raw_io.output_text(
           'jacoco_coverage = true'))
       + api.post_process(
-          post_process.MustRun, 'process java coverage')
+          post_process.MustRun, 'process java coverage.'
+          'Run component extraction script to generate mapping')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Generate Java coverage metadata')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'gsutil Upload JSON metadata')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Generate JaCoCo HTML report')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Zip generated JaCoCo HTML report files')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'gsutil Upload zipped JaCoCo HTML report')
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('skip collecting coverage data for java')
+      + api.properties.generic(
+          mastername='tryserver.chromium.android',
+          buildername='android-kitkat-arm-coverage-dbg',
+          buildnumber=54)
+      + api.step_data('check GN args for coverage', api.raw_io.output_text(
+          'jacoco_coverage = true'))
+      + api.properties(
+          files_to_instrument=[
+            'some/path/to/non_source_file.txt'
+          ])
+      + api.post_process(
+          post_process.MustRun,
+          'skip processing coverage data because no source file changed')
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('process java coverage for per-cl')
+      + api.properties.generic(
+          mastername='tryserver.chromium.android',
+          buildername='android-kitkat-arm-coverage-dbg',
+          buildnumber=54)
+      + api.buildbucket.try_build(
+          project='chromium', builder='android-kitkat-arm-coverage-dbg')
+      + api.step_data('check GN args for coverage', api.raw_io.output_text(
+          'jacoco_coverage = true'))
+      + api.properties(
+          files_to_instrument=[
+            'some/path/to/file.java',
+            'some/other/path/to/file.java',
+          ])
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'generate line number mapping from bot to Gerrit')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Generate Java coverage metadata')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'gsutil Upload JSON metadata')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Generate JaCoCo HTML report')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Zip generated JaCoCo HTML report files')
+      + api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'gsutil Upload zipped JaCoCo HTML report')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

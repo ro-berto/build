@@ -89,12 +89,14 @@ def get_coverage_metric_summaries(tree_root):
   return summaries
 
 
-def _get_file_coverage_data(file_path, source_file):
+def _get_file_coverage_data(file_path, source_file, diff_mapping):
   """Gets single source file coverage data from sourcefile element.
 
   Args:
     file_path: The file path relevant to the src root.
     source_file: The sourcefile element to calculate coverage data.
+    diff_mapping: A json object that stores the diff mapping. Only meaningful to
+      per-cl coverage.
 
   Returns:
     A dictionary of calculated source file coverage data.
@@ -106,7 +108,16 @@ def _get_file_coverage_data(file_path, source_file):
   file_coverage['branches'] = []
 
   for line in source_file.findall('line'):
-    line_number = int(line.attrib['nr'])
+    line_number = line.attrib['nr']
+    if diff_mapping and file_path in diff_mapping:
+      line_mapping = diff_mapping[file_path]
+      if line_number in line_mapping:
+        line_number = line_mapping[line_number][0]
+      else:
+        # Skip this line since it is deleted on Gerrit.
+        continue
+    line_number = int(line_number)
+
     covered_instructions = int(line.attrib['ci'])
     missed_branches = int(line.attrib['mb'])
     covered_branches = int(line.attrib['cb'])
@@ -131,17 +142,26 @@ def _get_file_coverage_data(file_path, source_file):
   return file_coverage
 
 
-def _get_files_coverage_data(src_path, root, source_dirs):
+def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
+                             source_files):
   """Gets the files coverage data based on Jacoco XML report.
 
   Args:
     src_path: Absolute path to the code checkout.
     root: The root element for the JaCoCo XML report ElementTree.
     source_dirs: A list of source directories of Java source files.
+    diff_mapping: A json object that stores the diff mapping. Only meaningful to
+      per-cl coverage.
+    source_files: List of source files to generate coverage data for,
+      paths relative to code checkout. Only meaningful to per-cl coverage.
 
   Returns:
     A list of files coverage data.
   """
+  files_set = None
+  if source_files:
+    files_set = set(source_files)
+
   files_coverage_data = []
   for package in root.findall('package'):
     package_path = package.attrib['name']
@@ -175,20 +195,24 @@ def _get_files_coverage_data(src_path, root, source_dirs):
                         source_file_name)
         continue
       file_path = os.path.join(package_source_dir, source_file_name)
+      # Only process affected files for per-cl coverage.
+      if diff_mapping and file_path not in files_set:
+        continue
+
       logging.info('Processing file %s', '//' + file_path)
       files_coverage_data.append(
-          _get_file_coverage_data(file_path, source_file))
+          _get_file_coverage_data(file_path, source_file, diff_mapping))
 
   # Add git revision and timestamp per source file.
-  if files_coverage_data:
+  if files_coverage_data and not diff_mapping:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
         files_coverage_data, src_path, 'DEPS')
 
   return files_coverage_data
 
 
-def generate_json_coverage_metadata(src_path, root, source_dirs,
-                                    component_mapping):
+def generate_json_coverage_metadata(
+    src_path, root, source_dirs, component_mapping, diff_mapping, source_files):
   """Generates a JSON representation based on Jacoco XML report.
 
   JSON format conforms to the proto:
@@ -200,12 +224,17 @@ def generate_json_coverage_metadata(src_path, root, source_dirs,
     source_dirs: A list of source directories of Java source files.
     component_mapping: A JSON object that stores the mapping from dirs to
       monorail components. Only meaningful to full-repo coverage.
+    diff_mapping: A json object that stores the diff mapping. Only meaningful to
+      per-cl coverage.
+    source_files: List of source files to generate coverage data for,
+      paths relative to code checkout. Only meaningful to per-cl coverage.
 
   Returns:
     JSON format coverage metadata.
   """
   data = {}
-  data['files'] = _get_files_coverage_data(src_path, root, source_dirs)
+  data['files'] = _get_files_coverage_data(src_path, root, source_dirs,
+                                           diff_mapping, source_files)
 
   # Add per directory and component coverage data.
   if data['files'] and component_mapping:
@@ -262,12 +291,25 @@ def _parse_args(args):
       '--component-mapping-path',
       type=str,
       help='absolute path to json file mapping dirs to monorail components')
+  parser.add_argument(
+      '--source-files',
+      nargs='*',
+      type=str,
+      help='a list of source files to generate coverage data for.'
+      'path should be relative to the root of the code checkout.')
+  parser.add_argument(
+      '--diff-mapping-path',
+      type=str,
+      help='absolute path to the file that stores the diff mapping')
   params = parser.parse_args(args=args)
 
   if params.component_mapping_path and not os.path.isfile(
       params.component_mapping_path):
     parser.error(
         'Component mapping %s is missing' % params.component_mapping_path)
+
+  if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
+    parser.error('Diff mapping %s is missing' % params.diff_mapping_path)
 
   return params
 
@@ -279,6 +321,15 @@ def main():
   if params.component_mapping_path:
     with open(params.component_mapping_path) as f:
       component_mapping = json.load(f)['dir-to-component']
+
+  diff_mapping = None
+  if params.diff_mapping_path:
+    with open(params.diff_mapping_path) as f:
+      diff_mapping = json.load(f)
+
+  assert (component_mapping is None) != (diff_mapping is None), (
+      'Either component_mapping (for full-repo coverage) or diff_mapping '
+      '(for per-cl coverage) must be specified.')
 
   coverage_files = get_files_with_suffix(params.coverage_dir, '.exec')
   if not coverage_files:
@@ -323,7 +374,8 @@ def main():
 
   root = tree.getroot()
   data = generate_json_coverage_metadata(params.src_path, root, source_dirs,
-                                         component_mapping)
+                                         component_mapping, diff_mapping,
+                                         params.source_files)
 
   logging.info('Writing fulfilled Java coverage metadata to %s',
                params.output_dir)

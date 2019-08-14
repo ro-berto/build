@@ -1324,6 +1324,18 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "skip processing coverage data because no source file changed"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "env": {
       "CHROME_HEADLESS": "1"
     },

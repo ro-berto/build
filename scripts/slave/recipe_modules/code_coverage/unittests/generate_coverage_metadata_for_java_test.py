@@ -47,6 +47,12 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
 
   COMPONENT_MAPPING = {'dir': 'Test>Component'}
 
+  DIFF_MAPPING = {
+      'dir/file.java': {
+          '1': [3, 'A line number changed by the patch.']
+      }
+  }
+
   XML_COUNTER_INPUT = """
   <report name="JaCoCo Coverage Report">
     <counter type="INSTRUCTION" missed="1" covered="1"/>
@@ -454,7 +460,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     }
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, ['dir'], self.COMPONENT_MAPPING)
+        '', root, ['dir'], self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
 
   @mock.patch.object(repository_util, 'GetFileRevisions')
@@ -464,8 +470,101 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, [], self.COMPONENT_MAPPING)
+        '', root, [], self.COMPONENT_MAPPING, None, None)
     self.assertEqual([], actual_output['files'])
+
+  @mock.patch.object(os.path, 'isfile')
+  def test_generate_json_coverage_metadata_for_per_cl(self,
+                                                      mock_os_path_isfile):
+    mock_os_path_isfile = True
+    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
+
+    expected_output = {
+        'files': [{
+            'path':
+                '//dir/file.java',
+            'lines': [{
+                'count': 1,
+                'last': 3,
+                'first': 3
+            }],
+            'branches': [],
+            'summaries': [{
+                'covered': 1,
+                'total': 1,
+                'name': 'instruction'
+            }, {
+                'covered': 0,
+                'total': 0,
+                'name': 'branch'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'line'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'complexity'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'method'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'class'
+            }]
+        }]
+    }
+
+    actual_output = generator.generate_json_coverage_metadata(
+        '', root, ['dir'], None, self.DIFF_MAPPING, ['dir/file.java'])
+    self.assertDictEqual(expected_output, actual_output)
+
+  @mock.patch.object(os.path, 'isfile')
+  def test_generate_json_coverage_metadata_for_per_cl_line_removed(
+      self, mock_os_path_isfile):
+    mock_os_path_isfile = True
+    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
+    diff_mapping_line_removed = {'dir/file.java': {}}
+
+    expected_output = {
+        'files': [{
+            'path':
+                '//dir/file.java',
+            'lines': [],
+            'branches': [],
+            'summaries': [{
+                'covered': 1,
+                'total': 1,
+                'name': 'instruction'
+            }, {
+                'covered': 0,
+                'total': 0,
+                'name': 'branch'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'line'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'complexity'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'method'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'class'
+            }]
+        }]
+    }
+
+    actual_output = generator.generate_json_coverage_metadata(
+        '', root, ['dir'], None, diff_mapping_line_removed, ['dir/file.java'])
+    self.assertDictEqual(expected_output, actual_output)
 
 
 if __name__ == '__main__':

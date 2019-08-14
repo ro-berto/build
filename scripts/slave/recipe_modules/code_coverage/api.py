@@ -16,11 +16,14 @@ _COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
 _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME = (
     'bot_to_gerrit_line_num_mapping.json')
 
-# Set of valid extensions for source files that use Clang.
-_EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG = set([
-    '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h', '.m',
-    '.hxx'
-])
+# Valid extensions of source files that supported per coverage tool.
+_TOOLS_TO_EXTENSIONS_MAP = {
+    'clang': [
+        '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h',
+        '.m', '.hxx'
+    ],
+    'jacoco': ['.java']
+}
 
 # Map exclude_sources property value to files that are to be excluded from
 # coverage aggregates.
@@ -228,24 +231,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     return list(set(binaries))  # Remove duplicates.
 
-  def _filter_source_file(self, file_paths):
-    """Fitlers source files with valid extensions.
-
-    Set of valid extensions is defined in:
-      _EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG.
+  def _filter_source_file(self, file_paths, extensions):
+    """Filters source files with valid extensions.
 
     Args:
       file_paths: A list of file paths relative to the checkout path.
+      extensions: A list of extensions to filter source files.
 
     Returns:
       A sub-list of the input with valid extensions.
     """
     source_files = []
     for file_path in file_paths:
-      if any([
-          file_path.endswith(extension)
-          for extension in _EXTENSIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG
-      ]):
+      if any([file_path.endswith(extension) for extension in extensions]):
         source_files.append(file_path)
 
     return source_files
@@ -259,31 +257,42 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     self._is_per_cl_coverage = True
 
-    self.m.file.ensure_directory(
-        'create .clang-coverage',
-        self.m.path['checkout'].join('.clang-coverage'))
-    self._affected_source_files = self._filter_source_file(affected_files)
-    return self.m.python(
-        'save paths of affected files',
-        self.resource('write_paths_to_instrument.py'),
-        args=[
-            '--write-to',
-            self.m.path['checkout'].join('.clang-coverage',
-                                         'files_to_instrument.txt'),
-            '--src-path',
-            self.m.path['checkout'],
-            '--build-path',
-            self.m.chromium.output_dir,
-        ] + self._affected_source_files,
-        stdout=self.m.raw_io.output_text(add_output_log=True))
+    if self.is_clang_coverage:
+      self._affected_source_files = self._filter_source_file(
+          affected_files, _TOOLS_TO_EXTENSIONS_MAP['clang'])
+      self.m.file.ensure_directory(
+          'create .clang-coverage',
+          self.m.path['checkout'].join('.clang-coverage'))
+      self.m.python(
+          'save paths of affected files',
+          self.resource('write_paths_to_instrument.py'),
+          args=[
+              '--write-to',
+              self.m.path['checkout'].join('.clang-coverage',
+                                           'files_to_instrument.txt'),
+              '--src-path',
+              self.m.path['checkout'],
+              '--build-path',
+              self.m.chromium.output_dir,
+          ] + self._affected_source_files,
+          stdout=self.m.raw_io.output_text(add_output_log=True))
+
+    elif self.is_java_coverage:
+      self._affected_source_files = self._filter_source_file(
+          affected_files, _TOOLS_TO_EXTENSIONS_MAP['jacoco'])
 
   def process_coverage_data(self, tests):
     """Processes the coverage data for html report or metadata.
 
     Args:
-      tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
+      tests (list of self.m.chromium_tests.steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
+    if self._is_per_cl_coverage and not self._affected_source_files:
+      self.m.python.succeeding_step(
+          'skip processing coverage data because no source file changed', '')
+      return
+
     if self.is_clang_coverage:
       self.process_clang_coverage_data(tests)
 
@@ -301,11 +310,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     with self.m.step.nest('process clang code coverage data'):
-      if self._is_per_cl_coverage and not self._affected_source_files:
-        self.m.python.succeeding_step(
-            'skip processing because no source file is changed', '')
-        return
-
       try:
         merged_profdata = self._merge_and_upload_profdata()
         if not merged_profdata:
@@ -344,10 +348,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     Args:
       **kwargs: Kwargs for python and gsutil steps.
     """
-    coverage_dir = self.m.chromium.output_dir.join('coverage')
-
     with self.m.step.nest('process java coverage'):
-      component_mapping_path = self._generate_component_mapping()
+      coverage_dir = self.m.chromium.output_dir.join('coverage')
       args = [
           '--src-path',
           self.m.path['checkout'],
@@ -357,9 +359,24 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           coverage_dir,
           '--sources-json-dir',
           self.m.chromium.output_dir,
-          '--component-mapping-path',
-          component_mapping_path,
       ]
+
+      if self._is_per_cl_coverage:
+        args.append('--affected-source-files')
+        args.extend(self._affected_source_files)
+        self._generate_line_number_mapping_from_bot_to_gerrit(
+            self._affected_source_files, coverage_dir)
+        args.extend([
+            '--diff-mapping-path',
+            coverage_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
+        ])
+      else:
+        component_mapping_path = self._generate_component_mapping()
+        args.extend([
+            '--component-mapping-path',
+            component_mapping_path,
+        ])
+
       self.m.python(
           'Generate Java coverage metadata',
           self.resource('generate_coverage_metadata_for_java.py'),
@@ -626,7 +643,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       # revision of the change in this build is different from the one on
       # Gerrit.
       self._generate_line_number_mapping_from_bot_to_gerrit(
-          self._affected_source_files)
+          self._affected_source_files, self.metadata_dir)
       args.extend([
           '--diff-mapping-path',
           self.metadata_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
@@ -663,15 +680,18 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       upload_step.presentation.properties['coverage_gs_bucket'] = (
           self._gs_bucket)
 
-  def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files):
+  def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files,
+                                                       output_dir):
     """Generates the line number mapping from bot to Gerrit.
 
     Args:
       source_files: List of source files to generate line number mapping for,
                     the paths are relative to the checkout path.
+      output_dir: The output directory to store
+                  _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME.
     """
     gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
-    local_to_gerrit_diff_mapping_file = self.metadata_dir.join(
+    local_to_gerrit_diff_mapping_file = output_dir.join(
         _BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
     self.m.python(
         'generate line number mapping from bot to Gerrit',
