@@ -284,7 +284,7 @@ class ChromiteApi(recipe_api.RecipeApi):
     # python2 a context manager to insert that directory at the front of PATH.
     return self.m.context(env_prefixes={'PATH': [python_bin]})
 
-  def run(self, args=None, goma_dir=None):
+  def run(self, args=None, goma_dir=None, chromeos_goma_dir=None):
     """Runs the configured 'cbuildbot' build.
 
     This workflow uses the registered configuration dictionary to make master-
@@ -304,7 +304,8 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     Args:
       args (list): Initial argument list, expanded based on other values.
-      goma_dir: Goma client path used inside chromite.
+      goma_dir: Goma client path used for simplechrome.
+      chromeos_goma_dir: Goma client path used inside chromite.
     Returns: (Step) the 'cbuildbot' execution step.
     """
     # Assert correct configuration.
@@ -356,6 +357,9 @@ class ChromiteApi(recipe_api.RecipeApi):
     cbb_args.extend([
         '--goma_dir', goma_dir,
         '--goma_client_json', self.m.goma.service_account_json_path])
+    if chromeos_goma_dir:
+      cbb_args.extend([
+          '--chromeos_goma_dir', chromeos_goma_dir])
 
     # Add custom args, if there are any.
     cbb_args.extend(self.c.cbb.extra_args)

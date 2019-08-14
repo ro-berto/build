@@ -38,8 +38,10 @@ def RunSteps(api):
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.
   with api.chromite.with_system_python():
-    api.chromite.run(goma_dir=api.chromite.m.goma.extra_package_path.join(
-        _CHROMEOS_GOMA_CIPD_PLATFORM))
+    api.chromite.run(
+        goma_dir=api.chromite.m.goma.goma_dir,
+        chromeos_goma_dir=api.chromite.m.goma.additional_goma_dir(
+            _CHROMEOS_GOMA_CIPD_PLATFORM))
 
 
 def GenTests(api):

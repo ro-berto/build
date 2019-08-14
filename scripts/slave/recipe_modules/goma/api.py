@@ -54,6 +54,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._use_luci_auth = properties.get('use_luci_auth', False)
 
     self._client_type = 'release'
+    self._additional_platforms = []
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -124,7 +125,7 @@ class GomaApi(recipe_api.RecipeApi):
     return self.default_cache_path_per_slave.join('client')
 
   @property
-  def extra_package_path(self):
+  def _extra_package_path(self):
     return self.default_cache_path_per_slave.join('extra')
 
   @property
@@ -171,8 +172,8 @@ class GomaApi(recipe_api.RecipeApi):
     Args:
       client_type: client type to be installed. default is release.
       additional_platforms: additional platforms to be installed.
-                            the downloaded cipd packages will be stored under
-                            self.extra_package_path with the platform name.
+                            path for the additional platforms can be got with
+                            additional_goma_dir method.
     """
     if self._local_dir:
       # When using goma module on local debug, we need to skip cipd step.
@@ -209,11 +210,24 @@ class GomaApi(recipe_api.RecipeApi):
           if additional_platforms:
             assert isinstance(additional_platforms, list) or isinstance(
                 additional_platforms, tuple)
-            for platform in additional_platforms:
-              Download(platform, self.extra_package_path.join(platform))
+            self._additional_platforms = additional_platforms
+            for platform in self._additional_platforms:
+              Download(platform, self._extra_package_path.join(platform))
         finally:
           self.m.cipd.set_service_account_credentials(None)
         return self._goma_dir
+
+  def additional_goma_dir(self, platform):
+    """Return the Goma client dir for the platform.
+
+    Args:
+      platform: platform string to be used.
+
+    Returns:
+      additional Goma client path.
+    """
+    assert platform in self._additional_platforms
+    return self._extra_package_path.join(platform)
 
   @property
   def goma_ctl(self):

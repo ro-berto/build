@@ -209,9 +209,11 @@
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
-      "[CACHE]/goma/extra/chromeos-amd64",
+      "[CACHE]/goma/client",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
+      "--chromeos_goma_dir",
+      "[CACHE]/goma/extra/chromeos-amd64",
       "tryjob_config"
     ],
     "env": {
