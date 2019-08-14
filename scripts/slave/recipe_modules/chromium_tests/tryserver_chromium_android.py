@@ -5,7 +5,7 @@
 
 SPEC = {
   'builders': {
-    'android-kitkat-arm-coverage-dbg': {
+    'android-kitkat-arm-coverage-rel': {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'download_vr_test_apks',
@@ -14,7 +14,7 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
+        'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },

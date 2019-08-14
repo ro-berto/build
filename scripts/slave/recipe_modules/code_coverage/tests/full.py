@@ -338,7 +338,7 @@ def GenTests(api):
       api.test('skip collecting coverage data for java')
       + api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-kitkat-arm-coverage-dbg',
+          buildername='android-kitkat-arm-coverage-rel',
           buildnumber=54)
       + api.step_data('check GN args for coverage', api.raw_io.output_text(
           'jacoco_coverage = true'))
@@ -356,10 +356,10 @@ def GenTests(api):
       api.test('process java coverage for per-cl')
       + api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-kitkat-arm-coverage-dbg',
+          buildername='android-kitkat-arm-coverage-rel',
           buildnumber=54)
       + api.buildbucket.try_build(
-          project='chromium', builder='android-kitkat-arm-coverage-dbg')
+          project='chromium', builder='android-kitkat-arm-coverage-rel')
       + api.step_data('check GN args for coverage', api.raw_io.output_text(
           'jacoco_coverage = true'))
       + api.properties(
