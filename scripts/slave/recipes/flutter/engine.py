@@ -328,7 +328,7 @@ def BuildLinux(api):
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
   Build(api, 'host_release')
-  RunTests(api, 'out/host_debug_unopt')
+  RunTests(api, 'host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
@@ -399,7 +399,7 @@ def BuildMac(api):
                '--mac-sdk-path', str(GetMacSDKDir(api)))
     Build(api, 'host_debug_unopt')
     Build(api, 'host_debug')
-    RunTests(api, 'out/host_debug_unopt')
+    RunTests(api, 'host_debug_unopt')
     host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
 
     api.zip.directory('Archive FlutterEmbedder.framework',
@@ -587,7 +587,7 @@ def BuildWindows(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
     Build(api, 'host_debug')
-    RunTests(api, 'out\\host_debug')
+    RunTests(api, 'host_debug')
     UploadArtifacts(api, 'windows-x64', [
       ICU_DATA_PATH,
       'out/host_debug/flutter_tester.exe',
