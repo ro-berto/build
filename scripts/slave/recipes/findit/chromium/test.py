@@ -299,16 +299,14 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
 
 
 def GenTests(api):
-  def props(
+  def base(
       tests, platform_name, tester_name, use_analyze=False, good_revision=None,
       bad_revision=None, suspected_revisions=None,
       test_on_good_revision=True, test_repeat_count=20):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
-        'buildername': '%s_chromium_variable' % platform_name,
         'bot_id': 'build1-a1',
-        'buildnumber': 1,
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
         'good_revision': good_revision or 'r0',
@@ -321,8 +319,15 @@ def GenTests(api):
       properties['tests'] = tests
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
-    return api.properties(**properties) + api.platform.name(
-        platform_name) + api.runtime(True, False)
+    return (
+        api.properties(**properties) +
+        api.buildbucket.ci_build(
+            builder='findit_variable',
+            git_repo='https://chromium.googlesource.com/chromium/src',
+        ) +
+        api.platform.name(platform_name) +
+        api.runtime(True, False)
+    )
 
   def verify_report_fields(check, step_odict, expected_report_fields):
     """Verifies fields in report are with expected values."""
@@ -342,8 +347,8 @@ def GenTests(api):
 
   yield (
       api.test('nonexistent_test_step_skipped') +
-      props({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+      base({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -359,8 +364,8 @@ def GenTests(api):
 
   yield (
       api.test('unaffected_test_skipped_by_analyze') +
-      props({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
-            'win', 'Win7 Tests (1)', use_analyze=True) +
+      base({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
+           'win', 'Win7 Tests (1)', use_analyze=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -394,8 +399,8 @@ def GenTests(api):
 
   yield (
       api.test('test_without_targets_not_skipped') +
-      props({'unaffected_tests': ['Test.One'], 'checkperms': []},
-            'win', 'Win7 Tests (1)', use_analyze=True) +
+      base({'unaffected_tests': ['Test.One'], 'checkperms': []},
+           'win', 'Win7 Tests (1)', use_analyze=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -425,8 +430,8 @@ def GenTests(api):
 
   yield (
       api.test('all_test_failed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)', test_on_good_revision=False) +
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)', test_on_good_revision=False) +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -448,8 +453,8 @@ def GenTests(api):
 
   yield (
       api.test('all_test_passed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -471,8 +476,8 @@ def GenTests(api):
 
   yield (
       api.test('only_one_test_passed') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
         'chromium.win', {
           'Win7 Tests (1)': {
@@ -514,7 +519,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_skipped') +
-      props({'checkperms': []}, 'win', 'Win7 Tests (1)') +
+      base({'checkperms': []}, 'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -530,8 +535,8 @@ def GenTests(api):
 
   yield (
       api.test('none_swarming_tests') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)', test_on_good_revision=False) +
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)', test_on_good_revision=False) +
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -555,7 +560,7 @@ def GenTests(api):
 
   yield (
       api.test('swarming_tests') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -577,7 +582,7 @@ def GenTests(api):
 
   yield (
       api.test('findit_culprit_in_last_sub_range') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
           use_analyze=False, good_revision='r0', bad_revision='r6',
           suspected_revisions=['r3']) +
@@ -623,7 +628,7 @@ def GenTests(api):
 
   yield (
       api.test('findit_culprit_in_middle_sub_range') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
           use_analyze=False, good_revision='r0', bad_revision='r6',
           suspected_revisions=['r3', 'r6']) +
@@ -701,7 +706,7 @@ def GenTests(api):
 
   yield (
       api.test('findit_culprit_in_first_sub_range') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
           use_analyze=False, good_revision='r0', bad_revision='r6',
           suspected_revisions=['r6'], test_on_good_revision=False) +
@@ -762,11 +767,11 @@ def GenTests(api):
 
   yield (
       api.test('findit_steps_multiple_culprits') +
-      props(
+      base(
           {'gl_tests': ['Test.gl_One'], 'browser_tests': ['Test.browser_One']},
           'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r3', 'r6']) +
+          good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3', 'r6']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -863,11 +868,11 @@ def GenTests(api):
 
   yield (
       api.test('findit_tests_multiple_culprits') +
-      props(
+      base(
           {'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
           'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r3', 'r5']) +
+          good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3', 'r5']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -962,11 +967,11 @@ def GenTests(api):
 
   yield (
       api.test('findit_consecutive_culprits') +
-      props(
+      base(
           {'gl_tests': ['Test.One']},
           'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r3', 'r4']) +
+          good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3', 'r4']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1024,7 +1029,7 @@ def GenTests(api):
 
   yield (
       api.test('record_infra_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1054,9 +1059,9 @@ def GenTests(api):
 
   yield (
       api.test('use_analyze_set_to_False_for_non_linear_try_job') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=True,
-           good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
+          good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1098,8 +1103,8 @@ def GenTests(api):
 
   yield (
       api.test('flaky_tests') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+           'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
         'chromium.win', {
           'Win7 Tests (1)': {
@@ -1141,7 +1146,7 @@ def GenTests(api):
 
   yield (
       api.test('use_abbreviated_revision_in_step_name') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
           use_analyze=False, good_revision='1234567890abcdefg',
           bad_revision='gfedcba0987654321', test_on_good_revision=False) +
@@ -1169,7 +1174,7 @@ def GenTests(api):
 
   yield (
       api.test('remove_culprits_for_flaky_failures') +
-      props(
+      base(
           {'gl_tests': ['Test.One', 'Test.Two']},
           'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
@@ -1217,7 +1222,7 @@ def GenTests(api):
 
   yield (
       api.test('blink_web_tests') +
-      props({'blink_web_tests': [
+      base({'blink_web_tests': [
                 'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
             'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
@@ -1272,7 +1277,7 @@ def GenTests(api):
 
   yield (
       api.test('builder_as_tester') +
-      props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
+      base({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'linux-ozone-rel': {
@@ -1294,7 +1299,7 @@ def GenTests(api):
 
   yield (
       api.test('gtest_task_failed') +
-      props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
+      base({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'linux-ozone-rel': {
@@ -1325,7 +1330,7 @@ def GenTests(api):
 
   yield (
       api.test('isolated_script_test_task_failed') +
-      props({'blink_web_tests': [
+      base({'blink_web_tests': [
                 'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
             'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
@@ -1363,7 +1368,7 @@ def GenTests(api):
 
   yield (
       api.test('first_revision_compile_failure') +
-      props(
+      base(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
           use_analyze=False, good_revision='r0', bad_revision='r6',
           suspected_revisions=['r3', 'r6']) +
@@ -1389,7 +1394,7 @@ def GenTests(api):
 
   yield (
       api.test('second_revision_compile_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1408,7 +1413,7 @@ def GenTests(api):
 
   yield (
       api.test('third_revision_compile_failure') +
-      props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
       api.chromium_tests.read_source_side_spec(
         'chromium.win', {

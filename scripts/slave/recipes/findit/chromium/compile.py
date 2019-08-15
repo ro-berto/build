@@ -344,15 +344,13 @@ def RunSteps(api, target_mastername, target_buildername,
 
 
 def GenTests(api):
-  def props(compile_targets=None, use_analyze=False,
+  def base(compile_targets=None, use_analyze=False,
             good_revision=None, bad_revision=None,
             suspected_revisions=None, use_bisect=False):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.linux',
-        'buildername': 'linux_variable',
         'bot_id': 'build1-a1',
-        'buildnumber': '1',
         'target_mastername': 'chromium.linux',
         'target_buildername': 'Linux Builder',
         'good_revision': good_revision or 'r0',
@@ -364,8 +362,15 @@ def GenTests(api):
       properties['compile_targets'] = compile_targets
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
-    return api.properties(**properties) + api.platform.name(
-        'linux') + api.runtime(True, False)
+    return (
+        api.properties(**properties) +
+        api.buildbucket.ci_build(
+            builder='findit_variable',
+            git_repo='https://chromium.googlesource.com/chromium/src',
+        ) +
+        api.platform.name('linux') +
+        api.runtime(True, False)
+    )
 
   def base_unittests_additional_compile_target():
     return api.chromium_tests.read_source_side_spec(
@@ -379,7 +384,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_specified_targets') +
-      props(compile_targets=['target_name']) +
+      base(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -390,7 +395,7 @@ def GenTests(api):
   yield (
       api.test('compile_specified_targets_from_parameter') +
       # TODO: Pass a dict instead of a json string for buildbucket property.
-      props(compile_targets=['target_name']) +
+      base(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -400,7 +405,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_none_existing_targets') +
-      props(compile_targets=['gen/a/b/source.cc']) +
+      base(compile_targets=['gen/a/b/source.cc']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': [],
@@ -411,7 +416,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_default_targets') +
-      props() +
+      base() +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Builder': {
@@ -424,28 +429,28 @@ def GenTests(api):
 
   yield (
       api.test('compile_succeeded') +
-      props() +
+      base() +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
   )
 
   yield (
       api.test('compile_succeeded_non_json_buildbucket') +
-      props() +
+      base() +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=0)
   )
 
   yield (
       api.test('compile_failed') +
-      props() +
+      base() +
       base_unittests_additional_compile_target() +
       api.override_step_data('test r1.compile', retcode=1)
   )
 
   yield (
       api.test('failed_compile_upon_infra_failure_goma_setup_failure') +
-      props(compile_targets=['target_name']) +
+      base(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -467,7 +472,7 @@ def GenTests(api):
 
   yield (
       api.test('failed_compile_upon_infra_failure_goma_ping_failure') +
-      props(compile_targets=['target_name']) +
+      base(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -491,7 +496,7 @@ def GenTests(api):
 
   yield (
       api.test('failed_compile_upon_infra_failure_goma_build_error') +
-      props(compile_targets=['target_name']) +
+      base(compile_targets=['target_name']) +
       api.override_step_data('test r1.check_targets',
                              api.json.output({
                                  'found': ['target_name'],
@@ -516,9 +521,9 @@ def GenTests(api):
 
   yield (
       api.test('compile_skipped') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -540,9 +545,9 @@ def GenTests(api):
 
   yield (
       api.test('previous_revision_directory_does_not_exist') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -559,9 +564,9 @@ def GenTests(api):
 
   yield (
       api.test('previous_revision_error_code') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -584,9 +589,9 @@ def GenTests(api):
   )
   yield (
       api.test('previous_revision_bad_output') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -607,9 +612,9 @@ def GenTests(api):
   )
   yield (
       api.test('previous_revision_valid') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -627,9 +632,9 @@ def GenTests(api):
 
   yield (
       api.test('compile_affected_targets_only') +
-      props(use_analyze=True,
-            good_revision='r0',
-            bad_revision='r2') +
+      base(use_analyze=True,
+           good_revision='r0',
+           bad_revision='r2') +
       api.override_step_data(
         'git commits in range',
         api.raw_io.stream_output(
@@ -660,10 +665,10 @@ def GenTests(api):
   # Should only run compile on r3, and then r4.
   yield (
       api.test('find_culprit_in_middle_of_a_sub_range') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r6',
-            suspected_revisions=['r4']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r6',
+           suspected_revisions=['r4']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -688,10 +693,10 @@ def GenTests(api):
   # Should only run compile on r3, and then r2.
   yield (
       api.test('find_culprit_at_first_revision_of_a_sub_range') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r6',
-            suspected_revisions=['r4']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r6',
+           suspected_revisions=['r4']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -717,10 +722,10 @@ def GenTests(api):
   # Should only run compile on r7(failed), then r3(pass) and r4(failed).
   yield (
       api.test('find_culprit_in_second_sub_range') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r6',
-            suspected_revisions=['r4', 'r8']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r6',
+           suspected_revisions=['r4', 'r8']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -752,10 +757,10 @@ def GenTests(api):
   # Should only run compile on r2(failed).
   yield (
       api.test('find_culprit_as_first_revision_of_entire_range') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r5',
-            suspected_revisions=['r2']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r5',
+           suspected_revisions=['r2']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -781,10 +786,10 @@ def GenTests(api):
   # Compile on r5 passed, should bail out right away.
   yield (
       api.test('last_revision_pass_not_bisect') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r5',
-            suspected_revisions=['r5']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r5',
+           suspected_revisions=['r5']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -810,11 +815,11 @@ def GenTests(api):
   # Compile on r10 passed, should bail out right away.
   yield (
       api.test('last_revision_pass_bisect') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r10',
-            suspected_revisions=['r7'],
-            use_bisect=True) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r10',
+           suspected_revisions=['r7'],
+           use_bisect=True) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -851,10 +856,10 @@ def GenTests(api):
   # No reliable results
   yield (
       api.test('first_revision_of_entire_range_failed_but_is_not_culprit') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r5',
-            suspected_revisions=['r2']) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r5',
+           suspected_revisions=['r2']) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -878,10 +883,10 @@ def GenTests(api):
   # Should only run compile on r6(failed), then r4(pass) and r5(failed).
   yield (
       api.test('find_culprit_using_bisect') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r10',
-            use_bisect=True) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r10',
+           use_bisect=True) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -913,11 +918,11 @@ def GenTests(api):
   # Should only run compile on r4(pass), and r5(failed).
   yield (
       api.test('check_suspected_revision_before_bisect') +
-      props(compile_targets=['target_name'],
-            good_revision='r1',
-            bad_revision='r8',
-            suspected_revisions=['r5'],
-            use_bisect=True) +
+      base(compile_targets=['target_name'],
+           good_revision='r1',
+           bad_revision='r8',
+           suspected_revisions=['r5'],
+           use_bisect=True) +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(

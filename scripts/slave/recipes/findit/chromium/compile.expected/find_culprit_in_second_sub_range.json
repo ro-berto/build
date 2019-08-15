@@ -237,7 +237,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"linux_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -523,7 +523,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"linux_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "name": "test r7.get compile targets for scripts",
     "~followup_annotations": [
@@ -705,7 +705,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_variable"
+      "[GOMA_CACHE]/data/findit_variable"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -728,7 +728,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_variable",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -927,11 +927,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux_variable\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"findit_variable\", \"project\": \"project\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux_variable",
+      "findit_variable",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
@@ -1214,7 +1216,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"linux_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "name": "test r3.get compile targets for scripts",
     "~followup_annotations": [
@@ -1396,7 +1398,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_variable"
+      "[GOMA_CACHE]/data/findit_variable"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1419,7 +1421,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_variable",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -1637,11 +1639,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux_variable\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"findit_variable\", \"project\": \"project\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux_variable",
+      "findit_variable",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
@@ -1927,7 +1931,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"linux_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"findit_variable\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
     ],
     "name": "test r4.get compile targets for scripts",
     "~followup_annotations": [
@@ -2109,7 +2113,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_variable"
+      "[GOMA_CACHE]/data/findit_variable"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2132,7 +2136,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_variable",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/findit_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2331,11 +2335,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux_variable\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"findit_variable\", \"project\": \"project\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux_variable",
+      "findit_variable",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",

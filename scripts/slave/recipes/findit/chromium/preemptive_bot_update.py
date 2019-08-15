@@ -15,6 +15,7 @@ DEPS = [
     'chromium_tests',
     'depot_tools/gclient',
     'depot_tools/git',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -63,7 +64,7 @@ NOT_FRESH = 600  # seconds
 
 def TargetMasterAndBuilder(api):
   mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
+  buildername = api.buildbucket.builder_name
   return TARGET_MAPPING[mastername][buildername]
 
 
@@ -97,6 +98,7 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('linux') +
+      api.buildbucket.try_build(builder='linux_chromium_variable') +
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
@@ -104,13 +106,12 @@ def GenTests(api):
           api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
-          'buildername': 'linux_chromium_variable',
           'bot_id': 'build1-a1',
-          'buildnumber': '1',
       })
   )
   yield (
       api.test('win') +
+      api.buildbucket.try_build(builder='win_chromium_variable') +
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
@@ -118,13 +119,12 @@ def GenTests(api):
           api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
-          'buildername': 'win_chromium_variable',
           'bot_id': 'build1-a1',
-          'buildnumber': '1',
       })
   )
   yield (
       api.test('mac') +
+      api.buildbucket.try_build(builder='mac_chromium_variable') +
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
@@ -132,17 +132,14 @@ def GenTests(api):
           api.path['cache'].join('builder', 'src')) +
       api.properties(**{
           'mastername': 'tryserver.chromium.mac',
-          'buildername': 'mac_chromium_variable',
           'bot_id': 'build1-a1',
-          'buildnumber': '1',
       })
   )
   yield (
       api.test('linux_new') +
+      api.buildbucket.try_build(builder='linux_chromium_variable') +
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
-          'buildername': 'linux_chromium_variable',
           'bot_id': 'build1-a1',
-          'buildnumber': '1',
       })
   )

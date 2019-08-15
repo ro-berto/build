@@ -101,15 +101,13 @@ def RunSteps(api, target_mastername, target_testername,
 
 
 def GenTests(api):
-  def props(
+  def base(
       tests, platform_name, tester_name, use_analyze=False, revision=None,
       skip_tests=False):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'tryserver.chromium.%s' % platform_name,
-        'buildername': '%s_chromium_variable' % platform_name,
         'bot_id': 'build1-a1',
-        'buildnumber': 1,
         'target_mastername': 'chromium.%s' % platform_name,
         'target_testername': tester_name,
         'test_revision': revision or 'r0',
@@ -117,13 +115,20 @@ def GenTests(api):
     }
     if tests:
       properties['tests'] = tests
-    return api.properties(**properties) + api.platform.name(
-        platform_name) + api.runtime(True, False)
+    return (
+        api.properties(**properties) +
+        api.buildbucket.ci_build(
+            builder='findit_variable',
+            git_repo='https://chromium.googlesource.com/chromium/src',
+        ) +
+        api.platform.name(platform_name) +
+        api.runtime(True, False)
+    )
 
   yield (
       api.test('flakiness_isolate_only') +
-      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-            skip_tests=True) +
+      base({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+           skip_tests=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -140,7 +145,7 @@ def GenTests(api):
   )
   yield (
       api.test('flakiness_swarming_tests') +
-      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -162,7 +167,7 @@ def GenTests(api):
   )
   yield (
       api.test('flakiness_non-swarming_tests') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -182,7 +187,7 @@ def GenTests(api):
   )
   yield (
       api.test('record_infra_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -211,7 +216,7 @@ def GenTests(api):
   )
   yield (
       api.test('flakiness_blink_web_tests') +
-      props({'blink_web_tests': ['fast/dummy/test.html']},
+      base({'blink_web_tests': ['fast/dummy/test.html']},
             'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
@@ -238,7 +243,7 @@ def GenTests(api):
 
   yield (
       api.test('compile_failure') +
-      props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {

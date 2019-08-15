@@ -30,6 +30,7 @@ DEPS = [
     'depot_tools/git',
     'findit',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/json',
@@ -127,12 +128,10 @@ def RunSteps(api, target_mastername, target_testername,
 
 
 def GenTests(api):
-  def props(isolated_targets, tester_name):
+  def base(isolated_targets, tester_name):
     properties = {
         'path_config': 'kitchen',
         'mastername': 'chromium.findit',
-        'buildername': 'findit_variable',
-        'buildnumber': '1234',
         'bot_id': 'beefy_vm',
         'target_mastername': 'chromium.findit',
         'target_testername': tester_name,
@@ -196,8 +195,15 @@ def GenTests(api):
             }
         },
     }
-    return api.properties(**properties) + api.platform.name(
-        'linux') + api.runtime(True, False)
+    return (
+        api.properties(**properties) +
+        api.buildbucket.ci_build(
+            builder='findit_variable',
+            git_repo='https://chromium.googlesource.com/chromium/src',
+        ) +
+        api.platform.name('linux') +
+        api.runtime(True, False)
+    )
 
   def verify_report(check, step_odict, expected_isolated_tests):
     step = step_odict['report']
@@ -210,7 +216,7 @@ def GenTests(api):
 
   yield (
       api.test('no_matching_isolated_target') +
-      props(['browser_tests'], 'findit_builder_tester') +
+      base(['browser_tests'], 'findit_builder_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
@@ -229,7 +235,7 @@ def GenTests(api):
   )
   yield (
       api.test('match_exactly_one_test_target') +
-      props(['browser_tests'], 'findit_tester') +
+      base(['browser_tests'], 'findit_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
@@ -249,7 +255,7 @@ def GenTests(api):
   )
   yield (
       api.test('match_more_than_one_test_target') +
-      props(['browser_tests'], 'findit_tester') +
+      base(['browser_tests'], 'findit_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
@@ -283,7 +289,7 @@ def GenTests(api):
   )
   yield (
       api.test('failed_to_compile_goma') +
-      props(['browser_tests'], 'findit_tester') +
+      base(['browser_tests'], 'findit_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
@@ -318,7 +324,7 @@ def GenTests(api):
   )
   yield (
       api.test('compile_failure') +
-      props(['browser_tests'], 'findit_tester') +
+      base(['browser_tests'], 'findit_tester') +
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
