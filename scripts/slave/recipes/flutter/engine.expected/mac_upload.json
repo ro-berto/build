@@ -111,6 +111,57 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses"
+    ],
+    "infra_step": true,
+    "name": "mkdir licenses"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "android_sdk_hash",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses/android-sdk-license"
+    ],
+    "infra_step": true,
+    "name": "android sdk license",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@android-sdk-license@android_sdk_hash@@@",
+      "@@@STEP_LOG_END@android-sdk-license@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "android_sdk_preview_hash",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses/android-sdk-preview-license"
+    ],
+    "infra_step": true,
+    "name": "android sdk preview license",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@android-sdk-preview-license@android_sdk_preview_hash@@@",
+      "@@@STEP_LOG_END@android-sdk-preview-license@@@"
+    ]
+  },
+  {
+    "cmd": [
       "cipd",
       "ensure",
       "-root",
@@ -121,6 +172,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -161,6 +213,7 @@
       "[CACHE]/osx_sdk/XCode.app"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -184,6 +237,7 @@
       "[CACHE]/osx_sdk/XCode.app"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -210,6 +264,7 @@
       "--full-dart-sdk"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -235,6 +290,7 @@
       "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -266,6 +322,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -292,6 +349,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -337,6 +395,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -364,6 +423,7 @@
       "[START_DIR]/src/out/host_debug_unopt"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -391,6 +451,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -434,6 +495,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -466,6 +528,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -528,6 +591,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -565,6 +629,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -594,6 +659,7 @@
       "dart,engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -625,6 +691,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -651,6 +718,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -696,6 +764,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -723,6 +792,7 @@
       "[START_DIR]/src/out/host_debug"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -750,6 +820,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -793,6 +864,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -825,6 +897,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -887,6 +960,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -924,6 +998,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -949,6 +1024,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -971,6 +1047,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -993,6 +1070,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1021,6 +1099,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/darwin-x64/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1050,6 +1129,7 @@
       "[CLEANUP]/tmp_tmp_1"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1072,6 +1152,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1100,6 +1181,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/darwin-x64/FlutterEmbedder.framework.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1129,6 +1211,7 @@
       "[CLEANUP]/tmp_tmp_2"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1151,6 +1234,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1179,6 +1263,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/darwin-x64/FlutterMacOS.framework.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1208,6 +1293,7 @@
       "[CLEANUP]/tmp_tmp_3"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1230,6 +1316,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1258,6 +1345,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/dart-sdk-darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1287,6 +1375,7 @@
       "[CLEANUP]/tmp_tmp_4"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1309,6 +1398,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1337,6 +1427,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1366,6 +1457,7 @@
       "[CLEANUP]/tmp_tmp_5"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1392,6 +1484,7 @@
       "--enable-vulkan"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1423,6 +1516,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1449,6 +1543,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1494,6 +1589,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1521,6 +1617,7 @@
       "[START_DIR]/src/out/android_release_vulkan"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1548,6 +1645,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1591,6 +1689,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1623,6 +1722,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1685,6 +1785,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1722,6 +1823,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1750,6 +1852,7 @@
       "--android"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1775,6 +1878,7 @@
       "--android-cpu=arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1799,6 +1903,7 @@
       "--android"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1824,6 +1929,7 @@
       "--android-cpu=arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1855,6 +1961,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1881,6 +1988,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1926,6 +2034,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1954,6 +2063,7 @@
       "flutter/lib/snapshot"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1981,6 +2091,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2024,6 +2135,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2056,6 +2168,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2118,6 +2231,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2155,6 +2269,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2190,6 +2305,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2216,6 +2332,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2261,6 +2378,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2289,6 +2407,7 @@
       "flutter/lib/snapshot"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2316,6 +2435,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2359,6 +2479,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2391,6 +2512,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2453,6 +2575,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2490,6 +2613,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2525,6 +2649,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2551,6 +2676,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2596,6 +2722,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2624,6 +2751,7 @@
       "flutter/lib/snapshot"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2651,6 +2779,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2694,6 +2823,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2726,6 +2856,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2788,6 +2919,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2825,6 +2957,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2860,6 +2993,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2886,6 +3020,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2931,6 +3066,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2959,6 +3095,7 @@
       "flutter/lib/snapshot"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2986,6 +3123,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3029,6 +3167,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3061,6 +3200,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3123,6 +3263,7 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3160,6 +3301,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3185,6 +3327,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3213,6 +3356,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3242,6 +3386,7 @@
       "[CLEANUP]/tmp_tmp_6"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3264,6 +3409,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3292,6 +3438,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3321,6 +3468,7 @@
       "[CLEANUP]/tmp_tmp_7"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3343,6 +3491,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3371,6 +3520,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3400,6 +3550,7 @@
       "[CLEANUP]/tmp_tmp_8"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3422,6 +3573,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3450,6 +3602,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/darwin-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3479,6 +3632,7 @@
       "[CLEANUP]/tmp_tmp_9"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3497,14 +3651,17 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "debug",
-      "--no-lto"
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/gems"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3517,24 +3674,74 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --ios --runtime-mode debug --no-lto"
+    "infra_step": true,
+    "name": "mkdir gems"
+  },
+  {
+    "cmd": [
+      "gem",
+      "install",
+      "jazzy:0.8.4",
+      "--install-dir",
+      "."
+    ],
+    "cwd": "[START_DIR]/gems",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "install jazzy"
+  },
+  {
+    "cmd": [
+      "gem",
+      "install",
+      "xcpretty:0.3.0",
+      "--install-dir",
+      "."
+    ],
+    "cwd": "[START_DIR]/gems",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "install xcpretty"
   },
   {
     "cmd": [
       "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
-      "--ios",
-      "--runtime-mode",
-      "debug",
-      "--ios-cpu=arm",
-      "--no-lto"
+      "--unoptimized"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3543,131 +3750,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "debug",
-      "--simulator",
-      "--no-lto"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode debug --simulator --no-lto"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "profile"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode profile"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "profile",
-      "--ios-cpu=arm"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode profile --ios-cpu=arm"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "release"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode release"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "release",
-      "--ios-cpu=arm"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode release --ios-cpu=arm"
+    "name": "gn --unoptimized"
   },
   {
     "cmd": [],
@@ -3686,10 +3769,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3712,6 +3798,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3723,6 +3811,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3757,10 +3846,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3781,13 +3873,16 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/ios_debug_sim"
+      "[START_DIR]/src/out/host_debug_unopt"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3796,7 +3891,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build ios_debug_sim"
+    "name": "build host_debug_unopt (2)"
   },
   {
     "cmd": [],
@@ -3811,6 +3906,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3822,6 +3919,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3854,6 +3952,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3865,6 +3965,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3886,6 +3987,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3897,6 +4000,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3906,6 +4010,563 @@
       ]
     },
     "name": "postprocess_for_goma (8).stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bigquery-upload",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "build host_debug_unopt",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"ci\", \"builder\": \"Mac Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "Mac Engine"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (8).upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma (8).stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "debug",
+      "--no-lto"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode debug --no-lto"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "debug",
+      "--ios-cpu=arm",
+      "--no-lto"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "debug",
+      "--simulator",
+      "--no-lto"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode debug --simulator --no-lto"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "profile"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode profile"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "profile",
+      "--ios-cpu=arm"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode profile --ios-cpu=arm"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "release"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode release"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "release",
+      "--ios-cpu=arm"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode release --ios-cpu=arm"
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (9)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/Mac_Engine"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (9).goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (9).start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (9).start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-j",
+      "1024",
+      "-C",
+      "[START_DIR]/src/out/ios_debug_sim"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "build ios_debug_sim"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma (9)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (9).goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (9).goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (9).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3948,10 +4609,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3960,7 +4624,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (8).upload_log",
+    "name": "postprocess_for_goma (9).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3985,10 +4649,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -3998,7 +4665,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (8).stop cloudtail",
+    "name": "postprocess_for_goma (9).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4010,10 +4677,13 @@
     ],
     "cwd": "[START_DIR]/src/flutter/testing/ios/IosUnitTests",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4025,8 +4695,32 @@
     "name": "iOS Unit Tests"
   },
   {
+    "cmd": [
+      "./run_ios_tests.sh",
+      "ios_debug_sim"
+    ],
+    "cwd": "[START_DIR]/src/flutter/testing/scenario_app",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Scenario App Unit Tests"
+  },
+  {
     "cmd": [],
-    "name": "preprocess_for_goma (9)"
+    "name": "preprocess_for_goma (10)"
   },
   {
     "cmd": [
@@ -4041,10 +4735,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4054,7 +4751,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (9).goma cache directory",
+    "name": "preprocess_for_goma (10).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4067,6 +4764,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4078,6 +4777,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4087,7 +4787,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (9).start_goma",
+    "name": "preprocess_for_goma (10).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -4112,10 +4812,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4125,7 +4828,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (9).start cloudtail",
+    "name": "preprocess_for_goma (10).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4139,10 +4842,13 @@
       "[START_DIR]/src/out/ios_debug"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4155,7 +4861,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (9)"
+    "name": "postprocess_for_goma (10)"
   },
   {
     "cmd": [
@@ -4166,6 +4872,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4177,6 +4885,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4185,7 +4894,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (9).goma_jsonstatus",
+    "name": "postprocess_for_goma (10).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4209,6 +4918,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4220,6 +4931,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4228,7 +4940,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (9).goma_stat",
+    "name": "postprocess_for_goma (10).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4241,6 +4953,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4252,6 +4966,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4260,7 +4975,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (9).stop_goma",
+    "name": "postprocess_for_goma (10).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4303,10 +5018,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4315,7 +5033,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (9).upload_log",
+    "name": "postprocess_for_goma (10).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4340,10 +5058,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4353,14 +5074,14 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (9).stop cloudtail",
+    "name": "postprocess_for_goma (10).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (10)"
+    "name": "preprocess_for_goma (11)"
   },
   {
     "cmd": [
@@ -4375,10 +5096,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4388,7 +5112,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (10).goma cache directory",
+    "name": "preprocess_for_goma (11).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4401,6 +5125,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4412,6 +5138,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4421,7 +5148,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (10).start_goma",
+    "name": "preprocess_for_goma (11).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -4446,10 +5173,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4459,7 +5189,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (10).start cloudtail",
+    "name": "preprocess_for_goma (11).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4473,10 +5203,13 @@
       "[START_DIR]/src/out/ios_debug_arm"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4489,7 +5222,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (10)"
+    "name": "postprocess_for_goma (11)"
   },
   {
     "cmd": [
@@ -4500,6 +5233,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4511,6 +5246,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4519,7 +5255,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (10).goma_jsonstatus",
+    "name": "postprocess_for_goma (11).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4543,6 +5279,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4554,6 +5292,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4562,7 +5301,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (10).goma_stat",
+    "name": "postprocess_for_goma (11).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4575,6 +5314,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4586,6 +5327,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4594,7 +5336,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (10).stop_goma",
+    "name": "postprocess_for_goma (11).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4637,10 +5379,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4649,7 +5394,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (10).upload_log",
+    "name": "postprocess_for_goma (11).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4674,10 +5419,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4687,14 +5435,14 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (10).stop cloudtail",
+    "name": "postprocess_for_goma (11).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (11)"
+    "name": "preprocess_for_goma (12)"
   },
   {
     "cmd": [
@@ -4709,10 +5457,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4722,7 +5473,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (11).goma cache directory",
+    "name": "preprocess_for_goma (12).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4735,6 +5486,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4746,6 +5499,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4755,7 +5509,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (11).start_goma",
+    "name": "preprocess_for_goma (12).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -4780,10 +5534,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4793,7 +5550,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (11).start cloudtail",
+    "name": "preprocess_for_goma (12).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4807,10 +5564,13 @@
       "[START_DIR]/src/out/ios_profile"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4823,7 +5583,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (11)"
+    "name": "postprocess_for_goma (12)"
   },
   {
     "cmd": [
@@ -4834,6 +5594,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4845,6 +5607,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4853,7 +5616,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (11).goma_jsonstatus",
+    "name": "postprocess_for_goma (12).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -4877,6 +5640,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4888,6 +5653,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4896,7 +5662,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (11).goma_stat",
+    "name": "postprocess_for_goma (12).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4909,6 +5675,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4920,6 +5688,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4928,7 +5697,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (11).stop_goma",
+    "name": "postprocess_for_goma (12).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4971,10 +5740,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -4983,7 +5755,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (11).upload_log",
+    "name": "postprocess_for_goma (12).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5008,10 +5780,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5021,14 +5796,14 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (11).stop cloudtail",
+    "name": "postprocess_for_goma (12).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (12)"
+    "name": "preprocess_for_goma (13)"
   },
   {
     "cmd": [
@@ -5043,10 +5818,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5056,7 +5834,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (12).goma cache directory",
+    "name": "preprocess_for_goma (13).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5069,6 +5847,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5080,6 +5860,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5089,7 +5870,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (12).start_goma",
+    "name": "preprocess_for_goma (13).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -5114,10 +5895,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5127,7 +5911,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (12).start cloudtail",
+    "name": "preprocess_for_goma (13).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5141,10 +5925,13 @@
       "[START_DIR]/src/out/ios_profile_arm"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5157,7 +5944,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (12)"
+    "name": "postprocess_for_goma (13)"
   },
   {
     "cmd": [
@@ -5168,6 +5955,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5179,6 +5968,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5187,7 +5977,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (12).goma_jsonstatus",
+    "name": "postprocess_for_goma (13).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5211,6 +6001,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5222,6 +6014,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5230,7 +6023,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (12).goma_stat",
+    "name": "postprocess_for_goma (13).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5243,6 +6036,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5254,6 +6049,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5262,7 +6058,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (12).stop_goma",
+    "name": "postprocess_for_goma (13).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5305,10 +6101,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5317,7 +6116,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (12).upload_log",
+    "name": "postprocess_for_goma (13).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5342,10 +6141,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5355,14 +6157,14 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (12).stop cloudtail",
+    "name": "postprocess_for_goma (13).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (13)"
+    "name": "preprocess_for_goma (14)"
   },
   {
     "cmd": [
@@ -5377,10 +6179,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5390,7 +6195,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (13).goma cache directory",
+    "name": "preprocess_for_goma (14).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5403,6 +6208,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5414,6 +6221,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5423,7 +6231,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (13).start_goma",
+    "name": "preprocess_for_goma (14).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -5448,10 +6256,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5461,7 +6272,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (13).start cloudtail",
+    "name": "preprocess_for_goma (14).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5475,10 +6286,13 @@
       "[START_DIR]/src/out/ios_release"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5491,7 +6305,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (13)"
+    "name": "postprocess_for_goma (14)"
   },
   {
     "cmd": [
@@ -5502,6 +6316,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5513,6 +6329,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5521,7 +6338,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (13).goma_jsonstatus",
+    "name": "postprocess_for_goma (14).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5545,6 +6362,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5556,6 +6375,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5564,7 +6384,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (13).goma_stat",
+    "name": "postprocess_for_goma (14).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5577,6 +6397,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5588,6 +6410,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5596,7 +6419,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (13).stop_goma",
+    "name": "postprocess_for_goma (14).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5639,10 +6462,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5651,7 +6477,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (13).upload_log",
+    "name": "postprocess_for_goma (14).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5676,10 +6502,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5689,14 +6518,14 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (13).stop cloudtail",
+    "name": "postprocess_for_goma (14).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (14)"
+    "name": "preprocess_for_goma (15)"
   },
   {
     "cmd": [
@@ -5711,10 +6540,13 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5724,7 +6556,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (14).goma cache directory",
+    "name": "preprocess_for_goma (15).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5737,6 +6569,8 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5748,6 +6582,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5757,7 +6592,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (14).start_goma",
+    "name": "preprocess_for_goma (15).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -5782,10 +6617,13 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5795,7 +6633,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (14).start cloudtail",
+    "name": "preprocess_for_goma (15).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5809,10 +6647,13 @@
       "[START_DIR]/src/out/ios_release_arm"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5825,7 +6666,7 @@
   },
   {
     "cmd": [],
-    "name": "postprocess_for_goma (14)"
+    "name": "postprocess_for_goma (15)"
   },
   {
     "cmd": [
@@ -5836,6 +6677,8 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5847,6 +6690,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5855,7 +6699,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (14).goma_jsonstatus",
+    "name": "postprocess_for_goma (15).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -5879,6 +6723,8 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5890,6 +6736,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5898,7 +6745,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (14).goma_stat",
+    "name": "postprocess_for_goma (15).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5911,6 +6758,8 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5922,6 +6771,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5930,7 +6780,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (14).stop_goma",
+    "name": "postprocess_for_goma (15).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5973,10 +6823,13 @@
       "Mac Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -5985,7 +6838,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "postprocess_for_goma (14).upload_log",
+    "name": "postprocess_for_goma (15).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -6010,10 +6863,13 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6023,7 +6879,7 @@
       ]
     },
     "infra_step": true,
-    "name": "postprocess_for_goma (14).stop cloudtail",
+    "name": "postprocess_for_goma (15).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6042,10 +6898,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6063,10 +6922,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6090,10 +6952,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6111,10 +6976,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6139,10 +7007,13 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/ios/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6168,10 +7039,13 @@
       "[CLEANUP]/tmp_tmp_10"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6197,10 +7071,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6218,10 +7095,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6245,10 +7125,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6266,10 +7149,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6294,10 +7180,13 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/ios-profile/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6323,10 +7212,13 @@
       "[CLEANUP]/tmp_tmp_11"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6354,10 +7246,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6375,10 +7270,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6402,10 +7300,13 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6423,10 +7324,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6451,10 +7355,13 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/ios-release/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6480,10 +7387,13 @@
       "[CLEANUP]/tmp_tmp_12"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6502,10 +7412,13 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6530,10 +7443,13 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/ios-release/Flutter.dSYM.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -6550,63 +7466,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/gems"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "mkdir gems"
-  },
-  {
-    "cmd": [
-      "gem",
-      "install",
-      "jazzy:0.8.4",
-      "--install-dir",
-      "."
-    ],
-    "cwd": "[START_DIR]/gems",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "install gems"
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/flutter/tools/gen_objcdoc.sh",
       "[CLEANUP]/tmp_tmp_13"
     ],
     "cwd": "[START_DIR]/src/flutter",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -6630,6 +7495,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -6660,6 +7526,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/ios-objcdoc.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -6691,6 +7558,7 @@
       "[CLEANUP]/tmp_tmp_13"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -6715,6 +7583,7 @@
     ],
     "cwd": "[START_DIR]/src/flutter/testing/symbols",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6736,6 +7605,7 @@
       "[START_DIR]/src/out"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6752,7 +7622,7 @@
   },
   {
     "cmd": [],
-    "name": "preprocess_for_goma (15)"
+    "name": "preprocess_for_goma (16)"
   },
   {
     "cmd": [
@@ -6767,6 +7637,7 @@
       "[CACHE]/goma/data/Mac_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6780,7 +7651,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (15).goma cache directory",
+    "name": "preprocess_for_goma (16).goma cache directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6793,6 +7664,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Mac_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6813,7 +7685,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (15).start_goma",
+    "name": "preprocess_for_goma (16).start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -6838,6 +7710,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6851,7 +7724,7 @@
       ]
     },
     "infra_step": true,
-    "name": "preprocess_for_goma (15).start cloudtail",
+    "name": "preprocess_for_goma (16).start cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -6865,6 +7738,7 @@
       "--upload"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6891,6 +7765,7 @@
       "[CLEANUP]/tmp_tmp_14/fuchsia.stamp"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6922,6 +7797,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/fuchsia/fuchsia.stamp"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6951,6 +7827,7 @@
       "[CLEANUP]/tmp_tmp_14"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6973,6 +7850,7 @@
       "--reset"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {

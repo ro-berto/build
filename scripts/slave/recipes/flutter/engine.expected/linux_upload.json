@@ -112,11 +112,63 @@
   {
     "cmd": [
       "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses"
+    ],
+    "infra_step": true,
+    "name": "mkdir licenses"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "android_sdk_hash",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses/android-sdk-license"
+    ],
+    "infra_step": true,
+    "name": "android sdk license",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@android-sdk-license@android_sdk_hash@@@",
+      "@@@STEP_LOG_END@android-sdk-license@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "android_sdk_preview_hash",
+      "[START_DIR]/src/third_party/android_tools/sdk/licenses/android-sdk-preview-license"
+    ],
+    "infra_step": true,
+    "name": "android sdk preview license",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@android-sdk-preview-license@android_sdk_preview_hash@@@",
+      "@@@STEP_LOG_END@android-sdk-preview-license@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--unoptimized"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -148,6 +200,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -174,6 +227,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -219,6 +273,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -247,6 +302,7 @@
       "generate_dart_ui"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -274,6 +330,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -317,6 +374,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -349,6 +407,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -411,6 +470,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -448,6 +508,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -473,6 +534,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -497,6 +559,7 @@
       "--full-dart-sdk"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -521,6 +584,7 @@
       "--unoptimized"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -544,6 +608,7 @@
       "release"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -575,6 +640,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -601,6 +667,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -646,6 +713,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -673,6 +741,7 @@
       "[START_DIR]/src/out/host_debug_unopt"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -700,6 +769,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -743,6 +813,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -775,6 +846,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -837,6 +909,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -874,6 +947,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -903,6 +977,7 @@
       "dart,engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -934,6 +1009,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -960,6 +1036,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1005,6 +1082,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1032,6 +1110,7 @@
       "[START_DIR]/src/out/host_debug"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1059,6 +1138,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1102,6 +1182,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1134,6 +1215,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1196,6 +1278,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1233,6 +1316,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1268,6 +1352,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1294,6 +1379,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1339,6 +1425,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1366,6 +1453,7 @@
       "[START_DIR]/src/out/host_release"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1393,6 +1481,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1436,6 +1525,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1468,6 +1558,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1530,6 +1621,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1567,6 +1659,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1592,6 +1685,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1620,6 +1714,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/linux-x64/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1649,6 +1744,7 @@
       "[CLEANUP]/tmp_tmp_1"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1671,6 +1767,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1699,6 +1796,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/linux-x64/linux-x64-embedder"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1728,6 +1826,7 @@
       "[CLEANUP]/tmp_tmp_2"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1750,6 +1849,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1778,6 +1878,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/linux-x64/linux-x64-flutter.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1807,6 +1908,7 @@
       "[CLEANUP]/tmp_tmp_3"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1829,6 +1931,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1857,6 +1960,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/linux-x64/flutter-cpp-client-wrapper.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1886,6 +1990,7 @@
       "[CLEANUP]/tmp_tmp_4"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1908,6 +2013,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1936,6 +2042,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_patched_sdk.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1965,6 +2072,7 @@
       "[CLEANUP]/tmp_tmp_5"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1992,6 +2100,7 @@
       "[START_DIR]/src/out/host_release/flutter_patched_sdk_product"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2014,6 +2123,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2042,6 +2152,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_patched_sdk_product.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2071,6 +2182,7 @@
       "[CLEANUP]/tmp_tmp_6"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2093,6 +2205,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2121,6 +2234,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/dart-sdk-linux-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2150,6 +2264,7 @@
       "[CLEANUP]/tmp_tmp_7"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2172,6 +2287,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2200,6 +2316,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-linux-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2229,6 +2346,7 @@
       "[CLEANUP]/tmp_tmp_8"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2253,6 +2371,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2277,6 +2396,7 @@
       "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2308,6 +2428,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2334,6 +2455,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2379,6 +2501,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2406,6 +2529,7 @@
       "[START_DIR]/src/out/android_debug"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2433,6 +2557,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2476,6 +2601,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2508,6 +2634,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2570,6 +2697,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2607,6 +2735,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2638,6 +2767,7 @@
       "android_debug"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2659,6 +2789,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2687,6 +2818,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2716,6 +2848,7 @@
       "[CLEANUP]/tmp_tmp_9"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2738,6 +2871,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2766,6 +2900,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2795,6 +2930,7 @@
       "[CLEANUP]/tmp_tmp_10"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2820,6 +2956,7 @@
       "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2851,6 +2988,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2877,6 +3015,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2922,6 +3061,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2949,6 +3089,7 @@
       "[START_DIR]/src/out/android_debug_arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -2976,6 +3117,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3019,6 +3161,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3051,6 +3194,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3113,6 +3257,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3150,6 +3295,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3175,6 +3321,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3203,6 +3350,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3232,6 +3380,7 @@
       "[CLEANUP]/tmp_tmp_11"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3254,6 +3403,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3282,6 +3432,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3311,6 +3462,7 @@
       "[CLEANUP]/tmp_tmp_12"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3336,6 +3488,7 @@
       "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3367,6 +3520,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3393,6 +3547,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3438,6 +3593,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3465,6 +3621,7 @@
       "[START_DIR]/src/out/android_debug_x86"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3492,6 +3649,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3535,6 +3693,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3567,6 +3726,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3629,6 +3789,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3666,6 +3827,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3691,6 +3853,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3719,6 +3882,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x86/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3748,6 +3912,7 @@
       "[CLEANUP]/tmp_tmp_13"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3770,6 +3935,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3798,6 +3964,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x86/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3827,6 +3994,7 @@
       "[CLEANUP]/tmp_tmp_14"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3852,6 +4020,7 @@
       "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3883,6 +4052,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3909,6 +4079,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3954,6 +4125,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -3981,6 +4153,7 @@
       "[START_DIR]/src/out/android_debug_x64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4008,6 +4181,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4051,6 +4225,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4083,6 +4258,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4145,6 +4321,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4182,6 +4359,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4207,6 +4385,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4235,6 +4414,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4264,6 +4444,7 @@
       "[CLEANUP]/tmp_tmp_15"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4286,6 +4467,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4314,6 +4496,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4343,6 +4526,7 @@
       "[CLEANUP]/tmp_tmp_16"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4375,6 +4559,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4401,6 +4586,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4446,6 +4632,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4474,6 +4661,7 @@
       ":dist"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4501,6 +4689,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4544,6 +4733,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4576,6 +4766,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4638,6 +4829,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4675,6 +4867,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4700,6 +4893,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4728,6 +4922,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/sky_engine.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4757,6 +4952,7 @@
       "[CLEANUP]/tmp_tmp_17"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4780,6 +4976,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4801,6 +4998,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4827,6 +5025,7 @@
       "[CLEANUP]/tmp_tmp_18"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4855,6 +5054,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-javadoc.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4884,6 +5084,7 @@
       "--enable-vulkan"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4915,6 +5116,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -4941,6 +5143,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4986,6 +5189,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5013,6 +5217,7 @@
       "[START_DIR]/src/out/android_release_vulkan"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5040,6 +5245,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5083,6 +5289,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5115,6 +5322,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5177,6 +5385,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5214,6 +5423,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5237,11 +5447,13 @@
       "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
-      "--android",
-      "--runtime-mode=profile",
-      "--android-cpu=arm"
+      "--runtime-mode",
+      "profile",
+      "--unoptimized",
+      "--no-lto"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5254,7 +5466,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm"
+    "name": "gn --runtime-mode profile --unoptimized --no-lto"
   },
   {
     "cmd": [],
@@ -5273,6 +5485,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5299,6 +5512,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5344,6 +5558,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5368,9 +5583,10 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/android_profile"
+      "[START_DIR]/src/out/host_profile_unopt"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5383,7 +5599,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build android_profile"
+    "name": "build host_profile_unopt"
   },
   {
     "cmd": [],
@@ -5398,6 +5614,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5441,6 +5658,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5473,6 +5691,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5519,7 +5738,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_profile",
+      "build host_profile_unopt",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -5535,6 +5754,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5572,6 +5792,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5593,250 +5814,14 @@
   {
     "cmd": [
       "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Zip android-arm-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_19/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[CLEANUP]/tmp_tmp_19/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/artifacts.zip"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "gsutil upload \"android-arm-profile/artifacts.zip\"",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/artifacts.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/tmp_tmp_19"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "temp dir for android-arm-profile UploadArtifacts artifacts.zip"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Zip android-arm-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_20/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[CLEANUP]/tmp_tmp_20/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/linux-x64.zip"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "gsutil upload \"android-arm-profile/linux-x64.zip\"",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/linux-x64.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/tmp_tmp_20"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "temp dir for android-arm-profile UploadArtifacts linux-x64.zip"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Zip android-arm-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_21/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[CLEANUP]/tmp_tmp_21/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/symbols.zip"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "gsutil upload \"android-arm-profile/symbols.zip\"",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/symbols.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/tmp_tmp_21"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "temp dir for android-arm-profile UploadArtifacts symbols.zip"
-  },
-  {
-    "cmd": [
-      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
-      "--runtime-mode=release",
-      "--android-cpu=arm"
+      "--runtime-mode=profile",
+      "--android-cpu=arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5849,7 +5834,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm"
+    "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
   },
   {
     "cmd": [],
@@ -5868,6 +5853,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5894,6 +5880,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5939,6 +5926,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5963,9 +5951,10 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/android_release"
+      "[START_DIR]/src/out/android_profile_arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -5978,7 +5967,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build android_release"
+    "name": "build android_profile_arm64"
   },
   {
     "cmd": [],
@@ -5993,6 +5982,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6036,6 +6026,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6068,6 +6059,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6114,7 +6106,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_release",
+      "build android_profile_arm64",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -6130,6 +6122,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6167,6 +6160,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6187,11 +6181,13 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]/resources/zip.py"
+      "./flutter/testing/scenario_app/assemble_apk.sh",
+      "[START_DIR]/src/out/host_profile_unopt",
+      "[START_DIR]/src/out/android_profile_arm64/clang_x64"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6204,22 +6200,18 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_22/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Build scenario app"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[CLEANUP]/tmp_tmp_22/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/artifacts.zip"
+      "./flutter/ci/firebase_testlab.sh",
+      "[START_DIR]/src/flutter/testing/scenario_app/android/app/build/outputs/apk/debug/app-debug.apk",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "deadbeef"
     ],
+    "cwd": "[START_DIR]/src",
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6232,37 +6224,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "infra_step": true,
-    "name": "gsutil upload \"android-arm-release/artifacts.zip\"",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/artifacts.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/tmp_tmp_22"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "temp dir for android-arm-release UploadArtifacts artifacts.zip"
+    "name": "Firebase test"
   },
   {
     "cmd": [
@@ -6271,6 +6233,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6283,8 +6246,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_23/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm64-profile artifacts.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_19/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -6295,10 +6258,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_23/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/linux-x64.zip"
+      "[CLEANUP]/tmp_tmp_19/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6312,9 +6276,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm-release/linux-x64.zip\"",
+    "name": "gsutil upload \"android-arm64-profile/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/linux-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/artifacts.zip@@@"
     ]
   },
   {
@@ -6325,9 +6289,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_23"
+      "[CLEANUP]/tmp_tmp_19"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6341,7 +6306,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm-release UploadArtifacts linux-x64.zip"
+    "name": "temp dir for android-arm64-profile UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -6350,6 +6315,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6362,8 +6328,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_24/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm64-profile linux-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_20/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -6374,10 +6340,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_24/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/symbols.zip"
+      "[CLEANUP]/tmp_tmp_20/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/linux-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6391,9 +6358,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm-release/symbols.zip\"",
+    "name": "gsutil upload \"android-arm64-profile/linux-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/linux-x64.zip@@@"
     ]
   },
   {
@@ -6404,9 +6371,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_24"
+      "[CLEANUP]/tmp_tmp_20"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6420,21 +6388,16 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm-release UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm64-profile UploadArtifacts linux-x64.zip"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py",
-      "--library",
-      "[START_DIR]/src/out/android_release/libflutter.so",
-      "--destdir",
-      "[CLEANUP]/tmp_tmp_25/sizes",
-      "--addr2line-binary",
-      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line"
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6447,7 +6410,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "generate treemap for android-arm-release"
+    "name": "Zip android-arm64-profile symbols.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_21/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -6458,11 +6422,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "-r",
-      "[CLEANUP]/tmp_tmp_25/sizes",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release"
+      "[CLEANUP]/tmp_tmp_21/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6476,9 +6440,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload treemap for out/android_release/libflutter.so",
+    "name": "gsutil upload \"android-arm64-profile/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/sizes/index.html@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/symbols.zip@@@"
     ]
   },
   {
@@ -6489,9 +6453,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_25"
+      "[CLEANUP]/tmp_tmp_21"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6505,7 +6470,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for treemap"
+    "name": "temp dir for android-arm64-profile UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
@@ -6513,10 +6478,11 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
-      "--runtime-mode=profile",
+      "--runtime-mode=release",
       "--android-cpu=arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6529,7 +6495,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
+    "name": "gn --android --runtime-mode=release --android-cpu=arm64"
   },
   {
     "cmd": [],
@@ -6548,6 +6514,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6574,6 +6541,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6619,6 +6587,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6643,9 +6612,10 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/android_profile_arm64"
+      "[START_DIR]/src/out/android_release_arm64"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6658,7 +6628,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build android_profile_arm64"
+    "name": "build android_release_arm64"
   },
   {
     "cmd": [],
@@ -6673,6 +6643,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6716,6 +6687,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6748,6 +6720,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -6794,7 +6767,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_profile_arm64",
+      "build android_release_arm64",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -6810,6 +6783,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6847,6 +6821,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6872,6 +6847,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6884,8 +6860,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_26/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm64-release artifacts.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_22/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -6896,10 +6872,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_26/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/artifacts.zip"
+      "[CLEANUP]/tmp_tmp_22/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6913,9 +6890,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-profile/artifacts.zip\"",
+    "name": "gsutil upload \"android-arm64-release/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/artifacts.zip@@@"
     ]
   },
   {
@@ -6926,9 +6903,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_26"
+      "[CLEANUP]/tmp_tmp_22"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6942,7 +6920,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-profile UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-arm64-release UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -6951,6 +6929,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6963,8 +6942,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_27/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm64-release linux-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_23/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -6975,10 +6954,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_27/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/linux-x64.zip"
+      "[CLEANUP]/tmp_tmp_23/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/linux-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -6992,9 +6972,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-profile/linux-x64.zip\"",
+    "name": "gsutil upload \"android-arm64-release/linux-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/linux-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/linux-x64.zip@@@"
     ]
   },
   {
@@ -7005,9 +6985,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_27"
+      "[CLEANUP]/tmp_tmp_23"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7021,7 +7002,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-profile UploadArtifacts linux-x64.zip"
+    "name": "temp dir for android-arm64-release UploadArtifacts linux-x64.zip"
   },
   {
     "cmd": [
@@ -7030,6 +7011,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7042,8 +7024,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_28/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm64-release symbols.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_24/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -7054,10 +7036,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_28/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/symbols.zip"
+      "[CLEANUP]/tmp_tmp_24/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7071,9 +7054,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-profile/symbols.zip\"",
+    "name": "gsutil upload \"android-arm64-release/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/symbols.zip@@@"
     ]
   },
   {
@@ -7084,9 +7067,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_28"
+      "[CLEANUP]/tmp_tmp_24"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7100,7 +7084,95 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-profile UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm64-release UploadArtifacts symbols.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py",
+      "--library",
+      "[START_DIR]/src/out/android_release_arm64/libflutter.so",
+      "--destdir",
+      "[CLEANUP]/tmp_tmp_25/sizes",
+      "--addr2line-binary",
+      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-addr2line"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "generate treemap for android-arm64-release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-r",
+      "[CLEANUP]/tmp_tmp_25/sizes",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload treemap for out/android_release_arm64/libflutter.so",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/sizes/index.html@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_25"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for treemap"
   },
   {
     "cmd": [
@@ -7108,10 +7180,11 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
-      "--runtime-mode=release",
-      "--android-cpu=arm64"
+      "--runtime-mode=profile",
+      "--android-cpu=arm"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7124,7 +7197,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm64"
+    "name": "gn --android --runtime-mode=profile --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -7143,6 +7216,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7169,6 +7243,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -7214,6 +7289,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7238,9 +7314,10 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]/src/out/android_release_arm64"
+      "[START_DIR]/src/out/android_profile"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7253,7 +7330,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build android_release_arm64"
+    "name": "build android_profile"
   },
   {
     "cmd": [],
@@ -7268,6 +7345,7 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -7311,6 +7389,7 @@
       "stat"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -7343,6 +7422,7 @@
       "stop"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -7389,7 +7469,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_release_arm64",
+      "build android_profile",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -7405,6 +7485,7 @@
       "Linux Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7442,6 +7523,7 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7467,6 +7549,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7479,8 +7562,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_29/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm-profile artifacts.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_26/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -7491,10 +7574,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_29/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/artifacts.zip"
+      "[CLEANUP]/tmp_tmp_26/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/artifacts.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7508,9 +7592,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-release/artifacts.zip\"",
+    "name": "gsutil upload \"android-arm-profile/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/artifacts.zip@@@"
     ]
   },
   {
@@ -7521,9 +7605,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_29"
+      "[CLEANUP]/tmp_tmp_26"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7537,7 +7622,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-release UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -7546,6 +7631,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7558,8 +7644,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_30/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm-profile linux-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_27/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -7570,10 +7656,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_30/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/linux-x64.zip"
+      "[CLEANUP]/tmp_tmp_27/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/linux-x64.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7587,9 +7674,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-release/linux-x64.zip\"",
+    "name": "gsutil upload \"android-arm-profile/linux-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/linux-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/linux-x64.zip@@@"
     ]
   },
   {
@@ -7600,9 +7687,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_30"
+      "[CLEANUP]/tmp_tmp_27"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7616,7 +7704,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-release UploadArtifacts linux-x64.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts linux-x64.zip"
   },
   {
     "cmd": [
@@ -7625,6 +7713,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7637,8 +7726,8 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-arm64-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_31/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "name": "Zip android-arm-profile symbols.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_28/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -7649,10 +7738,11 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_31/artifacts.zip",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/symbols.zip"
+      "[CLEANUP]/tmp_tmp_28/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/symbols.zip"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7666,9 +7756,9 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload \"android-arm64-release/symbols.zip\"",
+    "name": "gsutil upload \"android-arm-profile/symbols.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/symbols.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/symbols.zip@@@"
     ]
   },
   {
@@ -7679,9 +7769,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_31"
+      "[CLEANUP]/tmp_tmp_28"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7695,21 +7786,19 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-arm64-release UploadArtifacts symbols.zip"
+    "name": "temp dir for android-arm-profile UploadArtifacts symbols.zip"
   },
   {
     "cmd": [
       "python",
-      "-u",
-      "[START_DIR]/src/third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py",
-      "--library",
-      "[START_DIR]/src/out/android_release_arm64/libflutter.so",
-      "--destdir",
-      "[CLEANUP]/tmp_tmp_32/sizes",
-      "--addr2line-binary",
-      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-addr2line"
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--android",
+      "--runtime-mode=release",
+      "--android-cpu=arm"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7722,107 +7811,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "generate treemap for android-arm64-release"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-r",
-      "[CLEANUP]/tmp_tmp_32/sizes",
-      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "gsutil upload treemap for out/android_release_arm64/libflutter.so",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/sizes/index.html@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/tmp_tmp_32"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "temp dir for treemap (2)"
-  },
-  {
-    "cmd": [
-      "pub",
-      "get"
-    ],
-    "cwd": "[START_DIR]/src/flutter/testing/symbols",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "pub get for verify_exported.dart"
-  },
-  {
-    "cmd": [
-      "dart",
-      "[START_DIR]/src/flutter/testing/symbols/verify_exported.dart",
-      "[START_DIR]/src/out"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Verify exported symbols on release binaries"
+    "name": "gn --android --runtime-mode=release --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -7841,6 +7830,7 @@
       "[CACHE]/goma/data/Linux_Engine"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7867,6 +7857,7 @@
       "restart"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -7912,6 +7903,7 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7932,6 +7924,727 @@
   },
   {
     "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-j",
+      "1024",
+      "-C",
+      "[START_DIR]/src/out/android_release"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "build android_release"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma (15)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (15).goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (15).goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (15).stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bigquery-upload",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "build android_release",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "Linux Engine"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "postprocess_for_goma (15).upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma (15).stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Zip android-arm-release artifacts.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[START_DIR]/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_29/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]/tmp_tmp_29/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/artifacts.zip"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-release/artifacts.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/artifacts.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_29"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for android-arm-release UploadArtifacts artifacts.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Zip android-arm-release linux-x64.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_30/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]/tmp_tmp_30/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/linux-x64.zip"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-release/linux-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/linux-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_30"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for android-arm-release UploadArtifacts linux-x64.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Zip android-arm-release symbols.zip",
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[START_DIR]/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_31/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]/tmp_tmp_31/artifacts.zip",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/symbols.zip"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-release/symbols.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/symbols.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_31"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for android-arm-release UploadArtifacts symbols.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py",
+      "--library",
+      "[START_DIR]/src/out/android_release/libflutter.so",
+      "--destdir",
+      "[CLEANUP]/tmp_tmp_32/sizes",
+      "--addr2line-binary",
+      "[START_DIR]/src/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "generate treemap for android-arm-release"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-r",
+      "[CLEANUP]/tmp_tmp_32/sizes",
+      "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload treemap for out/android_release/libflutter.so",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/sizes/index.html@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_32"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for treemap (2)"
+  },
+  {
+    "cmd": [
+      "pub",
+      "get"
+    ],
+    "cwd": "[START_DIR]/src/flutter/testing/symbols",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "pub get for verify_exported.dart"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[START_DIR]/src/flutter/testing/symbols/verify_exported.dart",
+      "[START_DIR]/src/out"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Verify exported symbols on release binaries"
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (16)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/Linux_Engine"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (16).goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (16).start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma (16).start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "[START_DIR]/src/flutter/tools/fuchsia/build_fuchsia_artifacts.py",
       "--engine-version",
@@ -7939,6 +8652,7 @@
       "--upload"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7965,6 +8679,7 @@
       "[CLEANUP]/tmp_tmp_33/fuchsia.stamp"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -7996,6 +8711,7 @@
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/fuchsia/fuchsia.stamp"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -8025,6 +8741,7 @@
       "[CLEANUP]/tmp_tmp_33"
     ],
     "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
