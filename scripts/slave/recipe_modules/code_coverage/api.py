@@ -362,7 +362,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       ]
 
       if self._is_per_cl_coverage:
-        args.append('--affected-source-files')
+        args.append('--source-files')
         args.extend(self._affected_source_files)
         self._generate_line_number_mapping_from_bot_to_gerrit(
             self._affected_source_files, coverage_dir)
