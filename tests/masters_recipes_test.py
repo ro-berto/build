@@ -170,6 +170,7 @@ FAKE_BUILDERS = {
         'linux_chromium_dbg_32_ng',
         'linux_chromium_msan_rel_ng',
         'linux_layout_tests_layout_ng',
+        'linux_layout_tests_layout_ng_disabled',
         'linux_layout_tests_slimming_paint_v2',
         'linux_mojo',
         'linux_mojo_chromeos',
