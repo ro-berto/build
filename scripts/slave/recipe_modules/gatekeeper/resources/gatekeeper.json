@@ -618,6 +618,8 @@
           "*": { "categories": [ "webrtc_all"] }
         },
         "excluded_builders": [
+          "Mac64 Builder",
+          "Win32 Builder (Clang)",
           "*UWP*"
         ]
       }
