@@ -357,16 +357,8 @@ def TestObservatory(api):
 #  with api.context(cwd=checkout):
 #    api.step('engine unit tests', test_cmd)
 
-def GetMacSDKDir(api):
-  return api.path['cache'].join('builder', 'mac_sdk')
-
 @contextmanager
 def SetupXcode(api):
-  macos_sdk_cache_dir = GetMacSDKDir(api)
-  api.cipd.ensure(macos_sdk_cache_dir, api.cipd.EnsureFile()
-    .add_package('flutter_internal/macos/sdk', 'version:10.13')
-  )
-
   # See cr-buildbucket.cfg for how the version is passed in.
   # https://github.com/flutter/infra/blob/master/config/cr-buildbucket.cfg#L148
   with api.osx_sdk('ios'):
@@ -374,10 +366,8 @@ def SetupXcode(api):
 
 def BuildMac(api):
   if api.properties.get('build_host', True):
-    RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
+    RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
     Build(api, 'host_debug_unopt')
     RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
@@ -412,19 +402,14 @@ def BuildMac(api):
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
 
   if api.properties.get('build_android_vulkan', True):
-    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
     Build(api, 'android_release_vulkan')
 
   if api.properties.get('build_android_aot', True):
-    RunGN(api, '--runtime-mode', 'profile', '--android',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    RunGN(api, '--runtime-mode', 'release', '--android',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
-    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64',
-               '--mac-sdk-path', str(GetMacSDKDir(api)))
+    RunGN(api, '--runtime-mode', 'profile', '--android')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
 
     Build(api, 'android_profile', 'flutter/lib/snapshot')
     Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
@@ -519,20 +504,13 @@ def RunIOSTests(api):
 
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'profile',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'release',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
-  RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm',
-             '--mac-sdk-path', str(GetMacSDKDir(api)))
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
+  RunGN(api, '--ios', '--runtime-mode', 'profile')
+  RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm')
+  RunGN(api, '--ios', '--runtime-mode', 'release')
+  RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm')
 
   # Build all configurations.
   Build(api, 'ios_debug_sim')
