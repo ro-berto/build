@@ -1295,42 +1295,54 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           status=common_pb.FAILURE)
 
   def _format_unrecoverable_failures(self, unrecoverable_test_suites,
-                                     suffix, size_limit=5, failure_limit=4):
+                                     suffix, size_limit=700, failure_limit=4):
     """Creates list of failed tests formatted using markdown.
 
-       Args:
-        unrecoverable_test_suites: List of failed Test
-        (definition can be found in steps.py) objects
+    Args:
+      unrecoverable_test_suites: List of failed Test
+          (definition can be found in steps.py)
+      suffix: current Test suffix, which represents the phase
+      size_limit: max size of the message in characters,
+      failure_limit: max number of deterministic failures listed per test
 
-       Returns:
-        String containing a markdown formatted list of test failures
+    Returns:
+      String containing a markdown formatted list of test failures
     """
     test_size = len(unrecoverable_test_suites)
     header = '%d Test Suite(s) failed.' % test_size
     test_summary_lines = [header]
     if self._test_data.enabled:
-      size_limit = self._test_data.get('change_size_limit', 2)
-      failure_limit = size_limit
+      size_limit = self._test_data.get('change_size_limit', 200)
+      failure_limit = size_limit / 100
+
+    current_size = 0
     for index, test in enumerate(unrecoverable_test_suites):
-      if index >= size_limit:
+      test_suite_header = '**%s** failed.' % test.name
+
+      deterministic_failures = test.deterministic_failures(suffix)
+      if deterministic_failures:
+        test_suite_header = '**%s** failed because of:' % test.name
+
+      current_size += len(test_suite_header)
+      if current_size >= size_limit:
         hint = '...%d more test(s)...' % (test_size - index)
         test_summary_lines.append(hint)
         return '\n\n'.join(test_summary_lines)
-      name = test.name
-      deterministic_failures = test.deterministic_failures(suffix)
-      if deterministic_failures:
-        test_summary_lines.append('**%s** failed because of:' % name)
-      else:
-        test_summary_lines.append('**%s** failed.' % name)
+
+      test_summary_lines.append(test_suite_header)
 
       for index, failure in enumerate(deterministic_failures):
-        if index >= failure_limit:
+        if index >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
           hint = '...%d more failure(s) (%d total)...' % (
               failure_size - index, failure_size)
           test_summary_lines.append(hint)
-          return '\n\n'.join(test_summary_lines)
-        test_summary_lines.append('- ' + failure)
+          current_size += len(hint)
+          break
+
+        failure_line = '- %s' % failure
+        test_summary_lines.append(failure_line)
+        current_size += len(failure_line)
 
     return '\n\n'.join(test_summary_lines)
 
