@@ -7,7 +7,7 @@
       "linux-chromeos-google-rel",
       "linux-google-rel",
       "mac-google-rel",
-      "win-google-rel",
+      "win-google-rel"
     ],
     "project": "chrome"
   },
@@ -94,12 +94,6 @@
   "https://build.chromium.org/p/chromium.clang": {
     "bucket": "ci",
     "builders": [
-      "ToTLinuxOfficial",
-      "ToTMacOfficial",
-      "ToTWin",
-      "ToTWin64",
-      "ToTWinOfficial",
-      "ToTWinThinLTO64",
       "CFI Linux CF",
       "CFI Linux ToT",
       "CrWinAsan",
@@ -117,6 +111,7 @@
       "ToTLinuxASanLibfuzzer",
       "ToTLinuxCoverage",
       "ToTLinuxMSan",
+      "ToTLinuxOfficial",
       "ToTLinuxTSan",
       "ToTLinuxThinLTO",
       "ToTLinuxUBSanVptr",
@@ -124,14 +119,19 @@
       "ToTMac (dbg)",
       "ToTMacASan",
       "ToTMacCoverage",
+      "ToTMacOfficial",
+      "ToTWin",
       "ToTWin(dbg)",
       "ToTWin(dll)",
+      "ToTWin64",
       "ToTWin64(dbg)",
       "ToTWin64(dll)",
       "ToTWinASanLibfuzzer",
       "ToTWinCFI",
       "ToTWinCFI64",
       "ToTWinLibcxx64",
+      "ToTWinOfficial",
+      "ToTWinThinLTO64",
       "ToTiOS",
       "ToTiOSDevice",
       "UBSanVptr Linux",
@@ -210,13 +210,13 @@
       "win-pixel-builder-rel",
       "win-pixel-tester-rel"
     ],
-    "project": "chromium",
     "comments": [
       "TODO(crbug.com/991661):  Restore builders when bug is fixed.",
       "mac-jumbo-rel, win-jumbo-rel, Linux remote_run Builder, and ",
       "Linux remote_run Tester are skipped because buildbucket returns 500",
       "when searching builds for them."
-    ]
+    ],
+    "project": "chromium"
   },
   "https://build.chromium.org/p/chromium.gpu": {
     "bucket": "ci",
@@ -651,6 +651,10 @@
       "Linux V8 FYI Release - pointer compression (NVIDIA)",
       "Mac V8 FYI Release (Intel)",
       "V8 Android GN (dbg)",
+      "V8 Blink Linux",
+      "V8 Blink Linux Debug",
+      "V8 Blink Mac",
+      "V8 Blink Win",
       "V8 Linux - full debug",
       "V8 Linux - noembed",
       "V8 Linux - noembed - debug",
@@ -664,10 +668,6 @@
       "V8 Linux64 - gcov coverage",
       "V8 Linux64 - node.js integration ng",
       "V8 iOS - sim",
-      "V8 Blink Linux",
-      "V8 Blink Linux Debug",
-      "V8 Blink Mac",
-      "V8 Blink Win",
       "V8-Blink Linux 64",
       "V8-Blink Linux 64 - future",
       "Win V8 FYI Release (NVIDIA)"
@@ -795,6 +795,7 @@
       "linux-ozone-rel",
       "linux-rel",
       "linux-trusty-rel",
+      "linux-viz-rel",
       "linux_arm",
       "linux_chromium_analysis",
       "linux_chromium_archive_rel_ng",
@@ -814,7 +815,6 @@
       "linux_mojo_chromeos",
       "linux_optional_gpu_tests_rel",
       "linux_upload_clang",
-      "linux-viz-rel",
       "linux_vr"
     ],
     "project": "chromium"
