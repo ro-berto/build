@@ -213,59 +213,85 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def _limit_error_list(self, error_list, char_limit):
-    """Limits combined length of strings in the error list."""
-    char_count = 0
-    for index, error in enumerate(error_list):
-      if char_count > char_limit:
-        error_size = len(error_list)
-        hint = ('**...%d error(s) (%d total)...**'
-                % (error_size - index, error_size))
-        return error_list[:index] + [hint]
-      char_count += len(error)
-      # Wrap in code tags so code doesn't get interpreted as markdown
-      error_list[index] = '```%s```' % error
-    return error_list
+  def _limit_error_list(self, error_list, char_limit, message_prefix ='',
+                        message_suffix='', line_format='{}',
+                        limit_hint=''):
+    """Limits combined length of strings and formats the error list.
 
-  def _format_compile_failures(self, failure_summary,
-                               char_limit=700, line_limit=1000):
+    Args:
+      error_list: list of strings meant to be formatted
+      char_limit: max amount of characters within the list of strings
+      message_prefix: string added to the beginning of the list
+      message_suffix: string added to the end of the list
+      line_format: (Uses string.format()) Used to format each item in list
+      limit_hint: string added after last item if limit is reached
+
+    Returns:
+      A formatted list of errors
+    """
+    char_count = 0
+    errors = []
+    for error in error_list:
+      error_line = line_format.format(error)
+      char_count += len(error_line)
+
+      if char_count > char_limit:
+        return [message_prefix] + errors + [message_suffix, limit_hint]
+
+      errors.append(error_line)
+
+    return [message_prefix] + errors + [message_suffix]
+
+  def _format_failures(self, failure_summary, step_name,
+                       footer='', char_limit=700, line_limit=1000):
     """Removes non-vital information from summary and adds markdown.
 
     Args:
       failure_summary: string of error information from a compile step,
-      char_limit: max size failure summary can be
+      step_name: string in header that shows what step failed,
+      error_regex: regex used to identify errors in summary,
+      footer: message appended at the end of the summary,
+      char_limit: max size failure summary can be,
+      line_limit: max size of each line in the summary
 
     Returns:
       A string containing a markdown formatted failure summary of
       the step that failed.
     """
     if self._test_data.enabled:
-      char_limit = self._test_data.get('change_char_size_limit', 150)
-      line_limit = self._test_data.get('change_line_limit', 50)
+      char_limit = self._test_data.get('change_char_size_limit', 350)
+      line_limit = self._test_data.get('change_line_limit', 100)
+
+    # The estimated length of a line will be 1 / 7th of the char limit.
+    # The default case will 100 characters per line
+    AVG_LINE_SIZE = (char_limit / 7)
 
     summary_lines = failure_summary.splitlines()
     for index in range(len(summary_lines)):
       if len(summary_lines[index]) > line_limit:
-        crop_point = int(line_limit / 20)
-        summary_lines[index] = summary_lines[index][:crop_point] + '...'
+        summary_lines[index] = (
+            summary_lines[index][:AVG_LINE_SIZE] + '...(too long)')
 
-    filtered_summary = '\n'.join(summary_lines)
-    # Show the error message
-    if len(filtered_summary) < char_limit:
-      return '```\n%s\n```' % filtered_summary
-    # The normal error summary is too large. Extract a list of errors.
-    error_re = re.compile(r'.+error:.+')
-    error_list = error_re.findall(filtered_summary)
-    if error_list:
-      error_list = self._limit_error_list(error_list, char_limit)
-      notification = '**Compile failure**\n\nList of errors:'
-      error_list.insert(0, notification)
-      return '\n\n- '.join(error_list)
+    CODE_TAG = '```'
 
-    # No matches found
-    return ('No lines that look like "...error:..." '
-            'found in the compile output.\n'
-            'Refer to raw_io.output[failure_summary] for more information.')
+    summary_lines = self._limit_error_list(
+        summary_lines, char_limit,
+        message_prefix=CODE_TAG,
+        message_suffix=CODE_TAG,
+        limit_hint='##### ...The message was too long...'
+      )
+
+    # Header and footer are not reduced previously because
+    # they have markdown and should not be encased in code tags.
+
+    # Add header and footer
+    header = '#### Step _%s_ failed. Error logs are shown below:' % step_name
+    summary_lines.insert(0, header)
+    # Ensure footer is within a reasonable size,
+    if len(footer) <= AVG_LINE_SIZE:
+      summary_lines.append('#### %s' % footer)
+
+    return '\n'.join(summary_lines)
 
   def _run_ninja(self, ninja_command, name=None, ninja_env=None,
                  **kwargs):
@@ -335,9 +361,9 @@ class ChromiumApi(recipe_api.RecipeApi):
             result=ninja_step_result
         )
 
-      failure_summary = ('Step(\'%s\') failed. (retcode=%d)'
-            '\nNo failure summary provided') % (
-                ninja_step_result.name, ninja_step_result.retcode)
+      failure_summary = (
+        '(retcode=%d) No failure summary provided.' % ninja_step_result.retcode
+      )
       if ninja_step_result.raw_io.output:
         failure_summary = ninja_step_result.raw_io.output
 
@@ -610,8 +636,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       if ninja_result.retcode:
         return result_pb2.RawResult(
             status=common_pb.FAILURE,
-            summary_markdown=self._format_compile_failures(
-                                ninja_result.failure_summary)
+            summary_markdown=self._format_failures(
+                ninja_result.failure_summary,
+                name or 'compile',
+                'More information in raw_io.output[failure_summary]'
+            )
         )
       return result_pb2.RawResult(status=common_pb.SUCCESS)
     try:
@@ -636,8 +665,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     # a goma failure, so to avoid the message getting repeated it
     # will be handled here
     if ninja_result.retcode:
-      failure_summary = self._format_compile_failures(
-                                    ninja_result.failure_summary)
+      failure_summary = self._format_failures(
+          ninja_result.failure_summary,
+          name or 'compile',
+          'More information in raw_io.output[failure_summary]'
+      )
       return self._handle_goma_failures(failure_summary)
     return result_pb2.RawResult(status=common_pb.SUCCESS)
 
@@ -1461,40 +1493,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       if ex.result.json.outputs:
         failure_summary = ex.result.json.outputs['failure_summary']
         if failure_summary and failure_summary['output']:
-          ex.reason = self._format_mb_failures(name, failure_summary['output'])
+          ex.reason = self._format_failures(
+              failure_summary['output'], name,
+              footer='More information can be found in the stdout.'
+          )
       raise
-
-  def _format_mb_failures(self, step_name, error_message, char_limit=700):
-    """Adds markdown to mb failure and reformats if message is too long.
-
-       Args:
-        error_message: (string) output message written by mb command
-          to json output
-        char_limit: (number) limits overall message size
-
-       Returns:
-        String of formatted error messages
-    """
-
-    if self._test_data.enabled:
-      char_limit = self._test_data.get('change_char_size_limit', 150)
-
-    if len(error_message) <= char_limit:
-      return '```\n%s\n```' % error_message
-
-    # Extract error lines (...ERROR at...)
-    error_re = re.compile(r'.*ERROR\s+at.+')
-    error_list = error_re.findall(error_message)
-    if error_list:
-      error_list = self._limit_error_list(error_list, char_limit)
-      notification = 'Step **%s** failed.\n\nList of errors:' % step_name
-      error_list.insert(0, notification)
-      return '\n\n- '.join(error_list)
-
-    # No matches found
-    return ('No lines that look like "...ERROR at..." '
-            'found in the compile output.\n'
-            'Refer to stdout for more information.')
 
   def taskkill(self):
     self.m.build.python(

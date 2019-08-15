@@ -880,7 +880,7 @@
   },
   {
     "failure": {
-      "humanReason": "Infra compile failure: ```\nStep('compile (with patch)') failed. (retcode=1)\nNo failure summary provided\n```"
+      "humanReason": "Infra compile failure: #### Step _compile (with patch)_ failed. Error logs are shown below:\n```\n(retcode=1) No failure summary provided.\n```\n#### More information in raw_io.output[failure_summary]"
     },
     "name": "$result"
   }

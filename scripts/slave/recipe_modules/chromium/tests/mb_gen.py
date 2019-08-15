@@ -75,9 +75,11 @@ def GenTests(api):
       ) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason, textwrap.dedent('''
+          #### Step _generate_build_files_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
+          #### More information can be found in the stdout.
       ''').strip()) +
       api.post_process(post_process.DropExpectation)
   )
@@ -94,48 +96,19 @@ def GenTests(api):
       ) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason, textwrap.dedent('''
+          #### Step _generate_build_files_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
+          #### More information can be found in the stdout.
       ''').strip()) +
       api.post_process(post_process.DropExpectation)
   )
 
   yield (
-      api.test('mb_error_list') +
-      api.chromium.change_char_size_limit(70) +
-      api.step_data('generate_build_files',
-          api.json.output({
-            'output': textwrap.dedent(
-              """
-                ERROR at //view_unittest.cc:38:11: Can't include header here.
-                #include "ui/compositor_extra/shadow.h"
-                :          ^---------------------------
-                The target:
-                //ui/views:views_unittests
-                is including a file from the target:
-                //ui/compositor_extra:compositor_extra
-              """
-            ).strip()
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, textwrap.dedent(
-        """
-          Step **generate_build_files** failed.
-
-          List of errors:
-
-          - ```ERROR at //view_unittest.cc:38:11: Can't include header here.```
-        """
-      ).strip()) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('mb_long_error_list') +
-      api.chromium.change_char_size_limit(70) +
+      api.test('mb_long_error') +
+      api.chromium.change_char_size_limit(350) +
+      api.chromium.change_line_limit(150) +
       api.step_data('generate_build_files',
           api.json.output({
             'output': textwrap.dedent(
@@ -147,6 +120,8 @@ def GenTests(api):
                 #include "ui/compositor_extra/shadow2.h"
                 ERROR at //view_unittest.cc:38:13: Can't include header here.
                 #include "ui/compositor_extra/shadow3.h"
+                ERROR at //view_unittest.cc:38:14: Can't include header here.
+                #include "ui/compositor_extra/shadow4.h"
               """
             ).strip()
           }, name="failure_summary"),
@@ -155,15 +130,18 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason, textwrap.dedent(
         """
-          Step **generate_build_files** failed.
-
-          List of errors:
-
-          - ```ERROR at //view_unittest.cc:38:11: Can't include header here.```
-
-          - ```ERROR at //view_unittest.cc:38:12: Can't include header here.```
-
-          - **...1 error(s) (3 total)...**
+          #### Step _generate_build_files_ failed. Error logs are shown below:
+          ```
+          ERROR at //view_unittest.cc:38:11: Can't include header here.
+          #include "ui/compositor_extra/shadow.h"
+          :          ^---------------------------
+          ERROR at //view_unittest.cc:38:12: Can't include header here.
+          #include "ui/compositor_extra/shadow2.h"
+          ERROR at //view_unittest.cc:38:13: Can't include header here.
+          #include "ui/compositor_extra/shadow3.h"
+          ```
+          ##### ...The message was too long...
+          #### More information can be found in the stdout.
         """
       ).strip()) +
       api.post_process(post_process.DropExpectation)

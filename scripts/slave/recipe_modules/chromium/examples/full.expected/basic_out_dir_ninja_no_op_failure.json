@@ -644,7 +644,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "```\nFailing build because ninja reported work to do.\nTh...\nit...\nwa...\nlikely culprit.\n```"
+      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\nFailing build because ninja reported work to do.\nThis means that after completing a compile, another was run and\nit resulted in still having work to do (that is, a no-op build\nwasn't a no-op). Consult the first \"ninja explain:\" line for a\nlikely culprit.\n```\n#### More information in raw_io.output[failure_summary]"
     },
     "name": "$result"
   }

@@ -629,7 +629,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```"
+      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
     },
     "name": "$result"
   }

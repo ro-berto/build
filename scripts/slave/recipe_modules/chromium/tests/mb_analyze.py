@@ -59,9 +59,11 @@ def GenTests(api):
       ) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason, textwrap.dedent('''
+          #### Step _analyze_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
+          #### More information can be found in the stdout.
       ''').strip()) +
       api.post_process(post_process.DropExpectation)
   )
@@ -80,27 +82,5 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason,
           "Step('analyze') (retcode: 1)") +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('analyze_failure_no_re') +
-      api.properties.tryserver(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.chromium.change_char_size_limit(5) +
-      api.step_data('analyze',
-          api.json.output({
-            'output': 'line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          ('No lines that look like "...ERROR at..." '
-            'found in the compile output.\n'
-            'Refer to stdout for more information.')) +
       api.post_process(post_process.DropExpectation)
   )

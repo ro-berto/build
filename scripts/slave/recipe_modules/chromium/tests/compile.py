@@ -176,88 +176,23 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason,
           textwrap.dedent("""
-            ```
-            /b...
-            [1/1] CXX a.o
-            filename:row:col: error: error info
-            ```
+          #### Step _compile_ failed. Error logs are shown below:
+          ```
+          /b/s/w/ir/cache/goma/client/gomacc ../../third_par...(too long)
+          [1/1] CXX a.o
+          filename:row:col: error: error info
+          ```
+          #### More information in raw_io.output[failure_summary]
           """).strip()) +
       api.post_process(post_process.DropExpectation)
   )
 
   yield (
-      api.test('compile_error_summary') +
+      api.test('long_compile_failure') +
       api.properties(buildername='test_buildername') +
       api.properties(mastername='test_mastername') +
-      api.chromium.change_char_size_limit(150) +
-      api.override_step_data('compile', api.raw_io.output(
-          gomacc_path +
-          textwrap.dedent("""
-          [1/1] CXX a.o
-          filename:row:col: error: error 1 info
-          More stuff that happened in the error
-          filename:row:col: error: error 2 info
-          Actual code of where the error happened
-          """),
-          name='failure_summary'), retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          textwrap.dedent("""\
-          **Compile failure**
-
-          List of errors:
-
-          - ```filename:row:col: error: error 1 info```
-
-          - ```filename:row:col: error: error 2 info```""")) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('compile_failure_long_summary') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.chromium.change_char_size_limit(150) +
-      api.override_step_data('compile', api.raw_io.output(
-          gomacc_path +
-          textwrap.dedent("""
-          [1/1] CXX a.o
-          filename:row:col: error: error 1 info
-          More stuff that happened in the error
-          filename:row:col: error: error 2 info
-          Actual code of where the error happened
-          filename:row:col: error: error 3 info
-          filename:row:col: error: error 4 info
-          More stuff that happened in the error
-          filename:row:col: error: error 5 info
-          filename:row:col: error: error 6 info
-          """),
-          name='failure_summary'), retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
-          textwrap.dedent("""\
-          **Compile failure**
-
-          List of errors:
-
-          - ```filename:row:col: error: error 1 info```
-
-          - ```filename:row:col: error: error 2 info```
-
-          - ```filename:row:col: error: error 3 info```
-
-          - ```filename:row:col: error: error 4 info```
-
-          - ```filename:row:col: error: error 5 info```
-
-          - **...1 error(s) (6 total)...**""")) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('compile_failure_no_re_match') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
+      api.chromium.change_char_size_limit(350) +
+      api.chromium.change_line_limit(50) +
       api.override_step_data('compile', api.raw_io.output(
           gomacc_path +
           textwrap.dedent("""
@@ -269,12 +204,31 @@ def GenTests(api):
           filename error 3 info
           More stuff that happened in the error
           filename error 4 info
+          filename error 5 info
+          More stuff that happened in the error
+          filename error 6 info
           """),
           name='failure_summary'), retcode=1) +
       api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.ResultReason,
-          textwrap.dedent("""\
-          No lines that look like "...error:..." found in the compile output.
-          Refer to raw_io.output[failure_summary] for more information.""")) +
+          textwrap.dedent("""
+          #### Step _compile_ failed. Error logs are shown below:
+          ```
+          /b/s/w/ir/cache/goma/client/gomacc ../../third_par...(too long)
+
+          [1/1] CXX a.o
+          filename error 1 info
+          More stuff that happened in the error
+          filename error 2 info
+          Actual code of where the error happened
+          filename error 3 info
+          More stuff that happened in the error
+          filename error 4 info
+          filename error 5 info
+          More stuff that happened in the error
+          ```
+          ##### ...The message was too long...
+          #### More information in raw_io.output[failure_summary]
+          """).strip()) +
       api.post_process(post_process.DropExpectation)
   )
