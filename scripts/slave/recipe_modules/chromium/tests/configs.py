@@ -148,6 +148,6 @@ def GenTests(api):
 
   yield from_config('no_mac_toolchain_cipd_creds')
 
-  yield from_config('xcode_10b61')
+  yield from_config('xcode_11m382q')
 
   yield from_config('official_no_clobber')

@@ -938,7 +938,7 @@ SPEC = {
         'ios_release_simulator',
         'mac_toolchain',
         'no_mac_toolchain_cipd_creds',
-        'xcode_10b61'
+        'xcode_11m382q'
       ],
       'gclient_config': 'ios',
       'gclient_apply_config': ['use_clang_coverage'],

@@ -36,7 +36,7 @@ def GenTests(api):
             'is_debug=true',
             'target_cpu="x64"',
           ],
-          'xcode build version': '10b61',
+          'xcode build version': '11m382q',
           'tests': [
             {
               'app': 'fake test 0',
