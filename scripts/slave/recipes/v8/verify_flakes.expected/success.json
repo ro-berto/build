@@ -221,6 +221,7 @@
     ],
     "infra_step": true,
     "name": "collect builds.FunctionCallSample.wait",
+    "timeout": 14400,
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
