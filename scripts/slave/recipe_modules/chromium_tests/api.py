@@ -1325,7 +1325,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       current_size += len(test_suite_header)
       if current_size >= size_limit:
-        hint = '...%d more test(s)...' % (test_size - index)
+        hint = '#### ...%d more test(s)...' % (test_size - index)
         test_summary_lines.append(hint)
         return '\n\n'.join(test_summary_lines)
 
@@ -1334,7 +1334,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for index, failure in enumerate(deterministic_failures):
         if index >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
-          hint = '...%d more failure(s) (%d total)...' % (
+          hint = '- ...%d more failure(s) (%d total)...' % (
               failure_size - index, failure_size)
           test_summary_lines.append(hint)
           current_size += len(hint)
