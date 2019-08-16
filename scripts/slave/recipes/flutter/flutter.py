@@ -164,8 +164,7 @@ def RunSteps(api):
   git_url = \
     'https://chromium.googlesource.com/external/github.com/flutter/flutter'
   git_ref = api.buildbucket.gitiles_commit.ref
-  if (api.runtime.is_experimental and
-      'git_url' in api.properties and
+  if ('git_url' in api.properties and
       'git_ref' in api.properties):
     git_url = api.properties['git_url']
     git_ref = api.properties['git_ref']

@@ -675,8 +675,7 @@ def GetCheckout(api):
   git_url = GIT_REPO
   git_id = api.buildbucket.gitiles_commit.id
   git_ref = api.buildbucket.gitiles_commit.ref
-  if api.runtime.is_experimental and (
-      'git_url' in api.properties and 'git_ref' in api.properties):
+  if 'git_url' in api.properties and 'git_ref' in api.properties:
     git_url = api.properties['git_url']
     git_id = api.properties['git_ref']
     git_ref = api.properties['git_ref']
