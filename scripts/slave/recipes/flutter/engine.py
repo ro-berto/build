@@ -387,10 +387,19 @@ def BuildMac(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
     RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
+    RunGN(api, '--runtime-mode', 'profile', '--no-lto');
+    RunGN(api, '--runtime-mode', 'release', '--no-lto');
+
     Build(api, 'host_debug_unopt')
     RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
+    Build(api, 'host_profile');
+    Build(api, 'host_release');
     host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
+    host_profile_path = \
+        api.path['start_dir'].join('src', 'out', 'host_profile');
+    host_release_path = \
+        api.path['start_dir'].join('src', 'out', 'host_release');
 
     api.zip.directory('Archive FlutterEmbedder.framework',
       host_debug_path.join('FlutterEmbedder.framework'),
@@ -399,6 +408,12 @@ def BuildMac(api):
     api.zip.directory('Archive FlutterMacOS.framework',
       host_debug_path.join('FlutterMacOS.framework'),
       host_debug_path.join('FlutterMacOS.framework.zip'))
+    api.zip.directory('Archive FlutterMacOS.framework profile',
+      host_profile_path.join('FlutterMacOS.framework'),
+      host_profile_path.join('FlutterMacOS.framework.zip'))
+    api.zip.directory('Archive FlutterMacOS.framework release',
+      host_release_path.join('FlutterMacOS.framework'),
+      host_release_path.join('FlutterMacOS.framework.zip'))
 
     UploadArtifacts(api, 'darwin-x64', [
       ICU_DATA_PATH,
@@ -406,6 +421,7 @@ def BuildMac(api):
       'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
       'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
       'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+      'out/host_debug_unopt/gen_snapshot',
     ])
 
     UploadArtifacts(api, 'darwin-x64', [
@@ -416,6 +432,14 @@ def BuildMac(api):
       'out/host_debug/FlutterMacOS.framework.zip',
       'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
     ], archive_name='FlutterMacOS.framework.zip')
+    UploadArtifacts(api, 'darwin-x64-profile', [
+      'out/host_profile/FlutterMacOS.framework.zip',
+      'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
+    ], archive_name='FlutterMacOS.framework.zip');
+    UploadArtifacts(api, 'darwin-x64-release', [
+      'out/host_release/FlutterMacOS.framework.zip',
+      'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
+    ], archive_name='FlutterMacOS.framework.zip');
 
     UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
