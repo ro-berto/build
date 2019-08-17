@@ -107,7 +107,7 @@ DETERMINISTIC_BUILDERS = freeze({
       'TARGET_PLATFORM': 'fuchsia',
     },
     'gclient_config': 'chromium',
-    'gclient_apply_config': ['fuchsia_nobootable'],
+    'gclient_apply_config': ['fuchsia_x64'],
     'platform': 'linux',
     'targets': ['all'],
   },
