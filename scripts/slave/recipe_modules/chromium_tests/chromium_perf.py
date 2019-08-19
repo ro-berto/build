@@ -131,6 +131,7 @@ def TestSpec(config_name, platform, target_bits,
   )
 
   spec['parent_buildername'] = parent_buildername
+  spec['gclient_apply_config'].append('no_checkout_flash')
 
   if cros_board:
     spec['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board

@@ -328,3 +328,8 @@ def clang_tot(c):
 @CONFIG_CTX(includes=['chromium'])
 def openscreen_tot(c):
   c.revisions['src/third_party/openscreen/src'] = 'HEAD'
+
+@CONFIG_CTX()
+def no_checkout_flash(c):
+  # internal perf tester does not need to checkout flash related repositories.
+  c.solutions[0].custom_vars['checkout_flash'] = 'False'
