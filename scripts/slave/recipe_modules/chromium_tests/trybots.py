@@ -1052,20 +1052,15 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win10 FYI x64 Exp Release (NVIDIA)',
       }),
+      'gpu-fyi-try-win10-nvidia-rel-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win10 FYI x86 Release (NVIDIA)',
+      }),
       'gpu-fyi-try-win10-nvidia-rel-64': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Win x64 Builder',
         'tester': 'Win10 FYI x64 Release (NVIDIA)',
-      }),
-      'gpu-try-win10-nvidia-dbg': simple_bot({
-        'mastername': 'chromium.gpu',
-        'buildername': 'GPU Win Builder (dbg)',
-        'tester': 'Win10 Debug (NVIDIA)',
-      }),
-      'gpu-try-win10-nvidia-rel': simple_bot({
-        'mastername': 'chromium.gpu',
-        'buildername': 'GPU Win Builder',
-        'tester': 'Win10 Release (NVIDIA)',
       }),
     },
   },
