@@ -387,19 +387,11 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['win-archive-rel']),
         ['goma_canary', 'goma_localoutputcache']),
 
-    # TODO(yyanagisawa) remove followings
-    'Win Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['win-archive-rel']),
-        ['goma_canary', 'goma_localoutputcache']),
+    # TODO(b/78251210) remove after removal of cl.exe builders.
     'Win cl.exe Goma Canary LocalOutputCache': chromium_apply_configs(
         no_compile_targets(no_archive(
           chromium.SPEC['builders']['win-archive-rel'])),
         ['goma_canary', 'goma_localoutputcache']),
-    'Win7 Builder Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
-    'Win7 Builder (dbg) Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_canary']),
     'WinMSVC64 Goma Canary': chromium_apply_configs(
         {
           'chromium_config': 'chromium',
@@ -420,6 +412,12 @@ SPEC = {
           'add_tests_as_compile_targets': False,
         },
         ['goma_canary']),
+    # TODO(b/139556893): remove after win7 builders removal.
+    'Win7 Builder Goma Canary': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
+    'Win7 Builder (dbg) Goma Canary': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder (dbg)'],
+        ['goma_canary']),
 
     'chromeos-amd64-generic-rel-goma-canary': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][
@@ -432,14 +430,6 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['linux-archive-rel']),
                    ['goma_canary']),
     'linux-archive-rel-goma-canary-localoutputcache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_canary', 'goma_localoutputcache']),
-
-    # TODO(yyanagisawa): remove following two.
-    'Linux x64 Goma Canary (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-                   ['goma_canary']),
-    'Linux x64 Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['linux-archive-rel']),
         ['goma_canary', 'goma_localoutputcache']),
 
@@ -463,20 +453,6 @@ SPEC = {
             ['chrome']),
         ['goma_canary', 'goma_localoutputcache_small']),
 
-
-
-    # TODO(yyanagisawa): remove following
-    'Mac Goma Canary (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_canary']),
-
-    # TODO(yyanagisawa): remove following
-    'Mac Goma Canary LocalOutputCache': chromium_apply_configs(
-        override_compile_targets(
-            no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-            ['chrome']),
-        ['goma_canary', 'goma_localoutputcache_small']),
-
     # Latest Goma Client
     'Win Builder Goma Latest Client': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'],
@@ -488,19 +464,11 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['win-archive-rel']),
         ['goma_latest_client', 'goma_localoutputcache']),
 
-    # Remove followings
-    'Win Goma Latest Client LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['win-archive-rel']),
-        ['goma_latest_client', 'goma_localoutputcache']),
+    # TODO(b/78251210): remove after removal of cl.exe
     'Win cl.exe Goma Latest Client LocalOutputCache': chromium_apply_configs(
         no_compile_targets(no_archive(
           chromium.SPEC['builders']['win-archive-rel'])),
         ['goma_latest_client', 'goma_localoutputcache']),
-    'Win7 Builder Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_latest_client']),
-    'Win7 Builder (dbg) Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_latest_client']),
     'WinMSVC64 Goma Latest Client': chromium_apply_configs(
         {
           'chromium_config': 'chromium',
@@ -520,6 +488,12 @@ SPEC = {
           # compile line. We want to build everything.
           'add_tests_as_compile_targets': False,
         },
+        ['goma_latest_client']),
+    # TODO(b/139556893): remove after removal of win7.
+    'Win7 Builder Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'], ['goma_latest_client']),
+    'Win7 Builder (dbg) Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder (dbg)'],
         ['goma_latest_client']),
 
     'chromeos-amd64-generic-rel-goma-latest': chromium_apply_configs(
@@ -555,14 +529,6 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['linux-archive-rel']),
         ['goma_latest_client', 'goma_localoutputcache']),
 
-    # TODO(yyanagisawa): remove following two
-    'Linux x64 Goma Latest Client (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client']),
-    'Linux x64 Goma Latest Client LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client', 'goma_localoutputcache']),
-
     'Mac Builder Goma Latest Client': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder'],
         ['goma_latest_client', 'goma_use_local']),
@@ -573,11 +539,6 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['mac-archive-rel']),
         ['goma_latest_client']),
 
-    # TODO(yyanagisawa): remove this.
-    'Mac Goma Latest Client (clobber)': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_latest_client']),
-
     'Mac Builder (dbg) Goma Latest Client (clobber)': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
         ['goma_latest_client', 'clobber']),
@@ -585,13 +546,6 @@ SPEC = {
     # Build chrome only. Even with smaller localoutputcache, disk is short.
     # See crbug.com/825536
     'mac-archive-rel-goma-latest-localoutputcache': chromium_apply_configs(
-        override_compile_targets(
-            no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-            ['chrome']),
-        ['goma_latest_client', 'goma_localoutputcache_small']),
-
-    # TODO(yyanagisawa): remove this.
-    'Mac Goma Latest Client LocalOutputCache': chromium_apply_configs(
         override_compile_targets(
             no_archive(chromium.SPEC['builders']['mac-archive-rel']),
             ['chrome']),
@@ -996,15 +950,6 @@ SPEC['builders']['android-archive-dbg-goma-canary'] = chromium_apply_configs(
     SPEC['builders']['Android Builder (dbg)'],
     ['goma_canary'])
 SPEC['builders']['android-archive-dbg-goma-latest'] = (
-    chromium_apply_configs(
-        SPEC['builders']['Android Builder (dbg)'],
-        ['goma_latest_client']))
-
-# TODO(yyanagisawa): remove following two.
-SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
-    SPEC['builders']['Android Builder (dbg)'],
-    ['goma_canary'])
-SPEC['builders']['Android Builder (dbg) Goma Latest Client'] = (
     chromium_apply_configs(
         SPEC['builders']['Android Builder (dbg)'],
         ['goma_latest_client']))
