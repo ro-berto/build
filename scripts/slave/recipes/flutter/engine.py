@@ -423,6 +423,12 @@ def BuildMac(api):
       'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
       'out/host_debug_unopt/gen_snapshot',
     ])
+    UploadArtifacts(api, 'darwin-x64-profile', [
+      'out/host_profile/gen_snapshot',
+    ])
+    UploadArtifacts(api, 'darwin-x64-release', [
+      'out/host_release/gen_snapshot',
+    ])
 
     UploadArtifacts(api, 'darwin-x64', [
       'out/host_debug/FlutterEmbedder.framework.zip'
