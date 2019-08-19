@@ -342,6 +342,8 @@ def BuildLinux(api):
     'out/host_debug/libflutter_engine.so',
   ], archive_name='linux-x64-embedder')
 
+  # TODO: Remove this version once 'flutter' tool is using the -glfw version
+  # below. See https://github.com/flutter/flutter/issues/38589.
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug/flutter_export.h',
     'out/host_debug/flutter_glfw.h',
@@ -354,6 +356,20 @@ def BuildLinux(api):
     'src/out/host_debug',
     'cpp_client_wrapper',
     'flutter-cpp-client-wrapper.zip',
+    'linux-x64')
+
+  UploadArtifacts(api, 'linux-x64', [
+    'out/host_debug/flutter_export.h',
+    'out/host_debug/flutter_glfw.h',
+    'out/host_debug/flutter_messenger.h',
+    'out/host_debug/flutter_plugin_registrar.h',
+    'out/host_debug/libflutter_linux_glfw.so',
+  ], archive_name='linux-x64-flutter-glfw.zip')
+  UploadFolder(api,
+    'Upload linux-x64 Flutter GLFW library C++ wrapper',
+    'src/out/host_debug',
+    'cpp_client_wrapper_glfw',
+    'flutter-cpp-client-wrapper-glfw.zip',
     'linux-x64')
 
   UploadFlutterPatchedSdk(api)
@@ -612,6 +628,8 @@ def BuildWindows(api):
       'out/host_debug/flutter_engine.dll.pdb',
     ], archive_name='windows-x64-embedder.zip')
 
+    # TODO: Update this version to win32 variant once 'flutter' tool is using
+    # -glfw versions below. See https://github.com/flutter/flutter/issues/38589.
     UploadArtifacts(api, 'windows-x64', [
       'out/host_debug/flutter_export.h',
       'out/host_debug/flutter_glfw.h',
@@ -627,6 +645,23 @@ def BuildWindows(api):
       'src/out/host_debug',
       'cpp_client_wrapper',
       'flutter-cpp-client-wrapper.zip',
+      'windows-x64')
+
+    UploadArtifacts(api, 'windows-x64', [
+      'out/host_debug/flutter_export.h',
+      'out/host_debug/flutter_glfw.h',
+      'out/host_debug/flutter_messenger.h',
+      'out/host_debug/flutter_plugin_registrar.h',
+      'out/host_debug/flutter_windows_glfw.dll',
+      'out/host_debug/flutter_windows_glfw.dll.exp',
+      'out/host_debug/flutter_windows_glfw.dll.lib',
+      'out/host_debug/flutter_windows_glfw.dll.pdb',
+    ], archive_name='windows-x64-flutter-glfw.zip')
+    UploadFolder(api,
+      'Upload windows-x64 Flutter GLFW library C++ wrapper',
+      'src/out/host_debug',
+      'cpp_client_wrapper_glfw',
+      'flutter-cpp-client-wrapper-glfw.zip',
       'windows-x64')
 
     UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
