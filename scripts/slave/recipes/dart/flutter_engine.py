@@ -251,6 +251,10 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
 
+    # Precache so that later flutter won't overwrite
+    # updated artifacts.
+    api.step('flutter precache', [flutter_cmd, 'precache'])
+
     # analyze.dart and test.dart have hardcoded references to
     # bin/cache/dart-sdk.  So we overwrite bin/cache/dart-sdk and
     # tightly-coupled frontend_server.dart.snapshot with links that point to
