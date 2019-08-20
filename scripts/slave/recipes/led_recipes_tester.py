@@ -37,14 +37,14 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 DEFAULT_BUILDERS = [
   'luci.chromium.try:linux-rel',
-  'luci.chromium.try:win7-rel',
+  'luci.chromium.try:win10_chromium_x64_rel_ng',
 ]
 
 
 # We run the fast CL on Windows to speed up cycle time. Most of the
 # recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = [
-  'luci.chromium.try:win7-rel',
+  'luci.chromium.try:win10_chromium_x64_rel_ng',
 ]
 
 
@@ -263,9 +263,9 @@ def GenTests(api):
     led_get_builder('luci.chromium.try:linux-rel') +
       analyze('luci.chromium.try:linux-rel', 'foo_recipe') +
       led_launch('luci.chromium.try:linux-rel') +
-      led_get_builder('luci.chromium.try:win7-rel') +
-      analyze('luci.chromium.try:win7-rel', 'foo_recipe') +
-      led_launch('luci.chromium.try:win7-rel') +
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe') +
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -279,8 +279,8 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build') +
       led_get_builder('luci.chromium.try:linux-rel') +
       analyze('luci.chromium.try:linux-rel', None) +
-      led_get_builder('luci.chromium.try:win7-rel') +
-      analyze('luci.chromium.try:win7-rel', None) +
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None) +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -300,10 +300,10 @@ def GenTests(api):
         'random/file.py',
         'infra/config/recipes.cfg',
       ]) +
-      led_get_builder('luci.chromium.try:win7-rel') +
-      led_launch('luci.chromium.try:win7-rel') +
-      analyze('luci.chromium.try:win7-rel', None) +
-      git_diff('luci.chromium.try:win7-rel', [
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None) +
+      git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
         'random/file.py',
         'infra/config/recipes.cfg',
       ]) +
@@ -325,10 +325,10 @@ def GenTests(api):
         'random/file.py',
         'infra/config/recipes.cfg',
       ]) +
-      led_get_builder('luci.chromium.try:win7-rel') +
-      analyze('luci.chromium.try:win7-rel', 'foo_recipe') +
-      led_launch('luci.chromium.try:win7-rel') +
-      git_diff('luci.chromium.try:win7-rel', [
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe') +
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
+      git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
         'random/file.py',
         'infra/config/recipes.cfg',
       ]) +

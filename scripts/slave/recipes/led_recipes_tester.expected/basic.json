@@ -426,16 +426,16 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try:win7-rel"
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng"
   },
   {
     "cmd": [
       "[CACHE]/led/led",
       "get-builder",
-      "luci.chromium.try:win7-rel"
+      "luci.chromium.try:win10_chromium_x64_rel_ng"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led get-builder",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led get-builder",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -461,7 +461,7 @@
     ],
     "cwd": "[CACHE]/build/build",
     "infra_step": true,
-    "name": "analyze+launch luci.chromium.try:win7-rel.git diff to analyze patch",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.git diff to analyze patch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
@@ -480,7 +480,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.analyze foo_recipe",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.analyze foo_recipe",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -498,7 +498,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit-cr-cl",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -515,7 +515,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit-recipe-bundle",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -531,7 +531,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led edit",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -545,7 +545,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win7-rel.led launch",
+    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -651,7 +651,7 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try:win7-rel task",
+    "name": "collect luci.chromium.try:win10_chromium_x64_rel_ng task",
     "~followup_annotations": [
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
     ]
