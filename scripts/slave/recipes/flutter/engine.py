@@ -342,22 +342,6 @@ def BuildLinux(api):
     'out/host_debug/libflutter_engine.so',
   ], archive_name='linux-x64-embedder')
 
-  # TODO: Remove this version once 'flutter' tool is using the -glfw version
-  # below. See https://github.com/flutter/flutter/issues/38589.
-  UploadArtifacts(api, 'linux-x64', [
-    'out/host_debug/flutter_export.h',
-    'out/host_debug/flutter_glfw.h',
-    'out/host_debug/flutter_messenger.h',
-    'out/host_debug/flutter_plugin_registrar.h',
-    'out/host_debug/libflutter_linux.so',
-  ], archive_name='linux-x64-flutter.zip')
-  UploadFolder(api,
-    'Upload linux-x64 Flutter library C++ wrapper',
-    'src/out/host_debug',
-    'cpp_client_wrapper',
-    'flutter-cpp-client-wrapper.zip',
-    'linux-x64')
-
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug/flutter_export.h',
     'out/host_debug/flutter_glfw.h',
@@ -628,11 +612,9 @@ def BuildWindows(api):
       'out/host_debug/flutter_engine.dll.pdb',
     ], archive_name='windows-x64-embedder.zip')
 
-    # TODO: Update this version to win32 variant once 'flutter' tool is using
-    # -glfw versions below. See https://github.com/flutter/flutter/issues/38589.
     UploadArtifacts(api, 'windows-x64', [
       'out/host_debug/flutter_export.h',
-      'out/host_debug/flutter_glfw.h',
+      'out/host_debug/flutter_windows.h',
       'out/host_debug/flutter_messenger.h',
       'out/host_debug/flutter_plugin_registrar.h',
       'out/host_debug/flutter_windows.dll',
@@ -647,6 +629,8 @@ def BuildWindows(api):
       'flutter-cpp-client-wrapper.zip',
       'windows-x64')
 
+    # TODO: Remove this once the switch to the non-GLFW version above is
+    # complete. See https://github.com/flutter/flutter/issues/38590.
     UploadArtifacts(api, 'windows-x64', [
       'out/host_debug/flutter_export.h',
       'out/host_debug/flutter_glfw.h',
