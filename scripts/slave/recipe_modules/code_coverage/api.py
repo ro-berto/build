@@ -288,16 +288,20 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       tests (list of self.m.chromium_tests.steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
-    if self._is_per_cl_coverage and not self._affected_source_files:
-      self.m.python.succeeding_step(
-          'skip processing coverage data because no source file changed', '')
-      return
-
     if self.is_clang_coverage:
       self.process_clang_coverage_data(tests)
 
     if self.is_java_coverage:
-      self.process_java_coverage_data()
+      try:
+        self.process_java_coverage_data()
+      finally:
+        self.m.python(
+            'Clean up JaCoCo sources JSON files',
+            self.resource('clean_up_jacoco_sources_json.py'),
+            args=[
+                '--sources-json-dir',
+                self.m.chromium.output_dir,
+            ])
 
   def process_clang_coverage_data(self, tests):
     """Processes the clang coverage data for html report or metadata.
@@ -306,6 +310,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
+    if self._is_per_cl_coverage and not self._affected_source_files:
+      self.m.python.succeeding_step(
+          'skip processing coverage data because no source file changed', '')
+      return
+
     if not self._profdata_dirs:  # pragma: no cover.
       return
 
@@ -348,6 +357,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     Args:
       **kwargs: Kwargs for python and gsutil steps.
     """
+    if self._is_per_cl_coverage and not self._affected_source_files:
+      self.m.python.succeeding_step(
+          'skip processing coverage data because no source file changed', '')
+      return
+
     with self.m.step.nest('process java coverage'):
       coverage_dir = self.m.chromium.output_dir.join('coverage')
       args = [

@@ -32,7 +32,7 @@ import repository_util
 # 'input_path':
 #   '$CHROMIUM_OUTPUT_DIR/\
 #    obj/chrome/android/features/tab_ui/java__process_prebuilt-filtered.jar'
-_SOURCES_JSON_FILES_SUFFIX = '__jacoco_sources.json'
+SOURCES_JSON_FILES_SUFFIX = '__jacoco_sources.json'
 
 # Conforms to JaCoCo coverage counter types:
 # https://www.jacoco.org/jacoco/trunk/doc/counters.html
@@ -339,7 +339,7 @@ def main():
   class_files = []
   source_dirs = []
   sources_json_files = get_files_with_suffix(params.sources_json_dir,
-                                             _SOURCES_JSON_FILES_SUFFIX)
+                                             SOURCES_JSON_FILES_SUFFIX)
   for f in sources_json_files:
     with open(f) as json_file:
       json_file_data = json.load(json_file)
