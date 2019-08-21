@@ -10,7 +10,8 @@ DEPS = [
   'recipe_engine/properties',
 ]
 
-_CHROMEOS_GOMA_CIPD_PLATFORM='chromeos-amd64'
+_CHROMEOS_GOMA_CIPD_PLATFORM = 'chromeos-amd64'
+_LINUX_GOMA_CIPD_PLATFORM = 'linux-amd64'
 
 
 def RunSteps(api):
@@ -33,13 +34,16 @@ def RunSteps(api):
   # Update or install goma client via cipd.
   api.chromite.m.goma.ensure_goma(
       client_type = api.properties.get('cbb_goma_client_type'),
-      additional_platforms=[_CHROMEOS_GOMA_CIPD_PLATFORM])
+      additional_platforms=[
+          _LINUX_GOMA_CIPD_PLATFORM,
+          _CHROMEOS_GOMA_CIPD_PLATFORM])
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.
   with api.chromite.with_system_python():
-    api.chromite.run(goma_dir=api.chromite.m.goma.extra_package_path.join(
-        _CHROMEOS_GOMA_CIPD_PLATFORM))
+    api.chromite.run(
+        goma_dir=api.chromite.m.goma.additional_goma_dir(
+            _LINUX_GOMA_CIPD_PLATFORM))
 
 
 def GenTests(api):

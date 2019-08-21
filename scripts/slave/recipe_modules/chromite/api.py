@@ -304,7 +304,9 @@ class ChromiteApi(recipe_api.RecipeApi):
 
     Args:
       args (list): Initial argument list, expanded based on other values.
-      goma_dir: Goma client path used inside chromite.
+      goma_dir: Goma client path used for simplechrome.
+                Goma client for ChromeOS chroot should be located in sibling
+                directory so that cbuildbot can find it automatically.
     Returns: (Step) the 'cbuildbot' execution step.
     """
     # Assert correct configuration.

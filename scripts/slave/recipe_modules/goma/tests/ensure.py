@@ -12,6 +12,8 @@ def RunSteps(api):
   client_type = api.m.properties.get('client_type')
   additional_platforms = api.m.properties.get('additional_platforms')
   api.goma.ensure_goma(client_type=client_type, additional_platforms=additional_platforms)
+  if additional_platforms:
+    api.goma.additional_goma_dir(additional_platforms[0])
 
 
 def GenTests(api):
