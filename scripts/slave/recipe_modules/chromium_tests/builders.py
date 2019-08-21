@@ -26,6 +26,7 @@ from . import chromium_webkit
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
 from . import chromium_win
+from . import client_devtools_frontend_integration
 from . import client_openscreen_chromium
 from . import client_v8_chromium
 from . import client_v8_fyi
@@ -57,6 +58,8 @@ BUILDERS = freeze({
   'chromium.webrtc': chromium_webrtc.SPEC,
   'chromium.webrtc.fyi': chromium_webrtc_fyi.SPEC,
   'chromium.win': chromium_win.SPEC,
+  'client.devtools-frontend.integration': (
+      client_devtools_frontend_integration.SPEC),
   'client.openscreen.chromium': client_openscreen_chromium.SPEC,
   'client.v8.chromium': client_v8_chromium.SPEC,
   'client.v8.fyi': client_v8_fyi.SPEC,
