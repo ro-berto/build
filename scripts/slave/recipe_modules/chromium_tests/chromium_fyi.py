@@ -998,6 +998,15 @@ SPEC['builders']['android-archive-dbg-goma-latest'] = (
         SPEC['builders']['Android Builder (dbg)'],
         ['goma_latest_client']))
 
+SPEC['builders']['android-archive-dbg-goma-rbe-canary'] = (
+    chromium_apply_configs(
+        SPEC['builders']['Android Builder (dbg)'],
+        ['goma_canary']))
+SPEC['builders']['android-archive-dbg-goma-rbe-latest'] = (
+    chromium_apply_configs(
+        SPEC['builders']['Android Builder (dbg)'],
+        ['goma_latest_client']))
+
 SPEC['builders'].update([
     stock_config('linux-blink-rel-dummy', staging=False),
     stock_config('mac10.10-blink-rel-dummy', staging=False),
