@@ -404,6 +404,32 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Tests",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--quiet"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "check GN args from mb",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed."

@@ -29,7 +29,6 @@ def RunSteps(api):
   api.chromium_tests.configure_build(bot_config_object)
   # Fake path.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
-  api.path.mock_add_paths(api.chromium.output_dir.join('args.gn'))
 
   if 'tryserver' in mastername:
     api.code_coverage.instrument(api.properties['files_to_instrument'])
@@ -310,8 +309,9 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='android-code-coverage',
           buildnumber=54)
-      + api.step_data('check GN args for coverage', api.raw_io.output_text(
-          'jacoco_coverage = true'))
+      + api.step_data(
+          'check GN args from mb',
+          stdout=api.raw_io.output_text('jacoco_coverage = true'))
       + api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Run component extraction script to generate mapping')
@@ -343,8 +343,9 @@ def GenTests(api):
           mastername='tryserver.chromium.android',
           buildername='android-kitkat-arm-coverage-rel',
           buildnumber=54)
-      + api.step_data('check GN args for coverage', api.raw_io.output_text(
-          'jacoco_coverage = true'))
+      + api.step_data(
+          'check GN args from mb',
+          stdout=api.raw_io.output_text('jacoco_coverage = true'))
       + api.properties(
           files_to_instrument=[
             'some/path/to/non_source_file.txt'
@@ -366,8 +367,9 @@ def GenTests(api):
           buildnumber=54)
       + api.buildbucket.try_build(
           project='chromium', builder='android-kitkat-arm-coverage-rel')
-      + api.step_data('check GN args for coverage', api.raw_io.output_text(
-          'jacoco_coverage = true'))
+      + api.step_data(
+          'check GN args from mb',
+          stdout=api.raw_io.output_text('jacoco_coverage = true'))
       + api.properties(
           files_to_instrument=[
             'some/path/to/file.java',

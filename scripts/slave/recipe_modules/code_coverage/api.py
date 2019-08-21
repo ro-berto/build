@@ -75,12 +75,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   @property
   def gn_args(self):
-    if not self._gn_args and self.m.path.exists(
-        self.m.chromium.output_dir.join('args.gn')):
-      # TODO(yliuyliu): find more reliable way to get gn args.
-      content, _ = self.m.gn.read_args(
-          self.m.chromium.output_dir, 'check GN args for coverage')
-      self._gn_args = self.m.gn.parse_gn_args(content)
+    if not self._gn_args:
+      content = self.m.chromium.mb_lookup(
+          self.m.properties['mastername'],
+          self.m.buildbucket.builder_name,
+          name='check GN args from mb')
+      if content:
+        self._gn_args = self.m.gn.parse_gn_args(content)
     return self._gn_args
 
   @property
