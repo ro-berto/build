@@ -262,9 +262,7 @@
       "-xcode-version",
       "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_mac_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_mac_9c40b.app"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

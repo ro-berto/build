@@ -180,7 +180,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'no_mac_toolchain_cipd_creds',
           'xcode_10e1001'
       ],
       'chromium_config': 'chromium',
@@ -204,7 +203,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'no_mac_toolchain_cipd_creds',
           'xcode_10e1001'
       ],
       'chromium_config': 'chromium',
@@ -228,7 +226,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'no_mac_toolchain_cipd_creds',
           'xcode_10e1001'
       ],
       'chromium_config': 'chromium',

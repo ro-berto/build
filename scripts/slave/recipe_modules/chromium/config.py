@@ -89,6 +89,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       # CIPD cannot distribute Xcode publicly, hence its package requires
       # credentials on buildbot slaves. LUCI bots should NOT set this var, to
       # let CIPD use credentials from the LUCI context.
+      # TODO(jbudorick): Remove this once no configs attempt to set it.
+      # All mac buildbots have been switched to LUCI.
       cipd_credentials = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
@@ -217,9 +219,6 @@ def BASE(c):
     c.mac_toolchain.installer_version = (
         'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
     c.mac_toolchain.installer_cmd = 'mac_toolchain'
-    # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
-    c.mac_toolchain.cipd_credentials = (
-        '/creds/service_accounts/service-account-xcode-cipd-access.json')
 
   # TODO(sergeyberezin): remove this when all builds switch to the new Xcode
   # flow.

@@ -952,7 +952,6 @@ SPEC = {
       'chromium_apply_config': [
         'ios_release_simulator',
         'mac_toolchain',
-        'no_mac_toolchain_cipd_creds',
         'xcode_11m382q'
       ],
       'gclient_config': 'ios',
