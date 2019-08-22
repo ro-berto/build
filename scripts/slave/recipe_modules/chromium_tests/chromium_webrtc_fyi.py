@@ -176,7 +176,13 @@ SPEC = {
     },
     'WebRTC Chromium FYI Mac Builder': {
       'bot_type': 'builder',
-      'chromium_apply_config': ['dcheck', 'mb'],
+      'chromium_apply_config': [
+          'dcheck',
+          'mb',
+          'mac_toolchain',
+          'no_mac_toolchain_cipd_creds',
+          'xcode_10e1001'
+      ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -194,7 +200,13 @@ SPEC = {
     },
     'WebRTC Chromium FYI Mac Builder (dbg)': {
       'bot_type': 'builder_tester',
-      'chromium_apply_config': ['dcheck', 'mb'],
+      'chromium_apply_config': [
+          'dcheck',
+          'mb',
+          'mac_toolchain',
+          'no_mac_toolchain_cipd_creds',
+          'xcode_10e1001'
+      ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -212,7 +224,13 @@ SPEC = {
     },
     'WebRTC Chromium FYI Mac Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': ['dcheck', 'mb'],
+      'chromium_apply_config': [
+          'dcheck',
+          'mb',
+          'mac_toolchain',
+          'no_mac_toolchain_cipd_creds',
+          'xcode_10e1001'
+      ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

@@ -653,5 +653,9 @@ def no_mac_toolchain_cipd_creds(c):
   c.mac_toolchain.cipd_credentials = None
 
 @config_ctx()
+def xcode_10e1001(c):
+  c.mac_toolchain.xcode_build_version = '10E1001'
+
+@config_ctx()
 def xcode_11m382q(c):
   c.mac_toolchain.xcode_build_version = '11m382q'
