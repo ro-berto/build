@@ -1,8 +1,6 @@
 set noparent
 agable@chromium.org
 agable@google.com
-bhthompson@chromium.org
-bhthompson@google.com
 bpastene@chromium.org
 bpastene@google.com
 djd@chromium.org
@@ -43,10 +41,11 @@ sergiyb@chromium.org
 sergiyb@google.com
 smut@chromium.org
 smut@google.com
-sosa@chromium.org
 tandrii@chromium.org
 tandrii@google.com
 thakis@chromium.org
 thomasvl@chromium.org
 vadimsh@chromium.org
 vadimsh@google.com
+
+file://CROS_OWNERS
