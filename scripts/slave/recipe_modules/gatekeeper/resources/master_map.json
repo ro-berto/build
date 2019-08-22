@@ -226,16 +226,16 @@
       "GPU Linux Builder (dbg)",
       "GPU Mac Builder",
       "GPU Mac Builder (dbg)",
-      "GPU Win Builder",
-      "GPU Win Builder (dbg)",
+      "GPU Win x64 Builder",
+      "GPU Win x64 Builder (dbg)",
       "Linux Debug (NVIDIA)",
       "Linux Release (NVIDIA)",
       "Mac Debug (Intel)",
       "Mac Release (Intel)",
       "Mac Retina Debug (AMD)",
       "Mac Retina Release (AMD)",
-      "Win10 Debug (NVIDIA)",
-      "Win10 Release (NVIDIA)"
+      "Win10 x64 Debug (NVIDIA)",
+      "Win10 x64 Release (NVIDIA)"
     ],
     "project": "chromium"
   },

@@ -168,7 +168,7 @@
           "Android Debug (Nexus 7)",
           "GPU Linux Builder (dbg)",
           "GPU Mac Builder (dbg)",
-          "GPU Win Builder (dbg)",
+          "GPU Win x64 Builder (dbg)",
           "Linux Debug (NVIDIA)",
           "Mac 10.8 Debug (Intel)",
           "Mac Debug (Intel)",
