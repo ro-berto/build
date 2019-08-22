@@ -32,6 +32,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
+MAVEN_BUCKET_NAME = 'download.flutter.io'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
 
@@ -123,7 +124,11 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
 # and returns `io/flutter/flutter_embedding_release/1.0.0-<hash>/
 # flutter_embedding_release-1.0.0-<hash>.jar`.
 def GetCloudMavenPath(api, artifact_filename):
-  engine_git_hash = api.buildbucket.gitiles_commit.id or 'testing'
+  if api.runtime.is_experimental:
+    engine_git_hash = 'experimental'
+  else:
+    engine_git_hash = api.buildbucket.gitiles_commit.id or 'testing'
+
   artifact_id, artifact_extension = artifact_filename.split('.', 2)
 
   # Source artifacts
@@ -142,7 +147,7 @@ def GetCloudMavenPath(api, artifact_filename):
 
 # Uploads the local Maven artifact.
 def UploadMavenArtifacts(api, artifacts):
-  if not ShouldUploadPackages(api) or api.runtime.is_experimental:
+  if not ShouldUploadPackages(api):
     return
   checkout = api.path['start_dir'].join('src')
 
@@ -151,7 +156,7 @@ def UploadMavenArtifacts(api, artifacts):
     remote_artifact = GetCloudMavenPath(api, filename)
 
     api.gsutil.upload(checkout.join(local_artifact),
-                      BUCKET_NAME,
+                      MAVEN_BUCKET_NAME,
                       remote_artifact,
                       name='upload "%s"' % remote_artifact)
 
@@ -895,18 +900,21 @@ def GenTests(api):
         test += (api.properties(InputProperties(jazzy_version='0.8.4')))
       yield test
 
-  yield (
-    api.test('experimental') +
-    api.buildbucket.ci_build(
-        builder='Linux Engine',
-        git_repo=GIT_REPO,
-        project='flutter',
-    ) +
-    api.runtime(is_luci=True, is_experimental=True) +
-    api.properties(InputProperties(goma_jobs='1024',
-      android_sdk_license='android_sdk_hash',
-      android_sdk_preview_license='android_sdk_preview_hash'))
-  )
+  for should_upload in (True, False):
+    yield (
+      api.test('experimental%s' % ('_upload' if should_upload else '')) +
+      api.buildbucket.ci_build(
+          builder='Linux Engine',
+          git_repo=GIT_REPO,
+          project='flutter',
+      ) +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.properties(InputProperties(goma_jobs='1024',
+        android_sdk_license='android_sdk_hash',
+        android_sdk_preview_license='android_sdk_preview_hash',
+        upload_packages=should_upload,
+      ))
+    )
   yield (api.test('pull_request') +
          api.buildbucket.ci_build(
             builder='Linux Host Engine',
