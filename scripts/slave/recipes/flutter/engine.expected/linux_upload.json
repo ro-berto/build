@@ -2949,6 +2949,70 @@
   {
     "cmd": [
       "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug/armeabi_v7a_debug.jar",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug/armeabi_v7a_debug.pom",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
@@ -3477,6 +3541,70 @@
     },
     "infra_step": true,
     "name": "temp dir for android-arm64 UploadArtifacts symbols.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_arm64/arm64_v8a_debug.jar",
+      "gs://flutter_infra/io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_arm64/arm64_v8a_debug.pom",
+      "gs://flutter_infra/io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
   },
   {
     "cmd": [
@@ -4013,6 +4141,70 @@
   {
     "cmd": [
       "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_x86/x86_debug.jar",
+      "gs://flutter_infra/io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_x86/x86_debug.pom",
+      "gs://flutter_infra/io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/x86_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
@@ -4541,6 +4733,166 @@
     },
     "infra_step": true,
     "name": "temp dir for android-x64 UploadArtifacts symbols.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_x64/x86_64_debug.jar",
+      "gs://flutter_infra/io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug_x64/x86_64_debug.pom",
+      "gs://flutter_infra/io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/x86_64_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/x86_64_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug/flutter_embedding_debug.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug/flutter_embedding_debug.pom",
+      "gs://flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_debug/flutter_embedding_debug-sources.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_debug/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_debug-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar@@@"
+    ]
   },
   {
     "cmd": [],
@@ -6312,6 +6664,70 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile_arm64/arm64_v8a_profile.jar",
+      "gs://flutter_infra/io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile_arm64/arm64_v8a_profile.pom",
+      "gs://flutter_infra/io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
@@ -6921,6 +7337,70 @@
     },
     "infra_step": true,
     "name": "temp dir for android-arm64-release UploadArtifacts artifacts.zip"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release_arm64/arm64_v8a_release.jar",
+      "gs://flutter_infra/io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release_arm64/arm64_v8a_release.pom",
+      "gs://flutter_infra/io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/arm64_v8a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/arm64_v8a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
   },
   {
     "cmd": [
@@ -7628,6 +8108,70 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile/armeabi_v7a_profile.jar",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile/armeabi_v7a_profile.pom",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
@@ -8242,6 +8786,70 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release/armeabi_v7a_release.jar",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release/armeabi_v7a_release.pom",
+      "gs://flutter_infra/io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/armeabi_v7a_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/armeabi_v7a_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "env": {
@@ -8489,6 +9097,198 @@
     },
     "infra_step": true,
     "name": "temp dir for treemap (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile/flutter_embedding_profile.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile/flutter_embedding_profile.pom",
+      "gs://flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_profile/flutter_embedding_profile-sources.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_profile/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_profile-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release/flutter_embedding_release.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.jar@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release/flutter_embedding_release.pom",
+      "gs://flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789.pom@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/android_release/flutter_embedding_release-sources.jar",
+      "gs://flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/io/flutter/flutter_embedding_release/1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter_embedding_release-1.0.0-2d72510e447ab60a9728aeea2362d8be2cbd7789-sources.jar@@@"
+    ]
   },
   {
     "cmd": [

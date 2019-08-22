@@ -119,6 +119,43 @@ def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
           name='upload "%s"' % remote_name)
 
 
+# Takes an artifact filename such as `flutter_embedding_release.jar`
+# and returns `io/flutter/flutter_embedding_release/1.0.0-<hash>/
+# flutter_embedding_release-1.0.0-<hash>.jar`.
+def GetCloudMavenPath(api, artifact_filename):
+  engine_git_hash = api.buildbucket.gitiles_commit.id or 'testing'
+  artifact_id, artifact_extension = artifact_filename.split('.', 2)
+
+  # Source artifacts
+  if artifact_id.endswith('-sources'):
+    filename_pattern = '%s-1.0.0-%s-sources.%s'
+  else:
+    filename_pattern = '%s-1.0.0-%s.%s'
+
+  artifact_id = artifact_id.replace('-sources', '')
+  filename = filename_pattern % (artifact_id, engine_git_hash,
+      artifact_extension)
+
+  return 'io/flutter/%s/1.0.0-%s/%s' % (artifact_id, engine_git_hash,
+      filename)
+
+
+# Uploads the local Maven artifact.
+def UploadMavenArtifacts(api, artifacts):
+  if not ShouldUploadPackages(api) or api.runtime.is_experimental:
+    return
+  checkout = api.path['start_dir'].join('src')
+
+  for local_artifact in artifacts:
+    filename = api.path.basename(local_artifact)
+    remote_artifact = GetCloudMavenPath(api, filename)
+
+    api.gsutil.upload(checkout.join(local_artifact),
+                      BUCKET_NAME,
+                      remote_artifact,
+                      name='upload "%s"' % remote_artifact)
+
+
 def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
                  platform=None):
   with MakeTempDir(api, dir_label) as temp_dir:
@@ -237,12 +274,12 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
 def BuildLinuxAndroid(api, swarming_task_id):
   if api.properties.get('build_android_debug', True):
     debug_variants = [
-      ('arm', 'android_debug', 'android-arm', True),
-      ('arm64', 'android_debug_arm64', 'android-arm64', False),
-      ('x86', 'android_debug_x86', 'android-x86', False),
-      ('x64', 'android_debug_x64', 'android-x64', False),
+      ('arm', 'android_debug', 'android-arm', True, 'armeabi_v7a'),
+      ('arm64', 'android_debug_arm64', 'android-arm64', False, 'arm64_v8a'),
+      ('x86', 'android_debug_x86', 'android-x86', False, 'x86'),
+      ('x64', 'android_debug_x64', 'android-x64', False, 'x86_64'),
     ]
-    for android_cpu, out_dir, artifact_dir, run_tests in debug_variants:
+    for android_cpu, out_dir, artifact_dir, run_tests, abi in debug_variants:
       RunGN(api, '--android', '--android-cpu=%s' % android_cpu, '--no-lto')
       Build(api, out_dir)
       if run_tests:
@@ -253,6 +290,21 @@ def BuildLinuxAndroid(api, swarming_task_id):
       UploadArtifacts(api, artifact_dir, artifacts)
       UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
                       archive_name='symbols.zip')
+
+      # Upload the Maven artifacts.
+      engine_filename = '%s_debug' % abi
+      UploadMavenArtifacts(api, [
+        'out/%s/%s.jar' % (out_dir, engine_filename),
+        'out/%s/%s.pom' % (out_dir, engine_filename),
+      ])
+
+    # Upload the embedding
+    UploadMavenArtifacts(api, [
+      'out/android_debug/flutter_embedding_debug.jar',
+      'out/android_debug/flutter_embedding_debug.pom',
+      'out/android_debug/flutter_embedding_debug-sources.jar',
+    ])
+
     Build(api, 'android_debug', ':dist')
     UploadDartPackage(api, 'sky_engine')
     BuildJavadoc(api)
@@ -271,12 +323,12 @@ def BuildLinuxAndroid(api, swarming_task_id):
     # earlier if they fail.
     aot_variants = [
       ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
-      'aarch64-linux-android'),
+      'aarch64-linux-android', 'arm64_v8a'),
       ('arm', 'android_%s', 'android-arm-%s', 'clang_x64',
-      'arm-linux-androideabi'),
+      'arm-linux-androideabi', 'armeabi_v7a'),
     ]
     for (android_cpu, out_dir, artifact_dir, clang_dir,
-        android_triple) in aot_variants:
+        android_triple, abi) in aot_variants:
       for runtime_mode in ['profile', 'release']:
         build_output_dir = out_dir % runtime_mode
         upload_dir = artifact_dir % runtime_mode
@@ -304,8 +356,16 @@ def BuildLinuxAndroid(api, swarming_task_id):
             ]
             api.step('Firebase test', firebase_cmd)
 
+        # TODO(egarciad): Don't upload flutter.jar once the migration to Maven
+        # is completed.
         UploadArtifacts(api, upload_dir, [
           'out/%s/flutter.jar' % build_output_dir,
+        ])
+
+        # Upload the Maven artifacts.
+        UploadMavenArtifacts(api, [
+          'out/%s/%s_%s.jar' % (build_output_dir, abi, runtime_mode),
+          'out/%s/%s_%s.pom' % (build_output_dir, abi, runtime_mode),
         ])
 
         # Upload artifacts used for AOT compilation on Linux hosts.
@@ -320,6 +380,16 @@ def BuildLinuxAndroid(api, swarming_task_id):
         if runtime_mode == 'release':
           UploadTreeMap(
               api, upload_dir, unstripped_lib_flutter_path, android_triple)
+
+    # Upload the embedding
+    for runtime_mode in ['profile', 'release']:
+      build_output_dir = out_dir % runtime_mode
+      UploadMavenArtifacts(api,  [
+        'out/%s/flutter_embedding_%s.jar' % (build_output_dir, runtime_mode),
+        'out/%s/flutter_embedding_%s.pom' % (build_output_dir, runtime_mode),
+        'out/%s/flutter_embedding_%s-sources.jar'
+            % (build_output_dir, runtime_mode),
+      ])
 
 
 def BuildLinux(api):
