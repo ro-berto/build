@@ -194,23 +194,6 @@ SPEC = {
           'platform': 'linux',
       },
     },
-    'WebKit Linux layout_ng Dummy Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [],
-      'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
-    },
     'WebKit Linux layout_ng_disabled Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],

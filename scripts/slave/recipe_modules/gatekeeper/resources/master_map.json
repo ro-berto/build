@@ -810,7 +810,6 @@
       "linux_chromium_tsan_rel_ng",
       "linux_chromium_ubsan_rel_ng",
       "linux_layout_tests_composite_after_paint",
-      "linux_layout_tests_layout_ng",
       "linux_layout_tests_layout_ng_disabled",
       "linux_mojo",
       "linux_mojo_chromeos",
