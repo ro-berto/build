@@ -10,4 +10,8 @@ message InputProperties {
   // GS bucket to which coverage data should be saved.
   // Defaults to code-coverage-data.
   string gs_bucket = 1;
+  // Whether Clang coverage is enabled.
+  bool use_clang_coverage = 2;
+  // Whether Java coverage is enabled.
+  bool use_java_coverage = 3;
 }
