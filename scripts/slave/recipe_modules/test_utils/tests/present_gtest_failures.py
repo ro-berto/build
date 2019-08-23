@@ -22,6 +22,7 @@ def RunSteps(api):
 
 def GenTests(api):
   log = 'Deterministic failure: Test.One (status FAILURE)'
+  notrun_log = 'Deterministic failure: Test.Two (status NOTRUN)'
   flaky_log = 'Flaky failure: Test.One (status FAILURE,SUCCESS)'
   success_log_keys = ['test_utils.gtest_results']
 
@@ -44,6 +45,61 @@ def GenTests(api):
           })),
           retcode=1) +
       api.post_check(lambda check, steps: check(log in steps['test'].logs)) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('failures_with_notrun') +
+      api.override_step_data(
+          'test',
+          api.test_utils.gtest_results(json.dumps({
+              'per_iteration_data': [
+                  {
+                      'Test.One': [
+                          {
+                              'elapsed_time_ms': 0,
+                              'output_snippet': ':(',
+                              'status': 'FAILURE',
+                          },
+                      ],
+                      'Test.Two': [
+                          {
+                              'elapsed_time_ms': 0,
+                              'output_snippet': ':(',
+                              'status': 'NOTRUN',
+                          },
+                      ]
+                  }
+              ],
+          })),
+          retcode=1) +
+      api.post_check(lambda check, steps: check(log in steps['test'].logs)) +
+      api.post_check(lambda check, steps: check(
+          notrun_log not in steps['test'].logs
+      )) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('notrun') +
+      api.override_step_data(
+          'test',
+          api.test_utils.gtest_results(json.dumps({
+              'per_iteration_data': [
+                  {
+                      'Test.Two': [
+                          {
+                              'elapsed_time_ms': 0,
+                              'output_snippet': ':(',
+                              'status': 'NOTRUN',
+                          },
+                      ]
+                  }
+              ],
+          })),
+          retcode=1) +
+      api.post_check(
+          lambda check, steps: check(notrun_log in steps['test'].logs)) +
       api.post_process(post_process.DropExpectation)
   )
 

@@ -164,6 +164,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
       deterministic_failures_set = set(r.deterministic_failures)
       flaky_failures_set = set(r.unique_failures) - deterministic_failures_set
 
+      non_notrun_failures_set = set()
+      for failure in deterministic_failures_set:
+        if set(r.raw_results[failure]) != {'NOTRUN'}:
+          non_notrun_failures_set.add(failure)
+      # If the deterministic_failures_set has other state of failures other
+      # than NOTRUN, only report those failures and skip reporting the NOTRUN
+      # failures as they will probably not be the 'actual' failures
+      if non_notrun_failures_set:
+        deterministic_failures_set = non_notrun_failures_set
+
       deterministic_failures, deterministic_failures_text = (
           self.limit_failures(sorted(deterministic_failures_set)))
       flaky_failures, flaky_failures_text = (
