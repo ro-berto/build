@@ -31,6 +31,11 @@ message InputProperties {
 
   string jazzy_version = 13;
   string xcpretty_version = 14;
+
+  bool build_ios = 15;
+  bool ios_debug = 16;
+  bool ios_profile = 17;
+  bool ios_release = 18;
 }
 
 message EnvProperties {
