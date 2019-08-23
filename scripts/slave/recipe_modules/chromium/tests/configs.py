@@ -146,8 +146,6 @@ def GenTests(api):
 
   yield from_config('ios_release_simulator')
 
-  yield from_config('no_mac_toolchain_cipd_creds')
-
   yield from_config('xcode_10e1001')
 
   yield from_config('xcode_11m382q')

@@ -86,12 +86,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       installer_version = Single(basestring),
       installer_cmd = Single(basestring),
       kind = Single(basestring),
-      # CIPD cannot distribute Xcode publicly, hence its package requires
-      # credentials on buildbot slaves. LUCI bots should NOT set this var, to
-      # let CIPD use credentials from the LUCI context.
-      # TODO(jbudorick): Remove this once no configs attempt to set it.
-      # All mac buildbots have been switched to LUCI.
-      cipd_credentials = Single(basestring, required=False),
     ),
     project_generator = ConfigGroup(
       tool = Single(basestring, empty_val='mb'),
@@ -490,10 +484,8 @@ def clang_tot_linux(_):
 
 # mac_toolchain causes the bots to download system Xcode. The clang tot
 # bots need system Xcode to build clang; hermetic Xcode isn't sufficient.
-# All LUCI bots currently have to explicitly set no_mac_toolchain_cipd_creds
-# for the toolchain download to work.
 @config_ctx(includes=['ninja', 'clang', 'clang_tot',
-            'mac_toolchain', 'no_mac_toolchain_cipd_creds'])  # No goma.
+                      'mac_toolchain'])  # No goma.
 def clang_tot_mac(c):
   fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
 
@@ -646,10 +638,6 @@ def android_internal_isolate_maps(c):
 @config_ctx()
 def ios_release_simulator(c):
   c.build_config_fs = 'Release-iphonesimulator'
-
-@config_ctx()
-def no_mac_toolchain_cipd_creds(c):
-  c.mac_toolchain.cipd_credentials = None
 
 @config_ctx()
 def xcode_10e1001(c):
