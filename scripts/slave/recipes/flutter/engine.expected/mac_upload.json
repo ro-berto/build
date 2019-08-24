@@ -5227,65 +5227,6 @@
     "cmd": [
       "python",
       "[START_DIR]/src/flutter/tools/gn",
-      "--bitcode",
-      "--no-goma",
-      "--ios",
-      "--runtime-mode",
-      "debug",
-      "--no-lto"
-    ],
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
-      "GEM_HOME": "[START_DIR]/gems",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin",
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]",
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode debug --no-lto"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
-      "--goma",
-      "--ios",
-      "--runtime-mode",
-      "debug",
-      "--ios-cpu=arm",
-      "--no-lto"
-    ],
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
-      "GEM_HOME": "[START_DIR]/gems",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin",
-        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--ios",
       "--runtime-mode",
@@ -5671,6 +5612,65 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--bitcode",
+      "--no-goma",
+      "--ios",
+      "--runtime-mode",
+      "debug",
+      "--no-lto"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]",
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode debug --no-lto"
+  },
+  {
+    "cmd": [
+      "python",
+      "[START_DIR]/src/flutter/tools/gn",
+      "--goma",
+      "--ios",
+      "--runtime-mode",
+      "debug",
+      "--ios-cpu=arm",
+      "--no-lto"
+    ],
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/src/third_party/android_tools/sdk",
+      "GEM_HOME": "[START_DIR]/gems",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin",
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
   },
   {
     "cmd": [

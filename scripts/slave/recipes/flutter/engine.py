@@ -652,14 +652,16 @@ def BuildIOS(api):
   RunGN(api, '--unoptimized')
   Build(api, 'host_debug_unopt')
 
+  # Simulator doesn't use bitcode.
+  # Simulator binary is needed in all runtime modes.
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
+  Build(api, 'ios_debug_sim')
+
   # TODO(dnfield): Support bitcode for armv7
   if api.properties.get('ios_debug', True):
     RunGNBitcode(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
     RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto')
-    # Simulator doesn't use bitcode.
-    RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
 
-    Build(api, 'ios_debug_sim')
     RunIOSTests(api)
     BuildNoGoma(api, 'ios_debug')
     Build(api, 'ios_debug_arm')
