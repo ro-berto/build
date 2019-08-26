@@ -477,6 +477,13 @@ class IndexPack(object):
           '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
       ]
 
+      # Remove the SK_USER_CONFIG_HEADER define. This param throws errors in the
+      # indexer for Windows for some reason.
+      for i in range(len(command_list)):
+        if '-DSK_USER_CONFIG_HEADER' in command_list[i]:
+          command_list.pop(i)
+          break
+
     # This macro is used to guard Kythe-specific pragmas, so we must define it
     # for Kythe to see them. In particular the kythe_inline_metadata pragma we
     # insert into mojom generated files.
