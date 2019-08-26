@@ -59,14 +59,6 @@ def Build(api, config, *targets):
     name='build %s' % ' '.join([config] + list(targets)),
     ninja_command=ninja_args)
 
-# Bitcode builds cannot use goma.
-def BuildNoGoma(api, config, *targets):
-  checkout = api.path['start_dir'].join('src')
-  build_dir = checkout.join('out/%s' % config)
-  ninja_args = [api.depot_tools.autoninja_path, '-C', build_dir]
-  ninja_args.extend(targets)
-  api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
-
 def RunTests(api, out_dir, android_out_dir=None, types='all'):
   script_path = api.path['start_dir'].join(
       'src', 'flutter', 'testing', 'run_tests.py')
@@ -99,16 +91,6 @@ def RunGN(api, *args):
   gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
-
-# Bitcode builds cannot use goma.
-def RunGNBitcode(api, *args):
-  # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
-  with api.depot_tools.on_path():
-    checkout = api.path['start_dir'].join('src')
-    gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--bitcode',
-              '--no-goma']
-    gn_cmd.extend(args)
-    api.step('gn %s' % ' '.join(args), gn_cmd)
 
 # The relative_paths parameter is a list of strings and pairs of strings.
 # If the path is a string, then it will be used as the source filename,
@@ -657,13 +639,13 @@ def BuildIOS(api):
   RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
   Build(api, 'ios_debug_sim')
 
-  # TODO(dnfield): Support bitcode for armv7
+  # TODO(dnfield): Support bitcode for armv7 and re-enable bitcode
   if api.properties.get('ios_debug', True):
-    RunGNBitcode(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
+    RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
     RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto')
 
     RunIOSTests(api)
-    BuildNoGoma(api, 'ios_debug')
+    Build(api, 'ios_debug')
     Build(api, 'ios_debug_arm')
     BuildObjcDoc(api)
 
@@ -671,18 +653,18 @@ def BuildIOS(api):
         'debug',   'ios_debug',   'ios_debug_arm',   'ios_debug_sim', 'ios')
 
   if api.properties.get('ios_profile', True):
-    RunGNBitcode(api, '--ios', '--runtime-mode', 'profile')
+    RunGN(api, '--ios', '--runtime-mode', 'profile')
     RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm')
-    BuildNoGoma(api, 'ios_profile')
+    Build(api, 'ios_profile')
     Build(api, 'ios_profile_arm')
     PackageIOSVariant(api,
         'profile', 'ios_profile', 'ios_profile_arm', 'ios_debug_sim',
                       'ios-profile')
 
   if api.properties.get('ios_release', True):
-    RunGNBitcode(api, '--ios', '--runtime-mode', 'release')
+    RunGN(api, '--ios', '--runtime-mode', 'release')
     RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm')
-    BuildNoGoma(api, 'ios_release')
+    Build(api, 'ios_release')
     Build(api, 'ios_release_arm')
     PackageIOSVariant(api,
         'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
