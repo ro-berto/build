@@ -4,6 +4,13 @@
 
 import json
 
+from recipe_engine import recipe_api
+from recipe_engine.post_process import (
+    DoesNotRunRE, DropExpectation, Filter, MustRun)
+
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
+
 
 DEPS = [
   'depot_tools/bot_update',
@@ -23,11 +30,17 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+DART_GERRIT = 'https://dart.googlesource.com/'
 
 COMMITS_JSON = 'commits.json'
 ENGINE_REPO = 'external/github.com/flutter/engine'
 FLUTTER_REPO = 'external/github.com/flutter/flutter'
+LINEARIZED_REPO = 'linear_sdk_flutter_engine'
 SDK_REPO = 'sdk'
+
+ENGINE_REPO_URL = DART_GERRIT + ENGINE_REPO
+FLUTTER_REPO_URL = DART_GERRIT + FLUTTER_REPO
+LINEARIZED_REPO_URL = DART_GERRIT + LINEARIZED_REPO
 
 
 def KillTasks(api, checkout_dir, ok_ret='any'):
@@ -115,10 +128,11 @@ def GetCheckout(api):
   src_cfg = api.gclient.make_config()
   src_cfg.target_os = set(['android'])
   commits = {}
-  # tryjobs don't have a gitiles_commit
+
+  # tryjobs don't have a gitiles_commit.
   if api.buildbucket.gitiles_commit.id:
     commits = json.loads(api.gitiles.download_file(
-        'https://dart.googlesource.com/linear_sdk_flutter_engine',
+        LINEARIZED_REPO_URL,
         COMMITS_JSON,
         api.buildbucket.gitiles_commit.id,
         step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
@@ -135,13 +149,11 @@ def GetCheckout(api):
 
   soln = src_cfg.solutions.add()
   soln.name = 'src/flutter'
-  soln.url = \
-      'https://dart.googlesource.com/%s' % ENGINE_REPO
+  soln.url = ENGINE_REPO_URL
 
   soln = src_cfg.solutions.add()
   soln.name = 'flutter'
-  soln.url = \
-      'https://dart.googlesource.com/%s' % FLUTTER_REPO
+  soln.url = FLUTTER_REPO_URL
 
   api.gclient.c = src_cfg
   api.bot_update.ensure_checkout(ignore_input_commit=True,
@@ -283,23 +295,41 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
 
 def RunSteps(api):
   start_dir = api.path['cache'].join('builder')
-
-  with api.context(cwd=start_dir):
-    # buildbot sets 'clobber' to the empty string which is falsey, check with
-    # 'in'
-    if 'clobber' in api.properties:
-      api.file.rmcontents('everything', start_dir)
-    flutter_rev = GetCheckout(api)
-
-  api.goma.ensure_goma()
-
   checkout_dir = start_dir.join('src')
-  KillTasks(api, checkout_dir)
+
   try:
+    with api.context(cwd=start_dir):
+      # buildbot sets 'clobber' to the empty string which is falsey, check with
+      # 'in'
+      if 'clobber' in api.properties:
+        api.file.rmcontents('everything', start_dir)
+      flutter_rev = GetCheckout(api)
+
+    api.goma.ensure_goma()
+
+    KillTasks(api, checkout_dir)
+
     BuildAndTest(api, start_dir, checkout_dir, flutter_rev)
+  except recipe_api.StepFailure as failure:
+    if _is_bisecting(api):
+      bisect_reason = api.properties['bisect_reason']
+      if bisect_reason == failure.reason:
+        _bisect_older(api, bisect_reason)
+      else:
+        _bisect_newer(api, bisect_reason)
+        # The build failed for a different reason, fan out to find the root
+        # cause of that failure as well.
+        _bisect_older(api, failure.reason)
+    elif api.buildbucket.gitiles_commit.id:
+      # Tryjobs don't have an input commit and can't be bisected.
+      _start_bisection(api, failure.reason)
+    raise
   finally:
     # TODO(aam): Go back to `ok_ret={0}` once dartbug.com/35549 is fixed
     KillTasks(api, checkout_dir, ok_ret='any')
+  if _is_bisecting(api):
+    # The build was successful, so search newer builds to find the root cause.
+    _bisect_newer(api, api.properties['bisect_reason'])
 
 
 def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
@@ -341,11 +371,150 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
         TestFlutter(api, start_dir, just_built_dart_sdk)
 
 
-def GenTests(api):
-  yield (api.test('flutter-engine-linux') + api.platform('linux', 64)
+def _is_bisecting(api):
+  return 'bisect_reason' in api.properties
+
+
+def _start_bisection(api, reason):
+  current_rev = api.buildbucket.gitiles_commit.id
+
+  # Search for previous builds created by the Luci scheduler (to exclude
+  # bisection builds). The TimeRange includes all builds from start_time
+  # (defaults to 0) to end_time (exclusive). Because builds are ordered by
+  # create_time, the first result will be the previous build.
+  create_time = common_pb2.TimeRange(end_time=api.buildbucket.build.create_time)
+  builder = api.buildbucket.build.builder
+  search_predicate = rpc_pb2.BuildPredicate(
+      builder=builder,
+      create_time=create_time,
+      tags=[common_pb2.StringPair(key='user_agent', value='luci-scheduler')])
+  result = api.buildbucket.search(search_predicate, limit=1,
+      step_name='fetch previous build')
+  if not result or len(result) == 0:
+    # There is no previous build: do not bisect on new builders.
+    return
+  previous_build = result[0]
+  if previous_build.status == common_pb2.FAILURE:
+    # Do not bisect if the previous build failed.
+    # TODO(athom): Check if the failure reason is the same when
+    #              api.buildbucket.search supports adding
+    #              'builds.*.summaryMarkdown' to the field mask.
+    return
+  previous_rev = previous_build.input.gitiles_commit.id
+  # We're intentionally not paging through the log to avoid bisecting an
+  # excessive number of commits.
+  commits, _ = api.gitiles.log(
+      url=LINEARIZED_REPO_URL,
+      ref='%s..%s' % (previous_rev, current_rev)
+  )
+  commits = commits[1:] # The first commit is the current_rev
+  commits = [commit['commit'] for commit in commits]
+
+  _bisect(api, commits, reason)
+
+
+def _bisect(api, commits, reason):
+  if len(commits) == 0:
+    # Nothing more to bisect.
+    return
+
+  middle_index = len(commits)//2
+  newer = commits[:middle_index]
+  middle = commits[middle_index]
+  older = commits[middle_index + 1:]
+
+  commit = api.buildbucket.gitiles_commit
+  middle_commit = common_pb2.GitilesCommit()
+  middle_commit.CopyFrom(commit)
+  middle_commit.id = middle
+  builder = api.buildbucket.build.builder
+  request = api.buildbucket.schedule_request(
+    builder=builder.builder,
+    project=builder.project,
+    bucket=builder.bucket,
+    properties={
+      'bisect_newer': newer,
+      'bisect_older': older,
+      'bisect_reason': reason
+    },
+    gitiles_commit = middle_commit,
+    inherit_buildsets = False,
+  )
+  api.buildbucket.schedule([request], step_name='schedule bisect (%s)' % middle)
+
+
+def _bisect_newer(api, reason):
+  _bisect(api, list(api.properties.get('bisect_newer', [])), reason)
+
+
+def _bisect_older(api, reason):
+  _bisect(api, list(api.properties.get('bisect_older', [])), reason)
+
+
+def _test(api, name, failure=False):
+  data = (api.test(name) + api.platform('linux', 64)
       + api.buildbucket.ci_build(
           builder='flutter-engine-linux',
-          git_repo='https://dart.googlesource.com/linear_sdk_flutter_engine',
+          git_repo=LINEARIZED_REPO_URL,
           revision='f' * 8)
       + api.properties(bot_id='fake-m1', clobber='')
       + api.runtime(is_luci=True, is_experimental=False))
+  if failure:
+    # let the first step in the recipe fail
+    data += api.step_data('everything', retcode=1)
+  return data
+
+def GenTests(api):
+  yield (_test(api, 'flutter-engine-linux')
+      + api.post_process(DoesNotRunRE, r'schedule bisect.*'))
+
+  yield (_test(api, 'start-bisect', failure=True)
+      + api.buildbucket.simulated_search_results([
+            api.buildbucket.ci_build_message(status='SUCCESS'),
+          ], step_name='fetch previous build')
+      + api.step_data(
+          'gitiles log: 2d72510e447ab60a9728aeea2362d8be2cbd7789..ffffffff',
+        api.gitiles.make_log_test_data('master'))
+      + api.post_process(MustRun,
+          'schedule bisect (f4d35da881f8fd329a4d3e01dd78b66a502d5c49)'))
+
+  yield (_test(api, 'do-not-start-bisect-if-previous-build-failed',
+          failure=True)
+      + api.buildbucket.simulated_search_results([
+             api.buildbucket.ci_build_message(status='FAILURE'),
+          ], step_name='fetch previous build')
+      + api.post_process(DoesNotRunRE, r'schedule bisect.*'))
+
+  yield (_test(api, 'do-not-start-bisect-without-previous-build', failure=True)
+      + api.buildbucket.simulated_search_results([],
+          step_name='fetch previous build')
+      + api.post_process(DoesNotRunRE, r'schedule bisect.*'))
+
+  yield (_test(api, 'continue-bisect-on-failure', failure=True)
+      + api.properties(
+          bisect_newer=['a', 'b', 'c'], bisect_older=['c', 'd', 'e'],
+          bisect_reason="Infra Failure: Step('everything') (retcode: 1)")
+      + api.post_process(MustRun, 'schedule bisect (d)')
+      + api.post_process(Filter('schedule bisect (d)')))
+
+  yield (_test(api, 'continue-bisect-on-success')
+      + api.properties(
+          bisect_newer=['a', 'b', 'c'], bisect_older=['c', 'd', 'e'],
+          bisect_reason="Infra Failure: Step('everything') (retcode: 1)")
+      + api.post_process(MustRun, 'schedule bisect (b)')
+      + api.post_process(Filter('schedule bisect (b)')))
+
+  yield (_test(api, 'fan-out-on-distinct-failure', failure=True)
+      + api.properties(
+          bisect_newer=['a', 'b', 'c'], bisect_older=['c', 'd', 'e'],
+          bisect_reason='different failure')
+      + api.post_process(MustRun, 'schedule bisect (b)')
+      + api.post_process(MustRun, 'schedule bisect (d)')
+      + api.post_process(Filter().include_re(r'schedule bisect \(.*\)')))
+
+  yield (_test(api, 'stop-bisect')
+      + api.properties(
+          bisect_newer=[], bisect_older=[],
+          bisect_reason='different failure')
+      + api.post_process(DoesNotRunRE, r'schedule bisect.*')
+      + api.post_process(DropExpectation))
