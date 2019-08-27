@@ -426,6 +426,9 @@ SPEC = {
     'linux-archive-rel-goma-rbe-canary': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['linux-archive-rel']),
                    ['goma_canary']),
+    'linux-archive-rel-goma-rbe-ats-canary': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                   ['goma_canary']),
 
     'Mac Builder Goma Canary': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder'],
@@ -545,6 +548,9 @@ SPEC = {
         chromium_linux.SPEC['builders']['Linux Builder'],
         ['goma_latest_client','goma_use_local']),
     'linux-archive-rel-goma-rbe-latest': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+        ['goma_latest_client']),
+    'linux-archive-rel-goma-rbe-ats-latest': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['linux-archive-rel']),
         ['goma_latest_client']),
 
@@ -988,6 +994,16 @@ SPEC['builders']['android-archive-dbg-goma-rbe-latest'] = (
     chromium_apply_configs(
         SPEC['builders']['Android Builder (dbg)'],
         ['goma_latest_client']))
+
+SPEC['builders']['android-archive-dbg-goma-rbe-ats-canary'] = (
+    chromium_apply_configs(
+        SPEC['builders']['Android Builder (dbg)'],
+        ['goma_canary']))
+SPEC['builders']['android-archive-dbg-goma-rbe-ats-latest'] = (
+    chromium_apply_configs(
+        SPEC['builders']['Android Builder (dbg)'],
+        ['goma_latest_client']))
+
 
 SPEC['builders'].update([
     stock_config('linux-blink-rel-dummy', staging=False),
