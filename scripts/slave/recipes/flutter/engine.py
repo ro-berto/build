@@ -569,7 +569,8 @@ def BuildMac(api):
       'out/android_release_arm64/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
 
-def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
+def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name,
+    strip_bitcode=False):
   checkout = api.path['start_dir'].join('src')
   out_dir = checkout.join('out')
 
@@ -586,6 +587,10 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     '--simulator-out-dir',
     api.path.join(out_dir, sim_out),
   ]
+
+  if strip_bitcode:
+    create_ios_framework_cmd.append('--strip-bitcode')
+
   if label == 'release':
     create_ios_framework_cmd.extend([
       "--dsym",
@@ -686,6 +691,12 @@ def BuildIOS(api):
     PackageIOSVariant(api,
         'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
                       'ios-release')
+    # Create a bitcode-stripped version. This will help customers who do not
+    # need bitcode, which significantly increases download size. This should be
+    # removed when bitcode is enabled by default in Flutter.
+    PackageIOSVariant(api,
+        'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
+                      'ios-release-nobitcode', True)
 
 def BuildWindows(api):
   if api.properties.get('build_host', True):
