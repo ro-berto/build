@@ -477,10 +477,11 @@ class IndexPack(object):
           '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
       ]
 
-      # Remove the SK_USER_CONFIG_HEADER define. This param throws errors in the
+      # Remove some Skia header path defines. These params throw errors in the
       # indexer for Windows for some reason.
       for i in range(len(command_list)):
-        if '-DSK_USER_CONFIG_HEADER' in command_list[i]:
+        if ('-DSK_USER_CONFIG_HEADER' in command_list[i] or
+            '-DSK_GPU_WORKAROUNDS_HEADER' in command_list[i]):
           command_list.pop(i)
           break
 
