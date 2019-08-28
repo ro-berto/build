@@ -77,6 +77,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
                        _NUM_TESTS, _NUM_TESTS)
       + api.post_process(
@@ -128,6 +129,7 @@ def GenTests(api):
           buildnumber=54,
           exclude_sources='all_test_files',
       )
+      + api.code_coverage(use_clang_coverage=True)
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -138,6 +140,7 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.properties(
           files_to_instrument=[
             'some/path/to/file.cc',
@@ -191,6 +194,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.override_step_data(
           'process clang code coverage data.Finding merging errors',
           stdout=api.json.output(['some_step']))
@@ -207,6 +211,7 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.properties(
           files_to_instrument=[
             'some/path/to/non_source_file.txt'
@@ -225,6 +230,7 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='linux-coverage-rel',
         buildnumber=54)
+    + api.code_coverage(use_clang_coverage=True)
     + api.properties(
         files_to_instrument=[
           'some/path/to/file.cc',
@@ -252,6 +258,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.step_data(
           ('process clang code coverage data.generate metadata for %s tests' %
            _NUM_TESTS),
@@ -269,6 +276,7 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.properties(
           files_to_instrument=[
             'some/path/to/file.cc',
@@ -293,6 +301,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
+      + api.code_coverage(use_clang_coverage=True)
       + api.properties(
           mock_merged_profdata = False)
       + api.post_process(
@@ -309,9 +318,7 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='android-code-coverage',
           buildnumber=54)
-      + api.step_data(
-          'check GN args from mb',
-          stdout=api.raw_io.output_text('jacoco_coverage = true'))
+      + api.code_coverage(use_java_coverage=True)
       + api.post_process(
           post_process.MustRun, 'process java coverage.'
           'Run component extraction script to generate mapping')
@@ -343,9 +350,7 @@ def GenTests(api):
           mastername='tryserver.chromium.android',
           buildername='android-kitkat-arm-coverage-rel',
           buildnumber=54)
-      + api.step_data(
-          'check GN args from mb',
-          stdout=api.raw_io.output_text('jacoco_coverage = true'))
+      + api.code_coverage(use_java_coverage=True)
       + api.properties(
           files_to_instrument=[
             'some/path/to/non_source_file.txt'
@@ -365,11 +370,9 @@ def GenTests(api):
           mastername='tryserver.chromium.android',
           buildername='android-kitkat-arm-coverage-rel',
           buildnumber=54)
+      + api.code_coverage(use_java_coverage=True)
       + api.buildbucket.try_build(
           project='chromium', builder='android-kitkat-arm-coverage-rel')
-      + api.step_data(
-          'check GN args from mb',
-          stdout=api.raw_io.output_text('jacoco_coverage = true'))
       + api.properties(
           files_to_instrument=[
             'some/path/to/file.java',

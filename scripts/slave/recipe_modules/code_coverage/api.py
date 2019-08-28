@@ -53,10 +53,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The location of the scripts used to merge code coverage data (as opposed
     # to test results).
     self._merge_scripts_location = None
-    # The map of gn args in args.gn file.
-    self._gn_args = {}
     # The bucket to which code coverage data should be uploaded.
     self._gs_bucket = properties.gs_bucket or _DEFAULT_BUCKET_NAME
+    # When set True, Clang coverage is enabled.
+    self._use_clang_coverage = properties.use_clang_coverage
+    # When set True, Java coverage is enabled.
+    self._use_java_coverage = properties.use_java_coverage
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -74,26 +76,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return value
 
   @property
-  def gn_args(self):
-    if not self._gn_args:
-      content = self.m.chromium.mb_lookup(
-          self.m.properties['mastername'],
-          self.m.buildbucket.builder_name,
-          name='check GN args from mb')
-      if content:
-        self._gn_args = self.m.gn.parse_gn_args(content)
-    return self._gn_args
+  def use_clang_coverage(self):
+    return self._use_clang_coverage
 
   @property
-  def is_clang_coverage(self):
-    return (self.m.gclient.c and self.m.gclient.c.solutions and
-            'checkout_clang_coverage_tools' in self.m.gclient.c.solutions[0]
-            .custom_vars)
-
-  @property
-  def is_java_coverage(self):
-    return 'jacoco_coverage' in self.gn_args and self.gn_args[
-        'jacoco_coverage'] == 'true'
+  def use_java_coverage(self):
+    return self._use_java_coverage
 
   @property
   def merge_scripts_location(self):
@@ -176,9 +164,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   @property
   def using_coverage(self):
     """Checks if the current build is running coverage-instrumented targets."""
-    # TODO(crbug.com/896751): Implement a cleaner way to determine if the recipe
-    # is using code coverage instrumentation.
-    return self.is_clang_coverage or self.is_java_coverage
+    return self.use_clang_coverage or self.use_java_coverage
 
   def _get_binaries(self, tests):
     """Returns paths to the binary for the given test objects.
@@ -258,7 +244,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     self._is_per_cl_coverage = True
 
-    if self.is_clang_coverage:
+    if self.use_clang_coverage:
       self._affected_source_files = self._filter_source_file(
           affected_files, _TOOLS_TO_EXTENSIONS_MAP['clang'])
       self.m.file.ensure_directory(
@@ -278,7 +264,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ] + self._affected_source_files,
           stdout=self.m.raw_io.output_text(add_output_log=True))
 
-    elif self.is_java_coverage:
+    elif self.use_java_coverage:
       self._affected_source_files = self._filter_source_file(
           affected_files, _TOOLS_TO_EXTENSIONS_MAP['jacoco'])
 
@@ -289,10 +275,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       tests (list of self.m.chromium_tests.steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
-    if self.is_clang_coverage:
+    if self.use_clang_coverage:
       self.process_clang_coverage_data(tests)
 
-    if self.is_java_coverage:
+    if self.use_java_coverage:
       try:
         self.process_java_coverage_data()
       finally:
@@ -572,7 +558,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             self.profdata_executable,
         ],
     }
-    if self.is_java_coverage:
+    if self.use_java_coverage:
       new_merge['args'].extend([
           '--java-coverage-dir',
           self.m.chromium.output_dir.join('coverage'),

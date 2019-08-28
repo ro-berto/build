@@ -21,10 +21,6 @@ DEPS = [
     'test_utils',
 ]
 
-PROPERTIES = {
-    'gn_args': Property(default={'fake': 'map'}),
-}
-
 _TEST_BUILDERS = {
   'chromium.test': {
     'builders': {
@@ -81,8 +77,7 @@ _TEST_TRYBOTS = {
 }
 
 
-def RunSteps(api, gn_args):
-  api.code_coverage._gn_args = gn_args
+def RunSteps(api):
   api.path.mock_add_paths(
       api.code_coverage.profdata_dir().join('merged.profdata'))
   raw_result = api.chromium_tests.trybot_steps(
@@ -492,6 +487,7 @@ def GenTests(api):
 
   yield (
       api.test('code_coverage_trybot_with_patch') +
+      api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
@@ -534,6 +530,7 @@ def GenTests(api):
 
   yield (
       api.test('code_coverage_trybot_retry_shards_with_patch') +
+      api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
@@ -581,6 +578,7 @@ def GenTests(api):
 
   yield (
       api.test('code_coverage_trybot_without_patch') +
+      api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',

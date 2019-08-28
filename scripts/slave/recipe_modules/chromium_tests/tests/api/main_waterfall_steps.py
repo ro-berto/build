@@ -24,7 +24,6 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    'gn_args': Property(default={'fake': 'map'}),
     'fail_compile': Property(default=False, kind=bool)
 }
 
@@ -226,11 +225,10 @@ def NotIdempotent(check, step_odict, step):
   check('Idempotent flag unexpected',
         '--idempotent' not in step_odict[step].cmd)
 
-def RunSteps(api, gn_args, fail_compile):
+def RunSteps(api, fail_compile):
   builders = None
   if api.properties.get('custom_builders'):
     builders = CUSTOM_BUILDERS
-  api.code_coverage._gn_args = gn_args
   api.path.mock_add_paths(
       api.code_coverage.profdata_dir().join('merged.profdata'))
 
@@ -313,6 +311,7 @@ def GenTests(api):
             'base_unittests':
             '[dummy hash for base_unittests]'
           }) +
+      api.code_coverage(use_clang_coverage=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
               'linux-chromeos-code-coverage': {
@@ -355,8 +354,8 @@ def GenTests(api):
           swarm_hashes={
             'chrome_public_test_apk':
             '[dummy hash for chrome_public_test_apk]'
-          },
-          gn_args={'jacoco_coverage': 'true'}) +
+          }) +
+      api.code_coverage(use_java_coverage=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
               'android-code-coverage': {

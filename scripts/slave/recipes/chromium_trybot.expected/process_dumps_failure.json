@@ -393,32 +393,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
-      "lookup",
-      "-m",
-      "tryserver.chromium.win",
-      "-b",
-      "win7-rel",
-      "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[GOMA_CACHE]\\client",
-      "--quiet"
-    ],
-    "cwd": "[CACHE]\\builder\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "check GN args from mb",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[CACHE]\\builder\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"

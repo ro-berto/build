@@ -1047,33 +1047,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10]"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.mac",
-      "-b",
-      "Mac10.13 Tests",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/goma/client",
-      "--quiet"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "name": "check GN args from mb",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
     "name": "$result"
   }
 ]
