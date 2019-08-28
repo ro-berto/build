@@ -2391,7 +2391,7 @@ property when running the recipe with the full path. e.g.
 Note that the goma client directory must exist inside the recipe workdir.
 A symlink (on mac/linux) is enough, though.
 
-&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#220)(self, platform):**
+&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#229)(self, platform):**
 
 Return the Goma client dir for the platform.
 
@@ -2401,9 +2401,9 @@ Args:
 Returns:
   additional Goma client path.
 
-&emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#82)(self):**
+&emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#83)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#569)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#578)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2424,28 +2424,28 @@ Raises:
   StepFailure or InfraFailure if it fails to build or
   occurs something failure on goma steps.
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#86)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_exe](/scripts/slave/recipe_modules/goma/api.py#87)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#93)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_pid\_file](/scripts/slave/recipe_modules/goma/api.py#94)(self):**
 
-&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#73)(self):**
+&emsp; **@property**<br>&mdash; **def [cloudtail\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#74)(self):**
 
-&emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#77)(self):**
+&emsp; **@property**<br>&mdash; **def [counterz\_path](/scripts/slave/recipe_modules/goma/api.py#78)(self):**
 
-&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#140)(self):**
+&emsp; **@property**<br>&mdash; **def [debug](/scripts/slave/recipe_modules/goma/api.py#143)(self):**
 
 Returns true if debug mode is turned on.
 
 Uses value from property "$build/goma:{"debug":true}" if configured
 (typically in cr-buildbucket.cfg).  Defaults to False.
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#116)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path](/scripts/slave/recipe_modules/goma/api.py#119)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#107)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_cache\_path\_per\_slave](/scripts/slave/recipe_modules/goma/api.py#108)(self):**
 
-&emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#123)(self):**
+&emsp; **@property**<br>&mdash; **def [default\_client\_path](/scripts/slave/recipe_modules/goma/api.py#126)(self):**
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#169)(self, client_type=None, additional_platforms=None):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/goma/api.py#172)(self, client_type=None, additional_platforms=None, ephemeral=False):**
 
 ensure goma is installed.
 
@@ -2454,25 +2454,29 @@ Args:
   additional_platforms: additional platforms to be installed.
                         path for the additional platforms can be got with
                         additional_goma_dir method.
+  ephemeral: Goma client is stored to ad-hoc place to be removed after
+             the recipe run.
+             This is for mitigating crbug.com/997733 to avoid sharing
+             Goma client among builders.
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#232)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#241)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#236)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#245)(self):**
 
-&mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#65)(self):**
+&mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#66)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#131)(self):**
+&emsp; **@property**<br>&mdash; **def [jobs](/scripts/slave/recipe_modules/goma/api.py#134)(self):**
 
 Returns number of jobs for parallel build using Goma.
 
 Uses value from property "$build/goma:{"jobs": JOBS}" if configured
 (typically in cr-buildbucket.cfg), else defaults to `recommended_goma_jobs`.
 
-&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#97)(self):**
+&emsp; **@property**<br>&mdash; **def [json\_path](/scripts/slave/recipe_modules/goma/api.py#98)(self):**
 
-&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#102)(self):**
+&emsp; **@property**<br>&mdash; **def [jsonstatus](/scripts/slave/recipe_modules/goma/api.py#103)(self):**
 
-&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#149)(self):**
+&emsp; **@property**<br>&mdash; **def [recommended\_goma\_jobs](/scripts/slave/recipe_modules/goma/api.py#152)(self):**
 
 Return the recommended number of jobs for parallel build using Goma.
 
@@ -2481,16 +2485,16 @@ properties in cr-buildbucket.cfg.
 
 This function caches the _recommended_jobs.
 
-&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#69)(self):**
+&emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#70)(self):**
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#309)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#318)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#392)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#401)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -5018,9 +5022,9 @@ world-readable cloud location.
 
 &mdash; **def [BuildFuchsiaArtifactsAndUpload](/scripts/slave/recipes/flutter/engine.py#78)(api):**
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#654)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#655)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#782)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#783)(api):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#416)(api):**
 
@@ -5030,19 +5034,19 @@ world-readable cloud location.
 
 &mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#63)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#812)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#813)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#700)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#701)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#829)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#830)(api):**
 
 &mdash; **def [GetCloudMavenPath](/scripts/slave/recipes/flutter/engine.py#142)(api, artifact_filename):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#45)(api, path):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#797)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#798)(api):**
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#239)(api, label):**
 
@@ -5052,9 +5056,9 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#104)(api, \*args):**
 
-&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#643)(api):**
+&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#644)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#850)(api, properties, env_properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#851)(api, properties, env_properties):**
 
 &mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#70)(api, out_dir, android_out_dir=None, types='all'):**
 

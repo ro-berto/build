@@ -36,7 +36,10 @@ def RunSteps(api):
       client_type = api.properties.get('cbb_goma_client_type'),
       additional_platforms=[
           _LINUX_GOMA_CIPD_PLATFORM,
-          _CHROMEOS_GOMA_CIPD_PLATFORM])
+          _CHROMEOS_GOMA_CIPD_PLATFORM],
+      # TODO(crbug.com/997733): remove ephemeral when we find the way to
+      #                         avoid use of GLIBC 2.27 in legacy bots.
+      ephemeral=True)
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.

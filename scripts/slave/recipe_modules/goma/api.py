@@ -55,6 +55,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self._client_type = 'release'
     self._additional_platforms = []
+    self._ephemeral = False
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -106,6 +107,8 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def default_cache_path_per_slave(self):
+    if self._ephemeral:
+      return self.m.path['tmp_base'].join('goma')
     try:
       # Legacy Buildbot cache path:
       return self.m.path['goma_cache']
@@ -166,7 +169,8 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._recommended_jobs
 
-  def ensure_goma(self, client_type=None, additional_platforms=None):
+  def ensure_goma(self, client_type=None, additional_platforms=None,
+                  ephemeral=False):
     """ensure goma is installed.
 
     Args:
@@ -174,7 +178,12 @@ class GomaApi(recipe_api.RecipeApi):
       additional_platforms: additional platforms to be installed.
                             path for the additional platforms can be got with
                             additional_goma_dir method.
+      ephemeral: Goma client is stored to ad-hoc place to be removed after
+                 the recipe run.
+                 This is for mitigating crbug.com/997733 to avoid sharing
+                 Goma client among builders.
     """
+    self._ephemeral = ephemeral
     if self._local_dir:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
