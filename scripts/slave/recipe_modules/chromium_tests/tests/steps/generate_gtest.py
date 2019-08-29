@@ -385,3 +385,29 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
+
+
+  def NotIdempotent(check, step_odict, step):
+    check('Idempotent flag unexpected',
+          '--idempotent' not in step_odict[step].cmd)
+  yield (
+      api.test('not_idempotent') +
+      api.properties(
+          single_spec={
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'idempotent': False,
+              },
+              'test': 'base_unittests',
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(NotIdempotent, '[trigger] base_unittests') +
+      api.post_process(post_process.DropExpectation)
+  )

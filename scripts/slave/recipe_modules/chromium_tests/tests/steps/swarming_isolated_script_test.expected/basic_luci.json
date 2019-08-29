@@ -316,7 +316,6 @@
       "spec_name:chromium.try:Linux Tests",
       "--tag",
       "stepname:base_unittests on Intel GPU on Linux (with patch)",
-      "--idempotent",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

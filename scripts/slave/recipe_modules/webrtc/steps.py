@@ -257,6 +257,7 @@ class AndroidTest(SwarmingGTestTest):
 class SwarmingAndroidPerfTest(SwarmingTest):
   def __init__(self, test, args=None, shards=1, cipd_packages=None,
                idempotent=False, **kwargs):
+    super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
     args = list(args or [])
     args.extend([
         '--isolated-script-test-perf-output',
@@ -268,7 +269,6 @@ class SwarmingAndroidPerfTest(SwarmingTest):
     if cipd_packages is None:
       cipd_packages = ANDROID_CIPD_PACKAGES
     self._cipd_packages = cipd_packages
-    super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
 
   def create_task(self, api, suffix, isolated_hash):
     return api.chromium_swarming.task(

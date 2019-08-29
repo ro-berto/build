@@ -1470,7 +1470,37 @@ class SwarmingTest(Test):
                waterfall_buildername=None, set_up=None, tear_down=None,
                optional_dimensions=None, service_account=None,
                isolate_coverage_data=None, merge=None, ignore_task_failure=None,
-               containment_type=None, shards=1, **kwargs):
+               containment_type=None, idempotent=None, shards=1, **kwargs):
+    """Constructs an instance of SwarmingTest.
+
+    Args:
+      name: Displayed name of the test.
+      dimensions (dict of str: str): Requested dimensions of the test.
+      target_name: Ninja build target for the test. See
+          //testing/buildbot/gn_isolate_map.pyl for more info.
+      extra_suffix: Suffix applied to the test's step name in the build page.
+      expiration: Expiration of the test in Swarming, in seconds.
+      hard_timeout: Timeout of the test in Swarming, in seconds.
+      io_timeout: Max amount of time in seconds Swarming will allow the task to
+          be silent (no stdout or stderr).
+      waterfall_mastername: Waterfall/console name for the test's builder.
+      waterfall_buildername: Builder name for the test's builder.
+      set_up: Optional set up scripts.
+      tear_down: Optional tear_down scripts.
+      optional_dimensions: (dict of expiration: [{dimension(str): val(str)]}:
+          Optional dimensions that create additional fallback task slices.
+      service_account: Service account to run the test as.
+      isolate_coverage_data: Bool indicating wether to isolate coverage profile
+          data during the task.
+      merge: 'merge' dict as set in //testing/buildbot/ pyl files for the test.
+      ignore_task_failure: If False, the test will be reported as StepFailure on
+          failure.
+      containment_type: Type of containment to use for the task. See
+          `swarming.py trigger --help` for more info.
+      idempotent: Wether to mark the task as idempotent. A value of None will
+          cause chromium_swarming/api.py to apply its default_idempotent val.
+      shards: Number of shards to trigger.
+    """
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
@@ -1491,6 +1521,7 @@ class SwarmingTest(Test):
     self._ignore_task_failure = ignore_task_failure
     self._shards = shards
     self._service_account = service_account
+    self._idempotent = idempotent
     if dimensions and not extra_suffix:
       if dimensions.get('gpu'):
         self._extra_suffix = self._get_gpu_suffix(dimensions)
@@ -1658,6 +1689,8 @@ class SwarmingTest(Test):
 
     if suffix.startswith('retry shards'):
       task_slice = task_slice.with_idempotent(False)
+    elif self._idempotent is not None:
+      task_slice = task_slice.with_idempotent(self._idempotent)
 
     if suffix == 'retry shards with patch':
       task.task_to_retry = self._tasks['with patch']
@@ -1830,7 +1863,7 @@ class SwarmingGTestTest(SwarmingTest):
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
                optional_dimensions=None, service_account=None,
-               containment_type=None, ignore_task_failure=False):
+               containment_type=None, ignore_task_failure=False, **kw):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1840,7 +1873,8 @@ class SwarmingGTestTest(SwarmingTest):
         merge=merge, shards=shards,
         ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions,
-        service_account=service_account, containment_type=containment_type)
+        service_account=service_account, containment_type=containment_type,
+        **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
     self._cipd_packages = cipd_packages
@@ -2039,9 +2073,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                results_url=None, perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None, idempotent=True,
-               cipd_packages=None, isolate_coverage_data=False,
-               optional_dimensions=None, service_account=None, **kw):
+               set_up=None, tear_down=None, cipd_packages=None,
+               isolate_coverage_data=False, optional_dimensions=None,
+               service_account=None, **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -2061,7 +2095,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._trigger_script = trigger_script
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
-    self._idempotent = idempotent
     self._cipd_packages = cipd_packages
 
   @property
@@ -2084,12 +2117,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def create_task(self, api, suffix, isolated):
     task = api.chromium_swarming.isolated_script_task()
 
-    # For the time being, we assume all isolated_script_test are not
-    # idempotent TODO(crbug.com/549140): remove the self._idempotent
-    # parameter once Telemetry tests are idempotent, since that will make all
-    # isolated_script_tests idempotent.
     task_slice = task.request[0]
-    task_slice = task_slice.with_idempotent(self._idempotent)
     task.request = task.request.with_slice(0, task_slice)
 
     self._apply_swarming_task_config(

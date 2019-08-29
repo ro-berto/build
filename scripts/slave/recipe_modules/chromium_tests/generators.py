@@ -146,6 +146,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['shards'] = swarming_spec.get('shards', 1)
+    # If idempotent wasn't explicitly set, let chromium_swarming/api.py apply
+    # its default_idempotent val.
+    if 'idempotent' in swarming_spec:
+      kwargs['idempotent'] = swarming_spec['idempotent']
 
     packages = swarming_spec.get('cipd_packages')
     if packages:
@@ -377,7 +381,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         'ignore_task_failure', False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
-    kwargs['idempotent'] = swarming_spec.get('idempotent', True)
 
     return steps.SwarmingIsolatedScriptTest(**kwargs)
 
