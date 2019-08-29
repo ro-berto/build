@@ -1636,3 +1636,29 @@ def GenTests(api):
         }
     )
   )
+
+  yield (
+      api.test('webrtc_chromium_mac_tester') +
+      props(mastername='chromium.webrtc',
+            builder='WebRTC Chromium Mac Tester',
+            parent_buildername='WebRTC Chromium Mac Builder') +
+      api.platform('mac', 64) +
+      api.post_process(post_process.MustRun, 'ensure_installed') +
+      api.post_process(post_process.StepSuccess, 'browser_tests') +
+      api.post_process(post_process.StepSuccess,
+                      'Upload to test-results [browser_tests]') +
+      api.post_process(post_process.StatusSuccess) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('webrtc_chromium_mac_tester_failure') +
+      props(mastername='chromium.webrtc',
+            builder='WebRTC Chromium Mac Tester',
+            parent_buildername='WebRTC Chromium Mac Builder') +
+      api.platform('mac', 64) +
+      api.override_step_data('browser_tests', retcode=1) +
+      api.post_process(post_process.StepFailure, 'browser_tests') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )

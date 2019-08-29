@@ -26,6 +26,7 @@ PERF_CONFIG_MAPPINGS = {
   'r_chromium_commit_pos': 'got_cr_revision_cp',
 }
 
+from recipe_engine import post_process
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
@@ -73,6 +74,16 @@ def GenTests(api):
 
   yield (
       api.test('webrtc_tester') + typical_properties
+  )
+
+  yield (
+      api.test('webrtc_tester_failed') +
+      typical_properties +
+      api.step_data('test_name', retcode=1) +
+      api.post_process(post_process.StepFailure, 'test_name') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+
   )
 
   yield (

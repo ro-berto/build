@@ -2229,6 +2229,8 @@ class AndroidTest(Test):
             chrome_revision=api.bot_update.last_returned_properties.get(
                 'got_revision_cp', 'refs/x@{#0}'))
 
+    return step_result
+
   def compile_targets(self):
     return self._compile_targets
 
@@ -2350,6 +2352,8 @@ class BlinkTest(Test):
         self.results_handler.upload_results(
             api, results, step_result.step['name'], suffix)
 
+    return step_result
+
 
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
   def __init__(self, **kwargs):
@@ -2431,6 +2435,7 @@ class IncrementalCoverageTest(Test):
     self._suffix_step_name_map[suffix] = step_result.step['name']
     api.chromium_android.get_changed_lines_for_revision()
     api.chromium_android.incremental_coverage_report()
+    return step_result
 
 class FindAnnotatedTest(Test):
   _TEST_APKS = {
@@ -2471,6 +2476,8 @@ class FindAnnotatedTest(Test):
           temp_output_dir.join(
               '%s-android-chrome.json' % timestamp_string),
           'chromium-annotated-tests', 'android')
+
+    return step_result
 
 
 class WebRTCPerfTest(LocalGTestTest):
@@ -2513,13 +2520,7 @@ class WebRTCPerfTest(LocalGTestTest):
   @recipe_api.composite_step
   def run(self, api, suffix):
     self._wire_up_perf_config(api)
-    super(WebRTCPerfTest, self).run(api, suffix)
-
-  #override
-  def has_valid_results(self, suffix):  # pragma: no cover
-    # This test never produces any valid results as far as this check is
-    # concerned. The test is currently one-of-a-kind, so just bypass the check.
-    return True
+    return super(WebRTCPerfTest, self).run(api, suffix)
 
   def _wire_up_perf_config(self, api):
     props = api.bot_update.last_returned_properties
@@ -2594,6 +2595,8 @@ class MockTest(Test):
       step_result = api.step(
           '%s%s' % (self.name, self._mock_suffix(suffix)), None)
       self._suffix_step_name_map[suffix] = step_result.step['name']
+
+    return step_result
 
   def has_valid_results(self, suffix):
     self._api.step(
