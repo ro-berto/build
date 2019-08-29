@@ -5,23 +5,5 @@
 
 SPEC = {
   'builders': {
-    'linux-coverage-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'linux',
-    },
   },
 }

@@ -490,7 +490,7 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           path_config='kitchen',
           swarm_hashes={
             'base_unittests':
@@ -499,7 +499,7 @@ def GenTests(api):
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
-              'Linux Tests Code Coverage': {
+              'Linux Tests': {
                   'gtest_tests': [
                       {
                           'isolate_coverage_data': True,
@@ -533,7 +533,7 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           path_config='kitchen',
           swarm_hashes={
             'base_unittests':
@@ -542,7 +542,7 @@ def GenTests(api):
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
-              'Linux Tests Code Coverage': {
+              'Linux Tests': {
                   'gtest_tests': [
                       {
                           'isolate_coverage_data': True,
@@ -581,7 +581,7 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           path_config='kitchen',
           swarm_hashes={
             'base_unittests':
@@ -590,7 +590,7 @@ def GenTests(api):
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
-              'Linux Tests Code Coverage': {
+              'Linux Tests': {
                   'gtest_tests': [
                       {
                           'isolate_coverage_data': True,
@@ -633,7 +633,7 @@ def GenTests(api):
   def multiple_base_unittests_additional_compile_target():
     return api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
-            'Linux Tests Code Coverage': {
+            'Linux Tests': {
                 'gtest_tests': [
                   'base_unittests1',
                   'base_unittests2',
@@ -647,7 +647,7 @@ def GenTests(api):
     api.test('many_invalid_results') +
     api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           path_config='kitchen'
     ) +
     api.runtime(is_experimental=False, is_luci=True) +

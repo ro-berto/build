@@ -23,9 +23,15 @@ _NUM_TESTS = 7
 def RunSteps(api):
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']
+  config = api.chromium_tests.trybots.get(mastername, {}).get(
+      'builders', {}).get(buildername)
+  if not config:
+    config = {
+      'bot_ids': [api.chromium_tests.create_bot_id(mastername, buildername)],
+    }
+
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(mastername, buildername)],
-      builders=None)
+      config['bot_ids'])
   api.chromium_tests.configure_build(bot_config_object)
   # Fake path.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
@@ -138,7 +144,7 @@ def GenTests(api):
       api.test('tryserver')
       + api.properties.generic(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           buildnumber=54)
       + api.code_coverage(use_clang_coverage=True)
       + api.properties(
@@ -147,7 +153,7 @@ def GenTests(api):
             'some/other/path/to/file.cc',
           ])
       + api.buildbucket.try_build(
-          project='chromium', builder='linux-coverage-rel')
+          project='chromium', builder='linux-rel')
       + api.post_process(
           post_process.MustRun, 'save paths of affected files')
       + api.post_process(
@@ -209,7 +215,7 @@ def GenTests(api):
       api.test('skip collecting coverage data')
       + api.properties.generic(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           buildnumber=54)
       + api.code_coverage(use_clang_coverage=True)
       + api.properties(
@@ -217,7 +223,7 @@ def GenTests(api):
             'some/path/to/non_source_file.txt'
           ])
       + api.buildbucket.try_build(
-          project='chromium/src', builder='linux-coverage-rel')
+          project='chromium/src', builder='linux-rel')
       + api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed')
@@ -228,7 +234,7 @@ def GenTests(api):
     api.test('skip processing coverage data if not data is found')
     + api.properties.generic(
         mastername='tryserver.chromium.linux',
-        buildername='linux-coverage-rel',
+        buildername='linux-rel',
         buildnumber=54)
     + api.code_coverage(use_clang_coverage=True)
     + api.properties(
@@ -237,7 +243,7 @@ def GenTests(api):
           'some/other/path/to/file.cc',
         ])
     + api.buildbucket.try_build(
-        project='chromium', builder='linux-coverage-rel')
+        project='chromium', builder='linux-rel')
     + api.override_step_data(
       'process clang code coverage data.filter binaries with valid data for %s '
       'binaries' % (_NUM_TESTS - 1),
@@ -274,7 +280,7 @@ def GenTests(api):
       api.test('do not raise failure for per-cl coverage')
       + api.properties.generic(
           mastername='tryserver.chromium.linux',
-          buildername='linux-coverage-rel',
+          buildername='linux-rel',
           buildnumber=54)
       + api.code_coverage(use_clang_coverage=True)
       + api.properties(
@@ -283,7 +289,7 @@ def GenTests(api):
             'some/other/path/to/file.cc',
           ])
       + api.buildbucket.try_build(
-          project='chromium', builder='linux-coverage-rel')
+          project='chromium', builder='linux-rel')
       + api.step_data(
           ('process clang code coverage data.generate metadata for %s tests' %
            _NUM_TESTS),
