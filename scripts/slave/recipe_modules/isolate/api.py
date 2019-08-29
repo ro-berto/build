@@ -211,8 +211,9 @@ class IsolateApi(recipe_api.RecipeApi):
 
     isolate_steps = []
     try:
+      exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
       args = [
-          self.m.swarming_client.path,
+          exe,
           'archive',
           '--dump-json', self.m.json.output(),
           '--isolate-server', self._isolate_server,
@@ -226,9 +227,8 @@ class IsolateApi(recipe_api.RecipeApi):
 
       for target in archive_targets:
         isolate_steps.append(
-            self.m.python(
+            self.m.step(
                 'isolate %s%s' % (target, suffix),
-                self.resource('isolate.py'),
                 args + [
                     '--isolate', build_dir.join('%s.isolate' % target),
                     '--isolated', build_dir.join('%s.isolated' % target),
@@ -240,7 +240,7 @@ class IsolateApi(recipe_api.RecipeApi):
         # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
         # Raise InfraFailure on upload errors.
         args = [
-            self.m.swarming_client.path,
+            exe,
             'batcharchive',
             '--dump-json', self.m.json.output(),
             '--isolate-server', self._isolate_server,
@@ -256,8 +256,8 @@ class IsolateApi(recipe_api.RecipeApi):
             build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets])
 
         isolate_steps.append(
-            self.m.python(
-                step_name or ('isolate tests%s' % suffix), self.resource('isolate.py'), args,
+            self.m.step(
+                step_name or ('isolate tests%s' % suffix), args,
                 step_test_data=lambda: self.test_api.output_json(batch_targets),
                 **kwargs))
 
