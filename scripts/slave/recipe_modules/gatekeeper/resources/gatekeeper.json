@@ -4,6 +4,16 @@
               "this files's format."],
 
   "masters": {
+    "https://build.chromium.org/p/chrome": [
+      {
+        "categories": [
+          "experimental_tests"
+        ],
+        "builders": {
+          "*": {}
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium": [
       {
         "categories": [
