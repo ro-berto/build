@@ -200,8 +200,12 @@ def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
         continue
 
       logging.info('Processing file %s', '//' + file_path)
-      files_coverage_data.append(
-          _get_file_coverage_data(file_path, source_file, diff_mapping))
+      file_coverage = _get_file_coverage_data(file_path, source_file,
+                                              diff_mapping)
+      if not file_coverage['lines']:
+        logging.info('Skip file %s as no line instrumented', file_path)
+        continue
+      files_coverage_data.append(file_coverage)
 
   # Add git revision and timestamp per source file.
   if files_coverage_data and not diff_mapping:
