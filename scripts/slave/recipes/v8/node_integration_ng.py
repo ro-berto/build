@@ -6,7 +6,7 @@
 
 from recipe_engine.recipe_api import Property
 from recipe_engine.post_process import (
-    Filter, ResultReasonRE, StatusFailure, DropExpectation)
+    Filter, ResultReasonRE, StatusFailure, StatusSuccess, DropExpectation)
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
@@ -18,6 +18,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gsutil',
+  'depot_tools/tryserver',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/commit_position',
@@ -169,7 +170,8 @@ def RunSteps(api, triggers, v8_tot):
       has_flakes |= run_with_retry(api, 'test ' + suite, run_test)
 
   # Make flakes visible on the waterfall. This is not tracked by gatekeeper.
-  if has_flakes:
+  # Ignore flakes on tryjobs.
+  if has_flakes and not api.tryserver.is_tryserver:
     raise api.step.StepFailure('Flakes in build')
 
 
@@ -278,6 +280,20 @@ def GenTests(api):
       api.post_process(ResultReasonRE, 'Flakes in build') +
       api.post_process(Filter(
           'test default', 'test default (retry)', 'test default (flakes)'))
+  )
+
+  # Test that flakes are ignored on trybot.
+  yield (
+      test(
+          'flakes_on_trybot',
+          platform='linux',
+          is_trybot=True,
+      ) +
+      # When this step fails it is retried. The retry's test data passes by
+      # default, which is reported as a flake.
+      api.step_data('test default', retcode=1) +
+      api.post_process(StatusSuccess) +
+      api.post_process(DropExpectation)
   )
 
   yield (

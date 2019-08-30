@@ -5712,13 +5712,13 @@ Recipe to test v8/node.js integration.
 &emsp; **@contextmanager**<br>&mdash; **def [goma\_wrapper](/scripts/slave/recipes/v8/node_integration.py#113)(api):**
 ### *recipes* / [v8/node\_integration\_ng](/scripts/slave/recipes/v8/node_integration_ng.py)
 
-[DEPS](/scripts/slave/recipes/v8/node_integration_ng.py#16): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/node_integration_ng.py#16): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe to test v8/node.js integration.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration_ng.py#69)(api, triggers, v8_tot):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration_ng.py#70)(api, triggers, v8_tot):**
 
-&mdash; **def [run\_with\_retry](/scripts/slave/recipes/v8/node_integration_ng.py#47)(api, step_name, step_fun):**
+&mdash; **def [run\_with\_retry](/scripts/slave/recipes/v8/node_integration_ng.py#48)(api, step_name, step_fun):**
 
 Runs `step_fun` and retries once on failure.
 
