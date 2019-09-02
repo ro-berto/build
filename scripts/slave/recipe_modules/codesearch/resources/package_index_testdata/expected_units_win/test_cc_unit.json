@@ -6,6 +6,9 @@
       "/c",
       "test.cc",
       "/Fotest.obj",
+      "-D__CLANG_CUDA_WRAPPERS_NEW",
+      "-D__CLANG_CUDA_WRAPPERS_COMPLEX",
+      "-D__CLANG_CUDA_WRAPPERS_ALGORITHM",
       "-DKYTHE_IS_RUNNING=1",
       "-w"
     ],

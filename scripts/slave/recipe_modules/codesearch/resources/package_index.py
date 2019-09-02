@@ -37,6 +37,15 @@ MOJOM_IMPORT_RE = re.compile(r'^\s*import\s*"([^"]*)"', re.MULTILINE)
 # out by Kythe if necessary.
 WIN_SDK_CORPUS = 'winsdk'
 
+# Substrings of arguments that should be removed from compile commands on
+# Windows.
+UNWANTED_ARG_SUBSTRINGS_WIN = [
+    # These Skia header path defines throw errors in the Windows indexer for
+    # some reason.
+    '-DSK_USER_CONFIG_HEADER',
+    '-DSK_GPU_WORKAROUNDS_HEADER',
+]
+
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
@@ -462,7 +471,7 @@ class IndexPack(object):
 
     # Convert any args starting with -imsvc to use forward slashes, since this
     # is what Kythe expects.
-    if sys.platform == 'win32':
+    if command_list[0].startswith('clang-cl'):
       for i in range(len(command_list)):
         if command_list[i].startswith('-imsvc'):
           command_list[i] = command_list[i].replace('\\', '/')
@@ -477,13 +486,10 @@ class IndexPack(object):
           '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
       ]
 
-      # Remove some Skia header path defines. These params throw errors in the
-      # indexer for Windows for some reason.
-      for i in range(len(command_list)):
-        if ('-DSK_USER_CONFIG_HEADER' in command_list[i] or
-            '-DSK_GPU_WORKAROUNDS_HEADER' in command_list[i]):
-          command_list.pop(i)
-          break
+      # Remove any args that may cause errors with the Kythe indexer.
+      command_list = [
+          arg for arg in command_list if not _IsUnwantedWinArg(arg)
+      ]
 
     # This macro is used to guard Kythe-specific pragmas, so we must define it
     # for Kythe to see them. In particular the kythe_inline_metadata pragma we
@@ -584,6 +590,10 @@ def _CorpusForFile(filepath, default_corpus):
   if 'third_party/depot_tools/win_toolchain' in filepath:
     return WIN_SDK_CORPUS
   return default_corpus
+
+
+def _IsUnwantedWinArg(arg):
+  return any(substr in arg for substr in UNWANTED_ARG_SUBSTRINGS_WIN)
 
 
 def _ReplaceSuffix(string, curr_suffix, new_suffix):
