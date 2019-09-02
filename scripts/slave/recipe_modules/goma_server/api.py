@@ -51,6 +51,9 @@ class GomaServerApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout'],
                         env_prefixes=env_prefixes,
                         env=env):
+      # Set up modules.
+      self.m.step('list modules',
+                  ['go', 'list', '-m', 'all'])
       # Generate proto
       self.m.step('generate proto',
                   ['go', 'generate',
