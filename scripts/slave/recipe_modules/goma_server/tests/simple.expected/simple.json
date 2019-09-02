@@ -149,29 +149,6 @@
   {
     "cmd": [
       "go",
-      "list",
-      "-m",
-      "all"
-    ],
-    "cwd": "[CACHE]/builder/goma_src",
-    "env": {
-      "GO111MODULE": "on"
-    },
-    "env_prefixes": {
-      "GOPATH": [
-        "[CACHE]/builder/go"
-      ],
-      "PATH": [
-        "[START_DIR]/sdk/go/bin",
-        "[START_DIR]/sdk",
-        "[CACHE]/builder/go/bin"
-      ]
-    },
-    "name": "list modules"
-  },
-  {
-    "cmd": [
-      "go",
       "generate",
       "goma-server/proto/..."
     ],
