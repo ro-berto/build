@@ -36,6 +36,8 @@ message InputProperties {
   bool ios_debug = 16;
   bool ios_profile = 17;
   bool ios_release = 18;
+  bool no_bitcode = 19;
+  bool no_maven = 20;
 }
 
 message EnvProperties {

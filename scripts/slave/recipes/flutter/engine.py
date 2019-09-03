@@ -61,6 +61,10 @@ def Build(api, config, *targets):
 
 # Bitcode builds cannot use goma.
 def BuildNoGoma(api, config, *targets):
+  if api.properties.get('no_bitcode', False):
+    Build(api, config, *targets)
+    return
+
   checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
   ninja_args = [api.depot_tools.autoninja_path, '-C', build_dir]
@@ -102,6 +106,10 @@ def RunGN(api, *args):
 
 # Bitcode builds cannot use goma.
 def RunGNBitcode(api, *args):
+  if api.properties.get('no_bitcode', False):
+    RunGN(api, *args)
+    return
+
   # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
   with api.depot_tools.on_path():
     checkout = api.path['start_dir'].join('src')
@@ -163,6 +171,8 @@ def GetCloudMavenPath(api, artifact_filename):
 
 # Uploads the local Maven artifact.
 def UploadMavenArtifacts(api, artifacts):
+  if api.properties.get('no_maven', False):
+    return
   if not ShouldUploadPackages(api):
     return
   checkout = api.path['start_dir'].join('src')
@@ -691,12 +701,14 @@ def BuildIOS(api):
     PackageIOSVariant(api,
         'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
                       'ios-release')
-    # Create a bitcode-stripped version. This will help customers who do not
-    # need bitcode, which significantly increases download size. This should be
-    # removed when bitcode is enabled by default in Flutter.
-    PackageIOSVariant(api,
-        'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
-                      'ios-release-nobitcode', True)
+
+    if not api.properties.get('no_bitcode', False):
+      # Create a bitcode-stripped version. This will help customers who do not
+      # need bitcode, which significantly increases download size. This should
+      # be removed when bitcode is enabled by default in Flutter.
+      PackageIOSVariant(api,
+          'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
+                        'ios-release-nobitcode', True)
 
 def BuildWindows(api):
   if api.properties.get('build_host', True):
@@ -904,33 +916,36 @@ def RunSteps(api, properties, env_properties):
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
     for should_upload in (True, False):
-      test = (
-        api.test('%s%s' % (platform, '_upload' if should_upload else '')) +
-        api.platform(platform, 64) +
-        api.buildbucket.ci_build(
-          builder='%s Engine' % platform.capitalize(),
-          git_repo=GIT_REPO,
-          project='flutter',
-        ) +
-        api.properties(
-          InputProperties(
-            goma_jobs='1024',
-            build_host=True,
-            build_fuchsia=True,
-            build_android_aot=True,
-            build_android_debug=True,
-            build_android_vulkan=True,
-            upload_packages=should_upload,
-            android_sdk_license='android_sdk_hash',
-            android_sdk_preview_license='android_sdk_preview_hash',
-          ),
-        ) +
-        api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef'))
-      )
-      if platform == 'mac':
-        test += (api.properties(InputProperties(jazzy_version='0.8.4',
-            build_ios=True)))
-      yield test
+      for maven_or_bitcode in (True, False):
+        test = (
+          api.test('%s%s%s' % (platform, '_upload' if should_upload else '',
+              '_maven_or_bitcode' if maven_or_bitcode else '')) +
+          api.platform(platform, 64) +
+          api.buildbucket.ci_build(
+            builder='%s Engine' % platform.capitalize(),
+            git_repo=GIT_REPO,
+            project='flutter',
+          ) +
+          api.properties(
+            InputProperties(
+              goma_jobs='1024',
+              build_host=True,
+              build_fuchsia=True,
+              build_android_aot=True,
+              build_android_debug=True,
+              build_android_vulkan=True,
+              no_maven=maven_or_bitcode,
+              upload_packages=should_upload,
+              android_sdk_license='android_sdk_hash',
+              android_sdk_preview_license='android_sdk_preview_hash',
+            ),
+          ) +
+          api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef'))
+        )
+        if platform == 'mac':
+          test += (api.properties(InputProperties(jazzy_version='0.8.4',
+              build_ios=True, no_bitcode=maven_or_bitcode)))
+        yield test
 
   for should_upload in (True, False):
     yield (
