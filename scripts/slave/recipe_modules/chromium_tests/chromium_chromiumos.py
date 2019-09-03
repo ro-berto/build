@@ -99,6 +99,11 @@ def _config(name,
 
 SPEC['builders'].update([
     _config('linux-chromeos-rel'),
+    # Replicate linux-chromeos-rel for code coverage experiment.
+    # TODO(crbug.com/1000367): Remove once linux-chromeos-coverage-rel is folded
+    # into linux-chromeos-rel.
+    _config('linux-chromeos-coverage-rel-dummy',
+            gclient_apply_config=['chromeos', 'use_clang_coverage']),
     _config('linux-chromeos-dbg'),
 
     _config('chromeos-amd64-generic-asan-rel',

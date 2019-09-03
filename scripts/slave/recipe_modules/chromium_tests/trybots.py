@@ -693,6 +693,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.chromiumos',
         'buildername': 'linux-chromeos-rel',
       }),
+      'linux-chromeos-coverage-rel': simple_bot({
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'linux-chromeos-coverage-rel-dummy',
+      }),
     },
   },
   'tryserver.chromium.mac': {
