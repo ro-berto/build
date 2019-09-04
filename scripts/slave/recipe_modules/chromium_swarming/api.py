@@ -758,11 +758,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     # that shard indices are passed one at a time. See https://crbug.com/937927.
     if task.trigger_script and task.trigger_script.get(
         'requires_simultaneous_shard_dispatch', False):
-      return [self.trigger_all_task_shards(task, task.shard_indices, **kwargs)]
+      return [self._trigger_all_task_shards(task, task.shard_indices, **kwargs)]
 
     for shard_index in task.shard_indices:
       step_result, json_output = (
-          self.trigger_task_shard(task, shard_index, **kwargs))
+          self._trigger_task_shard(task, shard_index, **kwargs))
       step_results.append(step_result)
 
       # Merge the JSON outputs. There should be two fields: base_task_name,
@@ -793,7 +793,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_results
 
-  def generate_trigger_task_shard_args(self, task, **kwargs):
+  def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
     This generates all arguments other than sharding parameters.
@@ -968,7 +968,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return script, pre_trigger_args, args
 
-  def trigger_all_task_shards(self, task, shard_indices, **kwargs):
+  def _trigger_all_task_shards(self, task, shard_indices, **kwargs):
     """Triggers all shards as a single step.
 
     This method adds links to the presentation, and updates
@@ -978,7 +978,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       StepResult from the step.
     """
     script, pre_trigger_args, post_trigger_args = (
-        self.generate_trigger_task_shard_args(task, **kwargs))
+        self._generate_trigger_task_shard_args(task, **kwargs))
     assert len(shard_indices) == task.shards, (
         'The only trigger script that requires all shards to be simultaneously '
         'triggered is perf_device_trigger.py, and it doesn\'t support multi '
@@ -1009,7 +1009,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def trigger_task_shard(self, task, shard_index, **kwargs):
+  def _trigger_task_shard(self, task, shard_index, **kwargs):
     """Triggers a single shard for a task.
 
     Returns: (step_result, json_output)
@@ -1020,7 +1020,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       InfraFailure if shard cannot be triggered.
     """
     script, pre_trigger_args, post_trigger_args = (
-        self.generate_trigger_task_shard_args(task, **kwargs))
+        self._generate_trigger_task_shard_args(task, **kwargs))
 
     if task.shards == 1:
       # TODO(erikchen): Remove this placeholder logic. It should have no
