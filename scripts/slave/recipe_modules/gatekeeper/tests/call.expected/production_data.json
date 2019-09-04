@@ -17,22 +17,10 @@
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.android\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.webkit\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Android Builder\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Webkit Android (Nexus4)\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"set-status\": false@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"build_db.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.tools.build\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"build-db\": \"waterfall_build_db.json\", @@@",
@@ -136,9 +124,6 @@
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.boringssl\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.catapult\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.crashpad\": [@@@",
@@ -339,24 +324,9 @@
       "https://build.chromium.org/p/client.boringssl",
       "https://build.chromium.org/p/chromium.infra.cron",
       "https://build.chromium.org/p/chromium.fyi",
-      "https://build.chromium.org/p/client.crashpad",
-      "https://build.chromium.org/p/client.catapult"
+      "https://build.chromium.org/p/client.crashpad"
     ],
     "name": "gatekeeper: non-closers"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
-      "--json",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper.json",
-      "--service-account-path",
-      "/creds/service_accounts/service-account-gatekeeper.json",
-      "--verbose",
-      "https://build.chromium.org/p/chromium.perf"
-    ],
-    "name": "gatekeeper: chromium.perf"
   },
   {
     "cmd": [
@@ -456,11 +426,9 @@
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--verbose",
-      "--build-db",
-      "[CACHE]/builder/build_db.json",
-      "https://build.chromium.org/p/chromium.tools.build"
+      "https://build.chromium.org/p/chromium.perf"
     ],
-    "name": "gatekeeper: build"
+    "name": "gatekeeper: chromium.perf"
   },
   {
     "cmd": [
@@ -473,8 +441,7 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--verbose",
       "https://build.chromium.org/p/chromium:Android",
-      "https://build.chromium.org/p/chromium.android",
-      "https://build.chromium.org/p/chromium.webkit:Android Builder,Webkit Android (Nexus4)"
+      "https://build.chromium.org/p/chromium.android"
     ],
     "name": "gatekeeper: android"
   },

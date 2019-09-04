@@ -488,42 +488,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.tools.build": [
-      {
-        "builders": {
-          "cipd-test-end-to-end_mac": {
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "cipd-test-end-to-end_trusty64": {
-            "closing_optional": [
-              "*"
-            ]
-          },
-          "cipd-test-end-to-end_win64": {
-            "closing_optional": [
-              "*"
-            ]
-          }
-        },
-        "forgive_all": "true",
-        "tree_notify": [
-          "tandrii+build-recipes-end-to-end@google.com"
-        ]
-      }
-    ],
-    "https://build.chromium.org/p/chromium.webkit": [
-      {
-        "categories": [
-          "chromium_tree_closer",
-          "experimental_tests"
-        ],
-        "builders": {
-          "*": {}
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.win": [
       {
         "categories": [
@@ -568,19 +532,6 @@
             "closing_optional": [
               "*"
             ]
-          }
-        }
-      }
-    ],
-    "https://build.chromium.org/p/client.catapult": [
-      {
-        "forgive_all": "true",
-        "tree_notify": [
-          "catapult-sheriff@chromium.org"
-        ],
-        "builders": {
-          "*": {
-            "forgiving_optional": ["*"]
           }
         }
       }

@@ -4,12 +4,6 @@
             "https://build.chromium.org/p/chromium.chromiumos": ["*"]
         }
     },
-    "build": {
-        "build-db": "build_db.json",
-        "masters": {
-            "https://build.chromium.org/p/chromium.tools.build": ["*"]
-        }
-    },
     "chromium": {
         "build-db": "waterfall_build_db.json",
         "masters": {
@@ -35,10 +29,7 @@
         "set-status": false,
         "masters": {
             "https://build.chromium.org/p/chromium.android": ["*"],
-            "https://build.chromium.org/p/chromium": ["Android"],
-            "https://build.chromium.org/p/chromium.webkit": [
-                "Android Builder", "Webkit Android (Nexus4)"
-            ]
+            "https://build.chromium.org/p/chromium": ["Android"]
         }
     },
     "infra": {
@@ -144,7 +135,6 @@
             "https://build.chromium.org/p/chromium.fyi": ["*"],
             "https://build.chromium.org/p/chromium.infra.cron": ["*"],
             "https://build.chromium.org/p/client.boringssl": ["*"],
-            "https://build.chromium.org/p/client.catapult": ["*"],
             "https://build.chromium.org/p/client.crashpad": ["*"]
         }
     }
