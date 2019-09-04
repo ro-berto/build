@@ -975,6 +975,24 @@ SPEC = {
         'platform': 'linux',
       },
     },
+
+    'Win10 Tests x64 1803': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [],
+      'parent_mastername': 'chromium.win',
+      'parent_buildername': 'Win x64 Builder',
+      'checkout_dir': 'win',
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }
 
