@@ -27,36 +27,11 @@ MAX_ATTEMPTS = 4
 
 BUILDER_WILDCARD = '*'
 
-MASTER_URL_TEMPLATE = 'https://build.chromium.org/p/'
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+MASTER_MAP_JSON = os.path.join(THIS_DIR, 'master_map.json')
 
-BUILDERS_ENDPOINT = (
-    'https://cr-buildbucket.appspot.com/_ah/api/swarmbucket/v1/builders?')
 BUILDBUCKET_ENDPOINT = (
     'https://cr-buildbucket.appspot.com/prpc/buildbucket.v2.Builds/')
-
-# TODO(crbug.com/991661):  Restore builders when bug is fixed.
-# These builders are skipped because buildbucket returns 500 when fetching
-# recent builds for them.
-BUILDER_BLACKLIST = (
-    'mac-jumbo-rel',
-    'win-jumbo-rel',
-    'Linux remote_run Builder',
-    'Linux remote_run Tester',
-)
-KNOWN_BUCKETS = (
-    'luci.boringssl.ci',
-    'luci.catapult.ci',
-    'luci.chrome.ci',
-    'luci.chromium.ci',
-    'luci.chromium.try',
-    'luci.crashpad.ci',
-    'luci.infra.ci',
-    'luci.infra.cron',
-    'luci.nacl.ci',
-    'luci.pdfium.ci',
-    'luci.v8.ci',
-    'luci.webrtc.ci',
-)
 
 
 @contextmanager
@@ -112,12 +87,6 @@ def call_buildbucket(method, data, http=None):
   response = fetch(
       'POST', BUILDBUCKET_ENDPOINT + method, json.dumps(data), http)
   return json.loads(response[4:])
-
-
-def get_builders(buckets, http=None):
-  url_buckets = '&'.join('bucket=' + bucket for bucket in buckets)
-  response = fetch('GET', BUILDERS_ENDPOINT + url_buckets, http=http)
-  return json.loads(response)
 
 
 def get_builds_for_builder(args):
@@ -241,31 +210,10 @@ def find_new_builds(master_url, builderlist, root_json, build_db, processes):
   return new_builds
 
 
-def get_master_map():
-  masters = {}
-  buckets = get_builders(KNOWN_BUCKETS).get('buckets', [])
-  for bucket_info in buckets:
-    _, project, bucket = bucket_info['name'].split('.', 2)
-    for builder_info in bucket_info.get('builders', []):
-      properties_json = json.loads(builder_info.get('properties_json', '{}'))
-      if '$gatekeeper' in properties_json:
-        master = MASTER_URL_TEMPLATE + properties_json['$gatekeeper']['group']
-      elif 'mastername' in properties_json:
-        master = MASTER_URL_TEMPLATE + properties_json['mastername']
-      else:
-        continue
-      if builder_info['name'] in BUILDER_BLACKLIST:
-        continue
-      if master not in masters:
-        masters[master] = {'project': project, 'bucket': bucket, 'builders': []}
-      masters[master]['builders'].append(builder_info['name'])
-  return masters
-
-
 def find_new_builds_per_master(masters, build_db, processes):
   """Given a list of masters, find new builds and collect them under a dict."""
-  # TODO(ehmaldonado): Get master_map only for the buckets needed for 'masters'.
-  master_map = get_master_map()
+  with open(MASTER_MAP_JSON) as f:
+    master_map = json.load(f)
 
   builds = {}
   master_jsons = {}
