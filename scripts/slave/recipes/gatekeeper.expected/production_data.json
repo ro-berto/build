@@ -46,9 +46,6 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.memory\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.webkit\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.win\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
@@ -472,7 +469,6 @@
       "https://build.chromium.org/p/chromium.linux",
       "https://build.chromium.org/p/chromium.mac",
       "https://build.chromium.org/p/chromium.memory",
-      "https://build.chromium.org/p/chromium.webkit",
       "https://build.chromium.org/p/chromium.win",
       "https://build.chromium.org/p/chromium.chromiumos"
     ],
