@@ -11,7 +11,9 @@
           "experimental_tests"
         ],
         "builders": {
-          "*": {}
+          "*": {
+            "forgiving_optional": [ "*" ]
+          }
         }
       }
     ],
