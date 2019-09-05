@@ -28,6 +28,7 @@ class Gatekeeper(recipe_api.RecipeApi):
 
     self.m.file.ensure_directory('ensure cache', build_db_path)
 
+    failed_trees = []
     for tree_name, tree_args in config.iteritems():
       # Use tree-specific config if specified, otherwise use default.
       # Tree-specific configs must be relative to the trees file.
@@ -111,13 +112,18 @@ class Gatekeeper(recipe_api.RecipeApi):
           venv=True
         )
       except self.m.step.StepFailure:
-        pass
+        failed_trees.append(tree_name)
 
       if tree_args.get('build-db'):
         self._print_build_db(
             'db after: %s' % tree_name,
             build_db_path.join(tree_args['build-db']),
         )
+
+    if failed_trees:
+      failed_trees = ', '.join(failed_trees)
+      raise self.m.step.StepFailure(
+          'Gatekeeper failed to process some trees: %s' % failed_trees)
 
   def _print_build_db(self, name, build_db_path):  # pragma: no cover
     try:

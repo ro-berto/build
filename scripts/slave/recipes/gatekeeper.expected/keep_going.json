@@ -98,6 +98,10 @@
     "name": "gatekeeper: blink"
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "Gatekeeper failed to process some trees: chromium"
+    },
     "name": "$result"
   }
 ]
