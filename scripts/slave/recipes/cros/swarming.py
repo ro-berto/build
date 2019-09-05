@@ -2,7 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import recipe_api
+
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.recipe_engine import result as result_pb2
+
 import json
+import re
 
 DEPS = [
   'chromite',
@@ -15,6 +21,28 @@ _LINUX_GOMA_CIPD_PLATFORM = 'linux-amd64'
 
 
 def RunSteps(api):
+  result = result_pb2.RawResult(
+      status = common_pb2.SUCCESS,
+  )
+
+  try:
+    DoRunSteps(api)
+  except recipe_api.InfraFailure as ex:  #pragma: no cover
+    result.status = common_pb2.INFRA_FAILURE
+    result.summary_markdown = MakeSummaryMarkdown(api, ex)
+  except recipe_api.AggregatedStepFailure as ex:  #pragma: no cover
+    if ex.result.contains_infra_failure:
+      result.status = common_pb2.INFRA_FAILURE
+    else:
+      result.status = common_pb2.FAILURE
+    result.summary_markdown = MakeSummaryMarkdown(api, ex)
+  except recipe_api.StepFailure as ex:
+    result.status = common_pb2.FAILURE
+    result.summary_markdown = MakeSummaryMarkdown(api, ex)
+
+  return result
+
+def DoRunSteps(api):
   # Get parameters specified in the tryjob description.
   cbb_extra_args = api.properties.get('cbb_extra_args', [])
 
@@ -48,6 +76,20 @@ def RunSteps(api):
         goma_dir=api.chromite.m.goma.additional_goma_dir(
             _LINUX_GOMA_CIPD_PLATFORM))
 
+def MakeSummaryMarkdown(api, failure):
+  lines = []
+  lines.append(failure.reason)
+
+  cbb_config = api.properties.get('cbb_config', None)
+  if cbb_config:
+    lines.append('builder: %s' % cbb_config)
+
+  buildset = api.properties.get('buildset', '')
+  m = re.match('^cros/master_buildbucket_id/(\d+)$', buildset)
+  if m:
+    lines.append('[master](https://ci.chromium.org/b/%s)' % m.groups()[0])
+
+  return '\n'.join(lines)
 
 def GenTests(api):
 
@@ -64,6 +106,17 @@ def GenTests(api):
           bot_id='test',
           cbb_config='swarming-build-config',
       )
+  )
+
+  # Tests the summary_markdown generation, only works on failure for now
+  yield (
+      api.test('swarming_builder_fails')
+      + api.properties(
+          bot_id='test',
+          cbb_config='swarming-build-config',
+          buildset='cros/master_buildbucket_id/8904538489270332096',
+      )
+      + api.step_data('cbuildbot_launch [swarming-build-config]', retcode=1)
   )
 
   # Test a plain tryjob.
