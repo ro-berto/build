@@ -133,7 +133,8 @@ def get_builds_for_builder(args):
       },
     },
   }
-  return call_buildbucket('SearchBuilds', request)
+  response = call_buildbucket('SearchBuilds', request).get('builds', [])
+  return (builder, response)
 
 
 def get_builds_for_builders(project, bucket, builders, processes):
@@ -145,8 +146,8 @@ def get_builds_for_builders(project, bucket, builders, processes):
     builders: The list of builders to check.
 
   Returns:
-    For each builder (in the same order they were passed), a list
-    [{endTime, number}] of builds with the end time and build number.
+    A tuple (builderName, [{endTime, number}]) with the name and the last 100
+    build numbers and end times for each of the passed builders.
   """
   request_tuples = [(project, bucket, builder) for builder in builders]
   # Prevent map from hanging, see http://bugs.python.org/issue12157.
@@ -198,7 +199,7 @@ def find_new_builds(master_url, builderlist, root_json, build_db, processes):
   logging.info(
       'buildbucket output for %s (project: %s, bucket: %s):',
       master_url, root_json['project'], root_json['bucket'])
-  for buildername, builds in zip(builders, all_builds):
+  for buildername, builds in all_builds:
     candidate_builds = [
         build['number'] for build in builds if 'number' in build]
     current_builds = [
