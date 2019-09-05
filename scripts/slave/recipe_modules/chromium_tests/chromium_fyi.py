@@ -1049,6 +1049,7 @@ SPEC['builders'].update([
                  parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
+    stock_config('linux-oor-cors-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
