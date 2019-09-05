@@ -4,19 +4,6 @@
               "this files's format."],
 
   "masters": {
-    "https://build.chromium.org/p/chrome": [
-      {
-        "sheriff_classes": ["sheriff"],
-        "categories": [
-          "experimental_tests"
-        ],
-        "builders": {
-          "*": {
-            "forgiving_optional": [ "*" ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium": [
       {
         "categories": [
