@@ -135,6 +135,10 @@ def chromeos_betty(c): # pragma: no cover
   c.solutions[0].custom_vars['cros_board'] = 'betty'
 
 @CONFIG_CTX(includes=['chromeos'])
+def chromeos_betty_pi_arc(c): # pragma: no cover
+  c.solutions[0].custom_vars['cros_board'] = 'betty-pi-arc'
+
+@CONFIG_CTX(includes=['chromeos'])
 def chromeos_daisy(c):  # pragma: no cover
   c.solutions[0].custom_vars['cros_board'] = 'daisy'
 
