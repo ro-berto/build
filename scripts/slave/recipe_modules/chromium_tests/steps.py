@@ -1309,7 +1309,7 @@ class JSONResultsHandler(ResultsHandler):
 
     # We don't want to flood Milo with links if a bunch of artifacts are
     # generated, so put a cap on the number we're willing to show.
-    max_links = 10
+    max_links = 15
     num_links = 0
     for artifact_map in artifacts.values():
       for artifact_paths in artifact_map.values():

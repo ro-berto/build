@@ -97,7 +97,7 @@ def GenTests(api):
   bulk_expectations = {
     bulk_log_title: [],
   }
-  for i in xrange(10):
+  for i in xrange(15):
     bulk_artifacts.setdefault('test1', {}).setdefault(
         'Test1', {})['%d' % i] = ['https://somesite.com']
     bulk_expectations[bulk_log_title].append(
