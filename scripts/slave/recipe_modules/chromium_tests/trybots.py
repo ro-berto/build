@@ -71,6 +71,10 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'android-marshmallow-x86-fyi-rel': simple_bot({
+        'mastername': 'chromium.android.fyi',
+        'buildername': 'android-marshmallow-x86-fyi-rel',
+      }),
       'android-oreo-arm64-rel': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'android-oreo-arm64-rel',
