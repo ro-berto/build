@@ -505,7 +505,7 @@ SPEC['builders'].update([
           'goma_high_parallel'],
       chromium_config_kwargs={'TARGET_BITS': 64}),
   stock_config(
-      'android-oreo-arm64-rel',
+      'android-pie-arm64-rel',
       chromium_config_kwargs={'TARGET_BITS': 64}),
   stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
   stock_cronet_config('android-cronet-arm-rel'),
