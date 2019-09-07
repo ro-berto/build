@@ -247,6 +247,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if self.use_clang_coverage:
       self._affected_source_files = self._filter_source_file(
           affected_files, _TOOLS_TO_EXTENSIONS_MAP['clang'])
+      # TODO(yliuyliu): Remove this once crrev.com/c/1790271 landed.
       self.m.file.ensure_directory(
           'create .clang-coverage',
           self.m.path['checkout'].join('.clang-coverage'))
@@ -267,6 +268,22 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     elif self.use_java_coverage:
       self._affected_source_files = self._filter_source_file(
           affected_files, _TOOLS_TO_EXTENSIONS_MAP['jacoco'])
+
+    self.m.file.ensure_directory('create .code-coverage',
+                                 self.m.path['checkout'].join('.code-coverage'))
+    self.m.python(
+        'save paths of affected files',
+        self.resource('write_paths_to_instrument.py'),
+        args=[
+            '--write-to',
+            self.m.path['checkout'].join('.code-coverage',
+                                         'files_to_instrument.txt'),
+            '--src-path',
+            self.m.path['checkout'],
+            '--build-path',
+            self.m.chromium.output_dir,
+        ] + self._affected_source_files,
+        stdout=self.m.raw_io.output_text(add_output_log=True))
 
   def process_coverage_data(self, tests):
     """Processes the coverage data for html report or metadata.

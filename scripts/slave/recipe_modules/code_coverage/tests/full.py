@@ -362,6 +362,8 @@ def GenTests(api):
             'some/path/to/non_source_file.txt'
           ])
       + api.post_process(
+          post_process.MustRun, 'save paths of affected files')
+      + api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed')
       + api.post_process(
@@ -384,6 +386,8 @@ def GenTests(api):
             'some/path/to/file.java',
             'some/other/path/to/file.java',
           ])
+      + api.post_process(
+          post_process.MustRun, 'save paths of affected files')
       + api.post_process(
           post_process.MustRun, 'process java coverage.'
           'generate line number mapping from bot to Gerrit')
