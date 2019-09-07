@@ -1333,6 +1333,22 @@ SPEC = {
       },
       'checkout_dir': 'android',
     },
+    'Android FYI SkiaRenderer GL (Nexus 5X)': {
+      'chromium_config': 'android',
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'android',
+    },
     'Android FYI SkiaRenderer Vulkan (Pixel 2)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

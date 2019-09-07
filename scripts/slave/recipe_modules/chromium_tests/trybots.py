@@ -157,6 +157,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI dEQP Release (Nexus 5X)',
       }),
+      'gpu-fyi-try-android-m-nexus-5x-skgl-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI SkiaRenderer GL (Nexus 5X)',
+      }),
       'gpu-fyi-try-android-l-nexus-6-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 6)',
