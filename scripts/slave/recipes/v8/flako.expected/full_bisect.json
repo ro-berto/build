@@ -604,22 +604,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/v8-flake-bisect-_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "calibration attempt 1.rmtree [CLEANUP]/v8-flake-bisect-_tmp_1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "calibration attempt 2",
     "~followup_annotations": [
@@ -1315,22 +1299,6 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/v8-flake-bisect-_tmp_2"
-    ],
-    "infra_step": true,
-    "name": "calibration attempt 2.rmtree [CLEANUP]/v8-flake-bisect-_tmp_2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -2172,19 +2140,6 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/v8-flake-bisect-_tmp_3"
-    ],
-    "infra_step": true,
-    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_3"
   },
   {
     "cmd": [
@@ -3045,19 +3000,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/v8-flake-bisect-_tmp_4"
-    ],
-    "infra_step": true,
-    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_4"
-  },
-  {
     "cmd": [],
     "name": "Bisecting #5..#2",
     "~followup_annotations": [
@@ -3873,19 +3815,6 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/v8-flake-bisect-_tmp_5"
-    ],
-    "infra_step": true,
-    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_5"
   },
   {
     "cmd": [],

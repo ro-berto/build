@@ -364,25 +364,25 @@ class IsolateApi(recipe_api.RecipeApi):
     # archive makes running compare_build_artifacts.py locally easier.
     diffs.append('args.gn')
 
-    with self.m.tempfile.temp_dir('deterministic_build') as t:
-      output = self.m.path.join(t, TARBALL_NAME)
-      self.m.python('create tarball',
-                    script=self.m.path.join(self.m.path['checkout'],
-                                            'tools',
-                                            'determinism',
-                                            'create_diffs_tarball.py'),
-                    args=[
-                        '--first-build-dir', first_dir,
-                        '--second-build-dir', second_dir,
-                        '--json-input', self.m.json.input(diffs),
-                        '--output', output,
-                    ])
-      self.m.gsutil.upload(output,
-                           GS_BUCKET,
-                           self.m.path.join(
-                               self.m.properties['buildername'],
-                               self.m.properties['buildnumber'],
-                               TARBALL_NAME))
+    t = self.m.path.mkdtemp('deterministic_build')
+    output = self.m.path.join(t, TARBALL_NAME)
+    self.m.python('create tarball',
+                  script=self.m.path.join(self.m.path['checkout'],
+                                          'tools',
+                                          'determinism',
+                                          'create_diffs_tarball.py'),
+                  args=[
+                      '--first-build-dir', first_dir,
+                      '--second-build-dir', second_dir,
+                      '--json-input', self.m.json.input(diffs),
+                      '--output', output,
+                  ])
+    self.m.gsutil.upload(output,
+                         GS_BUCKET,
+                         self.m.path.join(
+                             self.m.properties['buildername'],
+                             self.m.properties['buildnumber'],
+                             TARBALL_NAME))
 
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""

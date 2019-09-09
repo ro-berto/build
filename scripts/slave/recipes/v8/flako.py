@@ -29,15 +29,17 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
-  'chromium_swarming',
-  'depot_tools/gitiles',
-  'depot_tools/gsutil',
   'recipe_engine/json',
+  'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
-  'recipe_engine/tempfile',
+
+  'depot_tools/gitiles',
+  'depot_tools/gsutil',
+
+  'chromium_swarming',
   'swarming_client',
 ]
 
@@ -416,26 +418,26 @@ class Runner(object):
     # TODO(sergiyb): Make bisect more robust to infra failures, e.g. we trigger
     # several dozen of tasks during bisect and currently if one expires, the
     # whole thing goes purple.
-    with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
-      with self.api.step.nest(step_prefix) as parent:
-        tasks = [
-          trigger_task(path, shard)
-          for shard in range(self.num_shards)
-        ]
-        num_failures = 0
-        for task in tasks:
-          num_failures += collect_task(task)
-          if (self.repro_only and num_failures or
-              num_failures >= MIN_FLAKE_THRESHOLD):
-            # Stop waiting for more tasks early if already enough failures are
-            # found.
-            # TODO(machenbach): Cancel the tasks we don't collect. During
-            # calibration we might even want to figure out a better number of
-            # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
-            # should be used throughout.
-            break
-        parent.presentation.step_text = '%d failures' % num_failures
-        return num_failures
+    path = self.api.path.mkdtemp('v8-flake-bisect-')
+    with self.api.step.nest(step_prefix) as parent:
+      tasks = [
+        trigger_task(path, shard)
+        for shard in range(self.num_shards)
+      ]
+      num_failures = 0
+      for task in tasks:
+        num_failures += collect_task(task)
+        if (self.repro_only and num_failures or
+            num_failures >= MIN_FLAKE_THRESHOLD):
+          # Stop waiting for more tasks early if already enough failures are
+          # found.
+          # TODO(machenbach): Cancel the tasks we don't collect. During
+          # calibration we might even want to figure out a better number of
+          # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
+          # should be used throughout.
+          break
+      parent.presentation.step_text = '%d failures' % num_failures
+      return num_failures
 
 
 def bisect(api, depot, initial_commit_offset, is_bad_func, offset):

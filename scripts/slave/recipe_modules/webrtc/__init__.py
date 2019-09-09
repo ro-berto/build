@@ -35,7 +35,6 @@ DEPS = [
   'recipe_engine/runtime',
   'recipe_engine/scheduler',
   'recipe_engine/step',
-  'recipe_engine/tempfile',
   'test_results',
   'test_utils',
   'trigger',

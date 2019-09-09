@@ -27,7 +27,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
-  'recipe_engine/tempfile',
   'recipe_engine/time',
 ]
 
@@ -103,43 +102,43 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
       return
 
     api.chromium.ensure_goma()
-    with api.tempfile.temp_dir('binary-size-trybot') as staging_dir:
-      with_results_dir, raw_result = _BuildAndMeasure(
-          api, True, compile_targets, apk_name, staging_dir)
+    staging_dir = api.path.mkdtemp('binary-size-trybot')
+    with_results_dir, raw_result = _BuildAndMeasure(
+        api, True, compile_targets, apk_name, staging_dir)
+
+    if raw_result and raw_result.status != common_pb.SUCCESS:
+      return raw_result
+
+    with api.context(cwd=api.chromium_checkout.working_dir):
+      api.bot_update.deapply_patch(bot_update_step)
+
+    with api.context(cwd=api.path['checkout']):
+      suffix = ' (without patch)'
+
+      api.chromium.runhooks(name='runhooks' + suffix)
+      without_results_dir, raw_result = _BuildAndMeasure(
+          api, False, compile_targets, apk_name, staging_dir)
 
       if raw_result and raw_result.status != common_pb.SUCCESS:
+        api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
         return raw_result
 
-      with api.context(cwd=api.chromium_checkout.working_dir):
-        api.bot_update.deapply_patch(bot_update_step)
+    # Re-apply patch so that the diff scripts can be tested via tryjobs.
+    # We could build without-patch first to avoid having to apply the patch
+    # twice, but it's nicer to fail fast when the patch does not compile.
+    suffix = ' (with patch again)'
+    with api.context(cwd=checkout_dir):
+      bot_update_step = api.bot_update.ensure_checkout(suffix=suffix,
+                                                       patch=True)
+    api.chromium.runhooks(name='runhooks' + suffix)
 
-      with api.context(cwd=api.path['checkout']):
-        suffix = ' (without patch)'
+    with api.context(cwd=api.path['checkout']):
+      results_path = staging_dir.join('results.json')
 
-        api.chromium.runhooks(name='runhooks' + suffix)
-        without_results_dir, raw_result = _BuildAndMeasure(
-            api, False, compile_targets, apk_name, staging_dir)
-
-        if raw_result and raw_result.status != common_pb.SUCCESS:
-          api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
-          return raw_result
-
-      # Re-apply patch so that the diff scripts can be tested via tryjobs.
-      # We could build without-patch first to avoid having to apply the patch
-      # twice, but it's nicer to fail fast when the patch does not compile.
-      suffix = ' (with patch again)'
-      with api.context(cwd=checkout_dir):
-        bot_update_step = api.bot_update.ensure_checkout(suffix=suffix,
-                                                         patch=True)
-      api.chromium.runhooks(name='runhooks' + suffix)
-
-      with api.context(cwd=api.path['checkout']):
-        results_path = staging_dir.join('results.json')
-
-        _CreateDiffs(api, apk_name, author, without_results_dir,
-                     with_results_dir, results_path, staging_dir)
-        _CheckForUndocumentedIncrease(api, results_path, staging_dir,
-                                      allow_regressions)
+      _CreateDiffs(api, apk_name, author, without_results_dir,
+                   with_results_dir, results_path, staging_dir)
+      _CheckForUndocumentedIncrease(api, results_path, staging_dir,
+                                    allow_regressions)
 
 
 def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):

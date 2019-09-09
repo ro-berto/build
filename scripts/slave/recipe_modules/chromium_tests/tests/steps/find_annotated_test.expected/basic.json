@@ -47,19 +47,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/annotated_tests_json_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "rmtree [CLEANUP]/annotated_tests_json_tmp_1"
-  },
-  {
     "name": "$result"
   }
 ]

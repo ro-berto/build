@@ -33,7 +33,6 @@ DEPS = [
   'recipe_engine/scheduler',
   'recipe_engine/step',
   'recipe_engine/swarming',
-  'recipe_engine/tempfile',
   'recipe_engine/time',
   'recipe_engine/url',
   'test_utils',

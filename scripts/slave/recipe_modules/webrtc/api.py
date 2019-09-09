@@ -184,21 +184,21 @@ class WebRTCApi(recipe_api.RecipeApi):
         ios_config['tests'].append(test_dict)
 
     buildername = sanitize_file_name(self.buildername)
-    with self.m.tempfile.temp_dir('ios') as tmp_path:
-      self.m.file.ensure_directory(
-          'create temp directory',
-          tmp_path.join(self.bucketname))
-      self.m.file.write_text(
-          'generate %s.json' % buildername,
-          tmp_path.join(self.bucketname, '%s.json' % buildername),
-          self.m.json.dumps(ios_config, indent=2, separators=(',', ': ')))
+    tmp_path = self.m.path.mkdtemp('ios')
+    self.m.file.ensure_directory(
+        'create temp directory',
+        tmp_path.join(self.bucketname))
+    self.m.file.write_text(
+        'generate %s.json' % buildername,
+        tmp_path.join(self.bucketname, '%s.json' % buildername),
+        self.m.json.dumps(ios_config, indent=2, separators=(',', ': ')))
 
-      # Make it read the actual config even in testing mode.
-      if self._test_data.enabled:
-        self.m.ios._test_data['build_config'] = ios_config
-      self.m.ios.read_build_config(build_config_base_dir=tmp_path,
-                                   master_name=self.bucketname,
-                                   buildername=buildername)
+    # Make it read the actual config even in testing mode.
+    if self._test_data.enabled:
+      self.m.ios._test_data['build_config'] = ios_config
+    self.m.ios.read_build_config(build_config_base_dir=tmp_path,
+                                 master_name=self.bucketname,
+                                 buildername=buildername)
 
   @property
   def revision_number(self):

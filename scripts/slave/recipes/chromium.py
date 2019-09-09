@@ -22,7 +22,6 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'recipe_engine/runtime',
-  'recipe_engine/tempfile',
   'test_results',
   'test_utils',
 ]

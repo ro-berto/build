@@ -2481,29 +2481,29 @@ class FindAnnotatedTest(Test):
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
-      timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
-      if api.buildbucket.builder_name:
-        timestamp_string = api.properties.get('current_time', timestamp_string)
+    temp_output_dir = api.path.mkdtemp('annotated_tests_json')
+    timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
+    if api.buildbucket.builder_name:
+      timestamp_string = api.properties.get('current_time', timestamp_string)
 
-      args = [
-          '--apk-output-dir', api.chromium.output_dir,
-          '--json-output-dir', temp_output_dir,
-          '--timestamp-string', timestamp_string,
-          '-v']
-      args.extend(
-          ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
-      with api.context(cwd=api.path['checkout']):
-        step_result = api.python(
-            'run find_annotated_tests.py',
-            api.path['checkout'].join(
-                'tools', 'android', 'find_annotated_tests.py'),
-            args=args)
-        self._suffix_step_name_map[suffix] = step_result.step['name']
-      api.gsutil.upload(
-          temp_output_dir.join(
-              '%s-android-chrome.json' % timestamp_string),
-          'chromium-annotated-tests', 'android')
+    args = [
+        '--apk-output-dir', api.chromium.output_dir,
+        '--json-output-dir', temp_output_dir,
+        '--timestamp-string', timestamp_string,
+        '-v']
+    args.extend(
+        ['--test-apks'] + [i for i in FindAnnotatedTest._TEST_APKS.values()])
+    with api.context(cwd=api.path['checkout']):
+      step_result = api.python(
+          'run find_annotated_tests.py',
+          api.path['checkout'].join(
+              'tools', 'android', 'find_annotated_tests.py'),
+          args=args)
+      self._suffix_step_name_map[suffix] = step_result.step['name']
+    api.gsutil.upload(
+        temp_output_dir.join(
+            '%s-android-chrome.json' % timestamp_string),
+        'chromium-annotated-tests', 'android')
 
     return step_result
 

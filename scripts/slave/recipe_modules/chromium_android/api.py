@@ -1000,21 +1000,21 @@ class AndroidApi(recipe_api.RecipeApi):
       ]
       return
 
-    with self.m.tempfile.temp_dir('symbols') as temp_symbols_dir:
-      # TODO(mikecase): Only generate breakpad symbols if we
-      # know there is at least one breakpad crash. This step takes
-      # several minutes and we should only run it if we need to.
-      for binary in binary_paths:
-        self.generate_breakpad_symbols(
-            temp_symbols_dir, binary, root_chromium_dir)
-      stackwalker_args = ['--stackwalker-binary-path',
-                          microdump_stackwalk_path,
-                          '--stack-trace-path', logcat,
-                          '--symbols-path', temp_symbols_dir]
-      self.m.python('symbolized breakpad crashes',
-                    root_chromium_dir.join(
-                        'build', 'android', 'stacktrace', 'stackwalker.py'),
-                    stackwalker_args)
+    temp_symbols_dir = self.m.path.mkdtemp('symbols')
+    # TODO(mikecase): Only generate breakpad symbols if we
+    # know there is at least one breakpad crash. This step takes
+    # several minutes and we should only run it if we need to.
+    for binary in binary_paths:
+      self.generate_breakpad_symbols(
+          temp_symbols_dir, binary, root_chromium_dir)
+    stackwalker_args = ['--stackwalker-binary-path',
+                        microdump_stackwalk_path,
+                        '--stack-trace-path', logcat,
+                        '--symbols-path', temp_symbols_dir]
+    self.m.python('symbolized breakpad crashes',
+                  root_chromium_dir.join(
+                      'build', 'android', 'stacktrace', 'stackwalker.py'),
+                  stackwalker_args)
 
   def stack_tool_steps(self, force_latest_version=False):
     build_dir = self.m.path['checkout'].join('out',
