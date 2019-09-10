@@ -41,19 +41,28 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test('basic')
-  yield (
-      api.test('high_usage') +
+  yield api.test(
+      'high_usage',
       api.properties(usage1_data={
           'capacity': 100 * GIB,
           'used': 90 * GIB,
-      }))
-  yield api.test('windows') + api.platform.name('win')
-  yield api.test('no_test_data') + api.properties(no_usage1_data=True)
+      }),
+  )
+  yield api.test(
+      'windows',
+      api.platform.name('win'),
+  )
+  yield api.test(
+      'no_test_data',
+      api.properties(no_usage1_data=True),
+  )
 
-  yield (
-      api.test('space_usage_doesnt_fail_build') +
-      api.properties(usage1_data={'x': 1}))
+  yield api.test(
+      'space_usage_doesnt_fail_build',
+      api.properties(usage1_data={'x': 1}),
+  )
 
-  yield (
-      api.test('space_usage_fails_build') +
-      api.properties(usage1_data={'x': 1}, usage1_fails_build=True))
+  yield api.test(
+      'space_usage_fails_build',
+      api.properties(usage1_data={'x': 1}, usage1_fails_build=True),
+  )
