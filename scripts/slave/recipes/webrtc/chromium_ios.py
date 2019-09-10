@@ -22,33 +22,34 @@ def RunSteps(api):
   api.ios.test_swarming()
 
 def GenTests(api):
-  yield (
-    api.test('basic_goma_build')
-    + api.platform('mac', 64)
-    + api.properties(
-      buildername='ios',
-      buildnumber='0',
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=false',
-        'target_cpu="arm"',
-        'use_goma=true',
-      ],
-      'bucket': 'fake-bucket-1',
-      'tests': [
-        {
-          'app': 'fake test',
-          'device type': 'iPhone X',
-          'os': '8.0',
-        },
-      ],
-    }) + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
+  yield api.test(
+      'basic_goma_build',
+      api.platform('mac', 64),
+      api.properties(
+          buildername='ios',
+          buildnumber='0',
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+          path_config='kitchen',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version':
+              'fake xcode version',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+              'use_goma=true',
+          ],
+          'bucket':
+              'fake-bucket-1',
+          'tests': [{
+              'app': 'fake test',
+              'device type': 'iPhone X',
+              'os': '8.0',
+          },],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
   )

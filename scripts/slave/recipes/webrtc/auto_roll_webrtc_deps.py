@@ -107,34 +107,40 @@ def GenTests(api):
       api.properties.generic() +
       api.runtime(is_luci=True, is_experimental=False)
   )
-  yield (
-      api.test('rolling_activated') +
-      base +
-      api.override_step_data('gerrit changes', api.json.output([]))
+  yield api.test(
+      'rolling_activated',
+      base,
+      api.override_step_data('gerrit changes', api.json.output([])),
   )
-  yield (
-      api.test('rolling_activated_experimental') +
-      base +
-      api.override_step_data('gerrit changes', api.json.output([])) +
-      api.runtime(is_luci=True, is_experimental=True)
+  yield api.test(
+      'rolling_activated_experimental',
+      base,
+      api.override_step_data('gerrit changes', api.json.output([])),
+      api.runtime(is_luci=True, is_experimental=True),
   )
-  yield (
-      api.test('rolling_deactivated') +
-      base +
-      api.url.text('check roll status', '0')
+  yield api.test(
+      'rolling_deactivated',
+      base,
+      api.url.text('check roll status', '0'),
   )
-  yield (
-      api.test('stale_roll') +
-      base +
-      api.override_step_data(
-          'gerrit changes', api.json.output([{'_number': '123'}])) +
-      api.override_step_data('gerrit changes (2)', api.json.output([]))
+  yield api.test(
+      'stale_roll',
+      base,
+      api.override_step_data('gerrit changes',
+                             api.json.output([{
+                                 '_number': '123'
+                             }])),
+      api.override_step_data('gerrit changes (2)', api.json.output([])),
   )
-  yield (
-      api.test('previous_roll_in_cq') +
-      base +
-      api.override_step_data(
-          'gerrit changes', api.json.output([{'_number': '123'}])) +
-      api.override_step_data(
-          'gerrit changes (2)', api.json.output([{'_number': '123'}]))
+  yield api.test(
+      'previous_roll_in_cq',
+      base,
+      api.override_step_data('gerrit changes',
+                             api.json.output([{
+                                 '_number': '123'
+                             }])),
+      api.override_step_data('gerrit changes (2)',
+                             api.json.output([{
+                                 '_number': '123'
+                             }])),
   )

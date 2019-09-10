@@ -81,27 +81,29 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('build_ok') +
-    api.properties.generic(mastername='client.webrtc',
-                           buildername='iOS API Framework Builder',
-                           path_config='kitchen')
+  yield api.test(
+      'build_ok',
+      api.properties.generic(
+          mastername='client.webrtc',
+          buildername='iOS API Framework Builder',
+          path_config='kitchen'),
   )
 
-  yield (
-    api.test('build_failure') +
-    api.properties.generic(mastername='client.webrtc',
-                           buildername='iOS API Framework Builder',
-                           path_config='kitchen') +
-    api.step_data('build', retcode=1)
+  yield api.test(
+      'build_failure',
+      api.properties.generic(
+          mastername='client.webrtc',
+          buildername='iOS API Framework Builder',
+          path_config='kitchen'),
+      api.step_data('build', retcode=1),
   )
 
-  yield (
-    api.test('trybot_build') +
-    api.properties.tryserver(mastername='tryserver.webrtc',
-                             buildername='ios_api_framework',
-                             gerrit_url=
-                                 'https://webrtc-review.googlesource.com',
-                             gerrit_project='src',
-                             path_config='kitchen')
+  yield api.test(
+      'trybot_build',
+      api.properties.tryserver(
+          mastername='tryserver.webrtc',
+          buildername='ios_api_framework',
+          gerrit_url='https://webrtc-review.googlesource.com',
+          gerrit_project='src',
+          path_config='kitchen'),
   )
