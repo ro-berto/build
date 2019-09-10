@@ -36,21 +36,17 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(parent_got_swarming_client_revision='sample_sha') +
+  yield api.test(
+      'basic',
+      api.properties(parent_got_swarming_client_revision='sample_sha'),
       api.step_data(
-          'swarming.py --version',
-          stdout=api.raw_io.output_text('0.4.4'))
+          'swarming.py --version', stdout=api.raw_io.output_text('0.4.4')),
   )
 
-  yield (
-      api.test('checkout_error') +
-      api.properties(parent_got_swarming_client_revision='sample_sha') +
+  yield api.test(
+      'checkout_error',
+      api.properties(parent_got_swarming_client_revision='sample_sha'),
+      api.step_data('git checkout (swarming_client)', retcode=1),
       api.step_data(
-          'git checkout (swarming_client)',
-          retcode=1) +
-      api.step_data(
-          'swarming.py --version',
-          stdout=api.raw_io.output_text('0.4.4'))
+          'swarming.py --version', stdout=api.raw_io.output_text('0.4.4')),
   )
