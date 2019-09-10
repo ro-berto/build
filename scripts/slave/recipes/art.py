@@ -657,13 +657,13 @@ def RunSteps(api):
 def GenTests(api):
 
   def test(name, builder):
-    return (
-        api.test(name) +
+    return api.test(
+        name,
         api.buildbucket.ci_build(
             project='art',
             builder=builder,
-        ) +
-        api.properties(bot_id='TestSlave')
+        ),
+        api.properties(bot_id='TestSlave'),
     )
 
   for builders in _CONFIG_MAP.values():
