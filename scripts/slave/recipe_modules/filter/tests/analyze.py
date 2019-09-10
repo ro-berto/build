@@ -33,20 +33,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('custom_mb_config_path') +
-      api.properties(config='cros') +
-      api.post_process(
-          post_process.StepCommandContains,
-          'analyze',
-          ['--config-file', 'path/to/custom_mb_config.pyl']) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'custom_mb_config_path',
+      api.properties(config='cros'),
+      api.post_process(post_process.StepCommandContains, 'analyze',
+                       ['--config-file', 'path/to/custom_mb_config.pyl']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('cros_no_mb') +
-      api.properties(config='cros', gn=True) +
-      api.post_process(post_process.MustRun, 'system_python') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'cros_no_mb',
+      api.properties(config='cros', gn=True),
+      api.post_process(post_process.MustRun, 'system_python'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

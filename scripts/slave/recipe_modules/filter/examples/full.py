@@ -37,117 +37,165 @@ def RunSteps(api):
 
 def GenTests(api):
   # Trivial test with no exclusions and nothing matching.
-  yield (api.test('basic') +
-         api.properties(
-           affected_files=['yy'],
-           filter_exclusions=[],
-           example_changed_paths=['yy']) +
-         api.override_step_data(
+  yield api.test(
+      'basic',
+      api.properties(
+          affected_files=['yy'],
+          filter_exclusions=[],
+          example_changed_paths=['yy']),
+      api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
-           'base': { 'exclusions': [] },
-           'chromium': { 'exclusions': [] }})))
+              'base': {
+                  'exclusions': []
+              },
+              'chromium': {
+                  'exclusions': []
+              }
+          })),
+  )
 
   # Matches exclusions
-  yield (api.test('match_exclusion') +
-         api.properties(affected_files=['foo.cc']) +
-         api.override_step_data(
+  yield api.test(
+      'match_exclusion',
+      api.properties(affected_files=['foo.cc']),
+      api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
-           'base': { 'exclusions': ['fo.*'] },
-           'chromium': { 'exclusions': [] }})))
+              'base': {
+                  'exclusions': ['fo.*']
+              },
+              'chromium': {
+                  'exclusions': []
+              }
+          })),
+  )
 
   # Matches exclusions in additional_names key
-  yield (api.test('match_additional_name_exclusion') +
-         api.properties(affected_files=['foo.cc']) +
-         api.override_step_data(
+  yield api.test(
+      'match_additional_name_exclusion',
+      api.properties(affected_files=['foo.cc']),
+      api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
-           'base': { 'exclusions': [] },
-           'chromium': { 'exclusions': ['fo.*'] }})))
+              'base': {
+                  'exclusions': []
+              },
+              'chromium': {
+                  'exclusions': ['fo.*']
+              }
+          })),
+  )
 
   # Doesnt match exclusion.
-  yield (api.test('doesnt_match_exclusion') +
-         api.properties(
-           affected_files=['bar.cc'],
-           example_changed_paths=['bar.cc']) +
-         api.override_step_data(
+  yield api.test(
+      'doesnt_match_exclusion',
+      api.properties(
+          affected_files=['bar.cc'], example_changed_paths=['bar.cc']),
+      api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
-           'base': { 'exclusions': ['fo.*'] },
-           'chromium': { 'exclusions': [] }})))
+              'base': {
+                  'exclusions': ['fo.*']
+              },
+              'chromium': {
+                  'exclusions': []
+              }
+          })),
+  )
 
   # Matches ignore.
-  yield (api.test('match_ignore') +
-         api.properties(
-           affected_files=['OWNERS'],
-           example_changed_paths=['OWNERS']) +
-         api.override_step_data(
+  yield api.test(
+      'match_ignore',
+      api.properties(
+          affected_files=['OWNERS'], example_changed_paths=['OWNERS']),
+      api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
-           'base': { 'ignores': ['OWNERS'] },
-           'chromium': { }})))
+              'base': {
+                  'ignores': ['OWNERS']
+              },
+              'chromium': {}
+          })),
+  )
 
   # Analyze returns matching result.
-  yield (api.test('analyzes_returns_true') +
-         api.override_step_data(
+  yield api.test(
+      'analyzes_returns_true',
+      api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency',
-                           'test_targets': [],
-                           'compile_targets': []})))
+          api.json.output({
+              'status': 'Found dependency',
+              'test_targets': [],
+              'compile_targets': []
+          })),
+  )
 
   # Analyze returns matching tests while matching all.
-  yield (api.test('analyzes_matches_all_exes') +
-         api.override_step_data(
+  yield api.test(
+      'analyzes_matches_all_exes',
+      api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency (all)',
-                           'test_targets': [],
-                           'compile_targets': []})))
+          api.json.output({
+              'status': 'Found dependency (all)',
+              'test_targets': [],
+              'compile_targets': []
+          })),
+  )
 
   # Analyze matches all and returns matching tests.
-  yield (api.test('analyzes_matches_test_targets') +
-         api.properties(
-           test_targets=['foo', 'bar'],
-           example_test_targets=['foo', 'bar'],
-           example_compile_targets=['bar', 'foo']) +
-         api.override_step_data(
+  yield api.test(
+      'analyzes_matches_test_targets',
+      api.properties(
+          test_targets=['foo', 'bar'],
+          example_test_targets=['foo', 'bar'],
+          example_compile_targets=['bar', 'foo']),
+      api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency',
-                           'test_targets': ['foo', 'bar'],
-                           'compile_targets': ['foo', 'bar']})))
+          api.json.output({
+              'status': 'Found dependency',
+              'test_targets': ['foo', 'bar'],
+              'compile_targets': ['foo', 'bar']
+          })),
+  )
 
   # Analyze matches all and returns matching tests.
-  yield (api.test('analyzes_matches_compile_targets') +
-         api.properties(
-           example_test_targets=['foo'],
-           example_compile_targets=['bar', 'foo']) +
-         api.override_step_data(
+  yield api.test(
+      'analyzes_matches_compile_targets',
+      api.properties(
+          example_test_targets=['foo'], example_compile_targets=['bar', 'foo']),
+      api.override_step_data(
           'analyze',
-          api.json.output({'status': 'Found dependency',
-                           'test_targets': ['foo'],
-                           'compile_targets': ['bar']})))
+          api.json.output({
+              'status': 'Found dependency',
+              'test_targets': ['foo'],
+              'compile_targets': ['bar']
+          })),
+  )
 
   # Analyze with error condition.
-  yield (api.test('analyzes_error') +
-         api.properties(
-           test_targets=[]) +
-         api.override_step_data(
-          'analyze',
-          api.json.output({'error': 'ERROR'})))
+  yield api.test(
+      'analyzes_error',
+      api.properties(test_targets=[]),
+      api.override_step_data('analyze', api.json.output({
+          'error': 'ERROR'
+      })),
+  )
 
   # Analyze with python returning bad status.
-  yield (api.test('bad_retcode_fails') +
-         api.properties(
-           test_targets=[]) +
-         api.step_data(
-          'analyze',
-          retcode=-1))
+  yield api.test(
+      'bad_retcode_fails',
+      api.properties(test_targets=[]),
+      api.step_data('analyze', retcode=-1),
+  )
 
   # invalid_targets creates a failure.
-  yield (api.test('invalid_targets') +
-         api.properties(
-           test_targets=[],
-           example_result=1) +
-         api.override_step_data(
+  yield api.test(
+      'invalid_targets',
+      api.properties(test_targets=[], example_result=1),
+      api.override_step_data(
           'analyze',
-          api.json.output({'invalid_targets': ['invalid', 'another one']})))
+          api.json.output({
+              'invalid_targets': ['invalid', 'another one']
+          })),
+  )

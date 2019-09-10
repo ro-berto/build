@@ -22,10 +22,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'basic',
+      api.platform('mac', 64),
       api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername')
+          mastername='test_mastername', buildername='test_buildername'),
   )
