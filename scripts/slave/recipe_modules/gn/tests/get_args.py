@@ -32,60 +32,59 @@ def RunSteps(api):
       'expected:\n%s\nactual:%s' % (api.properties.get('expected_args'), args)
 
 def GenTests(api):
-  yield (
-      api.test('basic')
-      + _test_args(api)
-      + api.post_process(post_process.StepTextContains, 'read GN args', [
-          ('target_cpu = "x86"<br/>'
-           'use_goma = true<br/>'),
-          'goma_dir = "/b/build/slave/cache/goma_client"'])
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'basic',
+      _test_args(api),
+      api.post_process(post_process.StepTextContains, 'read GN args',
+                       [('target_cpu = "x86"<br/>'
+                         'use_goma = true<br/>'),
+                        'goma_dir = "/b/build/slave/cache/goma_client"']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('present_to_logs')
-      + _test_args(api)
-      + api.properties(location=api.gn.LOGS)
-      + api.post_process(post_process.LogContains, 'read GN args', 'gn_args', [
+  yield api.test(
+      'present_to_logs',
+      _test_args(api),
+      api.properties(location=api.gn.LOGS),
+      api.post_process(post_process.LogContains, 'read GN args', 'gn_args', [
           ('target_cpu = "x86"\n'
-           'use_goma = true\n'),
-          'goma_dir = "/b/build/slave/cache/goma_client"'])
-      + api.post_process(post_process.DropExpectation)
+           'use_goma = true\n'), 'goma_dir = "/b/build/slave/cache/goma_client"'
+      ]),
+      api.post_process(post_process.DropExpectation),
   )
 
   args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in xrange(10))
-  yield (
-      api.test('many_args')
-      + _test_args(api, args)
-      + api.properties(max_text_lines=5)
-      + api.post_process(post_process.LogContains, 'read GN args', 'gn_args',
-                         [args])
-      + api.post_process(post_process.StepTextContains, 'read GN args',
-                         ['exceeds limit', 'presented in logs instead'])
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'many_args',
+      _test_args(api, args),
+      api.properties(max_text_lines=5),
+      api.post_process(post_process.LogContains, 'read GN args', 'gn_args',
+                       [args]),
+      api.post_process(post_process.StepTextContains, 'read GN args',
+                       ['exceeds limit', 'presented in logs instead']),
+      api.post_process(post_process.DropExpectation),
   )
 
   args = '\n'.join('arg%02d = "value%d"' % (i, i) for i in xrange(10))
-  yield (
-      api.test('present_to_text')
-      + _test_args(api, args)
-      + api.properties(location=api.gn.TEXT, max_text_lines=5)
-      + api.post_process(post_process.StepTextContains, 'read GN args',
-                         [args.replace('\n', '<br/>')])
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'present_to_text',
+      _test_args(api, args),
+      api.properties(location=api.gn.TEXT, max_text_lines=5),
+      api.post_process(post_process.StepTextContains, 'read GN args',
+                       [args.replace('\n', '<br/>')]),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('args_with_imports')
-      + _test_args(api, (
-          'import("//build/args/headless.gn")\n'
-          'goma_dir = "/b/build/slave/cache/goma_client"\n'
-          'target_cpu = "x86"\n'
-          'use_goma = true\n'))
-      + api.post_process(post_process.StepTextContains, 'read GN args', [
-          ('import("//build/args/headless.gn")<br/>'
-           'target_cpu = "x86"<br/>'
-           'use_goma = true<br/>'),
-          'goma_dir = "/b/build/slave/cache/goma_client"'])
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'args_with_imports',
+      _test_args(api, ('import("//build/args/headless.gn")\n'
+                       'goma_dir = "/b/build/slave/cache/goma_client"\n'
+                       'target_cpu = "x86"\n'
+                       'use_goma = true\n')),
+      api.post_process(post_process.StepTextContains, 'read GN args',
+                       [('import("//build/args/headless.gn")<br/>'
+                         'target_cpu = "x86"<br/>'
+                         'use_goma = true<br/>'),
+                        'goma_dir = "/b/build/slave/cache/goma_client"']),
+      api.post_process(post_process.DropExpectation),
   )

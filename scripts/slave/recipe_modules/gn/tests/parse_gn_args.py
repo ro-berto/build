@@ -25,7 +25,7 @@ def RunSteps(api):
   assert actual_result == _EXPECTED_RESULT
 
 def GenTests(api):
-  yield (
-      api.test('basic')
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'basic',
+      api.post_process(post_process.DropExpectation),
   )
