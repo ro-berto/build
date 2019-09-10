@@ -11,6 +11,4 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('should_warn')
-  )
+  yield api.test('should_warn')

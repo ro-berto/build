@@ -16,9 +16,9 @@ def RunSteps(api):
   results.as_jsonish()
 
 def GenTests(api):
-  yield (
-      api.test('results_none') +
-      api.properties(results_json=None) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'results_none',
+      api.properties(results_json=None),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

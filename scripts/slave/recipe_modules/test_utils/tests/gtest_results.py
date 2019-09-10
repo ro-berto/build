@@ -20,20 +20,23 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('many-log-lines') +
+  yield api.test(
+      'many-log-lines',
       api.override_step_data(
           'fake_test',
-          api.test_utils.gtest_results(json.dumps({
-            'per_iteration_data': [{
-              'SpammyTest': [{
-                'elapsed_time_ms': 1000,
-                'output_snippet': '\n'.join(itertools.repeat('line', 10000)),
-                'status': 'SUCCESS',
-              }],
-            }],
-          }))
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          api.test_utils.gtest_results(
+              json.dumps({
+                  'per_iteration_data': [{
+                      'SpammyTest': [{
+                          'elapsed_time_ms':
+                              1000,
+                          'output_snippet':
+                              '\n'.join(itertools.repeat('line', 10000)),
+                          'status':
+                              'SUCCESS',
+                      }],
+                  }],
+              }))),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

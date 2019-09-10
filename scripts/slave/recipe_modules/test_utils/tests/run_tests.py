@@ -67,21 +67,21 @@ def GenTests(api):
   failure_code = api.chromium_tests.steps.MockTest.ExitCodes.FAILURE
   infra_code = api.chromium_tests.steps.MockTest.ExitCodes.INFRA_FAILURE
 
-  yield (
-      api.test('success') +
+  yield api.test(
+      'success',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          test_name='base_unittests') +
-      api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          test_name='base_unittests'),
+      api.post_process(post_process.MustRun, 'test2'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('success_swarming') +
+  yield api.test(
+      'success_swarming',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -90,21 +90,19 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-            'base_unittests': '[dummy hash for base_unittests]',
-            'base_unittests_2': '[dummy hash for base_unittests_2]',
-          }) +
+              'base_unittests': '[dummy hash for base_unittests]',
+              'base_unittests_2': '[dummy hash for base_unittests_2]',
+          }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([['10000'], ['110000']], 1),
-      ]) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      # Tests that test_utils will poll swarming several times, waiting for the
-      # task to complete.
-      api.test('success_swarming_one_task_still_pending') +
+  yield api.test(
+      'success_swarming_one_task_still_pending',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -113,25 +111,23 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-            'base_unittests': '[dummy hash for base_unittests]',
-            'base_unittests_2': '[dummy hash for base_unittests_2]',
-          }) +
+              'base_unittests': '[dummy hash for base_unittests]',
+              'base_unittests_2': '[dummy hash for base_unittests_2]',
+          }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([['110000']], 1),
-      ]) +
+      ]),
       # There's no call to get_states after there's only one test left pending,
       # as the test_utils logic just calls the regular collect logic on that
       # test.
-      api.post_process(post_process.MustRun, 'base_unittests') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      api.post_process(post_process.MustRun, 'base_unittests'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      # Tests that test_utils will poll swarming several times, waiting for the
-      # task to complete.
-      api.test('success_swarming_long_pending') +
+  yield api.test(
+      'success_swarming_long_pending',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -140,9 +136,9 @@ def GenTests(api):
           test_name='base_unittests',
           test_swarming=True,
           swarm_hashes={
-            'base_unittests': '[dummy hash for base_unittests]',
-            'base_unittests_2': '[dummy hash for base_unittests_2]',
-          }) +
+              'base_unittests': '[dummy hash for base_unittests]',
+              'base_unittests_2': '[dummy hash for base_unittests_2]',
+          }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([], 1),
@@ -150,55 +146,55 @@ def GenTests(api):
           ([], 1),
           ([], 1),
           ([['10000'], ['110000']], 1),
-      ]) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('failure') +
+  yield api.test(
+      'failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          test_name='base_unittests') +
-      api.override_step_data('base_unittests', retcode=failure_code) +
-      api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          test_name='base_unittests'),
+      api.override_step_data('base_unittests', retcode=failure_code),
+      api.post_process(post_process.MustRun, 'test2'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('failure_abort') +
+  yield api.test(
+      'failure_abort',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
           test_name='base_unittests',
-          abort_on_failure=True) +
-      api.override_step_data('base_unittests', retcode=failure_code) +
-      api.post_process(post_process.DoesNotRun, 'test2') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          abort_on_failure=True),
+      api.override_step_data('base_unittests', retcode=failure_code),
+      api.post_process(post_process.DoesNotRun, 'test2'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('infra_failure') +
+  yield api.test(
+      'infra_failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          test_name='base_unittests') +
-      api.override_step_data('base_unittests', retcode=infra_code) +
-      api.post_process(post_process.DoesNotRun, 'test2') +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+          test_name='base_unittests'),
+      api.override_step_data('base_unittests', retcode=infra_code),
+      api.post_process(post_process.DoesNotRun, 'test2'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
-  yield (
-      api.test('retry_invalid_swarming') +
+  yield api.test(
+      'retry_invalid_swarming',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -208,50 +204,49 @@ def GenTests(api):
           test_swarming=True,
           retry_invalid_shards=True,
           swarm_hashes={
-            'base_unittests_invalid_results': '[dummy hash for base_unittests]',
-            'base_unittests_invalid_results_2':
-                '[dummy hash for base_unittests_2]',
-          }) +
+              'base_unittests_invalid_results':
+                  '[dummy hash for base_unittests]',
+              'base_unittests_invalid_results_2':
+                  '[dummy hash for base_unittests_2]',
+          }),
       api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([['10000'], ['110000']], 1),
-      ]) +
+      ]),
       api.post_process(post_process.MustRun,
-                       'base_unittests_invalid_results (retry shards)') +
+                       'base_unittests_invalid_results (retry shards)'),
       api.post_process(post_process.DoesNotRun,
-                       'base_unittests_invalid_results_2 (retry shards)') +
-      api.post_process(post_process.DropExpectation)
+                       'base_unittests_invalid_results_2 (retry shards)'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('pre_run_failure') +
+  yield api.test(
+      'pre_run_failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          test_name='base_unittests') +
+          test_name='base_unittests'),
       api.override_step_data(
-          'test_pre_run.pre_run base_unittests',
-          retcode=failure_code) +
-      api.post_process(post_process.MustRun, 'base_unittests') +
-      api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          'test_pre_run.pre_run base_unittests', retcode=failure_code),
+      api.post_process(post_process.MustRun, 'base_unittests'),
+      api.post_process(post_process.MustRun, 'test2'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('pre_run_infra_failure') +
+  yield api.test(
+      'pre_run_infra_failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          test_name='base_unittests') +
+          test_name='base_unittests'),
       api.override_step_data(
-          'test_pre_run.pre_run base_unittests',
-          retcode=infra_code) +
-      api.post_process(post_process.DoesNotRun, 'base_unittests') +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+          'test_pre_run.pre_run base_unittests', retcode=infra_code),
+      api.post_process(post_process.DoesNotRun, 'base_unittests'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
