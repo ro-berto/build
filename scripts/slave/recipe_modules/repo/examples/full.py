@@ -30,6 +30,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('setup_repo') +
-      api.step_data('repo list',
-                    api.raw_io.stream_output(REPO_LIST_OUTPUT)))
+  yield api.test(
+      'setup_repo',
+      api.step_data('repo list', api.raw_io.stream_output(REPO_LIST_OUTPUT)),
+  )
