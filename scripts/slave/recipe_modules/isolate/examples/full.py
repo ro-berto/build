@@ -68,14 +68,12 @@ def GenTests(api):
       all_expected_targets = None
 
     missing = set(all_expected_targets or []) - set(discovered_targets or [])
-    output = (
-        api.test(name) +
+    output = api.test(
+        name,
         api.step_data(
-            'read test spec',
-            stdout=api.json.output(all_expected_targets)) +
-        api.override_step_data(
-            'find isolated tests',
-            api.isolate.output_json(discovered_targets))
+            'read test spec', stdout=api.json.output(all_expected_targets)),
+        api.override_step_data('find isolated tests',
+                               api.isolate.output_json(discovered_targets)),
     )
 
     # See comment around 'if expected_targets is not None' above.

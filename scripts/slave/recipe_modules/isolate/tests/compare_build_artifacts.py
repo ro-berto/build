@@ -16,17 +16,13 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123)
+  yield api.test(
+      'basic',
+      api.properties(buildername='test_buildername', buildnumber=123),
   )
 
-  yield (
-      api.test('failure') +
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123) +
-      api.step_data('compare_build_artifacts', retcode=1)
+  yield api.test(
+      'failure',
+      api.properties(buildername='test_buildername', buildnumber=123),
+      api.step_data('compare_build_artifacts', retcode=1),
   )

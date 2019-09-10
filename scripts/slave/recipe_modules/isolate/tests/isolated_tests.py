@@ -17,11 +17,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(
-          swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }
-      )
+  yield api.test(
+      'basic',
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
   )

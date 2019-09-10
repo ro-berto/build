@@ -16,7 +16,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('compose') +
-      api.post_process(Filter('compose isolates'))
+  yield api.test(
+      'compose',
+      api.post_process(Filter('compose isolates')),
   )

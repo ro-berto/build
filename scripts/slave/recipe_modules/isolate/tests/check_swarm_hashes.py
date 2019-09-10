@@ -13,19 +13,22 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('matching') +
-      api.properties(swarm_hashes={'some_target': 'a'*40,
-                                   'other_target': 'b'*40,
-                                   'another_one': 'c'*40})
+  yield api.test(
+      'matching',
+      api.properties(
+          swarm_hashes={
+              'some_target': 'a' * 40,
+              'other_target': 'b' * 40,
+              'another_one': 'c' * 40
+          }),
   )
 
-  yield (
-      api.test('detected')
-  )
+  yield api.test('detected')
 
-  yield (
-      api.test('missing') +
-      api.properties(swarm_hashes={'some_target': 'a'*40,
-                                   'another_one': 'c'*40})
+  yield api.test(
+      'missing',
+      api.properties(swarm_hashes={
+          'some_target': 'a' * 40,
+          'another_one': 'c' * 40
+      }),
   )
