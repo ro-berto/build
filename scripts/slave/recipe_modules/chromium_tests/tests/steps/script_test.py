@@ -35,35 +35,36 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id')
+          bot_id='test_bot_id'),
   )
 
-  yield (
-      api.test('invalid_results') +
+  yield api.test(
+      'invalid_results',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id') +
-      api.override_step_data(
-          'script_test',
-          api.json.output({}))
+          bot_id='test_bot_id'),
+      api.override_step_data('script_test', api.json.output({})),
   )
 
-  yield (
-      api.test('failure') +
+  yield api.test(
+      'failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id') +
+          bot_id='test_bot_id'),
       api.override_step_data(
           'script_test',
-          api.json.output({'valid': True, 'failures': ['TestOne']}))
+          api.json.output({
+              'valid': True,
+              'failures': ['TestOne']
+          })),
   )

@@ -51,8 +51,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -62,5 +62,5 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-      )
+      ),
   )

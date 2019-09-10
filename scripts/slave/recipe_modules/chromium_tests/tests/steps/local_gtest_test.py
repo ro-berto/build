@@ -46,36 +46,34 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123)
+          buildnumber=123),
   )
 
-  yield (
-      api.test('retry') +
+  yield api.test(
+      'retry',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123) +
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.test_utils.canned_gtest_output(passing=False)) +
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.test_utils.canned_gtest_output(passing=True))
+          buildnumber=123),
+      api.override_step_data('base_unittests (with patch)',
+                             api.test_utils.canned_gtest_output(passing=False)),
+      api.override_step_data('base_unittests (without patch)',
+                             api.test_utils.canned_gtest_output(passing=True)),
   )
 
-  yield (
-      api.test('android') +
+  yield api.test(
+      'android',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          target_platform='android')
+          target_platform='android'),
   )

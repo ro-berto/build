@@ -24,45 +24,43 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.platform.name('win') +
-      api.properties(bot_config=api.chromium_tests.bot_config({
-          'isolate_server': 'https://example/isolate',
-          'isolate_service_account': 'chromium_builder',
-          'swarming_server': 'https://example/swarming',
-          'swarming_dimensions': {'os': 'Windows'},
-          'swarming_service_account': 'chromium-builder'
-      })) +
-      api.runtime(is_luci=False, is_experimental=False) +
-      api.post_process(
-          post_process.StepTextContains,
-          'swarming_service_account',
-          ['chromium-builder']) +
-      api.post_process(
-          post_process.StepTextContains,
-          'swarming_service_account',
-          ['chromium-builder'])
+  yield api.test(
+      'basic',
+      api.platform.name('win'),
+      api.properties(
+          bot_config=api.chromium_tests.bot_config({
+              'isolate_server': 'https://example/isolate',
+              'isolate_service_account': 'chromium_builder',
+              'swarming_server': 'https://example/swarming',
+              'swarming_dimensions': {
+                  'os': 'Windows'
+              },
+              'swarming_service_account': 'chromium-builder'
+          })),
+      api.runtime(is_luci=False, is_experimental=False),
+      api.post_process(post_process.StepTextContains,
+                       'swarming_service_account', ['chromium-builder']),
+      api.post_process(post_process.StepTextContains,
+                       'swarming_service_account', ['chromium-builder']),
   )
 
-  yield (
-      api.test('luci') +
-      api.platform.name('linux') +
-      api.properties(bot_config=api.chromium_tests.bot_config({
-          'isolate_server': 'https://example/isolate',
-          'isolate_service_account': 'chromium_builder',
-          'swarming_server': 'https://example/swarming',
-          'swarming_dimensions': {'os': 'Ubuntu-14.04'},
-          'swarming_service_account': 'chromium-builder'
-      })) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(
-          post_process.StepTextEquals,
-          'swarming_service_account',
-          '') +
-      api.post_process(
-          post_process.StepTextEquals,
-          'swarming_service_account',
-          '') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'luci',
+      api.platform.name('linux'),
+      api.properties(
+          bot_config=api.chromium_tests.bot_config({
+              'isolate_server': 'https://example/isolate',
+              'isolate_service_account': 'chromium_builder',
+              'swarming_server': 'https://example/swarming',
+              'swarming_dimensions': {
+                  'os': 'Ubuntu-14.04'
+              },
+              'swarming_service_account': 'chromium-builder'
+          })),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(post_process.StepTextEquals, 'swarming_service_account',
+                       ''),
+      api.post_process(post_process.StepTextEquals, 'swarming_service_account',
+                       ''),
+      api.post_process(post_process.DropExpectation),
   )

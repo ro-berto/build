@@ -23,10 +23,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties.generic(
           mastername='chromium.perf',
           buildername='linux-perf',
-          builders=api.chromium_tests.builders)
+          builders=api.chromium_tests.builders),
   )

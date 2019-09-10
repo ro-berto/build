@@ -17,26 +17,26 @@ def RunSteps(api):
       **api.properties.get('kwargs', {}))
 
 def GenTests(api):
-  yield (
-      api.test('read-gn-args')
-      + api.properties.generic(
+  yield api.test(
+      'read-gn-args',
+      api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
           parent_mastername='chromium.linux',
           parent_buildername='Linux Builder',
-          kwargs=dict(read_gn_args=True))
-      + api.post_process(post_process.MustRun, 'read GN args')
-      + api.post_process(post_process.DropExpectation)
+          kwargs=dict(read_gn_args=True)),
+      api.post_process(post_process.MustRun, 'read GN args'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('do-not-read-gn-args')
-      + api.properties.generic(
+  yield api.test(
+      'do-not-read-gn-args',
+      api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
           parent_mastername='chromium.linux',
           parent_buildername='Linux Builder',
-          kwargs=dict(read_gn_args=False))
-      + api.post_process(post_process.DoesNotRun, 'read GN args')
-      + api.post_process(post_process.DropExpectation)
+          kwargs=dict(read_gn_args=False)),
+      api.post_process(post_process.DoesNotRun, 'read GN args'),
+      api.post_process(post_process.DropExpectation),
   )

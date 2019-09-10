@@ -47,47 +47,50 @@ def GenTests(api):
       )
     )
 
-  yield (
-    api.test('deapply_deps_after_failure') +
-    ci_props(extra_swarmed_tests=['blink_web_tests']) +
-    api.platform.name('linux') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.linux', {
-            'Linux Builder': {
-              'isolated_scripts': [
-                    {
+  yield api.test(
+      'deapply_deps_after_failure',
+      ci_props(extra_swarmed_tests=['blink_web_tests']),
+      api.platform.name('linux'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Builder': {
+                  'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
-                      'swarming': {'can_use_on_swarming_builders': True},
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
                       'results_handler': 'layout tests',
-                    },
-                ],
-            },
-        }
-    ) +
-    api.override_step_data('blink_web_tests (with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (retry shards with patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=False, swarming=True,
-                isolated_script_passing=False,
-                isolated_script_retcode=125),
-            failure=True)) +
-    api.override_step_data('blink_web_tests (without patch)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-                passing=True, swarming=True,
-                isolated_script_passing=True))) +
-    api.post_process(post_process.MustRun, 'blink_web_tests (with patch)') +
-    api.post_process(
-        post_process.MustRun, 'blink_web_tests (retry shards with patch)') +
-    api.post_process(post_process.MustRun, 'blink_web_tests (without patch)') +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+                  },],
+              },
+          }),
+      api.override_step_data(
+          'blink_web_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=False,
+                  swarming=True,
+                  isolated_script_passing=False,
+                  isolated_script_retcode=125),
+              failure=True)),
+      api.override_step_data(
+          'blink_web_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=False,
+                  swarming=True,
+                  isolated_script_passing=False,
+                  isolated_script_retcode=125),
+              failure=True)),
+      api.override_step_data(
+          'blink_web_tests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True, swarming=True, isolated_script_passing=True))),
+      api.post_process(post_process.MustRun, 'blink_web_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'blink_web_tests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'blink_web_tests (without patch)'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

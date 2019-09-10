@@ -36,33 +36,30 @@ def GenTests(api):
 
   yield api.test('basic')
 
-  yield (
-    api.test('failure') +
-    api.properties(test_name='base_unittests') +
-    api.chromium_tests.override_step_data(
-        'base_unittests', retcode=failure_code) +
-    api.post_process(post_process.MustRun, 'step failure in base_unittests') +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'failure',
+      api.properties(test_name='base_unittests'),
+      api.chromium_tests.override_step_data(
+          'base_unittests', retcode=failure_code),
+      api.post_process(post_process.MustRun, 'step failure in base_unittests'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('failure_abort') +
-    api.properties(
-        abort_on_failure=True,
-        test_name='base_unittests') +
-    api.chromium_tests.override_step_data(
-        'base_unittests', retcode=failure_code) +
-    api.post_process(
-        post_process.MustRun,
-        'fatal step failure in base_unittests') +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'failure_abort',
+      api.properties(abort_on_failure=True, test_name='base_unittests'),
+      api.chromium_tests.override_step_data(
+          'base_unittests', retcode=failure_code),
+      api.post_process(post_process.MustRun,
+                       'fatal step failure in base_unittests'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('infra_failure') +
-    api.properties(test_name='base_unittests') +
-    api.chromium_tests.override_step_data(
-        'base_unittests', retcode=infra_code) +
-    api.post_process(post_process.MustRun, 'infra failure in base_unittests') +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'infra_failure',
+      api.properties(test_name='base_unittests'),
+      api.chromium_tests.override_step_data(
+          'base_unittests', retcode=infra_code),
+      api.post_process(post_process.MustRun, 'infra failure in base_unittests'),
+      api.post_process(post_process.DropExpectation),
   )

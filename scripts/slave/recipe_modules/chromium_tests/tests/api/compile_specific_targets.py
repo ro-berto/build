@@ -57,42 +57,41 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('linux_tests') +
+  yield api.test(
+      'linux_tests',
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          swarming_gtest=True)
+          swarming_gtest=True),
   )
 
-  yield (
-      api.test('failure') +
+  yield api.test(
+      'failure',
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          swarming_gtest=True) +
-      api.step_data('compile', retcode=1)
+          swarming_gtest=True),
+      api.step_data('compile', retcode=1),
   )
 
-  yield (
-      api.test('failure_tryserver') +
+  yield api.test(
+      'failure_tryserver',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel') +
-      api.step_data('compile (with patch)', retcode=1)
+          mastername='tryserver.chromium.linux', buildername='linux-rel'),
+      api.step_data('compile (with patch)', retcode=1),
   )
 
-  yield (
-      api.test('perf_isolate_lookup') +
+  yield api.test(
+      'perf_isolate_lookup',
       api.properties.generic(
           mastername='chromium.perf',
           buildername='linux-builder-perf',
-          swarming_gtest=True) +
-          api.post_process(Filter('pinpoint isolate upload'))
+          swarming_gtest=True),
+      api.post_process(Filter('pinpoint isolate upload')),
   )
 
-  yield (
-      api.test('perf_isolate_lookup_tryserver') +
+  yield api.test(
+      'perf_isolate_lookup_tryserver',
       api.properties.tryserver(
           mastername='tryserver.chromium.perf',
           buildername='Mac Builder Perf',
@@ -104,22 +103,19 @@ def GenTests(api):
           patch_repository_url='https://chromium.googlesource.com/chromium/src',
           patch_set=1,
           patch_storage='gerrit',
-          swarming_gtest=True) +
-          api.post_process(Filter('pinpoint isolate upload'))
+          swarming_gtest=True),
+      api.post_process(Filter('pinpoint isolate upload')),
   )
 
-  yield (
-      api.test('android') +
+  yield api.test(
+      'android',
       api.properties.generic(
-          mastername='chromium.android',
-          buildername='android-cronet-arm-rel')
+          mastername='chromium.android', buildername='android-cronet-arm-rel'),
   )
 
-  yield (
-      api.test('android_version') +
+  yield api.test(
+      'android_version',
       api.properties.generic(
-          mastername='fake.master',
-          buildername='Test Version') +
-      api.chromium.override_version(
-          major=123, minor=1, build=9876, patch=2)
+          mastername='fake.master', buildername='Test Version'),
+      api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
   )

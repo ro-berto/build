@@ -38,8 +38,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('buildbucket_string') +
+  yield api.test(
+      'buildbucket_string',
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
@@ -49,13 +49,13 @@ def GenTests(api):
           buildername='test_buildername',
           buildbucket='{"build": {"id": "12345"}}',
           expected_args=[u"12345"],
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('buildbucket_unicode') +
+  yield api.test(
+      'buildbucket_unicode',
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
@@ -65,13 +65,13 @@ def GenTests(api):
           buildername='test_buildername',
           buildbucket=u'{"build": {"id": "12345"}}',
           expected_args=[u"12345"],
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('buildbucket_dictionary') +
+  yield api.test(
+      'buildbucket_dictionary',
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
@@ -79,9 +79,11 @@ def GenTests(api):
           },
           mastername='test_mastername',
           buildername='test_buildername',
-          buildbucket={"build": {"id": "12345"}},
+          buildbucket={"build": {
+              "id": "12345"
+          }},
           expected_args=[u"12345"],
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

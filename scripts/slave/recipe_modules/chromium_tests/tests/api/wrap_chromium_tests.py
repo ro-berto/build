@@ -80,56 +80,55 @@ def GenTests(api):
       },
   }
 
-  yield (
-      api.test('require_device_steps') +
+  yield api.test(
+      'require_device_steps',
       api.properties.generic(
           mastername='chromium.example',
           buildername='android-basic',
           local_gtest=True,
-          builders=test_builders) +
-      api.post_process(post_process.MustRun, 'device_recovery') +
-      api.post_process(post_process.MustRun, 'provision_devices') +
-      api.post_process(post_process.MustRun, 'device_status') +
-      api.post_process(post_process.DropExpectation)
+          builders=test_builders),
+      api.post_process(post_process.MustRun, 'device_recovery'),
+      api.post_process(post_process.MustRun, 'provision_devices'),
+      api.post_process(post_process.MustRun, 'device_status'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('use_clang_coverage') +
+  yield api.test(
+      'use_clang_coverage',
       api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          mastername='chromium.fyi', buildername='linux-code-coverage'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('win') +
-      api.platform.name('win') +
+  yield api.test(
+      'win',
+      api.platform.name('win'),
       api.properties.tryserver(
-          mastername='tryserver.chromium.win',
-          buildername='win7-rel')
+          mastername='tryserver.chromium.win', buildername='win7-rel'),
   )
 
-  yield (
-      api.test('isolated_targets') +
+  yield api.test(
+      'isolated_targets',
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          swarming_gtest=True)
+          swarming_gtest=True),
   )
 
-  yield (
-      api.test('local_isolated_script_test') +
+  yield api.test(
+      'local_isolated_script_test',
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          local_isolated_script_test=True,)
+          local_isolated_script_test=True,
+      ),
   )
 
-  yield (
-      api.test('script_test') +
+  yield api.test(
+      'script_test',
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          script_test=True)
+          script_test=True),
   )

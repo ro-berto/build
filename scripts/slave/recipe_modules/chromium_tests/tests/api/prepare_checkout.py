@@ -46,27 +46,25 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Builder')
+          mastername='chromium.linux', buildername='Linux Builder'),
   )
 
-  yield (
-      api.test('disable_tests') +
+  yield api.test(
+      'disable_tests',
       api.properties.generic(
-          mastername='chromium.lkgr',
-          buildername='Win ASan Release')
+          mastername='chromium.lkgr', buildername='Win ASan Release'),
   )
 
-  yield (
-      api.test('cross_master_trigger') +
+  yield api.test(
+      'cross_master_trigger',
       api.properties.generic(
           mastername='chromium.fake',
           buildername='cross-master-trigger-builder',
-          builders=DUMMY_BUILDERS) +
+          builders=DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
-                       'read test spec (chromium.fake.fyi.json)') +
-      api.post_process(post_process.DropExpectation)
+                       'read test spec (chromium.fake.fyi.json)'),
+      api.post_process(post_process.DropExpectation),
   )

@@ -28,29 +28,26 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties.generic(
-          mastername='chromium.foo',
-          buildername='Foo Builder') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          mastername='chromium.foo', buildername='Foo Builder'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('missing_master_config') +
+  yield api.test(
+      'missing_master_config',
       api.properties.generic(
-          mastername='chromium.bar',
-          buildername='Bar Builder') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          mastername='chromium.bar', buildername='Bar Builder'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('missing_builder_config') +
+  yield api.test(
+      'missing_builder_config',
       api.properties.generic(
-          mastername='chromium.foo',
-          buildername='Bar Builder') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          mastername='chromium.foo', buildername='Bar Builder'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

@@ -23,16 +23,14 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('cf_archive_build') +
+  yield api.test(
+      'cf_archive_build',
       api.properties.generic(
-          mastername='chromium.lkgr',
-          buildername='ASAN Release')
+          mastername='chromium.lkgr', buildername='ASAN Release'),
   )
 
-  yield (
-      api.test('archive_build') +
+  yield api.test(
+      'archive_build',
       api.properties.generic(
-          mastername='chromium',
-          buildername='linux-archive-rel')
+          mastername='chromium', buildername='linux-archive-rel'),
   )

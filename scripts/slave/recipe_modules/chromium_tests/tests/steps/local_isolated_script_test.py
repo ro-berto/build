@@ -29,12 +29,11 @@ def RunSteps(api):
 
   test_repeat_count = api.properties.get('repeat_count')
   if test_repeat_count:
-      test.test_options = api.chromium_tests.steps.TestOptions(
-          test_filter=api.properties.get('test_filter'),
-          repeat_count=test_repeat_count,
-          retry_limit=0,
-          run_disabled=bool(test_repeat_count)
-      )
+    test.test_options = api.chromium_tests.steps.TestOptions(
+        test_filter=api.properties.get('test_filter'),
+        repeat_count=test_repeat_count,
+        retry_limit=0,
+        run_disabled=bool(test_repeat_count))
 
   try:
     test.pre_run(api, '')
@@ -69,66 +68,66 @@ def GenTests(api):
         'LLVM_PROFILE_FILE=${ISOLATED_OUTDIR}/profraw/default-%1m.profraw'
         in step.cmd)
 
-  yield (
-      api.test('basic') +
-      api.properties(
-          swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          })
+  yield api.test(
+      'basic',
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
   )
 
-  yield (
-      api.test('override_compile_targets') +
+  yield api.test(
+      'override_compile_targets',
       api.properties(
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          override_compile_targets=['base_unittests_run'])
+          override_compile_targets=['base_unittests_run']),
   )
 
-  yield (
-      api.test('log_pass_fail_counts') +
+  yield api.test(
+      'log_pass_fail_counts',
       api.properties(
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          log_pass_fail_counts=True) +
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
-      api.post_process(post_process.DropExpectation)
+          log_pass_fail_counts=True),
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('log_pass_fail_counts_invalid_results') +
+  yield api.test(
+      'log_pass_fail_counts_invalid_results',
       api.properties(
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          log_pass_fail_counts=True) +
+          log_pass_fail_counts=True),
       api.override_step_data(
-        'base_unittests',
-        api.test_utils.m.json.output({'interrupted': True}, 255)
-        ) +
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
-      api.post_process(post_process.DropExpectation)
+          'base_unittests',
+          api.test_utils.m.json.output({
+              'interrupted': True
+          }, 255)),
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('customized_test_options') +
+  yield api.test(
+      'customized_test_options',
       api.properties(
           swarm_hashes={
-            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20,
-          test_name='blink_web_tests')
+          test_name='blink_web_tests'),
   )
-  yield (
-      api.test('isolate_coverage_data') +
+  yield api.test(
+      'isolate_coverage_data',
       api.properties(
           isolate_coverage_data=True,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.post_process(verify_isolate_flag) +
-      api.post_process(post_process.DropExpectation)
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.post_process(verify_isolate_flag),
+      api.post_process(post_process.DropExpectation),
   )

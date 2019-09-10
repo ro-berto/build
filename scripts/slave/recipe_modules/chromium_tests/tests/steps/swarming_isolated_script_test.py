@@ -66,12 +66,11 @@ def RunSteps(api):
   assert test.shards > 0
 
   if test_repeat_count:
-      test.test_options = api.chromium_tests.steps.TestOptions(
-          test_filter=api.properties.get('test_filter'),
-          repeat_count=test_repeat_count,
-          retry_limit=0,
-          run_disabled=bool(test_repeat_count)
-      )
+    test.test_options = api.chromium_tests.steps.TestOptions(
+        test_filter=api.properties.get('test_filter'),
+        repeat_count=test_repeat_count,
+        retry_limit=0,
+        run_disabled=bool(test_repeat_count))
 
   try:
     # Emulate the behavior test_utils uses to run tests. Needed to achieve
@@ -122,142 +121,142 @@ def GenTests(api):
     # Make sure swarming collect know how to merge coverage profile data.
     check('[START_DIR]/merge_results.py' in step.cmd)
 
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}')
+          got_revision_cp='refs/heads/master@{#123456}'),
   )
 
-  yield (
-      api.test('isolate_coverage_data') +
+  yield api.test(
+      'isolate_coverage_data',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           isolate_coverage_data=True,
-      ) +
-      api.post_process(verify_isolate_flag) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(verify_isolate_flag),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('fail') +
+  yield api.test(
+      'fail',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}') +
+          got_revision_cp='refs/heads/master@{#123456}'),
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
-          retcode=1) +
-      api.post_process(post_process.StatusAnyFailure) +
-      api.post_process(post_process.DropExpectation)
+          retcode=1),
+      api.post_process(post_process.StatusAnyFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('fail_many_failures') +
+  yield api.test(
+      'fail_many_failures',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           shards=20,
           run_without_patch=True,
-          got_revision_cp='refs/heads/master@{#123456}') +
+          got_revision_cp='refs/heads/master@{#123456}'),
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
-          retcode=1, ) +
-      api.post_process(post_process.StatusAnyFailure) +
-      api.post_process(post_process.Filter(
-          '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
+          retcode=1,
+      ),
+      api.post_process(post_process.StatusAnyFailure),
+      api.post_process(
+          post_process.Filter(
+              '[trigger] base_unittests on Intel GPU on Linux (without patch)')
+      ),
   )
 
-  yield (
-      api.test('fail_to_trigger') +
+  yield api.test(
+      'fail_to_trigger',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          got_revision_cp='refs/heads/master@{#123456}'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('basic_luci') +
+  yield api.test(
+      'basic_luci',
       api.properties.generic(
           buildbucket=json.dumps({
-            'build':{
-              'project':'chromium',
-              'bucket':'try',
-              'tags':['builder:Linux Tests'],
-            }}),
+              'build': {
+                  'project': 'chromium',
+                  'bucket': 'try',
+                  'tags': ['builder:Linux Tests'],
+              }
+          }),
           mastername='chromium.linux',
-          buildername='Linux Tests') +
+          buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}')
+          got_revision_cp='refs/heads/master@{#123456}'),
   )
 
   isolated_script_output = api.test_utils.canned_isolated_script_output(
       passing=False, swarming=True, benchmark_enabled=True,
       isolated_script_passing=False,
       shards=4, use_json_test_format=True)
-  yield (
-      api.test('without_patch_filter') +
+  yield api.test(
+      'without_patch_filter',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          run_without_patch='a') +
+          run_without_patch='a'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              isolated_script_output, failure=True, retcode=1)) +
-      api.post_process(post_process.Filter(
-          '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
+              isolated_script_output, failure=True, retcode=1)),
+      api.post_process(
+          post_process.Filter(
+              '[trigger] base_unittests on Intel GPU on Linux (without patch)')
+      ),
   )
 
   isolated_script_output = api.test_utils.canned_isolated_script_output(
@@ -294,331 +293,362 @@ def GenTests(api):
           }
         },
       })
-  yield (
-      api.test('expected_failures') +
+  yield api.test(
+      'expected_failures',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
-          repeat_count=20) +
+          repeat_count=20),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              isolated_script_output, failure=True)) +
+              isolated_script_output, failure=True)),
       api.post_process(
-          verify_log_fields,
-          {'pass_fail_counts': {
-              'test1.Test1': {
-                  'pass_count': 0,
-                  'fail_count': 1},
-              'test1.Test2': {
-                  'pass_count': 1,
-                  'fail_count': 0},
-              'test1.Test3': {
-                  'pass_count': 1,
-                  'fail_count': 0},
-              'test1.Test4': {
-                  'pass_count': 1,
-                  'fail_count': 0}}}) +
-      api.post_process(post_process.DropExpectation)
+          verify_log_fields, {
+              'pass_fail_counts': {
+                  'test1.Test1': {
+                      'pass_count': 0,
+                      'fail_count': 1
+                  },
+                  'test1.Test2': {
+                      'pass_count': 1,
+                      'fail_count': 0
+                  },
+                  'test1.Test3': {
+                      'pass_count': 1,
+                      'fail_count': 0
+                  },
+                  'test1.Test4': {
+                      'pass_count': 1,
+                      'fail_count': 0
+                  }
+              }
+          }),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('customized_test_options') +
+  yield api.test(
+      'customized_test_options',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
-          repeat_count=20) +
+          repeat_count=20),
       api.post_process(
-          verify_log_fields,
-          {'pass_fail_counts': {
-              'test_common.Test1': {
-                  'pass_count': 1,
-                  'fail_count': 2},
-              'test1.Test1': {
-                  'pass_count': 1,
-                  'fail_count': 0},
-              'test1.Test2': {
-                  'pass_count': 1,
-                  'fail_count': 0},
-              'test1.Test3': {
-                  'pass_count': 0,
-                  'fail_count': 0}}}) +
-      api.post_process(post_process.DropExpectation)
+          verify_log_fields, {
+              'pass_fail_counts': {
+                  'test_common.Test1': {
+                      'pass_count': 1,
+                      'fail_count': 2
+                  },
+                  'test1.Test1': {
+                      'pass_count': 1,
+                      'fail_count': 0
+                  },
+                  'test1.Test2': {
+                      'pass_count': 1,
+                      'fail_count': 0
+                  },
+                  'test1.Test3': {
+                      'pass_count': 0,
+                      'fail_count': 0
+                  }
+              }
+          }),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('override_compile_targets') +
+  yield api.test(
+      'override_compile_targets',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          override_compile_targets=['base_unittests_run'])
+          override_compile_targets=['base_unittests_run']),
   )
 
-  yield (
-      api.test('chartjson') +
+  yield api.test(
+      'chartjson',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True,
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
                   output_chartjson=True,
-                  use_json_test_format=True), shards=2))
+                  use_json_test_format=True),
+              shards=2)),
   )
 
   # Uses simplified json
   # https://crbug.com/704066
-  yield (
-      api.test('chartjson_simplified_ignore_task_failure') +
+  yield api.test(
+      'chartjson_simplified_ignore_task_failure',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
-          ignore_task_failure=True) +
+          ignore_task_failure=True),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=False, swarming=True,
-                  shards=2, isolated_script_passing=False, valid=True,
-                  output_chartjson=True), shards=2))
+                  passing=False,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=False,
+                  valid=True,
+                  output_chartjson=True),
+              shards=2)),
   )
 
-  yield (
-      api.test('chartjson_ignore_task_failure') +
+  yield api.test(
+      'chartjson_ignore_task_failure',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
-          ignore_task_failure=True) +
+          ignore_task_failure=True),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=False, swarming=True,
-                  shards=2, isolated_script_passing=False,
-                  output_chartjson=True, use_json_test_format=True), shards=2))
+                  passing=False,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=False,
+                  output_chartjson=True,
+                  use_json_test_format=True),
+              shards=2)),
   )
 
   # Uses simplied json
   # https://crbug.com/704066
-  yield (
-      api.test('chartjson_invalid') +
+  yield api.test(
+      'chartjson_invalid',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True, valid=False,
-                  output_chartjson=True), shards=2),
-          retcode=0)
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  valid=False,
+                  output_chartjson=True),
+              shards=2),
+          retcode=0),
   )
 
-  yield (
-      api.test('chartjson_max_failures') +
+  yield api.test(
+      'chartjson_max_failures',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True,
-                  output_chartjson=True, use_json_test_format=True), shards=2),
-          retcode=102)
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  output_chartjson=True,
+                  use_json_test_format=True),
+              shards=2),
+          retcode=102),
   )
 
-  yield (
-      api.test('chartjson_no_results') +
+  yield api.test(
+      'chartjson_no_results',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url')
+          results_url='https://example/url'),
   )
 
-  yield (
-      api.test('chartjson_no_results_failure') +
+  yield api.test(
+      'chartjson_no_results_failure',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-              api.chromium_swarming.canned_summary_output(
-                  api.test_utils.m.json.output(None, 255), failure=True))
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.m.json.output(None, 255), failure=True)),
   )
 
-  yield (
-      api.test('chartjson_not_uploading') +
+  yield api.test(
+      'chartjson_not_uploading',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}') +
+          got_revision_cp='refs/heads/master@{#123456}'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True,
-                  output_chartjson=True, use_json_test_format=True), shards=2))
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  output_chartjson=True,
+                  use_json_test_format=True),
+              shards=2)),
   )
 
-  yield (
-      api.test('chartjson_disabled') +
+  yield api.test(
+      'chartjson_disabled',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True,
-                  output_chartjson=True, benchmark_enabled=False,
-                  use_json_test_format=True), shards=2))
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  output_chartjson=True,
+                  benchmark_enabled=False,
+                  use_json_test_format=True),
+              shards=2)),
   )
 
   # Uses simplied json
   # https://crbug.com/704066
 
-  yield (
-      api.test('chartjson_simplified_disabled') +
+  yield api.test(
+      'chartjson_simplified_disabled',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True, valid=True,
-                  output_chartjson=True, benchmark_enabled=False), shards=2))
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  valid=True,
+                  output_chartjson=True,
+                  benchmark_enabled=False),
+              shards=2)),
   )
 
   placeholder_test_output = (api.test_utils.canned_isolated_script_output(
@@ -627,15 +657,14 @@ def GenTests(api):
       output_chartjson=True, benchmark_enabled=True,
       use_json_test_format=True, output_histograms=True) +
       api.chromium_swarming.merge_script_log_file('Merge succesfully'))
-  yield (
-      api.test('histograms') +
+  yield api.test(
+      'histograms',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -644,24 +673,22 @@ def GenTests(api):
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
           perf_id='test-perf-id',
           perf_dashboard_machine_group='ChromePerf',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              placeholder_test_output, shards=2)) +
-      api.runtime(is_luci=True, is_experimental=False)
+              placeholder_test_output, shards=2)),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-      api.test(
-          'histograms_LUCI_missing_perf_dashboard_machine_group_property') +
+  yield api.test(
+      'histograms_LUCI_missing_perf_dashboard_machine_group_property',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -669,123 +696,137 @@ def GenTests(api):
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
           perf_id='test-perf-id',
-          results_url='https://example/url') +
+          results_url='https://example/url'),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True,
-                  shards=2, isolated_script_passing=True,
-                  output_chartjson=True, benchmark_enabled=True,
-                  use_json_test_format=True, output_histograms=True), shards=2))
-      + api.runtime(is_luci=True, is_experimental=False)
+                  passing=True,
+                  swarming=True,
+                  shards=2,
+                  isolated_script_passing=True,
+                  output_chartjson=True,
+                  benchmark_enabled=True,
+                  use_json_test_format=True,
+                  output_histograms=True),
+              shards=2)),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-      api.test('dimensions_windows') +
+  yield api.test(
+      'dimensions_windows',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          dimensions={'gpu': '8086', 'os': 'Windows'})
+          dimensions={
+              'gpu': '8086',
+              'os': 'Windows'
+          }),
   )
 
-  yield (
-      api.test('dimensions_mac') +
+  yield api.test(
+      'dimensions_mac',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          dimensions={'gpu': '8086', 'os': 'Mac'})
+          dimensions={
+              'gpu': '8086',
+              'os': 'Mac'
+          }),
   )
 
-  yield (
-      api.test('dimensions_mac_hidpi') +
+  yield api.test(
+      'dimensions_mac_hidpi',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          dimensions={'gpu': '8086', 'os': 'Mac', 'hidpi': '1'})
+          dimensions={
+              'gpu': '8086',
+              'os': 'Mac',
+              'hidpi': '1'
+          }),
   )
 
-  yield (
-      api.test('dimensions_mac_intel_stable') +
+  yield api.test(
+      'dimensions_mac_intel_stable',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
-            api.properties(
+          mastername='chromium.linux', buildername='Linux Tests'),
+      api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
-          dimensions={'gpu': '8086', 'os': 'mac-intel-stable'}) +
+          dimensions={
+              'gpu': '8086',
+              'os': 'mac-intel-stable'
+          }),
       api.override_step_data(
           'base_unittests on Intel GPU on Mac (with patch) '
           'on mac-intel-stable',
           api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(
-              passing=False, swarming=True,
-              isolated_script_passing=False,
-              shards=1, use_json_test_format=True,
-              customized_test_results={
-                'interrupted': False,
-                'path_delimiter': '.',
-                'version': 3,
-                'seconds_since_epoch': 14000000,
-                'num_failures_by_type': {
-                  'FAIL': 2,
-                  'PASS': 0
-                },
-                'tests': {
-                  'test1': {
-                    'Test1': {
-                      'expected': '',
-                      'actual': 'FAIL'
-                    },
-                  }
-                },
-              }
-            ))) +
+              api.test_utils.canned_isolated_script_output(
+                  passing=False,
+                  swarming=True,
+                  isolated_script_passing=False,
+                  shards=1,
+                  use_json_test_format=True,
+                  customized_test_results={
+                      'interrupted': False,
+                      'path_delimiter': '.',
+                      'version': 3,
+                      'seconds_since_epoch': 14000000,
+                      'num_failures_by_type': {
+                          'FAIL': 2,
+                          'PASS': 0
+                      },
+                      'tests': {
+                          'test1': {
+                              'Test1': {
+                                  'expected': '',
+                                  'actual': 'FAIL'
+                              },
+                          }
+                      },
+                  }))),
       api.post_process(
           post_process.StepSuccess,
           'Upload to test-results [base_unittests on Intel GPU on Mac '
-          '(with patch) on mac-intel-stable]') +
-      api.post_process(post_process.DropExpectation)
+          '(with patch) on mac-intel-stable]'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('dimensions_android') +
+  yield api.test(
+      'dimensions_android',
       api.properties.generic(
-          mastername='chromium.android',
-          buildername='Lollipop Phone Tester') +
+          mastername='chromium.android', buildername='Lollipop Phone Tester'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -794,54 +835,53 @@ def GenTests(api):
               'device_type': 'hammerhead',
               'device_os': 'LOL123',
               'os': 'Android'
-          }
-      )
+          }),
   )
 
-  yield (
-      api.test('invalid_test_results') +
+  yield api.test(
+      'invalid_test_results',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
-          repeat_count=20) +
+          repeat_count=20),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.m.json.output(None, 255), shards=2)) +
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
-      api.post_process(post_process.DropExpectation)
+              api.test_utils.m.json.output(None, 255), shards=2)),
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('unreliable_results') +
+  yield api.test(
+      'unreliable_results',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests') +
+          mastername='chromium.linux', buildername='Linux Tests'),
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
-          repeat_count=20) +
+          repeat_count=20),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.m.json.output(
-                  {'global_tags': ['UNRELIABLE_RESULTS']}, 0), shards=2)) +
+              api.test_utils.m.json.output({
+                  'global_tags': ['UNRELIABLE_RESULTS']
+              }, 0),
+              shards=2)),
       api.post_process(post_process.StepFailure,
-                       'blink_web_tests on Intel GPU on Linux (with patch)') +
-      api.post_process(post_process.DropExpectation)
+                       'blink_web_tests on Intel GPU on Linux (with patch)'),
+      api.post_process(post_process.DropExpectation),
   )

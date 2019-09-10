@@ -42,51 +42,51 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('android') +
+  yield api.test(
+      'android',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='android')
+          target_platform='android'),
   )
 
-  yield (
-      api.test('win') +
-      api.platform.name('win') +
+  yield api.test(
+      'win',
+      api.platform.name('win'),
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
           target_platform='win',
-          gs_acl='public')
+          gs_acl='public'),
   )
 
-  yield (
-      api.test('unexpected_flakes') +
+  yield api.test(
+      'unexpected_flakes',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id') +
+          bot_id='test_bot_id'),
       api.override_step_data(
           'blink_web_tests (with patch)',
           api.test_utils.canned_test_output(
               passing=True, unexpected_flakes=True),
-      retcode=0)
+          retcode=0),
   )
 
-  yield (
-      api.test('big') +
+  yield api.test(
+      'big',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id') +
+          bot_id='test_bot_id'),
       api.override_step_data(
           'blink_web_tests (with patch)',
           api.test_utils.canned_test_output(
-              passing=False, num_additional_failures=125, retcode=125))
+              passing=False, num_additional_failures=125, retcode=125)),
   )

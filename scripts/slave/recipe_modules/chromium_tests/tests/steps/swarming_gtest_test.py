@@ -64,110 +64,110 @@ def GenTests(api):
       expected_log = '%s: %r' % field
       check(expected_log in step.logs['details'])
 
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=False))
+              api.test_utils.canned_gtest_output(passing=True), failure=False)),
   )
 
-  yield (
-      api.test('basic_ignore_task_failure') +
+  yield api.test(
+      'basic_ignore_task_failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           ignore_task_failure=True,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=False),
-              failure=False)) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+              failure=False)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('android') +
+  yield api.test(
+      'android',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           target_platform='android',
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          })
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
   )
 
-  yield (
-      api.test('overrides') +
+  yield api.test(
+      'overrides',
       api.properties(
           override_compile_targets=['base_unittests_run'],
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          })
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
   )
 
-  yield (
-      api.test('no_result_json') +
+  yield api.test(
+      'no_result_json',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
-              dispatched_task_step_test_data=None, failure=True, retcode=1))
+              dispatched_task_step_test_data=None, failure=True, retcode=1)),
   )
 
-  yield (
-      api.test('invalid_test_result') +
+  yield api.test(
+      'invalid_test_result',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(None, 255))) +
-      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
-      api.post_process(post_process.DropExpectation)
+              api.test_utils.gtest_results(None, 255))),
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolate_coverage_data') +
+  yield api.test(
+      'isolate_coverage_data',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           isolate_coverage_data=True,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.post_process(
-          post_process.StepCommandContains, '[trigger] base_unittests', [
-              '--env',
-              'LLVM_PROFILE_FILE',
-              '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw']) +
-      api.post_process(post_process.DropExpectation)
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] base_unittests', [
+                           '--env', 'LLVM_PROFILE_FILE',
+                           '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw'
+                       ]),
+      api.post_process(post_process.DropExpectation),
   )

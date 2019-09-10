@@ -25,11 +25,12 @@ def RunSteps(api):
 def GenTests(api):
   for mastername, builders_dict in api.chromium_tests.trybots.iteritems():
     for buildername in builders_dict['builders']:
-      yield (
-          api.test(('%s-%s' % (mastername, buildername)).replace(' ', '_'))
-          + api.properties.generic(
-              mastername=mastername, buildername=buildername)
+      yield api.test(
+          ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
+          api.properties.generic(
+              mastername=mastername, buildername=buildername),
           # We want any errors when creating the BotConfig to be surfaced
           # directly to the test rather than creating a failing step
-          + api.chromium_tests.handle_bot_config_errors(False)
-          + api.post_process(post_process.DropExpectation))
+          api.chromium_tests.handle_bot_config_errors(False),
+          api.post_process(post_process.DropExpectation),
+      )

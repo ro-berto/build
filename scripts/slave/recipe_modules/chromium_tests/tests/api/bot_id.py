@@ -21,19 +21,15 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('without_testername') +
-      api.properties.generic(
-          mastername='fake.master',
-          buildername='builder') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'without_testername',
+      api.properties.generic(mastername='fake.master', buildername='builder'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('with_testername') +
+  yield api.test(
+      'with_testername',
       api.properties.generic(
-          mastername='fake.master',
-          buildername='builder',
-          testername='tester') +
-      api.post_process(post_process.DropExpectation)
+          mastername='fake.master', buildername='builder', testername='tester'),
+      api.post_process(post_process.DropExpectation),
   )

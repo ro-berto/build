@@ -50,26 +50,24 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('set_component_rev') +
+  yield api.test(
+      'set_component_rev',
       api.properties.generic(
-          mastername='fake.master',
-          buildername='Component Rev Builder') +
-      api.post_process(post_process.DropExpectation)
+          mastername='fake.master', buildername='Component Rev Builder'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('android_apply_config') +
+  yield api.test(
+      'android_apply_config',
       api.properties.generic(
-          mastername='fake.master',
-          buildername='Android Apply Config Builder') +
-      api.post_process(post_process.DropExpectation)
+          mastername='fake.master', buildername='Android Apply Config Builder'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('chromium_tests_apply_config') +
+  yield api.test(
+      'chromium_tests_apply_config',
       api.properties.generic(
           mastername='fake.master',
-          buildername='Chromium Tests Apply Config Builder') +
-      api.post_process(post_process.DropExpectation)
+          buildername='Chromium Tests Apply Config Builder'),
+      api.post_process(post_process.DropExpectation),
   )

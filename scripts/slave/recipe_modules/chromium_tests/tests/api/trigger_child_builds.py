@@ -84,18 +84,19 @@ def GenTests(api):
         check(trigger_spec['bucket'] == bucket)
     return steps_odict
 
-  yield (
-      api.test('cross_master_trigger') +
-      api.runtime(is_luci=False, is_experimental=False) +
-      api.platform.name('linux') +
+  yield api.test(
+      'cross_master_trigger',
+      api.runtime(is_luci=False, is_experimental=False),
+      api.platform.name('linux'),
       api.properties.generic(
           buildername='Fake Builder',
           mastername='chromium.example',
           parent_buildername='Android arm Builder (dbg)',
-          parent_mastername='chromium.android') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(trigger_includes_bucket,
-                       builder='Fake Tester',
-                       bucket='master.chromium.example2') +
-      api.post_process(post_process.DropExpectation)
+          parent_mastername='chromium.android'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(
+          trigger_includes_bucket,
+          builder='Fake Tester',
+          bucket='master.chromium.example2'),
+      api.post_process(post_process.DropExpectation),
   )

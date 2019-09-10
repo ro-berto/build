@@ -245,16 +245,18 @@ def RunSteps(api, fail_compile):
 
 
 def GenTests(api):
-  yield (
-      api.test('builder') +
+  yield api.test(
+      'builder',
       api.chromium_tests.platform([{
           'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder'}]) +
+          'buildername': 'Linux Builder'
+      }]),
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Builder') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.override_step_data('trigger', stdout=api.raw_io.output_text("""
+          mastername='chromium.linux', buildername='Linux Builder'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.override_step_data(
+          'trigger',
+          stdout=api.raw_io.output_text("""
         {
           "builds":[{
            "status": "SCHEDULED",
@@ -271,113 +273,99 @@ def GenTests(api):
           "kind": "buildbucket#resourcesItem",
           "etag": "\\"8uCIh8TRuYs4vPN3iWmly9SJMqw\\""
         }
-      """))
+      """)),
   )
 
-  yield (
-      api.test('builder_on_buildbot') +
+  yield api.test(
+      'builder_on_buildbot',
       api.chromium_tests.platform([{
           'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder'}]) +
+          'buildername': 'Linux Builder'
+      }]),
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Builder')
+          mastername='chromium.linux', buildername='Linux Builder'),
   )
 
-  yield (
-      api.test('tester') +
+  yield api.test(
+      'tester',
       api.chromium_tests.platform([{
           'mastername': 'chromium.linux',
-          'buildername': 'Linux Tests'}]) +
+          'buildername': 'Linux Tests'
+      }]),
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          parent_buildername='Linux Builder') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.linux',{
-              'Linux Tests': {
-                  'gtest_tests': ['base_unittests'],
-              },
-          }
-      )
+          parent_buildername='Linux Builder'),
+      api.chromium_tests.read_source_side_spec('chromium.linux', {
+          'Linux Tests': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
   )
 
-  yield (
-      api.test('code_coverage_ci_bots') +
+  yield api.test(
+      'code_coverage_ci_bots',
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
-          swarm_hashes={
-            'base_unittests':
-            '[dummy hash for base_unittests]'
-          }) +
-      api.code_coverage(use_clang_coverage=True) +
+          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
+      api.code_coverage(use_clang_coverage=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
               'linux-chromeos-code-coverage': {
-                  'gtest_tests': [
-                      {
-                          'isolate_coverage_data': True,
-                          'test': 'base_unittests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          }
+                  'gtest_tests': [{
+                      'isolate_coverage_data': True,
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       }
-                  ],
+                  }],
               },
-          }
-      ) +
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True),
-              internal_failure=True)) +
+              api.test_utils.canned_gtest_output(True), internal_failure=True)),
+      api.post_process(post_process.MustRun, 'base_unittests (retry shards)'),
       api.post_process(
-          post_process.MustRun, 'base_unittests (retry shards)') +
-      api.post_process(
-            post_process.MustRun,
-            'process clang code coverage data.'
-            'generate metadata for 2 tests') +
+          post_process.MustRun, 'process clang code coverage data.'
+          'generate metadata for 2 tests'),
       api.post_process(
           NotIdempotent,
           'test_pre_run (retry shards).[trigger] base_unittests (retry shards)'
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-    )
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('java_code_coverage_ci_bots') +
+  yield api.test(
+      'java_code_coverage_ci_bots',
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='android-code-coverage',
           swarm_hashes={
-            'chrome_public_test_apk':
-            '[dummy hash for chrome_public_test_apk]'
-          }) +
-      api.code_coverage(use_java_coverage=True) +
+              'chrome_public_test_apk':
+                  '[dummy hash for chrome_public_test_apk]'
+          }),
+      api.code_coverage(use_java_coverage=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
               'android-code-coverage': {
-                  'gtest_tests': [
-                      {
-                          'isolate_coverage_data': True,
-                          'test': 'chrome_public_test_apk',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          }
+                  'gtest_tests': [{
+                      'isolate_coverage_data': True,
+                      'test': 'chrome_public_test_apk',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       }
-                  ],
+                  }],
               },
-          }
-      ) +
-      api.post_process(
-            post_process.MustRun, 'chrome_public_test_apk on Android') +
-      api.post_process(
-            post_process.MustRun, 'process java coverage') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
-    )
+          }),
+      api.post_process(post_process.MustRun,
+                       'chrome_public_test_apk on Android'),
+      api.post_process(post_process.MustRun, 'process java coverage'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   def TriggersBuilderWithProperties(check, step_odict, builder='',
                                     properties=None):
@@ -401,40 +389,37 @@ def GenTests(api):
     else:  # pragma: no cover
       check('"%s" not triggered' % builder, False)
 
-  yield (
-      api.test('isolate_transfer_builder') +
+  yield api.test(
+      'isolate_transfer_builder',
       api.properties(
           bot_id='isolated_transfer_builder_id',
           buildername='Isolated Transfer Builder',
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
-      api.runtime(is_luci=True, is_experimental=False) +
+          mastername='chromium.example'),
+      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.DoesNotRun, 'package build') +
+          }),
+      api.post_process(post_process.DoesNotRun, 'package build'),
       api.post_process(
           TriggersBuilderWithProperties,
           builder='Isolated Transfer Tester',
-          properties=['swarm_hashes']) +
-      api.post_process(post_process.DropExpectation)
+          properties=['swarm_hashes']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolate_transfer_tester') +
+  yield api.test(
+      'isolate_transfer_tester',
       api.properties(
           bot_id='isolated_transfer_tester_id',
           buildername='Isolated Transfer Tester',
@@ -444,70 +429,59 @@ def GenTests(api):
           parent_buildername='Isolated Transfer Builder',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.runtime(is_luci=True, is_experimental=False) +
+          }),
+      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.override_step_data(
-          'find isolated tests',
-          api.json.output({})
-      ) +
-      api.post_process(post_process.DoesNotRun, 'extract build') +
-      api.post_process(post_process.DropExpectation)
+          }),
+      api.override_step_data('find isolated tests', api.json.output({})),
+      api.post_process(post_process.DoesNotRun, 'extract build'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolated_transfer__mixed_builder_isolated_tester') +
+  yield api.test(
+      'isolated_transfer__mixed_builder_isolated_tester',
       api.properties(
           bot_id='isolated_transfer_builder_id',
           buildername=(
               'Isolated Transfer: mixed builder, isolated tester (builder)'),
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
-      api.runtime(is_luci=True, is_experimental=False) +
+          mastername='chromium.example'),
+      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer: mixed builder, isolated tester (builder)': {
-                  'scripts': [
-                      {
-                          'name': 'check_network_annotations',
-                          'script': 'check_network_annotations.py',
-                      },
-                  ],
+                  'scripts': [{
+                      'name': 'check_network_annotations',
+                      'script': 'check_network_annotations.py',
+                  },],
               },
               'Isolated Transfer: mixed builder, isolated tester (tester)': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.DoesNotRun, 'package build') +
+          }),
+      api.post_process(post_process.DoesNotRun, 'package build'),
       api.post_process(
           TriggersBuilderWithProperties,
           builder='Isolated Transfer: mixed builder, isolated tester (tester)',
-          properties=['swarm_hashes']) +
-      api.post_process(post_process.DropExpectation)
+          properties=['swarm_hashes']),
+      api.post_process(post_process.DropExpectation),
   )
 
   def TriggersBuilderWithoutProperties(check, step_odict, builder='',
@@ -520,40 +494,37 @@ def GenTests(api):
     else:  # pragma: no cover
       check('"%s" not triggered' % builder, False)
 
-  yield (
-      api.test('isolate_transfer_builder_buildbot') +
+  yield api.test(
+      'isolate_transfer_builder_buildbot',
       api.properties(
           bot_id='isolated_transfer_builder_id',
           buildername='Isolated Transfer Builder',
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
-      api.runtime(is_luci=False, is_experimental=False) +
+          mastername='chromium.example'),
+      api.runtime(is_luci=False, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.MustRun, 'package build') +
+          }),
+      api.post_process(post_process.MustRun, 'package build'),
       api.post_process(
           TriggersBuilderWithoutProperties,
           builder='Isolated Transfer Tester',
-          properties=['swarm_hashes']) +
-      api.post_process(post_process.DropExpectation)
+          properties=['swarm_hashes']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolate_transfer_tester_buildbot') +
+  yield api.test(
+      'isolate_transfer_tester_buildbot',
       api.properties(
           bot_id='isolated_transfer_tester_id',
           buildername='Isolated Transfer Tester',
@@ -563,128 +534,110 @@ def GenTests(api):
           parent_buildername='Isolated Transfer Builder',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.runtime(is_luci=False, is_experimental=False) +
+          }),
+      api.runtime(is_luci=False, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Isolated Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.override_step_data(
-          'find isolated tests',
-          api.json.output({})
-      ) +
-      api.post_process(post_process.MustRun, 'extract build') +
-      api.post_process(post_process.DropExpectation)
+          }),
+      api.override_step_data('find isolated tests', api.json.output({})),
+      api.post_process(post_process.MustRun, 'extract build'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolated_transfer__mixed_bt_isolated_tester') +
+  yield api.test(
+      'isolated_transfer__mixed_bt_isolated_tester',
       api.properties(
           bot_id='isolated_transfer_builder_tester_id',
-          buildername=(
-              'Isolated Transfer: mixed BT, isolated tester (BT)'),
+          buildername=('Isolated Transfer: mixed BT, isolated tester (BT)'),
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
-      api.runtime(is_luci=True, is_experimental=False) +
+          mastername='chromium.example'),
+      api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'read test spec (chromium.example.json)',
           api.json.output({
               'Isolated Transfer: mixed BT, isolated tester (BT)': {
-                  'junit_tests': [
-                      {
-                          'test': 'base_junit_tests',
-                      },
-                  ],
+                  'junit_tests': [{
+                      'test': 'base_junit_tests',
+                  },],
               },
               'Isolated Transfer: mixed BT, isolated tester (tester)': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          })
-      ) +
-      api.post_process(post_process.DoesNotRun, 'package build') +
+          })),
+      api.post_process(post_process.DoesNotRun, 'package build'),
       api.post_process(
           TriggersBuilderWithProperties,
           builder='Isolated Transfer: mixed BT, isolated tester (tester)',
-          properties=['swarm_hashes']) +
-      api.post_process(post_process.DropExpectation)
+          properties=['swarm_hashes']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('package_transfer_builder') +
+  yield api.test(
+      'package_transfer_builder',
       api.properties(
           bot_id='packaged_transfer_builder_id',
           buildername='Packaged Transfer Builder',
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
+          mastername='chromium.example'),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': False,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.MustRun, 'package build') +
-      api.post_process(post_process.DropExpectation)
+          }),
+      api.post_process(post_process.MustRun, 'package build'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('package_transfer_enabled_builder') +
+  yield api.test(
+      'package_transfer_enabled_builder',
       api.properties(
           bot_id='packaged_transfer_builder_id',
           buildername='Packaged Transfer Enabled Builder',
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
+          mastername='chromium.example'),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': False,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.MustRun, 'package build') +
-      api.post_process(post_process.DropExpectation)
+          }),
+      api.post_process(post_process.MustRun, 'package build'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('package_transfer_tester') +
+  yield api.test(
+      'package_transfer_tester',
       api.properties(
           bot_id='packaged_transfer_tester_id',
           buildername='Packaged Transfer Tester',
@@ -694,81 +647,70 @@ def GenTests(api):
           parent_buildername='Packaged Transfer Builder',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
+          }),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': False,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.MustRun, 'extract build') +
-      api.post_process(post_process.DropExpectation)
+          }),
+      api.post_process(post_process.MustRun, 'extract build'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('multiple_triggers') +
+  yield api.test(
+      'multiple_triggers',
       api.properties(
           bot_id='multiple_triggers_builder_id',
           buildername='Multiple Triggers: Builder',
           buildnumber=123,
           custom_builders=True,
-          mastername='chromium.example') +
-      api.runtime(is_luci=True, is_experimental=False) +
+          mastername='chromium.example'),
+      api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Multiple Triggers: Mixed': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
-                  'junit_tests': [
-                      {
-                          'test': 'base_junit_tests',
-                      },
-                  ],
+                      'test': 'base_unittests',
+                  },],
+                  'junit_tests': [{
+                      'test': 'base_junit_tests',
+                  },],
               },
               'Multiple Triggers: Isolated': {
-                  'gtest_tests': [
-                      {
-                          'args': ['--sample-argument'],
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                          },
-                          'test': 'base_unittests',
+                  'gtest_tests': [{
+                      'args': ['--sample-argument'],
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
                       },
-                  ],
+                      'test': 'base_unittests',
+                  },],
               },
-          }
-      ) +
-      api.post_process(post_process.MustRun, 'package build') +
+          }),
+      api.post_process(post_process.MustRun, 'package build'),
       api.post_process(
           TriggersBuilderWithProperties,
           builder='Multiple Triggers: Mixed',
-          properties=['swarm_hashes']) +
-      api.post_process(post_process.DropExpectation)
+          properties=['swarm_hashes']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('compile_failure') +
+  yield api.test(
+      'compile_failure',
       api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Builder') +
-      api.properties(fail_compile=True) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, 'Compile step failed.') +
-      api.post_process(post_process.DropExpectation)
+          mastername='chromium.linux', buildername='Linux Builder'),
+      api.properties(fail_compile=True),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.ResultReason, 'Compile step failed.'),
+      api.post_process(post_process.DropExpectation),
   )

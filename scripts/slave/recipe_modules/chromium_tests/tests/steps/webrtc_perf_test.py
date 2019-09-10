@@ -72,28 +72,27 @@ def GenTests(api):
         bot_id='test_bot_id',
         parent_got_revision='a' * 40)
 
-  yield (
-      api.test('webrtc_tester') + typical_properties
+  yield api.test(
+      'webrtc_tester',
+      typical_properties,
   )
 
-  yield (
-      api.test('webrtc_tester_failed') +
-      typical_properties +
-      api.step_data('test_name', retcode=1) +
-      api.post_process(post_process.StepFailure, 'test_name') +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
-
+  yield api.test(
+      'webrtc_tester_failed',
+      typical_properties,
+      api.step_data('test_name', retcode=1),
+      api.post_process(post_process.StepFailure, 'test_name'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('webrtc_fyi_tester') +
+  yield api.test(
+      'webrtc_fyi_tester',
       api.properties(
           mastername='chromium.webrtc.fyi',
           buildername='WebRTC Chromium FYI Linux Tester',
           buildnumber=123,
           bot_id='test_bot_id',
           parent_got_revision='a' * 40,
-          parent_got_cr_revision='builder-chromium-tot')
+          parent_got_cr_revision='builder-chromium-tot'),
   )
-

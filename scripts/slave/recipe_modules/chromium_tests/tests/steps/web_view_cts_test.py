@@ -32,36 +32,36 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic pass') +
+  yield api.test(
+      'basic pass',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123) +
+          buildnumber=123),
       api.step_data("Run CTS",
-                    api.test_utils.canned_gtest_output(passing=True)) +
-      api.properties.generic(suffix='')
+                    api.test_utils.canned_gtest_output(passing=True)),
+      api.properties.generic(suffix=''),
   )
-  yield (
-      api.test('basic fail') +
+  yield api.test(
+      'basic fail',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123) +
+          buildnumber=123),
       api.step_data("Run CTS",
-                    api.test_utils.canned_gtest_output(passing=False)) +
-      api.properties.generic(suffix='')
+                    api.test_utils.canned_gtest_output(passing=False)),
+      api.properties.generic(suffix=''),
   )
-  yield (
-      api.test('with suffix') +
+  yield api.test(
+      'with suffix',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123) +
+          buildnumber=123),
       api.step_data("Run CTS (build suffix)",
-                    api.test_utils.canned_gtest_output(passing=True)) +
-      api.properties.generic(suffix='build suffix')
+                    api.test_utils.canned_gtest_output(passing=True)),
+      api.properties.generic(suffix='build suffix'),
   )

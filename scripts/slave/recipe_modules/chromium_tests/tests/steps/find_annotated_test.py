@@ -29,9 +29,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
-          buildername='test_buildername',
-          current_time='20170425T203027')
+          buildername='test_buildername', current_time='20170425T203027'),
   )

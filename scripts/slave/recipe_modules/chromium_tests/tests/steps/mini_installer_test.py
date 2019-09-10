@@ -64,32 +64,30 @@ def GenTests(api):
   """
   )
 
-  yield (
-      api.test('basic_failure') +
+  yield api.test(
+      'basic_failure',
       api.override_step_data(
           'test_installer',
-          api.test_utils.test_results(example_failure_results, retcode=1)) +
-      api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.StepFailure, 'test_installer') +
-      api.post_process(post_process.DropExpectation)
+          api.test_utils.test_results(example_failure_results, retcode=1)),
+      api.post_process(post_process.MustRun, 'test_installer'),
+      api.post_process(post_process.StepFailure, 'test_installer'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('invalid_results_but_still_valid_json') +
-      api.override_step_data(
-          'test_installer',
-          api.test_utils.test_results('{}', retcode=1)) +
-      api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.StepException, 'test_installer') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'invalid_results_but_still_valid_json',
+      api.override_step_data('test_installer',
+                             api.test_utils.test_results('{}', retcode=1)),
+      api.post_process(post_process.MustRun, 'test_installer'),
+      api.post_process(post_process.StepException, 'test_installer'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('invalid_json') +
-      api.override_step_data(
-          'test_installer',
-          api.test_utils.test_results('{', retcode=1)) +
-      api.post_process(post_process.MustRun, 'test_installer') +
-      api.post_process(post_process.StepException, 'test_installer') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'invalid_json',
+      api.override_step_data('test_installer',
+                             api.test_utils.test_results('{', retcode=1)),
+      api.post_process(post_process.MustRun, 'test_installer'),
+      api.post_process(post_process.StepException, 'test_installer'),
+      api.post_process(post_process.DropExpectation),
   )

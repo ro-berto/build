@@ -31,37 +31,42 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('invalid')
-  )
+  yield api.test('invalid')
 
-  yield (
-      api.test('passing') +
+  yield api.test(
+      'passing',
       api.step_data(
           'results',
           api.test_utils.canned_isolated_script_output(
-              passing=True, is_win=False, swarming=False,
+              passing=True,
+              is_win=False,
+              swarming=False,
               isolated_script_passing=True,
-              use_json_test_format=True))
+              use_json_test_format=True)),
   )
 
-  yield (
-      api.test('failures') +
+  yield api.test(
+      'failures',
       api.step_data(
           'results',
           api.test_utils.canned_isolated_script_output(
-              passing=False, is_win=False, swarming=False,
+              passing=False,
+              is_win=False,
+              swarming=False,
               isolated_script_passing=False,
               use_json_test_format=True,
-              add_shard_index=True))
+              add_shard_index=True)),
   )
 
-  yield (
-      api.test('unknown') +
+  yield api.test(
+      'unknown',
       api.step_data(
           'results',
           api.test_utils.canned_isolated_script_output(
-              passing=True, is_win=False, swarming=False,
+              passing=True,
+              is_win=False,
+              swarming=False,
               isolated_script_passing=True,
-              use_json_test_format=True, unknown=True))
+              use_json_test_format=True,
+              unknown=True)),
   )

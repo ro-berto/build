@@ -72,23 +72,25 @@ def GenTests(api):
     'somelink for test1.Test1': 'https://somesite.com',
   }
 
-  yield (
-    api.test('basic') +
-    api.properties(
+  yield api.test(
+      'basic',
+      api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-    api.override_step_data(
-        'base_unittests',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(passing=True,
-                use_json_test_format=True, artifacts=basic_artifacts),
-            failure=False)) +
-    api.post_process(verify_link_fields, basic_expectations) +
-    api.post_process(post_process.DropExpectation)
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  use_json_test_format=True,
+                  artifacts=basic_artifacts),
+              failure=False)),
+      api.post_process(verify_link_fields, basic_expectations),
+      api.post_process(post_process.DropExpectation),
   )
 
   bulk_log_title = ('Too many artifacts produced to link individually, click '
@@ -103,23 +105,25 @@ def GenTests(api):
     bulk_expectations[bulk_log_title].append(
         '%d for test1.Test1: https://somesite.com' % i)
 
-  yield (
-    api.test('bulk_log') +
-    api.properties(
+  yield api.test(
+      'bulk_log',
+      api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-    api.override_step_data(
-        'base_unittests',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(passing=True,
-                use_json_test_format=True, artifacts=bulk_artifacts),
-            failure=False)) +
-    api.post_process(verify_log_fields, bulk_expectations) +
-    api.post_process(post_process.DropExpectation)
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  use_json_test_format=True,
+                  artifacts=bulk_artifacts),
+              failure=False)),
+      api.post_process(verify_log_fields, bulk_expectations),
+      api.post_process(post_process.DropExpectation),
   )
 
   filepath_artifacts = {
@@ -133,24 +137,26 @@ def GenTests(api):
   filepath_expectations = basic_expectations
   filepath_missing_links = ['some/file/path', 'another/file/path']
 
-  yield (
-    api.test('filepath') +
-    api.properties(
+  yield api.test(
+      'filepath',
+      api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-    api.override_step_data(
-        'base_unittests',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(passing=True,
-                use_json_test_format=True, artifacts=filepath_artifacts),
-            failure=False)) +
-    api.post_process(verify_link_fields, filepath_expectations) +
-    api.post_process(verify_links_not_present, filepath_missing_links) +
-    api.post_process(post_process.DropExpectation)
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  use_json_test_format=True,
+                  artifacts=filepath_artifacts),
+              failure=False)),
+      api.post_process(verify_link_fields, filepath_expectations),
+      api.post_process(verify_links_not_present, filepath_missing_links),
+      api.post_process(post_process.DropExpectation),
   )
 
   http_artifacts = {
@@ -166,40 +172,42 @@ def GenTests(api):
   }
   http_missing_links = ['badsite']
 
-  yield (
-    api.test('http') +
-    api.properties(
+  yield api.test(
+      'http',
+      api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber=123,
           swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-    api.override_step_data(
-        'base_unittests',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_isolated_script_output(passing=True,
-                use_json_test_format=True, artifacts=http_artifacts),
-            failure=False)) +
-    api.post_process(verify_link_fields, http_expectations) +
-    api.post_process(verify_links_not_present, http_missing_links) +
-    api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-    api.test('corrupt_tests') +
-    api.properties(
-            mastername='test_mastername',
-            buildername='test_buildername',
-            buildnumber=123,
-            swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-            }) +
+          }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(passing=True,
-                  use_json_test_format=True, corrupt=True),
-              failure=False)) +
-      api.post_process(post_process.DropExpectation)
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  use_json_test_format=True,
+                  artifacts=http_artifacts),
+              failure=False)),
+      api.post_process(verify_link_fields, http_expectations),
+      api.post_process(verify_links_not_present, http_missing_links),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'corrupt_tests',
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True, use_json_test_format=True, corrupt=True),
+              failure=False)),
+      api.post_process(post_process.DropExpectation),
   )

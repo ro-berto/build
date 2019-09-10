@@ -20,10 +20,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.platform.name('win') +
+  yield api.test(
+      'basic',
+      api.platform.name('win'),
       api.properties.tryserver(
-          mastername='tryserver.chromium.win',
-          buildername='win7-rel')
+          mastername='tryserver.chromium.win', buildername='win7-rel'),
   )

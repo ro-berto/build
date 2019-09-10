@@ -43,111 +43,119 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  yield (
-      api.test('experiment_on') +
+  yield api.test(
+      'experiment_on',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
-          experiment_percentage='100') +
+          experiment_percentage='100'),
       api.post_process(post_process.MustRun,
-                       'pre_run inner_test (experimental)') +
-      api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+                       'pre_run inner_test (experimental)'),
+      api.post_process(post_process.MustRun, 'inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('experiment_off') +
+  yield api.test(
+      'experiment_off',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
-          experiment_percentage='0') +
+          experiment_percentage='0'),
       api.post_process(post_process.DoesNotRun,
-                       'pre_run inner_test (experimental)') +
-      api.post_process(post_process.DoesNotRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+                       'pre_run inner_test (experimental)'),
+      api.post_process(post_process.DoesNotRun, 'inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('experiment_on_invalid_results') +
+  yield api.test(
+      'experiment_on_invalid_results',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
-          has_valid_results=False) +
+          has_valid_results=False),
       api.post_process(post_process.MustRun,
-                       'has_valid_results inner_test (experimental)') +
+                       'has_valid_results inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun,
-                       'failures inner_test (experimental)') +
-      api.post_process(post_process.DropExpectation))
+                       'failures inner_test (experimental)'),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('experiment_off_invalid_results') +
+  yield api.test(
+      'experiment_off_invalid_results',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='0',
-          has_valid_results=False) +
-      api.post_process(post_process.DropExpectation))
+          has_valid_results=False),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('experiment_on_valid_failures') +
+  yield api.test(
+      'experiment_on_valid_failures',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
-          failures=['foo']) +
-      api.post_process(post_process.DropExpectation))
+          failures=['foo']),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('experiment_off_valid_failures') +
+  yield api.test(
+      'experiment_off_valid_failures',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='0',
-          failures=['foo']) +
-      api.post_process(post_process.DropExpectation))
+          failures=['foo']),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('failure_in_pre_run') +
+  yield api.test(
+      'failure_in_pre_run',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
-          experiment_percentage='100') +
-      api.override_step_data('pre_run inner_test (experimental)', retcode=1) +
+          experiment_percentage='100'),
+      api.override_step_data('pre_run inner_test (experimental)', retcode=1),
       api.post_process(post_process.MustRun,
-                       'pre_run inner_test (experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+                       'pre_run inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('failure_in_run') +
+  yield api.test(
+      'failure_in_run',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
-          experiment_percentage='100') +
-      api.override_step_data('inner_test (experimental)', retcode=1) +
-      api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+          experiment_percentage='100'),
+      api.override_step_data('inner_test (experimental)', retcode=1),
+      api.post_process(post_process.MustRun, 'inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('abort_on_failure') +
+  yield api.test(
+      'abort_on_failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
@@ -155,23 +163,25 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100',
           failures=['foo'],
-          abort_on_failure=True) +
-      api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+          abort_on_failure=True),
+      api.post_process(post_process.MustRun, 'inner_test (experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('with_patch') +
+  yield api.test(
+      'with_patch',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
-          suffix='with patch') +
+          suffix='with patch'),
       api.post_process(post_process.MustRun,
-                       'pre_run inner_test (with patch, experimental)') +
+                       'pre_run inner_test (with patch, experimental)'),
       api.post_process(post_process.MustRun,
-                       'inner_test (with patch, experimental)') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+                       'inner_test (with patch, experimental)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

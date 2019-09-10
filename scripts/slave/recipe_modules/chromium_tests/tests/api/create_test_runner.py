@@ -27,33 +27,33 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('failure') +
+  yield api.test(
+      'failure',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123) +
-      api.override_step_data('base_unittests', retcode=1)
+          buildnumber=123),
+      api.override_step_data('base_unittests', retcode=1),
   )
 
-  yield (
-      api.test('serialize_tests') +
+  yield api.test(
+      'serialize_tests',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          serialize_tests=True) +
-      api.override_step_data('base_unittests', retcode=1)
+          serialize_tests=True),
+      api.override_step_data('base_unittests', retcode=1),
   )
-  yield (
-      api.test('retry_failed_shards') +
+  yield api.test(
+      'retry_failed_shards',
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123,
-          retry_failed_shards=True) +
-      api.override_step_data('base_unittests', retcode=1)
+          retry_failed_shards=True),
+      api.override_step_data('base_unittests', retcode=1),
   )

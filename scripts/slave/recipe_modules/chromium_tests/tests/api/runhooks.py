@@ -21,10 +21,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('failure') +
+  yield api.test(
+      'failure',
       api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel') +
-      api.override_step_data('gclient runhooks (with patch)', retcode=1)
+          mastername='tryserver.chromium.linux', buildername='linux-rel'),
+      api.override_step_data('gclient runhooks (with patch)', retcode=1),
   )

@@ -19,10 +19,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('chromium_perf_clang') +
+  yield api.test(
+      'chromium_perf_clang',
       api.properties(
           gclient_config='chromium_perf_clang',
-          chromium_config='chromium_perf_clang') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='chromium_perf_clang'),
+      api.post_process(post_process.DropExpectation),
   )
