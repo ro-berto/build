@@ -284,86 +284,88 @@ def GenTests(api):
         + api.chromium_tests.read_source_side_spec(*(spec or _default_spec))
     )
 
-  yield (
-      api.test('all_targets')
-      + _common(api)
-      + api.post_process(MustRun, 'compile')
-      + api.post_process(StepCommandContains, 'compile', ['blink_web_tests'])
-      + api.post_process(StepCommandContains, 'compile', ['base_unittests'])
-      + api.post_process(StatusSuccess)
-      + api.post_process(DropExpectation)
+  yield api.test(
+      'all_targets',
+      _common(api),
+      api.post_process(MustRun, 'compile'),
+      api.post_process(StepCommandContains, 'compile', ['blink_web_tests']),
+      api.post_process(StepCommandContains, 'compile', ['base_unittests']),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
-  yield (
-      api.test('specific_target')
-      + _common(api, compile_targets=['base_unittests', 'missing_target'])
-      + api.post_process(MustRun, 'compile')
-      + api.post_process(StepCommandContains, 'compile', ['base_unittests'])
-      + api.post_process(_StepCommandNotContains, 'compile', 'missing_target')
-      + api.post_process(StatusSuccess)
-      + api.post_process(DropExpectation)
+  yield api.test(
+      'specific_target',
+      _common(api, compile_targets=['base_unittests', 'missing_target']),
+      api.post_process(MustRun, 'compile'),
+      api.post_process(StepCommandContains, 'compile', ['base_unittests']),
+      api.post_process(_StepCommandNotContains, 'compile', 'missing_target'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
-  yield (
-      api.test('compile_failure')
-      + _common(api)
-      + api.step_data('compile', retcode=1)
-      + api.post_process(StatusFailure)
-      + api.post_process(DropExpectation)
+  yield api.test(
+      'compile_failure',
+      _common(api),
+      api.step_data('compile', retcode=1),
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
   )
 
-  yield (
-      api.test('with_tests')
-      + _common(
+  yield api.test(
+      'with_tests',
+      _common(
           api,
           skip_analyze=True,
           tests={
               'blink_web_tests': [
-                  'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'],
+                  'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
+              ],
               'base_unittests': []
-        })
-      + api.post_process(MustRun, 'compile')
-      + api.post_process(MustRun, 'test_pre_run.[trigger] blink_web_tests')
-      + api.post_process(
-          StepCommandContains,
-          'test_pre_run.[trigger] blink_web_tests',
-          ['--gtest_filter='
-           'fast/Test/One.html:fast/Test/Two.html:dummy/Three.js'])
-      + api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests')
-      + api.post_process(DoesNotRun, 'analyze')
-      + api.post_process(StatusSuccess)
-      + api.post_process(DropExpectation)
+          }),
+      api.post_process(MustRun, 'compile'),
+      api.post_process(MustRun, 'test_pre_run.[trigger] blink_web_tests'),
+      api.post_process(
+          StepCommandContains, 'test_pre_run.[trigger] blink_web_tests', [
+              '--gtest_filter='
+              'fast/Test/One.html:fast/Test/Two.html:dummy/Three.js'
+          ]),
+      api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests'),
+      api.post_process(DoesNotRun, 'analyze'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
-  yield (
-      api.test('with_tests_and_analyze')
-      + _common(
+  yield api.test(
+      'with_tests_and_analyze',
+      _common(
           api,
           test_override_builders=True,
           target_builder='Linux Tests',
           tests={
               'blink_web_tests': [
-                'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'],
+                  'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
+              ],
               'base_unittests': [],
-          })
-      + api.override_step_data(
+          }),
+      api.override_step_data(
           'analyze',
           api.json.output({
               'status': 'Found dependency',
               'compile_targets': ['base_unittests'],
               'test_targets': ['base_unittests'],
-          }))
-      + api.post_process(MustRun, 'compile')
-      + api.post_process(DoesNotRun, 'test_pre_run.[trigger] blink_web_tests')
-      + api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests')
-      + api.post_process(MustRun, 'analyze')
-      + api.post_process(StatusSuccess)
-      + api.post_process(DropExpectation)
+          })),
+      api.post_process(MustRun, 'compile'),
+      api.post_process(DoesNotRun, 'test_pre_run.[trigger] blink_web_tests'),
+      api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests'),
+      api.post_process(MustRun, 'analyze'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
-  yield (
-      api.test('compile_skipped')
-      + _common(
+  yield api.test(
+      'compile_skipped',
+      _common(
           api,
           tests={'checkperms': []},
           spec=('chromium.linux', {
@@ -374,9 +376,9 @@ def GenTests(api):
                   }]
               }
           }),
-      )
-      + api.post_process(DoesNotRun, 'compile')
-      + api.post_process(MustRun, 'checkperms')
-      + api.post_process(StatusSuccess)
-      + api.post_process(DropExpectation)
+      ),
+      api.post_process(DoesNotRun, 'compile'),
+      api.post_process(MustRun, 'checkperms'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )

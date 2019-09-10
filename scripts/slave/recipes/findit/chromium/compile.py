@@ -382,280 +382,262 @@ def GenTests(api):
             }
         }, step_prefix='test r1.')
 
-  yield (
-      api.test('compile_specified_targets') +
-      base(compile_targets=['target_name']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             }))
+  yield api.test(
+      'compile_specified_targets',
+      base(compile_targets=['target_name']),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
   )
 
-  yield (
-      api.test('compile_specified_targets_from_parameter') +
+  yield api.test(
+      'compile_specified_targets_from_parameter',
       # TODO: Pass a dict instead of a json string for buildbucket property.
-      base(compile_targets=['target_name']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             }))
+      base(compile_targets=['target_name']),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
   )
 
-  yield (
-      api.test('compile_none_existing_targets') +
-      base(compile_targets=['gen/a/b/source.cc']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': [],
-                                 'not_found': ['gen/a/b/source.cc'],
-                             }))
+  yield api.test(
+      'compile_none_existing_targets',
+      base(compile_targets=['gen/a/b/source.cc']),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': [],
+              'not_found': ['gen/a/b/source.cc'],
+          })),
   )
 
-
-  yield (
-      api.test('compile_default_targets') +
-      base() +
+  yield api.test(
+      'compile_default_targets',
+      base(),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Builder': {
-                  'additional_compile_targets': [
-                      'base_unittests',
-                  ],
+                  'additional_compile_targets': ['base_unittests',],
               }
-         }, step_prefix='test r1.')
+          },
+          step_prefix='test r1.'),
   )
 
-  yield (
-      api.test('compile_succeeded') +
-      base() +
-      base_unittests_additional_compile_target() +
-      api.override_step_data('test r1.compile', retcode=0)
+  yield api.test(
+      'compile_succeeded',
+      base(),
+      base_unittests_additional_compile_target(),
+      api.override_step_data('test r1.compile', retcode=0),
   )
 
-  yield (
-      api.test('compile_succeeded_non_json_buildbucket') +
-      base() +
-      base_unittests_additional_compile_target() +
-      api.override_step_data('test r1.compile', retcode=0)
+  yield api.test(
+      'compile_succeeded_non_json_buildbucket',
+      base(),
+      base_unittests_additional_compile_target(),
+      api.override_step_data('test r1.compile', retcode=0),
   )
 
-  yield (
-      api.test('compile_failed') +
-      base() +
-      base_unittests_additional_compile_target() +
-      api.override_step_data('test r1.compile', retcode=1)
+  yield api.test(
+      'compile_failed',
+      base(),
+      base_unittests_additional_compile_target(),
+      api.override_step_data('test r1.compile', retcode=1),
   )
 
-  yield (
-      api.test('failed_compile_upon_infra_failure_goma_setup_failure') +
-      base(compile_targets=['target_name']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
+  yield api.test(
+      'failed_compile_upon_infra_failure_goma_setup_failure',
+      base(compile_targets=['target_name']),
       api.override_step_data(
-          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data(
+          'test r1.preprocess_for_goma.start_goma', retcode=1),
       api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          api.json.output(
-              data={
-                  'notice': [
-                      {
-                          "compile_error": "COMPILER_PROXY_UNREACHABLE",
-                      },
-                  ],
-              }))
+          api.json.output(data={
+              'notice': [{
+                  "compile_error": "COMPILER_PROXY_UNREACHABLE",
+              },],
+          })),
   )
 
-  yield (
-      api.test('failed_compile_upon_infra_failure_goma_ping_failure') +
-      base(compile_targets=['target_name']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
+  yield api.test(
+      'failed_compile_upon_infra_failure_goma_ping_failure',
+      base(compile_targets=['target_name']),
       api.override_step_data(
-          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data(
+          'test r1.preprocess_for_goma.start_goma', retcode=1),
       api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          api.json.output(
-              data={
-                  'notice': [
-                      {
-                          'infra_status': {
-                              'ping_status_code': 408,
-                          },
-                      },
-                  ],
-              }))
+          api.json.output(data={
+              'notice': [{
+                  'infra_status': {
+                      'ping_status_code': 408,
+                  },
+              },],
+          })),
   )
 
-  yield (
-      api.test('failed_compile_upon_infra_failure_goma_build_error') +
-      base(compile_targets=['target_name']) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.step_data(
-          'test r1.compile', retcode=1) +
+  yield api.test(
+      'failed_compile_upon_infra_failure_goma_build_error',
+      base(compile_targets=['target_name']),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.step_data('test r1.compile', retcode=1),
       api.step_data(
           'test r1.postprocess_for_goma.goma_jsonstatus',
           api.json.output(
               data={
-                  'notice': [
-                      {
-                          'infra_status': {
-                              'ping_status_code': 200,
-                              'num_user_error': 1,
-                          },
+                  'notice': [{
+                      'infra_status': {
+                          'ping_status_code': 200,
+                          'num_user_error': 1,
                       },
-                  ],
-              }))
+                  },],
+              })),
   )
 
-  yield (
-      api.test('compile_skipped') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
+  yield api.test(
+      'compile_skipped',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['cache'].join('builder', 'src')) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
+      api.path.exists(api.path['cache'].join('builder', 'src')),
       api.override_step_data('record previously checked-out revision',
-                             api.raw_io.output('')) +
+                             api.raw_io.output('')),
       api.override_step_data('record previously cached revision',
-                             api.raw_io.output('')) +
+                             api.raw_io.output('')),
       api.override_step_data(
           'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
               'test_targets': [],
-          })
-      )
+          })),
   )
 
-  yield (
-      api.test('previous_revision_directory_does_not_exist') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
+  yield api.test(
+      'previous_revision_directory_does_not_exist',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
       api.override_step_data(
           'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
               'test_targets': [],
-          })
-      )
+          })),
   )
 
-  yield (
-      api.test('previous_revision_error_code') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
+  yield api.test(
+      'previous_revision_error_code',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['cache'].join('builder', 'src')) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
+      api.path.exists(api.path['cache'].join('builder', 'src')),
+      api.override_step_data(
+          'record previously checked-out revision',
+          api.raw_io.output('SegmentationFault'),
+          retcode=255),
+      api.override_step_data(
+          'record previously cached revision',
+          api.raw_io.output('SegmentationFault'),
+          retcode=255),
+      api.override_step_data(
+          'test r2.analyze',
+          api.json.output({
+              'status': 'No dependencies',
+              'compile_targets': [],
+              'test_targets': [],
+          })),
+  )
+  yield api.test(
+      'previous_revision_bad_output',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
+      api.override_step_data(
+          'git commits in range',
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
+      api.path.exists(api.path['cache'].join('builder', 'src')),
       api.override_step_data('record previously checked-out revision',
-                             api.raw_io.output('SegmentationFault'),
-                             retcode=255) +
+                             api.raw_io.output('SegmentationFault')),
       api.override_step_data('record previously cached revision',
-                             api.raw_io.output('SegmentationFault'),
-                             retcode=255) +
+                             api.raw_io.output('SegmentationFault')),
       api.override_step_data(
           'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
               'test_targets': [],
-          })
-      )
+          })),
   )
-  yield (
-      api.test('previous_revision_bad_output') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
+  yield api.test(
+      'previous_revision_valid',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['cache'].join('builder', 'src')) +
-      api.override_step_data('record previously checked-out revision',
-                             api.raw_io.output('SegmentationFault')) +
-      api.override_step_data('record previously cached revision',
-                             api.raw_io.output('SegmentationFault')) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
+      api.path.exists(api.path['cache'].join('builder', 'src')),
       api.override_step_data(
           'test r2.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
               'test_targets': [],
-          })
-      )
-  )
-  yield (
-      api.test('previous_revision_valid') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
-      api.override_step_data(
-          'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['cache'].join('builder', 'src')) +
-      api.override_step_data(
-          'test r2.analyze',
-          api.json.output({
-              'status': 'No dependencies',
-              'compile_targets': [],
-              'test_targets': [],
-          })
-      )
+          })),
   )
 
-  yield (
-      api.test('compile_affected_targets_only') +
-      base(use_analyze=True,
-           good_revision='r0',
-           bad_revision='r2') +
+  yield api.test(
+      'compile_affected_targets_only',
+      base(use_analyze=True, good_revision='r0', bad_revision='r2'),
       api.override_step_data(
-        'git commits in range',
-        api.raw_io.stream_output(
-          '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
+          'git commits in range',
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 3))))),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
-               'Linux Builder': {
-                   'additional_compile_targets': [
-                       'a', 'a_run',
-                       'b', 'b_run',
-                   ],
-               }
-           }, step_prefix='test r2.') +
+              'Linux Builder': {
+                  'additional_compile_targets': [
+                      'a',
+                      'a_run',
+                      'b',
+                      'b_run',
+                  ],
+              }
+          },
+          step_prefix='test r2.'),
       api.override_step_data(
           'test r2.analyze',
           api.json.output({
               'status': 'Found dependency',
               'compile_targets': ['a', 'a_run'],
               'test_targets': ['a', 'a_run'],
-          })
-      )
+          })),
   )
 
   # Entire regression range: (r1, r6]
@@ -663,27 +645,30 @@ def GenTests(api):
   # Expected smaller ranges: [r3, [r4, r5, r6]], [None, [r2]]
   # Actual culprit: r4
   # Should only run compile on r3, and then r4.
-  yield (
-      api.test('find_culprit_in_middle_of_a_sub_range') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r6',
-           suspected_revisions=['r4']) +
+  yield api.test(
+      'find_culprit_in_middle_of_a_sub_range',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r6',
+          suspected_revisions=['r4']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 7))))) +
-      api.override_step_data('test r3.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r4.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r4.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 7))))),
+      api.override_step_data(
+          'test r3.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data(
+          'test r4.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r4.compile', retcode=1),
   )
 
   # Entire regression range: (r1, r6]
@@ -691,27 +676,30 @@ def GenTests(api):
   # Expected smaller ranges: [r3, [r4, r5, r6]], [None, [r2]]
   # Actual culprit: r3
   # Should only run compile on r3, and then r2.
-  yield (
-      api.test('find_culprit_at_first_revision_of_a_sub_range') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r6',
-           suspected_revisions=['r4']) +
+  yield api.test(
+      'find_culprit_at_first_revision_of_a_sub_range',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r6',
+          suspected_revisions=['r4']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 7))))) +
-      api.override_step_data('test r3.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r3.compile', retcode=1) +
-      api.override_step_data('test r2.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             }))
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 7))))),
+      api.override_step_data(
+          'test r3.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r3.compile', retcode=1),
+      api.override_step_data(
+          'test r2.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
   )
 
   # Entire regression range: (r1, r10]
@@ -720,33 +708,37 @@ def GenTests(api):
   #     [r7, [r8, r9, r10]], [r3, [r4, r5, r6]], [None, [r2]]
   # Actual culprit: r4
   # Should only run compile on r7(failed), then r3(pass) and r4(failed).
-  yield (
-      api.test('find_culprit_in_second_sub_range') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r6',
-           suspected_revisions=['r4', 'r8']) +
+  yield api.test(
+      'find_culprit_in_second_sub_range',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r6',
+          suspected_revisions=['r4', 'r8']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
-      api.override_step_data('test r7.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r7.compile', retcode=1) +
-      api.override_step_data('test r3.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r4.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r4.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 11))))),
+      api.override_step_data(
+          'test r7.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r7.compile', retcode=1),
+      api.override_step_data(
+          'test r3.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data(
+          'test r4.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r4.compile', retcode=1),
   )
 
   # Entire regression range: (r1, r5]
@@ -755,28 +747,31 @@ def GenTests(api):
   #     [None, r2, r3, r4, r5]
   # Actual culprit: r2
   # Should only run compile on r2(failed).
-  yield (
-      api.test('find_culprit_as_first_revision_of_entire_range') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r5',
-           suspected_revisions=['r2']) +
+  yield api.test(
+      'find_culprit_as_first_revision_of_entire_range',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r5',
+          suspected_revisions=['r2']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r1.compile', retcode=0) +
-      api.override_step_data('test r2.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r2.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 6))))),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r1.compile', retcode=0),
+      api.override_step_data(
+          'test r2.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r2.compile', retcode=1),
   )
 
   # Entire regression range: (r1, r5]
@@ -784,28 +779,31 @@ def GenTests(api):
   # Expected smaller ranges:
   #     [None, r2, r3], [r4, r5]
   # Compile on r5 passed, should bail out right away.
-  yield (
-      api.test('last_revision_pass_not_bisect') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r5',
-           suspected_revisions=['r5']) +
+  yield api.test(
+      'last_revision_pass_not_bisect',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r5',
+          suspected_revisions=['r5']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
-      api.override_step_data('test r4.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r4.compile', retcode=0) +
-      api.override_step_data('test r5.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r5.compile', retcode=0)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 6))))),
+      api.override_step_data(
+          'test r4.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r4.compile', retcode=0),
+      api.override_step_data(
+          'test r5.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r5.compile', retcode=0),
   )
 
   # Entire regression range: (r1, r10]
@@ -813,101 +811,113 @@ def GenTests(api):
   # Expected smaller ranges:
   #     [None, r2, r3, r4, r5], [r6, r7, r8, r9, r10]
   # Compile on r10 passed, should bail out right away.
-  yield (
-      api.test('last_revision_pass_bisect') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r10',
-           suspected_revisions=['r7'],
-           use_bisect=True) +
+  yield api.test(
+      'last_revision_pass_bisect',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r10',
+          suspected_revisions=['r7'],
+          use_bisect=True),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
-      api.override_step_data('test r6.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r6.compile', retcode=0) +
-      api.override_step_data('test r7.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r7.compile', retcode=0) +
-      api.override_step_data('test r9.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r9.compile', retcode=0) +
-      api.override_step_data('test r10.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r10.compile', retcode=0)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 11))))),
+      api.override_step_data(
+          'test r6.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r6.compile', retcode=0),
+      api.override_step_data(
+          'test r7.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r7.compile', retcode=0),
+      api.override_step_data(
+          'test r9.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r9.compile', retcode=0),
+      api.override_step_data(
+          'test r10.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r10.compile', retcode=0),
   )
 
   # Entire regression range: (r1, r5]
   # Suspected_revisions: [r2]
   # compile on r1 failed
   # No reliable results
-  yield (
-      api.test('first_revision_of_entire_range_failed_but_is_not_culprit') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r5',
-           suspected_revisions=['r2']) +
+  yield api.test(
+      'first_revision_of_entire_range_failed_but_is_not_culprit',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r5',
+          suspected_revisions=['r2']),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 6))))) +
-      api.override_step_data('test r1.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r1.compile', retcode=1) +
-      api.override_step_data('test r2.check_targets',
-                             api.json.output({
-                               'found': ['target_name'],
-                               'not_found': [],
-                             })) +
-      api.override_step_data('test r2.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 6))))),
+      api.override_step_data(
+          'test r1.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r1.compile', retcode=1),
+      api.override_step_data(
+          'test r2.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r2.compile', retcode=1),
   )
 
   # Entire regression range: (r1, r10]
   # Actual culprit: r5
   # Should only run compile on r6(failed), then r4(pass) and r5(failed).
-  yield (
-      api.test('find_culprit_using_bisect') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r10',
-           use_bisect=True) +
+  yield api.test(
+      'find_culprit_using_bisect',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r10',
+          use_bisect=True),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 11))))) +
-      api.override_step_data('test r6.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r6.compile', retcode=1) +
-      api.override_step_data('test r4.check_targets',
-                             api.json.output({
-                                 'found': [],
-                                 'not_found': ['target_name'],
-                             })) +
-      api.override_step_data('test r5.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r5.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 11))))),
+      api.override_step_data(
+          'test r6.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r6.compile', retcode=1),
+      api.override_step_data(
+          'test r4.check_targets',
+          api.json.output({
+              'found': [],
+              'not_found': ['target_name'],
+          })),
+      api.override_step_data(
+          'test r5.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r5.compile', retcode=1),
   )
 
   # Entire regression range: (r1, r8]
@@ -916,26 +926,29 @@ def GenTests(api):
   #     [r4, r5, r6, r7, r8], [None, r2, r3]
   # Actual culprit: r5
   # Should only run compile on r4(pass), and r5(failed).
-  yield (
-      api.test('check_suspected_revision_before_bisect') +
-      base(compile_targets=['target_name'],
-           good_revision='r1',
-           bad_revision='r8',
-           suspected_revisions=['r5'],
-           use_bisect=True) +
+  yield api.test(
+      'check_suspected_revision_before_bisect',
+      base(
+          compile_targets=['target_name'],
+          good_revision='r1',
+          bad_revision='r8',
+          suspected_revisions=['r5'],
+          use_bisect=True),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(2, 9))))) +
-      api.override_step_data('test r4.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r5.check_targets',
-                             api.json.output({
-                                 'found': ['target_name'],
-                                 'not_found': [],
-                             })) +
-      api.override_step_data('test r5.compile', retcode=1)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(2, 9))))),
+      api.override_step_data(
+          'test r4.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data(
+          'test r5.check_targets',
+          api.json.output({
+              'found': ['target_name'],
+              'not_found': [],
+          })),
+      api.override_step_data('test r5.compile', retcode=1),
   )

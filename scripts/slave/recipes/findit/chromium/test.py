@@ -345,1107 +345,1234 @@ def GenTests(api):
 
     return step_odict
 
-  yield (
-      api.test('nonexistent_test_step_skipped') +
-      base({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)') +
+  yield api.test(
+      'nonexistent_test_step_skipped',
+      base({
+          'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.')
+          },
+          step_prefix='test r1.'),
   )
 
-  yield (
-      api.test('unaffected_test_skipped_by_analyze') +
-      base({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
-           'win', 'Win7 Tests (1)', use_analyze=True) +
+  yield api.test(
+      'unaffected_test_skipped_by_analyze',
+      base({
+          'affected_tests': ['Test.One'],
+          'unaffected_tests': ['Test.Two']
+      },
+           'win',
+           'Win7 Tests (1)',
+           use_analyze=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
-                        'test': 'affected_tests',
-                        'swarming': {'can_use_on_swarming_builders': True},
+                          'test': 'affected_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                       {
-                        'test': 'unaffected_tests',
-                        'swarming': {'can_use_on_swarming_builders': True},
+                          'test': 'unaffected_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                   ],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
               'status': 'Found dependency',
               'compile_targets': ['affected_tests', 'affected_tests_run'],
               'test_targets': ['affected_tests', 'affected_tests_run'],
-          })
-      ) +
+          })),
       api.override_step_data(
           'test r1.affected_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))
-      )
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('test_without_targets_not_skipped') +
-      base({'unaffected_tests': ['Test.One'], 'checkperms': []},
-           'win', 'Win7 Tests (1)', use_analyze=True) +
+  yield api.test(
+      'test_without_targets_not_skipped',
+      base({
+          'unaffected_tests': ['Test.One'],
+          'checkperms': []
+      },
+           'win',
+           'Win7 Tests (1)',
+           use_analyze=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                        'test': 'unaffected_tests',
-                        'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'unaffected_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
-                  'scripts': [
-                      {
-                          'name': 'checkperms',
-                          'script': 'checkperms.py'
-                      },
-                  ]
+                  },],
+                  'scripts': [{
+                      'name': 'checkperms',
+                      'script': 'checkperms.py'
+                  },]
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
               'status': 'No dependencies',
               'compile_targets': [],
               'test_targets': [],
-          })
-      )
+          })),
   )
 
-  yield (
-      api.test('all_test_failed') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)', test_on_good_revision=False) +
+  yield api.test(
+      'all_test_failed',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      },
+           'win',
+           'Win7 Tests (1)',
+           test_on_good_revision=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two', 'Test.Three']),
-              failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('all_test_passed') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)') +
+  yield api.test(
+      'all_test_passed',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One', 'Test.Two', 'Test.Three']))
-      )
-  )
-
-  yield (
-      api.test('only_one_test_passed') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)') +
-      api.chromium_tests.read_source_side_spec(
-        'chromium.win', {
-          'Win7 Tests (1)': {
-            'gtest_tests': [
-              {
-                'test': 'gl_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-              },
-            ],
           },
-        }, step_prefix='test r0.') +
+          step_prefix='test r1.'),
       api.override_step_data(
-        'test r0.gl_tests (r0)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.simulated_gtest_output(
-                passed_test_names=['Test.One', 'Test.Two']),
-            failure=True)
-      ) +
+          'test r1.gl_tests (r1)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.simulated_gtest_output(
+                  passed_test_names=['Test.One', 'Test.Two', 'Test.Three']))),
+  )
+
+  yield api.test(
+      'only_one_test_passed',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r0.'),
+      api.override_step_data(
+          'test r0.gl_tests (r0)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.simulated_gtest_output(
+                  passed_test_names=['Test.One', 'Test.Two']),
+              failure=True)),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
+              'Win7 Tests (1)': {
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  },],
+              },
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-              failure=True)
-      )
+              failure=True)),
   )
 
-  yield (
-      api.test('compile_skipped') +
-      base({'checkperms': []}, 'win', 'Win7 Tests (1)') +
+  yield api.test(
+      'compile_skipped',
+      base({
+          'checkperms': []
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'scripts': [
-                      {
-                          'name': 'checkperms',
-                          'script': 'checkperms.py'
-                      },
-                  ]
+                  'scripts': [{
+                      'name': 'checkperms',
+                      'script': 'checkperms.py'
+                  },]
               },
-          }, step_prefix='test r1.')
+          },
+          step_prefix='test r1.'),
   )
 
-  yield (
-      api.test('none_swarming_tests') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)', test_on_good_revision=False) +
+  yield api.test(
+      'none_swarming_tests',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      },
+           'win',
+           'Win7 Tests (1)',
+           test_on_good_revision=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': False},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': False
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-              failure=True)
-      )
+              failure=True)),
   )
 
-  yield (
-      api.test('swarming_tests') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'swarming_tests',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))
-      )
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('findit_culprit_in_last_sub_range') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-          use_analyze=False, good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3']) +
+  yield api.test(
+      'findit_culprit_in_last_sub_range',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r2.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r3.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
+                  passed_test_names=['Test.One']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-          failure=True)
-      )
+              failure=True)),
   )
 
-  yield (
-      api.test('findit_culprit_in_middle_sub_range') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-          use_analyze=False, good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3', 'r6']) +
+  yield api.test(
+      'findit_culprit_in_middle_sub_range',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3', 'r6']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r2.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r3.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r5.') +
+          },
+          step_prefix='test r5.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r6.') +
+          },
+          step_prefix='test r6.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
+                  passed_test_names=['Test.One']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r5.gl_tests (r5)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r6.gl_tests (r6)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('findit_culprit_in_first_sub_range') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-          use_analyze=False, good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r6'], test_on_good_revision=False) +
+  yield api.test(
+      'findit_culprit_in_first_sub_range',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r6'],
+           test_on_good_revision=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r5.') +
+          },
+          step_prefix='test r5.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r6.') +
+          },
+          step_prefix='test r6.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r5.gl_tests (r5)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
+                  passed_test_names=['Test.One']))),
       api.override_step_data(
           'test r6.gl_tests (r6)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('findit_steps_multiple_culprits') +
-      base(
-          {'gl_tests': ['Test.gl_One'], 'browser_tests': ['Test.browser_One']},
-          'mac', 'Mac10.13 Tests', use_analyze=False,
-          good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3', 'r6']) +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                        'test': 'gl_tests',
-                        'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                  ],
-              },
-          }, step_prefix='test r2.') +
+  yield api.test(
+      'findit_steps_multiple_culprits',
+      base({
+          'gl_tests': ['Test.gl_One'],
+          'browser_tests': ['Test.browser_One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3', 'r6']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                       {
                           'test': 'browser_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                   ],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                       {
                           'test': 'browser_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                   ],
               },
-          }, step_prefix='test r5.') +
+          },
+          step_prefix='test r3.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                       {
                           'test': 'browser_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
                       },
                   ],
               },
-          }, step_prefix='test r6.') +
+          },
+          step_prefix='test r5.'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'gtest_tests': [
+                      {
+                          'test': 'gl_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
+                      },
+                      {
+                          'test': 'browser_tests',
+                          'swarming': {
+                              'can_use_on_swarming_builders': True
+                          },
+                      },
+                  ],
+              },
+          },
+          step_prefix='test r6.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r5.gl_tests (r5)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.gl_One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r5.browser_tests (r5)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.browser_One']))) +
+                  passed_test_names=['Test.browser_One']))),
       api.override_step_data(
           'test r6.browser_tests (r6)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.browser_One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.gl_One']))) +
+                  passed_test_names=['Test.gl_One']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.gl_One']),
-              failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('findit_tests_multiple_culprits') +
-      base(
-          {'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-          'mac', 'Mac10.13 Tests', use_analyze=False,
-          good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3', 'r5']) +
+  yield api.test(
+      'findit_tests_multiple_culprits',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3', 'r5']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r2.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r3.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r4.') +
+          },
+          step_prefix='test r4.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r5.') +
+          },
+          step_prefix='test r5.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r6.') +
+          },
+          step_prefix='test r6.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r4.gl_tests (r4)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One', 'Test.Three'],
                   failed_test_names=['Test.Two']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r5.gl_tests (r5)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One'],
                   failed_test_names=['Test.Three']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r6.gl_tests (r6)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-              failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.Two']))) +
+                  passed_test_names=['Test.Two']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.Two']),
-              failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('findit_consecutive_culprits') +
-      base(
-          {'gl_tests': ['Test.One']},
-          'mac', 'Mac10.13 Tests', use_analyze=False,
-          good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3', 'r4']) +
+  yield api.test(
+      'findit_consecutive_culprits',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3', 'r4']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r2.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r3.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r4.') +
+          },
+          step_prefix='test r4.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r4.gl_tests (r4)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-                  failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
+                  passed_test_names=['Test.One']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('record_infra_failure') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'record_infra_failure',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
-          'test r1.preprocess_for_goma.start_goma', retcode=1) +
+          'test r1.preprocess_for_goma.start_goma', retcode=1),
       api.step_data(
           'test r1.preprocess_for_goma.goma_jsonstatus',
-          api.json.output(
-              data={
-                  'notice': [
-                      {
-                          'infra_status': {
-                              'ping_status_code': 408,
-                          },
-                      },
-                  ],
-              }))
+          api.json.output(data={
+              'notice': [{
+                  'infra_status': {
+                      'ping_status_code': 408,
+                  },
+              },],
+          })),
   )
 
-  yield (
-      api.test('use_analyze_set_to_False_for_non_linear_try_job') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=True,
-          good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
+  yield api.test(
+      'use_analyze_set_to_False_for_non_linear_try_job',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=True,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r2.') +
+          },
+          step_prefix='test r2.'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r3.') +
+          },
+          step_prefix='test r3.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r2.gl_tests (r2)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))) +
+                  passed_test_names=['Test.One']))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-              failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('flaky_tests') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-           'win', 'Win7 Tests (1)') +
-      api.chromium_tests.read_source_side_spec(
-        'chromium.win', {
-          'Win7 Tests (1)': {
-            'gtest_tests': [
-              {
-                'test': 'gl_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-              },
-            ],
-          },
-        }, step_prefix='test r0.') +
-      api.override_step_data(
-        'test r0.gl_tests (r0)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.simulated_gtest_output(
-                failed_test_names=['Test.One'],
-                passed_test_names=['Test.Two']),
-                failure=True)
-      ) +
+  yield api.test(
+      'flaky_tests',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r0.'),
+      api.override_step_data(
+          'test r0.gl_tests (r0)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.simulated_gtest_output(
+                  failed_test_names=['Test.One'],
+                  passed_test_names=['Test.Two']),
+              failure=True)),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
+              'Win7 Tests (1)': {
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  },],
+              },
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-                  failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('use_abbreviated_revision_in_step_name') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-          use_analyze=False, good_revision='1234567890abcdefg',
-          bad_revision='gfedcba0987654321', test_on_good_revision=False) +
+  yield api.test(
+      'use_abbreviated_revision_in_step_name',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='1234567890abcdefg',
+           bad_revision='gfedcba0987654321',
+           test_on_good_revision=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test gfedcba.') +
-      api.override_step_data(
-          'git commits in range',
-          api.raw_io.stream_output('gfedcba0987654321')) +
+          },
+          step_prefix='test gfedcba.'),
+      api.override_step_data('git commits in range',
+                             api.raw_io.stream_output('gfedcba0987654321')),
       api.override_step_data(
           'test gfedcba.gl_tests (gfedcba)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One']),
-                  failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('remove_culprits_for_flaky_failures') +
-      base(
-          {'gl_tests': ['Test.One', 'Test.Two']},
-          'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r4']) +
-      api.chromium_tests.read_source_side_spec(
-        'chromium.mac', {
-          'Mac10.13 Tests': {
-            'gtest_tests': [
-              {
-                'test': 'gl_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-              },
-            ],
-          },
-        }, step_prefix='test r3.') +
+  yield api.test(
+      'remove_culprits_for_flaky_failures',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r4']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r4.') +
+          },
+          step_prefix='test r3.'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
+              'Mac10.13 Tests': {
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  },],
+              },
+          },
+          step_prefix='test r4.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   passed_test_names=['Test.One', 'Test.Two']),
-                  failure=True)) +
+              failure=True)),
       api.override_step_data(
           'test r4.gl_tests (r4)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   flaky_test_names=['Test.One'],
                   failed_test_names=['Test.Two']),
-                  failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('blink_web_tests') +
-      base({'blink_web_tests': [
-                'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
-            'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'blink_web_tests',
+      base({
+          'blink_web_tests': [
+              'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
+          ]
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'isolated_scripts': [
-                    {
+                  'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
                       'swarming': {
-                        'can_use_on_swarming_builders': True,
-                        'shards': 1,
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1,
                       },
-                    },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
+          },
+          step_prefix='test r0.'),
       api.override_step_data(
-        'test r0.blink_web_tests (r0)',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.simulated_isolated_script_output(
+          'test r0.blink_web_tests (r0)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.simulated_isolated_script_output(
                   failed_test_names=['fast/Test/One.html'],
                   passed_test_names=['fast/Test/Two.html'],
                   path_delimiter='/'),
-                  failure=True)
-      ) +
+              failure=True)),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'isolated_scripts': [
-                    {
+                  'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
                       'swarming': {
-                        'can_use_on_swarming_builders': True,
-                        'shards': 1,
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1,
                       },
-                    },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.blink_web_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_isolated_script_output(
-                  failed_test_names=['fast/Test/One.html',
-                                     'fast/Test/Two.html'],
+                  failed_test_names=[
+                      'fast/Test/One.html', 'fast/Test/Two.html'
+                  ],
                   passed_test_names=['dummy/Three.js'],
                   path_delimiter='/'),
-                  failure=True))
+              failure=True)),
   )
 
-  yield (
-      api.test('builder_as_tester') +
-      base({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
+  yield api.test(
+      'builder_as_tester',
+      base({
+          'services_unittests': ['Test.One']
+      }, 'linux', 'linux-ozone-rel'),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'linux-ozone-rel': {
-                  'gtest_tests': [
-                      {
-                          'test': 'services_unittests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'services_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.services_unittests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))
-      )
+                  passed_test_names=['Test.One']))),
   )
 
-  yield (
-      api.test('gtest_task_failed') +
-      base({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
+  yield api.test(
+      'gtest_task_failed',
+      base({
+          'services_unittests': ['Test.One']
+      }, 'linux', 'linux-ozone-rel'),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'linux-ozone-rel': {
-                  'gtest_tests': [
-                      {
-                          'test': 'services_unittests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'services_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.services_unittests (r1)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(None, 255))) +
+              api.test_utils.gtest_results(None, 255))),
       api.post_process(
           verify_report_fields,
           {'result': {
-                  'r1': {
-                      'services_unittests': {
-                          'pass_fail_counts': {}
-                      }
+              'r1': {
+                  'services_unittests': {
+                      'pass_fail_counts': {}
                   }
               }
-          }) +
-      api.post_process(post_process.DropExpectation)
+          }}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('isolated_script_test_task_failed') +
-      base({'blink_web_tests': [
-                'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
-            'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'isolated_script_test_task_failed',
+      base({
+          'blink_web_tests': [
+              'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
+          ]
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'isolated_scripts': [
-                    {
+                  'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
                       'swarming': {
-                        'can_use_on_swarming_builders': True,
-                        'shards': 1,
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1,
                       },
-                    },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.blink_web_tests (r1)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.m.json.output(None, 255),
-              failure=True)) +
+              api.test_utils.m.json.output(None, 255), failure=True)),
       api.post_process(
           verify_report_fields,
           {'result': {
-                  'r1': {
-                      'blink_web_tests': {
-                          'pass_fail_counts': {}
-                      }
+              'r1': {
+                  'blink_web_tests': {
+                      'pass_fail_counts': {}
                   }
               }
-          }) +
-      api.post_process(post_process.DropExpectation)
+          }}),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('first_revision_compile_failure') +
-      base(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-          use_analyze=False, good_revision='r0', bad_revision='r6',
-          suspected_revisions=['r3', 'r6']) +
+  yield api.test(
+      'first_revision_compile_failure',
+      base({
+          'gl_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           use_analyze=False,
+           good_revision='r0',
+           bad_revision='r6',
+           suspected_revisions=['r3', 'r6']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r5.') +
+          },
+          step_prefix='test r5.'),
       api.override_step_data(
           'git commits in range',
-          api.raw_io.stream_output(
-              '\n'.join('r%d' % i for i in reversed(range(1, 7))))) +
-      api.step_data('test r5.compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          api.raw_io.stream_output('\n'.join(
+              'r%d' % i for i in reversed(range(1, 7))))),
+      api.step_data('test r5.compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('second_revision_compile_failure') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'second_revision_compile_failure',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
-      api.step_data('test r1.compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          },
+          step_prefix='test r1.'),
+      api.step_data('test r1.compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('third_revision_compile_failure') +
-      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
-            'win', 'Win7 Tests (1)') +
-      api.chromium_tests.read_source_side_spec(
-        'chromium.win', {
-          'Win7 Tests (1)': {
-            'gtest_tests': [
-              {
-                'test': 'gl_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-              },
-            ],
-          },
-        }, step_prefix='test r0.') +
+  yield api.test(
+      'third_revision_compile_failure',
+      base({
+          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
+      }, 'win', 'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r1.') +
+          },
+          step_prefix='test r0.'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
+              'Win7 Tests (1)': {
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  },],
+              },
+          },
+          step_prefix='test r1.'),
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
                   failed_test_names=['Test.One', 'Test.Two'],
                   passed_test_names=['Test.Three']),
-              failure=True)
-      ) +
-      api.step_data('test r0.compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+              failure=True)),
+      api.step_data('test r0.compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

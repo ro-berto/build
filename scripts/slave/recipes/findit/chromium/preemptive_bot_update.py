@@ -96,50 +96,50 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('linux') +
-      api.buildbucket.try_build(builder='linux_chromium_variable') +
+  yield api.test(
+      'linux',
+      api.buildbucket.try_build(builder='linux_chromium_variable'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
-          api.path['cache'].join('builder', 'src')) +
+          api.path['cache'].join('builder', 'src')),
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
           'bot_id': 'build1-a1',
-      })
+      }),
   )
-  yield (
-      api.test('win') +
-      api.buildbucket.try_build(builder='win_chromium_variable') +
+  yield api.test(
+      'win',
+      api.buildbucket.try_build(builder='win_chromium_variable'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
-          api.path['cache'].join('builder', 'src')) +
+          api.path['cache'].join('builder', 'src')),
       api.properties(**{
           'mastername': 'tryserver.chromium.win',
           'bot_id': 'build1-a1',
-      })
+      }),
   )
-  yield (
-      api.test('mac') +
-      api.buildbucket.try_build(builder='mac_chromium_variable') +
+  yield api.test(
+      'mac',
+      api.buildbucket.try_build(builder='mac_chromium_variable'),
       api.path.exists(
           # buildbot path
           api.path['start_dir'].join('src'),
           # LUCI path
-          api.path['cache'].join('builder', 'src')) +
+          api.path['cache'].join('builder', 'src')),
       api.properties(**{
           'mastername': 'tryserver.chromium.mac',
           'bot_id': 'build1-a1',
-      })
+      }),
   )
-  yield (
-      api.test('linux_new') +
-      api.buildbucket.try_build(builder='linux_chromium_variable') +
+  yield api.test(
+      'linux_new',
+      api.buildbucket.try_build(builder='linux_chromium_variable'),
       api.properties(**{
           'mastername': 'tryserver.chromium.linux',
           'bot_id': 'build1-a1',
-      })
+      }),
   )

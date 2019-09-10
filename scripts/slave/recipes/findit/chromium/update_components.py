@@ -140,61 +140,63 @@ def GenTests(api):
     return api.properties.tryserver(
         mastername='chromium.linux', buildername='Linux Builder') + api.runtime(
             True, False)
-  yield (
-      api.test('no_change')
-      + props())
+
+  yield api.test(
+      'no_change',
+      props(),
+  )
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mp3'] = 'ChromeWinamp>mp3'
-  yield (
-      api.test('addition')
-      + api.override_step_data(
-          'Parse modified mapping',
-          api.json.output(modified_map))
-      + props())
+  yield api.test(
+      'addition',
+      api.override_step_data('Parse modified mapping',
+                             api.json.output(modified_map)),
+      props(),
+  )
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mini/mici'] = 'Blink>WebMIDI'
-  yield (
-      api.test('addition_into_subdirs')
-      + api.override_step_data(
-          'Parse modified mapping with subdirs',
-          api.json.output(modified_map))
-      + props())
+  yield api.test(
+      'addition_into_subdirs',
+      api.override_step_data('Parse modified mapping with subdirs',
+                             api.json.output(modified_map)),
+      props(),
+  )
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   del(modified_map['dir-to-component']['media/midi'])
-  yield (
-      api.test('removal')
-      + api.override_step_data(
-          'Parse modified mapping',
-          api.json.output(modified_map))
-      + props())
+  yield api.test(
+      'removal',
+      api.override_step_data('Parse modified mapping',
+                             api.json.output(modified_map)),
+      props(),
+  )
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/midi'] = 'ChromeWinamp>midi'
-  yield (
-      api.test('conflict')
-      + api.override_step_data(
-          'Parse modified mapping',
-          api.json.output(modified_map))
-      + props())
+  yield api.test(
+      'conflict',
+      api.override_step_data('Parse modified mapping',
+                             api.json.output(modified_map)),
+      props(),
+  )
 
-  yield (
-      api.test('script_error')
-      + api.override_step_data(
+  yield api.test(
+      'script_error',
+      api.override_step_data(
           'Run component extraction script to generate mapping',
           retcode=1,
-          stdout=api.raw_io.output_text('Dummy script error'))
-      + props())
+          stdout=api.raw_io.output_text('Dummy script error')),
+      props(),
+  )
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mp3'] = 'ChromeWinamp>mp3'
-  yield (
-      api.test('failed_upload')
-      + api.step_data(
-          'gsutil upload updated mapping', retcode=1)
-      + api.override_step_data(
-          'Parse modified mapping',
-          api.json.output(modified_map))
-      + props())
+  yield api.test(
+      'failed_upload',
+      api.step_data('gsutil upload updated mapping', retcode=1),
+      api.override_step_data('Parse modified mapping',
+                             api.json.output(modified_map)),
+      props(),
+  )

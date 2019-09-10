@@ -214,48 +214,48 @@ def GenTests(api):
     return step_odict
 
 
-  yield (
-      api.test('no_matching_isolated_target') +
-      base(['browser_tests'], 'findit_builder_tester') +
+  yield api.test(
+      'no_matching_isolated_target',
+      base(['browser_tests'], 'findit_builder_tester'),
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
-                  'gtest_tests': [
-                      {
-                          'test': 'base_unittests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 1},
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1
                       },
-                  ],
+                  },],
               },
-          }, step_suffix=' (2)') +
-      api.post_process(verify_report, None) +
-      api.post_process(post_process.DropExpectation)
+          },
+          step_suffix=' (2)'),
+      api.post_process(verify_report, None),
+      api.post_process(post_process.DropExpectation),
   )
-  yield (
-      api.test('match_exactly_one_test_target') +
-      base(['browser_tests'], 'findit_tester') +
+  yield api.test(
+      'match_exactly_one_test_target',
+      base(['browser_tests'], 'findit_tester'),
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
-                  'gtest_tests': [
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 1},
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1
                       },
-                  ],
+                  },],
               },
-          }, step_suffix=' (2)') +
+          },
+          step_suffix=' (2)'),
       api.post_process(verify_report,
-                       {'browser_tests': '[dummy hash for browser_tests]'}) +
-      api.post_process(post_process.DropExpectation)
+                       {'browser_tests': '[dummy hash for browser_tests]'}),
+      api.post_process(post_process.DropExpectation),
   )
-  yield (
-      api.test('match_more_than_one_test_target') +
-      base(['browser_tests'], 'findit_tester') +
+  yield api.test(
+      'match_more_than_one_test_target',
+      base(['browser_tests'], 'findit_tester'),
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
@@ -264,81 +264,79 @@ def GenTests(api):
                           'test': 'browser_tests',
                           'swarming': {
                               'can_use_on_swarming_builders': True,
-                              'shards': 1},
+                              'shards': 1
+                          },
                       },
                       {
                           'name': 'network_services_browser_tests',
                           'test': 'browser_tests',
                           'swarming': {
                               'can_use_on_swarming_builders': True,
-                              'shards': 1},
+                              'shards': 1
+                          },
                       },
                       {
                           'name': 'webui_polymer2_browser_tests',
                           'test': 'browser_tests',
                           'swarming': {
                               'can_use_on_swarming_builders': True,
-                              'shards': 1},
-                      },
-                  ],
-              },
-          }, step_suffix=' (2)') +
-      api.post_process(verify_report,
-                       {'browser_tests': '[dummy hash for browser_tests]'}) +
-      api.post_process(post_process.DropExpectation)
-  )
-  yield (
-      api.test('failed_to_compile_goma') +
-      base(['browser_tests'], 'findit_tester') +
-      api.chromium_tests.read_source_side_spec(
-          'chromium.findit', {
-              'findit_tester': {
-                  'gtest_tests': [
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 1},
-                      },
-                  ],
-              },
-          }, step_suffix=' (2)') +
-      api.override_step_data(
-          'preprocess_for_goma.start_goma', retcode=1) +
-      api.step_data(
-          'preprocess_for_goma.goma_jsonstatus',
-          api.json.output(
-              data={
-                  'notice': [
-                      {
-                          'infra_status': {
-                              'ping_status_code': 408,
+                              'shards': 1
                           },
                       },
                   ],
-              }
-          )
-      ) +
-      api.post_process(verify_report, None) +
-      api.post_process(post_process.DropExpectation)
+              },
+          },
+          step_suffix=' (2)'),
+      api.post_process(verify_report,
+                       {'browser_tests': '[dummy hash for browser_tests]'}),
+      api.post_process(post_process.DropExpectation),
   )
-  yield (
-      api.test('compile_failure') +
-      base(['browser_tests'], 'findit_tester') +
+  yield api.test(
+      'failed_to_compile_goma',
+      base(['browser_tests'], 'findit_tester'),
       api.chromium_tests.read_source_side_spec(
           'chromium.findit', {
               'findit_tester': {
-                  'gtest_tests': [
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 1},
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1
                       },
-                  ],
+                  },],
               },
-          }, step_suffix=' (2)') +
-      api.step_data('compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          },
+          step_suffix=' (2)'),
+      api.override_step_data('preprocess_for_goma.start_goma', retcode=1),
+      api.step_data(
+          'preprocess_for_goma.goma_jsonstatus',
+          api.json.output(data={
+              'notice': [{
+                  'infra_status': {
+                      'ping_status_code': 408,
+                  },
+              },],
+          })),
+      api.post_process(verify_report, None),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'compile_failure',
+      base(['browser_tests'], 'findit_tester'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
+              'findit_tester': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1
+                      },
+                  },],
+              },
+          },
+          step_suffix=' (2)'),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

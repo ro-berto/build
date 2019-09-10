@@ -43,16 +43,24 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('with_mock_bdb') + api.properties(
-      gs_bucket='bucket',
-      gs_object='data.json',
-      builders={
-          'mockmaster': {
-              'mockbuilder': {
-                  # Something frozen.
-                  'something': frozenset([]),
-                  # Something not serializable.
-                  'something_else': object()}}})
-  yield api.test('with_real_bdb_no_expect') + api.properties(
-      gs_bucket='bucket',
-      gs_object='data.json') + api.post_process(DropExpectation)
+  yield api.test(
+      'with_mock_bdb',
+      api.properties(
+          gs_bucket='bucket',
+          gs_object='data.json',
+          builders={
+              'mockmaster': {
+                  'mockbuilder': {
+                      # Something frozen.
+                      'something': frozenset([]),
+                      # Something not serializable.
+                      'something_else': object()
+                  }
+              }
+          }),
+  )
+  yield api.test(
+      'with_real_bdb_no_expect',
+      api.properties(gs_bucket='bucket', gs_object='data.json'),
+      api.post_process(DropExpectation),
+  )

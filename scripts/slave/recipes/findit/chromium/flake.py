@@ -125,137 +125,149 @@ def GenTests(api):
         api.runtime(True, False)
     )
 
-  yield (
-      api.test('flakiness_isolate_only') +
-      base({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
-           skip_tests=True) +
+  yield api.test(
+      'flakiness_isolate_only',
+      base({
+          'browser_tests': ['Test.One']
+      },
+           'mac',
+           'Mac10.13 Tests',
+           skip_tests=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 10},
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 10
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.')
+          },
+          step_prefix='test r0.'),
   )
-  yield (
-      api.test('flakiness_swarming_tests') +
-      base({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'flakiness_swarming_tests',
+      base({
+          'browser_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'browser_tests',
-                          'swarming': {
-                              'can_use_on_swarming_builders': True,
-                              'shards': 10},
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 10
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
+          },
+          step_prefix='test r0.'),
       api.override_step_data(
           'test r0.browser_tests (r0)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
+                  passed_test_names=['Test.One']))),
   )
-  yield (
-      api.test('flakiness_non-swarming_tests') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'flakiness_non-swarming_tests',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': False},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': False
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
+          },
+          step_prefix='test r0.'),
       api.override_step_data(
           'test r0.gl_tests (r0)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'])))
+                  passed_test_names=['Test.One']))),
   )
-  yield (
-      api.test('record_infra_failure') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'record_infra_failure',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
+          },
+          step_prefix='test r0.'),
       api.override_step_data(
-          'test r0.preprocess_for_goma.start_goma', retcode=1) +
+          'test r0.preprocess_for_goma.start_goma', retcode=1),
       api.step_data(
           'test r0.preprocess_for_goma.goma_jsonstatus',
-          api.json.output(
-              data={
-                  'notice': [
-                      {
-                          'infra_status': {
-                              'ping_status_code': 408,
-                          },
-                      },
-                  ],
-              }))
+          api.json.output(data={
+              'notice': [{
+                  'infra_status': {
+                      'ping_status_code': 408,
+                  },
+              },],
+          })),
   )
-  yield (
-      api.test('flakiness_blink_web_tests') +
-      base({'blink_web_tests': ['fast/dummy/test.html']},
-            'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'flakiness_blink_web_tests',
+      base({
+          'blink_web_tests': ['fast/dummy/test.html']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'isolated_scripts': [
-                    {
+                  'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',
                       'swarming': {
-                        'can_use_on_swarming_builders': True,
-                        'shards': 1,
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1,
                       },
-                    },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
+          },
+          step_prefix='test r0.'),
       api.override_step_data(
           'test r0.blink_web_tests (r0)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_isolated_script_output(
                   flaky_test_names=['fast/dummy/test.html'],
-                  path_delimiter='/')))
+                  path_delimiter='/'))),
   )
 
-  yield (
-      api.test('compile_failure') +
-      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
+  yield api.test(
+      'compile_failure',
+      base({
+          'gl_tests': ['Test.One']
+      }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
-                  'gtest_tests': [
-                      {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': False},
+                  'gtest_tests': [{
+                      'test': 'gl_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': False
                       },
-                  ],
+                  },],
               },
-          }, step_prefix='test r0.') +
-      api.step_data('test r0.compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          },
+          step_prefix='test r0.'),
+      api.step_data('test r0.compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
