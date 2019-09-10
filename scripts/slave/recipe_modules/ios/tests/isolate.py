@@ -39,10 +39,10 @@ def RunSteps(api, expected_partial_tasks):
 
 
 def GenTests(api):
-  yield (
-      api.test('builder_with_testers')
-      + api.platform('mac', 64)
-      + api.properties(
+  yield api.test(
+      'builder_with_testers',
+      api.platform('mac', 64),
+      api.properties(
           buildername='ios-builder',
           buildnumber='456',
           mastername='chromium.fake',
@@ -60,34 +60,30 @@ def GenTests(api):
                   'task_id': '0_1',
               },
           ],
-      )
-      + api.runtime(is_experimental=False, is_luci=True)
-      + api.ios.make_test_build_config({
+      ),
+      api.runtime(is_experimental=False, is_luci=True),
+      api.ios.make_test_build_config({
           'xcode version': '6.1.1',
           'gn_args': [
-            'is_debug=true',
-            'target_cpu="x64"',
-            'use_goma=true',
+              'is_debug=true',
+              'target_cpu="x64"',
+              'use_goma=true',
           ],
-          'triggered bots': [
-            'ios-tester',
-          ],
-      })
-      + api.ios.make_test_build_configs_for_children([
-          {
-            'xcode version': '6.1.1',
-            'tests': [
-              {
-                'app': 'fake test 1',
-                'device type': 'fake device',
-                'os': '12.1',
-                'xctest': True,
-                'shard size': 2,
-              },
-            ],
-            'triggered by': 'ios-builder',
-          }
-      ])
-      + api.post_process(post_process.StatusSuccess)
-      + api.post_process(post_process.DropExpectation)
+          'triggered bots': ['ios-tester',],
+      }),
+      api.ios.make_test_build_configs_for_children([{
+          'xcode version':
+              '6.1.1',
+          'tests': [{
+              'app': 'fake test 1',
+              'device type': 'fake device',
+              'os': '12.1',
+              'xctest': True,
+              'shard size': 2,
+          },],
+          'triggered by':
+              'ios-builder',
+      }]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

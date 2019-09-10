@@ -22,49 +22,44 @@ def RunSteps(api):
       test.pre_run(api.ios.m, suffix='')
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'basic',
+      api.platform('mac', 64),
       api.properties(
           buildername='ios',
           buildnumber='0',
           mastername='chromium.fake',
           bot_id='fake-vm',
-      ) +
+      ),
       api.ios.make_test_build_config({
           'gn_args': [
-            'is_debug=true',
-            'target_cpu="x64"',
+              'is_debug=true',
+              'target_cpu="x64"',
           ],
-          'xcode build version': '11m382q',
-          'tests': [
-            {
+          'xcode build version':
+              '11m382q',
+          'tests': [{
               'app': 'fake test 0',
               'device type': 'fake device 0',
               'os': '12.0',
               'host os': 'Mac-10.14.3',
               'optional_dimensions': {
-                '60': [
-                  {
-                    'host os': 'Mac-10.13.6',
-                  },
-                ],
+                  '60': [{
+                      'host os': 'Mac-10.13.6',
+                  },],
               },
-            },
-          ],
-      }) +
+          },],
+      }),
       # Check that we have both the main dimensions and the optional
       # dimensions set.
       api.post_process(
           post_process.StepCommandContains,
           '[trigger] fake test 0 (fake device 0 iOS 12.0) on Mac-10.14.3',
-          ['--dimension', 'os', 'Mac-10.14.3']
-      ) +
+          ['--dimension', 'os', 'Mac-10.14.3']),
       api.post_process(
           post_process.StepCommandContains,
           '[trigger] fake test 0 (fake device 0 iOS 12.0) on Mac-10.14.3',
-          ['--optional-dimension', 'os', 'Mac-10.13.6', '60']
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          ['--optional-dimension', 'os', 'Mac-10.13.6', '60']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

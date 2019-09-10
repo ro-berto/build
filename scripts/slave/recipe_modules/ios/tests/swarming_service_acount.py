@@ -22,41 +22,36 @@ def RunSteps(api):
       test.pre_run(api.ios.m, suffix='')
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'basic',
+      api.platform('mac', 64),
       api.properties(
           buildername='ios',
           buildnumber='0',
           mastername='chromium.fake',
           bot_id='fake-vm',
-      ) +
+      ),
       api.ios.make_test_build_config({
           'gn_args': [
-            'is_debug=true',
-            'target_cpu="x64"',
-            'use_goma=true',
+              'is_debug=true',
+              'target_cpu="x64"',
+              'use_goma=true',
           ],
-          'xcode build version': '11m382q',
-          'tests': [
-            {
+          'xcode build version':
+              '11m382q',
+          'tests': [{
               'app': 'fake test 0',
               'device type': 'fake device 0',
               'os': '12.0',
-              'dimensions': [
-                {
+              'dimensions': [{
                   'os': 'Mac-10.13',
                   'pool': 'Chrome',
-                }
-              ],
-            },
-          ],
-      }) +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] fake test 0 (fake device 0 iOS 12.0)',
-          ['--service-account', 'other-service-account']
-      ) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+              }],
+          },],
+      }),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] fake test 0 (fake device 0 iOS 12.0)',
+                       ['--service-account', 'other-service-account']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
