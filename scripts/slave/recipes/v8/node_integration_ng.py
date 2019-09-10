@@ -199,15 +199,12 @@ def GenTests(api):
     else:
       properties_fn = api.properties.generic
       buildbucket_fn = api.buildbucket.ci_build
-    return (
-        api.test(_sanitize_nonalpha('full', buildername) + suffix) +
-        properties_fn(
-            path_config='kitchen',
-            **properties
-        ) +
-        buildbucket_fn(**buildbucket_kwargs) +
-        api.platform(platform, 64) +
-        api.v8.hide_infra_steps()
+    return api.test(
+        _sanitize_nonalpha('full', buildername) + suffix,
+        properties_fn(path_config='kitchen', **properties),
+        buildbucket_fn(**buildbucket_kwargs),
+        api.platform(platform, 64),
+        api.v8.hide_infra_steps(),
     )
 
   # Test CI builder on node-ci master.

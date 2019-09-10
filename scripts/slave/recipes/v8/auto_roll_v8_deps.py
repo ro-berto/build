@@ -1,4 +1,3 @@
-
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -353,28 +352,28 @@ src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-pac
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001"""
 
   def template(testname, buildername):
-    return (
-        api.test(testname) +
-        api.properties.generic(path_config='kitchen') +
+    return api.test(
+        testname,
+        api.properties.generic(path_config='kitchen'),
         api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
             builder=buildername,
             revision='',
-        ) +
+        ),
         api.override_step_data(
             'gclient get v8 deps',
             api.raw_io.stream_output(v8_deps_info, stream='stdout'),
-        ) +
+        ),
         api.override_step_data(
             'gclient get src deps',
             api.raw_io.stream_output(cr_deps_info, stream='stdout'),
-        ) +
+        ),
         api.override_step_data(
             'git diff',
             api.raw_io.stream_output('some difference', stream='stdout'),
-        ) +
-        api.runtime(is_luci=True, is_experimental=False)
+        ),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield (
@@ -402,18 +401,20 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
       api.post_process(Filter('git commit', 'git cl'))
   )
 
-  yield (
-      api.test('stale_roll') +
-      api.properties.generic(path_config='kitchen') +
+  yield api.test(
+      'stale_roll',
+      api.properties.generic(path_config='kitchen'),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder='Auto-roll - v8 deps'
-      ) +
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='Auto-roll - v8 deps'),
       api.override_step_data(
-          'gerrit changes', api.json.output(
-              [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(MustRun, 'gerrit abandon') +
-      api.post_process(DropExpectation)
+          'gerrit changes',
+          api.json.output([{
+              '_number': '123',
+              'subject': 'Update V8 DEPS.'
+          }])),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(MustRun, 'gerrit abandon'),
+      api.post_process(DropExpectation),
   )

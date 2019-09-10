@@ -247,25 +247,25 @@ def GenTests(api):
            patch_level_after_commit, current_lkgr, head, head_tag,
            wait_count=0, commit_found_count=0, dry_run=False,
            commit_loop_test_data=True):
-    test_data = (
-        api.test(name) +
-        api.properties.generic(mastername='client.v8.branches',
-                               path_config='kitchen') +
+    test_data = api.test(
+        name,
+        api.properties.generic(
+            mastername='client.v8.branches', path_config='kitchen'),
         api.buildbucket.ci_build(
-          project='v8',
-          git_repo='https://chromium.googlesource.com/v8/v8',
-          builder='Auto-tag',
-          git_ref='refs/branch-heads/3.4',
-        ) +
-        api.v8.version_file(patch_level_latest, 'latest') +
-        api.v8.version_file(patch_level_previous, 'previous') +
-        api.v8.version_file(patch_level_after_commit, 'head') +
-        stdout('git log', head) +
-        stdout('git describe', head_tag) +
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder='Auto-tag',
+            git_ref='refs/branch-heads/3.4',
+        ),
+        api.v8.version_file(patch_level_latest, 'latest'),
+        api.v8.version_file(patch_level_previous, 'previous'),
+        api.v8.version_file(patch_level_after_commit, 'head'),
+        stdout('git log', head),
+        stdout('git describe', head_tag),
         stdout(
             'git ls-remote refs_heads_3.4-lkgr',
             current_lkgr + '\trefs/heads/3.4-lkgr',
-        )
+        ),
     )
     if dry_run:
       test_data += api.properties(dry_run=True)
@@ -340,15 +340,15 @@ def GenTests(api):
       dry_run=True
   )
   # The bot was triggered without specifying a branch.
-  yield (
-      api.test('missing_branch') +
-      api.properties.generic(mastername='client.v8.branches',
-                             path_config='kitchen') +
+  yield api.test(
+      'missing_branch',
+      api.properties.generic(
+          mastername='client.v8.branches', path_config='kitchen'),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder='Auto-tag',
-      )
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='Auto-tag',
+      ),
   )
   # Experimental mode.
   yield (

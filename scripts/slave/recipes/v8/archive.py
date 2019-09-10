@@ -225,32 +225,30 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
 
 def GenTests(api):
   def test_defaults(name, platform, build_config, **kwargs):
-    return (
-        api.test(api.v8.test_name('client.v8.official', 'V8 Foobar', name)) +
-        api.properties.generic(mastername='client.v8.official',
-                               path_config='kitchen',
-                               build_config=build_config,
-                               **kwargs) +
+    return api.test(
+        api.v8.test_name('client.v8.official', 'V8 Foobar', name),
+        api.properties.generic(
+            mastername='client.v8.official',
+            path_config='kitchen',
+            build_config=build_config,
+            **kwargs),
         api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
             builder='V8 Foobar',
             git_ref='refs/branch-heads/3.4',
-            revision='a'*40
-        ) +
-        api.platform(platform, 64) +
-        api.v8.version_file(17, 'head', prefix='sync.') +
-        api.override_step_data(
-            'sync.git describe',
-            api.raw_io.stream_output('3.4.3.17')) +
+            revision='a' * 40),
+        api.platform(platform, 64),
+        api.v8.version_file(17, 'head', prefix='sync.'),
+        api.override_step_data('sync.git describe',
+                               api.raw_io.stream_output('3.4.3.17')),
         api.v8.check_param_equals(
             'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
-            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
-        api.runtime(is_luci=True, is_experimental=False) +
-        api.post_process(
-            MustRun, 'sync.clobber', 'sync.gclient runhooks', 'build.gn',
-            'build.compile', 'make archive.zipping',
-            'make archive.gsutil upload')
+            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+        api.runtime(is_luci=True, is_experimental=False),
+        api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
+                         'build.gn', 'build.compile', 'make archive.zipping',
+                         'make archive.gsutil upload'),
     )
 
   def filter_steps(is_release):
@@ -322,217 +320,209 @@ def GenTests(api):
   # Test bailout on missing branch.
   mastername = 'client.v8.official'
   buildername = 'V8 Foobar'
-  yield (
-      api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
-      api.properties.generic(mastername=mastername,
-                             path_config='kitchen',
-                             build_config='Release',
-                             target_bits=64) +
+  yield api.test(
+      api.v8.test_name(mastername, buildername, 'no_branch'),
+      api.properties.generic(
+          mastername=mastername,
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername,
-        revision='a' * 40,
-      ) +
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          revision='a' * 40,
+      ),
       api.post_process(
-        MustRun, 'initialization.Skipping due to missing release branch.') +
-      api.post_process(
-          DoesNotRun, 'sync.gclient runhooks', 'build.gn',
-          'build.compile', 'make archive.zipping',
-          'make archive.gsutil upload') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(DropExpectation)
+          MustRun, 'initialization.Skipping due to missing release branch.'),
+      api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
+                       'build.compile', 'make archive.zipping',
+                       'make archive.gsutil upload'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(DropExpectation),
   )
 
   # Test bailout on missing tag.
   mastername = 'client.v8.official'
   buildername = 'V8 Foobar'
-  yield (
-      api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
-      api.properties.generic(mastername=mastername,
-                             path_config='kitchen',
-                             build_config='Release',
-                             target_bits=64) +
+  yield api.test(
+      api.v8.test_name(mastername, buildername, 'no_tag'),
+      api.properties.generic(
+          mastername=mastername,
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername,
-        git_ref='refs/branch-heads/3.4',
-        revision='a' * 40,
-      ) +
-      api.v8.version_file(17, 'head', prefix='sync.') +
-      api.override_step_data(
-          'sync.git describe',
-          api.raw_io.stream_output('3.4.3.17-blabla')) +
-      api.post_process(MustRun, 'sync.Skipping due to missing tag.') +
-      api.post_process(
-          DoesNotRun, 'sync.gclient runhooks', 'build.gn',
-          'build.compile', 'make archive.zipping',
-          'make archive.gsutil upload') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(DropExpectation)
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40,
+      ),
+      api.v8.version_file(17, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3.17-blabla')),
+      api.post_process(MustRun, 'sync.Skipping due to missing tag.'),
+      api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
+                       'build.compile', 'make archive.zipping',
+                       'make archive.gsutil upload'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(DropExpectation),
   )
 
   # Test refbuilds.
   mastername = 'client.v8.official'
   buildername = 'V8 Foobar'
-  yield (
-      api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
-      api.properties.generic(mastername=mastername,
-                             path_config='kitchen',
-                             build_config='Release',
-                             target_bits=64) +
+  yield api.test(
+      api.v8.test_name(mastername, buildername, 'update_beta'),
+      api.properties.generic(
+          mastername=mastername,
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername,
-        git_ref='refs/branch-heads/3.4',
-        revision='a' * 40,
-      ) +
-      api.v8.version_file(0, 'head', prefix='sync.') +
-      api.override_step_data(
-          'sync.git describe', api.raw_io.stream_output('3.4.3')) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(Filter().include_re('.*ref.*'))
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40,
+      ),
+      api.v8.version_file(0, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3')),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(Filter().include_re('.*ref.*')),
   )
 
   # Test canary upload.
   mastername = 'client.v8.official'
   buildername = 'V8 Foobar'
-  yield (
-      api.test(api.v8.test_name(mastername, buildername, 'canary')) +
-      api.properties.generic(mastername=mastername,
-                             path_config='kitchen',
-                             build_config='Release',
-                             target_bits=64) +
+  yield api.test(
+      api.v8.test_name(mastername, buildername, 'canary'),
+      api.properties.generic(
+          mastername=mastername,
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername,
-        git_ref='refs/heads/3.4.3',
-        revision='a' * 40,
-      ) +
-      api.v8.version_file(1, 'head', prefix='sync.') +
-      api.override_step_data(
-          'sync.git describe', api.raw_io.stream_output('3.4.3.1')) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(Filter(
-          'make archive.gsutil upload',
-          'make archive.gsutil upload json',
-      ))
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          git_ref='refs/heads/3.4.3',
+          revision='a' * 40,
+      ),
+      api.v8.version_file(1, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3.1')),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(
+          Filter(
+              'make archive.gsutil upload',
+              'make archive.gsutil upload json',
+          )),
   )
 
   # Test coverage for compile failures
-  yield (
-        api.test(
-          api.v8.test_name(
-            'client.v8.official', 'V8 Foobar', 'debug_compile_failure')
-        ) +
-        api.properties.generic(mastername='client.v8.official',
-                               path_config='kitchen',
-                               build_config='Debug',
-                               target_bits=64) +
-        api.buildbucket.ci_build(
-            project='v8',
-            git_repo='https://chromium.googlesource.com/v8/v8',
-            builder='V8 Foobar',
-            git_ref='refs/branch-heads/3.4',
-            revision='a'*40
-        ) +
-        api.platform('linux', 64) +
-        api.v8.version_file(17, 'head', prefix='sync.') +
-        api.override_step_data(
-            'sync.git describe',
-            api.raw_io.stream_output('3.4.3.17')) +
-        api.v8.check_param_equals(
-            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
-            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
-        api.runtime(is_luci=True, is_experimental=False) +
-      api.step_data('build.compile', retcode=1) +
-      api.post_process(StatusFailure) +
-      api.post_process(DropExpectation)
-  )
-
-  yield (
-        api.test(
-          api.v8.test_name(
-            'client.v8.official', 'V8 Foobar', 'release_compile_failure')
-        ) +
-        api.properties.generic(mastername='client.v8.official',
-                               path_config='kitchen',
-                               build_config='Release',
-                               target_bits=64) +
-        api.buildbucket.ci_build(
-            project='v8',
-            git_repo='https://chromium.googlesource.com/v8/v8',
-            builder='V8 Foobar',
-            git_ref='refs/branch-heads/3.4',
-            revision='a'*40
-        ) +
-        api.platform('linux', 64) +
-        api.v8.version_file(17, 'head', prefix='sync.') +
-        api.override_step_data(
-            'sync.git describe',
-            api.raw_io.stream_output('3.4.3.17')) +
-        api.v8.check_param_equals(
-            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
-            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
-        api.runtime(is_luci=True, is_experimental=False) +
-      api.step_data('build.compile', retcode=1) +
-      api.post_process(StatusFailure) +
-      api.post_process(DropExpectation)
-  )
-
-  yield (
-        api.test(
-          api.v8.test_name(
-            'client.v8.official', 'V8 Foobar', 'release_libs_compile_failure')
-        ) +
-        api.properties.generic(mastername='client.v8.official',
-                               path_config='kitchen',
-                               build_config='Release',
-                               target_bits=64) +
-        api.buildbucket.ci_build(
-            project='v8',
-            git_repo='https://chromium.googlesource.com/v8/v8',
-            builder='V8 Foobar',
-            git_ref='refs/branch-heads/3.4',
-            revision='a'*40
-        ) +
-        api.platform('linux', 64) +
-        api.v8.version_file(17, 'head', prefix='sync.') +
-        api.override_step_data(
-            'sync.git describe',
-            api.raw_io.stream_output('3.4.3.17')) +
-        api.v8.check_param_equals(
-            'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
-            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
-        api.runtime(is_luci=True, is_experimental=False) +
-      api.step_data('build (libs).compile', retcode=1) +
-      api.post_process(StatusFailure) +
-      api.post_process(DropExpectation)
-  )
-
-  yield (
-      api.test(
-        api.v8.test_name(
-          'client.v8.official', 'V8 Foobar', 'milestone_compile_failure')
-      ) +
-      api.properties.generic(mastername=mastername,
-                             path_config='kitchen',
-                             build_config='Release',
-                             target_bits=64) +
+  yield api.test(
+      api.v8.test_name('client.v8.official', 'V8 Foobar',
+                       'debug_compile_failure'),
+      api.properties.generic(
+          mastername='client.v8.official',
+          path_config='kitchen',
+          build_config='Debug',
+          target_bits=64),
       api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername,
-        git_ref='refs/branch-heads/3.4',
-        revision='a' * 40,
-      ) +
-      api.v8.version_file(0, 'head', prefix='sync.') +
-      api.override_step_data(
-          'sync.git describe', api.raw_io.stream_output('3.4.3')) +
-      api.step_data('build (ref).compile', retcode=1) +
-      api.post_process(StatusFailure) +
-      api.post_process(DropExpectation)
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='V8 Foobar',
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40),
+      api.platform('linux', 64),
+      api.v8.version_file(17, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3.17')),
+      api.v8.check_param_equals(
+          'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+          '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.step_data('build.compile', retcode=1),
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      api.v8.test_name('client.v8.official', 'V8 Foobar',
+                       'release_compile_failure'),
+      api.properties.generic(
+          mastername='client.v8.official',
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='V8 Foobar',
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40),
+      api.platform('linux', 64),
+      api.v8.version_file(17, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3.17')),
+      api.v8.check_param_equals(
+          'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+          '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.step_data('build.compile', retcode=1),
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      api.v8.test_name('client.v8.official', 'V8 Foobar',
+                       'release_libs_compile_failure'),
+      api.properties.generic(
+          mastername='client.v8.official',
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='V8 Foobar',
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40),
+      api.platform('linux', 64),
+      api.v8.version_file(17, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3.17')),
+      api.v8.check_param_equals(
+          'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
+          '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.step_data('build (libs).compile', retcode=1),
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      api.v8.test_name('client.v8.official', 'V8 Foobar',
+                       'milestone_compile_failure'),
+      api.properties.generic(
+          mastername=mastername,
+          path_config='kitchen',
+          build_config='Release',
+          target_bits=64),
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          git_ref='refs/branch-heads/3.4',
+          revision='a' * 40,
+      ),
+      api.v8.version_file(0, 'head', prefix='sync.'),
+      api.override_step_data('sync.git describe',
+                             api.raw_io.stream_output('3.4.3')),
+      api.step_data('build (ref).compile', retcode=1),
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
   )

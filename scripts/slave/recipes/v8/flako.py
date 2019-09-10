@@ -620,8 +620,8 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
 
 def GenTests(api):
   def test(name):
-    return (
-        api.test(name) +
+    return api.test(
+        name,
         api.properties(
             bisect_mastername='foo.v8',
             bisect_buildername='V8 Foobar',
@@ -634,8 +634,8 @@ def GenTests(api):
             timeout_sec=20,
             to_revision='a0',
             variant='stress_foo',
-        ) +
-        api.runtime(is_luci=True, is_experimental=False)
+        ),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   def isolated_lookup(offset, exists):

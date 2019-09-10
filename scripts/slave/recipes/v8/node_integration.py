@@ -100,10 +100,10 @@ BUILDERS = freeze({
 # Clean up the config above and remove this after testing in prod.
 FLATTENED_BUILDERS = {}
 for _, master_config in BUILDERS.iteritems():
-    builders = master_config['builders']
-    for _buildername, _bot_config in builders.iteritems():
-      assert _buildername not in FLATTENED_BUILDERS, _buildername
-      FLATTENED_BUILDERS[_buildername] = _bot_config
+  builders = master_config['builders']
+  for _buildername, _bot_config in builders.iteritems():
+    assert _buildername not in FLATTENED_BUILDERS, _buildername
+    FLATTENED_BUILDERS[_buildername] = _bot_config
 FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
 
 ARCHIVE_LINK = ('https://storage.googleapis.com'
@@ -329,14 +329,14 @@ def GenTests(api):
       else:
         properties_fn = api.properties.generic
         buildbucket_fn = api.buildbucket.ci_build
-      yield (
-          api.test(_sanitize_nonalpha('full', mastername, buildername)) +
+      yield api.test(
+          _sanitize_nonalpha('full', mastername, buildername),
           properties_fn(
               mastername=mastername,
               path_config='kitchen',
-          ) +
-          buildbucket_fn(**buildbucket_kwargs) +
-          api.platform(bot_config['testing']['platform'], 64) +
-          api.runtime(is_luci=True, is_experimental=False) +
-          api.v8.hide_infra_steps()
+          ),
+          buildbucket_fn(**buildbucket_kwargs),
+          api.platform(bot_config['testing']['platform'], 64),
+          api.runtime(is_luci=True, is_experimental=False),
+          api.v8.hide_infra_steps(),
       )

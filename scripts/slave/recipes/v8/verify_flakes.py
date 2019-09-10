@@ -142,25 +142,25 @@ def RunSteps(api):
 
 def GenTests(api):
   def test(name, results, ui_test_name=None):
-    return (
-        api.test(name) +
+    return api.test(
+        name,
         api.step_data(
             'read flake config',
-            api.gitiles.make_encoded_file(api.json.dumps(TEST_CONFIG))) +
-        api.step_data(
-            'read V8 ToT revision',
-            api.gitiles.make_log_test_data('deadbeef')) +
+            api.gitiles.make_encoded_file(api.json.dumps(TEST_CONFIG))),
+        api.step_data('read V8 ToT revision',
+                      api.gitiles.make_log_test_data('deadbeef')),
         api.buildbucket.simulated_schedule_output(
             rpc_pb2.BatchResponse(
-                responses=[dict(schedule_build=dict(id=123))],
-            ),
-            step_name='trigger flako builds') +
+                responses=[dict(schedule_build=dict(id=123))],),
+            step_name='trigger flako builds'),
         api.buildbucket.simulated_collect_output(
-            [api.buildbucket.ci_build_message(build_id=123, status=result)
-             for result in results],
-            step_name='collect builds.' +
-                      (ui_test_name or 'FunctionCallSample')) +
-        api.runtime(is_luci=True, is_experimental=False)
+            [
+                api.buildbucket.ci_build_message(build_id=123, status=result)
+                for result in results
+            ],
+            step_name='collect builds.' + (ui_test_name or
+                                           'FunctionCallSample')),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield (
@@ -184,13 +184,13 @@ def GenTests(api):
       api.post_process(Filter().include_re(r'.*FunctionCallSample.*'))
   )
 
-  yield (
-      api.test('no_flakes') +
-      api.step_data('read flake config', api.gitiles.make_encoded_file('[]')) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(MustRun, 'No flakes to reproduce') +
-      api.post_process(StatusSuccess) +
-      api.post_process(DropExpectation)
+  yield api.test(
+      'no_flakes',
+      api.step_data('read flake config', api.gitiles.make_encoded_file('[]')),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(MustRun, 'No flakes to reproduce'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
   )
 
   yield (
