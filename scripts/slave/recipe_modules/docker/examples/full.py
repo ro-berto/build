@@ -30,16 +30,16 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('example')
 
-  yield (
-      api.test('fail_installed') +
-      api.step_data('ensure docker installed', retcode=1) +
-      api.post_process(StatusFailure)
+  yield api.test(
+      'fail_installed',
+      api.step_data('ensure docker installed', retcode=1),
+      api.post_process(StatusFailure),
   )
 
-  yield (
-      api.test('fail_get_version') +
-      api.override_step_data(
-        'docker version', api.raw_io.stream_output('Foo: bar')) +
-      api.post_process(DoesNotRun, 'log version') +
-      api.post_process(Filter('docker version'))
+  yield api.test(
+      'fail_get_version',
+      api.override_step_data('docker version',
+                             api.raw_io.stream_output('Foo: bar')),
+      api.post_process(DoesNotRun, 'log version'),
+      api.post_process(Filter('docker version')),
   )
