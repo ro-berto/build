@@ -272,21 +272,27 @@ def GenTests(api):
     footer_json = {}
     if size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
-    return (api.test(name) + api.properties.tryserver(
-        build_config='Release',
-        mastername='tryserver.chromium.android',
-        buildername=_TEST_BUILDER,
-        buildnumber=_TEST_BUILDNUMBER,
-        patch_set=1,
-        **kwargs) + api.platform('linux', 64) + api.override_step_data(
+    return api.test(
+        name,
+        api.properties.tryserver(
+            build_config='Release',
+            mastername='tryserver.chromium.android',
+            buildername=_TEST_BUILDER,
+            buildnumber=_TEST_BUILDNUMBER,
+            patch_set=1,
+            **kwargs),
+        api.platform('linux', 64),
+        api.override_step_data(
             'gerrit changes',
             api.json.output([{
                 'revisions': {
                     kwargs['revision']: revision_info
                 }
-            }])) + api.override_step_data('parse description',
-                                          api.json.output(footer_json)) +
-            api.time.seed(_TEST_TIME))
+            }])),
+        api.override_step_data('parse description',
+                               api.json.output(footer_json)),
+        api.time.seed(_TEST_TIME),
+    )
 
 
   def override_analyze(no_changes=False):

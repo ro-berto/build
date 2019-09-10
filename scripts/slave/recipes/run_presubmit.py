@@ -266,15 +266,15 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('expected_tryjob') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.buildbucket.try_build(
-        project='chromium',
-        bucket='try',
-        builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.step_data('presubmit', api.json.output({}))
+  yield api.test(
+      'expected_tryjob',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.step_data('presubmit', api.json.output({})),
   )
 
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
@@ -300,145 +300,172 @@ def GenTests(api):
       'webrtc',
   ]
   for repo_name in REPO_NAMES:
-    yield (
-      api.test(repo_name) +
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='%s_presubmit' % repo_name,
-          repo_name=repo_name,
-          gerrit_project=repo_name) +
-      api.step_data('presubmit', api.json.output(
-        {'errors': [], 'notifications': [], 'warnings': []}
-      ))
+    yield api.test(
+        repo_name,
+        api.properties.tryserver(
+            mastername='tryserver.chromium.linux',
+            buildername='%s_presubmit' % repo_name,
+            repo_name=repo_name,
+            gerrit_project=repo_name),
+        api.step_data(
+            'presubmit',
+            api.json.output({
+                'errors': [],
+                'notifications': [],
+                'warnings': []
+            })),
     )
 
-  yield (
-    api.test('chromium_timeout') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}),
-      times_out_after=60*20) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.ResultReason,
-     ('There are 0 error(s), 0 warning(s), and 0 notifications(s).'
-      ' Here are the errors:'
-      '\n\nTimeout occurred during presubmit step.')) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'chromium_timeout',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          }),
+          times_out_after=60 * 20),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          ('There are 0 error(s), 0 warning(s), and 0 notifications(s).'
+           ' Here are the errors:'
+           '\n\nTimeout occurred during presubmit step.')),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('chromium_dry_run') +
-    api.cq(dry_run=True) +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src',
-        dry_run=True) +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'chromium_dry_run',
+      api.cq(dry_run=True),
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src',
+          dry_run=True),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('infra_with_runhooks') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='infra_presubmit',
-        repo_name='infra',
-        gerrit_project='infra/infra',
-        runhooks=True) +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'infra_with_runhooks',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='infra_presubmit',
+          repo_name='infra',
+          gerrit_project='infra/infra',
+          runhooks=True),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('recipes-py') +
-    api.properties.tryserver(
-        mastername='tryserver.infra',
-        buildername='infra_presubmit',
-        repo_name='recipes_py',
-        gerrit_project='infra/luci/recipes-py',
-        runhooks=True) +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'recipes-py',
+      api.properties.tryserver(
+          mastername='tryserver.infra',
+          buildername='infra_presubmit',
+          repo_name='recipes_py',
+          gerrit_project='infra/luci/recipes-py',
+          runhooks=True),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('recipes-py-windows') +
-    api.properties.tryserver(
-        mastername='tryserver.infra',
-        buildername='infra_presubmit',
-        repo_name='recipes_py',
-        gerrit_project='infra/luci/recipes-py',
-        runhooks=True) +
-    api.platform('win', 64) +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'recipes-py-windows',
+      api.properties.tryserver(
+          mastername='tryserver.infra',
+          buildername='infra_presubmit',
+          repo_name='recipes_py',
+          gerrit_project='infra/luci/recipes-py',
+          runhooks=True),
+      api.platform('win', 64),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('luci-py') +
-    api.properties.tryserver(
-        mastername='luci.infra.try',
-        buildername='Luci-py Presubmit',
-        repo_name='luci_py',
-        gerrit_project='infra/luci/luci-py') +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'luci-py',
+      api.properties.tryserver(
+          mastername='luci.infra.try',
+          buildername='Luci-py Presubmit',
+          repo_name='luci_py',
+          gerrit_project='infra/luci/luci-py'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('presubmit-failure') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(
-        {
-          'errors': [
-            {
-              'message': 'Missing LGTM',
-              'long_text': 'Here are some suggested OWNERS: fake@',
-              'items': [],
-              'fatal': True
-            },
-            {
-              'message': 'Syntax error in fake.py',
-              'long_text': 'Expected "," after item in list',
-              'items': [],
-              'fatal': True
-            }
-          ],
-          'notifications': [
-            {
-              'message': 'If there is a bug associated please add it.',
-              'long_text': '',
-              'items': [],
-              'fatal': False
-            }
-          ],
-          'warnings': [
-            {
-              'message': 'Line 100 has more than 80 characters',
-              'long_text': '',
-              'items': [],
-              'fatal': False
-            }
-          ]
-        }, retcode=1)
-    ) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.ResultReason, textwrap.dedent('''
+  yield api.test(
+      'presubmit-failure',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [{
+                  'message': 'Missing LGTM',
+                  'long_text': 'Here are some suggested OWNERS: fake@',
+                  'items': [],
+                  'fatal': True
+              },
+                         {
+                             'message': 'Syntax error in fake.py',
+                             'long_text': 'Expected "," after item in list',
+                             'items': [],
+                             'fatal': True
+                         }],
+              'notifications': [{
+                  'message': 'If there is a bug associated please add it.',
+                  'long_text': '',
+                  'items': [],
+                  'fatal': False
+              }],
+              'warnings': [{
+                  'message': 'Line 100 has more than 80 characters',
+                  'long_text': '',
+                  'items': [],
+                  'fatal': False
+              }]
+          },
+                          retcode=1)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
         There are 2 error(s), 1 warning(s), and 1 notifications(s). Here are the errors:
 
         **ERROR**
@@ -454,36 +481,36 @@ def GenTests(api):
         Expected "," after item in list
 
         To see notifications and warnings, look at the stdout of the presubmit step.
-      ''').strip()
-    ) +
-    api.post_process(post_process.DropExpectation)
+      ''').strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
   long_message = ('Here are some suggested OWNERS:' +
     '\nreallyLongFakeAccountNameEmail@chromium.org' * 10)
-  yield (
-    api.test('presubmit-failure-long-message') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(
-        {
-          'errors': [
-            {
-              'message': 'Missing LGTM',
-              'long_text': long_message,
-              'items': [],
-              'fatal': True
-            }
-          ],
-          'notifications': [],
-          'warnings': []
-        }, retcode=1)
-    ) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.ResultReason, textwrap.dedent('''
+  yield api.test(
+      'presubmit-failure-long-message',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [{
+                  'message': 'Missing LGTM',
+                  'long_text': long_message,
+                  'items': [],
+                  'fatal': True
+              }],
+              'notifications': [],
+              'warnings': []
+          },
+                          retcode=1)),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
         There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
         **ERROR**
@@ -513,43 +540,42 @@ def GenTests(api):
         **Error size > 450 chars, there are 1 more error(s) (13 total)**
 
         **The complete output can be found at the bottom of the presubmit stdout.**
-      ''').strip()
-    ) +
-    api.post_process(post_process.DropExpectation)
+      ''').strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('presubmit-infra-failure') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(
-        {
-          'errors': [
-            {
-              'message': 'Infra Failure',
-              'long_text': '',
-              'items': [],
-              'fatal': True
-            }
-          ],
-          'notifications': [],
-          'warnings': []
-        }, retcode=2)
-    ) +
-    api.post_process(post_process.StatusException) +
-    api.post_process(post_process.ResultReason, textwrap.dedent('''
+  yield api.test(
+      'presubmit-infra-failure',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [{
+                  'message': 'Infra Failure',
+                  'long_text': '',
+                  'items': [],
+                  'fatal': True
+              }],
+              'notifications': [],
+              'warnings': []
+          },
+                          retcode=2)),
+      api.post_process(post_process.StatusException),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
         There are 1 error(s), 0 warning(s), and 0 notifications(s). Here are the errors:
 
         **ERROR**
 
         Infra Failure
 
-      ''').lstrip()
-    ) +
-    api.post_process(post_process.DropExpectation)
+      ''').lstrip()),
+      api.post_process(post_process.DropExpectation),
   )
 
   bug_msg = (
@@ -559,64 +585,68 @@ def GenTests(api):
     '/p/chromium/issues/entry?components='
     'Infra%3EClient%3EChrome&status=Untriaged)'
   )
-  yield (
-    api.test('presubmit-failure-no-json') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(None, retcode=1)) +
-    api.post_process(post_process.StatusException) +
-    api.post_process(post_process.ResultReason, bug_msg) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'presubmit-failure-no-json',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data('presubmit', api.json.output(None, retcode=1)),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.ResultReason, bug_msg),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('presubmit-infra-failure-no-json') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repo_name='chromium',
-        gerrit_project='chromium/src') +
-    api.step_data('presubmit', api.json.output(None, retcode=2)) +
-    api.post_process(post_process.StatusException) +
-    api.post_process(post_process.ResultReason, bug_msg) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'presubmit-infra-failure-no-json',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repo_name='chromium',
+          gerrit_project='chromium/src'),
+      api.step_data('presubmit', api.json.output(None, retcode=2)),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.ResultReason, bug_msg),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('repository_url_with_solution_name') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repository_url='https://skia.googlesource.com/skia.git',
-        gerrit_project='skia',
-        solution_name='skia') +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'repository_url_with_solution_name',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repository_url='https://skia.googlesource.com/skia.git',
+          gerrit_project='skia',
+          solution_name='skia'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('v8_with_cache') +
-    api.properties.tryserver(
-        mastername='tryserver.v8',
-        buildername='v8_presubmit',
-        repo_name='v8',
-        gerrit_project='v8/v8',
-        runhooks=True,
-        path_config='generic')
+  yield api.test(
+      'v8_with_cache',
+      api.properties.tryserver(
+          mastername='tryserver.v8',
+          buildername='v8_presubmit',
+          repo_name='v8',
+          gerrit_project='v8/v8',
+          runhooks=True,
+          path_config='generic'),
   )
 
-  yield (
-    api.test('v8_with_cache_infra_config_branch') +
-    api.properties.tryserver(
-        mastername='tryserver.v8',
-        buildername='v8_presubmit',
-        repo_name='v8',
-        gerrit_project='v8/v8',
-        runhooks=True,
-        path_config='generic') +
-    api.tryserver.gerrit_change_target_ref('refs/heads/infra/config')
+  yield api.test(
+      'v8_with_cache_infra_config_branch',
+      api.properties.tryserver(
+          mastername='tryserver.v8',
+          buildername='v8_presubmit',
+          repo_name='v8',
+          gerrit_project='v8/v8',
+          runhooks=True,
+          path_config='generic'),
+      api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
   )

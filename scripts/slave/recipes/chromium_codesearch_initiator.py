@@ -85,22 +85,25 @@ def RunSteps(api):
       project='infra', jobs=BUILDERS)
 
 def GenTests(api):
-  yield api.test('basic') + api.runtime(is_luci=True, is_experimental=False)
-  yield (
-      api.test('missing_commit') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.url.json('Get hash of HEAD commit on master',
-                   GERRIT_TEST_DATA_NO_COMMIT)
+  yield api.test(
+      'basic',
+      api.runtime(is_luci=True, is_experimental=False),
   )
-  yield (
-      api.test('missing_timestamp') +
-      api.runtime(is_luci=True, is_experimental=False) +
+  yield api.test(
+      'missing_commit',
+      api.runtime(is_luci=True, is_experimental=False),
       api.url.json('Get hash of HEAD commit on master',
-                   GERRIT_TEST_DATA_NO_TIMESTAMP)
+                   GERRIT_TEST_DATA_NO_COMMIT),
   )
-  yield (
-      api.test('bad_timestamp') +
-      api.runtime(is_luci=True, is_experimental=False) +
+  yield api.test(
+      'missing_timestamp',
+      api.runtime(is_luci=True, is_experimental=False),
       api.url.json('Get hash of HEAD commit on master',
-                   GERRIT_TEST_DATA_BAD_TIMESTAMP)
+                   GERRIT_TEST_DATA_NO_TIMESTAMP),
+  )
+  yield api.test(
+      'bad_timestamp',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.url.json('Get hash of HEAD commit on master',
+                   GERRIT_TEST_DATA_BAD_TIMESTAMP),
   )

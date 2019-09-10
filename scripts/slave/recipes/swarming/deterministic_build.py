@@ -257,69 +257,69 @@ def GenTests(api):
   for buildername in DETERMINISTIC_BUILDERS:
     test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
                                 _sanitize_nonalpha(buildername))
-    yield (
-      api.test(test_name) +
-      api.properties.scheduled() +
-      api.properties.generic(buildername=buildername,
-                             mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64) +
-      api.properties(configuration='Release')
+    yield api.test(
+        test_name,
+        api.properties.scheduled(),
+        api.properties.generic(buildername=buildername, mastername=mastername),
+        api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
+        api.properties(configuration='Release'),
     )
-    yield (
-      api.test(test_name + '_fail') +
-      api.properties.scheduled() +
-      api.properties.generic(buildername=buildername,
-                             mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64) +
-      api.properties(configuration='Release') +
-      api.step_data('compare_build_artifacts', retcode=1)
+    yield api.test(
+        test_name + '_fail',
+        api.properties.scheduled(),
+        api.properties.generic(buildername=buildername, mastername=mastername),
+        api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 64),
+        api.properties(configuration='Release'),
+        api.step_data('compare_build_artifacts', retcode=1),
     )
 
   for trybotname in DETERMINISTIC_TRYBOTS:
     test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
                                 _sanitize_nonalpha(trybotname))
-    yield (
-      api.test(test_name) +
-      api.properties.scheduled() +
-      api.properties.generic(buildername=trybotname,
-                             mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[
-          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 64) +
-      api.properties(configuration='Release')
+    yield api.test(
+        test_name,
+        api.properties.scheduled(),
+        api.properties.generic(buildername=trybotname, mastername=mastername),
+        api.platform(
+            DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
+            ['platform'], 64),
+        api.properties(configuration='Release'),
     )
-    yield (
-      api.test(test_name + '_fail') +
-      api.properties.scheduled() +
-      api.properties.generic(buildername=trybotname,
-                              mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[
-          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 64) +
-      api.properties(configuration='Release') +
-      api.step_data('compare_build_artifacts', retcode=1)
+    yield api.test(
+        test_name + '_fail',
+        api.properties.scheduled(),
+        api.properties.generic(buildername=trybotname, mastername=mastername),
+        api.platform(
+            DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]
+            ['platform'], 64),
+        api.properties(configuration='Release'),
+        api.step_data('compare_build_artifacts', retcode=1),
     )
 
-  yield (
-    api.test('first_build_compile_fail') +
-    api.properties.scheduled() +
-    api.properties.generic(buildername='android-deterministic-dbg',
-                            mastername=mastername) +
-    api.platform(
-      DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'], 64) +
-    api.properties(configuration='Release') +
-    api.step_data('First build', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'first_build_compile_fail',
+      api.properties.scheduled(),
+      api.properties.generic(
+          buildername='android-deterministic-dbg', mastername=mastername),
+      api.platform(
+          DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
+          64),
+      api.properties(configuration='Release'),
+      api.step_data('First build', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('second_build_compile_fail') +
-    api.properties.scheduled() +
-    api.properties.generic(buildername='android-deterministic-dbg',
-                            mastername=mastername) +
-    api.platform(
-      DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'], 64) +
-    api.properties(configuration='Release') +
-    api.step_data('Second build', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'second_build_compile_fail',
+      api.properties.scheduled(),
+      api.properties.generic(
+          buildername='android-deterministic-dbg', mastername=mastername),
+      api.platform(
+          DETERMINISTIC_BUILDERS['Deterministic Android (dbg)']['platform'],
+          64),
+      api.properties(configuration='Release'),
+      api.step_data('Second build', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

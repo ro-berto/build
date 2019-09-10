@@ -36,17 +36,17 @@ UNITTESTS = freeze([
 ])
 
 BUILDERS = freeze({
-  'chromium.android.fyi':{
-    'x86 Emulator Tester': {
-      'config': 'x86_builder_mb',
-      'target': 'Debug',
-      'abi': 'x86',
-      'api_level': 23,
-      'unittests': UNITTESTS,
-      'sdcard_size': '500M',
-      'storage_size': '1024M'
+    'chromium.android.fyi': {
+        'x86 Emulator Tester': {
+            'config': 'x86_builder_mb',
+            'target': 'Debug',
+            'abi': 'x86',
+            'api_level': 23,
+            'unittests': UNITTESTS,
+            'sdcard_size': '500M',
+            'storage_size': '1024M'
+        }
     }
-  }
 })
 
 
@@ -117,26 +117,24 @@ def GenTests(api):
   for mastername in BUILDERS:
     master = BUILDERS[mastername]
     for buildername in master:
-      yield (
-          api.test('%s_test_basic' % sanitize(buildername)) +
+      yield api.test(
+          '%s_test_basic' % sanitize(buildername),
           api.properties.generic(
-              buildername=buildername,
-              mastername=mastername))
+              buildername=buildername, mastername=mastername),
+      )
 
-  yield (
-      api.test('x86_Emulator_Tester_test_fail') +
+  yield api.test(
+      'x86_Emulator_Tester_test_fail',
       api.properties.generic(
-        buildername='x86 Emulator Tester',
-        mastername='chromium.android.fyi') +
-      api.step_data('android_webview_unittests', retcode=2)
+          buildername='x86 Emulator Tester', mastername='chromium.android.fyi'),
+      api.step_data('android_webview_unittests', retcode=2),
   )
 
-  yield (
-      api.test('compile_failure') +
+  yield api.test(
+      'compile_failure',
       api.properties.generic(
-        buildername='x86 Emulator Tester',
-        mastername='chromium.android.fyi') +
-      api.step_data('compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          buildername='x86 Emulator Tester', mastername='chromium.android.fyi'),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

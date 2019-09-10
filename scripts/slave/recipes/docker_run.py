@@ -53,12 +53,12 @@ def RunSteps(api, server, project, image, cmd_args, env):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           image='my-image',
           cmd_args=['echo', 'x'],
           env=dict(k='v'),
           inherit_luci_context=True,
-      )
+      ),
   )

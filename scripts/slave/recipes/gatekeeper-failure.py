@@ -15,4 +15,7 @@ def RunSteps(api):
 
 def GenTests(api):
   for plat in ('mac', 'linux', 'win'):
-    yield api.test('basic_%s' % plat) + api.platform.name(plat)
+    yield api.test(
+        'basic_%s' % plat,
+        api.platform.name(plat),
+    )

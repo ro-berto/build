@@ -107,56 +107,65 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic_linux_tryjob') +
-    api.properties.tryserver(mastername='tryserver.chromium.linux',
-                             buildername='linux-libfuzzer-asan-rel') +
-    api.step_data('calculate all_fuzzers',
-        stdout=api.raw_io.output_text(
-            '//foo/bar:target1\n//foo/bar:target2\n//foo/bar:target3')) +
-    api.step_data('calculate no_fuzzers',
-        stdout=api.raw_io.output_text('//foo/bar:target1'))
+  yield api.test(
+      'basic_linux_tryjob',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-libfuzzer-asan-rel'),
+      api.step_data(
+          'calculate all_fuzzers',
+          stdout=api.raw_io.output_text(
+              '//foo/bar:target1\n//foo/bar:target2\n//foo/bar:target3')),
+      api.step_data(
+          'calculate no_fuzzers',
+          stdout=api.raw_io.output_text('//foo/bar:target1')),
   )
 
-  yield (
-    api.test('basic_linux_tryjob_with_compile') +
-    api.properties.tryserver(mastername='tryserver.chromium.linux',
-                             buildername='linux-libfuzzer-asan-rel') +
-    api.step_data('calculate all_fuzzers',
-        stdout=api.raw_io.output_text(
-            '\n'.join(['//foo/bar:target1', '//foo/bar:target2',
-                       '//foo/bar:target3']))) +
-    api.step_data('calculate no_fuzzers',
-        stdout=api.raw_io.output_text('//foo/bar:target1')) +
-    api.override_step_data(
-        'analyze',
-        api.json.output({
-            'status': 'Found dependency',
-            'compile_targets': ['//foo/bar:target2'],
-            'test_targets': []})) +
-    api.step_data('list gn targets',
-        stdout=api.raw_io.output_text('target2'))
+  yield api.test(
+      'basic_linux_tryjob_with_compile',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-libfuzzer-asan-rel'),
+      api.step_data(
+          'calculate all_fuzzers',
+          stdout=api.raw_io.output_text('\n'.join(
+              ['//foo/bar:target1', '//foo/bar:target2',
+               '//foo/bar:target3']))),
+      api.step_data(
+          'calculate no_fuzzers',
+          stdout=api.raw_io.output_text('//foo/bar:target1')),
+      api.override_step_data(
+          'analyze',
+          api.json.output({
+              'status': 'Found dependency',
+              'compile_targets': ['//foo/bar:target2'],
+              'test_targets': []
+          })),
+      api.step_data(
+          'list gn targets', stdout=api.raw_io.output_text('target2')),
   )
 
-  yield (
-    api.test('compile_failure') +
-    api.properties.tryserver(
-      mastername='tryserver.chromium.linux',
-      buildername='linux-libfuzzer-asan-rel'
-    ) +
-    api.step_data('calculate all_fuzzers',
-        stdout=api.raw_io.output_text(
-            '\n'.join(['//foo/bar:target1', '//foo/bar:target2',
-                       '//foo/bar:target3']))) +
-    api.step_data('calculate no_fuzzers',
-        stdout=api.raw_io.output_text('//foo/bar:target1')) +
-    api.override_step_data(
-        'analyze',
-        api.json.output({
-            'status': 'Found dependency',
-            'compile_targets': ['//foo/bar:target2'],
-            'test_targets': []})) +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-libfuzzer-asan-rel'),
+      api.step_data(
+          'calculate all_fuzzers',
+          stdout=api.raw_io.output_text('\n'.join(
+              ['//foo/bar:target1', '//foo/bar:target2',
+               '//foo/bar:target3']))),
+      api.step_data(
+          'calculate no_fuzzers',
+          stdout=api.raw_io.output_text('//foo/bar:target1')),
+      api.override_step_data(
+          'analyze',
+          api.json.output({
+              'status': 'Found dependency',
+              'compile_targets': ['//foo/bar:target2'],
+              'test_targets': []
+          })),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

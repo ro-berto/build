@@ -109,111 +109,100 @@ def RunSteps(api, buildername, mastername):
 
 
 def GenTests(api):
-  yield (
-    api.test('android') +
-    api.properties(
-        buildername='Android N5 Swarm',
-        mastername='chromium.swarm',
-        bot_id='TestSlave',
-        buildnumber=123,
-        path_config='kitchen')
+  yield api.test(
+      'android',
+      api.properties(
+          buildername='Android N5 Swarm',
+          mastername='chromium.swarm',
+          bot_id='TestSlave',
+          buildnumber=123,
+          path_config='kitchen'),
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
-  yield (
-    api.test('one_fails') +
-    api.properties(
-        buildername='Linux Swarm',
-        mastername='chromium.swarm',
-        bot_id='TestSlave',
-        buildnumber=123,
-        path_config='kitchen') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.swarm', {
-            'Linux Swarm': {
-                'gtest_tests': [
-                    {
-                        'test': 'browser_tests',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True,
-                            'shards': 2,
-                         }
-                    },
-                ],
-            },
-        }) +
-    api.override_step_data(
-        'find isolated tests',
-        api.json.output({
-            'browser_tests': 'deadbeef',
-        })
-    ) +
-    api.override_step_data(
-        'browser_tests on Ubuntu',
-        api.chromium_swarming.canned_summary_output(
-            api.test_utils.canned_gtest_output(
-                passing=False,
-                minimal=True,
-                extra_json={'missing_shards': [1]}),
-                failure=True)
-    )
+  yield api.test(
+      'one_fails',
+      api.properties(
+          buildername='Linux Swarm',
+          mastername='chromium.swarm',
+          bot_id='TestSlave',
+          buildnumber=123,
+          path_config='kitchen'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swarm', {
+              'Linux Swarm': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      }
+                  },],
+              },
+          }),
+      api.override_step_data('find isolated tests',
+                             api.json.output({
+                                 'browser_tests': 'deadbeef',
+                             })),
+      api.override_step_data(
+          'browser_tests on Ubuntu',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(
+                  passing=False,
+                  minimal=True,
+                  extra_json={'missing_shards': [1]}),
+              failure=True)),
   )
 
-  yield (
-    api.test('windows') +
-    api.properties(
-        buildername='Windows Swarm',
-        mastername='chromium.swarm',
-        bot_id='TestSlave',
-        buildnumber=123,
-        path_config='kitchen') +
-    api.platform('win', 64) +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.swarm', {
-            'Windows Swarm': {
-                'gtest_tests': [
-                    {
-                        'test': 'browser_tests',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True,
-                            'shards': 2,
-                         }
-                    },
-                ],
-            },
-        }) +
-    api.override_step_data(
-        'find isolated tests',
-        api.json.output({
-            'browser_tests': 'deadbeef',
-        })
-    )
+  yield api.test(
+      'windows',
+      api.properties(
+          buildername='Windows Swarm',
+          mastername='chromium.swarm',
+          bot_id='TestSlave',
+          buildnumber=123,
+          path_config='kitchen'),
+      api.platform('win', 64),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swarm', {
+              'Windows Swarm': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      }
+                  },],
+              },
+          }),
+      api.override_step_data('find isolated tests',
+                             api.json.output({
+                                 'browser_tests': 'deadbeef',
+                             })),
   )
 
-  yield (
-    api.test('compile_failure') +
-    api.properties(
-        buildername='Linux Swarm',
-        mastername='chromium.swarm',
-        bot_id='TestSlave',
-        buildnumber=123,
-        path_config='kitchen') +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.swarm', {
-            'Linux Swarm': {
-                'gtest_tests': [
-                    {
-                        'test': 'browser_tests',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True,
-                            'shards': 2,
-                         }
-                    },
-                ],
-            },
-        }) +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties(
+          buildername='Linux Swarm',
+          mastername='chromium.swarm',
+          bot_id='TestSlave',
+          buildnumber=123,
+          path_config='kitchen'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.swarm', {
+              'Linux Swarm': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      }
+                  },],
+              },
+          }),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

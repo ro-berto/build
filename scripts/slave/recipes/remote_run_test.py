@@ -25,15 +25,21 @@ def RunSteps(api, true_prop, num_prop, string_prop, dict_prop):
   assert dict_prop == {'foo': 'bar'}
 
 def GenTests(api):
-  yield api.test('basic') + api.properties(
-    true_prop=True,
-    num_prop=123,
-    string_prop='321',
-    dict_prop={'foo': 'bar'})
+  yield api.test(
+      'basic',
+      api.properties(
+          true_prop=True,
+          num_prop=123,
+          string_prop='321',
+          dict_prop={'foo': 'bar'}),
+  )
 
-  yield (api.test('type_error') + api.properties(
-      true_prop=True,
-      num_prop=123,
-      string_prop=321,
-      dict_prop={'foo': 'bar'}) +
-    api.expect_exception('AssertionError'))
+  yield api.test(
+      'type_error',
+      api.properties(
+          true_prop=True,
+          num_prop=123,
+          string_prop=321,
+          dict_prop={'foo': 'bar'}),
+      api.expect_exception('AssertionError'),
+  )

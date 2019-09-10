@@ -45,10 +45,10 @@ def RunSteps(api):
   _AnnotatedStepsSteps(api, got_revision)
 
 def GenTests(api):
-  yield api.test('linux') +\
-    api.platform('linux', 64) +\
-    api.properties(mastername = 'client.nacl.ports') +\
-    api.properties(buildername = 'linux-glibc-0') +\
-    api.properties(revision = 'a' * 40) +\
-    api.properties(bot_id = 'TestSlave') +\
-    api.properties(slavetype = 'BuilderTester')
+  yield api.test('linux', \
+    api.platform('linux', 64), \
+    api.properties(mastername = 'client.nacl.ports'), \
+    api.properties(buildername = 'linux-glibc-0'), \
+    api.properties(revision = 'a' * 40), \
+    api.properties(bot_id = 'TestSlave'), \
+    api.properties(slavetype = 'BuilderTester'),)

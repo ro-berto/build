@@ -120,48 +120,53 @@ def RunSteps(api, target_cpu, debug, clang):
 
 
 def GenTests(api):
-  yield (
-      api.test('linux') +
-      api.platform('linux', 64) +
-      api.properties(mastername='client.angle',
-                     buildername='linux',
-                     buildnumber='1234',
-                     bot_id='test_slave')
+  yield api.test(
+      'linux',
+      api.platform('linux', 64),
+      api.properties(
+          mastername='client.angle',
+          buildername='linux',
+          buildnumber='1234',
+          bot_id='test_slave'),
   )
-  yield (
-      api.test('linux_gcc') +
-      api.platform('linux', 64) +
-      api.properties(clang=False,
-                     mastername='client.angle',
-                     buildername='linux',
-                     buildnumber='1234',
-                     bot_id='test_slave')
+  yield api.test(
+      'linux_gcc',
+      api.platform('linux', 64),
+      api.properties(
+          clang=False,
+          mastername='client.angle',
+          buildername='linux',
+          buildnumber='1234',
+          bot_id='test_slave'),
   )
-  yield (
-      api.test('win') +
-      api.platform('win', 64) +
-      api.properties(mastername='client.angle',
-                     buildername='windows',
-                     buildnumber='1234',
-                     bot_id='test_slave')
+  yield api.test(
+      'win',
+      api.platform('win', 64),
+      api.properties(
+          mastername='client.angle',
+          buildername='windows',
+          buildnumber='1234',
+          bot_id='test_slave'),
   )
-  yield (
-      api.test('win_clang') +
-      api.platform('win', 64) +
-      api.properties(clang=True,
-                     mastername='client.angle',
-                     buildername='windows',
-                     buildnumber='1234',
-                     bot_id='test_slave')
+  yield api.test(
+      'win_clang',
+      api.platform('win', 64),
+      api.properties(
+          clang=True,
+          mastername='client.angle',
+          buildername='windows',
+          buildnumber='1234',
+          bot_id='test_slave'),
   )
-  yield (
-      api.test('win_rel_msvc_x86') +
-      api.platform('win', 64) +
-      api.properties(clang=False,
-                     debug=False,
-                     target_cpu='x86',
-                     mastername='client.angle',
-                     buildername='windows',
-                     buildnumber='1234',
-                     bot_id='test_slave')
+  yield api.test(
+      'win_rel_msvc_x86',
+      api.platform('win', 64),
+      api.properties(
+          clang=False,
+          debug=False,
+          target_cpu='x86',
+          mastername='client.angle',
+          buildername='windows',
+          buildnumber='1234',
+          bot_id='test_slave'),
   )

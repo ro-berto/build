@@ -244,10 +244,10 @@ def GenTests(api):
     return api.step_data(
         prefix(name) + 'led launch',
         stdout=api.json.output({
-          'swarming':{
-            'host_name': 'chromium-swarm.appspot.com',
-            'task_id': 'beeeeeeeee5',
-          }
+            'swarming': {
+                'host_name': 'chromium-swarm.appspot.com',
+                'task_id': 'beeeeeeeee5',
+            }
         }))
 
 
@@ -257,120 +257,167 @@ def GenTests(api):
         stdout=api.raw_io.output('\n'.join(files)))
 
 
-  yield (
-      api.test('basic') +
-      api.properties.tryserver(repo_name='build') +
-    led_get_builder('luci.chromium.try:linux-rel') +
-      analyze('luci.chromium.try:linux-rel', 'foo_recipe') +
-      led_launch('luci.chromium.try:linux-rel') +
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe') +
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
+  yield api.test(
+      'basic',
+      api.properties.tryserver(repo_name='build'),
+      led_get_builder('luci.chromium.try:linux-rel'),
+      analyze('luci.chromium.try:linux-rel', 'foo_recipe'),
+      led_launch('luci.chromium.try:linux-rel'),
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe'),
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': 'nothing important'}}}}])) +
-      api.override_step_data(
-          'parse description', api.json.output({}))
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': 'nothing important'
+                      }
+                  }
+              }
+          }])),
+      api.override_step_data('parse description', api.json.output({})),
   )
 
-  yield (
-      api.test('no_jobs_to_run') +
-      api.properties.tryserver(repo_name='build') +
-      led_get_builder('luci.chromium.try:linux-rel') +
-      analyze('luci.chromium.try:linux-rel', None) +
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None) +
+  yield api.test(
+      'no_jobs_to_run',
+      api.properties.tryserver(repo_name='build'),
+      led_get_builder('luci.chromium.try:linux-rel'),
+      analyze('luci.chromium.try:linux-rel', None),
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': 'nothing important'}}}}])) +
-      api.override_step_data(
-          'parse description', api.json.output({})) +
-      api.post_process(Filter('exiting'))
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': 'nothing important'
+                      }
+                  }
+              }
+          }])),
+      api.override_step_data('parse description', api.json.output({})),
+      api.post_process(Filter('exiting')),
   )
 
-  yield (
-      api.test('recipe_roller') +
-      api.properties.tryserver(repo_name='build') +
-      led_get_builder('luci.chromium.try:linux-rel') +
-      led_launch('luci.chromium.try:linux-rel') +
-      analyze('luci.chromium.try:linux-rel', None) +
+  yield api.test(
+      'recipe_roller',
+      api.properties.tryserver(repo_name='build'),
+      led_get_builder('luci.chromium.try:linux-rel'),
+      led_launch('luci.chromium.try:linux-rel'),
+      analyze('luci.chromium.try:linux-rel', None),
       git_diff('luci.chromium.try:linux-rel', [
-        'random/file.py',
-        'infra/config/recipes.cfg',
-      ]) +
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None) +
+          'random/file.py',
+          'infra/config/recipes.cfg',
+      ]),
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None),
       git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
-        'random/file.py',
-        'infra/config/recipes.cfg',
-      ]) +
+          'random/file.py',
+          'infra/config/recipes.cfg',
+      ]),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': 'nothing important'}}}}])) +
-      api.override_step_data(
-          'parse description', api.json.output({}))
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': 'nothing important'
+                      }
+                  }
+              }
+          }])),
+      api.override_step_data('parse description', api.json.output({})),
   )
 
-  yield (
-      api.test('manual_roll_with_changes') +
-      api.properties.tryserver(repo_name='build') +
-      led_get_builder('luci.chromium.try:linux-rel') +
-      analyze('luci.chromium.try:linux-rel', 'foo_recipe') +
-      led_launch('luci.chromium.try:linux-rel') +
+  yield api.test(
+      'manual_roll_with_changes',
+      api.properties.tryserver(repo_name='build'),
+      led_get_builder('luci.chromium.try:linux-rel'),
+      analyze('luci.chromium.try:linux-rel', 'foo_recipe'),
+      led_launch('luci.chromium.try:linux-rel'),
       git_diff('luci.chromium.try:linux-rel', [
-        'random/file.py',
-        'infra/config/recipes.cfg',
-      ]) +
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng') +
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe') +
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng') +
+          'random/file.py',
+          'infra/config/recipes.cfg',
+      ]),
+      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
+      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe'),
+      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
       git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
-        'random/file.py',
-        'infra/config/recipes.cfg',
-      ]) +
+          'random/file.py',
+          'infra/config/recipes.cfg',
+      ]),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': 'nothing important'}}}}])) +
-      api.override_step_data(
-          'parse description', api.json.output({}))
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': 'nothing important'
+                      }
+                  }
+              }
+          }])),
+      api.override_step_data('parse description', api.json.output({})),
   )
 
-  yield (
-      api.test('analyze_failure') +
-      api.properties.tryserver(repo_name='build') +
-      led_get_builder('luci.chromium.try:linux-rel') +
-      api.step_data(prefix('luci.chromium.try:linux-rel')+'analyze foo_recipe',
-                    api.json.output({
-                      'error': 'Bad analyze!!!!',
-                      'invalid_recipes': ['foo_recipe'],
-                    }), retcode=1) +
+  yield api.test(
+      'analyze_failure',
+      api.properties.tryserver(repo_name='build'),
+      led_get_builder('luci.chromium.try:linux-rel'),
+      api.step_data(
+          prefix('luci.chromium.try:linux-rel') + 'analyze foo_recipe',
+          api.json.output({
+              'error': 'Bad analyze!!!!',
+              'invalid_recipes': ['foo_recipe'],
+          }),
+          retcode=1),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': 'nothing important'}}}}])) +
-      api.override_step_data(
-          'parse description', api.json.output({})) +
-      api.post_process(Filter(
-          prefix('luci.chromium.try:linux-rel')+'recipe invalid'))
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': 'nothing important'
+                      }
+                  }
+              }
+          }])),
+      api.override_step_data('parse description', api.json.output({})),
+      api.post_process(
+          Filter(prefix('luci.chromium.try:linux-rel') + 'recipe invalid')),
   )
 
-  yield (
-      api.test('custom_builder') +
-      api.properties.tryserver(repo_name='build') +
+  yield api.test(
+      'custom_builder',
+      api.properties.tryserver(repo_name='build'),
       api.override_step_data(
-        'gerrit changes', api.json.output(
-          [{'revisions': {1: {'_number': 12, 'commit': {
-            'message': BUILDER_FOOTER + ': arbitrary.blah'}}}}])) +
+          'gerrit changes',
+          api.json.output([{
+              'revisions': {
+                  1: {
+                      '_number': 12,
+                      'commit': {
+                          'message': BUILDER_FOOTER + ': arbitrary.blah'
+                      }
+                  }
+              }
+          }])),
       api.override_step_data(
-          'parse description', api.json.output(
-              {BUILDER_FOOTER: ['arbitrary.blah']})) +
-      led_get_builder('arbitrary.blah') +
-      analyze('arbitrary.blah', 'foo_recipe')+
-      led_launch('arbitrary.blah') +
-      api.post_process(Filter(prefix('arbitrary.blah')+'led get-builder'))
+          'parse description',
+          api.json.output({
+              BUILDER_FOOTER: ['arbitrary.blah']
+          })),
+      led_get_builder('arbitrary.blah'),
+      analyze('arbitrary.blah', 'foo_recipe'),
+      led_launch('arbitrary.blah'),
+      api.post_process(Filter(prefix('arbitrary.blah') + 'led get-builder')),
   )

@@ -98,34 +98,33 @@ def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield test
 
-  yield (
-      api.test('mac-luci') +
-      api.platform.name('mac') +
-      api.runtime(is_experimental=False, is_luci=True) +
+  yield api.test(
+      'mac-luci',
+      api.platform.name('mac'),
+      api.runtime(is_experimental=False, is_luci=True),
       api.properties.tryserver(
-          buildername='mac_upload_clang',
-          mastername='tryserver.chromium.mac') +
+          buildername='mac_upload_clang', mastername='tryserver.chromium.mac'),
       api.buildbucket.try_build(
           project='chromium',
           builder='mac_upload_clang',
-          git_repo='https://chromium.googlesource.com/chromium/src') +
-      api.post_process(post_process.MustRun, 'install xcode') +
-      api.post_process(post_process.MustRun, 'select XCode') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.post_process(post_process.MustRun, 'install xcode'),
+      api.post_process(post_process.MustRun, 'select XCode'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('linux-buildbot') +
-      api.platform.name('linux') +
-      api.runtime(is_experimental=False, is_luci=False) +
+  yield api.test(
+      'linux-buildbot',
+      api.platform.name('linux'),
+      api.runtime(is_experimental=False, is_luci=False),
       api.properties.tryserver(
           buildername='linux_upload_clang',
-          mastername='tryserver.chromium.linux') +
+          mastername='tryserver.chromium.linux'),
       api.buildbucket.try_build(
           project='chromium',
           builder='linux_upload_clang',
-          git_repo='https://chromium.googlesource.com/chromium/src') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

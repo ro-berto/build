@@ -26,11 +26,11 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('heartbeat') +
-    api.properties.scheduled()
+  yield api.test(
+      'heartbeat',
+      api.properties.scheduled(),
   )
-  yield (
-    api.test('heartbeat_staging') +
-    api.properties.scheduled(target_environment='staging')
+  yield api.test(
+      'heartbeat_staging',
+      api.properties.scheduled(target_environment='staging'),
   )

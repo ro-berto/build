@@ -61,19 +61,16 @@ def RunSteps(api):
 
 def GenTests(api):
   def test(name, **kwargs):
-    return (
-        api.test(name) +
-        api.properties(
-          path_config='kitchen',
-          **kwargs
-        ) +
+    return api.test(
+        name,
+        api.properties(path_config='kitchen', **kwargs),
         api.buildbucket.ci_build(
-          project='wasm',
-          bucket='ci',
-          builder='linux',
-          build_number=123456,
-        ) +
-        api.runtime(is_luci=True, is_experimental=False)
+            project='wasm',
+            bucket='ci',
+            builder='linux',
+            build_number=123456,
+        ),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield test('linux')

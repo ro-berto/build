@@ -22,9 +22,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties(mastername='master.tryserver.client.custom_tabs_client',
-                   buildername='linux',
-                   bot_id='linux_slave')
+  yield api.test(
+      'basic',
+      api.properties(
+          mastername='master.tryserver.client.custom_tabs_client',
+          buildername='linux',
+          bot_id='linux_slave'),
   )

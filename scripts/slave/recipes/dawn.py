@@ -121,44 +121,42 @@ def RunSteps(api, target_cpu, debug, clang):
       _run_unittests(api, out_dir)
 
 def GenTests(api):
-  yield (
-      api.test('linux') +
-      api.platform('linux', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='linux',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'linux',
+      api.platform('linux', 64),
+      api.buildbucket.ci_build(
+          project='dawn', builder='linux', git_repo=DAWN_REPO),
   )
-  yield (
-      api.test('linux_gcc') +
-      api.platform('linux', 64) +
-      api.properties(clang=False) +
-      api.buildbucket.ci_build(project='dawn', builder='linux',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'linux_gcc',
+      api.platform('linux', 64),
+      api.properties(clang=False),
+      api.buildbucket.ci_build(
+          project='dawn', builder='linux', git_repo=DAWN_REPO),
   )
-  yield (
-      api.test('mac') +
-      api.platform('mac', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='mac',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'mac',
+      api.platform('mac', 64),
+      api.buildbucket.ci_build(
+          project='dawn', builder='mac', git_repo=DAWN_REPO),
   )
-  yield (
-      api.test('win') +
-      api.platform('win', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='win',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'win',
+      api.platform('win', 64),
+      api.buildbucket.ci_build(
+          project='dawn', builder='win', git_repo=DAWN_REPO),
   )
-  yield (
-      api.test('win_clang') +
-      api.platform('win', 64) +
-      api.properties(clang=True) +
-      api.buildbucket.ci_build(project='dawn', builder='win',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'win_clang',
+      api.platform('win', 64),
+      api.properties(clang=True),
+      api.buildbucket.ci_build(
+          project='dawn', builder='win', git_repo=DAWN_REPO),
   )
-  yield (
-      api.test('win_rel_msvc_x86') +
-      api.platform('win', 64) +
-      api.properties(clang=False,
-                     debug=False,
-                     target_cpu='x86') +
-      api.buildbucket.ci_build(project='dawn', builder='win',
-                               git_repo=DAWN_REPO)
+  yield api.test(
+      'win_rel_msvc_x86',
+      api.platform('win', 64),
+      api.properties(clang=False, debug=False, target_cpu='x86'),
+      api.buildbucket.ci_build(
+          project='dawn', builder='win', git_repo=DAWN_REPO),
   )

@@ -67,15 +67,15 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('expected_tryjob') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.buildbucket.try_build(
-        project='chromium',
-        bucket='try',
-        builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.step_data('presubmit', api.json.output({}))
+  yield api.test(
+      'expected_tryjob',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.step_data('presubmit', api.json.output({})),
   )
 
   # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
@@ -101,50 +101,58 @@ def GenTests(api):
       'webrtc',
   ]
   for repo_name in REPO_NAMES:
-    yield (
-      api.test(repo_name) +
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='%s_presubmit' % repo_name,
-          repo_name=repo_name,
-          gerrit_project=repo_name) +
-      api.step_data('presubmit', api.json.output(
-        {'errors': [], 'notifications': [], 'warnings': []}
-      ))
+    yield api.test(
+        repo_name,
+        api.properties.tryserver(
+            mastername='tryserver.chromium.linux',
+            buildername='%s_presubmit' % repo_name,
+            repo_name=repo_name,
+            gerrit_project=repo_name),
+        api.step_data(
+            'presubmit',
+            api.json.output({
+                'errors': [],
+                'notifications': [],
+                'warnings': []
+            })),
     )
 
-  yield (
-    api.test('repository_url_with_solution_name') +
-    api.properties.tryserver(
-        mastername='tryserver.chromium.linux',
-        buildername='chromium_presubmit',
-        repository_url='https://skia.googlesource.com/skia.git',
-        gerrit_project='skia',
-        solution_name='skia') +
-    api.step_data('presubmit', api.json.output(
-      {'errors': [], 'notifications': [], 'warnings': []}
-    ))
+  yield api.test(
+      'repository_url_with_solution_name',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='chromium_presubmit',
+          repository_url='https://skia.googlesource.com/skia.git',
+          gerrit_project='skia',
+          solution_name='skia'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          })),
   )
 
-  yield (
-    api.test('v8_with_cache') +
-    api.properties.tryserver(
-        mastername='tryserver.v8',
-        buildername='v8_presubmit',
-        repo_name='v8',
-        gerrit_project='v8/v8',
-        runhooks=True,
-        path_config='generic')
+  yield api.test(
+      'v8_with_cache',
+      api.properties.tryserver(
+          mastername='tryserver.v8',
+          buildername='v8_presubmit',
+          repo_name='v8',
+          gerrit_project='v8/v8',
+          runhooks=True,
+          path_config='generic'),
   )
 
-  yield (
-    api.test('v8_with_cache_infra_config_branch') +
-    api.properties.tryserver(
-        mastername='tryserver.v8',
-        buildername='v8_presubmit',
-        repo_name='v8',
-        gerrit_project='v8/v8',
-        runhooks=True,
-        path_config='generic') +
-    api.tryserver.gerrit_change_target_ref('refs/heads/infra/config')
+  yield api.test(
+      'v8_with_cache_infra_config_branch',
+      api.properties.tryserver(
+          mastername='tryserver.v8',
+          buildername='v8_presubmit',
+          repo_name='v8',
+          gerrit_project='v8/v8',
+          runhooks=True,
+          path_config='generic'),
+      api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
   )
