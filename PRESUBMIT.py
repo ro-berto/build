@@ -173,7 +173,16 @@ def BuildInternalCheck(output, input_api, output_api):
   return []
 
 
+def CheckChangeOnUpload(input_api, output_api):
+  output = []
+  output.extend(
+      input_api.canned_checks.CheckPatchFormatted(input_api, output_api))
+  return output
+
+
 def CheckChangeOnCommit(input_api, output_api):
   output = CommitChecks(input_api, output_api)
   output.extend(BuildInternalCheck(output, input_api, output_api))
+  output.extend(
+      input_api.canned_checks.CheckPatchFormatted(input_api, output_api))
   return output
