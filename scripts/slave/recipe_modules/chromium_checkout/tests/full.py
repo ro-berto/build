@@ -46,45 +46,39 @@ def GenTests(api):
         builder='linux',
         git_repo='https://chromium.googlesource.com/chromium/src')
 
-  yield (
-      api.test('buildbot_annotated_run') +
-      try_build() +
-      api.runtime(is_luci=False, is_experimental=False) +
-      api.platform('win', 64) +
-      api.properties(
-          buildername='example_buildername',
-          path_config='buildbot') +
-      api.post_process(verify_checkout_dir, api.path['start_dir'].join('src'))
+  yield api.test(
+      'buildbot_annotated_run',
+      try_build(),
+      api.runtime(is_luci=False, is_experimental=False),
+      api.platform('win', 64),
+      api.properties(buildername='example_buildername', path_config='buildbot'),
+      api.post_process(verify_checkout_dir, api.path['start_dir'].join('src')),
   )
 
-  yield (
-      api.test('buildbot_remote_run') +
-      try_build() +
-      api.runtime(is_luci=False, is_experimental=False) +
-      api.properties(
-          buildername='example_buildername',
-          path_config='kitchen') + # not a typo... T_T
-      api.post_process(verify_checkout_dir,
-                       api.path['builder_cache'].join('linux', 'src'))
+  yield api.test(
+      'buildbot_remote_run',
+      try_build(),
+      api.runtime(is_luci=False, is_experimental=False),
+      api.properties(buildername='example_buildername',
+                     path_config='kitchen'),  # not a typo... T_T
+      api.post_process(verify_checkout_dir, api.path['builder_cache'].join(
+          'linux', 'src')),
   )
 
-  yield (
-      api.test('buildbot_remote_run_kitchen') +
-      try_build() +
-      api.runtime(is_luci=False, is_experimental=False) +
-      api.properties(
-          buildername='example_buildername',
-          path_config='generic') +
-      api.post_process(verify_checkout_dir,
-                       api.path['builder_cache'].join('linux', 'src'))
+  yield api.test(
+      'buildbot_remote_run_kitchen',
+      try_build(),
+      api.runtime(is_luci=False, is_experimental=False),
+      api.properties(buildername='example_buildername', path_config='generic'),
+      api.post_process(verify_checkout_dir, api.path['builder_cache'].join(
+          'linux', 'src')),
   )
 
-  yield (
-      api.test('luci') +
-      try_build() +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.properties(
-          buildername='does not matter') +
-      api.post_process(verify_checkout_dir,
-                       api.path['cache'].join('builder', 'src'))
+  yield api.test(
+      'luci',
+      try_build(),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.properties(buildername='does not matter'),
+      api.post_process(verify_checkout_dir, api.path['cache'].join(
+          'builder', 'src')),
   )
