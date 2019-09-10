@@ -174,7 +174,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
     with sdk(target_os, 'x64'):
       api.step('compile with ninja x64', [ninja, '-C', x64_path])
     run_tests(x86_path)
-    run_tests(x64_path, env={'CRASHPAD_TEST_32_BIT_OUTPUT':x86_path})
+    run_tests(x64_path, env={'CRASHPAD_TEST_32_BIT_OUTPUT': x86_path})
   else:
     with sdk(target_os):
       api.step('compile with ninja', [ninja, '-C', path])
@@ -206,11 +206,11 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 def GenTests(api):
   # Only test a single clobber case.
   test = 'crashpad_mac_dbg'
-  yield(api.test(test + '_clobber') +
-        api.properties.generic(buildername=test,
-                               target_os='mac',
-                               config='Debug',
-                               clobber=True))
+  yield api.test(
+      test + '_clobber',
+      api.properties.generic(
+          buildername=test, target_os='mac', config='Debug', clobber=True),
+  )
 
   tests = [
       (test, 'mac', ''),
@@ -232,4 +232,3 @@ def GenTests(api):
       api.path.exists(api.path['checkout'].join(
         'build', 'swarming_test_spec.pyl'))
     )
-
