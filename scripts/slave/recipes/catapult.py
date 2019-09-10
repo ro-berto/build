@@ -80,39 +80,51 @@ def RunSteps(api, platform):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties(mastername='master.client.catapult',
-                   buildername='windows',
-                   bot_id='windows_slave') +
-    api.platform.name('win') +
-    api.generator_script(
-      'build_steps.py',
-      {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
-    )
+  yield api.test(
+      'basic',
+      api.properties(
+          mastername='master.client.catapult',
+          buildername='windows',
+          bot_id='windows_slave'),
+      api.platform.name('win'),
+      api.generator_script(
+          'build_steps.py',
+          {
+              'name': 'Dashboard Tests',
+              'cmd': ['run_py_tests', '--no-hooks']
+          },
+      ),
   )
 
-  yield (
-    api.test('mac') +
-    api.properties(mastername='master.client.catapult',
-                   buildername='mac',
-                   bot_id='mac_slave') +
-    api.platform.name('mac') +
-    api.generator_script(
-      'build_steps.py',
-      {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
-    )
+  yield api.test(
+      'mac',
+      api.properties(
+          mastername='master.client.catapult',
+          buildername='mac',
+          bot_id='mac_slave'),
+      api.platform.name('mac'),
+      api.generator_script(
+          'build_steps.py',
+          {
+              'name': 'Dashboard Tests',
+              'cmd': ['run_py_tests', '--no-hooks']
+          },
+      ),
   )
 
-  yield (
-    api.test('android') +
-    api.properties(mastername='master.client.catapult',
-                   buildername='android',
-                   bot_id='android_slave',
-                   platform='android') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.generator_script(
-        'build_steps.py',
-        {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
-    )
+  yield api.test(
+      'android',
+      api.properties(
+          mastername='master.client.catapult',
+          buildername='android',
+          bot_id='android_slave',
+          platform='android'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.generator_script(
+          'build_steps.py',
+          {
+              'name': 'Dashboard Tests',
+              'cmd': ['run_py_tests', '--no-hooks']
+          },
+      ),
   )
