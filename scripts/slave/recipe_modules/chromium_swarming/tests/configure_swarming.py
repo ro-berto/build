@@ -26,42 +26,45 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('precommit_cq') +
+  yield api.test(
+      'precommit_cq',
       api.properties(
           precommit=True,
           patch_project='chromium',
           requester='commit-bot@chromium.org',
-          blamelist=['some-user@chromium.org']) +
-      api.post_process(post_process.DropExpectation)
+          blamelist=['some-user@chromium.org']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('precommit_manual') +
-      api.properties(precommit=True, patch_project='chromium') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'precommit_manual',
+      api.properties(precommit=True, patch_project='chromium'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('postcommit') +
-      api.properties(precommit=False) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'postcommit',
+      api.properties(precommit=False),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('experimental') +
-      api.properties(precommit=False) +
-      api.runtime(is_luci=False, is_experimental=True) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'experimental',
+      api.properties(precommit=False),
+      api.runtime(is_luci=False, is_experimental=True),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('luci') +
-      api.properties(precommit=False) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'luci',
+      api.properties(precommit=False),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('default_priority') +
-      api.properties(precommit=False, default_priority=10) +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'default_priority',
+      api.properties(precommit=False, default_priority=10),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(post_process.DropExpectation),
+  )

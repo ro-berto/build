@@ -35,38 +35,31 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  yield (
-    api.test('wait_for_capacity') +
-    api.properties(
-        task_name='capacity-constrained task',
-        wait_for_capacity=True) +
-    api.post_process(
-        post_process.StepCommandContains,
-        '[trigger] capacity-constrained task',
-        ['--wait-for-capacity']) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'wait_for_capacity',
+      api.properties(
+          task_name='capacity-constrained task', wait_for_capacity=True),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] capacity-constrained task',
+                       ['--wait-for-capacity']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('containment_type') +
-    api.properties(
-        task_name='windows gpu task',
-        containment_type='AUTO') +
-    api.post_process(
-        post_process.StepCommandContains,
-        '[trigger] windows gpu task',
-        ['--containment-type', 'AUTO']) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'containment_type',
+      api.properties(task_name='windows gpu task', containment_type='AUTO'),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] windows gpu task',
+                       ['--containment-type', 'AUTO']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('optional_dimensions') +
-    api.properties(
-        task_name='optional-dimension task',
-        wait_for_capacity=True) +
-    api.post_process(
-        post_process.StepCommandContains,
-        '[trigger] optional-dimension task',
-        ['--optional-dimension', 'os', 'Ubuntu-14.04', '60']) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'optional_dimensions',
+      api.properties(
+          task_name='optional-dimension task', wait_for_capacity=True),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] optional-dimension task',
+                       ['--optional-dimension', 'os', 'Ubuntu-14.04', '60']),
+      api.post_process(post_process.DropExpectation),
   )

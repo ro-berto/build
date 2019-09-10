@@ -53,37 +53,39 @@ def RunSteps(api, task_to_retry, expected_value):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties(expected_value='10 11 12') +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'basic',
+      api.properties(expected_value='10 11 12'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-    api.test('task_to_retry') +
-    api.properties(task_to_retry={
-      'tasks': {
-        0: {
-            'shard_index': 0,
-            'task_id': '90',
-        },
-        1: {
-            'shard_index': 1,
-            'task_id': '91',
-        },
-        2: {
-            'shard_index': 2,
-            'task_id': '92',
-        },
-        3: {
-            'shard_index': 3,
-            'task_id': '93',
-        },
-        4: {
-            'shard_index': 4,
-            'task_id': '94',
-        },
-      },
-    }, expected_value='10 11 12 93 94') +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'task_to_retry',
+      api.properties(
+          task_to_retry={
+              'tasks': {
+                  0: {
+                      'shard_index': 0,
+                      'task_id': '90',
+                  },
+                  1: {
+                      'shard_index': 1,
+                      'task_id': '91',
+                  },
+                  2: {
+                      'shard_index': 2,
+                      'task_id': '92',
+                  },
+                  3: {
+                      'shard_index': 3,
+                      'task_id': '93',
+                  },
+                  4: {
+                      'shard_index': 4,
+                      'task_id': '94',
+                  },
+              },
+          },
+          expected_value='10 11 12 93 94'),
+      api.post_process(post_process.DropExpectation),
   )

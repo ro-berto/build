@@ -198,146 +198,150 @@ def RunSteps(api, platforms, custom_trigger_script,
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.properties(platforms=('win', 'linux', 'mac')))
-
-  yield (
-      api.test('custom_trigger_script') +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.properties(platforms=('mac',), custom_trigger_script=True) +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] hello_world on Mac-10.13',
-          ['--shard-index', '1']) +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] hello_world on Mac-10.13',
-          ['--shards', '3']) +
-      api.post_process(post_process.DropExpectation)
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(platforms=('win', 'linux', 'mac')),
   )
 
-  yield (
-      api.test('default_trigger_script') +
+  yield api.test(
+      'custom_trigger_script',
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.properties(platforms=('mac',), custom_trigger_script=False) +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] hello_world on Mac-10.13',
-          ['--env', 'GTEST_SHARD_INDEX', '1']) +
-      api.post_process(
-          post_process.StepCommandContains,
-          '[trigger] hello_world on Mac-10.13',
-          ['--env', 'GTEST_TOTAL_SHARDS', '3']) +
-      api.post_process(post_process.DropExpectation)
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(platforms=('mac',), custom_trigger_script=True),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] hello_world on Mac-10.13',
+                       ['--shard-index', '1']),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] hello_world on Mac-10.13', ['--shards', '3']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('wait_for_tasks') +
+  yield api.test(
+      'default_trigger_script',
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+      api.properties(platforms=('mac',), custom_trigger_script=False),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] hello_world on Mac-10.13',
+                       ['--env', 'GTEST_SHARD_INDEX', '1']),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] hello_world on Mac-10.13',
+                       ['--env', 'GTEST_TOTAL_SHARDS', '3']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'wait_for_tasks',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
       # This is probably how you'd use the test api; testing what happens if one
       # set of tasks finishes first. This example code doesn't care what is
       # returned, but calling code of this usually does.
       api.chromium_swarming.wait_for_finished_task_set([
           ([['110000', '110100']], 1),
-          ([['100000'],
-            ['130000']], 1),
-      ]) +
-      api.properties(platforms=('win', 'linux', 'mac'), wait_for_tasks=True) +
-      api.post_process(post_process.Filter(
-          'wait for tasks', 'wait for tasks (2)')))
+          ([['100000'], ['130000']], 1),
+      ]),
+      api.properties(platforms=('win', 'linux', 'mac'), wait_for_tasks=True),
+      api.post_process(
+          post_process.Filter('wait for tasks', 'wait for tasks (2)')),
+  )
 
 
   for exp in [True, False]:
-    yield (
-        api.test('basic_luci' + ('_experimental' if exp else '')) +
-        api.runtime(is_luci=True, is_experimental=exp) +
+    yield api.test(
+        'basic_luci' + ('_experimental' if exp else ''),
+        api.runtime(is_luci=True, is_experimental=exp),
         api.step_data(
             'archive for win',
-            stdout=api.raw_io.output_text(
-              'hash_for_win hello_world.isolated')) +
+            stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
         api.step_data(
             'archive for linux',
             stdout=api.raw_io.output_text(
-              'hash_for_linux hello_world.isolated')) +
+                'hash_for_linux hello_world.isolated')),
         api.step_data(
             'archive for mac',
-            stdout=api.raw_io.output_text(
-              'hash_for_mac hello_world.isolated')) +
-        api.properties(platforms=('win', 'linux', 'mac')))
+            stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
+        api.properties(platforms=('win', 'linux', 'mac')),
+    )
 
-  yield (
-      api.test('named_caches') +
+  yield api.test(
+      'named_caches',
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
       api.properties(
           platforms=('mac',),
-          named_caches={'foo': 'cache/foo', 'bar': 'cache/bar'}))
+          named_caches={
+              'foo': 'cache/foo',
+              'bar': 'cache/bar'
+          }),
+  )
 
-  yield (
-      api.test('service_account') +
+  yield api.test(
+      'service_account',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_linux hello_world.isolated')),
       api.step_data(
           'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')),
       api.properties(
-          platforms=('win', 'linux', 'mac',),
-          service_account='test@example.com'))
+          platforms=(
+              'win',
+              'linux',
+              'mac',
+          ),
+          service_account='test@example.com'),
+  )
 
-  yield (
-      api.test('gerrit_trybot') +
+  yield api.test(
+      'gerrit_trybot',
       api.buildbucket.try_build(
           project='chromium',
           builder='linux',
           build_number=1,
-          git_repo='https://chromium.googlesource.com/chromium/src') +
+          git_repo='https://chromium.googlesource.com/chromium/src'),
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+  )
 
-  yield (
-      api.test('show_shards_in_collect_step') +
+  yield api.test(
+      'show_shards_in_collect_step',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(show_shards_in_collect_step=True))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.properties(show_shards_in_collect_step=True),
+  )
 
-  yield (
-      api.test('show_outputs_ref_in_collect_step') +
+  yield api.test(
+      'show_outputs_ref_in_collect_step',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(show_outputs_ref_in_collect_step=False))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.properties(show_outputs_ref_in_collect_step=False),
+  )
 
   data = {
     'shards': [
@@ -347,16 +351,16 @@ def GenTests(api):
     ]
   }
 
-  yield (
-      api.test('gtest_with_outputs_ref') +
+  yield api.test(
+      'gtest_with_outputs_ref',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True)))
-    )
+              api.test_utils.canned_gtest_output(True))),
+  )
 
   data = {
     'shards': [
@@ -367,44 +371,44 @@ def GenTests(api):
     ]
   }
 
-  yield (
-      api.test('gtest_with_duration') +
+  yield api.test(
+      'gtest_with_duration',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.test_utils.canned_gtest_output(True), data))
-    )
+              api.test_utils.canned_gtest_output(True), data)),
+  )
 
   data = api.chromium_swarming.canned_summary_output_raw(shards=4)
   data['shards'][2]['completed_ts'] = '2014-09-25T01:49:23.123'
   data['shards'][3]['completed_ts'] = '2014-09-25T01:48:22.345'
 
-  yield (
-      api.test('gtest_with_long_task') +
+  yield api.test(
+      'gtest_with_long_task',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.test_utils.canned_gtest_output(True), data))
-    )
+              api.test_utils.canned_gtest_output(True), data)),
+  )
 
-  yield (
-      api.test('gtest_with_many_failures') +
+  yield api.test(
+      'gtest_with_many_failures',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.simulated_gtest_output(
-                  failed_test_names=['test-%d' % i for i in xrange(100)]))) +
-      api.properties(gtest_task=True)
-    )
+                  failed_test_names=['test-%d' % i for i in xrange(100)]))),
+      api.properties(gtest_task=True),
+  )
 
   data = {
     'shards': [
@@ -430,54 +434,62 @@ def GenTests(api):
   }
 
   data['shards'][0]['state'] = 'EXPIRED'
-  yield (
-      api.test('swarming_expired_new') +
+  yield api.test(
+      'swarming_expired_new',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary(None, data)))
-  yield (
-      api.test('isolated_script_expired_new') +
+                    api.chromium_swarming.summary(None, data)),
+  )
+  yield api.test(
+      'isolated_script_expired_new',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.step_data('hello_world on Windows-7-SP1',
+                    api.raw_io.output_dir({
+                        'summary.json': json.dumps(data)
+                    })),
+      api.properties(isolated_script_task=True),
+  )
 
   data['shards'][0]['state'] = 'TIMED_OUT'
-  yield (
-      api.test('swarming_timeout_new') +
+  yield api.test(
+      'swarming_timeout_new',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data('hello_world on Windows-7-SP1',
-                    api.chromium_swarming.summary(None, data)))
-  yield (
-      api.test('isolated_script_timeout_new') +
+                    api.chromium_swarming.summary(None, data)),
+  )
+  yield api.test(
+      'isolated_script_timeout_new',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.step_data('hello_world on Windows-7-SP1',
+                    api.raw_io.output_dir({
+                        'summary.json': json.dumps(data)
+                    })),
+      api.properties(isolated_script_task=True),
+  )
 
   data['shards'][0]['state'] = 'COMPLETED'
   data['shards'][0]['exit_code'] = '1'
-  yield (
-      api.test('isolated_script_non_zero_exit_status') +
+  yield api.test(
+      'isolated_script_non_zero_exit_status',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(data)}),
-              data)) +
-      api.properties(isolated_script_task=True))
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(data)
+              }), data)),
+      api.properties(isolated_script_task=True),
+  )
 
   data['shards'][0]['state'] = 'TIMED_OUT'
   del data['shards'][0]['exit_code']
@@ -491,15 +503,15 @@ def GenTests(api):
   big_output_dir['0/invalid.txt'] = '\x00\x00\x89'
   # Large text file
   big_output_dir['0/big_text.txt'] = 'lots of text\n' * 2000
-  yield (
-      api.test('isolated_large_outdir') +
+  yield api.test(
+      'isolated_large_outdir',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir(big_output_dir)) +
-      api.properties(isolated_script_task=True))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
+      api.step_data('hello_world on Windows-7-SP1',
+                    api.raw_io.output_dir(big_output_dir)),
+      api.properties(isolated_script_task=True),
+  )
 
   summary_data = {
     'shards': [
@@ -518,44 +530,43 @@ def GenTests(api):
     'num_failures_by_type': {},
     'links': {'custom_link': 'http://example.com'}
   }
-  yield (
-      api.test('isolated_script_with_custom_merge') +
+  yield api.test(
+      'isolated_script_with_custom_merge',
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-           api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data)}) +
-              api.json.output(json_results),
-              summary_data)) +
-      api.properties(
-          isolated_script_task=True,
-          merge={
-            'script': '//fake_custom_merge_script.py',
-          }))
-
-  yield (
-      api.test('isolated_script_with_custom_trigger_script') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output('hash_for_win hello_world.isolated')) +
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data)}) +
-              api.json.output(json_results),
-              summary_data)) +
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data)
+              }) + api.json.output(json_results), summary_data)),
+      api.properties(
+          isolated_script_task=True,
+          merge={
+              'script': '//fake_custom_merge_script.py',
+          }),
+  )
+
+  yield api.test(
+      'isolated_script_with_custom_trigger_script',
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output('hash_for_win hello_world.isolated')),
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.chromium_swarming.summary(
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data)
+              }) + api.json.output(json_results), summary_data)),
       api.properties(
           isolated_script_task=True,
           trigger_script={
-            'script': '//fake_custom_trigger_script.py',
-            'args': ['foo', 'bar'],
-          }) +
-      api.post_process(post_process.Filter(
-          '[trigger] hello_world on Windows-7-SP1'))
+              'script': '//fake_custom_trigger_script.py',
+              'args': ['foo', 'bar'],
+          }),
+      api.post_process(
+          post_process.Filter('[trigger] hello_world on Windows-7-SP1')),
   )
 
   summary_data = {
@@ -567,37 +578,38 @@ def GenTests(api):
       },
     ]
   }
-  yield (
-      api.test('gtest_with_null_shard') +
+  yield api.test(
+      'gtest_with_null_shard',
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data)}) +
-              api.test_utils.canned_gtest_output(False),
-              summary_data)
-          ) +
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data)
+              }) + api.test_utils.canned_gtest_output(False), summary_data)),
       api.properties(
           platforms=('linux',),
           show_shards_in_collect_step=True,
-          gtest_task=True))
-  yield (
-      api.test('isolated_script_with_null_shard') +
+          gtest_task=True),
+  )
+  yield api.test(
+      'isolated_script_with_null_shard',
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-              summary_data)) +
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data)
+              }), summary_data)),
       api.properties(
           platforms=('linux',),
           show_shards_in_collect_step=True,
-          isolated_script_task=True))
+          isolated_script_task=True),
+  )
 
   summary_data_deduped = {
     'shards': [
@@ -618,20 +630,20 @@ def GenTests(api):
     ]
   }
 
-  yield (
-      api.test('gtest_with_deduped_shard') +
+  yield api.test(
+      'gtest_with_deduped_shard',
       api.step_data(
           'archive for linux',
-          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
       api.step_data(
           'hello_world',
           api.chromium_swarming.summary(
-              api.raw_io.output_dir(
-                  {'summary.json': json.dumps(summary_data_deduped)}) +
-              api.test_utils.canned_gtest_output(False),
-              summary_data_deduped)
-          ) +
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data_deduped)
+              }) + api.test_utils.canned_gtest_output(False),
+              summary_data_deduped)),
       api.properties(
           platforms=('linux',),
           show_shards_in_collect_step=True,
-          gtest_task=True))
+          gtest_task=True),
+  )
