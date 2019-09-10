@@ -16,10 +16,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('simple') +
-         api.buildbucket.try_build(
-             builder='Goma Server Trusty Presubmit',
-             change_number=4840,
-             patch_set=2))
-
-
+  yield api.test(
+      'simple',
+      api.buildbucket.try_build(
+          builder='Goma Server Trusty Presubmit',
+          change_number=4840,
+          patch_set=2),
+  )
