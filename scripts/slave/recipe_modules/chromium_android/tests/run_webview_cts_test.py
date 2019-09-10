@@ -18,50 +18,54 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic pass') +
-      api.properties.generic(cts_args={}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
+  yield api.test(
+      'basic pass',
+      api.properties.generic(cts_args={}),
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=True)),
   )
-  yield (
-      api.test('basic fail') +
-      api.properties.generic(cts_args={}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(
-          passing=False))
+  yield api.test(
+      'basic fail',
+      api.properties.generic(cts_args={}),
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False)),
   )
-  yield (
-      api.test('with suffix') +
-      api.properties.generic(cts_args={'suffix': 'build suffix'}) +
+  yield api.test(
+      'with suffix',
+      api.properties.generic(cts_args={'suffix': 'build suffix'}),
       api.step_data("Run CTS (build suffix)",
-                    api.test_utils.canned_gtest_output(passing=True))
+                    api.test_utils.canned_gtest_output(passing=True)),
   )
-  yield (
-      api.test('with commandline args') +
+  yield api.test(
+      'with commandline args',
       api.properties.generic(
-          cts_args={'command_line_args': ['--webview-test-flag']}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
-  )
-  yield (
-      api.test('with details pass') +
-      api.properties.generic(cts_args={'result_details': True}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
-  )
-  yield (
-      api.test('with details fail') +
-      api.properties.generic(cts_args={'result_details': True}) +
+          cts_args={'command_line_args': ['--webview-test-flag']}),
       api.step_data("Run CTS",
-                    api.test_utils.canned_gtest_output(passing=False))
+                    api.test_utils.canned_gtest_output(passing=True)),
   )
-  yield (
-      api.test('with results file pass') +
-      api.properties.generic(
-          cts_args={'json_results_file': '/path/to/a/json/file'}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
-  )
-  yield (
-      api.test('with results file fail') +
-      api.properties.generic(
-          cts_args={'json_results_file': '/path/to/a/json/file'}) +
+  yield api.test(
+      'with details pass',
+      api.properties.generic(cts_args={'result_details': True}),
       api.step_data("Run CTS",
-                    api.test_utils.canned_gtest_output(passing=False))
+                    api.test_utils.canned_gtest_output(passing=True)),
+  )
+  yield api.test(
+      'with details fail',
+      api.properties.generic(cts_args={'result_details': True}),
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False)),
+  )
+  yield api.test(
+      'with results file pass',
+      api.properties.generic(
+          cts_args={'json_results_file': '/path/to/a/json/file'}),
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=True)),
+  )
+  yield api.test(
+      'with results file fail',
+      api.properties.generic(
+          cts_args={'json_results_file': '/path/to/a/json/file'}),
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False)),
   )

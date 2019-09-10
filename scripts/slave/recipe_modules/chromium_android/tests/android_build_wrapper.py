@@ -21,7 +21,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(buildername='test_buildername', buildnumber=123)
+  yield api.test(
+      'basic',
+      api.properties(buildername='test_buildername', buildnumber=123),
   )

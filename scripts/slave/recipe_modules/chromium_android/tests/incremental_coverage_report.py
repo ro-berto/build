@@ -14,10 +14,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           buildbotURL='https://example/url',
           buildername='test_buildername',
-          buildnumber=123)
+          buildnumber=123),
   )

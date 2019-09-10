@@ -20,17 +20,15 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('blacklisted_device') +
-      api.properties(blacklist_exists=True) +
-      api.override_step_data(
-          'read_blacklist_file',
-          api.json.output({
-              'serial1': {}
-          })
-      )
+  yield api.test(
+      'blacklisted_device',
+      api.properties(blacklist_exists=True),
+      api.override_step_data('read_blacklist_file',
+                             api.json.output({
+                                 'serial1': {}
+                             })),
   )
-  yield (
-      api.test('no_blacklist') +
-      api.properties(blacklist_exists=False)
+  yield api.test(
+      'no_blacklist',
+      api.properties(blacklist_exists=False),
   )

@@ -15,21 +15,19 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('no_commitrefs') +
-      api.post_process(
-          post_process.StepCommandRE,
-          'git number',
-          ['git', 'number']) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'no_commitrefs',
+      api.post_process(post_process.StepCommandRE, 'git number',
+                       ['git', 'number']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield (
-      api.test('with_commitrefs') +
-      api.properties(commitrefs=['01234567', '89abcdef']) +
-      api.post_process(
-          post_process.StepCommandRE,
-          'git number',
-          ['git', 'number', '01234567', '89abcdef']) +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'with_commitrefs',
+      api.properties(commitrefs=['01234567', '89abcdef']),
+      api.post_process(post_process.StepCommandRE, 'git number',
+                       ['git', 'number', '01234567', '89abcdef']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

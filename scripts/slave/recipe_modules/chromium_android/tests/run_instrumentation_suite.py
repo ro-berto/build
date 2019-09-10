@@ -21,18 +21,14 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=1337,
-          trace_output=False)
+          buildername='test_buildername', buildnumber=1337, trace_output=False),
   )
 
-  yield (
-      api.test('basic_with_tracing') +
+  yield api.test(
+      'basic_with_tracing',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=1337,
-          trace_output=True)
+          buildername='test_buildername', buildnumber=1337, trace_output=True),
   )

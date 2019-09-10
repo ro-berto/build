@@ -41,31 +41,27 @@ def GenTests(api):
     return step_odict
 
   first_args = ['unzip', '-o', '[START_DIR]/src/out/build_product.zip']
-  yield (
-      api.test('basic') +
-      api.post_process(
-          post_process.MustRun, 'gsutil download_build_product') +
-      api.post_process(check_args, expected_cwd=None,
-                       expected_args=first_args) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'basic',
+      api.post_process(post_process.MustRun, 'gsutil download_build_product'),
+      api.post_process(check_args, expected_cwd=None, expected_args=first_args),
+      api.post_process(post_process.DropExpectation),
   )
   mock_extract_path = api.path['tmp_base'].join('bar')
-  yield (
-      api.test('with extract_path') +
-      api.properties(extract_path=mock_extract_path) +
+  yield api.test(
+      'with extract_path',
+      api.properties(extract_path=mock_extract_path),
+      api.post_process(post_process.MustRun, 'gsutil download_build_product'),
       api.post_process(
-          post_process.MustRun, 'gsutil download_build_product') +
-      api.post_process(check_args, expected_cwd=mock_extract_path,
-                       expected_args=first_args) +
-      api.post_process(post_process.DropExpectation)
+          check_args, expected_cwd=mock_extract_path, expected_args=first_args),
+      api.post_process(post_process.DropExpectation),
   )
   mock_globs = ['apks/*', 'gen/*']
-  yield (
-      api.test('with globs') +
-      api.properties(globs=mock_globs) +
+  yield api.test(
+      'with globs',
+      api.properties(globs=mock_globs),
+      api.post_process(post_process.MustRun, 'gsutil download_build_product'),
       api.post_process(
-          post_process.MustRun, 'gsutil download_build_product') +
-      api.post_process(check_args, expected_cwd=None,
-                       expected_args=first_args + mock_globs) +
-      api.post_process(post_process.DropExpectation)
+          check_args, expected_cwd=None, expected_args=first_args + mock_globs),
+      api.post_process(post_process.DropExpectation),
   )

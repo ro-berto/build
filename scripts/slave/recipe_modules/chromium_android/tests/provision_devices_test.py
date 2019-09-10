@@ -11,7 +11,11 @@ def RunSteps(api):
   api.chromium_android.provision_devices()
 
 def GenTests(api):
-  yield (api.test('warning_exit_code') +
-         api.step_data('provision_devices', retcode=88))
-  yield (api.test('infra_failure_exit_code') +
-         api.step_data('provision_devices', retcode=87))
+  yield api.test(
+      'warning_exit_code',
+      api.step_data('provision_devices', retcode=88),
+  )
+  yield api.test(
+      'infra_failure_exit_code',
+      api.step_data('provision_devices', retcode=87),
+  )

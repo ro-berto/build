@@ -193,8 +193,8 @@ def RunSteps(api, buildername):
       store_tombstones=config.get('store_tombstones'),
       tool='asan')
   if not failure:
-      api.chromium_android.run_bisect_script(extra_src='test.py',
-                                             path_to_config='test.py')
+    api.chromium_android.run_bisect_script(
+        extra_src='test.py', path_to_config='test.py')
 
   if config.get('resource_size'):
     api.chromium_android.resource_sizes(
@@ -256,82 +256,115 @@ def GenTests(api):
         internal=True)
 
   for buildername in BUILDERS:
-    yield api.test('%s_basic' % buildername) + properties_for(buildername)
+    yield api.test(
+        '%s_basic' % buildername,
+        properties_for(buildername),
+    )
 
-  yield (api.test('tester_no_devices_during_recovery') +
-         properties_for('tester') +
-         api.step_data('device_recovery', retcode=1))
+  yield api.test(
+      'tester_no_devices_during_recovery',
+      properties_for('tester'),
+      api.step_data('device_recovery', retcode=1),
+  )
 
-  yield (api.test('tester_no_devices_during_status') +
-         properties_for('tester') +
-         api.step_data('device_status', retcode=1))
+  yield api.test(
+      'tester_no_devices_during_status',
+      properties_for('tester'),
+      api.step_data('device_status', retcode=1),
+  )
 
-  yield (api.test('tester_other_device_failure_during_recovery') +
-         properties_for('tester') +
-         api.step_data('device_recovery', retcode=2))
+  yield api.test(
+      'tester_other_device_failure_during_recovery',
+      properties_for('tester'),
+      api.step_data('device_recovery', retcode=2),
+  )
 
-  yield (api.test('tester_other_device_failure_during_status') +
-         properties_for('tester') +
-         api.step_data('device_status', retcode=2))
+  yield api.test(
+      'tester_other_device_failure_during_status',
+      properties_for('tester'),
+      api.step_data('device_status', retcode=2),
+  )
 
-  yield (api.test('tester_with_step_warning') +
-         properties_for('tester') +
-         api.step_data('unittests', retcode=88))
+  yield api.test(
+      'tester_with_step_warning',
+      properties_for('tester'),
+      api.step_data('unittests', retcode=88),
+  )
 
-  yield (api.test('tester_failing_host_info') +
-         properties_for('tester') +
-         api.step_data(
-             'Host Info',
-             api.json.output({'failures': ['foo', 'bar']}),
-             retcode=1))
+  yield api.test(
+      'tester_failing_host_info',
+      properties_for('tester'),
+      api.step_data(
+          'Host Info', api.json.output({
+              'failures': ['foo', 'bar']
+          }), retcode=1),
+  )
 
-  yield (api.test('tester_blacklisted_devices') +
-         properties_for('tester') +
-         api.override_step_data('provision_devices',
-                                api.json.output(['abc123', 'def456'])))
+  yield api.test(
+      'tester_blacklisted_devices',
+      properties_for('tester'),
+      api.override_step_data('provision_devices',
+                             api.json.output(['abc123', 'def456'])),
+  )
 
-  yield (api.test('tester_offline_devices') +
-         properties_for('tester') +
-         api.override_step_data('device_status',
-                                api.json.output([{}, {}])))
+  yield api.test(
+      'tester_offline_devices',
+      properties_for('tester'),
+      api.override_step_data('device_status', api.json.output([{}, {}])),
+  )
 
-  yield (api.test('gerrit_refs') +
+  yield api.test(
+      'gerrit_refs',
       api.properties.generic(
-        buildername='gerrit_try_builder',
-        bot_id='testslave',
-        repo_name='src/repo',
-        issue='123456789',
-        patchset='1',
-        rietveld='http://rietveld.example.com',
-        repo_url='svn://svn.chromium.org/chrome/trunk/src',
-        revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        internal=True, **({'event.patchSet.ref':'refs/changes/50/176150/1'})))
+          buildername='gerrit_try_builder',
+          bot_id='testslave',
+          repo_name='src/repo',
+          issue='123456789',
+          patchset='1',
+          rietveld='http://rietveld.example.com',
+          repo_url='svn://svn.chromium.org/chrome/trunk/src',
+          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          internal=True,
+          **({
+              'event.patchSet.ref': 'refs/changes/50/176150/1'
+          })),
+  )
 
-  yield (api.test('tombstones_m53') +
-         properties_for('tester') +
-         api.chromium.override_version(major=53))
+  yield api.test(
+      'tombstones_m53',
+      properties_for('tester'),
+      api.chromium.override_version(major=53),
+  )
 
-  yield (api.test('telemetry_browser_tests_failures') +
-         properties_for('telemetry_browser_tests_tester') +
-         api.override_step_data('Run telemetry browser_test PopularUrlsTest',
-             api.json.output({'successes': ['passed_test1', 'passed_test2'],
-                              'failures': ['failed_test_1', 'failed_test_2']}),
-             retcode=1))
+  yield api.test(
+      'telemetry_browser_tests_failures',
+      properties_for('telemetry_browser_tests_tester'),
+      api.override_step_data(
+          'Run telemetry browser_test PopularUrlsTest',
+          api.json.output({
+              'successes': ['passed_test1', 'passed_test2'],
+              'failures': ['failed_test_1', 'failed_test_2']
+          }),
+          retcode=1),
+  )
 
-  yield (api.test('upload_result_details_failures') +
-         properties_for('result_details') +
-         api.override_step_data('unittests: generate result details',
-                                retcode=1))
+  yield api.test(
+      'upload_result_details_failures',
+      properties_for('result_details'),
+      api.override_step_data('unittests: generate result details', retcode=1),
+  )
 
-  yield (api.test('asan_setup_failure') +
-         properties_for('asan') +
-         api.override_step_data('Set up ASAN on devices.wait_for_devices',
-                                retcode=87))
+  yield api.test(
+      'asan_setup_failure',
+      properties_for('asan'),
+      api.override_step_data(
+          'Set up ASAN on devices.wait_for_devices', retcode=87),
+  )
 
-  yield (
-    api.test('compile_failure') +
-    properties_for('basic_builder') +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      properties_for('basic_builder'),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
