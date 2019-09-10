@@ -31,22 +31,20 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic')
+  yield api.test('basic')
+
+  yield api.test(
+      'bucket_name_not_set_failed',
+      api.properties(codesearch_config='base'),
+      api.expect_exception('AssertionError'),
   )
 
-  yield (
-      api.test('bucket_name_not_set_failed') +
-      api.properties(codesearch_config='base') +
-      api.expect_exception('AssertionError')
+  yield api.test(
+      'basic_without_got_revision_cp',
+      api.properties(set_got_revision_cp_to_none=True),
   )
 
-  yield (
-      api.test('basic_without_got_revision_cp') +
-      api.properties(set_got_revision_cp_to_none=True)
-  )
-
-  yield (
-      api.test('basic_without_kythe_root') +
-      api.properties(root='')
+  yield api.test(
+      'basic_without_kythe_root',
+      api.properties(root=''),
   )

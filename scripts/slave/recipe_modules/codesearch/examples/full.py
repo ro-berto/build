@@ -122,21 +122,26 @@ def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
 
   for buildername in BUILDERS:
-    yield (api.test('%s_test_basic' % sanitize(buildername)) +
-           api.properties.generic(buildername=buildername) +
-           api.runtime(is_luci=True, is_experimental=False))
-    yield (api.test('%s_test_buildbot' % sanitize(buildername)) +
-           api.properties.generic(buildername=buildername) +
-           api.runtime(is_luci=False, is_experimental=False))
-    yield (api.test('%s_test_experimental' % sanitize(buildername)) +
-           api.properties.generic(buildername=buildername) +
-           api.runtime(is_luci=True, is_experimental=True))
+    yield api.test(
+        '%s_test_basic' % sanitize(buildername),
+        api.properties.generic(buildername=buildername),
+        api.runtime(is_luci=True, is_experimental=False),
+    )
+    yield api.test(
+        '%s_test_buildbot' % sanitize(buildername),
+        api.properties.generic(buildername=buildername),
+        api.runtime(is_luci=False, is_experimental=False),
+    )
+    yield api.test(
+        '%s_test_experimental' % sanitize(buildername),
+        api.properties.generic(buildername=buildername),
+        api.runtime(is_luci=True, is_experimental=True),
+    )
 
-  yield (
-    api.test(
-        '%s_delete_generated_files_fail' %
-        sanitize('codesearch-gen-chromium-win')) +
-    api.step_data('delete old generated files', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-win') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      '%s_delete_generated_files_fail' %
+      sanitize('codesearch-gen-chromium-win'),
+      api.step_data('delete old generated files', retcode=1),
+      api.properties.generic(buildername='codesearch-gen-chromium-win'),
+      api.runtime(is_luci=True, is_experimental=False),
   )

@@ -28,32 +28,30 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123)
+  yield api.test(
+      'basic',
+      api.properties(buildername='test_buildername', buildnumber=123),
   )
 
-  yield (
-      api.test('specified_branch_and_out_dir') +
+  yield api.test(
+      'specified_branch_and_out_dir',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           gen_repo_branch='android',
-          gen_repo_out_dir='chromium-android')
+          gen_repo_out_dir='chromium-android'),
   )
 
-  yield (
-      api.test('false_sync_generated_files') +
+  yield api.test(
+      'false_sync_generated_files',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
-          sync_generated_files=False)
+          sync_generated_files=False),
   )
 
-  yield (
-      api.test('generated_repo_not_set_failed') +
-      api.properties(codesearch_config='base') +
-      api.expect_exception('AssertionError')
+  yield api.test(
+      'generated_repo_not_set_failed',
+      api.properties(codesearch_config='base'),
+      api.expect_exception('AssertionError'),
   )

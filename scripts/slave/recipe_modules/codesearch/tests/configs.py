@@ -24,19 +24,19 @@ def RunSteps(api):
     api.codesearch.apply_config(config)
 
 def GenTests(api):
-  yield (
-      api.test('base') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'base',
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('chromium') +
-      api.properties(codesearch_apply_config=['chromium']) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'chromium',
+      api.properties(codesearch_apply_config=['chromium']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('compile_targets') +
-      api.properties(compile_targets=['all']) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_targets',
+      api.properties(compile_targets=['all']),
+      api.post_process(post_process.DropExpectation),
   )

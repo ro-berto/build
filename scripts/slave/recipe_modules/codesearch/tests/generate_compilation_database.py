@@ -27,7 +27,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('basic')
 
-  yield (
-      api.test('generate_compilation_database_failed') +
-      api.step_data('generate compilation database', retcode=1)
+  yield api.test(
+      'generate_compilation_database_failed',
+      api.step_data('generate compilation database', retcode=1),
   )

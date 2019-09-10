@@ -13,11 +13,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic')
-  )
+  yield api.test('basic')
 
-  yield (
-      api.test('run_translation_unit_clang_tool_failed') +
-      api.step_data('run translation_unit clang tool', retcode=1)
+  yield api.test(
+      'run_translation_unit_clang_tool_failed',
+      api.step_data('run translation_unit clang tool', retcode=1),
   )
