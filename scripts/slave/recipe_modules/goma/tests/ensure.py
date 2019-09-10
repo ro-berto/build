@@ -18,24 +18,24 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('non_canary') +
-      api.properties(client_type='release')
+  yield api.test(
+      'non_canary',
+      api.properties(client_type='release'),
   )
-  yield (
-    api.test('canary') +
-    api.properties(client_type='candidate')
+  yield api.test(
+      'canary',
+      api.properties(client_type='candidate'),
   )
-  yield (
-    api.test('latest') +
-    api.properties(client_type='latest')
+  yield api.test(
+      'latest',
+      api.properties(client_type='latest'),
   )
-  yield (
-    api.test('additional_canary') +
-    api.properties(client_type='candidate') +
-    api.properties(additional_platforms=['chromeos-amd64'])
+  yield api.test(
+      'additional_canary',
+      api.properties(client_type='candidate'),
+      api.properties(additional_platforms=['chromeos-amd64']),
   )
-  yield (
-    api.test('ephemeral') +
-    api.properties(ephemeral=True)
+  yield api.test(
+      'ephemeral',
+      api.properties(ephemeral=True),
   )

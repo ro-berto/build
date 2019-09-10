@@ -14,5 +14,11 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('default-is-recommended-50') + api.platform.name('linux')
-  yield api.test('can-be-overridden-99') + api.goma(jobs=99)
+  yield api.test(
+      'default-is-recommended-50',
+      api.platform.name('linux'),
+  )
+  yield api.test(
+      'can-be-overridden-99',
+      api.goma(jobs=99),
+  )

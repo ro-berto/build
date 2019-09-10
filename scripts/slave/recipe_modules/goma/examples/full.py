@@ -52,52 +52,84 @@ def GenTests(api):
   }
 
   for platform in ('linux', 'win', 'mac'):
-    yield (api.test(platform) + api.platform.name(platform) +
-           api.properties.generic(**properties))
+    yield api.test(
+        platform,
+        api.platform.name(platform),
+        api.properties.generic(**properties),
+    )
 
-  yield (api.test('linux_custom_jobs') + api.platform.name('linux') +
-           api.properties.generic(**properties) + api.goma(jobs=80))
+  yield api.test(
+      'linux_custom_jobs',
+      api.platform.name('linux'),
+      api.properties.generic(**properties),
+      api.goma(jobs=80),
+  )
 
-  yield (api.test('linux_debug') + api.platform.name('linux') +
-           api.properties.generic(**properties) + api.goma(jobs=80, debug=True))
+  yield api.test(
+      'linux_debug',
+      api.platform.name('linux'),
+      api.properties.generic(**properties),
+      api.goma(jobs=80, debug=True),
+  )
 
-  yield (api.test('linux_compile_failed') + api.platform.name('linux') +
-         api.step_data('ninja', retcode=1) +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_compile_failed',
+      api.platform.name('linux'),
+      api.step_data('ninja', retcode=1),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('linux_start_goma_failed') + api.platform.name('linux') +
-         api.step_data('preprocess_for_goma.start_goma', retcode=1) +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_start_goma_failed',
+      api.platform.name('linux'),
+      api.step_data('preprocess_for_goma.start_goma', retcode=1),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('linux_stop_goma_failed') + api.platform.name('linux') +
-         api.step_data('postprocess_for_goma.stop_goma', retcode=1) +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_stop_goma_failed',
+      api.platform.name('linux'),
+      api.step_data('postprocess_for_goma.stop_goma', retcode=1),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('linux_set_custome_tmp_dir') + api.platform.name('linux') +
-         api.properties(custom_tmp_dir='/tmp/goma_goma_module') +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_set_custome_tmp_dir',
+      api.platform.name('linux'),
+      api.properties(custom_tmp_dir='/tmp/goma_goma_module'),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('linux_invalid_goma_jsonstatus') +
-         api.platform.name('linux') +
-         api.step_data('postprocess_for_goma.goma_jsonstatus',
-                       api.json.output(data=None)) +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_invalid_goma_jsonstatus',
+      api.platform.name('linux'),
+      api.step_data('postprocess_for_goma.goma_jsonstatus',
+                    api.json.output(data=None)),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('linux_local_run_goma_recipe') + api.platform.name('linux') +
-         api.properties(**{
-           "$build/goma": {
-             "local": "[START_DIR]/goma",
-           }
-         }) +
-         api.properties.generic(**properties))
+  yield api.test(
+      'linux_local_run_goma_recipe',
+      api.platform.name('linux'),
+      api.properties(**{"$build/goma": {
+          "local": "[START_DIR]/goma",
+      }}),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('win_goma_canary') + api.platform.name('win') +
-         api.properties(client_type='candidate') +
-         api.properties.generic(**properties))
+  yield api.test(
+      'win_goma_canary',
+      api.platform.name('win'),
+      api.properties(client_type='candidate'),
+      api.properties.generic(**properties),
+  )
 
-  yield (api.test('win_goma_latest_client') + api.platform.name('win') +
-         api.properties(client_type='latest') +
-         api.properties.generic(**properties) +
-         api.post_process(post_process.MustRun, 'ensure_goma') +
-         api.post_process(post_process.StepTextContains, 'ensure_goma',
-                          ['latest']))
+  yield api.test(
+      'win_goma_latest_client',
+      api.platform.name('win'),
+      api.properties(client_type='latest'),
+      api.properties.generic(**properties),
+      api.post_process(post_process.MustRun, 'ensure_goma'),
+      api.post_process(post_process.StepTextContains, 'ensure_goma',
+                       ['latest']),
+  )
