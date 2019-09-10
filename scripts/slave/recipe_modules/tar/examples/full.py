@@ -44,4 +44,7 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
-    yield api.test(platform) + api.platform.name(platform)
+    yield api.test(
+        platform,
+        api.platform.name(platform),
+    )
