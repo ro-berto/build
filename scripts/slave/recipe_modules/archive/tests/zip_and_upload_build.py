@@ -36,20 +36,18 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'mac', 'win'):
-    yield (
-        api.test(platform) +
-        api.runtime(is_luci=True, is_experimental=False) +
+    yield api.test(
+        platform,
+        api.runtime(is_luci=True, is_experimental=False),
         api.properties(
             buildername='example_buildername',
             gs_acl='public',
-            platform=platform)
+            platform=platform),
     )
-  yield (
-      api.test('linux-experimental') +
-      api.runtime(is_luci=False, is_experimental=True) +
+  yield api.test(
+      'linux-experimental',
+      api.runtime(is_luci=False, is_experimental=True),
       api.properties(
-          buildername='example_buildername',
-          gs_acl='public',
-          platform='linux') +
-      api.post_process(Filter('zip build'))
+          buildername='example_buildername', gs_acl='public', platform='linux'),
+      api.post_process(Filter('zip build')),
   )

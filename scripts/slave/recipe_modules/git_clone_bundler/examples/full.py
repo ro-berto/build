@@ -37,27 +37,28 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic'))
+  yield api.test('basic')
 
-  yield (api.test('repo') +
-         api.properties(
-             repo_manifest_url='https://googlesource.com/manifest.xml') +
-         api.step_data('repo list',
-                       api.raw_io.stream_output(REPO_LIST_OUTPUT)) +
-         api.step_data('lookup Git remote (src/foo)',
-                       api.raw_io.stream_output('https://localhost/foo.git')) +
-         api.step_data('lookup Git remote (src/bar)',
-                       api.raw_io.stream_output('https://localhost/bar.git')))
+  yield api.test(
+      'repo',
+      api.properties(repo_manifest_url='https://googlesource.com/manifest.xml'),
+      api.step_data('repo list', api.raw_io.stream_output(REPO_LIST_OUTPUT)),
+      api.step_data('lookup Git remote (src/foo)',
+                    api.raw_io.stream_output('https://localhost/foo.git')),
+      api.step_data('lookup Git remote (src/bar)',
+                    api.raw_io.stream_output('https://localhost/bar.git')),
+  )
 
-  yield (api.test('repo_with_duplicate') +
-         api.properties(
-             repo_manifest_url='https://googlesource.com/manifest.xml') +
-         api.step_data('repo list',
-                       api.raw_io.stream_output(REPO_LIST_OUTPUT_DUP)))
+  yield api.test(
+      'repo_with_duplicate',
+      api.properties(repo_manifest_url='https://googlesource.com/manifest.xml'),
+      api.step_data('repo list',
+                    api.raw_io.stream_output(REPO_LIST_OUTPUT_DUP)),
+  )
 
-  yield (api.test('repo_with_error') +
-         api.properties(
-             repo_manifest_url='https://googlesource.com/manifest.xml') +
-         api.step_data('repo list',
-                       api.raw_io.stream_output(REPO_LIST_OUTPUT)) +
-         api.step_data('create bundle (src/foo)', retcode=1))
+  yield api.test(
+      'repo_with_error',
+      api.properties(repo_manifest_url='https://googlesource.com/manifest.xml'),
+      api.step_data('repo list', api.raw_io.stream_output(REPO_LIST_OUTPUT)),
+      api.step_data('create bundle (src/foo)', retcode=1),
+  )

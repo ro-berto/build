@@ -57,40 +57,39 @@ def GenTests(api):
         ('mac', ['chrome', 'icu.dat', 'pdfsqueeze']),
         ('linux', ['chrome', 'icu.dat', 'lib.host']),
       ):
-    yield (
-      api.test('cf_archiving_%s' % platform) +
-      api.platform(platform, 64) +
-      api.properties(
-          update_properties=update_properties,
-          gs_acl='public-read',
-          archive_subdir_suffix='subdir',
-      ) +
-      api.override_step_data('filter build_dir', api.json.output(build_files))
+    yield api.test(
+        'cf_archiving_%s' % platform,
+        api.platform(platform, 64),
+        api.properties(
+            update_properties=update_properties,
+            gs_acl='public-read',
+            archive_subdir_suffix='subdir',
+        ),
+        api.override_step_data('filter build_dir',
+                               api.json.output(build_files)),
     )
 
-  yield (
-    api.test('cf_archiving_win64') +
-    api.platform('win', 64) +
-    api.properties(
-        bitness=64,
-        update_properties=update_properties,
-        use_legacy=False,
-    ) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome']))
+  yield api.test(
+      'cf_archiving_win64',
+      api.platform('win', 64),
+      api.properties(
+          bitness=64,
+          update_properties=update_properties,
+          use_legacy=False,
+      ),
+      api.override_step_data('filter build_dir', api.json.output(['chrome'])),
   )
 
-  yield (
-    api.test('cf_archiving_win64_exp') +
-    api.platform('win', 64) +
-    api.properties(
-        bitness=64,
-        update_properties=update_properties,
-        use_legacy=False,
-    ) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome'])) +
-    api.runtime(is_luci=True, is_experimental=True)
+  yield api.test(
+      'cf_archiving_win64_exp',
+      api.platform('win', 64),
+      api.properties(
+          bitness=64,
+          update_properties=update_properties,
+          use_legacy=False,
+      ),
+      api.override_step_data('filter build_dir', api.json.output(['chrome'])),
+      api.runtime(is_luci=True, is_experimental=True),
   )
 
   # A component build with git.
@@ -98,36 +97,35 @@ def GenTests(api):
     'got_x10_revision': TEST_HASH_COMPONENT,
     'got_x10_revision_cp': TEST_COMMIT_POSITON_COMPONENT,
   }
-  yield (
-    api.test('cf_archiving_component') +
-    api.platform('linux', 64) +
-    api.properties(
-        update_properties=update_properties,
-        revision_dir='x10',
-        primary_project='x10',
-    ) +
-    api.override_step_data(
-        'filter build_dir', api.json.output(['chrome', 'resources']))
+  yield api.test(
+      'cf_archiving_component',
+      api.platform('linux', 64),
+      api.properties(
+          update_properties=update_properties,
+          revision_dir='x10',
+          primary_project='x10',
+      ),
+      api.override_step_data('filter build_dir',
+                             api.json.output(['chrome', 'resources'])),
   )
 
   update_properties = {
     'got_revision': TEST_HASH_MAIN,
     'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
   }
-  yield (
-    api.test('cf_archiving_no_llvm') +
-    api.platform('linux', 64) +
-    api.properties(
-      update_properties=update_properties,
-      no_llvm=True,
-    ) +
-    api.override_step_data(
-      'filter build_dir', api.json.output(['chrome']))
+  yield api.test(
+      'cf_archiving_no_llvm',
+      api.platform('linux', 64),
+      api.properties(
+          update_properties=update_properties,
+          no_llvm=True,
+      ),
+      api.override_step_data('filter build_dir', api.json.output(['chrome'])),
   )
 
-  yield(
-      api.test('zip_and_upload_custom_location') +
-      api.platform('linux', 64) +
+  yield api.test(
+      'zip_and_upload_custom_location',
+      api.platform('linux', 64),
       api.properties(
-          build_archive_url='gs://dummy-bucket/Linux Release/full-build.zip')
+          build_archive_url='gs://dummy-bucket/Linux Release/full-build.zip'),
   )

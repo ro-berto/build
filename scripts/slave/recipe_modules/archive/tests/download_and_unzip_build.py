@@ -20,20 +20,20 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
           parent_buildername='example_buildername',
           parent_buildnumber=1.0,
           buildnumber=123,
-      )
+      ),
   )
 
-  yield (
-      api.test('build_archive_url') +
+  yield api.test(
+      'build_archive_url',
       api.properties(
           parent_buildername='example_buildername',
           parentname='example_buildername',
           buildnumber=123,
-          build_archive_url='https://example/url')
+          build_archive_url='https://example/url'),
   )

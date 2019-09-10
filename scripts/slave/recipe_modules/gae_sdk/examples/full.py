@@ -29,14 +29,17 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('win') +
-      api.platform('win', 64))
+  yield api.test(
+      'win',
+      api.platform('win', 64),
+  )
 
-  yield (
-      api.test('linux') +
-      api.platform('linux', 64))
+  yield api.test(
+      'linux',
+      api.platform('linux', 64),
+  )
 
-  yield (
-      api.test('mac') +
-      api.platform('mac', 64))
+  yield api.test(
+      'mac',
+      api.platform('mac', 64),
+  )
