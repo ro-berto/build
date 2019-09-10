@@ -53,115 +53,114 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id')
+          buildername='test_buildername', buildnumber=123,
+          bot_id='test_bot_id'),
   )
 
-  yield (
-      api.test('histograms') +
+  yield api.test(
+      'histograms',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          use_histograms=True)
+          use_histograms=True),
   )
 
-  yield (
-      api.test('android') +
+  yield api.test(
+      'android',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='android') +
-      api.runtime(is_luci=False, is_experimental=False)
+          target_platform='android'),
+      api.runtime(is_luci=False, is_experimental=False),
   )
 
   # In order to get coverage of the LUCI-specific code in runtest.
-  yield (
-      api.test('luci') +
+  yield api.test(
+      'luci',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='android') +
-      api.runtime(is_luci=True, is_experimental=False)
+          target_platform='android'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-      api.test('win') +
-      api.platform('win', 64) +
+  yield api.test(
+      'win',
+      api.platform('win', 64),
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          target_platform='win')
+          target_platform='win'),
   )
 
-  yield (
-      api.test('annotate') +
+  yield api.test(
+      'annotate',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          annotate='gtest')
+          annotate='gtest'),
   )
 
-  yield (
-      api.test('python_mode') +
+  yield api.test(
+      'python_mode',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          python_mode=True)
+          python_mode=True),
   )
 
-  yield (
-      api.test('memcheck') +
+  yield api.test(
+      'memcheck',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          chromium_apply_config=['memcheck'])
+          chromium_apply_config=['memcheck']),
   )
 
-  yield (
-      api.test('tsan') +
+  yield api.test(
+      'tsan',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
           chromium_config='chromium_clang',
-          chromium_apply_config=['tsan2'])
+          chromium_apply_config=['tsan2']),
   )
 
-  yield (
-      api.test('msan') +
+  yield api.test(
+      'msan',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          chromium_config='chromium_msan')
+          chromium_config='chromium_msan'),
   )
 
-  yield (
-      api.test('lsan') +
+  yield api.test(
+      'lsan',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
           chromium_config='chromium_clang',
-          chromium_apply_config=['lsan'])
+          chromium_apply_config=['lsan']),
   )
 
-  yield (
-      api.test('asan') +
+  yield api.test(
+      'asan',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          chromium_apply_config=['chromium_win_asan'])
+          chromium_apply_config=['chromium_win_asan']),
   )

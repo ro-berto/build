@@ -38,81 +38,87 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('basic')
 
-  yield (
-      api.test('cros_board') +
+  yield api.test(
+      'cros_board',
       api.properties(
-          target_platform='chromeos',
-          target_cros_board='x86-generic')
+          target_platform='chromeos', target_cros_board='x86-generic'),
   )
 
-  yield (
-      api.test('win') +
-      api.properties(chromium_apply_config=['win_analyze'])
+  yield api.test(
+      'win',
+      api.properties(chromium_apply_config=['win_analyze']),
   )
 
-  yield (
-      api.test('mac') +
-      api.platform('mac', 64) +
-      api.properties(target_platform='mac')
+  yield api.test(
+      'mac',
+      api.platform('mac', 64),
+      api.properties(target_platform='mac'),
   )
 
-  yield (
-      api.test('explicit_mb') +
+  yield api.test(
+      'explicit_mb',
       api.properties(
           use_explicit_isolate_map_path=True,
-          chromium_apply_config=['chromium_official'])
+          chromium_apply_config=['chromium_official']),
   )
 
-  yield (
-      api.test('mac_failure') +
-      api.platform('mac', 64) +
-      api.properties(target_platform='mac') +
-      api.step_data('generate_build_files',
+  yield api.test(
+      'mac_failure',
+      api.platform('mac', 64),
+      api.properties(target_platform='mac'),
+      api.step_data(
+          'generate_build_files',
           api.json.output({
-            'output': 'ERROR at line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, textwrap.dedent('''
+              'output': 'ERROR at line 5: missing )'
+          },
+                          name="failure_summary"),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
           #### Step _generate_build_files_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
           #### More information can be found in the stdout.
-      ''').strip()) +
-      api.post_process(post_process.DropExpectation)
+      ''').strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('win_failure') +
-      api.platform('win', 64) +
-      api.properties(target_platform='win') +
-      api.step_data('generate_build_files',
+  yield api.test(
+      'win_failure',
+      api.platform('win', 64),
+      api.properties(target_platform='win'),
+      api.step_data(
+          'generate_build_files',
           api.json.output({
-            'output': 'ERROR at line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, textwrap.dedent('''
+              'output': 'ERROR at line 5: missing )'
+          },
+                          name="failure_summary"),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
           #### Step _generate_build_files_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
           #### More information can be found in the stdout.
-      ''').strip()) +
-      api.post_process(post_process.DropExpectation)
+      ''').strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('mb_long_error') +
-      api.chromium.change_char_size_limit(350) +
-      api.chromium.change_line_limit(150) +
-      api.step_data('generate_build_files',
+  yield api.test(
+      'mb_long_error',
+      api.chromium.change_char_size_limit(350),
+      api.chromium.change_line_limit(150),
+      api.step_data(
+          'generate_build_files',
           api.json.output({
-            'output': textwrap.dedent(
-              """
+              'output':
+                  textwrap.dedent("""
                 ERROR at //view_unittest.cc:38:11: Can't include header here.
                 #include "ui/compositor_extra/shadow.h"
                 :          ^---------------------------
@@ -122,14 +128,14 @@ def GenTests(api):
                 #include "ui/compositor_extra/shadow3.h"
                 ERROR at //view_unittest.cc:38:14: Can't include header here.
                 #include "ui/compositor_extra/shadow4.h"
-              """
-            ).strip()
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, textwrap.dedent(
-        """
+              """).strip()
+          },
+                          name="failure_summary"),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent("""
           #### Step _generate_build_files_ failed. Error logs are shown below:
           ```
           ERROR at //view_unittest.cc:38:11: Can't include header here.
@@ -142,7 +148,6 @@ def GenTests(api):
           ```
           ##### ...The message was too long...
           #### More information can be found in the stdout.
-        """
-      ).strip()) +
-      api.post_process(post_process.DropExpectation)
+        """).strip()),
+      api.post_process(post_process.DropExpectation),
   )

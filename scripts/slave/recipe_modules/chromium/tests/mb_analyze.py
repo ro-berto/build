@@ -32,55 +32,60 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties.tryserver(
           mastername='test_mastername',
           buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.post_process(post_process.MustRun, 'analyze') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+          path_config='kitchen'),
+      api.runtime(is_experimental=False, is_luci=True),
+      api.post_process(post_process.MustRun, 'analyze'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('analyze_failure') +
+  yield api.test(
+      'analyze_failure',
       api.properties.tryserver(
           mastername='test_mastername',
           buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.step_data('analyze',
+          path_config='kitchen'),
+      api.runtime(is_experimental=False, is_luci=True),
+      api.step_data(
+          'analyze',
           api.json.output({
-            'output': 'ERROR at line 5: missing )'
-          }, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason, textwrap.dedent('''
+              'output': 'ERROR at line 5: missing )'
+          },
+                          name="failure_summary"),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          textwrap.dedent('''
           #### Step _analyze_ failed. Error logs are shown below:
           ```
           ERROR at line 5: missing )
           ```
           #### More information can be found in the stdout.
-      ''').strip()) +
-      api.post_process(post_process.DropExpectation)
+      ''').strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('analyze_failure_no_output') +
+  yield api.test(
+      'analyze_failure_no_output',
       api.properties.tryserver(
           mastername='test_mastername',
           buildername='test_buildername',
-          path_config='kitchen') +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.step_data('analyze',
-          api.json.output({'output': ''}, name="failure_summary"),
-          retcode=1
-      ) +
-      api.post_process(post_process.StatusFailure) +
+          path_config='kitchen'),
+      api.runtime(is_experimental=False, is_luci=True),
+      api.step_data(
+          'analyze',
+          api.json.output({
+              'output': ''
+          }, name="failure_summary"),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason,
-          "Step('analyze') (retcode: 1)") +
-      api.post_process(post_process.DropExpectation)
+                       "Step('analyze') (retcode: 1)"),
+      api.post_process(post_process.DropExpectation),
   )

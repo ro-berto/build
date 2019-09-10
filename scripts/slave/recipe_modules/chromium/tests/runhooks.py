@@ -23,21 +23,20 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('basic')
 
-  yield (
-      api.test('chromeos') +
+  yield api.test(
+      'chromeos',
       api.properties(
-          target_platform='chromeos',
-          target_cros_board='x86-generic')
+          target_platform='chromeos', target_cros_board='x86-generic'),
   )
 
-  yield (
-      api.test('clobber') +
-      api.properties(clobber='1')
+  yield api.test(
+      'clobber',
+      api.properties(clobber='1'),
   )
 
-  yield (
-      api.test('mac_buildbot') +
-      api.platform.name('mac') +
-      api.properties(target_platform='mac') +
-      api.runtime(is_luci=False, is_experimental=False)
+  yield api.test(
+      'mac_buildbot',
+      api.platform.name('mac'),
+      api.properties(target_platform='mac'),
+      api.runtime(is_luci=False, is_experimental=False),
   )

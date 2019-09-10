@@ -15,7 +15,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('success')
 
-  yield (
-      api.test('failure') +
-      api.step_data('process_dumps', retcode=1)
+  yield api.test(
+      'failure',
+      api.step_data('process_dumps', retcode=1),
   )

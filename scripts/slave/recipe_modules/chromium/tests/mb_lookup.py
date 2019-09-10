@@ -37,37 +37,37 @@ def GenTests(api):
           'target_sysroot = "//build/linux"'))
   ]
 
-  yield (
-      api.test('basic')
-      + api.properties(expected_gn_args=gn_args)
-      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
-      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
-                         ['--quiet'])
-      + api.post_process(post_process.StepTextContains, 'lookup GN args',
-                         expected_step_text)
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'basic',
+      api.properties(expected_gn_args=gn_args),
+      api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args)),
+      api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                       ['--quiet']),
+      api.post_process(post_process.StepTextContains, 'lookup GN args',
+                       expected_step_text),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('cros_board')
-      + api.properties(target_platform='chromeos',
-                       target_cros_board='x86-generic')
-      + api.properties(expected_gn_args=gn_args)
-      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
-      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
-                         ['--quiet'])
-      + api.post_process(post_process.StepTextContains, 'lookup GN args',
-                         expected_step_text)
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'cros_board',
+      api.properties(
+          target_platform='chromeos', target_cros_board='x86-generic'),
+      api.properties(expected_gn_args=gn_args),
+      api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args)),
+      api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                       ['--quiet']),
+      api.post_process(post_process.StepTextContains, 'lookup GN args',
+                       expected_step_text),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('recursive')
-      + api.properties(expected_gn_args=gn_args, recursive=True)
-      + api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args))
-      + api.post_process(post_process.StepCommandContains, 'lookup GN args',
-                         ['--recursive'])
-      + api.post_process(post_process.StepTextContains, 'lookup GN args',
-                         expected_step_text)
-      + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'recursive',
+      api.properties(expected_gn_args=gn_args, recursive=True),
+      api.step_data('lookup GN args', stdout=api.raw_io.output_text(gn_args)),
+      api.post_process(post_process.StepCommandContains, 'lookup GN args',
+                       ['--recursive']),
+      api.post_process(post_process.StepTextContains, 'lookup GN args',
+                       expected_step_text),
+      api.post_process(post_process.DropExpectation),
   )

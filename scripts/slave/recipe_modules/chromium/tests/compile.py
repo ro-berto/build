@@ -43,117 +43,115 @@ def RunSteps(api, use_goma):
   return api.chromium.compile(use_goma_module=use_goma)
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(buildername='test_buildername') +
-      api.properties(buildnumber='1') +
-      api.properties(mastername='test_mastername') +
-      api.path.exists(api.path['checkout'].join(
-          'tools', 'clang', 'scripts', 'process_crashreports.py'))
+  yield api.test(
+      'basic',
+      api.properties(buildername='test_buildername'),
+      api.properties(buildnumber='1'),
+      api.properties(mastername='test_mastername'),
+      api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
+                                                'process_crashreports.py')),
   )
 
-  yield (
-      api.test('compile_fail') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.step_data('compile', retcode=1) +
-      api.path.exists(api.path['checkout'].join(
-          'tools', 'clang', 'scripts', 'process_crashreports.py')) +
-      api.post_process(post_process.MustRun, 'process clang crashes') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_fail',
+      api.properties(buildername='test_buildername'),
+      api.properties(mastername='test_mastername'),
+      api.step_data('compile', retcode=1),
+      api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
+                                                'process_crashreports.py')),
+      api.post_process(post_process.MustRun, 'process clang crashes'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('infra_failure') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.override_step_data('compile', retcode=2) +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'infra_failure',
+      api.properties(buildername='test_buildername'),
+      api.properties(mastername='test_mastername'),
+      api.override_step_data('compile', retcode=2),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('infra_failure_without_goma') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.properties(use_goma=False) +
-      api.override_step_data('compile', retcode=2) +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'infra_failure_without_goma',
+      api.properties(buildername='test_buildername'),
+      api.properties(mastername='test_mastername'),
+      api.properties(use_goma=False),
+      api.override_step_data('compile', retcode=2),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('codesearch') +
+  yield api.test(
+      'codesearch',
       api.properties(
-          buildername='test_buildername',
-          chromium_apply_config=['codesearch'])
+          buildername='test_buildername', chromium_apply_config=['codesearch']),
   )
 
-  yield (
-      api.test('official_win_luci') +
+  yield api.test(
+      'official_win_luci',
       api.properties(
           target_platform='win',
           buildername='test_buildername',
-          chromium_apply_config=['official']) +
-      api.runtime(is_luci=True, is_experimental=False)
+          chromium_apply_config=['official']),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-      api.test('official_linux_buildbot') +
+  yield api.test(
+      'official_linux_buildbot',
       api.properties(
           target_platform='linux',
           buildername='test_buildername',
-          chromium_apply_config=['official']) +
-      api.runtime(is_luci=False, is_experimental=False)
+          chromium_apply_config=['official']),
+      api.runtime(is_luci=False, is_experimental=False),
   )
 
-  yield (
-      api.test('chromeos') +
+  yield api.test(
+      'chromeos',
       api.properties(
           buildername='test_buildername',
           target_platform='chromeos',
-          target_cros_board='x86-generic')
+          target_cros_board='x86-generic'),
   )
 
-  yield (
-      api.test('chromeos_official') +
+  yield api.test(
+      'chromeos_official',
       api.properties(
           buildername='test_buildername',
           target_platform='chromeos',
           target_cros_board='x86-generic',
-          chromium_apply_config=['official']) +
-      api.post_process(post_process.DropExpectation)
+          chromium_apply_config=['official']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('goma_canary') +
+  yield api.test(
+      'goma_canary',
       api.properties(
           buildername='test_buildername',
-          chromium_apply_config=['goma_canary'])
+          chromium_apply_config=['goma_canary']),
   )
 
-  yield (
-      api.test('goma_localoutputcache_small') +
+  yield api.test(
+      'goma_localoutputcache_small',
       api.properties(
           buildername='test_buildername',
-          chromium_apply_config=['goma_localoutputcache_small'])
+          chromium_apply_config=['goma_localoutputcache_small']),
   )
 
-  yield (
-      api.test('goma_custom_jobs_debug') +
-      api.properties(buildername='test_buildername') +
-      api.goma(jobs=500, debug=True) + api.runtime(
-          is_luci=True, is_experimental=False)
+  yield api.test(
+      'goma_custom_jobs_debug',
+      api.properties(buildername='test_buildername'),
+      api.goma(jobs=500, debug=True),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-      api.test('clang_tot') +
+  yield api.test(
+      'clang_tot',
       api.properties(
-          buildername='test_buildername',
-          chromium_apply_config=['clang_tot']) +
+          buildername='test_buildername', chromium_apply_config=['clang_tot']),
       api.post_process(post_process.StepCommandContains, 'clang_revision',
-                                                        ['--use-tot-clang']) +
-      api.post_process(post_process.DropExpectation)
+                       ['--use-tot-clang']),
+      api.post_process(post_process.DropExpectation),
   )
 
   gomacc_path = ('/b/s/w/ir/cache/goma/client/gomacc '
@@ -161,20 +159,23 @@ def GenTests(api):
         'long string of commands\n'
   )
 
-  yield (
-      api.test('compile_failure_summary') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.chromium.change_line_limit(50) +
-      api.override_step_data('compile', api.raw_io.output(
-          gomacc_path +
-          textwrap.dedent("""
+  yield api.test(
+      'compile_failure_summary',
+      api.properties(buildername='test_buildername'),
+      api.properties(mastername='test_mastername'),
+      api.chromium.change_line_limit(50),
+      api.override_step_data(
+          'compile',
+          api.raw_io.output(
+              gomacc_path + textwrap.dedent("""
             [1/1] CXX a.o
             filename:row:col: error: error info
           """).strip(),
-          name='failure_summary'), retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
+              name='failure_summary'),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
           textwrap.dedent("""
           #### Step _compile_ failed. Error logs are shown below:
           ```
@@ -183,19 +184,20 @@ def GenTests(api):
           filename:row:col: error: error info
           ```
           #### More information in raw_io.output[failure_summary]
-          """).strip()) +
-      api.post_process(post_process.DropExpectation)
+          """).strip()),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('long_compile_failure') +
-      api.properties(buildername='test_buildername') +
-      api.properties(mastername='test_mastername') +
-      api.chromium.change_char_size_limit(350) +
-      api.chromium.change_line_limit(50) +
-      api.override_step_data('compile', api.raw_io.output(
-          gomacc_path +
-          textwrap.dedent("""
+  yield api.test(
+      'long_compile_failure',
+      api.properties(buildername='test_buildername'),
+      api.properties(mastername='test_mastername'),
+      api.chromium.change_char_size_limit(350),
+      api.chromium.change_line_limit(50),
+      api.override_step_data(
+          'compile',
+          api.raw_io.output(
+              gomacc_path + textwrap.dedent("""
           [1/1] CXX a.o
           filename error 1 info
           More stuff that happened in the error
@@ -208,9 +210,11 @@ def GenTests(api):
           More stuff that happened in the error
           filename error 6 info
           """),
-          name='failure_summary'), retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.ResultReason,
+              name='failure_summary'),
+          retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
           textwrap.dedent("""
           #### Step _compile_ failed. Error logs are shown below:
           ```
@@ -229,6 +233,6 @@ def GenTests(api):
           ```
           ##### ...The message was too long...
           #### More information in raw_io.output[failure_summary]
-          """).strip()) +
-      api.post_process(post_process.DropExpectation)
+          """).strip()),
+      api.post_process(post_process.DropExpectation),
   )

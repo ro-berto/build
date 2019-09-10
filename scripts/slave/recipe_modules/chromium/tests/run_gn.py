@@ -21,23 +21,23 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('basic')
 
-  yield (
-      api.test('custom_gn_path') +
-      api.properties(gn_path='some/other/path/gn')
+  yield api.test(
+      'custom_gn_path',
+      api.properties(gn_path='some/other/path/gn'),
   )
 
-  yield (
-      api.test('mac') +
-      api.platform('mac', 64) +
-      api.properties(target_platform='mac')
+  yield api.test(
+      'mac',
+      api.platform('mac', 64),
+      api.properties(target_platform='mac'),
   )
 
-  yield (
-      api.test('android') +
-      api.properties(target_platform='android')
+  yield api.test(
+      'android',
+      api.properties(target_platform='android'),
   )
 
-  yield (
-      api.test('debug') +
-      api.properties(build_config='Debug')
+  yield api.test(
+      'debug',
+      api.properties(build_config='Debug'),
   )

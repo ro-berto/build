@@ -19,7 +19,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.override_step_data('analyze', api.chromium.analyze_builds_nothing)
+  yield api.test(
+      'basic',
+      api.override_step_data('analyze', api.chromium.analyze_builds_nothing),
   )

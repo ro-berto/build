@@ -51,185 +51,210 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic_out_dir') + api.properties(
-      mastername='chromium.android',
-      buildername='Android arm Builder (dbg)',
-      bot_id='build1-a1',
-      buildnumber='77457',
-      out_dir='/tmp',
+  yield api.test(
+      'basic_out_dir',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+      ),
   )
 
-  yield api.test('basic_out_dir_with_custom_mb_config') + api.properties(
-      mastername='chromium.android',
-      buildername='Android arm Builder (dbg)',
-      bot_id='build1-a1',
-      buildnumber='77457',
-      out_dir='/tmp',
-      mb_config_path='/custom/config.pyl',
+  yield api.test(
+      'basic_out_dir_with_custom_mb_config',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          mb_config_path='/custom/config.pyl',
+      ),
   )
 
-  yield api.test('basic_out_dir_without_compile_py') + api.properties(
-      mastername='chromium.android',
-      buildername='Android arm Builder (dbg)',
-      bot_id='build1-a1',
-      buildnumber='77457',
-      out_dir='/tmp',
+  yield api.test(
+      'basic_out_dir_without_compile_py',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+      ),
   )
 
-  yield api.test('basic_out_dir_with_goma_module') + api.properties(
-      mastername='chromium.android',
-      buildername='Android arm Builder (dbg)',
-      bot_id='build1-a1',
-      buildnumber='77457',
-      use_goma_module=True,
-      out_dir='/tmp',
+  yield api.test(
+      'basic_out_dir_with_goma_module',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          use_goma_module=True,
+          out_dir='/tmp',
+      ),
   )
 
-  yield api.test('basic_no_out_dir_with_goma_module') + api.properties(
-      mastername='chromium.android',
-      buildername='Android arm Builder (dbg)',
-      bot_id='build1-a1',
-      buildnumber='77457',
-      use_goma_module=True,
+  yield api.test(
+      'basic_no_out_dir_with_goma_module',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          use_goma_module=True,
+      ),
   )
 
-  yield (api.test('basic_out_dir_goma_module_build_failure') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=True,
-             failfast=True,
-         ) + api.step_data('compile', retcode=1) +
-         api.step_data(
-             'postprocess_for_goma.goma_jsonstatus',
-             api.json.output(
-                 data={
-                     'notice': [
-                         {
-                             'infra_status': {
-                                 'ping_status_code': 200,
-                                 'num_user_error': 1,
-                             },
-                         },
-                     ],
-                 })))
-
-  yield (api.test('basic_out_dir_ninja_build_failure') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=False,
-         ) + api.step_data('compile', retcode=1))
-
-  yield (api.test('basic_out_dir_ninja_no_op_failure') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=True,
-         ) + api.override_step_data(
-             'compile confirm no-op',
-             stdout=api.raw_io.output(
-                 "ninja explain: chrome is dirty\n")))
-
-  yield (api.test('basic_out_dir_goma_module_start_failure') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=True,
-             failfast=True,
-         ) + api.step_data('preprocess_for_goma.start_goma', retcode=1) +
-         api.step_data(
-             'preprocess_for_goma.goma_jsonstatus',
-             api.json.output(
-                 data={
-                     'notice': [
-                         {
-                             "compile_error": "COMPILER_PROXY_UNREACHABLE",
-                         },
-                     ],
-                 })))
-
-  yield (api.test('basic_out_dir_goma_module_ping_failure') +
-         api.properties(
-             mastername='chromium.android',
-             buildername='Android arm Builder (dbg)',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             use_goma_module=True,
-             failfast=True,
-         ) + api.step_data('preprocess_for_goma.start_goma', retcode=1) +
-         api.step_data(
-             'preprocess_for_goma.goma_jsonstatus',
-             api.json.output(
-                 data={
-                     'notice': [
-                         {
-                             'infra_status': {
-                                 'ping_status_code': 408,
-                             },
-                         },
-                     ],
-                 })))
-
-  yield (api.test('mac_basic') +
-         api.platform('mac', 64) +
-         api.properties(
-             mastername='chromium.mac',
-             buildername='Mac Builder',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             target_platform='mac',
-         )
+  yield api.test(
+      'basic_out_dir_goma_module_build_failure',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          use_goma_module=True,
+          failfast=True,
+      ),
+      api.step_data('compile', retcode=1),
+      api.step_data(
+          'postprocess_for_goma.goma_jsonstatus',
+          api.json.output(
+              data={
+                  'notice': [{
+                      'infra_status': {
+                          'ping_status_code': 200,
+                          'num_user_error': 1,
+                      },
+                  },],
+              })),
   )
 
-  yield (api.test('mac_basic_luci') +
-         api.platform('mac', 64) +
-         api.properties(
-             mastername='chromium.mac',
-             buildername='Mac Builder',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             target_platform='mac',
-         ) +
-         api.runtime(is_luci=True, is_experimental=False) +
-         api.post_process(Filter('gclient runhooks'))
+  yield api.test(
+      'basic_out_dir_ninja_build_failure',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          use_goma_module=False,
+      ),
+      api.step_data('compile', retcode=1),
   )
 
-  yield (api.test('mac_toolchain') +
-         api.platform('mac', 64) +
-         api.properties(
-             mastername='chromium.mac',
-             buildername='Mac Builder',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-             target_platform='mac',
-             configs=['mac_toolchain'],
-         )
+  yield api.test(
+      'basic_out_dir_ninja_no_op_failure',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          use_goma_module=True,
+      ),
+      api.override_step_data(
+          'compile confirm no-op',
+          stdout=api.raw_io.output("ninja explain: chrome is dirty\n")),
   )
 
-  yield (api.test('chromeos_simplechrome') +
-         api.platform('linux', 64) +
-         api.properties(
-             mastername='chromium.chromiumos',
-             buildername='chromeos-amd64-generic-rel',
-             bot_id='build1-a1',
-             buildnumber='77457',
-             out_dir='/tmp',
-         )
+  yield api.test(
+      'basic_out_dir_goma_module_start_failure',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          use_goma_module=True,
+          failfast=True,
+      ),
+      api.step_data('preprocess_for_goma.start_goma', retcode=1),
+      api.step_data(
+          'preprocess_for_goma.goma_jsonstatus',
+          api.json.output(data={
+              'notice': [{
+                  "compile_error": "COMPILER_PROXY_UNREACHABLE",
+              },],
+          })),
+  )
+
+  yield api.test(
+      'basic_out_dir_goma_module_ping_failure',
+      api.properties(
+          mastername='chromium.android',
+          buildername='Android arm Builder (dbg)',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          use_goma_module=True,
+          failfast=True,
+      ),
+      api.step_data('preprocess_for_goma.start_goma', retcode=1),
+      api.step_data(
+          'preprocess_for_goma.goma_jsonstatus',
+          api.json.output(data={
+              'notice': [{
+                  'infra_status': {
+                      'ping_status_code': 408,
+                  },
+              },],
+          })),
+  )
+
+  yield api.test(
+      'mac_basic',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.mac',
+          buildername='Mac Builder',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          target_platform='mac',
+      ),
+  )
+
+  yield api.test(
+      'mac_basic_luci',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.mac',
+          buildername='Mac Builder',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          target_platform='mac',
+      ),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(Filter('gclient runhooks')),
+  )
+
+  yield api.test(
+      'mac_toolchain',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.mac',
+          buildername='Mac Builder',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          target_platform='mac',
+          configs=['mac_toolchain'],
+      ),
+  )
+
+  yield api.test(
+      'chromeos_simplechrome',
+      api.platform('linux', 64),
+      api.properties(
+          mastername='chromium.chromiumos',
+          buildername='chromeos-amd64-generic-rel',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+      ),
   )

@@ -43,23 +43,23 @@ def RunSteps(api):
   api.gclient.apply_config(api.properties.get('apply_gclient_config'))
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(apply_gclient_config='checkout_instrumented_libraries') +
-      api.post_process(DropExpectation)
+  yield api.test(
+      'basic',
+      api.properties(apply_gclient_config='checkout_instrumented_libraries'),
+      api.post_process(DropExpectation),
   )
-  yield (
-      api.test('clang_coverage') +
-      api.properties(apply_gclient_config='use_clang_coverage') +
-      api.post_process(DropExpectation)
+  yield api.test(
+      'clang_coverage',
+      api.properties(apply_gclient_config='use_clang_coverage'),
+      api.post_process(DropExpectation),
   )
-  yield (
-      api.test('tot_clang') +
-      api.properties(apply_gclient_config='clang_tot') +
-      api.post_process(DropExpectation)
+  yield api.test(
+      'tot_clang',
+      api.properties(apply_gclient_config='clang_tot'),
+      api.post_process(DropExpectation),
   )
-  yield (
-      api.test('no_checkout_flash') +
-      api.properties(apply_gclient_config='no_checkout_flash') +
-      api.post_process(DropExpectation)
+  yield api.test(
+      'no_checkout_flash',
+      api.properties(apply_gclient_config='no_checkout_flash'),
+      api.post_process(DropExpectation),
   )

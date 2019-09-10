@@ -19,8 +19,8 @@ def RunSteps(api):
   })
 
 def GenTests(api):
-  yield (
-      api.test('override_version') +
-      api.chromium.override_version(
-          major=123, minor=1, build=9876, patch=2) +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'override_version',
+      api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
+      api.post_process(post_process.DropExpectation),
+  )

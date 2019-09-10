@@ -55,10 +55,10 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
           platform_name = 'win'
         else:
           platform_name = 'linux'
-        test = (
-            self.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                      _sanitize_nonalpha(buildername))) +
-            self.m.platform.name(platform_name)
+        test = self.test(
+            'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                            _sanitize_nonalpha(buildername)),
+            self.m.platform.name(platform_name),
         )
         if mastername.startswith('tryserver'):
           test += self.m.properties.tryserver(buildername=buildername,

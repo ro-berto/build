@@ -24,20 +24,20 @@ def RunSteps(api):
 
 def GenTests(api):
   def from_config(config):
-    return (
-        api.test(config) +
-        api.properties(chromium_config=config) +
-        api.post_process(post_process.StatusSuccess) +
-        api.post_process(post_process.DropExpectation)
+    return api.test(
+        config,
+        api.properties(chromium_config=config),
+        api.post_process(post_process.StatusSuccess),
+        api.post_process(post_process.DropExpectation),
     )
 
   yield from_config('gn')
 
-  yield (
-      api.test('ios') +
-      api.platform('mac', 64) +
-      api.properties(target_platform='ios') +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'ios',
+      api.platform('mac', 64),
+      api.properties(target_platform='ios'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('goma_canary')
@@ -50,13 +50,12 @@ def GenTests(api):
 
   yield from_config('trybot_flavor')
 
-  yield (
-      api.test('chromium_win_clang_official') +
-      api.platform('win', 64) +
+  yield api.test(
+      'chromium_win_clang_official',
+      api.platform('win', 64),
       api.properties(
-          chromium_config='chromium_win_clang_official',
-          target_platform='win') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='chromium_win_clang_official', target_platform='win'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('chromium_win_clang_official_tot')
@@ -67,13 +66,12 @@ def GenTests(api):
 
   yield from_config('clang_tot_linux')
 
-  yield (
-      api.test('clang_tot_mac') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'clang_tot_mac',
+      api.platform('mac', 64),
       api.properties(
-          chromium_config='clang_tot_mac_asan',
-          target_platform='mac') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='clang_tot_mac_asan', target_platform='mac'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('clang_tot_linux_asan')
@@ -84,13 +82,12 @@ def GenTests(api):
 
   yield from_config('clang_tot_linux_ubsan_vptr')
 
-  yield (
-      api.test('clang_tot_mac_asan') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'clang_tot_mac_asan',
+      api.platform('mac', 64),
       api.properties(
-          chromium_config='clang_tot_mac_asan',
-          target_platform='mac') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='clang_tot_mac_asan', target_platform='mac'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('clang_tot_android_asan')
@@ -99,21 +96,19 @@ def GenTests(api):
 
   yield from_config('chromium_tsan2')
 
-  yield (
-      api.test('chromium_official_linux') +
+  yield api.test(
+      'chromium_official_linux',
       api.properties(
-          chromium_config='chromium_official',
-          target_platform='linux') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='chromium_official', target_platform='linux'),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('chromium_official_win') +
-      api.platform('win', 64) +
+  yield api.test(
+      'chromium_official_win',
+      api.platform('win', 64),
       api.properties(
-          chromium_config='chromium_official_internal',
-          target_platform='win') +
-      api.post_process(post_process.DropExpectation)
+          chromium_config='chromium_official_internal', target_platform='win'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('android_clang')
@@ -122,24 +117,24 @@ def GenTests(api):
 
   yield from_config('download_vr_test_apks')
 
-  yield (
-      api.test('mac_toolchain') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'mac_toolchain',
+      api.platform('mac', 64),
       api.properties(
           target_platform='mac',
           chromium_apply_config=['mac_toolchain'],
-      ) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('ios_toolchain') +
-      api.platform('mac', 64) +
+  yield api.test(
+      'ios_toolchain',
+      api.platform('mac', 64),
       api.properties(
           target_platform='ios',
           chromium_apply_config=['mac_toolchain'],
-      ) +
-      api.post_process(post_process.DropExpectation)
+      ),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield from_config('android_internal_isolate_maps')

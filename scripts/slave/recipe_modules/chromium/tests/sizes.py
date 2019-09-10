@@ -27,42 +27,39 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id')
+          buildername='test_buildername', buildnumber=123,
+          bot_id='test_bot_id'),
   )
 
-  yield (
-      api.test('luci') +
+  yield api.test(
+      'luci',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(
-          post_process.StepCommandContains, 'sizes', ['--use-histograms']) +
-      api.post_process(post_process.DropExpectation)
+          buildername='test_buildername', buildnumber=123,
+          bot_id='test_bot_id'),
+      api.runtime(is_luci=True, is_experimental=False),
+      api.post_process(post_process.StepCommandContains, 'sizes',
+                       ['--use-histograms']),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('platform') +
+  yield api.test(
+      'platform',
       api.properties(
           platform='linux',
           buildername='test_buildername',
           buildnumber=123,
-          bot_id='test_bot_id')
+          bot_id='test_bot_id'),
   )
 
-  yield (
-      api.test('compile_failure') +
+  yield api.test(
+      'compile_failure',
       api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id') +
-      api.step_data('compile', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+          buildername='test_buildername', buildnumber=123,
+          bot_id='test_bot_id'),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

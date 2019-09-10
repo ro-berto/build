@@ -27,13 +27,13 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(buildername='test_buildername')
+  yield api.test(
+      'basic',
+      api.properties(buildername='test_buildername'),
   )
 
-  yield (
-      api.test('experimental') +
-      api.properties(buildername='test_buildername') +
-      api.runtime(is_luci=True, is_experimental=True)
+  yield api.test(
+      'experimental',
+      api.properties(buildername='test_buildername'),
+      api.runtime(is_luci=True, is_experimental=True),
   )
