@@ -224,30 +224,32 @@ def GenTests(api):
   # tests bots in BUILDERS
   for mastername, builders in BUILDERS.iteritems():
     for buildername in builders:
-      yield (
-        api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
-                                 _sanitize_nonalpha(buildername))) +
-        api.properties.generic(buildername=buildername,
-            repository='svn://svn.chromium.org/chrome/trunk/src',
-            buildnumber=257,
-            mastername=mastername,
-            issue='8675309',
-            patchset='1',
-            revision='a' * 40,
-            got_revision='a' * 40))
+      yield api.test(
+          'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                          _sanitize_nonalpha(buildername)),
+          api.properties.generic(
+              buildername=buildername,
+              repository='svn://svn.chromium.org/chrome/trunk/src',
+              buildnumber=257,
+              mastername=mastername,
+              issue='8675309',
+              patchset='1',
+              revision='a' * 40,
+              got_revision='a' * 40),
+      )
 
-  yield(
-    api.test('compile_failure') +
-    api.properties.generic(
-        mastername='chromium.perf',
-        repository='svn://svn.chromium.org/chrome/trunk/src',
-        buildnumber=257,
-        buildername='Android Builder Perf',
-        issue='8675309',
-        patchset='1',
-        revision='a' * 40,
-        got_revision='a' * 40) +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties.generic(
+          mastername='chromium.perf',
+          repository='svn://svn.chromium.org/chrome/trunk/src',
+          buildnumber=257,
+          buildername='Android Builder Perf',
+          issue='8675309',
+          patchset='1',
+          revision='a' * 40,
+          got_revision='a' * 40),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

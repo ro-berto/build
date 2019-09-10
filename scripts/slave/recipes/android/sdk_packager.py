@@ -134,71 +134,71 @@ def GenTests(api):
           }))
   )
 
-  yield (
-      api.test('basic') +
+  yield api.test(
+      'basic',
       api.buildbucket.ci_build(
           project='chromium',
           git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='android-sdk-packager') +
-      emulator_package_properties +
-      api.runtime(is_experimental=False, is_luci=True) +
+          builder='android-sdk-packager'),
+      emulator_package_properties,
+      api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(
           api.path['checkout'].join('third_party', 'android_sdk', 'public',
                                     'tools', 'bin', 'sdkmanager'),
           api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'emulator.yaml')) +
-      package_version_steps +
-      api.post_process(post_process.MustRun, 'emulator.install') +
-      api.post_process(post_process.MustRun, 'emulator.create emulator.yaml') +
-      api.post_process(post_process.StatusSuccess) +
-      api.post_process(post_process.DropExpectation)
+                                    'emulator.yaml')),
+      package_version_steps,
+      api.post_process(post_process.MustRun, 'emulator.install'),
+      api.post_process(post_process.MustRun, 'emulator.create emulator.yaml'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('no-sdkmanager') +
+  yield api.test(
+      'no-sdkmanager',
       api.buildbucket.ci_build(
           project='chromium',
           git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='android-sdk-packager') +
-      emulator_package_properties +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+          builder='android-sdk-packager'),
+      emulator_package_properties,
+      api.runtime(is_experimental=False, is_luci=True),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('unparseable-list-output') +
+  yield api.test(
+      'unparseable-list-output',
       api.buildbucket.ci_build(
           project='chromium',
           git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='android-sdk-packager') +
-      emulator_package_properties +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.path.exists(
-          api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'tools', 'bin', 'sdkmanager')) +
+          builder='android-sdk-packager'),
+      emulator_package_properties,
+      api.runtime(is_experimental=False, is_luci=True),
+      api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
+                                                'public', 'tools', 'bin',
+                                                'sdkmanager')),
       api.override_step_data(
           'package versions.list',
-          stdout=api.raw_io.output_text(textwrap.dedent(
-              '''\
+          stdout=api.raw_io.output_text(
+              textwrap.dedent('''\
               [UNPARSEABLE]
-              '''))) +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+              '''))),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
-  yield (
-      api.test('no-cipd-yaml') +
+  yield api.test(
+      'no-cipd-yaml',
       api.buildbucket.ci_build(
           project='chromium',
           git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='android-sdk-packager') +
-      emulator_package_properties +
-      api.runtime(is_experimental=False, is_luci=True) +
-      api.path.exists(
-          api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'tools', 'bin', 'sdkmanager')) +
-      package_version_steps +
-      api.post_process(post_process.StatusException) +
-      api.post_process(post_process.DropExpectation)
+          builder='android-sdk-packager'),
+      emulator_package_properties,
+      api.runtime(is_experimental=False, is_luci=True),
+      api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
+                                                'public', 'tools', 'bin',
+                                                'sdkmanager')),
+      package_version_steps,
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
