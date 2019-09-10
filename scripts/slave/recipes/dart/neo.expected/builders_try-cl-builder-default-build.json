@@ -309,7 +309,7 @@
       ]
     },
     "name": "build dart",
-    "timeout": 2400
+    "timeout": 3000
   },
   {
     "cmd": [],

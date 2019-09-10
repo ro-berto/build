@@ -237,7 +237,7 @@
       ]
     },
     "name": "can_time_out",
-    "timeout": 2400
+    "timeout": 3000
   },
   {
     "cmd": [],
@@ -937,7 +937,7 @@
       ]
     },
     "name": "build",
-    "timeout": 2400
+    "timeout": 3000
   },
   {
     "cmd": [],

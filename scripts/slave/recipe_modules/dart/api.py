@@ -111,7 +111,7 @@ class DartApi(recipe_api.RecipeApi):
           self.m.python(name,
                         self.m.path['checkout'].join('tools', 'build.py'),
                         args=build_args,
-                        timeout=40 * 60)
+                        timeout=50 * 60)
         finally:
           build_exit_status = self.m.step.active_result.retcode
       finally:
