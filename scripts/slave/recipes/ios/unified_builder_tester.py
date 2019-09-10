@@ -93,139 +93,139 @@ def GenTests(api):
     )
   )
 
-  yield (
-    api.test('basic')
-    + basic_common
-    + api.runtime(is_luci=False, is_experimental=False)
+  yield api.test(
+      'basic',
+      basic_common,
+      api.runtime(is_luci=False, is_experimental=False),
   )
 
-  yield (
-    api.test('basic_experimental')
-    + basic_common
-    + api.runtime(is_luci=True, is_experimental=True)
+  yield api.test(
+      'basic_experimental',
+      basic_common,
+      api.runtime(is_luci=True, is_experimental=True),
   )
 
-  yield (
-    api.test('goma')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.buildbucket.try_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=false',
-        'target_cpu="arm"',
-        'use_goma=true',
-      ],
-      'tests': [
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
+  yield api.test(
+      'goma',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+          path_config='kitchen',
+      ),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version': 'fake xcode version',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+              'use_goma=true',
+          ],
+          'tests': [],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
   )
 
-  yield (
-    api.test('goma_canary')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.buildbucket.try_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [
-        'is_debug=false',
-        'target_cpu="arm"',
-        'use_goma=true',
-      ],
-      'goma_client_type': 'candidate',
-      'tests': [
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
+  yield api.test(
+      'goma_canary',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+          path_config='kitchen',
+      ),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version': 'fake xcode version',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+              'use_goma=true',
+          ],
+          'goma_client_type': 'candidate',
+          'tests': [],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
   )
 
-  yield (
-    api.test('goma_compilation_failure')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-    )
-    + api.buildbucket.try_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
-      'gn_args': [
-        'is_debug=false',
-        'target_cpu="arm"',
-        'use_goma=true',
-      ],
-      'tests': [
-        {
-          'app': 'fake test',
-          'device type': 'fake device',
-          'os': '8.1',
-        },
-      ],
-    })
-    + api.step_data(
-        'compile',
-        retcode=1,
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
+  yield api.test(
+      'goma_compilation_failure',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+      ),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version':
+              '6.1.1',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+              'use_goma=true',
+          ],
+          'tests': [{
+              'app': 'fake test',
+              'device type': 'fake device',
+              'os': '8.1',
+          },],
+      }),
+      api.step_data(
+          'compile',
+          retcode=1,
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
   )
 
-  yield (
-    api.test('clang-tot') +
-    api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.clang',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.buildbucket.try_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'gn_args': [ 'is_debug=false', 'target_cpu="arm"', ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-    + api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'clang-tot',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.clang',
+          bot_id='fake-vm',
+          path_config='kitchen',
+      ),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version': 'fake xcode version',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+          ],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
+      api.post_process(post_process.DropExpectation),
   )
