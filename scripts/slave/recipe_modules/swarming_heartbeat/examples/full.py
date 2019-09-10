@@ -15,6 +15,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test('prod')
 
-  yield (
-      api.test('staging') +
-      api.properties.scheduled(target_environment='staging'))
+  yield api.test(
+      'staging',
+      api.properties.scheduled(target_environment='staging'),
+  )
