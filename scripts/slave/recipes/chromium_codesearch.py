@@ -272,89 +272,84 @@ SAMPLE_GN_DESC_OUTPUT = '''
 
 def GenTests(api):
   for buildername, _ in SPEC['builders'].iteritems():
-    yield (
-        api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
-        api.step_data('generate gn target list',
-                      api.raw_io.stream_output(
-                          SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-        api.properties.generic(buildername=buildername) +
-        api.runtime(is_luci=True, is_experimental=False)
+    yield api.test(
+        'full_%s' % (_sanitize_nonalpha(buildername)),
+        api.step_data(
+            'generate gn target list',
+            api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+        api.properties.generic(buildername=buildername),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   for buildername, _ in SPEC['builders'].iteritems():
-    yield (
-        api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
-        api.step_data('generate gn target list',
-                      api.raw_io.stream_output(
-                          SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-        api.properties.generic(buildername=buildername) +
-        api.properties(root_solution_revision='a' * 40,
-                       root_solution_revision_timestamp=1531887759) +
-        api.runtime(is_luci=True, is_experimental=False)
+    yield api.test(
+        'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
+        api.step_data(
+            'generate gn target list',
+            api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+        api.properties.generic(buildername=buildername),
+        api.properties(
+            root_solution_revision='a' * 40,
+            root_solution_revision_timestamp=1531887759),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
-  yield (
-    api.test(
-        'full_%s_delete_generated_files_fail' %
-        _sanitize_nonalpha('codesearch-gen-chromium-win')) +
-    api.step_data('delete old generated files', retcode=1) +
-    api.step_data('generate gn target list',
-                  api.raw_io.stream_output(
-                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-    api.properties.generic(buildername='codesearch-gen-chromium-win') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_delete_generated_files_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-win'),
+      api.step_data('delete old generated files', retcode=1),
+      api.step_data(
+          'generate gn target list',
+          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.properties.generic(buildername='codesearch-gen-chromium-win'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-    api.test(
-        'full_%s_compile_fail' %
-        _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
-    api.step_data('compile', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-linux') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_compile_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      api.step_data('compile', retcode=1),
+      api.properties.generic(buildername='codesearch-gen-chromium-linux'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-    api.test(
-        'full_%s_translation_unit_fail' % _sanitize_nonalpha(
-            'codesearch-gen-chromium-chromiumos')) +
-    api.step_data('run translation_unit clang tool', retcode=2) +
-    api.step_data('generate gn target list',
-                  api.raw_io.stream_output(
-                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_translation_unit_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
+      api.step_data('run translation_unit clang tool', retcode=2),
+      api.step_data(
+          'generate gn target list',
+          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.properties.generic(buildername='codesearch-gen-chromium-chromiumos'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-    api.test(
-        'full_%s_generate_compile_database_fail' %
-        _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
-    api.step_data('generate compilation database', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_generate_compile_database_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
+      api.step_data('generate compilation database', retcode=1),
+      api.properties.generic(buildername='codesearch-gen-chromium-chromiumos'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-    api.test(
-        'full_%s_git_config_fail' %
-        _sanitize_nonalpha('codesearch-gen-chromium-win')) +
-    api.step_data('set core.longpaths', retcode=1) +
-    api.step_data('generate gn target list',
-                  api.raw_io.stream_output(
-                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-    api.properties.generic(buildername='codesearch-gen-chromium-win') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_git_config_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-win'),
+      api.step_data('set core.longpaths', retcode=1),
+      api.step_data(
+          'generate gn target list',
+          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.properties.generic(buildername='codesearch-gen-chromium-win'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
 
-  yield (
-    api.test(
-        'full_%s_sync_generated_files_fail' %
-        _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
-    api.step_data('sync generated files', retcode=1) +
-    api.step_data('generate gn target list',
-                  api.raw_io.stream_output(
-                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
-    api.properties.generic(buildername='codesearch-gen-chromium-linux') +
-    api.runtime(is_luci=True, is_experimental=False)
+  yield api.test(
+      'full_%s_sync_generated_files_fail' %
+      _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      api.step_data('sync generated files', retcode=1),
+      api.step_data(
+          'generate gn target list',
+          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.properties.generic(buildername='codesearch-gen-chromium-linux'),
+      api.runtime(is_luci=True, is_experimental=False),
   )
