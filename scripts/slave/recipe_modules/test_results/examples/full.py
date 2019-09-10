@@ -44,46 +44,53 @@ def RunSteps(api, warning, server_config):
 
 def GenTests(api):
   for config in ('no_server', 'public_server', 'staging_server'):
-    yield (
-        api.test('upload_success_%s' % config) +
+    yield api.test(
+        'upload_success_%s' % config,
         api.properties(
             mastername='example.master',
             buildername='ExampleBuilder',
             buildnumber=123,
-            server_config=config))
+            server_config=config),
+    )
 
   for config in ('no_server', 'public_server', 'staging_server'):
-    yield (
-        api.test('upload_success_buildbucket_%s' % config) +
+    yield api.test(
+        'upload_success_buildbucket_%s' % config,
         api.properties(
             mastername='example.master',
             buildername='ExampleBuilder',
             buildnumber=123,
-            buildbucket={'build':{'id':2345}},
-            server_config=config))
+            buildbucket={'build': {
+                'id': 2345
+            }},
+            server_config=config),
+    )
 
-  yield (
-      api.test('upload_success_experimental') +
-      api.runtime(is_luci=True, is_experimental=True) +
+  yield api.test(
+      'upload_success_experimental',
+      api.runtime(is_luci=True, is_experimental=True),
       api.properties(
           mastername='example.master',
           buildername='ExampleBuilder',
-          buildnumber=123))
+          buildnumber=123),
+  )
 
-  yield (
-      api.test('upload_and_degrade_to_warning') +
-      api.step_data('Upload to test-results [example-test-type]', retcode=1) +
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123,
-          warning=True))
-
-  yield (
-      api.test('upload_without_degrading_failures') +
-      api.step_data('Upload to test-results [example-test-type]', retcode=1) +
+  yield api.test(
+      'upload_and_degrade_to_warning',
+      api.step_data('Upload to test-results [example-test-type]', retcode=1),
       api.properties(
           mastername='example.master',
           buildername='ExampleBuilder',
           buildnumber=123,
-          warning=False))
+          warning=True),
+  )
+
+  yield api.test(
+      'upload_without_degrading_failures',
+      api.step_data('Upload to test-results [example-test-type]', retcode=1),
+      api.properties(
+          mastername='example.master',
+          buildername='ExampleBuilder',
+          buildnumber=123,
+          warning=False),
+  )
