@@ -31,57 +31,65 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('invalid_commit_position') +
-      api.properties(commit_position='foo'))
+  yield api.test(
+      'invalid_commit_position',
+      api.properties(commit_position='foo'),
+  )
 
-  yield (
-      api.test('invalid_hash') +
-      api.properties(commit_hash='foo'))
+  yield api.test(
+      'invalid_hash',
+      api.properties(commit_hash='foo'),
+  )
 
-  yield (
-      api.test('valid_hash') +
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
+  yield api.test(
+      'valid_hash',
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
       api.step_data(
           name='crrev get commit position for '
-               'abcdeabcde0123456789abcdeabcde0123456789',
+          'abcdeabcde0123456789abcdeabcde0123456789',
           stdout=api.json.output({
-              'numberings': [
-                  {
-                      'number': '111',
-                      'numbering_identifier': 'refs/heads/master',
-                      'numbering_type': 'COMMIT_POSITION',
-                  }
-              ]})))
+              'numberings': [{
+                  'number': '111',
+                  'numbering_identifier': 'refs/heads/master',
+                  'numbering_type': 'COMMIT_POSITION',
+              }]
+          })),
+  )
 
-  yield (
-      api.test('valid_commit_position') +
-      api.properties(commit_position='refs/heads/master@{#111}') +
+  yield api.test(
+      'valid_commit_position',
+      api.properties(commit_position='refs/heads/master@{#111}'),
       api.step_data(
           name='crrev get commit hash for refs/heads/master@{#111}',
           stdout=api.json.output({
               'git_sha': 'abcdeabcde0123456789abcdeabcde0123456789'
-          })))
+          })),
+  )
 
-  yield (
-      api.test('empty_commit_hash_output') +
-      api.properties(commit_position='refs/heads/master@{#111}') +
+  yield api.test(
+      'empty_commit_hash_output',
+      api.properties(commit_position='refs/heads/master@{#111}'),
       api.step_data(
           name='crrev get commit hash for refs/heads/master@{#111}',
-          stdout=api.json.output({})))
+          stdout=api.json.output({})),
+  )
 
-  yield (
-      api.test('empty_commit_position_output') +
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
+  yield api.test(
+      'empty_commit_position_output',
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
       api.step_data(
           name='crrev get commit position for '
-               'abcdeabcde0123456789abcdeabcde0123456789',
-          stdout=api.json.output({})))
+          'abcdeabcde0123456789abcdeabcde0123456789',
+          stdout=api.json.output({})),
+  )
 
-  yield (
-      api.test('no_numberings') +
-      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789') +
+  yield api.test(
+      'no_numberings',
+      api.properties(commit_hash='abcdeabcde0123456789abcdeabcde0123456789'),
       api.step_data(
           name='crrev get commit position for '
-               'abcdeabcde0123456789abcdeabcde0123456789',
-          stdout=api.json.output({'numberings': []})))
+          'abcdeabcde0123456789abcdeabcde0123456789',
+          stdout=api.json.output({
+              'numberings': []
+          })),
+  )
