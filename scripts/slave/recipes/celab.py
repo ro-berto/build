@@ -412,128 +412,162 @@ def _UploadTestResults(api, tests_summary):
 
 
 def GenTests(api):
-  yield (
-      api.test('basic_try') +
-      api.buildbucket.try_build(project='celab', bucket='try',
-                                git_repo=CELAB_REPO)
+  yield api.test(
+      'basic_try',
+      api.buildbucket.try_build(
+          project='celab', bucket='try', git_repo=CELAB_REPO),
   )
-  yield (
-      api.test('basic_ci_linux') +
-      api.platform('linux', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='ci',
-                               git_repo=CELAB_REPO)
+  yield api.test(
+      'basic_ci_linux',
+      api.platform('linux', 64),
+      api.buildbucket.ci_build(
+          project='celab', bucket='ci', git_repo=CELAB_REPO),
   )
-  yield (
-      api.test('basic_ci_windows') +
-      api.platform('win', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='ci',
-                               git_repo=CELAB_REPO)
+  yield api.test(
+      'basic_ci_windows',
+      api.platform('win', 64),
+      api.buildbucket.ci_build(
+          project='celab', bucket='ci', git_repo=CELAB_REPO),
   )
-  yield (
-      api.test('failed_tests_ci_linux') +
-      api.platform('linux', 64) +
-      api.properties(tests='*', pool_name='celab-ci', pool_size=5) +
-      api.buildbucket.ci_build(project='celab', bucket='ci',
-                               git_repo=CELAB_REPO) +
-      api.step_data('run all tests', retcode=1) +
-      api.step_data('test summary.parse summary',
-                    api.json.output({
-                      '1st test': {'success': False, 'output': '/some/file'},
-                      '2nd test': {'success': True, 'output': '/other/file'},
-                      '3rd test': {'success': False, 'output': '/missing'}})) +
+  yield api.test(
+      'failed_tests_ci_linux',
+      api.platform('linux', 64),
+      api.properties(tests='*', pool_name='celab-ci', pool_size=5),
+      api.buildbucket.ci_build(
+          project='celab', bucket='ci', git_repo=CELAB_REPO),
+      api.step_data('run all tests', retcode=1),
+      api.step_data(
+          'test summary.parse summary',
+          api.json.output({
+              '1st test': {
+                  'success': False,
+                  'output': '/some/file'
+              },
+              '2nd test': {
+                  'success': True,
+                  'output': '/other/file'
+              },
+              '3rd test': {
+                  'success': False,
+                  'output': '/missing'
+              }
+          })),
       api.step_data('test summary.1st test.read logs',
-            api.file.read_text('first\ntest\nlogs')) +
+                    api.file.read_text('first\ntest\nlogs')),
       api.step_data('test summary.3rd test.read logs',
-            api.file.errno('EEXIST')) +
-      api.path.exists(api.path['start_dir'].join('logs', '1st test'))
+                    api.file.errno('EEXIST')),
+      api.path.exists(api.path['start_dir'].join('logs', '1st test')),
   )
-  yield (
-      api.test('failed_tests_no_summary_ci_linux') +
-      api.platform('linux', 64) +
-      api.properties(tests='*', pool_name='celab-ci', pool_size=5) +
-      api.buildbucket.ci_build(project='celab', bucket='ci',
-                               git_repo=CELAB_REPO) +
-      api.step_data('run all tests', retcode=1) +
-      api.step_data('test summary.parse summary', retcode=1)
+  yield api.test(
+      'failed_tests_no_summary_ci_linux',
+      api.platform('linux', 64),
+      api.properties(tests='*', pool_name='celab-ci', pool_size=5),
+      api.buildbucket.ci_build(
+          project='celab', bucket='ci', git_repo=CELAB_REPO),
+      api.step_data('run all tests', retcode=1),
+      api.step_data('test summary.parse summary', retcode=1),
   )
-  yield (
-      api.test('windows_quick_tests') +
-      api.properties(tests='sample.test', pool_name='celab-try', pool_size=5) +
-      api.platform('win', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='try',
-                               builder='windows-quick-tests',
-                               git_repo=CELAB_REPO)
+  yield api.test(
+      'windows_quick_tests',
+      api.properties(tests='sample.test', pool_name='celab-try', pool_size=5),
+      api.platform('win', 64),
+      api.buildbucket.ci_build(
+          project='celab',
+          bucket='try',
+          builder='windows-quick-tests',
+          git_repo=CELAB_REPO),
   )
-  yield (
-      api.test('misconfigured_tests') +
-      api.properties(tests='sample.test') +
-      api.platform('win', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='try',
-                               builder='misconfigured-quick-tests',
-                               git_repo=CELAB_REPO) +
-      api.expect_exception('ValueError')
+  yield api.test(
+      'misconfigured_tests',
+      api.properties(tests='sample.test'),
+      api.platform('win', 64),
+      api.buildbucket.ci_build(
+          project='celab',
+          bucket='try',
+          builder='misconfigured-quick-tests',
+          git_repo=CELAB_REPO),
+      api.expect_exception('ValueError'),
   )
-  yield (
-      api.test('chromium_try') +
-      api.properties(tests='chromium.test',
-                     pool_name='chromium-try', pool_size=5,
-                     mastername='tryserver.chromium.win', bot_id='test_bot') +
-      api.platform('win', 64) +
-      api.buildbucket.try_build(project='chromium',
-                                bucket='luci.chromium.try',
-                                builder='win-celab-try-rel',
-                                git_repo=CHROMIUM_REPO) +
-      api.step_data('read vpython file',
-            api.file.read_text('''wheel: <
+  yield api.test(
+      'chromium_try',
+      api.properties(
+          tests='chromium.test',
+          pool_name='chromium-try',
+          pool_size=5,
+          mastername='tryserver.chromium.win',
+          bot_id='test_bot'),
+      api.platform('win', 64),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='luci.chromium.try',
+          builder='win-celab-try-rel',
+          git_repo=CHROMIUM_REPO),
+      api.step_data(
+          'read vpython file',
+          api.file.read_text('''wheel: <
               name: "infra/celab/celab/windows-amd64"
               version: "celab_package_version"
-            >''')) +
-      api.step_data('test summary.parse summary',
-                    api.json.output({
-                      '1st test': {'success': False, 'output': '/file'}}))
+            >''')),
+      api.step_data(
+          'test summary.parse summary',
+          api.json.output({
+              '1st test': {
+                  'success': False,
+                  'output': '/file'
+              }
+          })),
   )
-  yield (
-      api.test('chromium_no_tests') +
-      api.properties(mastername='tryserver.chromium.win', bot_id='test_bot') +
-      api.platform('win', 64) +
-      api.buildbucket.try_build(project='chromium',
-                                bucket='luci.chromium.try',
-                                builder='win-celab-try-rel',
-                                git_repo=CHROMIUM_REPO) +
-      api.expect_exception('ValueError')
+  yield api.test(
+      'chromium_no_tests',
+      api.properties(mastername='tryserver.chromium.win', bot_id='test_bot'),
+      api.platform('win', 64),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='luci.chromium.try',
+          builder='win-celab-try-rel',
+          git_repo=CHROMIUM_REPO),
+      api.expect_exception('ValueError'),
   )
-  yield (
-      api.test('chromium_no_celab_package') +
-      api.properties(tests='chromium.test',
-                     mastername='tryserver.chromium.win', bot_id='test_bot') +
-      api.platform('win', 64) +
-      api.buildbucket.try_build(project='chromium',
-                                bucket='luci.chromium.try',
-                                builder='win-celab-try-rel',
-                                git_repo=CHROMIUM_REPO) +
-      api.step_data('read vpython file',
-            api.file.read_text('''wheel: <
+  yield api.test(
+      'chromium_no_celab_package',
+      api.properties(
+          tests='chromium.test',
+          mastername='tryserver.chromium.win',
+          bot_id='test_bot'),
+      api.platform('win', 64),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='luci.chromium.try',
+          builder='win-celab-try-rel',
+          git_repo=CHROMIUM_REPO),
+      api.step_data(
+          'read vpython file',
+          api.file.read_text('''wheel: <
               name: "infra/other/package"
               version: "package_version"
-            >''')) +
-      api.expect_exception('ValueError')
+            >''')),
+      api.expect_exception('ValueError'),
   )
-  yield (
-      api.test('invalid_project') +
-      api.buildbucket.ci_build(project='other-project') +
-      api.expect_exception('ValueError')
+  yield api.test(
+      'invalid_project',
+      api.buildbucket.ci_build(project='other-project'),
+      api.expect_exception('ValueError'),
   )
-  yield (
-      api.test('compile_failure') +
-      api.properties(tests='chromium.test',
-                     pool_name='chromium-try', pool_size=5,
-                     mastername='tryserver.chromium.win', bot_id='test_bot') +
-      api.platform('win', 64) +
-      api.buildbucket.try_build(project='chromium',
-                                bucket='luci.chromium.try',
-                                builder='win-celab-try-rel',
-                                git_repo=CHROMIUM_REPO) +
-      api.step_data('compile (with patch)', retcode=1) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties(
+          tests='chromium.test',
+          pool_name='chromium-try',
+          pool_size=5,
+          mastername='tryserver.chromium.win',
+          bot_id='test_bot'),
+      api.platform('win', 64),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='luci.chromium.try',
+          builder='win-celab-try-rel',
+          git_repo=CHROMIUM_REPO),
+      api.step_data('compile (with patch)', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
