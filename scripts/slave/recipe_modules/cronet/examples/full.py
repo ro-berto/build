@@ -79,7 +79,10 @@ def GenTests(api):
       git_revision='a' * 40
     )
     # Test regular bot.
-    yield api.test(bot_id) + props
+    yield api.test(
+        bot_id,
+        props,
+    )
     # Test experimental bot.
     yield (
         api.runtime(is_luci=True, is_experimental=True) +
@@ -87,19 +90,18 @@ def GenTests(api):
         props
     )
 
-  yield (
-    api.test('compile_failure') +
-    api.properties.generic(
-      buildername='local_test',
-      revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-      repository='https://chromium.googlesource.com/chromium/src',
-      branch='master',
-      project='src',
-      got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-      got_revision_cp='refs/heads/master@{#291141}',
-      git_revision='a' * 40
-    ) +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties.generic(
+          buildername='local_test',
+          revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          repository='https://chromium.googlesource.com/chromium/src',
+          branch='master',
+          project='src',
+          got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
+          got_revision_cp='refs/heads/master@{#291141}',
+          git_revision='a' * 40),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )

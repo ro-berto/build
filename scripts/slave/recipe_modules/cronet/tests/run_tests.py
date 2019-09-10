@@ -20,11 +20,10 @@ def RunSteps(api):
 
 def GenTests(api):
   # Ensure that cronet_unittests_android is built and run.
-  yield (
-      api.test('m66__cronet_unittests_android') +
-      api.properties(
-          buildername='generic_cronet_builder',
-          buildnumber='1') +
-      api.chromium.override_version(major=66) +
-      api.post_process(post_process.MustRun, 'cronet_unittests_android') +
-      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'm66__cronet_unittests_android',
+      api.properties(buildername='generic_cronet_builder', buildnumber='1'),
+      api.chromium.override_version(major=66),
+      api.post_process(post_process.MustRun, 'cronet_unittests_android'),
+      api.post_process(post_process.DropExpectation),
+  )

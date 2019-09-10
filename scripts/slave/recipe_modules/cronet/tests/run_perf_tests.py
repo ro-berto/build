@@ -17,10 +17,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield(
-    api.test('compile_failure') +
-    api.properties.generic(buildername='local_test') +
-    api.step_data('compile', retcode=1) +
-    api.post_process(post_process.StatusFailure) +
-    api.post_process(post_process.DropExpectation)
+  yield api.test(
+      'compile_failure',
+      api.properties.generic(buildername='local_test'),
+      api.step_data('compile', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
