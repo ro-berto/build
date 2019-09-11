@@ -175,12 +175,12 @@ def browser_perf_test(perf_id):
       # These tests needs --test-launcher-jobs=1 since some of them are
       # not able to run in parallel (they record system audio, etc).
       args=['--gtest_filter=%s' % ':'.join(
-                BAREMETAL_BROWSER_TESTS_FILTER + PERF_BROWSER_TESTS_FILTER
-            ),
-            '--run-manual', '--ui-test-action-max-timeout=350000',
-            '--test-launcher-jobs=1',
-            '--test-launcher-bot-mode',
-            '--test-launcher-print-test-stdio=always'],
+               BAREMETAL_BROWSER_TESTS_FILTER + PERF_BROWSER_TESTS_FILTER
+           ),
+           '--run-manual', '--ui-test-action-max-timeout=350000',
+           '--test-launcher-timeout=350000', '--test-launcher-jobs=1',
+           '--test-launcher-bot-mode',
+           '--test-launcher-print-test-stdio=always'],
       perf_id=perf_id,
       perf_config_mappings=None,
       commit_position_property='got_revision_cp')
