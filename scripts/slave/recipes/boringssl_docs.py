@@ -45,30 +45,29 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('docs') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.buildbucket.ci_build(
-        project='boringssl',
-        bucket='ci',
-        builder='docs',
-        git_repo='https://boringssl.googlesource.com/boringssl',
-    )
+  yield api.test(
+      'docs',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.buildbucket.ci_build(
+          project='boringssl',
+          bucket='ci',
+          builder='docs',
+          git_repo='https://boringssl.googlesource.com/boringssl',
+      ),
   )
-  yield (
-    api.test('docs-experimental') +
-    api.runtime(is_luci=False, is_experimental=True) +
-    api.properties.generic(mastername='client.boringssl',
-                           buildername='docs')
+  yield api.test(
+      'docs-experimental',
+      api.runtime(is_luci=False, is_experimental=True),
+      api.properties.generic(mastername='client.boringssl', buildername='docs'),
   )
 
-  yield (
-    api.test('docs-try') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.buildbucket.try_build(
-        project='boringssl',
-        bucket='try',
-        builder='docs',
-        git_repo='https://boringssl.googlesource.com/boringssl',
-    )
+  yield api.test(
+      'docs-try',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.buildbucket.try_build(
+          project='boringssl',
+          bucket='try',
+          builder='docs',
+          git_repo='https://boringssl.googlesource.com/boringssl',
+      ),
   )
