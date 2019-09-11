@@ -77,39 +77,27 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('linux64_debug') +
-      api.platform('linux', 64) +
-      api.buildbucket.try_build('openscreen', 'try') +
-      api.properties(
-          debug=True,
-          is_asan=True
-      )
+  yield api.test(
+      'linux64_debug',
+      api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(debug=True, is_asan=True),
   )
-  yield (
-      api.test('linux64_tsan') +
-      api.platform('linux', 64) +
-      api.buildbucket.try_build('openscreen', 'try') +
-      api.properties(
-          is_tsan=True
-      )
+  yield api.test(
+      'linux64_tsan',
+      api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(is_tsan=True),
   )
-  yield (
-      api.test('linux64_debug_gcc') +
-      api.platform('linux', 64) +
-      api.buildbucket.try_build('openscreen', 'try') +
-      api.properties(
-          debug=True,
-          is_asan=False,
-          is_gcc=True
-      )
+  yield api.test(
+      'linux64_debug_gcc',
+      api.platform('linux', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(debug=True, is_asan=False, is_gcc=True),
   )
-  yield (
-      api.test('mac_debug') +
-      api.platform('mac', 64) +
-      api.buildbucket.try_build('openscreen', 'try') +
-      api.properties(
-          debug=True,
-          is_asan=False
-      )
+  yield api.test(
+      'mac_debug',
+      api.platform('mac', 64),
+      api.buildbucket.try_build('openscreen', 'try'),
+      api.properties(debug=True, is_asan=False),
   )
