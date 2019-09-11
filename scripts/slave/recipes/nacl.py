@@ -137,79 +137,86 @@ def RunSteps(api):
   _TriggerTestsSteps(api)
 
 def GenTests(api):
-  yield (
-    api.test('linux_triggering') +
-    api.platform('linux', 64) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
-      revision = 'a' * 40,
-      bot_id = 'TestSlave',
-      buildnumber = 1234,
-      slavetype = 'BuilderTester',
-    ))
+  yield api.test(
+      'linux_triggering',
+      api.platform('linux', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='precise_64-newlib-arm_qemu-pnacl-dbg',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+  )
 
-  yield (
-    api.test('luci_win') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.platform('win', 64) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'win7-64-glibc-dbg',
-      revision = 'a' * 40,
-      bot_id = 'TestSlave',
-      buildnumber = 1234,
-      slavetype = 'BuilderTester',
-    ))
+  yield api.test(
+      'luci_win',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.platform('win', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='win7-64-glibc-dbg',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+  )
 
-  yield (
-    api.test('luci_mac') +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.platform('mac', 64) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'mac-newlib-dbg-asan',
-      revision = 'a' * 40,
-      bot_id = 'TestSlave',
-      buildnumber = 1234,
-      slavetype = 'BuilderTester',
-    ))
+  yield api.test(
+      'luci_mac',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.platform('mac', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='mac-newlib-dbg-asan',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+  )
 
-  yield (
-    api.test('win') +
-    api.platform('win', 64) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'win7-64-glibc-dbg',
-      revision = 'a' * 40,
-      bot_id = 'TestSlave',
-      buildnumber = 1234,
-      slavetype = 'BuilderTester',
-    ))
+  yield api.test(
+      'win',
+      api.platform('win', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='win7-64-glibc-dbg',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+  )
 
-  yield (
-    api.test('linux_triggering_failed') +
-    api.platform('linux', 64) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
-      revision = 'a' * 40,
-      bot_id = 'TestSlave',
-      buildnumber = 1234,
-      slavetype = 'BuilderTester',
-    ) + api.step_data('annotated steps', retcode=1))
+  yield api.test(
+      'linux_triggering_failed',
+      api.platform('linux', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='precise_64-newlib-arm_qemu-pnacl-dbg',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+      api.step_data('annotated steps', retcode=1),
+  )
 
-  yield (
-    api.test('linux_triggered') +
-    api.platform('linux', 32) +
-    api.properties(
-      mastername = 'client.nacl',
-      buildername = 'oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
-      revision = 'a' * 40,
-      bot_id='TestSlave',
-      buildnumber = 5678,
-      parent_slavename = 'TestSlave',
-      parent_buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
-      parent_buildnumber = 1,
-      slavetype = 'BuilderTester',
-    ))
+  yield api.test(
+      'linux_triggered',
+      api.platform('linux', 32),
+      api.properties(
+          mastername='client.nacl',
+          buildername='oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=5678,
+          parent_slavename='TestSlave',
+          parent_buildername='precise_64-newlib-arm_qemu-pnacl-dbg',
+          parent_buildnumber=1,
+          slavetype='BuilderTester',
+      ),
+  )
