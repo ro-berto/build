@@ -5,7 +5,6 @@ per-file bisect*=dtu@chromium.org
 per-file bisect*=prasadv@chromium.org
 per-file bisect*=robertocn@chromium.org
 per-file bisect*=simonhatch@chromium.org
-per-file blink_downstream.py=file:blink_downstream.expected/OWNERS
 per-file boringssl.py=file:boringssl.expected/OWNERS
 per-file boringssl_docs.py=file:boringssl.expected/OWNERS
 per-file catapult.py=file:catapult.expected/OWNERS

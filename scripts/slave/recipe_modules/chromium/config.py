@@ -580,11 +580,6 @@ def chromium_official_internal(c):
   c.project_generator.config_path = c.CHECKOUT_PATH.join(
       'src-internal', 'tools', 'mb', 'mb_config.pyl')
 
-# TODO(phajdan.jr): cover or remove blink; used by blink_downstream.
-@config_ctx(includes=['chromium'])
-def blink(c):  # pragma: no cover
-  c.compile_py.default_targets = ['blink_tests']
-
 @config_ctx(includes=['android_common', 'ninja', 'default_compiler', 'goma'])
 def android(_):
   pass

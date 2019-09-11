@@ -62,7 +62,6 @@
   * [archive:tests/zip_and_upload_build](#recipes-archive_tests_zip_and_upload_build)
   * [art](#recipes-art)
   * [binary_size_trybot](#recipes-binary_size_trybot)
-  * [blink_downstream](#recipes-blink_downstream) &mdash; This recipe can be used by components like v8 to verify blink tests with a low false positive rate.
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
   * [build:examples/full](#recipes-build_examples_full)
@@ -4006,48 +4005,6 @@ Checks that properties get to recipes from annotated_run properly
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#10): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_trybot.py#70)(api, analyze_targets, compile_targets, apk_name):**
-### *recipes* / [blink\_downstream](/scripts/slave/recipes/blink_downstream.py)
-
-[DEPS](/scripts/slave/recipes/blink_downstream.py#34): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-This recipe can be used by components like v8 to verify blink tests with a
-low false positive rate. Similar to a trybot, this recipe compares test
-failures from a build with a current component revision with test failures
-from a build with a pinned component revision.
-
-Summary of the recipe flow:
-1. Sync chromium to HEAD
-2. Sync blink to HEAD
-3. Sync component X to revision Y
-4. Run blink tests
--> In case of failures:
-5. Sync chromium to same revision as 1
-6. Sync blink to same revision as 2
-7. Sync component X to pinned revision from DEPS file
-8. Run blink tests
--> If failures in 4 don't happen in 8, then revision Y reveals a problem not
-   present in the pinned revision
-
-Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
-in a forced build with no revision provided).
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#233)(api):**
-
-&mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#52)(config, bits, platform, swarming_shards, swarming_priority=35):**
-
-&mdash; **def [build](/scripts/slave/recipes/blink_downstream.py#95)(api, suffix):**
-
-Compiles and isolates the checked-out code.
-
-Args:
-  api: Recipe module api.
-  suffix: Step name suffix to disambiguate repeated calls.
-
-Returns:
-  When a compile failure occurs
-    a RawResult object with the compile step's status and failure message
-  else
-    None
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
 [DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
