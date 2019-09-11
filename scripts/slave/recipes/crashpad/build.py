@@ -11,25 +11,24 @@ import contextlib
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/osx_sdk',
-  'depot_tools/windows_sdk',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/osx_sdk',
+    'depot_tools/windows_sdk',
 ]
 
 PROPERTIES = {
-  'buildername': Property(kind=str, help='The builder name', default=None),
   'config': Property(kind=str, help='Debug or Release', default='Debug'),
   'target_os':
     Property(kind=str, help='win, mac, linux, or fuchsia', default=None),
@@ -51,7 +50,8 @@ FAKE_SWARMING_TEST_SPEC = """\
 ]
 """
 
-def RunSteps(api, buildername, config, target_os, target_cpu):
+
+def RunSteps(api, config, target_os, target_cpu):
   """Generates the sequence of steps that will be run by the slave."""
   api.gclient.set_config('crashpad')
 
@@ -195,7 +195,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
       return
 
     for spec in swarming_test_spec:
-      if buildername in spec['builders']:
+      if api.buildbucket.builder_name in spec['builders']:
         api.python(
             spec['step_name'],
             api.path['checkout'].join('build', 'run_on_swarming.py'),
@@ -206,11 +206,12 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 def GenTests(api):
   # Only test a single clobber case.
   test = 'crashpad_mac_dbg'
+  CRASHPAD_REPO = 'https://chromium.googlesource.com/crashpad/crashpad.git'
   yield api.test(
       test + '_clobber',
-      api.properties.generic(
-          buildername=test, target_os='mac', config='Debug', clobber=True),
-  )
+      api.properties(target_os='mac', config='Debug', clobber=True) +
+      api.buildbucket.ci_build(
+          project='crashpad', builder=test, git_repo=CRASHPAD_REPO))
 
   tests = [
       (test, 'mac', ''),
@@ -220,15 +221,13 @@ def GenTests(api):
       ('crashpad_fuchsia_rel', 'fuchsia', ''),
   ]
   for t, os, cpu in tests:
-    test = api.test(t)
-
-    yield (
-      test +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.properties.generic(buildername=t,
-                             config='Debug' if '_dbg' in t else 'Release',
-                             target_os=os,
-                             target_cpu=cpu) +
-      api.path.exists(api.path['checkout'].join(
-        'build', 'swarming_test_spec.pyl'))
-    )
+    yield api.test(
+        t, api.runtime(is_luci=True, is_experimental=False),
+        api.properties(
+            config='Debug' if '_dbg' in t else 'Release',
+            target_os=os,
+            target_cpu=cpu),
+        api.buildbucket.ci_build(
+            project='crashpad', builder=t, git_repo=CRASHPAD_REPO),
+        api.path.exists(api.path['checkout'].join('build',
+                                                  'swarming_test_spec.pyl')))
