@@ -210,11 +210,11 @@ def _GetTargetEnv(buildername, bot_utils):
 def _LogFailingTests(api, step_result):
   if (step_result.test_utils.test_results.valid and
       step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
-      failures = step_result.test_utils.test_results.unexpected_failures
-      p = step_result.presentation
-      p.step_text += api.test_utils.format_step_text([
+    failures = step_result.test_utils.test_results.unexpected_failures
+    p = step_result.presentation
+    p.step_text += api.test_utils.format_step_text([
         ['unexpected_failures:', failures.keys()],
-      ])
+    ])
 
 
 @contextmanager
@@ -414,14 +414,14 @@ def GenTests(api):
     ('linux_nothreads_small', api.platform('linux', 64)),
   ]
   for (buildername, host_platform) in tests:
-    yield (
-      api.test(buildername) +
-      host_platform +
-      _CIBuild(api, buildername) +
-      api.override_step_data('unit tests',
-                             api.test_utils.canned_test_output(True)) +
-      api.override_step_data('ssl tests',
-                             api.test_utils.canned_test_output(True))
+    yield api.test(
+        buildername,
+        host_platform,
+        _CIBuild(api, buildername),
+        api.override_step_data('unit tests',
+                               api.test_utils.canned_test_output(True)),
+        api.override_step_data('ssl tests',
+                               api.test_utils.canned_test_output(True)),
     )
 
   compile_only_tests = [
@@ -429,10 +429,10 @@ def GenTests(api):
     ('ios64_compile', api.platform('mac', 64)),
   ]
   for (buildername, host_platform) in compile_only_tests:
-    yield (
-      api.test(buildername) +
-      host_platform +
-      _CIBuild(api, buildername)
+    yield api.test(
+        buildername,
+        host_platform,
+        _CIBuild(api, buildername),
     )
 
   unit_test_only_tests = [
@@ -443,82 +443,82 @@ def GenTests(api):
     ('win64_sde', api.platform('win', 64)),
   ]
   for (buildername, host_platform) in unit_test_only_tests:
-    yield (
-      api.test(buildername) +
-      host_platform +
-      _CIBuild(api, buildername) +
-      api.override_step_data('unit tests',
-                             api.test_utils.canned_test_output(True))
+    yield api.test(
+        buildername,
+        host_platform,
+        _CIBuild(api, buildername),
+        api.override_step_data('unit tests',
+                               api.test_utils.canned_test_output(True)),
     )
 
-  yield (
-    api.test('failed_imported_libraries') +
-    api.platform('linux', 64) +
-    _CIBuild(api, 'linux_shared') +
-    api.override_step_data('check imported libraries', retcode=1) +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(True)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(True))
+  yield api.test(
+      'failed_imported_libraries',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux_shared'),
+      api.override_step_data('check imported libraries', retcode=1),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(True)),
   )
 
-  yield (
-    api.test('failed_filenames') +
-    api.platform('linux', 64) +
-    _CIBuild(api, 'linux') +
-    api.override_step_data('check filenames', retcode=1) +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(True)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(True))
+  yield api.test(
+      'failed_filenames',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux'),
+      api.override_step_data('check filenames', retcode=1),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(True)),
   )
 
-  yield (
-    api.test('failed_unit_tests') +
-    api.platform('linux', 64) +
-    _CIBuild(api, 'linux') +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(False)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(True))
+  yield api.test(
+      'failed_unit_tests',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux'),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(False)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(True)),
   )
 
   # Test that the cleanup step works correctly with test failures.
-  yield (
-    api.test('failed_unit_tests_win') +
-    api.platform('win', 64) +
-    _CIBuild(api, 'win64') +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(False)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(True))
+  yield api.test(
+      'failed_unit_tests_win',
+      api.platform('win', 64),
+      _CIBuild(api, 'win64'),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(False)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(True)),
   )
 
-  yield (
-    api.test('failed_ssl_tests') +
-    api.platform('linux', 64) +
-    _CIBuild(api, 'linux') +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(True)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(False))
+  yield api.test(
+      'failed_ssl_tests',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux'),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(False)),
   )
 
   # The taskkill step may fail if mspdbsrv has already exitted. This should
   # still be accepted.
-  yield (
-    api.test('failed_taskkill') +
-    api.platform('win', 64) +
-    _CIBuild(api, 'win64') +
-    api.override_step_data('unit tests',
-                           api.test_utils.canned_test_output(True)) +
-    api.override_step_data('ssl tests',
-                           api.test_utils.canned_test_output(True)) +
-    api.override_step_data('taskkill mspdbsrv', retcode=1)
+  yield api.test(
+      'failed_taskkill',
+      api.platform('win', 64),
+      _CIBuild(api, 'win64'),
+      api.override_step_data('unit tests',
+                             api.test_utils.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.test_utils.canned_test_output(True)),
+      api.override_step_data('taskkill mspdbsrv', retcode=1),
   )
 
-  yield (
-    api.test('gerrit_cl') +
-    api.platform('linux', 64) +
-    _TryBuild(api, 'linux')
+  yield api.test(
+      'gerrit_cl',
+      api.platform('linux', 64),
+      _TryBuild(api, 'linux'),
   )
