@@ -111,15 +111,15 @@ def RunSteps(api):
 
 def GenTests(api):
   def test(name):
-    return (
-        api.test(name) +
-        api.properties(path_config='kitchen') +
+    return api.test(
+        name,
+        api.properties(path_config='kitchen'),
         api.buildbucket.ci_build(
             project='emscripten-releases',
             builder='linux',
             build_number=42,
-        ) +
-        api.runtime(is_luci=True, is_experimental=False)
+        ),
+        api.runtime(is_luci=True, is_experimental=False),
     )
 
   yield test('linux')
