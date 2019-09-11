@@ -108,123 +108,120 @@ def GenTests(api):
 
 
   # Test a CrOS tryjob.
-  yield (
-      api.test('external')
-      + api.properties(
+  yield api.test(
+      'external',
+      api.properties(
           buildername='full',
           cbb_config='x86-generic-full',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          **common_properties),
   )
 
-  yield (
-      api.test('internal')
-      + api.properties(
+  yield api.test(
+      'internal',
+      api.properties(
           buildername='paladin',
           cbb_config='internal-paladin',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          **common_properties),
   )
 
-  yield (
-      api.test('swarming')
-      + api.properties(
+  yield api.test(
+      'swarming',
+      api.properties(
           buildername='paladin',
           cbb_config='internal-paladin',
-          cbb_extra_args=["--timeout", "14400", "--remote-trybot",
-                          "--remote-version=4"],
-          **common_properties
-      )
+          cbb_extra_args=[
+              "--timeout", "14400", "--remote-trybot", "--remote-version=4"
+          ],
+          **common_properties),
   )
 
-  yield (
-      api.test('release')
-      + api.properties(
+  yield api.test(
+      'release',
+      api.properties(
           buildername='paladin',
           cbb_config='x86-generic-full',
           cbb_branch='release-R55-9999.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          **common_properties),
   )
 
-  yield (
-      api.test('release_branch_one_param')
-      + api.properties(
+  yield api.test(
+      'release_branch_one_param',
+      api.properties(
           buildername='paladin',
           cbb_config='x86-generic-full',
           cbb_branch='master',
           cbb_extra_args=json.dumps([
-              '--timeout', '14400', '--remote-trybot',
-              '--remote-version=4', '--branch=release-R00-0000.B']),
-          **common_properties
-      )
+              '--timeout', '14400', '--remote-trybot', '--remote-version=4',
+              '--branch=release-R00-0000.B'
+          ]),
+          **common_properties),
   )
 
-  yield (
-      api.test('release_branch_two_params')
-      + api.properties(
+  yield api.test(
+      'release_branch_two_params',
+      api.properties(
           buildername='paladin',
           cbb_config='x86-generic-full',
           cbb_branch='master',
           cbb_extra_args=json.dumps([
-              '--timeout', '14400', '--remote-trybot',
-              '--remote-version=4', '--branch', 'release-R00-0000.B']),
-          **common_properties
-      )
+              '--timeout', '14400', '--remote-trybot', '--remote-version=4',
+              '--branch', 'release-R00-0000.B'
+          ]),
+          **common_properties),
   )
 
-  yield (
-      api.test('pre_git_cache_release')
-      + api.properties(
+  yield api.test(
+      'pre_git_cache_release',
+      api.properties(
           buildername='paladin',
           cbb_config='x86-generic-full',
           cbb_branch='release-R54-8743.B',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          **common_properties),
   )
 
   # Test a CrOS tryjob with compressed "cbb_extra_args".
-  yield (
-      api.test('basic_compressed')
-      + api.properties(
+  yield api.test(
+      'basic_compressed',
+      api.properties(
           buildername='full',
           cbb_config='x86-generic-full',
           cbb_extra_args=(
-            'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
-            '/PzbE2UYgFJaBNI'),
-          **common_properties
-      )
+              'z:eJyLVtLVLcnMTc0vLVHSUVAyNDExMAAxdHWLUnPzS1J1S4oqk/JLUITKUouKM'
+              '/PzbE2UYgFJaBNI'),
+          **common_properties),
   )
 
   # Test a config that is not registered in Chromite.
-  yield (
-      api.test('unknown_config')
-      + api.properties(
+  yield api.test(
+      'unknown_config',
+      api.properties(
           buildername='etc',
           cbb_config='xxx-fakeboard-fakebuild',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          **common_properties),
   )
 
   # Test a config with buildbucket properties
-  yield (
-      api.test('pre_cq_buildbucket_config')
-      + api.properties(
+  yield api.test(
+      'pre_cq_buildbucket_config',
+      api.properties(
           buildername='pre-cq',
           cbb_config='binhost-pre-cq',
           cbb_extra_args='["--timeout", "14400", "--remote-trybot",'
-                         '"--remote-version=4"]',
-          buildbucket=json.dumps({'build': {'id':'12345'}}),
-          **common_properties
-      )
+          '"--remote-version=4"]',
+          buildbucket=json.dumps({
+              'build': {
+                  'id': '12345'
+              }
+          }),
+          **common_properties),
   )

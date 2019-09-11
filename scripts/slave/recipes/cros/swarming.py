@@ -94,106 +94,103 @@ def MakeSummaryMarkdown(api, failure):
 def GenTests(api):
 
   common_properties = {
-    'buildername': 'Test',
-    'bot_id': 'test_builder',
-    'buildbucket': {'build': {'id':'12345'}},
+      'buildername': 'Test',
+      'bot_id': 'test_builder',
+      'buildbucket': {
+          'build': {
+              'id': '12345'
+          }
+      },
   }
 
   # Test a minimal invocation.
-  yield (
-      api.test('swarming_builder')
-      + api.properties(
+  yield api.test(
+      'swarming_builder',
+      api.properties(
           bot_id='test',
           cbb_config='swarming-build-config',
-      )
+      ),
   )
 
   # Tests the summary_markdown generation, only works on failure for now
-  yield (
-      api.test('swarming_builder_fails')
-      + api.properties(
+  yield api.test(
+      'swarming_builder_fails',
+      api.properties(
           bot_id='test',
           cbb_config='swarming-build-config',
           buildset='cros/master_buildbucket_id/8904538489270332096',
-      )
-      + api.step_data('cbuildbot_launch [swarming-build-config]', retcode=1)
+      ),
+      api.step_data('cbuildbot_launch [swarming-build-config]', retcode=1),
   )
 
   # Test a plain tryjob.
-  yield (
-      api.test('tryjob_simple')
-      + api.properties(
+  yield api.test(
+      'tryjob_simple',
+      api.properties(
           cbb_config='tryjob_config',
           cbb_extra_args='["--remote-trybot"]',
           email='user@google.com',
-          **common_properties
-      )
+          **common_properties),
   )
 
   # Test a tryjob with a branch and CLs.
-  yield (
-      api.test('tryjob_complex')
-      + api.properties(
+  yield api.test(
+      'tryjob_complex',
+      api.properties(
           cbb_config='tryjob_config',
           cbb_extra_args='["--remote-trybot", "-b", "release-R65-10323.B",'
-                         ' "-g", "900169", "-g", "902706"]',
+          ' "-g", "900169", "-g", "902706"]',
           email='user@google.com',
-          **common_properties
-      )
+          **common_properties),
   )
 
   # Test a tryjob with a branch and CLs.
-  yield (
-      api.test('master_builder')
-      + api.properties(
+  yield api.test(
+      'master_builder',
+      api.properties(
           branch='',
           cbb_branch='slave_branch',
           cbb_config='master_config',
-          **common_properties
-      )
+          **common_properties),
   )
 
   # Test a tryjob with a branch and CLs.
-  yield (
-      api.test('complex_slave_builder')
-      + api.properties(
+  yield api.test(
+      'complex_slave_builder',
+      api.properties(
           branch='',
           cbb_branch='slave_branch',
           cbb_config='slave_config',
           cbb_master_build_id=123,
-          **common_properties
-      )
+          **common_properties),
   )
 
   # Test empty string args.
-  yield (
-      api.test('empty_string_args')
-      + api.properties(
+  yield api.test(
+      'empty_string_args',
+      api.properties(
           cbb_config='tryjob_config',
           cbb_extra_args='',
           email='user@google.com',
-          **common_properties
-      )
+          **common_properties),
   )
 
   # Test tuple args. I'm not sure what mechanism gets them here, but it
   # can happen.
-  yield (
-      api.test('tuple_args')
-      + api.properties(
+  yield api.test(
+      'tuple_args',
+      api.properties(
           cbb_config='tryjob_config',
           cbb_extra_args=('--remote-trybot', '-foo'),
           email='user@google.com',
-          **common_properties
-      )
+          **common_properties),
   )
 
-  yield (
-      api.test('goma_canary')
-      + api.properties(
+  yield api.test(
+      'goma_canary',
+      api.properties(
           cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
           cbb_goma_canary=True,
           email='user@google.com',
-          **common_properties
-      )
+          **common_properties),
   )
