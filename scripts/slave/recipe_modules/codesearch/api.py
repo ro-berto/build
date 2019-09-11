@@ -190,8 +190,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
     self.m.build.python('create kythe index pack',
                         self.resource('package_index.py'),
-                        args,
-                        venv=True)
+                        args)
 
   def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
                               index_pack_kythe_name_with_revision):
