@@ -43,7 +43,6 @@ UNWANTED_ARG_SUBSTRINGS_WIN = [
     # These Skia header path defines throw errors in the Windows indexer for
     # some reason.
     '-DSK_USER_CONFIG_HEADER',
-    '-DSK_GPU_WORKAROUNDS_HEADER',
 ]
 
 class IndexPack(object):
