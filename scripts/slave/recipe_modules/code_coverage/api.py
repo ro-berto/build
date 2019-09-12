@@ -193,6 +193,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['telemetry_gpu_unittests', None],
           ['devtools_closure_compile', None],
           ['devtools_eslint', None],
+          ['python3_smoketest', None],
 
           # Following are mappings from isolate target names to binary names.
           ['telemetry_gpu_integration_test', 'chrome'],
