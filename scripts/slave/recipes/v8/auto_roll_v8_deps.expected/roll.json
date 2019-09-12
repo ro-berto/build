@@ -320,8 +320,8 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@deps@{@@@",
       "@@@STEP_LOG_LINE@deps@  \"base/trace_event/common\": \"https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"build\": \"https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"foo\": \"https://chromium.googlesource.com/chromium/src/foo.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"foo/bar\": \"https://chromium.googlesource.com/external/github.com/foo/bar@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil\": \"https://chrome-infra-packages.appspot.com/chromium/llvm-build-tools/dsymutil@OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC\", @@@",
@@ -371,12 +371,12 @@
     "cmd": [
       "git",
       "ls-remote",
-      "https://chromium.googlesource.com/chromium/src/build.git",
+      "https://chromium.googlesource.com/chromium/src/foo.git",
       "HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "infra_step": true,
-    "name": "look up build",
+    "name": "look up foo",
     "~followup_annotations": [
       "@@@STEP_TEXT@deadbeef@@@"
     ]
@@ -388,7 +388,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "v8/build@deadbeef"
+      "v8/foo@deadbeef"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env_suffixes": {
@@ -397,7 +397,7 @@
       ]
     },
     "infra_step": true,
-    "name": "gclient setdep build"
+    "name": "gclient setdep foo"
   },
   {
     "cmd": [],
@@ -550,7 +550,7 @@
       "-m",
       "Update V8 DEPS.",
       "-m",
-      "Rolling v8/build: https://chromium.googlesource.com/chromium/src/build/+log/d3f34f8..deadbee",
+      "Rolling v8/foo: https://chromium.googlesource.com/chromium/src/foo/+log/d3f34f8..deadbee",
       "-m",
       "Rolling v8/tools/clang/dsymutil: OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC..resolved-instance_id-of-latest----------",
       "-m",
