@@ -58,7 +58,8 @@
           "digest": "d00a30539b38a598d89f113998c1f2fa7924052a4b11b88ef7ead3692576d81d"
         },
         "v_name": {
-          "path": "src/third_party/depot_tools/win_toolchain/sdk_header.h",
+          "path": "sdk_header.h",
+          "root": "src/third_party/depot_tools/win_toolchain",
           "corpus": "winsdk"
         }
       }

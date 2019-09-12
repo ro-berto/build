@@ -522,12 +522,7 @@ class IndexPack(object):
 
         normalized_fname = self._NormalizePath(fname)
         normalized_fname = self._ConvertPathToForwardSlashes(normalized_fname)
-        required_input = {
-            'v_name': {
-                'corpus': _CorpusForFile(normalized_fname, corpus),
-                'path': normalized_fname,
-            }
-        }
+        required_input = {'v_name': _VNameForFile(normalized_fname, corpus)}
 
         required_input['info'] = {
             'path': self._ConvertPathToForwardSlashes(fname),
@@ -575,6 +570,29 @@ class IndexPack(object):
     self._GenerateUnitFiles()
 
 
+def _VNameForFile(filepath, default_corpus):
+  """Returns the appropriate VName for a file path.
+
+  Specifically, this checks if the file should be put in a special corpus
+  (e.g. the one for the Windows SDK), and if so overrides default_corpus
+  and moves the windows path to root.
+
+  Args:
+    filepath: A normalized path to a file, using '/' as the path separator.
+    default_corpus: The corpus to use if no special corpus is required.
+  """
+  assert '\\' not in filepath
+  vname = {}
+  win_toolchain, vname['path'] = re.match(
+      '(src/third_party/depot_tools/win_toolchain/)?(.*)', filepath).groups()
+  if win_toolchain:
+    vname['root'] = win_toolchain[:-1]
+    vname['corpus'] = WIN_SDK_CORPUS
+  else:
+    vname['corpus'] = default_corpus
+  return vname
+
+
 def _CorpusForFile(filepath, default_corpus):
   """Returns the appropriate corpus name for a file path.
 
@@ -586,7 +604,7 @@ def _CorpusForFile(filepath, default_corpus):
     default_corpus: The corpus to use if no special corpus is required.
   """
   assert '\\' not in filepath
-  if 'third_party/depot_tools/win_toolchain' in filepath:
+  if filepath.startswith('src/third_party/depot_tools/win_toolchain'):
     return WIN_SDK_CORPUS
   return default_corpus
 
