@@ -319,7 +319,7 @@ def BuildLinuxAndroid(api, swarming_task_id):
         RunTests(api, out_dir, android_out_dir=out_dir, types='java')
       artifacts = ['out/%s/flutter.jar' % out_dir]
       if android_cpu in ['x86', 'x64']:
-          artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
+        artifacts.append('out/%s/lib.stripped/libflutter.so' % out_dir)
       UploadArtifacts(api, artifact_dir, artifacts)
       UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
                       archive_name='symbols.zip')
@@ -490,19 +490,17 @@ def BuildMac(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--no-lto', '--full-dart-sdk')
     RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
-    RunGN(api, '--runtime-mode', 'profile', '--no-lto');
-    RunGN(api, '--runtime-mode', 'release', '--no-lto');
+    RunGN(api, '--runtime-mode', 'profile', '--no-lto')
+    RunGN(api, '--runtime-mode', 'release', '--no-lto')
 
     Build(api, 'host_debug_unopt')
     RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
     Build(api, 'host_profile');
     Build(api, 'host_release');
-    host_debug_path = GetCheckoutPath(api).join('src', 'out', 'host_debug')
-    host_profile_path = \
-        GetCheckoutPath(api).join('src', 'out', 'host_profile')
-    host_release_path = \
-        GetCheckoutPath(api).join('src', 'out', 'host_release')
+    host_debug_path = GetCheckoutPath(api).join('out', 'host_debug')
+    host_profile_path = GetCheckoutPath(api).join('out', 'host_profile')
+    host_release_path = GetCheckoutPath(api).join('out', 'host_release')
 
     api.zip.directory('Archive FlutterEmbedder.framework',
       host_debug_path.join('FlutterEmbedder.framework'),
@@ -654,7 +652,7 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name,
 
 
 def RunIOSTests(api):
-  test_dir = GetCheckoutPath(api).join('src', 'flutter', 'testing')
+  test_dir = GetCheckoutPath(api).join('flutter', 'testing')
   ios_unit_tests = test_dir.join('ios', 'IosUnitTests')
   scenario_app_tests = test_dir.join('scenario_app')
 

@@ -1909,7 +1909,7 @@
       ]
     },
     "name": "Archive FlutterEmbedder.framework",
-    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/src/out/host_debug/FlutterEmbedder.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/src/out/host_debug/FlutterEmbedder.framework.zip\", \"root\": \"[CACHE]/builder/src/src/out/host_debug/FlutterEmbedder.framework\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out/host_debug/FlutterEmbedder.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/host_debug/FlutterEmbedder.framework.zip\", \"root\": \"[CACHE]/builder/src/out/host_debug/FlutterEmbedder.framework\"}"
   },
   {
     "cmd": [
@@ -1933,7 +1933,7 @@
       ]
     },
     "name": "Archive FlutterMacOS.framework",
-    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/src/out/host_debug/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/src/out/host_debug/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/src/out/host_debug/FlutterMacOS.framework\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out/host_debug/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/host_debug/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/out/host_debug/FlutterMacOS.framework\"}"
   },
   {
     "cmd": [
@@ -1957,7 +1957,7 @@
       ]
     },
     "name": "Archive FlutterMacOS.framework profile",
-    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/src/out/host_profile/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/src/out/host_profile/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/src/out/host_profile/FlutterMacOS.framework\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out/host_profile/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/host_profile/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/out/host_profile/FlutterMacOS.framework\"}"
   },
   {
     "cmd": [
@@ -1981,7 +1981,7 @@
       ]
     },
     "name": "Archive FlutterMacOS.framework release",
-    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/src/out/host_release/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/src/out/host_release/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/src/out/host_release/FlutterMacOS.framework\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]/builder/src/out/host_release/FlutterMacOS.framework\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/host_release/FlutterMacOS.framework.zip\", \"root\": \"[CACHE]/builder/src/out/host_release/FlutterMacOS.framework\"}"
   },
   {
     "cmd": [
@@ -5498,7 +5498,7 @@
       "./run_tests.sh",
       "ios_debug_sim"
     ],
-    "cwd": "[CACHE]/builder/src/src/flutter/testing/ios/IosUnitTests",
+    "cwd": "[CACHE]/builder/src/flutter/testing/ios/IosUnitTests",
     "env": {
       "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
@@ -5522,7 +5522,7 @@
       "./run_ios_tests.sh",
       "ios_debug_sim"
     ],
-    "cwd": "[CACHE]/builder/src/src/flutter/testing/scenario_app",
+    "cwd": "[CACHE]/builder/src/flutter/testing/scenario_app",
     "env": {
       "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GEM_HOME": "[START_DIR]/gems",
