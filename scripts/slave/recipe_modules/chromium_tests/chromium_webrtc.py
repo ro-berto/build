@@ -177,7 +177,7 @@ def browser_perf_test(perf_id):
       args=['--gtest_filter=%s' % ':'.join(
                BAREMETAL_BROWSER_TESTS_FILTER + PERF_BROWSER_TESTS_FILTER
            ),
-           '--run-manual', '--ui-test-action-max-timeout=350000',
+           '--run-manual', '--ui-test-action-max-timeout=300000',
            '--test-launcher-timeout=350000', '--test-launcher-jobs=1',
            '--test-launcher-bot-mode',
            '--test-launcher-print-test-stdio=always'],
