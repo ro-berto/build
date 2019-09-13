@@ -5023,11 +5023,11 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine_builder.py#57)(api, git_url, git_ref):**
 
-&mdash; **def [IsolateOutputs](/scripts/slave/recipes/flutter/engine_builder.py#74)(api, output_files):**
+&mdash; **def [IsolateOutputs](/scripts/slave/recipes/flutter/engine_builder.py#74)(api, output_files, output_dirs):**
 
 &mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine_builder.py#51)(api, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine_builder.py#80)(api, properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine_builder.py#82)(api, properties):**
 ### *recipes* / [flutter/flutter](/scripts/slave/recipes/flutter/flutter.py)
 
 [DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

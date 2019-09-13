@@ -71,10 +71,12 @@ def GetCheckout(api, git_url, git_ref):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-def IsolateOutputs(api, output_files):
+def IsolateOutputs(api, output_files, output_dirs):
   out_dir = api.path['cache'].join('builder', 'src')
   isolated = api.isolated.isolated(out_dir)
   isolated.add_files(output_files)
+  for output_dir in output_dirs:
+    isolated.add_dir(output_dir)
   return isolated.archive('Archive build outputs')
 
 def RunSteps(api, properties):
@@ -100,6 +102,7 @@ def RunSteps(api, properties):
     }
 
     output_files = []
+    output_dirs = []
     with api.osx_sdk('ios'), api.depot_tools.on_path(), api.context(env=env):
       for build in properties.builds:
         with api.step.nest('build %s (%s)' % (
@@ -109,8 +112,11 @@ def RunSteps(api, properties):
           for output_file in build.output_files:
             output_files.append(cache_root.join('src', 'out',
                 build.dir, output_file))
+          for output_dir in build.output_dirs:
+            output_dirs.append(cache_root.join('src', 'out',
+                build.dir, output_dir))
 
-    isolated_hash = IsolateOutputs(api, output_files)
+    isolated_hash = IsolateOutputs(api, output_files, output_dirs)
     output_props = api.step('Set output properties', None)
     output_props.presentation.properties['isolated_output_hash'] = isolated_hash
 
@@ -133,7 +139,8 @@ def GenTests(api):
             disable_goma=True,
             gn_args=['--unoptimized', '--android'],
             dir='android_debug_unopt',
-            output_files=['libflutter.so']
+            output_files=['libflutter.so'],
+            output_dirs=['some_dir'],
           ),
           EngineBuild(
             disable_goma=False,

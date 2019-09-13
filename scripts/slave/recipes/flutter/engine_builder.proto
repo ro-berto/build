@@ -18,8 +18,14 @@ message EngineBuild {
   // Specific targets, if any, to build.
   repeated string targets = 4;
 
-  // Paths, relative to `src`, to send to isolated.
+  // File paths, relative to `src`, to send to isolated.
+  // For example, if you want to isolate libflutter.so and flutter.jar, it would
+  // be `['libflutter.so', 'flutter.jar']`.
   repeated string output_files = 5;
+  // Directory paths, relative to `src`, to send to isolated.
+  // For example, if you want to isolate the "flutter_runner_far" directory,
+  // it would be `['flutter_runner_far']`.
+  repeated string output_dirs = 6;
 }
 
 message InputProperties {
