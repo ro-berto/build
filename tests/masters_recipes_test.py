@@ -394,7 +394,9 @@ def verifyTrybotConfigsAreConsistent(builders, trybots):
           return_value = False
         if 'tester' in trybot_id:
           if not botExists(builders, waterfall_name, trybot_name,
-                           trybot_id['mastername'], trybot_id['tester'],
+                           trybot_id.get(
+                             'tester_mastername', trybot_id['mastername']),
+                             trybot_id['tester'],
                            undefined_bots):
             return_value = False
 

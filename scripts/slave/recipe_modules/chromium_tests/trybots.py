@@ -850,6 +850,13 @@ TRYBOTS = freeze({
                     'buildername': 'Mac Builder (dbg)',
                     'tester': 'Mac10.13 Tests (dbg)',
                 }),
+            'mac-osxbeta-rel':
+                simple_bot({
+                    'mastername': 'chromium.mac',
+                    'buildername': 'Mac Builder',
+                    'tester_mastername': 'chromium.fyi',
+                    'tester': 'mac-osxbeta-rel',
+                }),
             'mac-rel': {
                 'bot_ids': [
                     {
