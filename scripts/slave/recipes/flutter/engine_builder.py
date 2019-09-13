@@ -34,7 +34,7 @@ GIT_REPO = \
 PROPERTIES = InputProperties
 
 def Build(api, config, disable_goma, *targets):
-  checkout = api.path['start_dir'].join('src')
+  checkout = api.path['cache'].join('builder', 'src')
   build_dir = checkout.join('out/%s' % config)
 
   if not disable_goma:
@@ -49,7 +49,7 @@ def Build(api, config, disable_goma, *targets):
     api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
 
 def RunGN(api, *args):
-  checkout = api.path['start_dir'].join('src')
+  checkout = api.path['cache'].join('builder', 'src')
   gn_cmd = ['python', checkout.join('flutter/tools/gn')]
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
@@ -72,45 +72,47 @@ def GetCheckout(api, git_url, git_ref):
   api.gclient.runhooks()
 
 def IsolateOutputs(api, output_files):
-  out_dir = api.path['start_dir'].join('src')
+  out_dir = api.path['cache'].join('builder', 'src')
   isolated = api.isolated.isolated(out_dir)
   isolated.add_files(output_files)
   return isolated.archive('Archive build outputs')
 
 def RunSteps(api, properties):
-  GetCheckout(api, properties.git_url, properties.git_ref)
-  api.goma.ensure_goma()
+  cache_root = api.path['cache'].join('builder')
+  with api.context(cwd=cache_root):
+    GetCheckout(api, properties.git_url, properties.git_ref)
+    api.goma.ensure_goma()
 
-  android_home = api.path['start_dir'].join('src', 'third_party',
-      'android_tools', 'sdk')
-  with api.step.nest('Android SDK'):
-    api.file.ensure_directory('mkdir licenses', android_home.join('licenses'))
-    api.file.write_text('android sdk license',
-        android_home.join('licenses', 'android-sdk-license'),
-        str(properties.android_sdk_license))
-    api.file.write_text('android sdk preview license',
-        android_home.join('licenses', 'android-sdk-preview-license'),
-        str(properties.android_sdk_preview_license))
+    android_home = cache_root.join('src', 'third_party',
+        'android_tools', 'sdk')
+    with api.step.nest('Android SDK'):
+      api.file.ensure_directory('mkdir licenses', android_home.join('licenses'))
+      api.file.write_text('android sdk license',
+          android_home.join('licenses', 'android-sdk-license'),
+          str(properties.android_sdk_license))
+      api.file.write_text('android sdk preview license',
+          android_home.join('licenses', 'android-sdk-preview-license'),
+          str(properties.android_sdk_preview_license))
 
-  env = {
-    'GOMA_DIR': api.goma.goma_dir,
-    'ANDROID_HOME': str(android_home)
-  }
+    env = {
+      'GOMA_DIR': api.goma.goma_dir,
+      'ANDROID_HOME': str(android_home)
+    }
 
-  output_files = []
-  with api.osx_sdk('ios'), api.depot_tools.on_path(), api.context(env=env):
-    for build in properties.builds:
-      with api.step.nest('build %s (%s)' % (
-          build.dir, ','.join(build.targets))):
-        RunGN(api, *build.gn_args)
-        Build(api, build.dir, build.disable_goma, *build.targets)
-        for output_file in build.output_files:
-          output_files.append(api.path['start_dir'].join('src', 'out',
-              build.dir, output_file))
+    output_files = []
+    with api.osx_sdk('ios'), api.depot_tools.on_path(), api.context(env=env):
+      for build in properties.builds:
+        with api.step.nest('build %s (%s)' % (
+            build.dir, ','.join(build.targets))):
+          RunGN(api, *build.gn_args)
+          Build(api, build.dir, build.disable_goma, *build.targets)
+          for output_file in build.output_files:
+            output_files.append(cache_root.join('src', 'out',
+                build.dir, output_file))
 
-  isolated_hash = IsolateOutputs(api, output_files)
-  output_props = api.step('Set output properties', None)
-  output_props.presentation.properties['isolated_output_hash'] = isolated_hash
+    isolated_hash = IsolateOutputs(api, output_files)
+    output_props = api.step('Set output properties', None)
+    output_props.presentation.properties['isolated_output_hash'] = isolated_hash
 
 def GenTests(api):
   yield (

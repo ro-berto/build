@@ -38,6 +38,7 @@ message InputProperties {
   bool ios_release = 18;
   bool no_bitcode = 19;
   bool no_maven = 20;
+  bool clobber=21;
 }
 
 message EnvProperties {

@@ -1,6 +1,53 @@
 [
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder"
+    ],
+    "infra_step": true,
+    "name": "Ensure checkout cache"
+  },
+  {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\goma\\client",
+      "-ensure-file",
+      "infra_internal/goma/client/windows-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
@@ -19,8 +66,19 @@
       "--revision",
       "src\\flutter@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
+        "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
       ]
     },
@@ -72,9 +130,19 @@
       "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src/flutter",
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
+        "RECIPE_REPO[depot_tools]",
         "RECIPE_REPO[depot_tools]"
       ]
     },
@@ -82,35 +150,7 @@
   },
   {
     "cmd": [],
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "cipd.bat",
-      "ensure",
-      "-root",
-      "[CACHE]\\goma\\client",
-      "-ensure-file",
-      "infra_internal/goma/client/windows-amd64 release",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    ],
-    "infra_step": true,
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "Android SDK Licenses"
   },
   {
     "cmd": [
@@ -122,10 +162,28 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]\\src\\third_party\\android_tools\\sdk\\licenses"
+      "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk\\licenses"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "mkdir licenses"
+    "name": "Android SDK Licenses.mkdir licenses",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -136,11 +194,27 @@
       "/path/to/tmp/json",
       "copy",
       "android_sdk_hash",
-      "[START_DIR]\\src\\third_party\\android_tools\\sdk\\licenses\\android-sdk-license"
+      "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk\\licenses\\android-sdk-license"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "android sdk license",
+    "name": "Android SDK Licenses.android sdk license",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@android-sdk-license@android_sdk_hash@@@",
       "@@@STEP_LOG_END@android-sdk-license@@@"
     ]
@@ -154,11 +228,27 @@
       "/path/to/tmp/json",
       "copy",
       "android_sdk_preview_hash",
-      "[START_DIR]\\src\\third_party\\android_tools\\sdk\\licenses\\android-sdk-preview-license"
+      "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk\\licenses\\android-sdk-preview-license"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "android sdk preview license",
+    "name": "Android SDK Licenses.android sdk preview license",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@android-sdk-preview-license@android_sdk_preview_hash@@@",
       "@@@STEP_LOG_END@android-sdk-preview-license@@@"
     ]
@@ -166,20 +256,21 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]\\src\\flutter/tools/gn",
+      "[CACHE]\\builder\\src\\flutter/tools/gn",
       "--goma",
       "--runtime-mode",
       "debug",
       "--full-dart-sdk",
       "--no-lto"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -205,13 +296,14 @@
       "0777",
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -232,8 +324,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -245,7 +338,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -278,13 +371,14 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -304,15 +398,16 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]\\src\\out/host_debug"
+      "[CACHE]\\builder\\src\\out/host_debug"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -334,8 +429,9 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -347,7 +443,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -378,8 +474,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -391,7 +488,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -411,8 +508,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -424,7 +522,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -474,13 +572,14 @@
       "--buildbot-buildername",
       "Win Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -512,13 +611,14 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -536,19 +636,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\flutter\\testing\\run_tests.py",
+      "[CACHE]\\builder\\src\\flutter\\testing\\run_tests.py",
       "--variant",
       "host_debug",
       "--type",
       "engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -564,13 +665,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -579,7 +681,7 @@
       ]
     },
     "name": "Zip windows-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]\\\\src\\\\third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_tester.exe\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_tester.exe\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -593,13 +695,14 @@
       "[CLEANUP]\\tmp_tmp_1\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/artifacts.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -623,13 +726,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_1"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -646,13 +750,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -661,7 +766,7 @@
       ]
     },
     "name": "Zip windows-x64 windows-x64-embedder.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_embedder.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_embedder.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_2\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_embedder.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_embedder.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_engine.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.exp\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_engine.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.lib\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_engine.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.pdb\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_engine.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_2\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -675,13 +780,14 @@
       "[CLEANUP]\\tmp_tmp_2\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/windows-x64-embedder.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -705,13 +811,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_2"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -728,13 +835,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -743,7 +851,7 @@
       ]
     },
     "name": "Zip windows-x64 windows-x64-flutter.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_export.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_export.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_messenger.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_messenger.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_plugin_registrar.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_plugin_registrar.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_export.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_export.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_messenger.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_messenger.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_plugin_registrar.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_plugin_registrar.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.exp\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.lib\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows.dll.pdb\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -757,13 +865,14 @@
       "[CLEANUP]\\tmp_tmp_3\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/windows-x64-flutter.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -787,13 +896,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_3"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -810,13 +920,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -825,7 +936,7 @@
       ]
     },
     "name": "Zip cpp_client_wrapper",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\cpp_client_wrapper\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\flutter-cpp-client-wrapper.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]\\\\builder\\\\src/out/host_debug\\\\cpp_client_wrapper\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\flutter-cpp-client-wrapper.zip\", \"root\": \"[CACHE]\\\\builder\\\\src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -839,13 +950,14 @@
       "[CLEANUP]\\tmp_tmp_4\\flutter-cpp-client-wrapper.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/flutter-cpp-client-wrapper.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -869,13 +981,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_4"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -892,13 +1005,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -907,7 +1021,7 @@
       ]
     },
     "name": "Zip windows-x64 windows-x64-flutter-glfw.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_export.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_export.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_glfw.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_glfw.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_messenger.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_messenger.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_plugin_registrar.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_plugin_registrar.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows_glfw.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_5\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_export.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_export.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_glfw.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_glfw.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_messenger.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_messenger.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_plugin_registrar.h\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_plugin_registrar.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows_glfw.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.exp\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.lib\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_windows_glfw.dll.pdb\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/flutter_windows_glfw.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_5\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -921,13 +1035,14 @@
       "[CLEANUP]\\tmp_tmp_5\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/windows-x64-flutter-glfw.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -951,13 +1066,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_5"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -974,13 +1090,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -989,7 +1106,7 @@
       ]
     },
     "name": "Zip cpp_client_wrapper_glfw",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\cpp_client_wrapper_glfw\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\flutter-cpp-client-wrapper-glfw.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]\\\\builder\\\\src/out/host_debug\\\\cpp_client_wrapper_glfw\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\flutter-cpp-client-wrapper-glfw.zip\", \"root\": \"[CACHE]\\\\builder\\\\src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -1003,13 +1120,14 @@
       "[CLEANUP]\\tmp_tmp_6\\flutter-cpp-client-wrapper-glfw.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/windows-x64/flutter-cpp-client-wrapper-glfw.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1033,13 +1151,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_6"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1056,13 +1175,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1071,7 +1191,7 @@
       ]
     },
     "name": "Zip dart-sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]\\\\builder\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\dart-sdk-windows-x64.zip\", \"root\": \"[CACHE]\\\\builder\\\\src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -1085,13 +1205,14 @@
       "[CLEANUP]\\tmp_tmp_7\\dart-sdk-windows-x64.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/dart-sdk-windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1115,13 +1236,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_7"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1138,13 +1260,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1153,7 +1276,7 @@
       ]
     },
     "name": "Zip flutter_web_sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\flutter_web_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\flutter-web-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CACHE]\\\\builder\\\\src/out/host_debug\\\\flutter_web_sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\flutter-web-sdk-windows-x64.zip\", \"root\": \"[CACHE]\\\\builder\\\\src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -1167,13 +1290,14 @@
       "[CLEANUP]\\tmp_tmp_8\\flutter-web-sdk-windows-x64.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/flutter-web-sdk-windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1197,13 +1321,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_8"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1217,19 +1342,20 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]\\src\\flutter/tools/gn",
+      "[CACHE]\\builder\\src\\flutter/tools/gn",
       "--goma",
       "--runtime-mode",
       "profile",
       "--android"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1242,20 +1368,21 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]\\src\\flutter/tools/gn",
+      "[CACHE]\\builder\\src\\flutter/tools/gn",
       "--goma",
       "--runtime-mode",
       "profile",
       "--android",
       "--android-cpu=arm64"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1268,19 +1395,20 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]\\src\\flutter/tools/gn",
+      "[CACHE]\\builder\\src\\flutter/tools/gn",
       "--goma",
       "--runtime-mode",
       "release",
       "--android"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1293,20 +1421,21 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]\\src\\flutter/tools/gn",
+      "[CACHE]\\builder\\src\\flutter/tools/gn",
       "--goma",
       "--runtime-mode",
       "release",
       "--android",
       "--android-cpu=arm64"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1332,13 +1461,14 @@
       "0777",
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1359,8 +1489,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1372,7 +1503,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1405,13 +1536,14 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1431,16 +1563,17 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]\\src\\out/android_profile",
+      "[CACHE]\\builder\\src\\out/android_profile",
       "gen_snapshot"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1462,8 +1595,9 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1475,7 +1609,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1506,8 +1640,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1519,7 +1654,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1539,8 +1674,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1552,7 +1688,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1602,13 +1738,14 @@
       "--buildbot-buildername",
       "Win Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1640,13 +1777,14 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1676,13 +1814,14 @@
       "0777",
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1703,8 +1842,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1716,7 +1856,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1749,13 +1889,14 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1775,16 +1916,17 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]\\src\\out/android_profile_arm64",
+      "[CACHE]\\builder\\src\\out/android_profile_arm64",
       "gen_snapshot"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1806,8 +1948,9 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1819,7 +1962,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1850,8 +1993,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1863,7 +2007,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1883,8 +2027,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1896,7 +2041,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1946,13 +2091,14 @@
       "--buildbot-buildername",
       "Win Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -1984,13 +2130,14 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2020,13 +2167,14 @@
       "0777",
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2047,8 +2195,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2060,7 +2209,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2093,13 +2242,14 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2119,16 +2269,17 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]\\src\\out/android_release",
+      "[CACHE]\\builder\\src\\out/android_release",
       "gen_snapshot"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2150,8 +2301,9 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2163,7 +2315,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2194,8 +2346,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2207,7 +2360,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2227,8 +2380,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2240,7 +2394,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2290,13 +2444,14 @@
       "--buildbot-buildername",
       "Win Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2328,13 +2483,14 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2364,13 +2520,14 @@
       "0777",
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2391,8 +2548,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2404,7 +2562,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2437,13 +2595,14 @@
       "--cloudtail-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2463,16 +2622,17 @@
       "-j",
       "1024",
       "-C",
-      "[START_DIR]\\src\\out/android_release_arm64",
+      "[CACHE]\\builder\\src\\out/android_release_arm64",
       "gen_snapshot"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2494,8 +2654,9 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2507,7 +2668,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2538,8 +2699,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2551,7 +2713,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2571,8 +2733,9 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win_Engine",
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2584,7 +2747,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2634,13 +2797,14 @@
       "--buildbot-buildername",
       "Win Engine"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2672,13 +2836,14 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2698,13 +2863,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2713,7 +2879,7 @@
       ]
     },
     "name": "Zip android-arm-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_9\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/android_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_9\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -2727,13 +2893,14 @@
       "[CLEANUP]\\tmp_tmp_9\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2757,13 +2924,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_9"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2780,13 +2948,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2795,7 +2964,7 @@
       ]
     },
     "name": "Zip android-arm64-profile windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_10\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_10\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -2809,13 +2978,14 @@
       "[CLEANUP]\\tmp_tmp_10\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2839,13 +3009,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_10"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2862,13 +3033,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2877,7 +3049,7 @@
       ]
     },
     "name": "Zip android-arm-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -2891,13 +3063,14 @@
       "[CLEANUP]\\tmp_tmp_11\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2921,13 +3094,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_11"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2944,13 +3118,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -2959,7 +3134,7 @@
       ]
     },
     "name": "Zip android-arm64-release windows-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_12\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_12\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [
@@ -2973,13 +3148,14 @@
       "[CLEANUP]\\tmp_tmp_12\\artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/windows-x64.zip"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {
@@ -3003,13 +3179,14 @@
       "rmtree",
       "[CLEANUP]\\tmp_tmp_12"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "ANDROID_HOME": "[START_DIR]\\src\\third_party\\android_tools\\sdk",
+      "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+        "[CACHE]\\builder\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "env_suffixes": {

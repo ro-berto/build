@@ -4940,79 +4940,81 @@ world-readable cloud location.
 
 [DEPS](/scripts/slave/recipes/flutter/engine.py#11): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [AddFiles](/scripts/slave/recipes/flutter/engine.py#127)(api, pkg, relative_paths):**
+&mdash; **def [AddFiles](/scripts/slave/recipes/flutter/engine.py#129)(api, pkg, relative_paths):**
 
-&mdash; **def [AnalyzeDartUI](/scripts/slave/recipes/flutter/engine.py#258)(api):**
+&mdash; **def [AnalyzeDartUI](/scripts/slave/recipes/flutter/engine.py#260)(api):**
 
-&mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#52)(api, config, \*targets):**
+&mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#55)(api, config, \*targets):**
 
-&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#465)(api):**
+&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#467)(api):**
 
-&mdash; **def [BuildFuchsiaArtifactsAndUpload](/scripts/slave/recipes/flutter/engine.py#82)(api):**
+&mdash; **def [BuildFuchsiaArtifactsAndUpload](/scripts/slave/recipes/flutter/engine.py#84)(api):**
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#665)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#667)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#795)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#797)(api):**
 
-&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#426)(api):**
+&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#428)(api):**
 
-&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#305)(api, swarming_task_id):**
+&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#307)(api, swarming_task_id):**
 
-&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#487)(api):**
+&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#489)(api):**
 
-&mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#63)(api, config, \*targets):**
+&mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#66)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#825)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#827)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#713)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#715)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#842)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#844)(api):**
 
-&mdash; **def [GetCloudMavenPath](/scripts/slave/recipes/flutter/engine.py#150)(api, artifact_filename):**
+&mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#42)(api):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#45)(api, path):**
+&mdash; **def [GetCloudMavenPath](/scripts/slave/recipes/flutter/engine.py#152)(api, artifact_filename):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#810)(api):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#48)(api, path):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#249)(api, label):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#812)(api):**
 
-&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#582)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#251)(api, label):**
 
-&mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#101)(api, \*args):**
+&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#584)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
 
-&mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#108)(api, \*args):**
+&mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#103)(api, \*args):**
 
-&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#654)(api):**
+&mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#110)(api, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#863)(api, properties, env_properties):**
+&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#656)(api):**
 
-&mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#74)(api, out_dir, android_out_dir=None, types='all'):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#865)(api, properties, env_properties):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#480)(api):**
+&mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#77)(api, out_dir, android_out_dir=None, types='all'):**
 
-&mdash; **def [ShouldUploadPackages](/scripts/slave/recipes/flutter/engine.py#42)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#482)(api):**
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#470)(api):**
+&mdash; **def [ShouldUploadPackages](/scripts/slave/recipes/flutter/engine.py#45)(api):**
 
-&mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#132)(api, platform, file_paths, archive_name='artifacts.zip'):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#472)(api):**
 
-&mdash; **def [UploadDartPackage](/scripts/slave/recipes/flutter/engine.py#208)(api, package_name):**
+&mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#134)(api, platform, file_paths, archive_name='artifacts.zip'):**
 
-&mdash; **def [UploadDartSdk](/scripts/slave/recipes/flutter/engine.py#234)(api, archive_name):**
+&mdash; **def [UploadDartPackage](/scripts/slave/recipes/flutter/engine.py#210)(api, package_name):**
 
-&mdash; **def [UploadFlutterPatchedSdk](/scripts/slave/recipes/flutter/engine.py#216)(api):**
+&mdash; **def [UploadDartSdk](/scripts/slave/recipes/flutter/engine.py#236)(api, archive_name):**
 
-&mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#190)(api, dir_label, parent_dir, folder_name, zip_name, platform=None):**
+&mdash; **def [UploadFlutterPatchedSdk](/scripts/slave/recipes/flutter/engine.py#218)(api):**
 
-&mdash; **def [UploadMavenArtifacts](/scripts/slave/recipes/flutter/engine.py#173)(api, artifacts):**
+&mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#192)(api, dir_label, parent_dir, folder_name, zip_name, platform=None):**
 
-&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#278)(api, upload_dir, lib_flutter_path, android_triple):**
+&mdash; **def [UploadMavenArtifacts](/scripts/slave/recipes/flutter/engine.py#175)(api, artifacts):**
 
-&mdash; **def [UploadWebSdk](/scripts/slave/recipes/flutter/engine.py#241)(api, archive_name):**
+&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#280)(api, upload_dir, lib_flutter_path, android_triple):**
 
-&mdash; **def [VerifyExportedSymbols](/scripts/slave/recipes/flutter/engine.py#267)(api):**
+&mdash; **def [UploadWebSdk](/scripts/slave/recipes/flutter/engine.py#243)(api, archive_name):**
+
+&mdash; **def [VerifyExportedSymbols](/scripts/slave/recipes/flutter/engine.py#269)(api):**
 ### *recipes* / [flutter/engine\_builder](/scripts/slave/recipes/flutter/engine_builder.py)
 
 [DEPS](/scripts/slave/recipes/flutter/engine_builder.py#10): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
