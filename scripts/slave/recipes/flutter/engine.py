@@ -223,10 +223,14 @@ def UploadFlutterPatchedSdk(api):
     'flutter_patched_sdk.zip') # zip_name
 
   host_release_path = GetCheckoutPath(api).join('out/host_release')
+  flutter_patched_sdk_product = host_release_path.join(
+      'flutter_patched_sdk_product')
+  api.file.rmtree('Remove stale flutter_patched_sdk_product',
+                  flutter_patched_sdk_product)
   api.file.move(
-    'Move release flutter_patched_sdk to flutter_patched_sdk_product',
-    host_release_path.join('flutter_patched_sdk'),
-    host_release_path.join('flutter_patched_sdk_product'))
+      'Move release flutter_patched_sdk to flutter_patched_sdk_product',
+      host_release_path.join('flutter_patched_sdk'),
+      flutter_patched_sdk_product)
   UploadFolder(api,
     'Upload Product Flutter patched sdk', # dir_label
     'src/out/host_release', # parent_dir
