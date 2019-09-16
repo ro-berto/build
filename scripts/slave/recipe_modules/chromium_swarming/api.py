@@ -1139,14 +1139,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     if max_duration[0] > 0:
       prefix = 'S' if len(shards) <= 1 else 'Max s'
       suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_duration[1]
-      step_presentation.step_text += (
-        '<br>%shard duration: %s%s' % (
+      step_presentation.step_text += ('<br>%shard runtime + overhead: %s%s' % (
           prefix, fmt_time(max_duration[0]), suffix))
 
     if min_duration[0] is not None and len(shards) > 1:
       step_presentation.step_text += (
-        '<br>Min shard duration: %s (shard #%d)' % (
-          fmt_time(min_duration[0]), min_duration[1]))
+          '<br>Min shard runtime + overhead: %s (shard #%d)' % (fmt_time(
+              min_duration[0]), min_duration[1]))
 
   def _default_collect_step(
       self, task, failure_as_exception, output_placeholder=None, name=None,
@@ -1509,7 +1508,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     # can differ.
     return ''.join((prefix, task.request.name, suffix))
 
-
   def _handle_summary_json(self, task, step_result):
     """Updates presentation with results from swarming collect.
 
@@ -1544,7 +1542,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Some expected errors [e.g. expiration] should present as EXCEPTION
     # [purple].
     expected_error_present_as_exception = False
-    # Do we have valid results? We count shards as not having valid resuls if
+    # Do we have valid results? We count shards as not having valid results if
     # they weren't able to complete execution normally, due to timing out or
     # the bot dying. Completing execution, but failing, gives valid results.
     has_valid_results = True
@@ -1554,10 +1552,17 @@ class SwarmingApi(recipe_api.RecipeApi):
     links = step_result.presentation.links
     for index, shard in enumerate(summary_shards):
       url = task.get_shard_view_url(index)
-      duration = shard and shard.get('duration')
-      if duration is not None:
-        display_text = 'shard #%d (%.1f sec)' % (index, duration)
-        self._shards_durations.append(duration)
+      if shard and shard.get('duration'):
+        self._shards_durations.append(shard['duration'])
+
+      duration = None
+      if shard and shard.get('completed_ts') and shard.get('started_ts'):
+        # Display text for shard duration to reflect runtime + overhead
+        delta = parse_time(shard['completed_ts']) - parse_time(
+            shard['started_ts'])
+        duration = fmt_time(delta.total_seconds())
+        display_text = (
+            'shard #%d (runtime + overhead: %s sec)' % (index, duration))
       else:
         display_text = 'shard #%d' % index
 
@@ -1591,7 +1596,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
           display_text = (
-              'shard #%d timed out after %.1f sec' % (index, duration))
+              'shard #%d timed out after %s sec' % (index, duration))
         else: # pragma: no cover
           # TODO(tikuta): Add coverage for this code.
           display_text = (
@@ -1602,7 +1607,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       elif self._get_exit_code(shard) != 0:
         # TODO(bpastene): Add coverage for this code.
         if duration is not None:  # pragma: no cover
-          display_text = 'shard #%d (failed) (%.1f sec)' % (index, duration)
+          display_text = 'shard #%d (failed) (%s sec)' % (index, duration)
         else:
           display_text = 'shard #%d (failed)' % index
         expected_errors.append(display_text)

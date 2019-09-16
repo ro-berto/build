@@ -499,7 +499,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step(\"['shard #0 timed out after 60.0 sec']\") (retcode: 0)"
+      "humanReason": "Step(\"['shard #0 timed out, took too much time to complete']\") (retcode: 0)"
     },
     "name": "$result"
   }

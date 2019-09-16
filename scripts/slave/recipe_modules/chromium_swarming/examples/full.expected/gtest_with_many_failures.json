@@ -466,7 +466,7 @@
     },
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>deterministic failures [caused step to fail]:<br/>test-0<br/>test-1<br/>test-10<br/>test-11<br/>test-12<br/>test-13<br/>test-14<br/>test-15<br/>test-16<br/>test-17<br/>test-18<br/>test-19<br/>test-2<br/>test-20<br/>test-21<br/>test-22<br/>test-23<br/>test-24<br/>test-25<br/>test-26<br/>test-27<br/>test-28<br/>test-29<br/>test-3<br/>test-30<br/>test-31<br/>test-32<br/>test-33<br/>test-34<br/>test-35<br/>... 70 more (100 total) ...<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00<br/>deterministic failures [caused step to fail]:<br/>test-0<br/>test-1<br/>test-10<br/>test-11<br/>test-12<br/>test-13<br/>test-14<br/>test-15<br/>test-16<br/>test-17<br/>test-18<br/>test-19<br/>test-2<br/>test-20<br/>test-21<br/>test-22<br/>test-23<br/>test-24<br/>test-25<br/>test-26<br/>test-27<br/>test-28<br/>test-29<br/>test-3<br/>test-30<br/>test-31<br/>test-32<br/>test-33<br/>test-34<br/>test-35<br/>... 70 more (100 total) ...<br/>@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",

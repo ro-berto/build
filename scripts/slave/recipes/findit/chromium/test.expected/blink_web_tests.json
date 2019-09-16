@@ -1309,7 +1309,7 @@
     "name": "test r1.blink_web_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>* fast/Test/Two.html<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>* fast/Test/Two.html<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \"/\", @@@",
@@ -1387,7 +1387,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (failed) (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (failed) (0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -2372,7 +2372,7 @@
     "name": "test r0.blink_web_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 2<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (0 expected, >>>1 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00<br/>Total tests: 2<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (0 expected, >>>1 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \"/\", @@@",
@@ -2443,7 +2443,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (failed) (31.5 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@",
+      "@@@STEP_LINK@shard #0 (failed) (0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

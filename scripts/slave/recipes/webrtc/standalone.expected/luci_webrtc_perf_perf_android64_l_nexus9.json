@@ -395,7 +395,7 @@
     },
     "name": "low_bandwidth_audio_perf_test on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -446,7 +446,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (runtime + overhead: 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -530,7 +530,7 @@
     },
     "name": "webrtc_perf_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -581,7 +581,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
+      "@@@STEP_LINK@shard #0 (runtime + overhead: 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
