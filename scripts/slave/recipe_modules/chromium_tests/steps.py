@@ -2264,11 +2264,16 @@ class AndroidTest(Test):
 
 
 class AndroidJunitTest(AndroidTest):
-  def __init__(
-      self, name, waterfall_mastername=None, waterfall_buildername=None):
+
+  def __init__(self,
+               name,
+               target_name=None,
+               waterfall_mastername=None,
+               waterfall_buildername=None):
     super(AndroidJunitTest, self).__init__(
         name, compile_targets=[name], waterfall_mastername=None,
         waterfall_buildername=None)
+    self._target_name = target_name or name
 
   @property
   def uses_local_devices(self):
@@ -2277,10 +2282,13 @@ class AndroidJunitTest(AndroidTest):
   #override
   def run_tests(self, api, suffix, json_results_file):
     return api.chromium_android.run_java_unit_test_suite(
-        self.name, verbose=True, suffix=suffix,
+        self.name,
+        target_name=self._target_name,
+        verbose=True,
+        suffix=suffix,
         json_results_file=json_results_file,
-        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(
-            False))
+        step_test_data=(
+            lambda: api.test_utils.test_api.canned_gtest_output(False)))
 
 
 class BlinkTest(Test):

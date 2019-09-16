@@ -1172,7 +1172,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if tool:
       args.append('--tool=%s' % tool)
     if result_details and not json_results_file:
-        json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
+      json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
     if store_tombstones:
@@ -1203,8 +1203,13 @@ class AndroidApi(recipe_api.RecipeApi):
         self.copy_gtest_results(result_step,
                                 self.m.step.active_result)
 
-  def run_java_unit_test_suite(self, suite, verbose=True,
-                               json_results_file=None, suffix=None, **kwargs):
+  def run_java_unit_test_suite(self,
+                               suite,
+                               target_name=None,
+                               verbose=True,
+                               json_results_file=None,
+                               suffix=None,
+                               **kwargs):
     args = []
     if verbose:
       args.append('--verbose')
@@ -1217,7 +1222,7 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.test_runner(
           '%s%s' % (str(suite), ' (%s)' % suffix if suffix else ''),
           args=args,
-          wrapper_script_suite_name=str(suite),
+          wrapper_script_suite_name=str(target_name or suite),
           pass_adb_path=False,
           **kwargs)
 

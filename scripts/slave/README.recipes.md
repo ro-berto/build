@@ -986,7 +986,7 @@ Args:
 
 &mdash; **def [run\_instrumentation\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#780)(self, name, test_apk=None, apk_under_test=None, additional_apks=None, flakiness_dashboard=None, annotation=None, except_annotation=None, screenshot=False, verbose=False, tool=None, json_results_file=None, timeout_scale=None, strict_mode=None, suffix=None, num_retries=None, device_flags=None, wrapper_script_suite_name=None, result_details=False, store_tombstones=False, trace_output=False, args=None, \*\*kwargs):**
 
-&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1206)(self, suite, verbose=True, json_results_file=None, suffix=None, \*\*kwargs):**
+&mdash; **def [run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/api.py#1206)(self, suite, target_name=None, verbose=True, json_results_file=None, suffix=None, \*\*kwargs):**
 
 &mdash; **def [run\_telemetry\_browser\_test](/scripts/slave/recipe_modules/chromium_android/api.py#761)(self, test_name, browser='android-chromium'):**
 
@@ -4232,9 +4232,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/run_instrumentation_suite.py#12)(api):**
 ### *recipes* / [chromium\_android:tests/run\_java\_unit\_test\_suite](/scripts/slave/recipe_modules/chromium_android/tests/run_java_unit_test_suite.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_android/tests/run_java_unit_test_suite.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/json][recipe_engine/recipe_modules/json]
+[DEPS](/scripts/slave/recipe_modules/chromium_android/tests/run_java_unit_test_suite.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/run_java_unit_test_suite.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/run_java_unit_test_suite.py#18)(api):**
 ### *recipes* / [chromium\_android:tests/run\_test\_suite](/scripts/slave/recipe_modules/chromium_android/tests/run_test_suite.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_android/tests/run_test_suite.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/json][recipe_engine/recipe_modules/json]
@@ -4468,9 +4468,9 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/configs.py#16)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/android\_junit\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#22)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/artifact\_links](/scripts/slave/recipe_modules/chromium_tests/tests/steps/artifact_links.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/artifact_links.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
