@@ -1272,7 +1272,8 @@ SPEC = {
     'Android FYI 32 Vk Release (Pixel 2)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'gclient_apply_config': ['android', 'chrome_internal',
+                               'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -1288,7 +1289,8 @@ SPEC = {
     'Android FYI 64 Vk Release (Pixel 2)': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'angle_top_of_tree'],
+      'gclient_apply_config': ['android', 'chrome_internal',
+                               'angle_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
