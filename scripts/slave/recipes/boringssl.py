@@ -169,6 +169,10 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     elif _HasToken(buildername, 'aarch64'):
       args['ANDROID_ABI'] = 'arm64-v8a'
       args['ANDROID_NATIVE_API_LEVEL'] = 21
+    # The Android toolchain defaults to Thumb mode, but ARM mode may be
+    # specified as well.
+    if _HasToken(buildername, 'armmode'):
+      args['ANDROID_ARM_MODE'] = 'arm'
   if _HasToken(buildername, 'fips'):
     args['FIPS'] = '1'
   if _HasToken(buildername, 'ios'):
@@ -371,47 +375,48 @@ def _TryBuild(api, builder):
 
 def GenTests(api):
   tests = [
-    # To ensure full test coverage, add a test for each builder configuration.
-    ('linux', api.platform('linux', 64)),
-    ('linux_shared', api.platform('linux', 64)),
-    ('linux32', api.platform('linux', 64)),
-    ('linux_noasm_asan', api.platform('linux', 64)),
-    ('linux_small', api.platform('linux', 64)),
-    ('linux_nothreads', api.platform('linux', 64)),
-    ('linux_rel', api.platform('linux', 64)),
-    ('linux32_rel', api.platform('linux', 64)),
-    ('linux_clang_rel', api.platform('linux', 64)),
-    ('linux_clang_relwithasserts_msan', api.platform('linux', 64)),
-    ('linux_clang_relwithasserts_ubsan', api.platform('linux', 64)),
-    ('linux_clang_cfi', api.platform('linux', 64)),
-    ('linux_fuzz', api.platform('linux', 64)),
-    ('linux_fips', api.platform('linux', 64)),
-    ('linux_fips_rel', api.platform('linux', 64)),
-    ('linux_fips_clang', api.platform('linux', 64)),
-    ('linux_fips_clang_rel', api.platform('linux', 64)),
-    ('linux_fips_noasm_asan', api.platform('linux', 64)),
-    ('mac', api.platform('mac', 64)),
-    ('mac_small', api.platform('mac', 64)),
-    ('mac_rel', api.platform('mac', 64)),
-    ('win32', api.platform('win', 64)),
-    ('win32_small', api.platform('win', 64)),
-    ('win32_rel', api.platform('win', 64)),
-    ('win32_vs2017', api.platform('win', 64)),
-    ('win32_vs2017_clang', api.platform('win', 64)),
-    ('win32_nasm', api.platform('win', 64)),
-    ('win64', api.platform('win', 64)),
-    ('win64_small', api.platform('win', 64)),
-    ('win64_rel', api.platform('win', 64)),
-    ('win64_vs2017', api.platform('win', 64)),
-    ('win64_vs2017_clang', api.platform('win', 64)),
-    ('win64_nasm', api.platform('win', 64)),
-    ('android_arm', api.platform('linux', 64)),
-    ('android_arm_rel', api.platform('linux', 64)),
-    ('android_aarch64', api.platform('linux', 64)),
-    ('android_aarch64_rel', api.platform('linux', 64)),
-    # This is not a builder configuration, but it ensures _AppendFlags handles
-    # appending to CMAKE_CXX_FLAGS when there is already a value in there.
-    ('linux_nothreads_small', api.platform('linux', 64)),
+      # To ensure full test coverage, add a test for each builder configuration.
+      ('linux', api.platform('linux', 64)),
+      ('linux_shared', api.platform('linux', 64)),
+      ('linux32', api.platform('linux', 64)),
+      ('linux_noasm_asan', api.platform('linux', 64)),
+      ('linux_small', api.platform('linux', 64)),
+      ('linux_nothreads', api.platform('linux', 64)),
+      ('linux_rel', api.platform('linux', 64)),
+      ('linux32_rel', api.platform('linux', 64)),
+      ('linux_clang_rel', api.platform('linux', 64)),
+      ('linux_clang_relwithasserts_msan', api.platform('linux', 64)),
+      ('linux_clang_relwithasserts_ubsan', api.platform('linux', 64)),
+      ('linux_clang_cfi', api.platform('linux', 64)),
+      ('linux_fuzz', api.platform('linux', 64)),
+      ('linux_fips', api.platform('linux', 64)),
+      ('linux_fips_rel', api.platform('linux', 64)),
+      ('linux_fips_clang', api.platform('linux', 64)),
+      ('linux_fips_clang_rel', api.platform('linux', 64)),
+      ('linux_fips_noasm_asan', api.platform('linux', 64)),
+      ('mac', api.platform('mac', 64)),
+      ('mac_small', api.platform('mac', 64)),
+      ('mac_rel', api.platform('mac', 64)),
+      ('win32', api.platform('win', 64)),
+      ('win32_small', api.platform('win', 64)),
+      ('win32_rel', api.platform('win', 64)),
+      ('win32_vs2017', api.platform('win', 64)),
+      ('win32_vs2017_clang', api.platform('win', 64)),
+      ('win32_nasm', api.platform('win', 64)),
+      ('win64', api.platform('win', 64)),
+      ('win64_small', api.platform('win', 64)),
+      ('win64_rel', api.platform('win', 64)),
+      ('win64_vs2017', api.platform('win', 64)),
+      ('win64_vs2017_clang', api.platform('win', 64)),
+      ('win64_nasm', api.platform('win', 64)),
+      ('android_arm', api.platform('linux', 64)),
+      ('android_arm_rel', api.platform('linux', 64)),
+      ('android_arm_armmode_rel', api.platform('linux', 64)),
+      ('android_aarch64', api.platform('linux', 64)),
+      ('android_aarch64_rel', api.platform('linux', 64)),
+      # This is not a builder configuration, but it ensures _AppendFlags handles
+      # appending to CMAKE_CXX_FLAGS when there is already a value in there.
+      ('linux_nothreads_small', api.platform('linux', 64)),
   ]
   for (buildername, host_platform) in tests:
     yield api.test(
