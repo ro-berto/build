@@ -52,8 +52,6 @@ BOT_CONFIGS = {
   'Auto-roll - v8 deps': {
     'subject': 'Update V8 DEPS.',
     'blacklist': [
-      # TODO(machenbach): Remove after resolving https://crbug.com/1002806
-      'build',
       # https://crrev.com/c/1547863
       'third_party/perfetto',
       'third_party/protobuf',
@@ -337,7 +335,7 @@ def GenTests(api):
   # pylint: disable=line-too-long
   v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
 v8/base/trace_event/common: https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd
-v8/foo: https://chromium.googlesource.com/chromium/src/foo.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
+v8/build: https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
 src/foo/bar: https://chromium.googlesource.com/external/github.com/foo/bar@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
@@ -385,7 +383,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
           retcode=1,
       ) +
       api.override_step_data(
-          'look up foo',
+          'look up build',
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       ) +
       api.override_step_data(
