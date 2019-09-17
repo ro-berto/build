@@ -229,7 +229,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"bucket\": \"chromium-webrtc\",\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"tests\": [\n    {\n      \"app\": \"webrtc_perf_tests\",\n      \"bot id\": \"build16-a7\",\n      \"device type\": \"iPhone 7\",\n      \"max runtime seconds\": 7200,\n      \"os\": \"12.1.4\",\n      \"pool\": \"WebRTC\",\n      \"priority\": 30,\n      \"test args\": [\n        \"--save_chartjson_result\",\n        \"--nologs\"\n      ]\n    }\n  ],\n  \"xcode build version\": \"10l232m\"\n}",
+      "{\n  \"bucket\": \"chromium-webrtc\",\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"tests\": [\n    {\n      \"app\": \"webrtc_perf_tests\",\n      \"bot id\": \"build16-a7\",\n      \"device type\": \"iPhone 7\",\n      \"max runtime seconds\": 7200,\n      \"os\": \"12.4.1\",\n      \"pool\": \"WebRTC\",\n      \"priority\": 30,\n      \"test args\": [\n        \"--save_chartjson_result\",\n        \"--nologs\"\n      ]\n    }\n  ],\n  \"xcode build version\": \"10l232m\"\n}",
       "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.try/ios_arm64_perf.json"
     ],
     "infra_step": true,
@@ -250,7 +250,7 @@
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"bot id\": \"build16-a7\",@@@",
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"device type\": \"iPhone 7\",@@@",
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"max runtime seconds\": 7200,@@@",
-      "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"os\": \"12.1.4\",@@@",
+      "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"os\": \"12.4.1\",@@@",
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"pool\": \"WebRTC\",@@@",
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"priority\": 30,@@@",
       "@@@STEP_LOG_LINE@ios_arm64_perf.json@      \"test args\": [@@@",
@@ -289,7 +289,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"bot id\": \"build16-a7\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"device type\": \"iPhone 7\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"max runtime seconds\": 7200, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"12.1.4\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"os\": \"12.4.1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"pool\": \"WebRTC\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"priority\": 30, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"test args\": [@@@",
@@ -865,7 +865,7 @@
     "name": "isolate.generate 0.isolated.gen.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@webrtc_perf_tests (iPhone 7 iOS 12.1.4)@@@",
+      "@@@STEP_TEXT@webrtc_perf_tests (iPhone 7 iOS 12.4.1)@@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
@@ -983,7 +983,7 @@
       "--priority",
       "30",
       "--task-name",
-      "webrtc_perf_tests (iPhone 7 iOS 12.1.4)/iOS-12.1.4/[dummy has/ios_arm64_perf/-1",
+      "webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/ios_arm64_perf/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1006,7 +1006,7 @@
       "build16-a7",
       "--dimension",
       "os",
-      "iOS-12.1.4",
+      "iOS-12.4.1",
       "--dimension",
       "pool",
       "WebRTC",
@@ -1030,7 +1030,7 @@
       "--tag",
       "gerrit:https://webrtc-review.googlesource.com/c/123456/7",
       "--tag",
-      "ios_version:12.1.4",
+      "ios_version:12.4.1",
       "--tag",
       "master:internal.tryserver.webrtc",
       "--tag",
@@ -1052,7 +1052,7 @@
       "--tag",
       "spec_name:webrtc-internal.try:ios_arm64_perf",
       "--tag",
-      "stepname:webrtc_perf_tests (iPhone 7 iOS 12.1.4) on iOS-12.1.4",
+      "stepname:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
       "--tag",
       "test:webrtc_perf_tests",
       "--idempotent",
@@ -1084,14 +1084,14 @@
       "[dummy hash for 0]"
     ],
     "infra_step": true,
-    "name": "trigger.[trigger] webrtc_perf_tests (iPhone 7 iOS 12.1.4) on iOS-12.1.4",
+    "name": "trigger.[trigger] webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Bot id: 'build16-a7'<br/>Run on OS: 'iOS-12.1.4'@@@",
+      "@@@STEP_TEXT@Bot id: 'build16-a7'<br/>Run on OS: 'iOS-12.4.1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_perf_tests (iPhone 7 iOS 12.1.4)/iOS-12.1.4/[dummy has/ios_arm64_perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/ios_arm64_perf/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webrtc_perf_tests (iPhone 7 iOS 12.1.4)/iOS-12.1.4/[dummy has/ios_arm64_perf/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/ios_arm64_perf/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10000\"@@@",
@@ -1176,9 +1176,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "webrtc_perf_tests (iPhone 7 iOS 12.1.4) on iOS-12.1.4",
+    "name": "webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Bot id: 'build16-a7'<br/>Run on OS: 'iOS-12.1.4'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00@@@",
+      "@@@STEP_TEXT@Bot id: 'build16-a7'<br/>Run on OS: 'iOS-12.4.1'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -1229,7 +1229,7 @@
   },
   {
     "failure": {
-      "humanReason": "Failed webrtc_perf_tests (iPhone 7 iOS 12.1.4)."
+      "humanReason": "Failed webrtc_perf_tests (iPhone 7 iOS 12.4.1)."
     },
     "name": "$result"
   }
