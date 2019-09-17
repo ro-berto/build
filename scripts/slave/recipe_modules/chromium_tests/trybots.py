@@ -469,6 +469,12 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.linux',
                     'buildername': 'Fuchsia ARM64 Cast Audio',
                 }),
+            'fuchsia-compile-x64-dbg':
+                simple_bot({
+                    'mastername': 'chromium.linux',
+                    'buildername': 'fuchsia-x64-dbg',
+                },
+                           analyze_mode='compile'),
             'fuchsia-fyi-arm64-rel':
                 simple_bot({
                     'mastername': 'chromium.fyi',

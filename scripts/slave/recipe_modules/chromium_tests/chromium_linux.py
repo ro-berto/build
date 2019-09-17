@@ -41,6 +41,22 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'fuchsia-x64-dbg': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia_x64'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'linux-gcc-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
