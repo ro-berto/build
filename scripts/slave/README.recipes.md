@@ -53,6 +53,7 @@
 
 **[Recipes](#Recipes)**
   * [adb:examples/full](#recipes-adb_examples_full)
+  * [android/avd_packager](#recipes-android_avd_packager) &mdash; Packages Android AVDs as CIPD packages.
   * [android/builder](#recipes-android_builder)
   * [android/sdk_packager](#recipes-android_sdk_packager) &mdash; Packages Android SDK packages as CIPD packages.
   * [angle](#recipes-angle)
@@ -3945,6 +3946,13 @@ Args:
 [DEPS](/scripts/slave/recipe_modules/adb/examples/full.py#5): [adb](#recipe_modules-adb), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/adb/examples/full.py#12)(api):**
+### *recipes* / [android/avd\_packager](/scripts/slave/recipes/android/avd_packager.py)
+
+[DEPS](/scripts/slave/recipes/android/avd_packager.py#10): [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+
+Packages Android AVDs as CIPD packages.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/android/avd_packager.py#24)(api, properties):**
 ### *recipes* / [android/builder](/scripts/slave/recipes/android/builder.py)
 
 [DEPS](/scripts/slave/recipes/android/builder.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
