@@ -1153,8 +1153,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if min_duration.duration is not None and len(shards) > 1:
       step_presentation.step_text += (
           '<br>Min shard runtime (%s) + overhead (%s): %s (shard #%d)' %
-          (fmt_time(min_duration.duration), fmt_time(min_duration.runtime),
-           fmt_time(min_duration.overhead), min_duration.index))
+          (fmt_time(min_duration.runtime), fmt_time(min_duration.overhead),
+           fmt_time(min_duration.duration), min_duration.index))
 
   def _default_collect_step(
       self, task, failure_as_exception, output_placeholder=None, name=None,

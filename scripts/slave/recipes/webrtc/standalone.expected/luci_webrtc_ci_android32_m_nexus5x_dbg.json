@@ -5153,7 +5153,7 @@
     },
     "name": "modules_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5298,7 +5298,7 @@
     },
     "name": "modules_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5535,7 +5535,7 @@
     },
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5848,7 +5848,7 @@
     },
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6451,7 +6451,7 @@
     },
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
