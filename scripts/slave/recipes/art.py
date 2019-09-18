@@ -420,6 +420,10 @@ def setup_target(api,
       libcore_command.append('--debug')
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
+    # Ignore failures from Libcore tests using the getrandom() syscall (present
+    # since Linux 3.17) on fugu devices, as they run a Linux 3.10 kernel.
+    if device == 'fugu':
+      libcore_command.append('--no-getrandom')
 
     # Disable libcore runs with gcstress and debug, they time out.
     if not (gcstress and debug):

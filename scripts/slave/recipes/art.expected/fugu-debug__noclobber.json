@@ -1096,7 +1096,8 @@
       "[START_DIR]/art/tools/run-libcore-tests.sh",
       "--mode=device",
       "--variant=X32",
-      "--debug"
+      "--debug",
+      "--no-getrandom"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
