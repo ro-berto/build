@@ -85,9 +85,11 @@ def RunSteps(api):
 def GenTests(api):
   for platform in ['linux', 'mac', 'win']:
     for bucket in ['prod', 'luci.goma-client.ci']:
-      yield (api.test('goma_client_%s_%s_rel' % (platform, bucket)) +
-             api.platform(platform, 64) +
-             api.buildbucket.ci_build(
-                 bucket=bucket,
-                 git_repo='chromium.googlesource.com/infra/goma/client',
-                 revision='8b3cd40a25a512033cc8c0797e41de9ecfc2432c'))
+      yield api.test(
+          'goma_client_%s_%s_rel' % (platform, bucket),
+          api.platform(platform, 64),
+          api.buildbucket.ci_build(
+              bucket=bucket,
+              git_repo='chromium.googlesource.com/infra/goma/client',
+              revision='8b3cd40a25a512033cc8c0797e41de9ecfc2432c'),
+      )
