@@ -10,5 +10,7 @@ def RunSteps(api):
   api.halt('Fake failure')
 
 def GenTests(api):
-  yield api.test('basic') + api.step_data('Recipe failed. Reason: Fake failure',
-                                          retcode = 1)
+  yield api.test(
+      'basic',
+      api.step_data('Recipe failed. Reason: Fake failure', retcode=1),
+  )
