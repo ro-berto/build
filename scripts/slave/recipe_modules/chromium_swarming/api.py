@@ -41,30 +41,29 @@ IMPLIED_ENV_PREFIXES = {
 #   - "env_path" (optional): path relative to the installed path to put on
 #     $PATH. If unspecified, the package's installation root is put on $PATH.
 IMPLIED_CIPD_BINARIES = {
-  # Both vpython versions MUST be changed together.
-  'infra/tools/luci/vpython/${platform}': {
-      'version': 'git_revision:98a268c6432f18aedd55d62b9621765316dc2a16',
-  },
-  'infra/tools/luci/vpython-native/${platform}': {
-      'version': 'git_revision:98a268c6432f18aedd55d62b9621765316dc2a16',
-  },
+    # Both vpython versions MUST be changed together.
+    'infra/tools/luci/vpython/${platform}': {
+        'version': 'git_revision:4722764c4f0247f32e18864c90bd349336bf684f',
+    },
+    'infra/tools/luci/vpython-native/${platform}': {
+        'version': 'git_revision:4722764c4f0247f32e18864c90bd349336bf684f',
+    },
+    'infra/tools/luci/logdog/butler/${platform}': {
+        'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
+    },
 
-  'infra/tools/luci/logdog/butler/${platform}': {
-      'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
-  },
-
-  # NOTE(crbug.com/842234): these aren't currently available on mips. See
-  # SwarmingApi.trigger_task for hack.
-  'infra/python/cpython/${platform}': {
-      'install_path': 'cpython',
-      'env_path': 'bin',
-      'version': 'version:2.7.15.chromium14',
-  },
-  'infra/python/cpython3/${platform}': {
-      'install_path': 'cpython3',
-      'env_path': 'bin',
-      'version': 'version:3.8.0b1.chromium.1',
-  },
+    # NOTE(crbug.com/842234): these aren't currently available on mips. See
+    # SwarmingApi.trigger_task for hack.
+    'infra/python/cpython/${platform}': {
+        'install_path': 'cpython',
+        'env_path': 'bin',
+        'version': 'version:2.7.15.chromium14',
+    },
+    'infra/python/cpython3/${platform}': {
+        'install_path': 'cpython3',
+        'env_path': 'bin',
+        'version': 'version:3.8.0b1.chromium.1',
+    },
 }
 
 PER_TARGET_SWARMING_DIMS = collections.defaultdict(dict)
