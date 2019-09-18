@@ -12,4 +12,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic') + api.expect_exception('ValueError')
+  yield api.test(
+      'basic',
+      api.expect_exception('ValueError'),
+  )
