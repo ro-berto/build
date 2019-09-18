@@ -78,12 +78,12 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'android-bfcache-rel': {
+    'android-bfcache-debug': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
