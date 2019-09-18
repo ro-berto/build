@@ -23,6 +23,17 @@
   },
   {
     "cmd": [
+      "RECIPE_REPO[depot_tools]/repo",
+      "manifest",
+      "-r",
+      "-o",
+      "-"
+    ],
+    "infra_step": true,
+    "name": "repo manifest"
+  },
+  {
+    "cmd": [
       "rm",
       "-rf",
       "out"

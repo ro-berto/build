@@ -23,6 +23,7 @@ def RunSteps(api):
   api.repo.clean()
   api.repo.clean('-x')
   api.repo.sync()
+  api.repo.manifest()
 
   repos = api.repo.list()
   assert repos == [('src/foo', 'foo'), ('src/bar', 'bar')]

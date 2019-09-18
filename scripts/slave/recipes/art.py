@@ -60,11 +60,15 @@ def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master-art')
   api.repo.sync("-f", "-c")
+  api.repo.manifest()
+
 
 def full_checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master')
   api.repo.sync("-f", "-c")
+  api.repo.manifest()
+
 
 def clobber(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'

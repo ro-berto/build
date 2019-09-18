@@ -55,6 +55,12 @@ class RepoApi(recipe_api.RecipeApi):
       kwargs['name'] = name
     return self(['sync'] + list(args), **kwargs)
 
+  def manifest(self, **kwargs):
+    """Generate a manifest containing current revisions."""
+    kwargs.setdefault('infra_step', True)
+    kwargs.setdefault('name', 'repo manifest')
+    return self(['manifest', '-r', '-o', '-'], **kwargs)
+
   def clean(self, *args, **kwargs):
     """Clean an already-init'd repo."""
     kwargs.setdefault('infra_step', True)
