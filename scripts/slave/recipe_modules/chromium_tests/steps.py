@@ -1464,13 +1464,28 @@ class SwarmingTest(Test):
   SUFFIXES_TO_INCREASE_PRIORITY = [
       'without patch', 'retry shards with patch' ]
 
-  def __init__(self, name, dimensions=None, target_name=None,
-               extra_suffix=None, expiration=None, hard_timeout=None,
-               io_timeout=None, waterfall_mastername=None,
-               waterfall_buildername=None, set_up=None, tear_down=None,
-               optional_dimensions=None, service_account=None,
-               isolate_coverage_data=None, merge=None, ignore_task_failure=None,
-               containment_type=None, idempotent=None, shards=1, **kwargs):
+  def __init__(self,
+               name,
+               dimensions=None,
+               target_name=None,
+               extra_suffix=None,
+               expiration=None,
+               hard_timeout=None,
+               io_timeout=None,
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               set_up=None,
+               tear_down=None,
+               optional_dimensions=None,
+               service_account=None,
+               isolate_coverage_data=None,
+               merge=None,
+               ignore_task_failure=None,
+               containment_type=None,
+               idempotent=None,
+               shards=1,
+               cipd_packages=None,
+               **kwargs):
     """Constructs an instance of SwarmingTest.
 
     Args:
@@ -1500,6 +1515,8 @@ class SwarmingTest(Test):
       idempotent: Wether to mark the task as idempotent. A value of None will
           cause chromium_swarming/api.py to apply its default_idempotent val.
       shards: Number of shards to trigger.
+      cipd_packages: [(str, str, str)] list of 3-tuples containing cipd
+          package root, package name, and package version.
     """
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
@@ -1507,6 +1524,7 @@ class SwarmingTest(Test):
         waterfall_buildername=waterfall_buildername,
         **kwargs)
     self._tasks = {}
+    self._cipd_packages = cipd_packages or []
     self._containment_type = containment_type
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions
@@ -1855,15 +1873,30 @@ class SwarmingTest(Test):
 
 
 class SwarmingGTestTest(SwarmingTest):
-  def __init__(self, name, args=None, target_name=None, shards=1,
-               dimensions=None, extra_suffix=None, expiration=None,
-               hard_timeout=None, io_timeout=None,
+
+  def __init__(self,
+               name,
+               args=None,
+               target_name=None,
+               shards=1,
+               dimensions=None,
+               extra_suffix=None,
+               expiration=None,
+               hard_timeout=None,
+               io_timeout=None,
                override_compile_targets=None,
-               cipd_packages=None, waterfall_mastername=None,
-               waterfall_buildername=None, merge=None, trigger_script=None,
-               set_up=None, tear_down=None, isolate_coverage_data=False,
-               optional_dimensions=None, service_account=None,
-               containment_type=None, ignore_task_failure=False, **kw):
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               merge=None,
+               trigger_script=None,
+               set_up=None,
+               tear_down=None,
+               isolate_coverage_data=False,
+               optional_dimensions=None,
+               service_account=None,
+               containment_type=None,
+               ignore_task_failure=False,
+               **kw):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1877,7 +1910,6 @@ class SwarmingGTestTest(SwarmingTest):
         **kw)
     self._args = args or []
     self._override_compile_targets = override_compile_targets
-    self._cipd_packages = cipd_packages
     self._gtest_results = {}
     self._trigger_script = trigger_script
 
@@ -2066,16 +2098,32 @@ class LocalIsolatedScriptTest(Test):
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
-  def __init__(self, name, args=None, target_name=None, shards=1,
-               dimensions=None, extra_suffix=None,
-               ignore_task_failure=False, expiration=None,
-               hard_timeout=None, override_compile_targets=None, perf_id=None,
-               results_url=None, perf_dashboard_id=None, io_timeout=None,
-               waterfall_mastername=None, waterfall_buildername=None,
-               merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None, cipd_packages=None,
-               isolate_coverage_data=False, optional_dimensions=None,
-               service_account=None, **kw):
+  def __init__(self,
+               name,
+               args=None,
+               target_name=None,
+               shards=1,
+               dimensions=None,
+               extra_suffix=None,
+               ignore_task_failure=False,
+               expiration=None,
+               hard_timeout=None,
+               override_compile_targets=None,
+               perf_id=None,
+               results_url=None,
+               perf_dashboard_id=None,
+               io_timeout=None,
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               merge=None,
+               trigger_script=None,
+               results_handler=None,
+               set_up=None,
+               tear_down=None,
+               isolate_coverage_data=False,
+               optional_dimensions=None,
+               service_account=None,
+               **kw):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -2095,7 +2143,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._trigger_script = trigger_script
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
-    self._cipd_packages = cipd_packages
 
   @property
   def target_name(self):
@@ -2682,7 +2729,13 @@ class SwarmingIosTest(SwarmingTest):
         If the function is not provided, the default is to upload performance
         results from perf_result.json.
     """
-    super(SwarmingIosTest, self).__init__(name=task['step name'])
+    super(SwarmingIosTest, self).__init__(
+        name=task['step name'],
+        cipd_packages=[(
+            MAC_TOOLCHAIN_ROOT,
+            MAC_TOOLCHAIN_PACKAGE,
+            MAC_TOOLCHAIN_VERSION,
+        )])
     self._service_account = swarming_service_account
     self._platform = platform
     self._config = copy.deepcopy(config)
@@ -2693,28 +2746,21 @@ class SwarmingIosTest(SwarmingTest):
     self._args = []
     self._trigger_script = None
 
-    cipd_packages = [(
-        MAC_TOOLCHAIN_ROOT,
-        MAC_TOOLCHAIN_PACKAGE,
-        MAC_TOOLCHAIN_VERSION,
-    )]
-
     replay_package_name = task['test'].get('replay package name')
     replay_package_version = task['test'].get('replay package version')
     use_trusted_cert = task['test'].get('use trusted cert')
     if use_trusted_cert or (replay_package_name and replay_package_version):
-      cipd_packages.append((
+      self._cipd_packages.append((
           WPR_TOOLS_ROOT,
           WPR_TOOLS_PACKAGE,
           WPR_TOOLS_VERSION,
       ))
     if replay_package_name and replay_package_version:
-      cipd_packages.append((
+      self._cipd_packages.append((
           WPR_REPLAY_DATA_ROOT,
           replay_package_name,
           replay_package_version,
       ))
-    self._cipd_packages = cipd_packages
     self._expiration = (self._task['test'].get('expiration_time') or
                         self._config.get( 'expiration_time'))
 
