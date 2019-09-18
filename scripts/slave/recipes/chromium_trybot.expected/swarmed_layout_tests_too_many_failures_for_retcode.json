@@ -2245,7 +2245,7 @@
     },
     "name": "blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00<br/>2 passed, 0 failed (2 total)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br/>2 passed, 0 failed (2 total)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"successes\": [@@@",
@@ -2306,7 +2306,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime + overhead: 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {

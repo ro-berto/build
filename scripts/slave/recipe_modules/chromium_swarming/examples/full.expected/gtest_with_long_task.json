@@ -465,7 +465,7 @@
     },
     "name": "hello_world on Windows-7-SP1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime + overhead: 0:07:12 (shard #2)<br>Min shard runtime + overhead: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (0:06:41): 0:07:12 (shard #2)<br>Min shard runtime (0:01:00) + overhead (31s): 28s (shard #0)@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",

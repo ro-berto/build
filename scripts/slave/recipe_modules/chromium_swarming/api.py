@@ -160,10 +160,8 @@ def parse_time(value):
 def fmt_time(seconds):
   """Formats some number of seconds into a string. If this is < 60, it will
   render as `NNs`. If it's >= 60 seconds, it will render as 'hh:mm:ss'."""
-  return (
-    '%ds' % (seconds,) if seconds < 60
-    else str(datetime.timedelta(seconds=seconds))
-  )
+  return ('%ds' % (seconds,) if seconds < 60 else str(
+      datetime.timedelta(seconds=round(seconds))))
 
 
 class ReadOnlyDict(dict):
@@ -1108,8 +1106,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
     and also displays the min and max shard duration accross all shards."""
     max_pending = (-1, None)
-    max_duration = (-1, None)
-    min_duration = (None, None)
+    ShardStats = collections.namedtuple(
+        'ShardStats', ['duration', 'runtime', 'overhead', 'index'])
+    max_duration = ShardStats(
+        duration=None, index=-1, runtime=None, overhead=None)
+    min_duration = ShardStats(
+        duration=None, index=None, runtime=None, overhead=None)
     for i, shard in enumerate(shards):
       if not shard or not shard.get('started_ts'):
         continue
@@ -1123,28 +1125,36 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       if shard.get('completed_ts'):
         duration = (parse_time(shard['completed_ts']) - started).total_seconds()
-        if duration > max_duration[0]:
-          max_duration = (duration, i)
-        if min_duration[0] is None or duration < min_duration[0]:
-          min_duration = (duration, i)
+        overhead = duration - shard['duration']
+        runtime = shard['duration']
+        if duration > max_duration.duration:
+          max_duration = ShardStats(
+              duration=duration, index=i, runtime=runtime, overhead=overhead)
+        if min_duration.index is None or duration < min_duration.duration:
+          min_duration = ShardStats(
+              duration=duration, index=i, runtime=runtime, overhead=overhead)
 
     # Only display annotation when pending more than 10 seconds to reduce noise.
     if max_pending[0] > 10:
       prefix = 'P' if len(shards) <= 1 else 'Max p'
       suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_pending[1]
-      step_presentation.step_text += (
-        '<br>%sending time: %s%s' % (prefix, fmt_time(max_pending[0]), suffix))
+      step_presentation.step_text += ('<br>%sending time: %s%s' % (
+          prefix, fmt_time(max_pending[0]), suffix))
 
-    if max_duration[0] > 0:
+    if max_duration.duration > 0:
       prefix = 'S' if len(shards) <= 1 else 'Max s'
-      suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_duration[1]
-      step_presentation.step_text += ('<br>%shard runtime + overhead: %s%s' % (
-          prefix, fmt_time(max_duration[0]), suffix))
-
-    if min_duration[0] is not None and len(shards) > 1:
+      suffix = '' if len(shards) <= 1 else ' (shard #%d)' % max_duration.index
       step_presentation.step_text += (
-          '<br>Min shard runtime + overhead: %s (shard #%d)' % (fmt_time(
-              min_duration[0]), min_duration[1]))
+          '<br>%shard runtime (%s) + overhead (%s): %s%s' %
+          (prefix, fmt_time(max_duration.runtime),
+           fmt_time(max_duration.overhead), fmt_time(max_duration.duration),
+           suffix))
+
+    if min_duration.duration is not None and len(shards) > 1:
+      step_presentation.step_text += (
+          '<br>Min shard runtime (%s) + overhead (%s): %s (shard #%d)' %
+          (fmt_time(min_duration.duration), fmt_time(min_duration.runtime),
+           fmt_time(min_duration.overhead), min_duration.index))
 
   def _default_collect_step(
       self, task, failure_as_exception, output_placeholder=None, name=None,
@@ -1560,8 +1570,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         delta = parse_time(shard['completed_ts']) - parse_time(
             shard['started_ts'])
         duration = fmt_time(delta.total_seconds())
-        display_text = (
-            'shard #%d (runtime + overhead: %s sec)' % (index, duration))
+        runtime = shard['duration']
+        overhead = delta.total_seconds() - runtime
+        display_text = ('shard #%d (runtime (%s) + overhead (%s): %s sec)' % (
+            index, fmt_time(runtime), fmt_time(overhead), duration))
       else:
         display_text = 'shard #%d' % index
 

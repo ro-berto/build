@@ -1129,7 +1129,7 @@
     },
     "name": "webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Bot id: 'build15-a7'<br/>Run on OS: 'iOS-12.4.1'<br>Pending time: 0:01:11<br>Shard runtime + overhead: 0:01:00@@@",
+      "@@@STEP_TEXT@Bot id: 'build15-a7'<br/>Run on OS: 'iOS-12.4.1'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -1160,7 +1160,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime + overhead: 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/10000@@@"
     ]
   },
   {
