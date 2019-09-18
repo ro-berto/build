@@ -20,7 +20,7 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties.tryserver()
+  yield api.test(
+      'basic',
+      api.properties.tryserver(),
   )
