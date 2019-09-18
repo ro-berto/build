@@ -19,18 +19,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-      api.test('affected_files_in_src') +
-      api.buildbucket.ci_build() +
-      api.properties(solution_name='src')
+  yield api.test(
+      'affected_files_in_src',
+      api.buildbucket.ci_build(),
+      api.properties(solution_name='src'),
   )
-  yield (
-      api.test('affected_files_third_party') +
-      api.buildbucket.ci_build() +
-      api.properties(solution_name='src/third_party/pdfium')
+  yield api.test(
+      'affected_files_third_party',
+      api.buildbucket.ci_build(),
+      api.properties(solution_name='src/third_party/pdfium'),
   )
-  yield (
-      api.test('affected_files_on_win') +
-      api.buildbucket.ci_build() +
-      api.properties(solution_name='src\\third_party\\pdfium')
+  yield api.test(
+      'affected_files_on_win',
+      api.buildbucket.ci_build(),
+      api.properties(solution_name='src\\third_party\\pdfium'),
   )
