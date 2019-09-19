@@ -590,7 +590,7 @@
     },
     "name": "hello_world",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Total shard runtime (0s) + overhead(0s): 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

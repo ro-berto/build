@@ -1102,7 +1102,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     result.presentation.logs['detailed stats'] = detailed_stats
 
   @staticmethod
-  def _display_pending(shards, step_presentation):
+  def _display_time_stats(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
     and also displays the min and max shard duration accross all shards."""
     max_pending = (-1, None)
@@ -1112,6 +1112,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         duration=None, index=-1, runtime=None, overhead=None)
     min_duration = ShardStats(
         duration=None, index=None, runtime=None, overhead=None)
+    duration_sum = 0
+    runtime_sum = 0
+    overhead_sum = 0
     for i, shard in enumerate(shards):
       if not shard or not shard.get('started_ts'):
         continue
@@ -1127,6 +1130,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         duration = (parse_time(shard['completed_ts']) - started).total_seconds()
         overhead = duration - shard['duration']
         runtime = shard['duration']
+        duration_sum += duration
+        overhead_sum += overhead
+        runtime_sum += runtime
         if duration > max_duration.duration:
           max_duration = ShardStats(
               duration=duration, index=i, runtime=runtime, overhead=overhead)
@@ -1155,6 +1161,12 @@ class SwarmingApi(recipe_api.RecipeApi):
           '<br>Min shard runtime (%s) + overhead (%s): %s (shard #%d)' %
           (fmt_time(min_duration.runtime), fmt_time(min_duration.overhead),
            fmt_time(min_duration.duration), min_duration.index))
+
+    if len(shards) > 1:
+      step_presentation.step_text += (
+          '<br>Total shard runtime (%s) + overhead(%s): %s'
+          % (fmt_time(runtime_sum), fmt_time(overhead_sum),
+             fmt_time(duration_sum)))
 
   def _default_collect_step(
       self, task, failure_as_exception, output_placeholder=None, name=None,
@@ -1650,7 +1662,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # here.
     task.failed_shards = failed_shards
 
-    self._display_pending(summary_shards, step_result.presentation)
+    self._display_time_stats(summary_shards, step_result.presentation)
 
     if unexpected_errors:
       template = 'Shard #%s failed: %s'

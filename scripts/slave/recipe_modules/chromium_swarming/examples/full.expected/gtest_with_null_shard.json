@@ -577,7 +577,7 @@
     },
     "name": "hello_world",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Total shard runtime (0s) + overhead(0s): 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    null, @@@",
