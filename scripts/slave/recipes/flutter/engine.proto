@@ -39,6 +39,8 @@ message InputProperties {
   bool no_bitcode = 19;
   bool no_maven = 20;
   bool clobber=21;
+
+  string fuchsia_ctl_version=22;
 }
 
 message EnvProperties {

@@ -8,33 +8,39 @@ import contextlib
 from PB.recipes.build.flutter.engine import InputProperties
 from PB.recipes.build.flutter.engine import EnvProperties
 
+from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from google.protobuf import struct_pb2
+
 DEPS = [
-  'build',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/git',
-  'depot_tools/gsutil',
-  'depot_tools/osx_sdk',
-  'goma',
-  'recipe_engine/buildbucket',
-  'recipe_engine/cipd',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'recipe_engine/python',
-  'zip',
+    'build',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/git',
+    'depot_tools/gsutil',
+    'depot_tools/osx_sdk',
+    'goma',
+    'recipe_engine/buildbucket',
+    'recipe_engine/cipd',
+    'recipe_engine/context',
+    'recipe_engine/isolated',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'recipe_engine/swarming',
+    'recipe_engine/python',
+    'zip',
 ]
 
 BUCKET_NAME = 'flutter_infra'
 MAVEN_BUCKET_NAME = 'download.flutter.io'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
-GIT_REPO = 'https://chromium.googlesource.com/external/github.com/flutter/engine' # pylint: disable=line-too-long
+GIT_REPO = (
+    'https://chromium.googlesource.com/external/github.com/flutter/engine')
 
 PROPERTIES = InputProperties
 ENV_PROPERTIES = EnvProperties
@@ -62,6 +68,7 @@ def Build(api, config, *targets):
     name='build %s' % ' '.join([config] + list(targets)),
     ninja_command=ninja_args)
 
+
 # Bitcode builds cannot use goma.
 def BuildNoGoma(api, config, *targets):
   if api.properties.get('no_bitcode', False):
@@ -74,6 +81,7 @@ def BuildNoGoma(api, config, *targets):
   ninja_args.extend(targets)
   api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
 
+
 def RunTests(api, out_dir, android_out_dir=None, types='all'):
   script_path = GetCheckoutPath(api).join('flutter', 'testing', 'run_tests.py')
   args = ['--variant', out_dir, '--type', types]
@@ -81,24 +89,74 @@ def RunTests(api, out_dir, android_out_dir=None, types='all'):
     args.extend(['--android-variant', android_out_dir])
   api.python('Host Tests for %s' % out_dir, script_path, args)
 
-def BuildFuchsiaArtifactsAndUpload(api):
-  api.goma.start()
-  checkout = GetCheckoutPath(api)
-  git_rev = api.buildbucket.gitiles_commit.id
-  build_script = str(checkout.join(
-    'flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
-  cmd = ['python', build_script, '--engine-version', git_rev]
-  if not api.runtime.is_experimental and ShouldUploadPackages(api):
-    cmd.append('--upload')
-  api.step('Build Fuchsia Artifacts & Upload', cmd)
 
-  if ShouldUploadPackages(api):
-    with MakeTempDir(api, 'fuchsia_stamp') as temp_dir:
-      stamp_file = temp_dir.join('fuchsia.stamp')
-      api.file.write_text('fuchsia.stamp', stamp_file, '')
-      remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
-      api.gsutil.upload(stamp_file, BUCKET_NAME, remote_file,
-          name='upload "fuchsia.stamp"')
+def ScheduleBuilds(api, builder_name, drone_props):
+  req = api.buildbucket.schedule_request(
+      builder=builder_name, properties=drone_props)
+  return api.buildbucket.schedule([req])
+
+
+def CancelBuilds(api, builds):
+  for build in builds:
+    api.buildbucket.cancel_build(build.id)
+
+
+def CollectBuilds(api, builds):
+  return api.buildbucket.collect_builds([build.id for build in builds])
+
+
+def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
+  targets = [
+      'flutter/shell/platform/fuchsia/flutter:flutter_jit_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/flutter:flutter_aot_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/dart_runner:dart_jit_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/dart:kernel_compiler',
+  ]
+  if include_test_targets:
+    targets.append(
+        'flutter/shell/platform/fuchsia/flutter:flutter_runner_tests')
+  return targets
+
+
+def GetFuchsiaOutputFiles(product):
+  return [
+      'dart_jit_%srunner' % ('product_' if product else ''),
+      'flutter_jit_%srunner' % ('product_' if product else ''),
+      'flutter_aot_%srunner' % ('product_' if product else ''),
+  ]
+
+
+def GetFuchsiaOutputDirs(product):
+  return [
+      'dart_jit_%srunner_far' % ('product_' if product else ''),
+      'flutter_jit_%srunner_far' % ('product_' if product else ''),
+      'flutter_aot_%srunner_far' % ('product_' if product else ''),
+      'engine_dart_runner_patched_sdk',
+      'engine_flutter_runner_patched_sdk',
+  ]
+
+
+def BuildAndTestFuchsia(api, build_script, git_rev):
+  RunGN(api, '--fuchsia', '--fuchsia-cpu', 'x64', '--runtime-mode', 'debug',
+        '--no-lto')
+  Build(api, 'fuchsia_debug_x64', *GetFlutterFuchsiaBuildTargets(False, True))
+
+  fuchsia_package_cmd = [
+      'python', build_script, '--engine-version', git_rev, '--skip-build',
+      '--archs', 'x64', '--runtime-mode', 'debug'
+  ]
+
+  if api.platform.is_linux:
+    api.step('Package Fuchsia Artifacts', fuchsia_package_cmd)
+    TestFuchsia(api)
+
+  RunGN(api, '--fuchsia', '--fuchsia-cpu', 'arm64', '--runtime-mode', 'debug',
+        '--no-lto')
+  Build(api, 'fuchsia_debug_arm64', *GetFlutterFuchsiaBuildTargets(False, True))
+
 
 def RunGN(api, *args):
   checkout = GetCheckoutPath(api)
@@ -468,9 +526,172 @@ def BuildLinux(api):
   UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
 
 
+def GetFuchsiaBuildId(api):
+  checkout = GetCheckoutPath(api)
+  manifest_path = checkout.join('fuchsia', 'sdk', 'linux', 'meta',
+                                'manifest.json')
+  manifest_data = api.file.read_json(
+      'Read manifest', manifest_path, test_data={'id': 123})
+  return manifest_data['id']
+
+
+def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
+                               image_name):
+  api.gsutil.download(bucket_name,
+                      'development/%s/images/%s' % (build_id, image_name),
+                      target_dir)
+
+
+def PackageFlutterRunnerTests(api, checkout, fuchsia_tools):
+  package_cmd = [
+      checkout.join('flutter', 'tools', 'fuchsia', 'gen_package.py'),
+      '--pm-bin',
+      fuchsia_tools.join('pm'),
+      '--package-dir',
+      checkout.join('out', 'fuchsia_debug_x64', 'flutter_runner_tests_far'),
+      '--signing-key',
+      checkout.join('flutter', 'tools', 'fuchsia', 'development.key'),
+      '--far-name',
+      'flutter_runner_tests',
+  ]
+  api.step('Generate far', package_cmd)
+
+
+def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
+  """
+  Gets the system image for the current Fuchsia SDK from cloud storage, adds it
+  to an isolated along with the `pm` and `dev_finder` utilities, as well as the
+  flutter_runner_tests and the flutter_runner FAR, and a bash script (in
+  engine.resources/fuchsia-tests.sh) to drive the flutter_ctl.
+  """
+  with MakeTempDir(api, 'isolated') as isolated_dir:
+    with api.step.nest('Copy files'):
+      api.file.copy('Copy test script', api.resource('fuchsia-tests.sh'),
+                    isolated_dir)
+      api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
+                    isolated_dir)
+      api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
+      api.file.copy(
+          'Copy flutter_runner far',
+          checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
+                        'aot', 'flutter_aot_runner-0.far'), isolated_dir)
+      api.file.copy(
+          'Copy flutter_runner_tests far',
+          checkout.join('out', 'fuchsia_debug_x64',
+                        'flutter_runner_tests-0.far'), isolated_dir)
+
+    DownloadFuchsiaSystemImage(api, isolated_dir, 'fuchsia',
+                               GetFuchsiaBuildId(api), image_name)
+    isolated = api.isolated.isolated(isolated_dir)
+    isolated.add_dir(isolated_dir)
+    return isolated.archive('Archive Fuchsia Test Isolate')
+
+def TestFuchsia(api):
+  """
+  Packages the flutter_runner build artifacts into a FAR, and then sends them
+  and related artifacts to isolated. The isolated is used to create a swarming
+  task that:
+    - Downloads the isolated artifacts
+    - Gets fuchsia_ctl from CIPD
+    - Runs the script to pave, test, and reboot the Fuchsia device
+  """
+  checkout = GetCheckoutPath(api)
+  fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
+  image_name = 'generic-x64.tgz'
+
+  PackageFlutterRunnerTests(api, checkout, fuchsia_tools)
+  isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
+      image_name)
+
+  ensure_file = api.cipd.EnsureFile()
+  ensure_file.add_package('flutter/fuchsia_ctl/${platform}',
+      api.properties.get('fuchsia_ctl_version'))
+
+  request = (
+      api.swarming.task_request().with_name('flutter_runner_fuchsia')
+      .with_priority(100))
+
+  request = (
+      request.with_slice(
+          0, request[0].with_cipd_ensure_file(ensure_file).with_command(
+              ['./fuchsia-tests.sh',
+                image_name]).with_dimensions(pool='luci.flutter.tests')
+          .with_isolated(isolated_hash).with_expiration_secs(
+              3600).with_io_timeout_secs(3600).with_execution_timeout_secs(
+                  3600).with_idempotent(True).with_containment_type('AUTO')))
+
+  # Trigger the task request.
+  metadata = api.swarming.trigger('Trigger Fuchsia Tess', requests=[request])
+  # Collect the result of the task by metadata.
+  fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
+  api.file.ensure_directory('swarming output', fuchsia_output)
+  api.swarming.collect(
+      'collect', metadata, output_dir=fuchsia_output, timeout='30m')
+
+
 def BuildFuchsia(api):
-  if api.properties.get('build_fuchsia', True):
-    BuildFuchsiaArtifactsAndUpload(api)
+  """
+  This schedules release and profile builds for x64 and arm64 on other bots,
+  and then builds the x64 and arm64 runners (which do not require LTO and thus
+  are faster to build). On Linux, we also run tests for the runner against x64,
+  and if they fail we cancel the scheduled builds.
+  """
+  fuchsia_build_pairs = [
+      ('arm64', 'profile'),
+      ('arm64', 'release'),
+      ('x64', 'profile'),
+      ('x64', 'release'),
+  ]
+  builds = []
+  for arch, build_mode in fuchsia_build_pairs:
+    gn_args = [
+        '--fuchsia', '--fuchsia-cpu', arch, '--runtime-mode', build_mode
+    ]
+    product = build_mode == 'release'
+    builds += ScheduleBuilds(
+        api, 'Linux Engine Drone', {
+            'builds': [{
+                'gn_args': gn_args,
+                'dir': 'fuchsia_%s_%s' % (build_mode, arch),
+                'targets': GetFlutterFuchsiaBuildTargets(product),
+                'output_files': GetFuchsiaOutputFiles(product),
+                'output_dirs': GetFuchsiaOutputDirs(product),
+            }]
+        })
+
+  checkout = GetCheckoutPath(api)
+  build_script = str(
+      checkout.join('flutter/tools/fuchsia/build_fuchsia_artifacts.py'))
+  git_rev = api.buildbucket.gitiles_commit.id or 'HEAD'
+
+  try:
+    BuildAndTestFuchsia(api, build_script, git_rev)
+  except (api.step.StepFailure, api.step.InfraFailure) as e:
+    CancelBuilds(api, builds)
+    raise e
+
+  builds = CollectBuilds(api, builds)
+  for build_id in builds:
+    api.isolated.download(
+        'Download for build %s' % build_id,
+        builds[build_id].output.properties['isolated_output_hash'],
+        GetCheckoutPath(api))
+
+  if ShouldUploadPackages(api) and not api.runtime.is_experimental:
+    fuchsia_package_cmd = [
+        'python',
+        build_script,
+        '--engine-version',
+        git_rev,
+        '--skip-build',
+        '--upload',
+    ]
+    api.step('Upload Fuchsia Artifacts', fuchsia_package_cmd)
+    stamp_file = api.path['cleanup'].join('fuchsia_stamp')
+    api.file.write_text('fuchsia.stamp', stamp_file, '')
+    remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
+    api.gsutil.upload(
+        stamp_file, BUCKET_NAME, remote_file, name='upload "fuchsia.stamp"')
 
 
 def TestObservatory(api):
@@ -500,8 +721,8 @@ def BuildMac(api):
     Build(api, 'host_debug_unopt')
     RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
-    Build(api, 'host_profile');
-    Build(api, 'host_release');
+    Build(api, 'host_profile')
+    Build(api, 'host_release')
     host_debug_path = GetCheckoutPath(api).join('out', 'host_debug')
     host_profile_path = GetCheckoutPath(api).join('out', 'host_profile')
     host_release_path = GetCheckoutPath(api).join('out', 'host_release')
@@ -539,18 +760,29 @@ def BuildMac(api):
       'out/host_debug/FlutterEmbedder.framework.zip'
     ], archive_name='FlutterEmbedder.framework.zip')
 
-    UploadArtifacts(api, 'darwin-x64', [
-      'out/host_debug/FlutterMacOS.framework.zip',
-      'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
-    ], archive_name='FlutterMacOS.framework.zip')
-    UploadArtifacts(api, 'darwin-x64-profile', [
-      'out/host_profile/FlutterMacOS.framework.zip',
-      'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
-    ], archive_name='FlutterMacOS.framework.zip');
-    UploadArtifacts(api, 'darwin-x64-release', [
-      'out/host_release/FlutterMacOS.framework.zip',
-      'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec',
-    ], archive_name='FlutterMacOS.framework.zip');
+    flutter_podspec = \
+        'flutter/shell/platform/darwin/macos/framework/FlutterMacOS.podspec'
+    UploadArtifacts(
+        api,
+        'darwin-x64', [
+            'out/host_debug/FlutterMacOS.framework.zip',
+            flutter_podspec,
+        ],
+        archive_name='FlutterMacOS.framework.zip')
+    UploadArtifacts(
+        api,
+        'darwin-x64-profile', [
+            'out/host_profile/FlutterMacOS.framework.zip',
+            flutter_podspec,
+        ],
+        archive_name='FlutterMacOS.framework.zip')
+    UploadArtifacts(
+        api,
+        'darwin-x64-release', [
+            'out/host_release/FlutterMacOS.framework.zip',
+            flutter_podspec,
+        ],
+        archive_name='FlutterMacOS.framework.zip')
 
     UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
@@ -905,7 +1137,8 @@ def RunSteps(api, properties, env_properties):
         TestObservatory(api)
       BuildLinuxAndroid(api, env_properties.SWARMING_TASK_ID)
       VerifyExportedSymbols(api)
-      BuildFuchsia(api)
+      if api.properties.get('build_fuchsia', True):
+        BuildFuchsia(api)
 
     if api.platform.is_mac:
       with SetupXcode(api):
@@ -924,6 +1157,13 @@ def RunSteps(api, properties, env_properties):
 # The tests in here make sure that every line of code is used and does not fail.
 # pylint: enable=line-too-long
 def GenTests(api):
+  output_props = struct_pb2.Struct()
+  output_props['isolated_output_hash'] = 'deadbeef'
+  build = api.buildbucket.try_build_message(
+      builder='Linux Drone', project='flutter')
+  build.output.CopyFrom(build_pb2.Build.Output(properties=output_props))
+
+  collect_build_output = api.buildbucket.simulated_collect_output([build])
   for platform in ('mac', 'linux', 'win'):
     for should_upload in (True, False):
       for maven_or_bitcode in (True, False):
@@ -940,6 +1180,7 @@ def GenTests(api):
             InputProperties(
               clobber=False,
               goma_jobs='1024',
+              fuchsia_ctl_version='version:0.0.2',
               build_host=True,
               build_fuchsia=True,
               build_android_aot=True,
@@ -953,62 +1194,81 @@ def GenTests(api):
           ) +
           api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef'))
         )
+        if platform != 'win':
+          test += collect_build_output
         if platform == 'mac':
           test += (api.properties(InputProperties(jazzy_version='0.8.4',
               build_ios=True, no_bitcode=maven_or_bitcode)))
         yield test
 
   for should_upload in (True, False):
-    yield (
-      api.test('experimental%s' % ('_upload' if should_upload else '')) +
-      api.buildbucket.ci_build(
-          builder='Linux Engine',
-          git_repo=GIT_REPO,
-          project='flutter',
-      ) +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.properties(InputProperties(goma_jobs='1024',
-        android_sdk_license='android_sdk_hash',
-        android_sdk_preview_license='android_sdk_preview_hash',
-        upload_packages=should_upload,
-      ))
-    )
-  yield (api.test('clobber') +
-         api.buildbucket.ci_build(
-            builder='Linux Host Engine',
-            git_repo='https://github.com/flutter/engine',
-            project='flutter') +
-         api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(
-          InputProperties(
-            clobber=True,
-            git_url = 'https://github.com/flutter/engine',
-            goma_jobs='200',
-            git_ref = 'refs/pull/1/head',
-            build_host=True,
-            build_fuchsia=True,
-            build_android_aot=True,
-            build_android_debug=True,
-            build_android_vulkan=True,
-            android_sdk_license='android_sdk_hash',
-            android_sdk_preview_license='android_sdk_preview_hash')))
-
-  yield (api.test('pull_request') +
-         api.buildbucket.ci_build(
-            builder='Linux Host Engine',
-            git_repo='https://github.com/flutter/engine',
-            project='flutter') +
-         api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(
-          InputProperties(
-            clobber=False,
-            git_url = 'https://github.com/flutter/engine',
-            goma_jobs='200',
-            git_ref = 'refs/pull/1/head',
-            build_host=True,
-            build_fuchsia=True,
-            build_android_aot=True,
-            build_android_debug=True,
-            build_android_vulkan=True,
-            android_sdk_license='android_sdk_hash',
-            android_sdk_preview_license='android_sdk_preview_hash')))
+    yield (api.test('experimental%s' % ('_upload' if should_upload else '')) +
+           api.buildbucket.ci_build(
+               builder='Linux Engine',
+               git_repo=GIT_REPO,
+               project='flutter',
+           ) + collect_build_output + api.runtime(
+               is_luci=True, is_experimental=True) + api.properties(
+                   InputProperties(
+                       goma_jobs='1024',
+                       fuchsia_ctl_version='version:0.0.2',
+                       android_sdk_license='android_sdk_hash',
+                       android_sdk_preview_license='android_sdk_preview_hash',
+                       upload_packages=should_upload,
+                   )))
+  yield (api.test('clobber') + api.buildbucket.ci_build(
+      builder='Linux Host Engine',
+      git_repo='https://github.com/flutter/engine',
+      project='flutter') + collect_build_output + api.runtime(
+          is_luci=True, is_experimental=True) + api.properties(
+              InputProperties(
+                  clobber=True,
+                  git_url='https://github.com/flutter/engine',
+                  goma_jobs='200',
+                  git_ref='refs/pull/1/head',
+                  fuchsia_ctl_version='version:0.0.2',
+                  build_host=True,
+                  build_fuchsia=True,
+                  build_android_aot=True,
+                  build_android_debug=True,
+                  build_android_vulkan=True,
+                  android_sdk_license='android_sdk_hash',
+                  android_sdk_preview_license='android_sdk_preview_hash')))
+  yield (api.test('pull_request') + api.buildbucket.ci_build(
+      builder='Linux Host Engine',
+      git_repo='https://github.com/flutter/engine',
+      project='flutter') + collect_build_output + api.runtime(
+          is_luci=True, is_experimental=True) + api.properties(
+              InputProperties(
+                  clobber=False,
+                  git_url='https://github.com/flutter/engine',
+                  goma_jobs='200',
+                  git_ref='refs/pull/1/head',
+                  fuchsia_ctl_version='version:0.0.2',
+                  build_host=True,
+                  build_fuchsia=True,
+                  build_android_aot=True,
+                  build_android_debug=True,
+                  build_android_vulkan=True,
+                  android_sdk_license='android_sdk_hash',
+                  android_sdk_preview_license='android_sdk_preview_hash')))
+  yield (api.test('Linux Fuchsia failing test') + api.platform(
+      'linux', 64) + api.buildbucket.ci_build(
+          builder='Linux Engine', git_repo=GIT_REPO,
+          project='flutter') + api.step_data(
+              'gn --fuchsia --fuchsia-cpu x64 --runtime-mode debug --no-lto',
+              retcode=1) + api.properties(
+                  InputProperties(
+                      clobber=False,
+                      goma_jobs='1024',
+                      fuchsia_ctl_version='version:0.0.2',
+                      build_host=False,
+                      build_fuchsia=True,
+                      build_android_aot=False,
+                      build_android_debug=False,
+                      build_android_vulkan=False,
+                      no_maven=False,
+                      upload_packages=True,
+                      android_sdk_license='android_sdk_hash',
+                      android_sdk_preview_license='android_sdk_preview_hash')) +
+         api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef')))
