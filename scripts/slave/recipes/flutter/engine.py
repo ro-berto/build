@@ -134,8 +134,8 @@ def GetFuchsiaOutputDirs(product):
       'dart_jit_%srunner_far' % ('product_' if product else ''),
       'flutter_jit_%srunner_far' % ('product_' if product else ''),
       'flutter_aot_%srunner_far' % ('product_' if product else ''),
-      'engine_dart_runner_patched_sdk',
-      'engine_flutter_runner_patched_sdk',
+      'dart_runner_patched_sdk',
+      'flutter_runner_patched_sdk',
   ]
 
 
@@ -1136,9 +1136,9 @@ def RunSteps(api, properties, env_properties):
         BuildLinux(api)
         TestObservatory(api)
       BuildLinuxAndroid(api, env_properties.SWARMING_TASK_ID)
-      VerifyExportedSymbols(api)
       if api.properties.get('build_fuchsia', True):
         BuildFuchsia(api)
+      VerifyExportedSymbols(api)
 
     if api.platform.is_mac:
       with SetupXcode(api):
@@ -1146,8 +1146,9 @@ def RunSteps(api, properties, env_properties):
         if api.properties.get('build_ios', True):
           with InstallGems(api):
             BuildIOS(api)
+        if api.properties.get('build_fuchsia', True):
+          BuildFuchsia(api)
         VerifyExportedSymbols(api)
-        BuildFuchsia(api)
 
     if api.platform.is_win:
       BuildWindows(api)

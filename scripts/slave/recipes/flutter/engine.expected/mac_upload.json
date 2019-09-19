@@ -7194,51 +7194,6 @@
   },
   {
     "cmd": [
-      "pub",
-      "get"
-    ],
-    "cwd": "[CACHE]/builder/src/flutter/testing/symbols",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "pub get for verify_exported.dart"
-  },
-  {
-    "cmd": [
-      "dart",
-      "[CACHE]/builder/src/flutter/testing/symbols/verify_exported.dart",
-      "[CACHE]/builder/src/out"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Verify exported symbols on release binaries"
-  },
-  {
-    "cmd": [
       "bb",
       "batch",
       "-host",
@@ -7261,7 +7216,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"engine_dart_runner_patched_sdk\", \"engine_flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -7309,8 +7264,8 @@
       "@@@STEP_LOG_LINE@request@                \"dart_jit_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner_far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_dart_runner_patched_sdk\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_flutter_runner_patched_sdk\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
       "@@@STEP_LOG_LINE@request@                \"dart_jit_runner\", @@@",
@@ -7365,7 +7320,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (2)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"engine_dart_runner_patched_sdk\", \"engine_flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -7413,8 +7368,8 @@
       "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner_far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_dart_runner_patched_sdk\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_flutter_runner_patched_sdk\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
       "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner\", @@@",
@@ -7469,7 +7424,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (3)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"engine_dart_runner_patched_sdk\", \"engine_flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133d\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133d\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -7517,8 +7472,8 @@
       "@@@STEP_LOG_LINE@request@                \"dart_jit_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner_far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_dart_runner_patched_sdk\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_flutter_runner_patched_sdk\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
       "@@@STEP_LOG_LINE@request@                \"dart_jit_runner\", @@@",
@@ -7573,7 +7528,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (4)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"engine_dart_runner_patched_sdk\", \"engine_flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001340\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001340\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -7621,8 +7576,8 @@
       "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner_far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_dart_runner_patched_sdk\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"engine_flutter_runner_patched_sdk\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
       "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner\", @@@",
@@ -8728,6 +8683,51 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/fuchsia/fuchsia.stamp@@@"
     ]
+  },
+  {
+    "cmd": [
+      "pub",
+      "get"
+    ],
+    "cwd": "[CACHE]/builder/src/flutter/testing/symbols",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "pub get for verify_exported.dart"
+  },
+  {
+    "cmd": [
+      "dart",
+      "[CACHE]/builder/src/flutter/testing/symbols/verify_exported.dart",
+      "[CACHE]/builder/src/out"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Verify exported symbols on release binaries"
   },
   {
     "cmd": [
