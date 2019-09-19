@@ -449,7 +449,7 @@ def BuildLinuxAndroid(api, swarming_task_id):
               api.buildbucket.gitiles_commit.id or 'testing',
               swarming_task_id,
             ]
-            api.step('Firebase test', firebase_cmd)
+            api.step('Firebase test', firebase_cmd, ok_ret='any')
 
         # TODO(egarciad): Don't upload flutter.jar once the migration to Maven
         # is completed.
