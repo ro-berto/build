@@ -21,7 +21,7 @@ DEPS = [
 ]
 
 BUILD_CONFIG = 'Default'
-BUILD_TARGET = ['gn_all', 'demo', 'openscreen_unittests']
+BUILD_TARGETS = ['gn_all', 'openscreen_unittests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 def _GetHostToolLabel(platform):
@@ -67,8 +67,10 @@ def RunSteps(api):
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
     # if this is being run on a non-Mac platform.
     with api.osx_sdk('mac'):
-      ninja_cmd = [api.depot_tools.ninja_path, '-C', output_path,
-                   '-j', api.goma.recommended_goma_jobs] + BUILD_TARGET
+      ninja_cmd = [
+          api.depot_tools.ninja_path, '-C', output_path, '-j',
+          api.goma.recommended_goma_jobs
+      ] + BUILD_TARGETS
       api.goma.build_with_goma(
           name='compile',
           ninja_command=ninja_cmd,
