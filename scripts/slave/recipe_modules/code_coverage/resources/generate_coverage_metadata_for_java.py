@@ -347,7 +347,7 @@ def main():
   for f in sources_json_files:
     with open(f) as json_file:
       json_file_data = json.load(json_file)
-      class_files.append(json_file_data['input_path'])
+      class_files.extend(json_file_data['input_path'])
       source_dirs.extend(json_file_data['source_dirs'])
 
   cmd = [
