@@ -136,6 +136,7 @@ def GetFuchsiaOutputDirs(product):
       'flutter_aot_%srunner_far' % ('product_' if product else ''),
       'dart_runner_patched_sdk',
       'flutter_runner_patched_sdk',
+      'clang_x64',
   ]
 
 
