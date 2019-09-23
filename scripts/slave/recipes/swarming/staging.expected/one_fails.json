@@ -998,7 +998,7 @@
     },
     "name": "browser_tests on Ubuntu",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -1091,10 +1091,10 @@
     "cwd": "[CACHE]/builder",
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },

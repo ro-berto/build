@@ -159,9 +159,15 @@ def parse_time(value):
 
 def fmt_time(seconds):
   """Formats some number of seconds into a string. If this is < 60, it will
-  render as `NNs`. If it's >= 60 seconds, it will render as 'hh:mm:ss'."""
-  return ('%ds' % (seconds,) if seconds < 60 else str(
-      datetime.timedelta(seconds=round(seconds))))
+  render as `NNs`. If it's >= 60 seconds, it will render as 'Xm Xs'."""
+  seconds = round(seconds)
+  mins, seconds = divmod(seconds, 60)
+
+  out = ''
+  if mins > 0:
+    out += '%dm ' % mins
+  out += '%ds' % seconds
+  return out
 
 
 class ReadOnlyDict(dict):
@@ -1584,7 +1590,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         duration = fmt_time(delta.total_seconds())
         runtime = shard['duration']
         overhead = delta.total_seconds() - runtime
-        display_text = ('shard #%d (runtime (%s) + overhead (%s): %s sec)' % (
+        display_text = ('shard #%d (runtime (%s) + overhead (%s): %s)' % (
             index, fmt_time(runtime), fmt_time(overhead), duration))
       else:
         display_text = 'shard #%d' % index
@@ -1618,8 +1624,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         has_valid_results = False
       elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
-          display_text = (
-              'shard #%d timed out after %s sec' % (index, duration))
+          display_text = ('shard #%d timed out after %s' % (index, duration))
         else: # pragma: no cover
           # TODO(tikuta): Add coverage for this code.
           display_text = (
@@ -1630,7 +1635,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       elif self._get_exit_code(shard) != 0:
         # TODO(bpastene): Add coverage for this code.
         if duration is not None:  # pragma: no cover
-          display_text = 'shard #%d (failed) (%s sec)' % (index, duration)
+          display_text = 'shard #%d (failed) (%s)' % (index, duration)
         else:
           display_text = 'shard #%d (failed)' % index
         expected_errors.append(display_text)

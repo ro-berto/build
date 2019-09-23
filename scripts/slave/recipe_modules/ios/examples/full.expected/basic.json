@@ -3350,7 +3350,7 @@
     },
     "name": "fake included test 1 (fake device 1 iOS 8.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3391,7 +3391,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/150000@@@"
     ]
   },
   {
@@ -3438,7 +3438,7 @@
     },
     "name": "fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3479,7 +3479,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -3551,7 +3551,7 @@
     },
     "name": "fake test 2 (fake device 2 iOS 7.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3592,7 +3592,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/170000@@@"
     ]
   },
   {
@@ -3639,7 +3639,7 @@
     },
     "name": "fake included test 1 (fake device 2 iOS 7.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3680,7 +3680,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/180000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/180000@@@"
     ]
   },
   {
@@ -3727,7 +3727,7 @@
     },
     "name": "fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3768,7 +3768,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -3840,7 +3840,7 @@
     },
     "name": "fake test 1 (fake device 1 iOS 8.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3881,7 +3881,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -3953,7 +3953,7 @@
     },
     "name": "fake test 2 (fake device 2 iOS 8.1) (with patch) on Mac-10.12",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.12'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.12'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3994,7 +3994,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -4041,7 +4041,7 @@
     },
     "name": "fake included test 2 (fake device 2 iOS 7.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4082,7 +4082,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/190000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/190000@@@"
     ]
   },
   {
@@ -4129,7 +4129,7 @@
     },
     "name": "fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4170,7 +4170,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -4217,7 +4217,7 @@
     },
     "name": "fake included test 2 (fake device 1 iOS 8.1) (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00<br />dummy step text@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br />dummy step text@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4258,7 +4258,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/160000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/160000@@@"
     ]
   },
   {

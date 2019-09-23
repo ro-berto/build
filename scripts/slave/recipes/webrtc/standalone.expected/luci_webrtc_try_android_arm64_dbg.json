@@ -4813,7 +4813,7 @@
     },
     "name": "AppRTCMobile_test_apk on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -4862,7 +4862,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -4935,7 +4935,7 @@
     },
     "name": "android_instrumentation_test_apk on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -4984,7 +4984,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -5057,7 +5057,7 @@
     },
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5106,7 +5106,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -5179,7 +5179,7 @@
     },
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5228,7 +5228,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -5301,7 +5301,7 @@
     },
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5350,7 +5350,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -5423,7 +5423,7 @@
     },
     "name": "modules_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:01:03) + overhead(57s): 0:02:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (1m 3s) + overhead(57s): 2m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5493,9 +5493,9 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/150000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/160100@@@"
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/160100@@@"
     ]
   },
   {
@@ -5568,7 +5568,7 @@
     },
     "name": "modules_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:03:09) + overhead(0:02:51): 0:06:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (3m 9s) + overhead(2m 51s): 6m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5722,17 +5722,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/170000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/180100@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/180100@@@",
       "@@@STEP_LINK@shard #2 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #2 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/190200@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/190200@@@",
       "@@@STEP_LINK@shard #3 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #3 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1100300@@@",
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1100300@@@",
       "@@@STEP_LINK@shard #4 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #4 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1110400@@@",
+      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1110400@@@",
       "@@@STEP_LINK@shard #5 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #5 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1120500@@@"
+      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1120500@@@"
     ]
   },
   {
@@ -5805,7 +5805,7 @@
     },
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:02:06) + overhead(0:01:54): 0:04:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (2m 6s) + overhead(1m 54s): 4m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -5917,13 +5917,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1130000@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1130000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1140100@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1140100@@@",
       "@@@STEP_LINK@shard #2 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #2 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1150200@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1150200@@@",
       "@@@STEP_LINK@shard #3 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #3 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1160300@@@"
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1160300@@@"
     ]
   },
   {
@@ -5996,7 +5996,7 @@
     },
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6045,7 +6045,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1170000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1170000@@@"
     ]
   },
   {
@@ -6118,7 +6118,7 @@
     },
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:03:09) + overhead(0:02:51): 0:06:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (3m 9s) + overhead(2m 51s): 6m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6272,17 +6272,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1180000@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1180000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1190100@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1190100@@@",
       "@@@STEP_LINK@shard #2 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #2 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1200200@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1200200@@@",
       "@@@STEP_LINK@shard #3 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #3 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1210300@@@",
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1210300@@@",
       "@@@STEP_LINK@shard #4 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #4 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1220400@@@",
+      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1220400@@@",
       "@@@STEP_LINK@shard #5 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #5 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1230500@@@"
+      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1230500@@@"
     ]
   },
   {
@@ -6355,7 +6355,7 @@
     },
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6404,7 +6404,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1240000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1240000@@@"
     ]
   },
   {
@@ -6477,7 +6477,7 @@
     },
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6526,7 +6526,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1250000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1250000@@@"
     ]
   },
   {
@@ -6599,7 +6599,7 @@
     },
     "name": "tools_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6648,7 +6648,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1260000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1260000@@@"
     ]
   },
   {
@@ -6721,7 +6721,7 @@
     },
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:02:06) + overhead(0:01:54): 0:04:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (2m 6s) + overhead(1m 54s): 4m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6833,13 +6833,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1270000@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1270000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1280100@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1280100@@@",
       "@@@STEP_LINK@shard #2 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #2 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1290200@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1290200@@@",
       "@@@STEP_LINK@shard #3 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #3 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1300300@@@"
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1300300@@@"
     ]
   },
   {
@@ -6912,7 +6912,7 @@
     },
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -6961,7 +6961,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1310000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1310000@@@"
     ]
   },
   {
@@ -7045,7 +7045,7 @@
     },
     "name": "webrtc_perf_tests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -7094,7 +7094,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chromium-swarm.appspot.com/user/task/1320000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1320000@@@"
     ]
   },
   {

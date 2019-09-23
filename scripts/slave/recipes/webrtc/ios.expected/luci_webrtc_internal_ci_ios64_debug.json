@@ -3384,7 +3384,7 @@
     },
     "name": "common_audio_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3415,7 +3415,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3462,7 +3462,7 @@
     },
     "name": "common_video_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3493,7 +3493,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/110000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -3540,7 +3540,7 @@
     },
     "name": "modules_tests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3571,7 +3571,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -3618,7 +3618,7 @@
     },
     "name": "modules_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3649,7 +3649,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/130000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -3696,7 +3696,7 @@
     },
     "name": "rtc_pc_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3727,7 +3727,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/140000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -3774,7 +3774,7 @@
     },
     "name": "rtc_stats_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3805,7 +3805,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/150000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/150000@@@"
     ]
   },
   {
@@ -3852,7 +3852,7 @@
     },
     "name": "system_wrappers_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3883,7 +3883,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/160000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/160000@@@"
     ]
   },
   {
@@ -3930,7 +3930,7 @@
     },
     "name": "test_support_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3961,7 +3961,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/170000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/170000@@@"
     ]
   },
   {
@@ -4008,7 +4008,7 @@
     },
     "name": "tools_unittests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4039,7 +4039,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/180000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/180000@@@"
     ]
   },
   {
@@ -4086,7 +4086,7 @@
     },
     "name": "video_capture_tests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4117,7 +4117,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/190000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/190000@@@"
     ]
   },
   {
@@ -4164,7 +4164,7 @@
     },
     "name": "video_engine_tests (iPhone 6s iOS 12.0) on iOS-12.0",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 0:01:11<br>Shard runtime (31s) + overhead (28s): 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -4195,7 +4195,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #0 (runtime (31s) + overhead (28s): 0:01:00 sec)@https://chrome-swarming.appspot.com/user/task/1100000@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chrome-swarming.appspot.com/user/task/1100000@@@"
     ]
   },
   {
@@ -4206,10 +4206,10 @@
     ],
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 11<br/>Total runtime: 0:05:47 <br/>@@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 11<br/>Total runtime: 5m 47s <br/>@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 11@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:05:47 @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 5m 47s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },

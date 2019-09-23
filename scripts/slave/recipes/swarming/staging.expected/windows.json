@@ -1012,7 +1012,7 @@
     },
     "name": "browser_tests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Min shard runtime (31s) + overhead (28s): 0:01:00 (shard #0)<br>Total shard runtime (0:01:03) + overhead(57s): 0:02:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (1m 3s) + overhead(57s): 2m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -1114,10 +1114,10 @@
     "cwd": "[CACHE]\\builder",
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 0:01:03 <br/>@@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 1m 3s <br/>@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:03 @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 1m 3s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
