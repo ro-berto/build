@@ -182,7 +182,7 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
       step_test_data=lambda: api.json.test_api.output({
         'status_code': 0,
         'summary': '\n!summary!',
-        'archive_filenames': [ 'result.ndjson' ],
+        'archive_filenames': [ 'result.ndjson', 'result.txt' ],
         'links': [
             {
                 'name': 'Resource Sizes Diff (high-level metrics)',
@@ -198,6 +198,25 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
                 'url': 'https://foo.com/{{result.ndjson}}',
             },
         ],
+        'gerrit_plugin_details': {
+          'listings': [
+              {
+                  'name': 'Normalised APK size',
+                  'delta': '500 bytes',
+                  'allowed': True,
+              },
+          ],
+          'extras': [
+              {
+                  'text': 'Supersize HTML Diff',
+                  'url': 'https://foo.com/{{result.ndjson}}',
+              },
+              {
+                  'text': 'SuperSize Text Diff',
+                  'url': '{{result.txt}}',
+              },
+          ],
+        }
     }))
   result_json = step_result.json.output
   # Upload files (.ndjson) to storage bucket.
@@ -211,14 +230,29 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
     if 'lines' in link:
       step_result.presentation.logs[link['name']] = link['lines']
     else:
-      url = link['url']
-      for filename, archived_url in filename_map.iteritems():
-        url = url.replace('{{' + filename + '}}', archived_url)
+      url = _LinkifyFilenames(link['url'], filename_map)
       step_result.presentation.links[link['name']] = url
+
+  gerrit_plugin_details = result_json.get('gerrit_plugin_details')
+  if gerrit_plugin_details:
+    for extra in gerrit_plugin_details['extras']:
+      if 'url' in extra:
+        url = extra['url']
+        url = _LinkifyFilenames(url, filename_map)
+        extra['url'] = url
+    step_result.presentation.properties[
+        'binary_size_plugin'] = gerrit_plugin_details
+
 
   if not allow_regressions and result_json['status_code'] != 0:
     step_result.presentation.status = api.step.FAILURE
     raise api.step.StepFailure('Undocumented size increase detected')
+
+
+def _LinkifyFilenames(url, filename_map):
+  for filename, archived_url in filename_map.iteritems():
+    url = url.replace('{{' + filename + '}}', archived_url)
+  return url
 
 
 def _CreateDiffs(api, apk_name, author, before_dir, after_dir, results_path,
@@ -294,7 +328,6 @@ def GenTests(api):
         api.time.seed(_TEST_TIME),
     )
 
-
   def override_analyze(no_changes=False):
     """Overrides analyze step data so that targets get compiled."""
     return api.override_step_data(
@@ -334,6 +367,13 @@ def GenTests(api):
                 'https://foo.com/{}{}/{}/{}/result.ndjson'.format(
                     _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
                     _TEST_BUILDNUMBER))) +
+      api.post_check(
+          lambda check, steps:
+          check(steps[_RESULTS_STEP_NAME]
+                .output_properties['binary_size_plugin']['extras'][-1]['url']
+                == '{}{}/{}/{}/result.txt'.format(
+                  _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
+                  _TEST_BUILDNUMBER))) +
       api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME)
   )
   yield (
