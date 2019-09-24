@@ -19,21 +19,21 @@ DEPS = [
 
 REPO_URL = 'https://chromium.googlesource.com/chromium/src.git'
 BUILDERS = freeze({
-  'chromium.fyi':{
-    'Disable settings after launch emulator': {
-      'config': 'x86_builder',
-      'target': 'Debug',
-      'abi': 'x86',
-      'api_level': 23,
-      'partition_size': '1024M',
-      'sdcard_size': '512M',
-      'provision_settings': {
-        'disable_location': True,
-        'disable_network': True,
-      },
-      'sample_gtest_suite': 'sample_test',
+    'chromium.fyi': {
+        'Disable settings after launch emulator': {
+            'config': 'x86_builder',
+            'target': 'Debug',
+            'abi': 'x86',
+            'api_level': 23,
+            'partition_size': '1024M',
+            'sdcard_size': '512M',
+            'provision_settings': {
+                'disable_location': True,
+                'disable_network': True,
+            },
+            'sample_gtest_suite': 'sample_test',
+        }
     }
-  }
 })
 
 PROPERTIES = {
@@ -80,8 +80,8 @@ def GenTests(api):
   for mastername in BUILDERS:
     master = BUILDERS[mastername]
     for buildername in master:
-      yield (
-          api.test('%s_test_basic' % sanitize(buildername)) +
+      yield api.test(
+          '%s_test_basic' % sanitize(buildername),
           api.properties.generic(
-              buildername=buildername,
-              mastername=mastername))
+              buildername=buildername, mastername=mastername),
+      )
