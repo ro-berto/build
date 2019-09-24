@@ -2603,7 +2603,16 @@ class WebRTCPerfTest(LocalGTestTest):
   @recipe_api.composite_step
   def run(self, api, suffix):
     self._wire_up_perf_config(api)
-    return super(WebRTCPerfTest, self).run(api, suffix)
+    result = super(WebRTCPerfTest, self).run(api, suffix)
+
+    # These runs do not return json data about which tests were executed
+    # as they report to ChromePerf dashboard.
+    # Here we just need to be sure that all tests have passed.
+    if result.retcode == 0:
+      self.update_test_run(api, suffix,
+                           api.test_utils.canonical.result_format(valid=True))
+    return result
+
 
   def _wire_up_perf_config(self, api):
     props = api.bot_update.last_returned_properties
