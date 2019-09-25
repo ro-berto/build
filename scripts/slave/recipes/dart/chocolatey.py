@@ -90,14 +90,14 @@ def RunSteps(api):
       api.step('choco push', [POWERSHELL, '-Command', choco_push])
 
 def GenTests(api):
-  yield (
-    api.test('dev') +
-    api.platform('win', 64) +
-    api.properties.generic(version='2.0.0-dev.51.0') +
-    api.post_process(Filter('choco pack', 'choco push'))
+  yield api.test(
+      'dev',
+      api.platform('win', 64),
+      api.properties.generic(version='2.0.0-dev.51.0'),
+      api.post_process(Filter('choco pack', 'choco push')),
   )
-  yield (
-    api.test('release') +
-    api.platform('win', 64) +
-    api.properties.generic(version='1.24.3')
+  yield api.test(
+      'release',
+      api.platform('win', 64),
+      api.properties.generic(version='1.24.3'),
   )

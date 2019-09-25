@@ -38,23 +38,25 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('base') +
-      api.step_data('find base commit',
-                    stdout=api.raw_io.output('deadbeef')) +
+  yield api.test(
+      'base',
+      api.step_data('find base commit', stdout=api.raw_io.output('deadbeef')),
       api.buildbucket.ci_build(
           project='dart',
           bucket='ci',
           builder='base',
-          git_repo='https://dart.googlesource.com/a/sdk.git'))
+          git_repo='https://dart.googlesource.com/a/sdk.git'),
+  )
 
-  yield (api.test('no_hash') +
-      api.step_data('find base commit',
-                    stdout=api.raw_io.output('  ')) +
+  yield api.test(
+      'no_hash',
+      api.step_data('find base commit', stdout=api.raw_io.output('  ')),
       api.buildbucket.ci_build(
           project='dart',
           bucket='ci',
           builder='base',
-          git_repo='https://dart.googlesource.com/a/sdk.git') +
-      api.expect_exception('AssertionError') +
-      api.post_process(post_process.DropExpectation) +
-      api.post_process(post_process.DoesNotRunRE, 'push.*'))
+          git_repo='https://dart.googlesource.com/a/sdk.git'),
+      api.expect_exception('AssertionError'),
+      api.post_process(post_process.DropExpectation),
+      api.post_process(post_process.DoesNotRunRE, 'push.*'),
+  )

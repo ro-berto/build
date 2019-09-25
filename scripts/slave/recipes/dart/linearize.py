@@ -60,15 +60,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('base') +
+  yield api.test(
+      'base',
       api.properties.generic(
-          repo = 'https://dart.googlesource.com/a/linearized_history.git') +
+          repo='https://dart.googlesource.com/a/linearized_history.git'),
       api.buildbucket.ci_build(
-          git_repo = 'https://dart.googlesource.com/a/repo.git',
-          revision = 'deadbeef') +
+          git_repo='https://dart.googlesource.com/a/repo.git',
+          revision='deadbeef'),
       api.step_data(
           'commit log: %s' % 'deadbeef',
-          api.gitiles.make_commit_test_data('deadbeef', 'Subject\n\nMessage\n',
-              new_files=['foo/bar', 'baz/qux'])) +
-      api.path.exists(
-          api.path['checkout'].join(COMMITS_JSON)))
+          api.gitiles.make_commit_test_data(
+              'deadbeef',
+              'Subject\n\nMessage\n',
+              new_files=['foo/bar', 'baz/qux'])),
+      api.path.exists(api.path['checkout'].join(COMMITS_JSON)),
+  )

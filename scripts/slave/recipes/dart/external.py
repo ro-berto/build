@@ -23,21 +23,19 @@ def RunSteps(api):
     raise api.step.StepFailure(result)
 
 def GenTests(api):
-  yield (
-    api.test('success') +
-    api.properties.generic(
-        result='success',
-        url='https://www.example.com') +
-    api.buildbucket.ci_build(revision = '3456abce78ef',
-        git_repo='https://dart.googlesource.com/sdk',
-        project='dart')
+  yield api.test(
+      'success',
+      api.properties.generic(result='success', url='https://www.example.com'),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
   )
-  yield (
-    api.test('failure') +
-    api.properties.generic(
-        result='failure',
-        url='https://www.example.com') +
-    api.buildbucket.ci_build(revision = '3456abce78ef',
-        git_repo='https://dart.googlesource.com/sdk',
-        project='dart')
+  yield api.test(
+      'failure',
+      api.properties.generic(result='failure', url='https://www.example.com'),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
   )

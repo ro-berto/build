@@ -334,12 +334,12 @@ def RunSteps(api):
 
 def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
   run_env = {
-    'GOMA_DIR':api.goma.goma_dir,
-    # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
-    # its cached state into the given folder. If something goes wrong with
-    # the cache we can clobber it by requesting normal clobber via Buildbot
-    # UI.
-    'ANALYZER_STATE_LOCATION_OVERRIDE': start_dir.join('.dartServer')
+      'GOMA_DIR': api.goma.goma_dir,
+      # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
+      # its cached state into the given folder. If something goes wrong with
+      # the cache we can clobber it by requesting normal clobber via Buildbot
+      # UI.
+      'ANALYZER_STATE_LOCATION_OVERRIDE': start_dir.join('.dartServer')
   }
   with api.context(cwd=start_dir, env=run_env):
     BuildLinux(api, checkout_dir)
@@ -452,13 +452,16 @@ def _bisect_older(api, reason):
 
 
 def _test(api, name, failure=False):
-  data = (api.test(name) + api.platform('linux', 64)
-      + api.buildbucket.ci_build(
+  data = api.test(
+      name,
+      api.platform('linux', 64),
+      api.buildbucket.ci_build(
           builder='flutter-engine-linux',
           git_repo=LINEARIZED_REPO_URL,
-          revision='f' * 8)
-      + api.properties(bot_id='fake-m1', clobber='')
-      + api.runtime(is_luci=True, is_experimental=False))
+          revision='f' * 8),
+      api.properties(bot_id='fake-m1', clobber=''),
+      api.runtime(is_luci=True, is_experimental=False),
+  )
   if failure:
     # let the first step in the recipe fail
     data += api.step_data('everything', retcode=1)

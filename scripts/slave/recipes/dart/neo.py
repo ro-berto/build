@@ -125,53 +125,52 @@ def _run_steps_impl(api):
 
 
 def GenTests(api):
-   yield (
-      api.test('builders/vm-linux-release-x64') +
+  yield api.test(
+      'builders/vm-linux-release-x64',
       api.buildbucket.ci_build(
           builder='builders/vm-linux-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart')
-   )
-   yield (
-      api.test('builders/dart2js-win-debug-x64-firefox-try') +
+          project='dart'),
+  )
+  yield api.test(
+      'builders/dart2js-win-debug-x64-firefox-try',
       api.buildbucket.try_build(
           revision='3456abcd78ef',
           builder='dart2js-win-debug-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.properties.generic(new_workflow_enabled='true')
-   )
-   yield (
-      api.test('builders/try-cl-builder') +
+          project='dart'),
+      api.properties.generic(new_workflow_enabled='true'),
+  )
+  yield api.test(
+      'builders/try-cl-builder',
       api.buildbucket.try_build(
           builder='builders/vm-linux-release-x64-try',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
+          project='dart'),
       api.properties.generic(
           try_build_args='  runtime,sdk',
           try_cmd_1='tools/test.py -rchrome',
           try_cmd_2='tools/test.py -mdebug',
-          try_cmd_2_repeat='2')
-   )
-   yield (
-      api.test('builders/try-cl-builder-default-build') +
+          try_cmd_2_repeat='2'),
+  )
+  yield api.test(
+      'builders/try-cl-builder-default-build',
       api.buildbucket.try_build(
           builder='builders/vm-linux-release-x64-try',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
+          project='dart'),
       api.properties.generic(
           try_cmd_1='xvfb tools/test.py  -mrelease',
           try_cmd_1_repeat='1',
           try_cmd_2='tools/test.py language_2/some_test',
-          try_cmd_2_repeat='3')
-   )
-   yield (
-      api.test('builders/analyzer-triggered') +
+          try_cmd_2_repeat='3'),
+  )
+  yield api.test(
+      'builders/analyzer-triggered',
       api.buildbucket.ci_build(
           builder='builders/analyzer-triggered',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
+          project='dart'),
       api.properties.generic(
-        parent_fileset='isolate_123',
-        parent_fileset_name='test_name')
-   )
+          parent_fileset='isolate_123', parent_fileset_name='test_name'),
+  )

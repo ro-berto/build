@@ -51,13 +51,12 @@ def RunSteps(api):
     api.step('build and push', [build_push, 'google', version])
 
 def GenTests(api):
-  yield (
-    api.test('release') +
-    api.properties.generic(
-      version='1.24.3')
+  yield api.test(
+      'release',
+      api.properties.generic(version='1.24.3'),
   )
-  yield (
-    api.test('dev') +
-    api.properties.generic(version='2.0.0-dev.51.0') +
-    api.post_process(Filter('gsutil download dart sdk'))
+  yield api.test(
+      'dev',
+      api.properties.generic(version='2.0.0-dev.51.0'),
+      api.post_process(Filter('gsutil download dart sdk')),
   )

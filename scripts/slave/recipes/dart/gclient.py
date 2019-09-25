@@ -33,5 +33,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('ci'))
-  yield (api.test('try') + api.properties.tryserver())
+  yield api.test('ci')
+  yield api.test(
+      'try',
+      api.properties.tryserver(),
+  )
