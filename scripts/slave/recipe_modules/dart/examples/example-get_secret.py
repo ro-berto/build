@@ -13,8 +13,9 @@ def RunSteps(api):
   api.dart.get_secret('not_a_secret')
 
 def GenTests(api):
-  yield (api.test('basic'))
-  yield (
-      api.test('win') +
-      api.platform('win', 64) +
-      api.post_process(Filter('cloudkms get key')))
+  yield api.test('basic')
+  yield api.test(
+      'win',
+      api.platform('win', 64),
+      api.post_process(Filter('cloudkms get key')),
+  )

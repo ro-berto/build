@@ -285,130 +285,157 @@ def _canned_step(api, name, shards=0, local_shard=True, suffix='',
   return data
 
 def GenTests(api):
-  yield (api.test('basic') +
-      api.properties(
-          shard_timeout='600',
-          new_workflow_enabled=True) +
-      api.buildbucket.try_build(revision = '3456abce78ef',
+  yield api.test(
+      'basic',
+      api.properties(shard_timeout='600', new_workflow_enabled=True),
+      api.buildbucket.try_build(
+          revision='3456abce78ef',
           build_number=1357,
           builder='dart2js-strong-linux-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.override_step_data(
-        'download previous results.gerrit changes',
-        api.json.output([{'change_id': 'Ideadbeef'}])) +
-      _canned_step(api, 'test1', 2, False) +
-      _canned_step(api, 'test2') +
-      _canned_step(api, 'custom_runner', deflake=False) +
-      api.step_data('upload testing fileset test',
-          stdout=api.raw_io.output('test_hash')) +
+          project='dart'),
+      api.override_step_data('download previous results.gerrit changes',
+                             api.json.output([{
+                                 'change_id': 'Ideadbeef'
+                             }])),
+      _canned_step(api, 'test1', 2, False),
+      _canned_step(api, 'test2'),
+      _canned_step(api, 'custom_runner', deflake=False),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
       api.step_data('download previous results.gsutil find latest build',
-          api.raw_io.output_text('123', name='latest')) +
+                    api.raw_io.output_text('123', name='latest')),
       api.step_data('add fields to result records',
-          api.raw_io.output_text(RESULT_DATA)))
+                    api.raw_io.output_text(RESULT_DATA)),
+  )
 
-  yield (api.test('analyzer-linux-release') +
-      api.properties(
-          bot_id='trusty-dart-123',
-          new_workflow_enabled=True) +
-      api.buildbucket.ci_build(revision = '3456abce78ef',
+  yield api.test(
+      'analyzer-linux-release',
+      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
           build_number=1357,
           builder='analyzer-linux-release',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      _canned_step(api, 'test1', 2, False) +
-      _canned_step(api, 'test2') +
-      _canned_step(api, 'test3', 2) +
-      api.step_data('upload testing fileset test',
-                    stdout=api.raw_io.output('test_hash')) +
-      api.step_data('upload testing fileset trigger',
-                    stdout=api.raw_io.output('trigger_hash')) +
-      api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)) +
+          project='dart'),
+      _canned_step(api, 'test1', 2, False),
+      _canned_step(api, 'test2'),
+      _canned_step(api, 'test3', 2),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(
+          'upload testing fileset trigger',
+          stdout=api.raw_io.output('trigger_hash')),
+      api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
-          api.raw_io.output_text(RESULT_DATA)))
+                    api.raw_io.output_text(RESULT_DATA)),
+  )
 
-  yield (api.test('build-failure-in-matrix') +
-      api.buildbucket.ci_build(revision = '3456abce78ef',
+  yield api.test(
+      'build-failure-in-matrix',
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
           build_number=1357,
           builder='analyzer-linux-release',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.step_data('build', retcode=1) +
-      api.post_process(DoesNotRun, 'test1') +
-      api.post_process(DropExpectation))
+          project='dart'),
+      api.step_data('build', retcode=1),
+      api.post_process(DoesNotRun, 'test1'),
+      api.post_process(DropExpectation),
+  )
 
-  yield (api.test('basic-missing-name') +
+  yield api.test(
+      'basic-missing-name',
       api.buildbucket.ci_build(
           builder='this-name-does-not-exist-in-test-matrix',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart'))
+          project='dart'),
+  )
 
-  yield (api.test('basic-timeout') +
-      api.buildbucket.ci_build(builder='times-out',
+  yield api.test(
+      'basic-timeout',
+      api.buildbucket.ci_build(
+          builder='times-out',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.step_data('can_time_out', times_out_after=60 * 61 + 1))
+          project='dart'),
+      api.step_data('can_time_out', times_out_after=60 * 61 + 1),
+  )
 
-  yield (api.test('basic-failure') +
-      api.buildbucket.ci_build(builder='build-fail',
+  yield api.test(
+      'basic-failure',
+      api.buildbucket.ci_build(
+          builder='build-fail',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.step_data('can_time_out', retcode=1))
+          project='dart'),
+      api.step_data('can_time_out', retcode=1),
+  )
 
-  yield (api.test('vm-win') +
-      api.platform('win', 64) +
-      api.properties(
-          bot_id='win-dart-123',
-          new_workflow_enabled=True) +
-      api.buildbucket.ci_build(revision = '3456abce78ef',
+  yield api.test(
+      'vm-win',
+      api.platform('win', 64),
+      api.properties(bot_id='win-dart-123', new_workflow_enabled=True),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
           build_number=1357,
           builder='vm-kernel-win-release-simarm_x64',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.step_data('upload testing fileset test',
-                    stdout=api.raw_io.output('test_hash')) +
-      api.step_data('upload testing fileset trigger',
-                    stdout=api.raw_io.output('trigger_hash')) +
-      api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)) +
+          project='dart'),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(
+          'upload testing fileset trigger',
+          stdout=api.raw_io.output('trigger_hash')),
+      api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
-          api.raw_io.output_text(RESULT_DATA)))
+                    api.raw_io.output_text(RESULT_DATA)),
+  )
 
-  yield (api.test('basic-mac') + api.platform('mac', 64) +
+  yield api.test(
+      'basic-mac',
+      api.platform('mac', 64),
       api.properties(
-          bot_id='mac-dart-123',
-          new_workflow_enabled=True,
-          no_approvals=True) +
-      api.buildbucket.ci_build(revision='a' * 40,
+          bot_id='mac-dart-123', new_workflow_enabled=True, no_approvals=True),
+      api.buildbucket.ci_build(
+          revision='a' * 40,
           build_number=1357,
           builder='dart2js-strong-mac-x64-chrome',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
+          project='dart'),
       api.properties(
           clobber='True',
           parent_fileset='isolate_hash_123',
-          parent_fileset_name='test') +
+          parent_fileset_name='test'),
       api.step_data('add fields to result records',
-          api.raw_io.output_text(RESULT_DATA)))
+                    api.raw_io.output_text(RESULT_DATA)),
+  )
 
-  yield (api.test('example-mac') + api.platform('mac', 64) +
-      api.buildbucket.ci_build(builder='vm-kernel-mac-release-x64',
+  yield api.test(
+      'example-mac',
+      api.platform('mac', 64),
+      api.buildbucket.ci_build(
+          builder='vm-kernel-mac-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart'))
+          project='dart'),
+  )
 
-  yield (api.test('example-android') + api.platform('linux', 64) +
+  yield api.test(
+      'example-android',
+      api.platform('linux', 64),
       api.buildbucket.ci_build(
           builder='vm-kernel-precomp-android-release-armsimdbc64',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      _canned_step(api, 'android', 2, False, ' on Android') +
-      api.step_data('upload testing fileset test',
-                    stdout=api.raw_io.output('test_hash')))
+          project='dart'),
+      _canned_step(api, 'android', 2, False, ' on Android'),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+  )
 
-  yield (api.test('fuzz-test') +
-      api.step_data('upload testing fileset test',
-                    stdout=api.raw_io.output('test_hash')) +
-      api.buildbucket.ci_build(builder='fuzz-linux',
+  yield api.test(
+      'fuzz-test',
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.buildbucket.ci_build(
+          builder='fuzz-linux',
           git_repo='https://dart.googlesource.com/sdk',
-          project='dart'))
+          project='dart'),
+  )
