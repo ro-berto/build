@@ -100,14 +100,14 @@
     ],
     "name": "create dart/third_party/co19",
     "~followup_annotations": [
-      "@@@STEP_TEXT@</br>pkg: dart/third_party/co19</br>id: 40-chars-fake-of-the-package-instance_id@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"package\": \"dart/third_party/co19\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/dart/third_party/co19/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {
