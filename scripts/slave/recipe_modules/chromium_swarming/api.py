@@ -1583,7 +1583,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         self._shards_durations.append(shard['duration'])
 
       duration = None
-      if shard and shard.get('completed_ts') and shard.get('started_ts'):
+      if (shard and not shard.get('internal_failure') and
+          shard.get('completed_ts') and shard.get('started_ts')):
         # Display text for shard duration to reflect runtime + overhead
         delta = parse_time(shard['completed_ts']) - parse_time(
             shard['started_ts'])
