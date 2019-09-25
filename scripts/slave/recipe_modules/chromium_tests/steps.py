@@ -1485,6 +1485,7 @@ class SwarmingTest(Test):
                idempotent=None,
                shards=1,
                cipd_packages=None,
+               named_caches=None,
                **kwargs):
     """Constructs an instance of SwarmingTest.
 
@@ -1517,6 +1518,8 @@ class SwarmingTest(Test):
       shards: Number of shards to trigger.
       cipd_packages: [(str, str, str)] list of 3-tuples containing cipd
           package root, package name, and package version.
+      named_caches: {str: str} dict mapping named cache name to named cache
+          path.
     """
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
@@ -1537,6 +1540,7 @@ class SwarmingTest(Test):
     self._tear_down = tear_down
     self._isolate_coverage_data = isolate_coverage_data
     self._ignore_task_failure = ignore_task_failure
+    self._named_caches = named_caches or {}
     self._shards = shards
     self._service_account = service_account
     self._idempotent = idempotent
@@ -1749,6 +1753,9 @@ class SwarmingTest(Test):
 
     task_slice = (task_slice.with_cipd_ensure_file(ensure_file).
                    with_isolated(isolated))
+
+    if self._named_caches:
+      task.named_caches.update(self._named_caches)
 
     if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
       task_request = task_request.with_priority(task_request.priority - 1)

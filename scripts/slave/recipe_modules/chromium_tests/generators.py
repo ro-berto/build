@@ -151,6 +151,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     if 'idempotent' in swarming_spec:
       kwargs['idempotent'] = swarming_spec['idempotent']
 
+    named_caches = swarming_spec.get('named_caches')
+    if named_caches:
+      kwargs['named_caches'] = {nc['name']: nc['path'] for nc in named_caches}
+
     packages = swarming_spec.get('cipd_packages')
     if packages:
       kwargs['cipd_packages'] = [
@@ -356,11 +360,11 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # needed.
     results_handler_name = test.get('results_handler', 'default')
     try:
-        common_kwargs['results_handler'] = {
-            'default': lambda: None,
-            'fake': steps.FakeCustomResultsHandler,
-            'layout tests': steps.LayoutTestResultsHandler,
-        }[results_handler_name]()
+      common_kwargs['results_handler'] = {
+          'default': lambda: None,
+          'fake': steps.FakeCustomResultsHandler,
+          'layout tests': steps.LayoutTestResultsHandler,
+      }[results_handler_name]()
     except KeyError:
       api.python.failing_step(
           'isolated_scripts spec format error',
@@ -393,4 +397,3 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         api, spec, isolated_script_swarming_delegate,
         isolated_script_local_delegate, swarming_dimensions):
       yield t
-

@@ -160,6 +160,41 @@ def GenTests(api):
   )
 
   yield api.test(
+      'swarming_with_named_caches',
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'swarming': {
+                  'can_use_on_swarming_builders':
+                      True,
+                  'dimension_sets': [{
+                      'os': 'Linux',
+                  },],
+                  'named_caches': [{
+                      'name': 'cache_name',
+                      'path': '.path/to/named/cache',
+                  },]
+              },
+          },
+          mastername='test_mastername',
+          bot_id='test_bot_id',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      ),
+      api.post_process(post_process.StepCommandContains,
+                       '[trigger] base_unittests',
+                       ['--named-cache', 'cache_name', '.path/to/named/cache']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
       'merge',
       api.properties(
           single_spec={
