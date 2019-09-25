@@ -202,6 +202,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
+    if self.m.chromium.c.TARGET_CROS_BOARD:
+      self.m.gclient.c.solutions[0].custom_vars['cros_board'] = (
+          self.m.chromium.c.TARGET_CROS_BOARD)
+
     for c in bot_config.get('android_apply_config', []):
       self.m.chromium_android.apply_config(c)
 

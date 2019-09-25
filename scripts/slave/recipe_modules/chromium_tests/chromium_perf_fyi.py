@@ -76,7 +76,7 @@ _AddBuildSpec('chromeos-kevin-builder-perf-fyi', 'chromeos',
               target_bits=32,
               target_arch='arm',
               cros_board='kevin',
-              extra_gclient_apply_config=['arm', 'chromeos_kevin'])
+              extra_gclient_apply_config=['arm', 'chromeos'])
 
 _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',

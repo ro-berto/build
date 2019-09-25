@@ -122,30 +122,6 @@ def v8_tot(c):
 def chromeos(c):
   c.target_os.add('chromeos')
 
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_amd64_generic(c):
-  c.solutions[0].custom_vars['cros_board'] = 'amd64-generic'
-
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_arm_generic(c): # pragma: no cover
-  c.solutions[0].custom_vars['cros_board'] = 'arm-generic'
-
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_betty(c): # pragma: no cover
-  c.solutions[0].custom_vars['cros_board'] = 'betty'
-
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_betty_pi_arc(c): # pragma: no cover
-  c.solutions[0].custom_vars['cros_board'] = 'betty-pi-arc'
-
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_daisy(c):  # pragma: no cover
-  c.solutions[0].custom_vars['cros_board'] = 'daisy'
-
-@CONFIG_CTX(includes=['chromeos'])
-def chromeos_kevin(c):  # pragma: no cover
-  c.solutions[0].custom_vars['cros_board'] = 'kevin'
-
 @CONFIG_CTX()
 def fuchsia(c):
   c.target_os.add('fuchsia')
@@ -275,27 +251,27 @@ def chrome_internal(c):
   c.solutions[0].custom_vars['checkout_src_internal'] = 'True'
   # Remove some things which are generally not needed
   c.solutions[0].custom_deps = {
-    "src/data/autodiscovery" : None,
-    "src/data/page_cycler" : None,
-    "src/tools/grit/grit/test/data" : None,
-    "src/chrome/test/data/perf/frame_rate/private" : None,
-    "src/data/mozilla_js_tests" : None,
-    "src/chrome/test/data/firefox2_profile/searchplugins" : None,
-    "src/chrome/test/data/firefox2_searchplugins" : None,
-    "src/chrome/test/data/firefox3_profile/searchplugins" : None,
-    "src/chrome/test/data/firefox3_searchplugins" : None,
-    "src/chrome/test/data/ssl/certs" : None,
-    "src/data/mach_ports" : None,
-    "src/data/esctf" : None,
-    "src/data/selenium_core" : None,
-    "src/chrome/test/data/plugin" : None,
-    "src/data/memory_test" : None,
-    "src/data/tab_switching" : None,
-    "src/chrome/test/data/osdd" : None,
-    "src/webkit/data/bmp_decoder":None,
-    "src/webkit/data/ico_decoder":None,
-    "src/webkit/data/test_shell/plugins":None,
-    "src/webkit/data/xbm_decoder":None,
+      "src/data/autodiscovery": None,
+      "src/data/page_cycler": None,
+      "src/tools/grit/grit/test/data": None,
+      "src/chrome/test/data/perf/frame_rate/private": None,
+      "src/data/mozilla_js_tests": None,
+      "src/chrome/test/data/firefox2_profile/searchplugins": None,
+      "src/chrome/test/data/firefox2_searchplugins": None,
+      "src/chrome/test/data/firefox3_profile/searchplugins": None,
+      "src/chrome/test/data/firefox3_searchplugins": None,
+      "src/chrome/test/data/ssl/certs": None,
+      "src/data/mach_ports": None,
+      "src/data/esctf": None,
+      "src/data/selenium_core": None,
+      "src/chrome/test/data/plugin": None,
+      "src/data/memory_test": None,
+      "src/data/tab_switching": None,
+      "src/chrome/test/data/osdd": None,
+      "src/webkit/data/bmp_decoder": None,
+      "src/webkit/data/ico_decoder": None,
+      "src/webkit/data/test_shell/plugins": None,
+      "src/webkit/data/xbm_decoder": None,
   }
 
   m = c.got_revision_reverse_mapping

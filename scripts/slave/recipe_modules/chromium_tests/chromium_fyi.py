@@ -805,7 +805,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos_amd64_generic'],
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'intel',
@@ -826,7 +826,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos_kevin'],
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'arm',
@@ -847,7 +847,7 @@ SPEC = {
         'mb',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos_amd64_generic', 'use_clang_coverage'],
+      'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'intel',
