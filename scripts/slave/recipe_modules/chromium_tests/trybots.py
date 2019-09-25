@@ -163,6 +163,30 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.gpu.fyi',
                     'buildername': 'Optional Android Release (Nexus 5X)',
                 }),
+            'android-webview-marshmallow-arm64-dbg':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm64 Builder (dbg)',
+                    'tester': 'Android WebView M (dbg)',
+                }),
+            'android-webview-nougat-arm64-dbg':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm64 Builder (dbg)',
+                    'tester': 'Android WebView N (dbg)',
+                }),
+            'android-webview-oreo-arm64-dbg':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm64 Builder (dbg)',
+                    'tester': 'Android WebView O (dbg)',
+                }),
+            'android-webview-pie-arm64-dbg':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'Android arm64 Builder (dbg)',
+                    'tester': 'Android WebView P (dbg)',
+                }),
             'cast_shell_android':
                 simple_bot({
                     'mastername': 'chromium.android',
