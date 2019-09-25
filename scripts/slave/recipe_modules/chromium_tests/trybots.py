@@ -272,6 +272,11 @@ TRYBOTS = freeze({
                     'buildername': 'Android arm64 Builder (dbg)',
                     'tester': 'android-pie-arm64-dbg',
                 }),
+            'android-webview-pie-arm64-fyi-rel':
+                simple_bot({
+                    'mastername': 'chromium.android.fyi',
+                    'buildername': 'Android WebView P FYI (rel)',
+                }),
         },
     },
     'tryserver.chromium.angle': {
