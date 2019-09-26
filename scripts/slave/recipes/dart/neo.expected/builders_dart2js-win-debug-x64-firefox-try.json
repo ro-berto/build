@@ -100,7 +100,7 @@
       "--patch_ref",
       "https://dart.googlesource.com/sdk@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "sdk@3456abcd78ef"
+      "sdk@HEAD"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -122,7 +122,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"3456abcd78ef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -377,21 +377,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
-  },
-  {
-    "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "infra_step": true,
-    "name": "git show"
   },
   {
     "cmd": [
@@ -1118,7 +1103,7 @@
       "--build-id",
       "8945511751514863184",
       "--commit",
-      "3456abcd78ef",
+      "",
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1132,6 +1117,21 @@
   },
   {
     "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "infra_step": true,
+    "name": "git show"
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/extend_results.dart",
       "",
@@ -1141,7 +1141,7 @@
       "dart2js-win-debug-x64-firefox-try",
       "0",
       "1234567",
-      "3456abcd78ef",
+      "refs/changes/123456/7",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1309,6 +1309,43 @@
   {
     "cmd": [],
     "name": "upload new results"
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-scopes",
+      "https://www.googleapis.com/auth/cloud-platform",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "infra_step": true,
+    "name": "upload new results.get access token for default account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "[CACHE]/builder/sdk/tools/bots/post_results_to_pubsub.dart",
+      "-f",
+      "",
+      "-a",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "upload new results.publish results to pub/sub",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

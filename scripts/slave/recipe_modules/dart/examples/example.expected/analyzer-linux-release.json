@@ -786,18 +786,6 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "git show"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/task_kill.py",
@@ -1458,8 +1446,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@"
     ]
@@ -1689,8 +1675,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@"
     ]
@@ -1804,8 +1788,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
@@ -1889,8 +1871,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
@@ -1974,8 +1954,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
@@ -2335,8 +2313,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/1\":\"log\"}@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/2\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@"
@@ -2401,8 +2377,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/1\":\"log\"}@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/2\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@"
@@ -2486,8 +2460,6 @@
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\"}@@@",
       "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
-      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/1\":\"log\"}@@@",
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/2\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
@@ -2514,6 +2486,18 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
     ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "git show"
   },
   {
     "cmd": [
@@ -2830,26 +2814,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/analyzer-linux-release/1357/approved_results.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"trusty-dart-123\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"trusty-dart-123\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"trusty-dart-123\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n{\"builder_name\": \"analyzer-linux-release\", \"bot_name\": \"trusty-dart-123\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"3456abce78ef\"}\n",
-      "gs://dart-test-results/builders/analyzer-linux-release/1357/runs.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "upload new results.gsutil upload runs.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/analyzer-linux-release/1357/runs.json@@@"
     ]
   },
   {

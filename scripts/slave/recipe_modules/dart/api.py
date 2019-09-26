@@ -45,11 +45,14 @@ class DartApi(recipe_api.RecipeApi):
         '%s@%s' % (SWARMING_CLIENT_REPO, SWARMING_CLIENT_REV)
     self.m.goma.ensure_goma()
 
-    with self.m.context(cwd=self.m.path['cache'].join('builder'),
-                        env={'GOMA_DIR':self.m.goma.goma_dir,
-                             'GIT_TRACE_CURL': '1',
-                             'GIT_TRACE_CURL_NO_DATA': '1',
-                             'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
+    with self.m.context(
+        cwd=self.m.path['cache'].join('builder'),
+        env={
+            'GOMA_DIR': self.m.goma.goma_dir,
+            'GIT_TRACE_CURL': '1',
+            'GIT_TRACE_CURL_NO_DATA': '1',
+            'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'
+        }):
       self.m.bot_update.ensure_checkout()
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
@@ -94,6 +97,12 @@ class DartApi(recipe_api.RecipeApi):
     return self.m.path['checkout'].join(
       'tools','sdks', 'dart-sdk', 'bin', executable)
 
+  def commit_id(self):
+    """The commit hash of a CI build or the patch set of a CQ build"""
+    return str(self.m.buildbucket.gitiles_commit.id or 'refs/changes/%s/%s' %
+               (self.m.buildbucket.build.input.gerrit_changes[0].change,
+                self.m.buildbucket.build.input.gerrit_changes[0].patchset))
+
 
   def build(self, build_args=None, name='build dart'):
     """Builds dart using the specified build_args"""
@@ -101,8 +110,7 @@ class DartApi(recipe_api.RecipeApi):
       build_args = []
     build_args = build_args + ['--no-start-goma', '-j200']
     with self.m.depot_tools.on_path(), self.m.context(
-        cwd=self.m.path['checkout'],
-        env={'GOMA_DIR':self.m.goma.goma_dir}):
+        cwd=self.m.path['checkout'], env={'GOMA_DIR': self.m.goma.goma_dir}):
       self.kill_tasks()
       build_exit_status = None
       try:
@@ -257,8 +265,7 @@ class DartApi(recipe_api.RecipeApi):
     for filepath in output_dir:
       filename = filepath.split('/')[-1]
       filename = filename.split('\\')[-1]
-      if filename in (
-          'logs.json', 'results.json', 'run.json'):
+      if filename in ('logs.json', 'results.json'):
         contents = output_dir[filepath]
         self.m.step.active_result.presentation.logs[
             filename] = [contents]
@@ -266,8 +273,6 @@ class DartApi(recipe_api.RecipeApi):
           results.add_results(bot_name, contents)
         if filename == 'logs.json':
           results.logs += contents
-        if filename == 'run.json':
-          results.add_run(bot_name, contents)
 
 
   def _get_latest_tested_commit(self):
@@ -388,10 +393,11 @@ class DartApi(recipe_api.RecipeApi):
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
-  def _upload_results(self, flaky_json_str, logs_str, results_str, runs_str):
-    # Try builders do not upload results.
+  def _upload_results(self, flaky_json_str, logs_str, results_str):
+    # Try builders do not upload results, only publish to pub/sub
     builder = str(self.m.buildbucket.builder_name)
     if builder.endswith('try'):
+      self._publish_results(results_str)
       return # pragma: no cover
 
     build_revision = str(self.m.buildbucket.gitiles_commit.id)
@@ -411,7 +417,6 @@ class DartApi(recipe_api.RecipeApi):
         'builders/%s/%s/approved_results.json' % (builder, build_number),
         name='upload approved_results.json',
         ok_ret='any' if self._report_new_results() else {0})
-    self._upload_result(builder, build_number, 'runs.json', runs_str)
     # Update "latest" file
     new_latest = self.m.raw_io.input_text(build_number, name='latest')
     self.m.gsutil.upload(
@@ -446,29 +451,18 @@ class DartApi(recipe_api.RecipeApi):
          ok_ret='any')
 
 
-  def _extend_results_records(
-      self, results_str,
-      prior_results_path,
-      flaky_json_str,
-      prior_flaky_path,
-      builder_name,
-      build_number,
-      commit_time,
-      commit_hash):
-    return self.m.step(
-        'add fields to result records',
-        [self.dart_executable(),
-         self.m.path['checkout'].join('tools', 'bots', 'extend_results.dart'),
-         self.m.raw_io.input_text(results_str, name='results.json'),
-         prior_results_path,
-         self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
-         prior_flaky_path,
-         builder_name,
-         build_number,
-         commit_time,
-         commit_hash,
-         self.m.raw_io.output_text()
-        ]).raw_io.output_text
+  def _extend_results_records(self, results_str, prior_results_path,
+                              flaky_json_str, prior_flaky_path, builder_name,
+                              build_number, commit_time, commit_id):
+    return self.m.step('add fields to result records', [
+        self.dart_executable(), self.m.path['checkout'].join(
+            'tools', 'bots', 'extend_results.dart'),
+        self.m.raw_io.input_text(results_str,
+                                 name='results.json'), prior_results_path,
+        self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
+        prior_flaky_path, builder_name, build_number, commit_time, commit_id,
+        self.m.raw_io.output_text()
+    ]).raw_io.output_text
 
 
   def _present_results(self, logs_str, results_str, flaky_json_str):
@@ -756,10 +750,6 @@ class DartApi(recipe_api.RecipeApi):
                    'checked_in_sdk_version': checked_in_sdk_version,
                    'co19_version': co19_version,
                    'out': out}
-    environment['commit'] = {
-      'commit_hash': str(self.m.buildbucket.gitiles_commit.id),
-      'commit_time': self.m.git.get_timestamp(test_data='1234567')
-    }
     # Linux and vm-*-win builders should use copy-coredumps
     environment['copy-coredumps'] = (system == 'linux' or system == 'mac' or
             (system.startswith('win') and builder_name.startswith('vm-')))
@@ -824,7 +814,7 @@ class DartApi(recipe_api.RecipeApi):
       args = ['-m%s' % mode] + args
     if not self._has_specific_argument(args, ['-a', '--arch']):
       args = ['-a%s' % arch] + args
-    with self.m.context(env={'GOMA_DIR':self.m.goma.goma_dir}):
+    with self.m.context(env={'GOMA_DIR': self.m.goma.goma_dir}):
       self.m.python(step.name,
                     self.m.path['checkout'].join('tools', 'gn.py'),
                     args=args)
@@ -862,25 +852,18 @@ class DartApi(recipe_api.RecipeApi):
         results_str = ''.join(
             (step.results.results for step in steps))
         flaky_json_str = self._update_flakiness_information(results_str)
-        commit = steps[0].environment['commit']
         results_str = self._extend_results_records(
-            results_str,
-            self.m.path['checkout'].join('LATEST', 'results.json'),
-            flaky_json_str,
-            self.m.path['checkout'].join('LATEST', 'flaky.json'),
-            self.m.buildbucket.builder_name,
+            results_str, self.m.path['checkout'].join('LATEST', 'results.json'),
+            flaky_json_str, self.m.path['checkout'].join(
+                'LATEST', 'flaky.json'), self.m.buildbucket.builder_name,
             self.m.buildbucket.build.number,
-            commit['commit_time'],
-            commit['commit_hash'])
+            self.m.git.get_timestamp(test_data='1234567'), self.commit_id())
         try:
           self._present_results(logs_str, results_str, flaky_json_str)
         finally:
           # Upload even if present_results fails the build
           with self.m.step.nest('upload new results'):
-            runs_str = ''.join(
-                (step.results.runs for step in steps))
-            self._upload_results(
-                flaky_json_str, logs_str, results_str, runs_str)
+            self._upload_results(flaky_json_str, logs_str, results_str)
         # Approve unapproved successes if the build is green (an exception would
         # have been thrown above if it was red). If we approve successes when
         # the builder is red, then a commit that both fixes and breaks tests
@@ -1093,7 +1076,7 @@ class DartApi(recipe_api.RecipeApi):
     def __init__(self, m, builder_name, config, step_json, environment, index):
       self.m = m
       self.name = step_json['name']
-      self.results = StepResults(m, environment['commit'])
+      self.results = StepResults(m)
       self.deflake_list = []
       self.args = step_json.get('arguments', [])
       self.environment = environment
@@ -1145,11 +1128,10 @@ class DartApi(recipe_api.RecipeApi):
 
 
 class StepResults:
-  def __init__(self, m, commit):
+
+  def __init__(self, m):
     self.logs = ''
     self.results = ''
-    self.runs = ''
-    self.commit = commit
     self.builder_name = str(m.buildbucket.builder_name) # Returned as unicode
     self.build_number = str(m.buildbucket.build.number)
 
@@ -1160,12 +1142,3 @@ class StepResults:
     all_chunks = (chunk for match in all_matches for chunk in (
         match.group(1), extra))
     self.results += ''.join(all_chunks)
-
-
-  def add_run(self, bot_name, run_json):
-    run = json.loads(run_json)
-    run['commit_time'] = self.commit['commit_time']
-    run['commit_hash'] = self.commit['commit_hash']
-    run['builder_name'] = self.builder_name
-    run['bot_name'] = bot_name
-    self.runs += json.dumps(run) + '\n'

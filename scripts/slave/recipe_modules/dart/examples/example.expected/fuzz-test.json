@@ -784,18 +784,6 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "git show"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",

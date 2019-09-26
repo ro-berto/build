@@ -135,7 +135,6 @@ def GenTests(api):
   yield api.test(
       'builders/dart2js-win-debug-x64-firefox-try',
       api.buildbucket.try_build(
-          revision='3456abcd78ef',
           builder='dart2js-win-debug-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
