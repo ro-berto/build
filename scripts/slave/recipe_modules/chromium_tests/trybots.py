@@ -818,10 +818,20 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.chromiumos',
                     'buildername': 'chromeos-amd64-generic-cfi-thin-lto-rel',
                 }),
+            'chromeos-amd64-generic-dbg':
+                simple_bot({
+                    'mastername': 'chromium.chromiumos',
+                    'buildername': 'chromeos-amd64-generic-dbg',
+                }),
             'chromeos-amd64-generic-rel':
                 simple_bot({
                     'mastername': 'chromium.chromiumos',
                     'buildername': 'chromeos-amd64-generic-rel',
+                }),
+            'chromeos-arm-generic-dbg':
+                simple_bot({
+                    'mastername': 'chromium.chromiumos',
+                    'buildername': 'chromeos-arm-generic-dbg',
                 }),
             'chromeos-arm-generic-rel':
                 simple_bot({
