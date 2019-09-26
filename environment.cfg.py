@@ -26,8 +26,6 @@ def Extend(pythonpath, cwd, with_third_party):
       third_party_base,
   ]
   build_path += [os.path.join(third_party_base, path) for path in (
-      'buildbot_8_4p1',
-      'buildbot_slave_8_4',
       'coverage-3.7.1',
       'decorator_3_3_1',
       'google_api_python_client',

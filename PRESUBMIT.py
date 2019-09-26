@@ -29,8 +29,8 @@ def GetBlackList(input_api):
 
       # Exclude all "...recipe_deps" directories.
       #
-      # These directories are created by tests in "tests/", and by recipe
-      # engine. Each is an independent recipe checkout. If Pylint is run on
+      # These directories are created by recipe engine.
+      # Each is an independent recipe checkout. If Pylint is run on
       # these, it will hang forever, so we must exclude them.
       r'^(.*/)?\..*recipe_deps/.*',
   ]
@@ -68,13 +68,6 @@ def CommitChecks(input_api, output_api):
 
   whitelist = [r'.+_test\.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api, output_api, 'tests', whitelist=whitelist))
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join('scripts', 'master', 'unittests'),
-      whitelist))
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'slave', 'unittests'),
@@ -88,12 +81,6 @@ def CommitChecks(input_api, output_api):
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'tools', 'unittests'),
-      whitelist))
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join(
-        'scripts', 'master', 'buildbucket', 'unittests'),
       whitelist))
 
   recipe_modules_tests = input_api.glob(
@@ -113,12 +100,6 @@ def CommitChecks(input_api, output_api):
         output_api,
         path,
         whitelist))
-
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join('slave', 'tests'),
-      whitelist))
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
   # condition where multiple tests are trying to fetch at once.
