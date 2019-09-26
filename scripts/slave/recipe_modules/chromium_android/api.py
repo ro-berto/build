@@ -1209,6 +1209,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                verbose=True,
                                json_results_file=None,
                                suffix=None,
+                               additional_args=None,
                                **kwargs):
     args = []
     if verbose:
@@ -1217,6 +1218,8 @@ class AndroidApi(recipe_api.RecipeApi):
       args.append('--release')
     if json_results_file:
       args.extend(['--json-results-file', json_results_file])
+    if additional_args:
+      args.extend(additional_args)
 
     with self.m.context(env=self.m.chromium.get_env()):
       return self.test_runner(

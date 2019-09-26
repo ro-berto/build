@@ -294,8 +294,11 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
   del swarming_dimensions, scripts_compile_targets, bot_config
   for test in test_spec.get(buildername, {}).get('junit_tests', []):
     yield steps.AndroidJunitTest(
-        str(test['test']),
-        waterfall_mastername=mastername, waterfall_buildername=buildername)
+        test.get('name', test['test']),
+        target_name=test['test'],
+        additional_args=test.get('args'),
+        waterfall_mastername=mastername,
+        waterfall_buildername=buildername)
 
 
 def generate_cts_test(api, chromium_tests_api, mastername, buildername,

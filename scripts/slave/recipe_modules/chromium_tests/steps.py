@@ -2322,12 +2322,14 @@ class AndroidJunitTest(AndroidTest):
   def __init__(self,
                name,
                target_name=None,
+               additional_args=None,
                waterfall_mastername=None,
                waterfall_buildername=None):
     super(AndroidJunitTest, self).__init__(
         name, compile_targets=[name], waterfall_mastername=None,
         waterfall_buildername=None)
     self._target_name = target_name or name
+    self._additional_args = additional_args
 
   @property
   def uses_local_devices(self):
@@ -2340,6 +2342,7 @@ class AndroidJunitTest(AndroidTest):
         target_name=self._target_name,
         verbose=True,
         suffix=suffix,
+        additional_args=self._additional_args,
         json_results_file=json_results_file,
         step_test_data=(
             lambda: api.test_utils.test_api.canned_gtest_output(False)))

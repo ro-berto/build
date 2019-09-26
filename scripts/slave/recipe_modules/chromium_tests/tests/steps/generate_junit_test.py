@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'chromium',
     'chromium_android',
@@ -47,13 +49,58 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123),
       api.properties(
           single_spec={
               'test': 'junit_test',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123,
       ),
   )
+
+  yield api.test(
+      'different-name',
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123),
+      api.properties(
+          single_spec={
+              'test': 'junit_test',
+              'name': 'junit_alias',
+          },
+          mastername='test_mastername',
+          bot_id='test_bot_id',
+      ), api.post_process(post_process.MustRun, 'junit_alias'),
+      api.override_step_data('junit_alias',
+                             api.test_utils.canned_gtest_output(True)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
+      'additional-args',
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123),
+      api.properties(
+          single_spec={
+              'test': 'junit_test',
+              'args': ['--foo=bar'],
+          },
+          mastername='test_mastername',
+          bot_id='test_bot_id',
+      ), api.post_process(post_process.MustRun, 'junit_test'),
+      api.override_step_data('junit_test',
+                             api.test_utils.canned_gtest_output(True)),
+      api.post_process(post_process.StepCommandContains, 'junit_test',
+                       ['--foo=bar']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))

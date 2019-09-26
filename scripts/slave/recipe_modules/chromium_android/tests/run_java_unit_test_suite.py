@@ -24,6 +24,7 @@ def RunSteps(api):
   api.chromium_android.run_java_unit_test_suite(
       'test_suite',
       target_name=api.properties.get('target_name', 'test_suite'),
+      additional_args=api.properties.get('additional_args'),
       json_results_file=api.test_utils.gtest_results())
 
 
@@ -44,4 +45,14 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'test_suite'),
       api.post_process(post_process.StepCommandContains, 'test_suite',
                        ['[CACHE]/builder/src/out/Release/bin/run_test_target']),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
+      'additional-args', api.properties(additional_args=['--foo=bar']),
+      api.override_step_data('test_suite',
+                             api.test_utils.canned_gtest_output(passing=True)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.MustRun, 'test_suite'),
+      api.post_process(post_process.StepCommandContains, 'test_suite',
+                       ['--foo=bar']),
       api.post_process(post_process.DropExpectation))
