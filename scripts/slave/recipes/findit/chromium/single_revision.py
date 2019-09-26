@@ -163,9 +163,13 @@ def _compute_targets_and_tests(api, bot_config, bot_db, bot_id, requested_tests,
   # If no targets were specifically requested, compile every target in the spec.
   if not compile_targets:
     return default_compile_targets, []
-  # Compile _requested_ targets that _are_ defined in the spec. To avoid trying
-  # to compile targets that do not exist at this revision.
-  return [t for t in default_compile_targets if t in compile_targets ], []
+  # Filter out targets that do not exist in this revision. i.e. By calling
+  # `ninja query`.
+  existing_targets = api.findit.existing_targets(
+      compile_targets,
+      mb_mastername=bot_id['mastername'],
+      mb_buildername=bot_id['buildername'])
+  return existing_targets, []
 
 
 def _run_tests(api, bot_config, test_objects, requested_tests,
@@ -297,6 +301,10 @@ def GenTests(api):
   yield api.test(
       'specific_target',
       _common(api, compile_targets=['base_unittests', 'missing_target']),
+      api.override_step_data('check_targets',
+                             api.json.output({
+                                 'found': ['base_unittests']
+                             })),
       api.post_process(MustRun, 'compile'),
       api.post_process(StepCommandContains, 'compile', ['base_unittests']),
       api.post_process(_StepCommandNotContains, 'compile', 'missing_target'),
