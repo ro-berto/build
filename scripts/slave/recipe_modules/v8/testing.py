@@ -399,7 +399,7 @@ class V8Test(BaseTest):
       step_result.presentation.logs['test filter'] = self.applied_test_filter
 
     # The output is expected to be a list of architecture dicts that
-    # each contain a results list. On buildbot, there is only one
+    # each contain a results list. On the bots, there is only one
     # architecture.
     assert len(json_output) == 1
     self.api.v8._update_durations(json_output[0], step_result.presentation)

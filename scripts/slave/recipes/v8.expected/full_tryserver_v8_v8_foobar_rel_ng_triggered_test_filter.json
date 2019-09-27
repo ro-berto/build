@@ -160,7 +160,6 @@
       "Release",
       "--outdir",
       "out",
-      "--buildbot",
       "--random-seed=831298184",
       "mjsunit/regression/*",
       "intl/foo",

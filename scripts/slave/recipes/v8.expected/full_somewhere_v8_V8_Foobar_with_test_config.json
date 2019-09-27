@@ -46,7 +46,6 @@
       "Release",
       "--outdir",
       "out",
-      "--buildbot",
       "--test-root",
       "[BUILDER_CACHE]/v8/custom_deps/test_checkout/test",
       "--random-seed=-358114921",

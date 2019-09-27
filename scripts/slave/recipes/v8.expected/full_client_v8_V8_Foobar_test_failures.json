@@ -97,7 +97,6 @@
       "Release",
       "--outdir",
       "out",
-      "--buildbot",
       "--random-seed=831298184",
       "bot_default",
       "--variants=more,dev",
