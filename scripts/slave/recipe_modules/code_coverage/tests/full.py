@@ -333,7 +333,7 @@ def GenTests(api):
   yield api.test('skip collecting coverage data for java',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-kitkat-arm-coverage-rel',
+          buildername='android-marshmallow-arm64-coverage-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.properties(
@@ -353,11 +353,11 @@ def GenTests(api):
   yield api.test('process java coverage for per-cl',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-kitkat-arm-coverage-rel',
+          buildername='android-marshmallow-arm64-coverage-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.buildbucket.try_build(
-          project='chromium', builder='android-kitkat-arm-coverage-rel'),
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
        api.properties(
           files_to_instrument=[
             'some/path/to/file.java',

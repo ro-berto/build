@@ -5,22 +5,6 @@
 
 SPEC = {
     'builders': {
-        'android-kitkat-arm-coverage-rel': {
-            'chromium_config': 'android',
-            'chromium_apply_config': ['download_vr_test_apks', 'mb'],
-            'gclient_config': 'chromium',
-            'gclient_apply_config': ['android'],
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            'android_config': 'main_builder',
-            'bot_type': 'builder_tester',
-            'testing': {
-                'platform': 'linux',
-            },
-        },
         'android-marshmallow-arm64-coverage-rel': {
             'chromium_config':
                 'android',
