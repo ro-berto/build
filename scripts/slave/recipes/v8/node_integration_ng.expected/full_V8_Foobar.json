@@ -170,7 +170,7 @@
       "-C",
       "[BUILDER_CACHE]/node-ci/out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[BUILDER_CACHE]/node-ci",
     "env": {
@@ -195,7 +195,7 @@
       "-C",
       "[BUILDER_CACHE]/node-ci/out/Release",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"

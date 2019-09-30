@@ -170,7 +170,7 @@
       "-u",
       "[BUILDER_CACHE]/node.js/configure",
       "--build-v8-with-gn",
-      "--build-v8-with-gn-max-jobs=20",
+      "--build-v8-with-gn-max-jobs=80",
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
@@ -291,7 +291,7 @@
       "--prefix=/",
       "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
       "--build-v8-with-gn",
-      "--build-v8-with-gn-max-jobs=20",
+      "--build-v8-with-gn-max-jobs=80",
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],

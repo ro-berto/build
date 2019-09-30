@@ -116,7 +116,7 @@
       "-C",
       "out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "name": "ninja"
   },
@@ -224,7 +224,7 @@
       "--ninja-log-outdir",
       "out/Release",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"20\"]",
+      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"80\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

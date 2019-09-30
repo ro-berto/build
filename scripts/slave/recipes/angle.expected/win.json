@@ -236,7 +236,7 @@
       "-C",
       "[CACHE]\\builder\\angle\\out\\release",
       "-j",
-      "20"
+      "80"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -347,7 +347,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\angle\\out\\release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[CACHE]\\\\builder\\\\angle\\\\out\\\\release\", \"-j\", 20]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[CACHE]\\\\builder\\\\angle\\\\out\\\\release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

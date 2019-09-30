@@ -115,7 +115,7 @@
       "-C",
       "out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "name": "ninja",
     "~followup_annotations": [
@@ -223,7 +223,7 @@
       "--ninja-log-outdir",
       "out/Release",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"20\"]",
+      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"80\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

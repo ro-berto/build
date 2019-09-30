@@ -286,7 +286,7 @@
       "-C",
       "[START_DIR]/openscreen/out/Default",
       "-j",
-      "20",
+      "80",
       "gn_all",
       "openscreen_unittests"
     ],
@@ -397,7 +397,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/openscreen/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 20, \"gn_all\", \"openscreen_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 80, \"gn_all\", \"openscreen_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

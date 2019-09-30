@@ -781,7 +781,7 @@
       "-C",
       "[CACHE]/builder/src/out/Release",
       "-j",
-      "20",
+      "80",
       "target_name"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -920,7 +920,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"target_name\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"target_name\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

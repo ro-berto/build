@@ -36,7 +36,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "v8_archive"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -155,7 +155,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "v8_archive"
     ],
     "cwd": "[BUILDER_CACHE]/v8",

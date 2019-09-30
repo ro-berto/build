@@ -326,7 +326,7 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\win_compile_x86_msvc_rel",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -343,7 +343,7 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\win_compile_x86_msvc_rel",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"
@@ -459,7 +459,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\win_compile_x86_msvc_rel",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_compile_x86_msvc_rel\", \"-j\", 20]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_compile_x86_msvc_rel\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

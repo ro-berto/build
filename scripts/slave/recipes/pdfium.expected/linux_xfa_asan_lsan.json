@@ -214,7 +214,7 @@
       "-C",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan",
       "-j",
-      "20",
+      "80",
       "pdfium_all"
     ],
     "name": "compile with ninja"
@@ -320,7 +320,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_xfa_v8_asan\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_xfa_v8_asan\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

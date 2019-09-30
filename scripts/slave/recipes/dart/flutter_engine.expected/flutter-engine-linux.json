@@ -258,7 +258,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/host_debug"
     ],
@@ -522,7 +522,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/host_debug",
       "create_full_sdk"
@@ -804,7 +804,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/host_debug_unopt"
     ],
@@ -1068,7 +1068,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/host_debug_unopt",
       "generate_dart_ui"
@@ -1350,7 +1350,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/host_release"
     ],
@@ -1683,7 +1683,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_debug"
     ],
@@ -1956,7 +1956,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_debug",
       ":dist"
@@ -2250,7 +2250,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_release",
       "gen_snapshot"
@@ -2543,7 +2543,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_profile"
     ],
@@ -2835,7 +2835,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_release"
     ],
@@ -3128,7 +3128,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_debug_x64"
     ],
@@ -3421,7 +3421,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-j",
-      "20",
+      "80",
       "-C",
       "[CACHE]/builder/src/out/android_debug_x86"
     ],

@@ -247,7 +247,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -267,7 +267,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"
@@ -980,7 +980,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1000,7 +1000,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"
@@ -1448,7 +1448,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1468,7 +1468,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"
@@ -1954,7 +1954,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20"
+      "80"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env": {
@@ -1974,7 +1974,7 @@
       "-C",
       "[BUILDER_CACHE]/v8/out/Release",
       "-j",
-      "20",
+      "80",
       "-d",
       "explain",
       "-n"

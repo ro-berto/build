@@ -264,7 +264,7 @@
       "-C",
       "[CACHE]/builder/dawn/out/release",
       "-j",
-      "20"
+      "80"
     ],
     "name": "compile with ninja"
   },
@@ -369,7 +369,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/dawn/out/release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release\", \"-j\", 20]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
