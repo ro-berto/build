@@ -3,6 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 import argparse
 import errno
 import os.path
@@ -61,7 +64,7 @@ def copy_generated_files(source, dest, debug_dir):
 
       if not os.path.exists(source_file) or \
           not has_whitelisted_extension(source_file):
-        print "DELETING FILE:", dest_file
+        print("DELETING FILE:", dest_file)
         os.remove(dest_file)
 
   # Second, copy everything that matches the whitelist from source to dest.
@@ -81,7 +84,7 @@ def copy_generated_files(source, dest, debug_dir):
       dest_file = translate_root(source_root, dest_root, source_file)
 
       if not os.path.exists(dest_file):
-        print "ADDING FILE:", dest_file
+        print("ADDING FILE:", dest_file)
       shutil.copyfile(source_file, dest_file)
 
   # Finally, delete any empty directories. We keep going to a fixed point, to
@@ -94,7 +97,7 @@ def copy_generated_files(source, dest, debug_dir):
     # We make no effort to deduplicate paths in dirs_to_examine, so we might
     # have already removed this path.
     if os.path.exists(d) and os.listdir(d) == []:
-      print "DELETING DIRECTORY:", d
+      print("DELETING DIRECTORY:", d)
       os.rmdir(d)
 
       # The parent dir might be empty now, so add it back into the list.
@@ -127,7 +130,7 @@ def main():
   status = subprocess.check_output(
       ['git', 'status', '--porcelain'], cwd=opts.dest)
   if not status:
-    print 'No changes, exiting'
+    print('No changes, exiting')
     return 0
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
@@ -141,9 +144,9 @@ def main():
 
 def check_call(cmd, cwd=None):
   if cwd is None:
-    print 'Running %s' % cmd
+    print('Running %s' % cmd)
   else:
-    print 'Running %s in %s' % (cmd, cwd)
+    print('Running %s in %s' % (cmd, cwd))
   return subprocess.check_call(cmd, cwd=cwd)
 
 

@@ -32,10 +32,9 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
     try:
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
-          'foo contents')
+      with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'),
+                'r') as f:
+        self.assertEqual(f.read(), 'foo contents')
     except IOError as e:
       self.fail(e)
 
@@ -60,28 +59,25 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
     try:
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
-          'foo contents')
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'dir1', 'bar.css'), 'r').read(),
-          'bar contents')
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'dir2', 'baz.js'), 'r').read(),
-          'baz contents')
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'),
-               'r').read(),
-          'quux contents')
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'),
-               'r').read(),
-          'zip contents')
+      with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'),
+                'r') as f:
+        self.assertEqual(f.read(), 'foo contents')
+      with open(
+          os.path.join(self.dest_dir, 'Debug', 'gen', 'dir1', 'bar.css'),
+          'r') as f:
+        self.assertEqual(f.read(), 'bar contents')
+      with open(
+          os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'baz.js'),
+          'r') as f:
+        self.assertEqual(f.read(), 'baz contents')
+      with open(
+          os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21',
+                       'quux.json'), 'r') as f:
+        self.assertEqual(f.read(), 'quux contents')
+      with open(
+          os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21',
+                       'zip.txt'), 'r') as f:
+        self.assertEqual(f.read(), 'zip contents')
     except IOError as e:
       self.fail(e)
 
@@ -107,10 +103,9 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
     try:
-      self.assertEqual(
-          open(os.path.join(
-              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
-          'new foo contents')
+      with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'),
+                'r') as f:
+        self.assertEqual(f.read(), 'new foo contents')
     except IOError as e:
       self.fail(e)
 
