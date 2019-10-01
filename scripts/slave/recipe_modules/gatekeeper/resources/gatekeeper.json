@@ -372,6 +372,9 @@
         "builders": {
           "*": {}
         },
+        "excluded_builders" : [
+          "linux-jumbo-rel"
+        ],
         "tree_notify": [
           "thomasanderson@chromium.org"
         ]
@@ -657,7 +660,6 @@
           },
           "Jumbo Linux x64": {
             "tree_notify": [
-              "bratell+jumbo-builds@opera.com",
               "brucedawson@chromium.org",
               "dpranke@chromium.org",
               "mostynb+jumbo@vewd.com"
@@ -666,7 +668,6 @@
           },
           "Jumbo Mac": {
             "tree_notify": [
-              "bratell+jumbo-builds@opera.com",
               "brucedawson@chromium.org",
               "dpranke@chromium.org"
             ],
@@ -674,7 +675,6 @@
           },
           "Jumbo Win x64": {
             "tree_notify": [
-              "bratell+jumbo-builds@opera.com",
               "brucedawson@chromium.org",
               "dpranke@chromium.org"
             ],
