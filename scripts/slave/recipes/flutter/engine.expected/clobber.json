@@ -2754,7 +2754,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-x86 artifacts.zip",
+    "name": "Zip android-x86-jit-release artifacts.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_jit_release_x86/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_9/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
@@ -2783,7 +2783,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-x86 UploadArtifacts artifacts.zip"
+    "name": "temp dir for android-x86-jit-release UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [
@@ -4180,7 +4180,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "Zip android-x86 artifacts.zip (2)",
+    "name": "Zip android-x86 artifacts.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_debug_x86/flutter.jar\", \"type\": \"file\"}, {\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_debug_x86/lib.stripped/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_14/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
@@ -4209,7 +4209,7 @@
       ]
     },
     "infra_step": true,
-    "name": "temp dir for android-x86 UploadArtifacts artifacts.zip (2)"
+    "name": "temp dir for android-x86 UploadArtifacts artifacts.zip"
   },
   {
     "cmd": [

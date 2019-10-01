@@ -372,7 +372,8 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
 def BuildLinuxAndroid(api, swarming_task_id):
   if api.properties.get('build_android_jit_release', True):
     jit_release_variants = [
-        ('x86', 'android_jit_release_x86', 'android-x86', True, 'x86'),
+        ('x86', 'android_jit_release_x86', 'android-x86-jit-release', True,
+         'x86'),
     ]
     for android_cpu, out_dir, artifact_dir, \
             run_tests, abi in jit_release_variants:
