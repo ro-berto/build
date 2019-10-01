@@ -92,6 +92,11 @@
               "chromium_tree_closer"
             ]
           },
+          "android-pie-arm64-rel": {
+            "categories": [
+              "chromium_tree_closer"
+            ]
+          },
           "Deterministic Android (dbg)": {
             "categories": [
               "chromium_tree_closer",
