@@ -592,6 +592,18 @@ TRYBOTS = freeze({
                     'buildername': 'Linux Builder (dbg)',
                     'tester': 'Linux Tests (dbg)(1)',
                 }),
+            'linux-clang-tidy-dbg':
+                simple_bot({
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder (dbg)',
+                },
+                           analyze_mode='compile'),
+            'linux-clang-tidy-rel':
+                simple_bot({
+                    'mastername': 'chromium.linux',
+                    'buildername': 'Linux Builder',
+                },
+                           analyze_mode='compile'),
             'linux-rel': {
                 'bot_ids': [
                     {
