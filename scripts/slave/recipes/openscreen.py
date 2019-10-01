@@ -47,7 +47,12 @@ def RunSteps(api):
   api.goma.ensure_goma()
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
-  with api.context(cwd=checkout_path):
+  env = {}
+  if api.properties.get('is_asan', False):
+    env['ASAN_SYMBOLIZER_PATH'] = str(
+        checkout_path.join('third_party', 'llvm-build', 'Release+Asserts',
+                           'bin', 'llvm-symbolizer'))
+  with api.context(cwd=checkout_path, env=env):
     host_tool_label = _GetHostToolLabel(api.platform)
     api.step('install build tools',
              [checkout_path.join('tools', 'install-build-tools.sh'),

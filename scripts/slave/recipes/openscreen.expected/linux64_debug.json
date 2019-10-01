@@ -142,6 +142,9 @@
       "linux64"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "install build tools"
   },
   {
@@ -152,6 +155,9 @@
       "--args=is_debug=true is_asan=true is_tsan=false is_gcc=false"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "gn gen"
   },
   {
@@ -171,6 +177,9 @@
       "[CACHE]/goma/data/builder"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -186,6 +195,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -220,6 +230,9 @@
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -237,6 +250,9 @@
       "openscreen_unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "compile"
   },
   {
@@ -253,6 +269,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -286,6 +303,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -308,6 +326,7 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -363,6 +382,9 @@
       "builder"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -390,6 +412,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -401,6 +426,9 @@
       "[START_DIR]/openscreen/out/Default/openscreen_unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
+    "env": {
+      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
+    },
     "name": "Run unit tests"
   },
   {
