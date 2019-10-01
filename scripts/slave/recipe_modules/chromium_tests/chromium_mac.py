@@ -39,23 +39,6 @@ SPEC = {
       },
       'checkout_dir': 'mac',
     },
-    # Exact duplicate of 'Mac10.13 Tests'
-    'mac-dummy-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    # Exact duplicate of 'mac-dummy-rel'
     'Mac10.13 Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

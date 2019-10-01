@@ -46,7 +46,7 @@ def validate_tester_config(api, mastername, buildername, bot_config):
   # Some builders are 'dummy' builders. They don't actually run, but are created
   # for configuration reasons. Don't validate these builders.
   if 'dummy' in buildername:
-    return
+    return  # pragma: no cover
   parent_buildername = bot_config.get('parent_buildername')
 
   parent_mastername = bot_config.get('parent_mastername', mastername)
