@@ -2325,11 +2325,14 @@ class AndroidJunitTest(AndroidTest):
                additional_args=None,
                waterfall_mastername=None,
                waterfall_buildername=None):
+    target_name = target_name or name
     super(AndroidJunitTest, self).__init__(
-        name, compile_targets=[name], waterfall_mastername=None,
+        name,
+        compile_targets=[target_name],
+        waterfall_mastername=None,
         waterfall_buildername=None)
-    self._target_name = target_name or name
     self._additional_args = additional_args
+    self._target_name = target_name
 
   @property
   def uses_local_devices(self):

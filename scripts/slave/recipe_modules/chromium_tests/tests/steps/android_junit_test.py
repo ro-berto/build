@@ -29,6 +29,8 @@ def RunSteps(api):
   test = api.chromium_tests.steps.AndroidJunitTest(
       'test_name', target_name=api.properties.get('target_name'))
 
+  api.chromium.compile(targets=test.compile_targets(), name='compile')
+
   try:
     test.run(api.chromium_tests.m, '')
   finally:
@@ -68,6 +70,8 @@ def GenTests(api):
           builder='test_buildername',
           build_number=123),
       api.properties(mastername='test_mastername', target_name='target_name'),
+      api.post_process(post_process.StepCommandContains, 'compile',
+                       ['target_name']),
       api.post_process(post_process.MustRun, 'test_name'),
       api.post_process(calls_runner_script, 'test_name', 'run_target_name'),
       api.post_process(post_process.StatusFailure),

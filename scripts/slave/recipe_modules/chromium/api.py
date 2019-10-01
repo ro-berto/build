@@ -488,7 +488,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       - InfraFailure when goma failure occurs
     """
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
-    assert isinstance(targets, (list, tuple))
+    assert isinstance(targets, (list, tuple)), type(targets)
 
     if self.c.use_gyp_env and self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
       # Get the Clang revision before compiling.
