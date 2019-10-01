@@ -145,10 +145,10 @@ TEST_CONFIGS = freeze({
     'isolated_target': 'perf_integration',
   },
   'test262': {
-    'name': 'Test262 - no variants',
+    'name': 'Test262',
     'tests': ['test262'],
-    'variants': V8Variant('default'),
   },
+  # TODO(machenbach): Remove this once not referenced from V8.
   'test262_variants': {
     'name': 'Test262',
     'tests': ['test262'],
