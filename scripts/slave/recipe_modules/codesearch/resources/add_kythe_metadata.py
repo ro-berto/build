@@ -12,6 +12,9 @@ locations to the name of the entity in the source Mojom file which generates
 them.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 import argparse
 import base64
 import collections
@@ -53,15 +56,15 @@ def _GenerateMetadata(filename, file_contents, corpus, verbose):
         next_line, re.IGNORECASE)
     if not entity_name_match:
       # We should always find the entity, but don't fail completely if we don't.
-      print "Couldn't find name after annotation in %s for %s, at offset %d" % (
-          filename, signature, match.start(0))
+      print("Couldn't find name after annotation in %s for %s, at offset %d" %
+            (filename, signature, match.start(0)))
       continue
 
     annotations.append(Annotation(signature, end + entity_name_match.start(1),
                         end + entity_name_match.end(1)))
 
   if verbose:
-    print 'found %d annotations' % len(annotations)
+    print('found %d annotations' % len(annotations))
 
   return {
       # This has to be 'kythe0'. I guess it's a version number.
@@ -91,11 +94,11 @@ def _GenerateMetadata(filename, file_contents, corpus, verbose):
 
 
 def _FormatMetadata(metadata):
-  b64_metadata = base64.encodestring(json.dumps(metadata))
+  b64_metadata = base64.encodestring(json.dumps(metadata).encode('utf-8'))
 
   # base64.encodedstring returns multi-line output. This is fine by us, as we
   # want to wrap the comment anyway.
-  return '/* Metadata comment\n' + b64_metadata + '*/'
+  return '/* Metadata comment\n' + b64_metadata.decode('utf-8') + '*/'
 
 
 def main():
@@ -111,7 +114,7 @@ def main():
 
   for filename in _FindAllMojomGeneratedFiles(opts.gen_dir):
     if opts.verbose:
-      print 'Adding metadata to %s' % filename
+      print('Adding metadata to %s' % filename)
     with open(filename, 'a+') as f:
       contents = f.read()
       metadata = _GenerateMetadata(filename, contents, opts.corpus,
@@ -137,7 +140,7 @@ def main():
       if match is not None:
         comment_pos = match.start()
         if opts.verbose:
-          print 'Clearing existing metadata from %s' % filename
+          print('Clearing existing metadata from %s' % filename)
         f.seek(comment_pos)
         f.truncate()
         contents = contents[:comment_pos]
