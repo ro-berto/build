@@ -956,11 +956,10 @@ class DartApi(recipe_api.RecipeApi):
       args = args + ['--repeat=5', '--tests', step.deflake_list]
       shards = min(shards, 1)
 
-    test_args = ['--progress=status',
-                 '--report',
-                 '--time',
-                 '--write-results',
-                 '--write-logs']
+    test_args = [
+        '--progress=status', '--report', '--time', '--silent-failures',
+        '--write-results', '--write-logs'
+    ]
     if self._report_new_results() or step.deflake_list:
       test_args.append('--clean-exit')
     args = test_args + args
