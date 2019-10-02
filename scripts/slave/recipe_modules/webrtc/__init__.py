@@ -37,7 +37,6 @@ DEPS = [
   'recipe_engine/step',
   'test_results',
   'test_utils',
-  'trigger',
   'zip',
 ]
 

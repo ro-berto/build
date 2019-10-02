@@ -36,7 +36,6 @@ DEPS = [
   'recipe_engine/time',
   'recipe_engine/url',
   'test_utils',
-  'trigger',
 ]
 
 

@@ -21,7 +21,6 @@ DEPS = [
   'depot_tools/windows_sdk',
 
   'goma',
-  'trigger',
 ]
 
 # Maps from triggering builder to triggered builder;
@@ -126,10 +125,10 @@ def _AnnotatedStepsSteps(api, got_revision):
       api.goma.stop(build_exit_status=exit_status)
 
 def _TriggerTestsSteps(api):
-  if api.buildbucket.builder_name in trigger_map:
-    api.trigger(
-        {'builder_name': trigger_map[api.buildbucket.builder_name],
-         'properties': {'parent_slavename': api.properties['bot_id']}})
+  # TODO(someone): use "recipe_engine/buildbucket" to trigger steps. This used
+  # to use the old @@@STEP_TRIGGER@@@ annotation which has never worked in LUCI
+  # and has now been removed after the demise of buildbot.
+  pass
 
 def RunSteps(api):
   got_revision = _CheckoutSteps(api)

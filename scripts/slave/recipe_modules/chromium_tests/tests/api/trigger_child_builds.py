@@ -7,6 +7,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium_tests',
     'recipe_engine/path',
+    'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -78,15 +79,16 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def trigger_includes_bucket(check, steps_odict, builder=None, bucket=None):
-    for trigger_spec in steps_odict['trigger'].trigger_specs:
-      if trigger_spec['builder_name'] == builder:
-        check(trigger_spec['bucket'] == bucket)
+  def trigger_includes_bucket(check, steps_odict, builder=None):
+    batches = [
+      b['jobs'] for b in api.json.loads(steps_odict['trigger'].stdin)['batches']
+    ]
+    check(any(j['job'] == builder for jobs in batches for j in jobs))
     return steps_odict
 
   yield api.test(
       'cross_master_trigger',
-      api.runtime(is_luci=False, is_experimental=False),
+      api.runtime(is_luci=True, is_experimental=False),
       api.platform.name('linux'),
       api.properties.generic(
           buildername='Fake Builder',
@@ -96,7 +98,6 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(
           trigger_includes_bucket,
-          builder='Fake Tester',
-          bucket='master.chromium.example2'),
+          builder='Fake Tester'),
       api.post_process(post_process.DropExpectation),
   )

@@ -628,32 +628,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                            additional_properties=None):
     additional_properties = additional_properties or {}
 
-    # If you modify parameters or properties, make sure to modify it for both
-    # legacy and LUCI cases below.
-    if not self.m.runtime.is_luci:
-      # Legacy buildbot-only triggering.
-      # TODO(tandrii): get rid of legacy triggering.
-      trigger_specs = []
-      for _, loop_mastername, loop_buildername, _ in sorted(
-          bot_db.bot_configs_matching_parent_buildername(
-              mastername, buildername)):
-        trigger_spec = {
-            'builder_name': loop_buildername,
-            'properties': {
-                'parent_mastername': mastername,
-            },
-        }
-        if mastername != loop_mastername:
-          trigger_spec['bucket'] = 'master.' + loop_mastername
-        for name, value in update_step.presentation.properties.iteritems():
-          if name.startswith('got_'):
-            trigger_spec['properties']['parent_' + name] = value
-        trigger_spec['properties'].update(additional_properties)
-        trigger_specs.append(trigger_spec)
-      if trigger_specs:
-        self.m.trigger(*trigger_specs)
-      return
-
     # LUCI-Scheduler-based triggering (required on luci stack).
     properties = {
       'parent_mastername': mastername,
@@ -670,7 +644,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties.update(additional_properties)
 
     scheduler_jobs = collections.defaultdict(list)
-    for luci_project, loop_mastername, loop_buildername, _ in sorted(
+    for luci_project, _, loop_buildername, _ in sorted(
         bot_db.bot_configs_matching_parent_buildername(
             mastername, buildername)):
       # LUCI mode will emulate triggering of builds inside master.chromium*
@@ -1139,9 +1113,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       package_transfer_reasons = [
           'This builder is doing the full package transfer because:'
       ]
-      if not self.m.runtime.is_luci:
-        package_transfer_reasons.append(
-            " - it's still running on buildbot :(")
       for t in non_isolated_tests:
         package_transfer_reasons.append(
             " - %s doesn't use isolate" % t.name)

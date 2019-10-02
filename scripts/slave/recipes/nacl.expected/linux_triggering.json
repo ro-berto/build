@@ -367,21 +367,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
-        "properties": {
-          "parent_slavename": "TestSlave"
-        }
-      }
-    ],
-    "~followup_annotations": [
-      "@@@STEP_TEXT@oneiric_32-newlib-arm_hw-pnacl-panda-dbg@@@"
-    ]
-  },
-  {
     "name": "$result"
   }
 ]

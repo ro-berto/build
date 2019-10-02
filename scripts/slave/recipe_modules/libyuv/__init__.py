@@ -17,7 +17,6 @@ DEPS = [
   'recipe_engine/runtime',
   'recipe_engine/scheduler',
   'recipe_engine/step',
-  'trigger',
 ]
 
 

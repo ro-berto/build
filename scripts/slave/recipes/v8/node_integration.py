@@ -26,7 +26,6 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/runtime',
   'recipe_engine/step',
-  'trigger',
   'v8',
   'zip',
 ]
