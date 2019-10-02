@@ -4114,9 +4114,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/get_version.py#13)(api):**
 ### *recipes* / [chromium:tests/mb\_analyze](/scripts/slave/recipe_modules/chromium/tests/mb_analyze.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_analyze.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_analyze.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_analyze.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_analyze.py#20)(api):**
 ### *recipes* / [chromium:tests/mb\_gen](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#8): [chromium](#recipe_modules-chromium), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4219,7 +4219,7 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/init_and_sync.py#10)(api):**
 ### *recipes* / [chromium\_android:tests/logcat\_dump](/scripts/slave/recipe_modules/chromium_android/tests/logcat_dump.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_android/tests/logcat_dump.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_android/tests/logcat_dump.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/logcat_dump.py#12)(api):**
 ### *recipes* / [chromium\_android:tests/provision\_devices](/scripts/slave/recipe_modules/chromium_android/tests/provision_devices.py)
@@ -4360,9 +4360,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/tests/trigger_output.py#24)(api, task_to_retry, expected_value):**
 ### *recipes* / [chromium\_tests:examples/full](/scripts/slave/recipe_modules/chromium_tests/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/examples/full.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/examples/full.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/examples/full.py#17)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/examples/full.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/api/archive\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]

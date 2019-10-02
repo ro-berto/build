@@ -9,6 +9,7 @@ DEPS = [
   'chromium',
   'chromium_checkout',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/properties',
   'recipe_engine/runtime',
@@ -34,9 +35,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.tryserver(
+      api.buildbucket.try_build(builder='test_buildername'),
+      api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           path_config='kitchen'),
       api.runtime(is_experimental=False, is_luci=True),
       api.post_process(post_process.MustRun, 'analyze'),
@@ -46,9 +47,9 @@ def GenTests(api):
 
   yield api.test(
       'analyze_failure',
-      api.properties.tryserver(
+      api.buildbucket.try_build(builder='test_buildername'),
+      api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           path_config='kitchen'),
       api.runtime(is_experimental=False, is_luci=True),
       api.step_data(
@@ -73,9 +74,9 @@ def GenTests(api):
 
   yield api.test(
       'analyze_failure_no_output',
-      api.properties.tryserver(
+      api.buildbucket.try_build(builder='test_buildername'),
+      api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           path_config='kitchen'),
       api.runtime(is_experimental=False, is_luci=True),
       api.step_data(

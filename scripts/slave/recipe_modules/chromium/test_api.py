@@ -61,8 +61,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
             self.m.platform.name(platform_name),
         )
         if mastername.startswith('tryserver'):
-          test += self.m.properties.tryserver(buildername=buildername,
-                                              mastername=mastername)
+          test += self.m.properties(mastername=mastername)
           test += self.m.buildbucket.try_build(
               project=project,
               builder=buildername,

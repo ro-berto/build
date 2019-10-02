@@ -25,12 +25,12 @@
       "-a",
       "public-read",
       "None/out/Release/full_log",
-      "gs://test-bucket/logcat_dumps/TestBuilder/571"
+      "gs://test-bucket/logcat_dumps/builder/0"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/test-bucket/logcat_dumps/TestBuilder/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/test-bucket/logcat_dumps/builder/0@@@"
     ]
   },
   {

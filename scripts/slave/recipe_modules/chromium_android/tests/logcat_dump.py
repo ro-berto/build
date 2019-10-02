@@ -5,7 +5,7 @@
 DEPS = [
   'chromium',
   'chromium_android',
-  'recipe_engine/properties',
+  'recipe_engine/buildbucket',
 ]
 
 
@@ -16,7 +16,4 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test(
-      'basic',
-      api.properties.tryserver(),
-  )
+  yield api.test('basic', api.buildbucket.try_build())
