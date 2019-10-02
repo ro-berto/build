@@ -210,9 +210,9 @@
       "    return callable_obj(*props, **additional_args)",
       "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 65, in RunSteps",
       "    _RunStepsCelab(api)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 94, in _RunStepsCelab",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 95, in _RunStepsCelab",
       "    tests)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 256, in _RunTests",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 263, in _RunTests",
       "    raise ValueError('pool_name and pool_size must be defined with `tests`.')",
       "ValueError: pool_name and pool_size must be defined with `tests`."
     ]

@@ -15,14 +15,14 @@
       "    arg_names, **additional_args)",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
       "    return callable_obj(*props, **additional_args)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 71, in RunSteps",
-      "    raise ValueError('Invalid `project`. Accepted values: celab, chromium.')",
-      "ValueError: Invalid `project`. Accepted values: celab, chromium."
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 72, in RunSteps",
+      "    'Invalid `project`. Accepted values: celab, chromium, chrome.')",
+      "ValueError: Invalid `project`. Accepted values: celab, chromium, chrome."
     ]
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError('Invalid `project`. Accepted values: celab, chromium.',)"
+      "humanReason": "Uncaught Exception: ValueError('Invalid `project`. Accepted values: celab, chromium, chrome.',)"
     },
     "name": "$result"
   }

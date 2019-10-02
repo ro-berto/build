@@ -63,12 +63,13 @@ def RunSteps(api):
 
   if project == 'celab':
     _RunStepsCelab(api)
-  elif project == 'chromium':
+  elif project == 'chromium' or project == 'chrome':
     compile_failure = _RunStepsChromium(api)
     if compile_failure:
       return compile_failure
   else:
-    raise ValueError('Invalid `project`. Accepted values: celab, chromium.')
+    raise ValueError(
+        'Invalid `project`. Accepted values: celab, chromium, chrome.')
 
 
 def _RunStepsCelab(api):
@@ -195,6 +196,8 @@ def _BuildCelabFromSource(api, checkout):
 
 
 def _CheckoutChromiumRepo(api):
+  project = api.buildbucket.build.builder.project
+
   with api.chromium.chromium_layout():
     bot_config = {
         'chromium_config': 'chromium',
@@ -205,6 +208,10 @@ def _CheckoutChromiumRepo(api):
             'TARGET_BITS': 64,
         },
     }
+
+    if project == 'chrome':
+      bot_config['gclient_apply_config'] = ['chrome_internal']
+
     api.chromium_tests.configure_build(bot_config)
     api.chromium_checkout.ensure_checkout(bot_config)
     api.chromium.runhooks()
@@ -570,4 +577,33 @@ def GenTests(api):
       api.step_data('compile (with patch)', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'chrome_try',
+      api.properties(
+          tests='chrome.test',
+          pool_name='chrome-try',
+          pool_size=5,
+          mastername='tryserver.chrome.win',
+          bot_id='test_bot'),
+      api.platform('win', 64),
+      api.buildbucket.try_build(
+          project='chrome',
+          bucket='luci.chrome.try',
+          builder='win-celab-try-rel',
+          git_repo=CHROMIUM_REPO),
+      api.step_data(
+          'read vpython file',
+          api.file.read_text('''wheel: <
+              name: "infra/celab/celab/windows-amd64"
+              version: "celab_package_version"
+            >''')),
+      api.step_data(
+          'test summary.parse summary',
+          api.json.output({
+              '1st test': {
+                  'success': False,
+                  'output': '/file'
+              }
+          })),
   )
