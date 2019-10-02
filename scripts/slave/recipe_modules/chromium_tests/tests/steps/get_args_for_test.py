@@ -8,6 +8,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/tryserver',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -34,7 +35,8 @@ def RunSteps(api):
   )
   if api.properties.get('expected_args'):
     # For some reason, we get expected_args as a tuple instead of a list
-    assert list(api.properties.get('expected_args')) == test_args
+    api.assertions.assertEqual(
+        list(api.properties.get('expected_args')), test_args)
 
 
 def GenTests(api):
@@ -46,9 +48,11 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildbucket='{"build": {"id": "12345"}}',
-          expected_args=[u"12345"],
+          expected_args=[u'8945511751514863184'],
+      ),
+      api.buildbucket.ci_build(
+          project='chromium/src',
+          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -62,9 +66,11 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildbucket=u'{"build": {"id": "12345"}}',
-          expected_args=[u"12345"],
+          expected_args=[u'8945511751514863184'],
+      ),
+      api.buildbucket.ci_build(
+          project='chromium/src',
+          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -78,11 +84,11 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildbucket={"build": {
-              "id": "12345"
-          }},
-          expected_args=[u"12345"],
+          expected_args=[u'8945511751514863184'],
+      ),
+      api.buildbucket.ci_build(
+          project='chromium/src',
+          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
