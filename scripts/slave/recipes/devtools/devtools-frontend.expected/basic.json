@@ -92,6 +92,108 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/devtools-frontend",
+      "gen",
+      "//out/Release",
+      "--args=is_debug=false target_cpu=\"x64\""
+    ],
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "name": "gn"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_REPO[depot_tools]/autoninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/devtools-frontend/out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/autoninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "name": "compile confirm no-op"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--skip-sendgomatsmon",
+      "--ninja-log-outdir",
+      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/devtools-frontend/out/Release\"]",
+      "--build-exit-status",
+      "0",
+      "--ninja-log-compiler",
+      "unknown"
+    ],
+    "cwd": "[BUILDER_CACHE]",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "name": "upload_ninja_log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]/devtools-frontend/scripts/compile_frontend.py"
     ],
     "cwd": "[BUILDER_CACHE]",

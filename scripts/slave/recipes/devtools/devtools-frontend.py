@@ -5,6 +5,7 @@
 from contextlib import contextmanager
 
 DEPS = [
+  'chromium',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
@@ -15,29 +16,46 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+STEPS_N_SCRIPTS = [
+  ('Compile Frontend', 'compile_frontend.py'),
+  ('Lint', 'lint_javascript.py'),
+  ('Run Tests', 'run_tests.py'),
+]
+
+REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
+
 
 def RunSteps(api):
   _configure(api)
   with _in_builder_cache_depot_on_path(api):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
-    steps_n_scripts = [
-      ('Compile Frontend', 'compile_frontend.py'),
-      ('Lint', 'lint_javascript.py'),
-      ('Run Tests', 'run_tests.py'),
-    ]
-    for step, script in steps_n_scripts:
+    api.chromium.run_gn()
+    api.chromium.compile()
+    for step, script in STEPS_N_SCRIPTS:
       run_script(api, step, script)
 
 
 def _configure(api):
+  _configure_source(api)
+  _configure_build(api)
+
+
+def _configure_source(api):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
   soln.name = 'devtools-frontend'
-  soln.url = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
+  soln.url = REPO_URL
   soln.revision = api.properties.get('revision', 'HEAD')
   src_cfg.got_revision_mapping[soln.name] = 'got_revision'
   api.gclient.c = src_cfg
+
+
+def _configure_build(api):
+  build_cfg = api.chromium.make_config()
+  build_cfg.build_config_fs = 'Release'
+  build_cfg.compile_py.use_autoninja = True
+  api.chromium.c = build_cfg
 
 
 def run_script(api, step_name, script):
