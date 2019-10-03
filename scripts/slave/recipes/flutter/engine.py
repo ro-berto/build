@@ -932,10 +932,13 @@ def BuildIOS(api):
     RunGN(api, '--unoptimized')
     Build(api, 'host_debug_unopt')
 
+    RunGN(api, '--ios', '--runtime-mode', 'debug', '--unoptimized',
+        '--enable-metal')
     RunGNBitcode(api, '--ios', '--runtime-mode', 'debug')
     RunGNBitcode(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm')
 
     RunIOSTests(api)
+    Build(api, 'ios_debug_unopt_metal')
     BuildNoGoma(api, 'ios_debug')
     BuildNoGoma(api, 'ios_debug_arm')
     BuildObjcDoc(api)
