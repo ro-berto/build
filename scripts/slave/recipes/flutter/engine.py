@@ -645,8 +645,11 @@ def TestFuchsia(api):
   # Collect the result of the task by metadata.
   fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
   api.file.ensure_directory('swarming output', fuchsia_output)
-  api.swarming.collect(
+  results = api.swarming.collect(
       'collect', metadata, output_dir=fuchsia_output, timeout='30m')
+  for result in results:
+    result.analyze()
+
 
 
 def BuildFuchsia(api):
