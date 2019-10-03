@@ -232,8 +232,6 @@
       "[CACHE]/cbuild",
       "--branch",
       "slave_branch",
-      "--buildbucket-id",
-      "12345",
       "--master-build-id",
       "123",
       "--git-cache-dir",

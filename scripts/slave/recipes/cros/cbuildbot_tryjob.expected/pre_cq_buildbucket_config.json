@@ -88,8 +88,6 @@
       "[CACHE]/cbuild",
       "--branch",
       "master",
-      "--buildbucket-id",
-      "12345",
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",

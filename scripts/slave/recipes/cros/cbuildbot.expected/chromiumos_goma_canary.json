@@ -95,8 +95,6 @@
       "master",
       "--buildnumber",
       "12345",
-      "--buildbucket-id",
-      "1337",
       "--master-build-id",
       "24601",
       "--git-cache-dir",

@@ -236,8 +236,6 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
-      "--build-id",
-      "1",
       "--builder-id-json",
       "{\"bucket\": \"master.test_master\", \"builder\": \"test_builder\", \"project\": \"\"}",
       "--is-luci",
