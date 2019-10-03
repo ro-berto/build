@@ -16,6 +16,8 @@
       "example-test-type",
       "--chrome-revision",
       "2",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results-test.appspot.com"
     ],

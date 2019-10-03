@@ -15,7 +15,9 @@
       "--test-type",
       "example-test-type",
       "--chrome-revision",
-      "2"
+      "2",
+      "--build-id",
+      "8945511751514863184"
     ],
     "name": "Upload to test-results [example-test-type]"
   },

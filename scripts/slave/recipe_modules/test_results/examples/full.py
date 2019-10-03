@@ -5,10 +5,11 @@
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'recipe_engine/json',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'test_results',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
+    'test_results',
 ]
 
 PROPERTIES = {
@@ -43,54 +44,30 @@ def RunSteps(api, warning, server_config):
 
 
 def GenTests(api):
-  for config in ('no_server', 'public_server', 'staging_server'):
-    yield api.test(
-        'upload_success_%s' % config,
-        api.properties(
-            mastername='example.master',
-            buildername='ExampleBuilder',
-            buildnumber=123,
-            server_config=config),
-    )
+
+  def case(name, *test_data, **props):
+    props.setdefault('mastername', 'example.master')
+    return api.test(
+        name,
+        api.buildbucket.ci_build(builder='ExampleBuilder', build_number=123),
+        api.properties(**props), *test_data)
 
   for config in ('no_server', 'public_server', 'staging_server'):
-    yield api.test(
-        'upload_success_buildbucket_%s' % config,
-        api.properties(
-            mastername='example.master',
-            buildername='ExampleBuilder',
-            buildnumber=123,
-            buildbucket={'build': {
-                'id': 2345
-            }},
-            server_config=config),
-    )
+    yield case('upload_success_%s' % config, server_config=config)
 
-  yield api.test(
+  yield case(
       'upload_success_experimental',
       api.runtime(is_luci=True, is_experimental=True),
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123),
   )
 
-  yield api.test(
+  yield case(
       'upload_and_degrade_to_warning',
       api.step_data('Upload to test-results [example-test-type]', retcode=1),
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123,
-          warning=True),
+      warning=True,
   )
 
-  yield api.test(
+  yield case(
       'upload_without_degrading_failures',
       api.step_data('Upload to test-results [example-test-type]', retcode=1),
-      api.properties(
-          mastername='example.master',
-          buildername='ExampleBuilder',
-          buildnumber=123,
-          warning=False),
+      warning=False,
   )

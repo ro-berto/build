@@ -5450,9 +5450,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/tar/examples/full.py#14)(api):**
 ### *recipes* / [test\_results:examples/full](/scripts/slave/recipe_modules/test_results/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#23)(api, warning, server_config):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_results/examples/full.py#24)(api, warning, server_config):**
 ### *recipes* / [test\_utils:tests/gtest\_results](/scripts/slave/recipe_modules/test_utils/tests/gtest_results.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/gtest_results.py#10): [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
