@@ -50,6 +50,10 @@ PROPERTIES = {
 }
 
 
+def _IsGomaEnabled(msvc):
+  return not msvc
+
+
 def _CheckoutSteps(api, target_os):
   solution_path = api.path['cache'].join('builder')
   api.file.ensure_directory('init cache if not exists', solution_path)
@@ -104,7 +108,9 @@ def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo,
 # the used build configuration to be used by Gold.
 def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
                  msvc, rel, jumbo, component, target_os, out_dir):
-  api.goma.ensure_goma()
+  enable_goma = _IsGomaEnabled(msvc)
+  if enable_goma:
+    api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
   checkout = api.path['checkout']
@@ -119,9 +125,12 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
       'pdf_use_skia=%s' % gn_bool[skia],
       'pdf_use_skia_paths=%s' % gn_bool[skia_paths],
       'pdf_is_standalone=true',
-      'use_goma=true',
-      'goma_dir="%s"' % api.goma.goma_dir,
   ]
+  if enable_goma:
+    args.extend([
+        'use_goma=true',
+        'goma_dir="%s"' % api.goma.goma_dir,
+    ])
   if api.platform.is_win and not memory_tool:
     args.append('symbol_level=1')
   if api.platform.is_win:
@@ -179,16 +188,22 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
   return gold_build_config(args)
 
 
-def _BuildSteps(api, clang, out_dir):
+def _BuildSteps(api, clang, msvc, out_dir):
+  enable_goma = _IsGomaEnabled(msvc)
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
-               '-j', api.goma.recommended_goma_jobs, 'pdfium_all']
+  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
+  if enable_goma:
+    ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
+  ninja_cmd.append('pdfium_all')
 
-  api.goma.build_with_goma(
-      name='compile with ninja',
-      ninja_command=ninja_cmd,
-      ninja_log_outdir=debug_path,
-      ninja_log_compiler='clang' if clang else 'unknown')
+  if enable_goma:
+    api.goma.build_with_goma(
+        name='compile with ninja',
+        ninja_command=ninja_cmd,
+        ninja_log_outdir=debug_path,
+        ninja_log_compiler='clang' if clang else 'unknown')
+  else:
+    api.step('compile with ninja', ninja_cmd)
 
 
 # _RunTests runs the tests and uploads the results to Gold.
@@ -306,7 +321,7 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     build_config = _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8,
                                 target_cpu, clang, msvc, rel, jumbo, component,
                                 target_os, out_dir)
-    _BuildSteps(api, clang, out_dir)
+    _BuildSteps(api, clang, msvc, out_dir)
 
     if skip_test:
       return
