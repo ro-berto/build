@@ -371,9 +371,6 @@ def GenTests(api):
                                     properties=None):
     trigger_step = step_odict['trigger']
     check(
-        'TriggersBuilderWithProperties only supports LUCI builds.',
-        not trigger_step.trigger_specs)
-    check(
         '"trigger" step did not run expected command.',
         'scheduler.Scheduler.EmitTriggers' in trigger_step.cmd and
         trigger_step.stdin)
