@@ -261,7 +261,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('cbuildbot_launch [swarming-build-config]') (retcode: 1)\nbuilder: swarming-build-config\n[master](https://ci.chromium.org/b/8904538489270332096)"
+      "humanReason": "Step('cbuildbot_launch [swarming-build-config]') (retcode: 1)\n\nbuilder: swarming-build-config\n\n[master](https://ci.chromium.org/b/8904538489270332096)"
     },
     "name": "$result"
   }

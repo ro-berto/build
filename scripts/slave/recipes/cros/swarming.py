@@ -89,7 +89,7 @@ def MakeSummaryMarkdown(api, failure):
   if m:
     lines.append('[master](https://ci.chromium.org/b/%s)' % m.groups()[0])
 
-  return '\n'.join(lines)
+  return '\n\n'.join(lines)
 
 def GenTests(api):
 
