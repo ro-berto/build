@@ -41,7 +41,6 @@ def RunSteps(api):
 
 def GenTests(api):
   properties = {
-      'buildername': 'test_builder',
       'mastername': 'test_master',
       'bot_id': 'test_slave',
       'build_command': ['ninja', '-C', 'out/Release'],

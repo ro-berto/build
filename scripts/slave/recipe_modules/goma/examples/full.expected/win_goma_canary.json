@@ -58,7 +58,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\test_builder"
+      "[CACHE]\\goma\\data\\TestBuilder"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -75,7 +75,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\test_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\TestBuilder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -137,7 +137,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\test_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\TestBuilder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -169,7 +169,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\test_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\TestBuilder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -190,7 +190,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\test_builder",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\TestBuilder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -238,10 +238,10 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.test_master\", \"builder\": \"test_builder\", \"project\": \"\"}",
+      "{\"bucket\": \"master.test_master\", \"builder\": \"TestBuilder\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "test_builder",
+      "TestBuilder",
       "--buildbot-mastername",
       "test_master",
       "--buildbot-slavename",

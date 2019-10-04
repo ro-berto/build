@@ -19,12 +19,11 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(buildername='test_buildername'),
       api.buildbucket.ci_build(builder='test_buildername'),
   )
 
   yield api.test(
       'luci_and_experimental',
-      api.properties(buildername='test_buildername'),
       api.runtime(is_luci=True, is_experimental=True),
+      api.buildbucket.ci_build(builder='test_buildername'),
   )

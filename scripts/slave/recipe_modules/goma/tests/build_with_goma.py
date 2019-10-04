@@ -24,15 +24,12 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(buildername='test_buildername'),
   )
   yield api.test(
       'enable_ats',
-      api.properties(buildername='test_buildername'),
       api.goma(enable_ats=True),
   )
   yield api.test(
       'server_host',
-      api.properties(buildername='test_buildername'),
       api.goma(server_host="goma.chromium.org", rpc_extra_params="?prod"),
   )
