@@ -10,6 +10,7 @@ import copy
 import json
 import logging
 import os
+import platform
 import psutil
 import stat
 import subprocess
@@ -19,6 +20,8 @@ import zlib
 
 import aggregation_util
 import repository_util
+
+IS_WIN = platform.system() == 'Windows'
 
 
 def _extract_coverage_info(segments):
@@ -317,17 +320,28 @@ def _show_system_resource_usage(proc):
     logging.info('Thread numbers: %d', proc.num_threads())
 
     p_mem = proc.memory_info()
-    logging.info('llvm-cov Memory: '
-                 'RSS=%s,  VMS=%s, shared=%s', bytes_to_gb(p_mem.rss),
-                 bytes_to_gb(p_mem.vms), bytes_to_gb(p_mem.shared))
+    if IS_WIN:
+      logging.info('llvm-cov Memory: '
+                   'RSS=%s,  VMS=%s', bytes_to_gb(p_mem.rss),
+                   bytes_to_gb(p_mem.vms))
+    else:
+      logging.info('llvm-cov Memory: '
+                   'RSS=%s,  VMS=%s, shared=%s', bytes_to_gb(p_mem.rss),
+                   bytes_to_gb(p_mem.vms), bytes_to_gb(p_mem.shared))
 
     os_vm = psutil.virtual_memory()
-    logging.info(
-        'OS virtual Memory: '
-        'available=%s, used=%s, free=%s, cached=%s, shared=%s',
-        bytes_to_gb(os_vm.available), bytes_to_gb(os_vm.used),
-        bytes_to_gb(os_vm.free), bytes_to_gb(os_vm.cached),
-        bytes_to_gb(os_vm.shared))
+    if IS_WIN:
+      logging.info('OS virtual Memory: '
+                   'available=%s, used=%s, free=%s',
+                   bytes_to_gb(os_vm.available), bytes_to_gb(os_vm.used),
+                   bytes_to_gb(os_vm.free))
+    else:
+      logging.info(
+          'OS virtual Memory: '
+          'available=%s, used=%s, free=%s, cached=%s, shared=%s',
+          bytes_to_gb(os_vm.available), bytes_to_gb(os_vm.used),
+          bytes_to_gb(os_vm.free), bytes_to_gb(os_vm.cached),
+          bytes_to_gb(os_vm.shared))
 
     os_sm = psutil.swap_memory()
     logging.info('OS swap: '
