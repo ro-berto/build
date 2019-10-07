@@ -268,11 +268,11 @@ def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
           name='upload %s' % remote_name)
 
 
-def UploadDartPackage(api, package_name, parent_dir):
+def UploadDartPackage(api, package_name):
   UploadFolder(
       api,
       'UploadDartPackage %s' % package_name,  # dir_label
-      parent_dir,
+      'src/out/android_debug/dist/packages',  # parent_dir
       package_name,  # folder_name
       "%s.zip" % package_name)  # zip_name
 
@@ -420,7 +420,7 @@ def BuildLinuxAndroid(api, swarming_task_id):
     ], swarming_task_id)
 
     Build(api, 'android_debug', ':dist')
-    UploadDartPackage(api, 'sky_engine', 'src/out/android_debug/dist/packages')
+    UploadDartPackage(api, 'sky_engine')
     BuildJavadoc(api)
 
   if api.properties.get('build_android_vulkan', True):
@@ -545,13 +545,6 @@ def BuildLinux(api):
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
   UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
-
-  UploadDartPackage(api, 'vm', 'src/out/host_debug/gen/dart-pkg')
-  UploadDartPackage(api, 'front_end', 'src/out/host_debug/gen/dart-pkg')
-  UploadDartPackage(api, 'kernel', 'src/out/host_debug/gen/dart-pkg')
-  UploadDartPackage(api, 'build_integration', 'src/out/host_debug/gen/dart-pkg')
-  UploadDartPackage(api, 'frontend_server', 'src/out/host_debug/gen/dart-pkg')
-  UploadDartPackage(api, 'dev_compiler', 'src/out/host_debug/gen/dart-pkg')
 
 
 def GetFuchsiaBuildId(api):
