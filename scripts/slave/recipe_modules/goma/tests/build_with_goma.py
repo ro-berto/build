@@ -3,10 +3,11 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'goma',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/step',
+    'goma',
+    'recipe_engine/buildbucket',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/step',
 ]
 
 
@@ -24,12 +25,15 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
+      api.buildbucket.ci_build(),
   )
   yield api.test(
       'enable_ats',
       api.goma(enable_ats=True),
+      api.buildbucket.ci_build(),
   )
   yield api.test(
       'server_host',
       api.goma(server_host="goma.chromium.org", rpc_extra_params="?prod"),
+      api.buildbucket.ci_build(),
   )

@@ -6,13 +6,14 @@ import json
 import re
 
 DEPS = [
-  'goma',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
+    'goma',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 from recipe_engine import post_process
@@ -47,7 +48,6 @@ def GenTests(api):
       'ninja_log_outdir': 'out/Release',
       'ninja_log_compiler': 'goma',
       'build_data_dir': 'build_data_dir',
-      'buildbucket': json.dumps({'build': {'id': 1}}),
   }
 
   for platform in ('linux', 'win', 'mac'):
@@ -55,6 +55,7 @@ def GenTests(api):
         platform,
         api.platform.name(platform),
         api.properties.generic(**properties),
+        api.buildbucket.ci_build(),
     )
 
   yield api.test(
@@ -62,6 +63,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.properties.generic(**properties),
       api.goma(jobs=80),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -69,6 +71,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.properties.generic(**properties),
       api.goma(jobs=80, debug=True),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -76,6 +79,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.step_data('ninja', retcode=1),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -83,6 +87,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.step_data('preprocess_for_goma.start_goma', retcode=1),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -90,6 +95,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.step_data('postprocess_for_goma.stop_goma', retcode=1),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -97,6 +103,7 @@ def GenTests(api):
       api.platform.name('linux'),
       api.properties(custom_tmp_dir='/tmp/goma_goma_module'),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -105,6 +112,7 @@ def GenTests(api):
       api.step_data('postprocess_for_goma.goma_jsonstatus',
                     api.json.output(data=None)),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -114,6 +122,7 @@ def GenTests(api):
           "local": "[START_DIR]/goma",
       }}),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -121,6 +130,7 @@ def GenTests(api):
       api.platform.name('win'),
       api.properties(client_type='candidate'),
       api.properties.generic(**properties),
+      api.buildbucket.ci_build(),
   )
 
   yield api.test(
@@ -131,4 +141,5 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'ensure_goma'),
       api.post_process(post_process.StepTextContains, 'ensure_goma',
                        ['latest']),
+      api.buildbucket.ci_build(),
   )

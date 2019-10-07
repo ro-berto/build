@@ -45,7 +45,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data"
+      "[CACHE]/goma/data/builder"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -62,7 +62,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -122,7 +122,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -154,7 +154,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -175,7 +175,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -216,9 +216,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}",
-      "--is-luci"
+      "{\"bucket\": \"ci\", \"builder\": \"builder\", \"project\": \"project\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "builder"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
