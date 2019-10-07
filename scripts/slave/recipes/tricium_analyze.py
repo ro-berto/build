@@ -3,11 +3,11 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine.types import freeze
 
 DEPS = [
     'chromium',
     'chromium_checkout',
+    'goma',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/gerrit',
@@ -65,6 +65,7 @@ def _add_clang_tidy_comments(api, file_paths):
         '--findings_file=%s' % warnings_file,
         '--clang_tidy_binary=%s' % clang_tidy_location,
         '--base_path=%s' % api.context.cwd,
+        '--ninja_jobs=%s' % api.goma.recommended_goma_jobs,
         '--verbose',
         '--',
     ]
@@ -150,6 +151,7 @@ def RunSteps(api):
 
       if tidyable_paths:
         api.chromium.ensure_goma()
+        api.goma.start()
         api.chromium.mb_gen(mastername, buildername)
 
         with api.step.nest('clang-tidy'):

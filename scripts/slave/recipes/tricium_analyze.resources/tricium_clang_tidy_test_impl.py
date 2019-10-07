@@ -20,11 +20,16 @@ import unittest
 import tricium_clang_tidy as tidy
 
 
-def _parse_fixes_file_text(line_offsets, contents_text):
+def _parse_fixes_file_text(line_offsets,
+                           contents_text,
+                           tidy_invocation_dir='/tidy/dir'):
   if sys.version_info[0] == 2 and isinstance(contents_text, str):
     contents_text = unicode(contents_text)
   return list(
-      tidy._parse_tidy_fixes_file(line_offsets, io.StringIO(contents_text)))
+      tidy._parse_tidy_fixes_file(
+          line_offsets,
+          io.StringIO(contents_text),
+          tidy_invocation_dir=tidy_invocation_dir))
 
 
 class _SilencingFilter(object):
@@ -59,16 +64,22 @@ class Tests(unittest.TestCase):
     no_offsets = tidy._LineOffsetMap.for_text('')
     self.assertEqual(_parse_fixes_file_text(no_offsets, ''), [])
 
+    tidy_invocation_dir = '/tidy'
     input_file = tidy._LineOffsetMap.for_text('a\nb')
     tidy_diags = [
         tidy._TidyDiagnostic(
-            file_path='foo1', line_number=1, diag_name='-Wfoo1',
+            file_path='/foo1',
+            line_number=1,
+            diag_name='-Wfoo1',
             message='foo1'),
         tidy._TidyDiagnostic(
-            file_path='foo2', line_number=1, diag_name='-Wfoo2',
+            file_path='/foo2',
+            line_number=1,
+            diag_name='-Wfoo2',
             message='foo2'),
         tidy._TidyDiagnostic(
-            file_path='foo3', line_number=2, diag_name='-Wfoo3', message='foo3')
+            file_path='foo3', line_number=2, diag_name='-Wfoo3',
+            message='foo3'),
     ]
 
     diagnostics = [{
@@ -84,9 +95,11 @@ class Tests(unittest.TestCase):
         'Diagnostics': diagnostics,
     }
 
+    tidy_diags[-1] = tidy_diags[-1]._replace(file_path='/tidy/foo3')
     # YAML doesn't have a dumps() on my local machine; JSON's easiest.
     self.assertEqual(
-        _parse_fixes_file_text(input_file, json.dumps(inputs)), tidy_diags)
+        _parse_fixes_file_text(input_file, json.dumps(inputs),
+                               tidy_invocation_dir), tidy_diags)
 
   def test_generate_tidy_actions_actually_builds_everything(self):
     chunk_size = 2
@@ -305,6 +318,9 @@ class Tests(unittest.TestCase):
     self.assertListEqual(
         list(tidy._normalize_paths_to_base(input_list, base)), [
             'bar',
+            None,
+            None,
+            None,
         ])
 
     input_list = [
@@ -326,6 +342,7 @@ class Tests(unittest.TestCase):
                 line_number=1,
                 diag_name='foo',
                 message='aaaaa'),
+            None,
         ])
 
 

@@ -121,7 +121,9 @@ class _LineOffsetMap(object):
     return _LineOffsetMap([m.start() for m in re.finditer(r'\n', data)])
 
 
-def _parse_tidy_fixes_file(line_offsets, stream):
+def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
+  assert os.path.isabs(tidy_invocation_dir)
+
   try:
     findings = yaml.load(stream)
   except yaml.parser.ParserError as v:
@@ -135,10 +137,17 @@ def _parse_tidy_fixes_file(line_offsets, stream):
       message = diag['DiagnosticMessage']
       line_number = line_offsets.get_line_number(message['FileOffset'])
 
+      file_path = message['FilePath']
+      # Rarely (e.g., in the case of missing `#include`s, clang will emit
+      # relative file paths for diagnostics. Fix those here.
+      if not os.path.isabs(file_path):
+        file_path = os.path.abspath(
+            os.path.join(tidy_invocation_dir, file_path))
+
       yield _TidyDiagnostic(
           diag_name=diag['DiagnosticName'],
           message=message['Message'],
-          file_path=message['FilePath'],
+          file_path=file_path,
           line_number=line_number,
       )
   except KeyError as k:
@@ -215,7 +224,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
     tidy_exited_regularly = return_code == 0
     try:
       with open(findings_file) as f:
-        findings = list(_parse_tidy_fixes_file(line_offsets, f))
+        findings = list(_parse_tidy_fixes_file(line_offsets, f, in_dir))
     except IOError as e:
       # If tidy died (crashed), it might not have created a file for us.
       if e.errno != errno.ENOENT or tidy_exited_regularly:
@@ -490,15 +499,15 @@ def _normalize_path_to_base(path, base):
 
 
 def _normalize_paths_to_base(paths, base):
-  normalized = (_normalize_path_to_base(p, base) for p in paths)
-  return (x for x in normalized if x is not None)
+  return [_normalize_path_to_base(p, base) for p in paths]
 
 
 def _normalize_diags_to_base(diags, base):
   normalized = (_normalize_path_to_base(d.file_path, base) for d in diags)
-  return (diag._replace(file_path=n)
-          for diag, n in zip(diags, normalized)
-          if n is not None)
+  return [
+      None if n is None else diag._replace(file_path=n)
+      for diag, n in zip(diags, normalized)
+  ]
 
 
 def main():
@@ -532,7 +541,7 @@ def main():
       '--clang_tidy_binary', required=True, help='Path to clang-tidy')
   args = parser.parse_args()
 
-  base_path = os.path.abspath(args.base_path)
+  base_path = os.path.realpath(args.base_path)
 
   # Mututally exclusive arg groups apparently don't like positional args, so
   # emulate that here.
@@ -552,7 +561,7 @@ def main():
   if args.all:
     only_cc_files = None
   else:
-    only_cc_files = [os.path.abspath(f) for f in args.cc_file]
+    only_cc_files = [os.path.realpath(f) for f in args.cc_file]
 
     if len(set(only_cc_files)) != len(only_cc_files):
       sys.exit('Multiple identical cc_files given. This is unsupported.')
@@ -594,6 +603,13 @@ def main():
 
   findings = _filter_invalid_findings(findings)
 
+  def logged_normalize(normalize_fn, thing, thing_name):
+    after = normalize_fn(thing, base_path)
+    removed = [old for old, new in zip(thing, after) if new is None]
+    logging.info('Dropped %d elements from %r during path normalization: %s',
+                 len(removed), thing_name, removed)
+    return sorted(x for x in after if x is not None)
+
   # This is the object that we ship to Tricium. Comments are overdescriptive
   # so that people don't have to reason about code above in order to
   # understand what each piece of this is.
@@ -605,19 +621,21 @@ def main():
       # This could indicate that we're going to provide incomplete or incorrect
       # diagnostics, since e.g. generated headers may be missing.
       'failed_cc_files':
-          sorted(_normalize_paths_to_base(failed_cc_files, base_path)),
+          logged_normalize(_normalize_paths_to_base, failed_cc_files,
+                           'failed_cc_files'),
 
       # A list of .cc files that we failed to tidy due to internal timeouts.
       # This should hopefully never happen, but it's *probably* good to know
       # when it's the case.
       'timed_out_cc_files':
-          sorted(_normalize_paths_to_base(timed_out_cc_files, base_path)),
+          logged_normalize(_normalize_paths_to_base, timed_out_cc_files,
+                           'timed_out_cc_files'),
 
       # A list of all of the diagnostics we've seen in this run. They're
       # instances of `_TidyDiagnostic`.
       'diagnostics': [
-          x._asdict()
-          for x in sorted(_normalize_diags_to_base(findings, base_path))
+          x._asdict() for x in logged_normalize(_normalize_diags_to_base,
+                                                findings, 'findings')
       ],
   }
 
