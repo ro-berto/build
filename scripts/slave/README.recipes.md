@@ -4891,38 +4891,38 @@ world-readable cloud location.
 
 &mdash; **def [BuildAndTestFuchsia](/scripts/slave/recipes/flutter/engine.py#143)(api, build_script, git_rev):**
 
-&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#656)(api):**
+&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#657)(api):**
 
 This schedules release and profile builds for x64 and arm64 on other bots,
 and then builds the x64 and arm64 runners (which do not require LTO and thus
 are faster to build). On Linux, we also run tests for the runner against x64,
 and if they fail we cancel the scheduled builds.
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#925)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#926)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1058)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1059)(api):**
 
-&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#511)(api):**
+&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#512)(api):**
 
 &mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#373)(api, swarming_task_id):**
 
-&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#738)(api):**
+&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#739)(api):**
 
 &mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#73)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1088)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1089)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#976)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#977)(api):**
 
 &mdash; **def [CancelBuilds](/scripts/slave/recipes/flutter/engine.py#99)(api, builds):**
 
 &mdash; **def [CollectBuilds](/scripts/slave/recipes/flutter/engine.py#104)(api, builds):**
 
-&mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#559)(api, target_dir, bucket_name, build_id, image_name):**
+&mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#560)(api, target_dir, bucket_name, build_id, image_name):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1105)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1106)(api):**
 
 &mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#48)(api):**
 
@@ -4932,15 +4932,15 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [GetFlutterFuchsiaBuildTargets](/scripts/slave/recipes/flutter/engine.py#108)(product, include_test_targets=False):**
 
-&mdash; **def [GetFuchsiaBuildId](/scripts/slave/recipes/flutter/engine.py#550)(api):**
+&mdash; **def [GetFuchsiaBuildId](/scripts/slave/recipes/flutter/engine.py#551)(api):**
 
 &mdash; **def [GetFuchsiaOutputDirs](/scripts/slave/recipes/flutter/engine.py#132)(product):**
 
 &mdash; **def [GetFuchsiaOutputFiles](/scripts/slave/recipes/flutter/engine.py#124)(product):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1073)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1074)(api):**
 
-&mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#581)(api, checkout, fuchsia_tools, image_name):**
+&mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#582)(api, checkout, fuchsia_tools, image_name):**
 
 Gets the system image for the current Fuchsia SDK from cloud storage, adds it
 to an isolated along with the `pm` and `dev_finder` utilities, as well as the
@@ -4949,27 +4949,27 @@ engine.resources/fuchsia-tests.sh) to drive the flutter_ctl.
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#317)(api, label):**
 
-&mdash; **def [PackageFlutterRunnerTests](/scripts/slave/recipes/flutter/engine.py#566)(api, checkout, fuchsia_tools):**
+&mdash; **def [PackageFlutterRunnerTests](/scripts/slave/recipes/flutter/engine.py#567)(api, checkout, fuchsia_tools):**
 
-&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#842)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
+&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#843)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
 
 &mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#162)(api, \*args):**
 
 &mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#169)(api, \*args):**
 
-&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#914)(api):**
+&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#915)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1126)(api, properties, env_properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1127)(api, properties, env_properties):**
 
 &mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#85)(api, out_dir, android_out_dir=None, types='all'):**
 
 &mdash; **def [ScheduleBuilds](/scripts/slave/recipes/flutter/engine.py#93)(api, builder_name, drone_props):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#731)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#732)(api):**
 
 &mdash; **def [ShouldUploadPackages](/scripts/slave/recipes/flutter/engine.py#51)(api):**
 
-&mdash; **def [TestFuchsia](/scripts/slave/recipes/flutter/engine.py#610)(api):**
+&mdash; **def [TestFuchsia](/scripts/slave/recipes/flutter/engine.py#611)(api):**
 
 Packages the flutter_runner build artifacts into a FAR, and then sends them
 and related artifacts to isolated. The isolated is used to create a swarming
@@ -4978,7 +4978,7 @@ task that:
   - Gets fuchsia_ctl from CIPD
   - Runs the script to pave, test, and reboot the Fuchsia device
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#721)(api):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#722)(api):**
 
 &mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#193)(api, platform, file_paths, archive_name='artifacts.zip'):**
 

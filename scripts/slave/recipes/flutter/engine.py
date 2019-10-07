@@ -452,6 +452,7 @@ def BuildLinuxAndroid(api, swarming_task_id):
         RunGN(api, '--android', '--runtime-mode=' + runtime_mode,
               '--android-cpu=%s' % android_cpu)
         Build(api, build_output_dir)
+        Build(api, build_output_dir, "%s/gen_snapshot" % clang_dir)
 
         if runtime_mode == 'profile' and android_cpu == 'arm64':
           checkout = GetCheckoutPath(api)
