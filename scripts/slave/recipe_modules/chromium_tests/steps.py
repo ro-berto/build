@@ -1319,7 +1319,7 @@ class JSONResultsHandler(ResultsHandler):
     for test_name, test_artifacts in artifacts.items():
       for artifact_type, artifact_paths in test_artifacts.items():
         for path in artifact_paths:
-          link_title = '%s for %s' % (artifact_type, test_name)
+          link_title = '%s produced by %s' % (artifact_type, test_name)
           if num_links < max_links:
             presentation.links[link_title] = path
           else:

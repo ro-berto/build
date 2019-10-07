@@ -69,7 +69,7 @@ def GenTests(api):
     },
   }
   basic_expectations = {
-    'somelink for test1.Test1': 'https://somesite.com',
+      'somelink produced by test1.Test1': 'https://somesite.com',
   }
 
   yield api.test(
@@ -103,7 +103,7 @@ def GenTests(api):
     bulk_artifacts.setdefault('test1', {}).setdefault(
         'Test1', {})['%d' % i] = ['https://somesite.com']
     bulk_expectations[bulk_log_title].append(
-        '%d for test1.Test1: https://somesite.com' % i)
+        '%d produced by test1.Test1: https://somesite.com' % i)
 
   yield api.test(
       'bulk_log',
@@ -168,7 +168,7 @@ def GenTests(api):
     },
   }
   http_expectations = {
-    'anotherlink for test1.Test1': 'https://somesite.com',
+      'anotherlink produced by test1.Test1': 'https://somesite.com',
   }
   http_missing_links = ['badsite']
 
