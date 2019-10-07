@@ -185,10 +185,10 @@ def RunSteps(api):
 
 def GenTests(api):
   for package_name in INSTALL_PKGS:
-    yield (
-        api.test(package_name) +
-        api.properties(package_name=package_name) +
-        api.buildbucket.ci_build(git_ref='refs/heads/master')
-        )
+    yield api.test(
+        package_name,
+        api.properties(package_name=package_name),
+        api.buildbucket.ci_build(git_ref='refs/heads/master'),
+    )
 
 # vim: ts=2 sw=2

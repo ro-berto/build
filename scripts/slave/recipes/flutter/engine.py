@@ -1195,108 +1195,129 @@ def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
     for should_upload in (True, False):
       for maven_or_bitcode in (True, False):
-        test = (
-          api.test('%s%s%s' % (platform, '_upload' if should_upload else '',
-              '_maven_or_bitcode' if maven_or_bitcode else '')) +
-          api.platform(platform, 64) +
-          api.buildbucket.ci_build(
-            builder='%s Engine' % platform.capitalize(),
+        test = api.test(
+            '%s%s%s' % (platform, '_upload' if should_upload else '',
+                        '_maven_or_bitcode' if maven_or_bitcode else ''),
+            api.platform(platform, 64),
+            api.buildbucket.ci_build(
+                builder='%s Engine' % platform.capitalize(),
+                git_repo=GIT_REPO,
+                project='flutter',
+            ),
+            api.properties(
+                InputProperties(
+                    clobber=False,
+                    goma_jobs='1024',
+                    fuchsia_ctl_version='version:0.0.2',
+                    build_host=True,
+                    build_fuchsia=True,
+                    build_android_aot=True,
+                    build_android_debug=True,
+                    build_android_vulkan=True,
+                    no_maven=maven_or_bitcode,
+                    upload_packages=should_upload,
+                    android_sdk_license='android_sdk_hash',
+                    android_sdk_preview_license='android_sdk_preview_hash',
+                ),),
+            api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef')),
+        )
+        if platform != 'win':
+          test += collect_build_output
+        if platform == 'mac':
+          test += (
+              api.properties(
+                  InputProperties(
+                      jazzy_version='0.8.4',
+                      build_ios=True,
+                      no_bitcode=maven_or_bitcode)))
+        yield test
+
+  for should_upload in (True, False):
+    yield api.test(
+        'experimental%s' % ('_upload' if should_upload else ''),
+        api.buildbucket.ci_build(
+            builder='Linux Engine',
             git_repo=GIT_REPO,
             project='flutter',
-          ) +
-          api.properties(
+        ),
+        collect_build_output,
+        api.runtime(is_luci=True, is_experimental=True),
+        api.properties(
             InputProperties(
-              clobber=False,
-              goma_jobs='1024',
+                goma_jobs='1024',
+                fuchsia_ctl_version='version:0.0.2',
+                android_sdk_license='android_sdk_hash',
+                android_sdk_preview_license='android_sdk_preview_hash',
+                upload_packages=should_upload,
+            )),
+    )
+  yield api.test(
+      'clobber',
+      api.buildbucket.ci_build(
+          builder='Linux Host Engine',
+          git_repo='https://github.com/flutter/engine',
+          project='flutter'),
+      collect_build_output,
+      api.runtime(is_luci=True, is_experimental=True),
+      api.properties(
+          InputProperties(
+              clobber=True,
+              git_url='https://github.com/flutter/engine',
+              goma_jobs='200',
+              git_ref='refs/pull/1/head',
               fuchsia_ctl_version='version:0.0.2',
               build_host=True,
               build_fuchsia=True,
               build_android_aot=True,
               build_android_debug=True,
               build_android_vulkan=True,
-              no_maven=maven_or_bitcode,
-              upload_packages=should_upload,
               android_sdk_license='android_sdk_hash',
-              android_sdk_preview_license='android_sdk_preview_hash',
-            ),
-          ) +
-          api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef'))
-        )
-        if platform != 'win':
-          test += collect_build_output
-        if platform == 'mac':
-          test += (api.properties(InputProperties(jazzy_version='0.8.4',
-              build_ios=True, no_bitcode=maven_or_bitcode)))
-        yield test
-
-  for should_upload in (True, False):
-    yield (api.test('experimental%s' % ('_upload' if should_upload else '')) +
-           api.buildbucket.ci_build(
-               builder='Linux Engine',
-               git_repo=GIT_REPO,
-               project='flutter',
-           ) + collect_build_output + api.runtime(
-               is_luci=True, is_experimental=True) + api.properties(
-                   InputProperties(
-                       goma_jobs='1024',
-                       fuchsia_ctl_version='version:0.0.2',
-                       android_sdk_license='android_sdk_hash',
-                       android_sdk_preview_license='android_sdk_preview_hash',
-                       upload_packages=should_upload,
-                   )))
-  yield (api.test('clobber') + api.buildbucket.ci_build(
-      builder='Linux Host Engine',
-      git_repo='https://github.com/flutter/engine',
-      project='flutter') + collect_build_output + api.runtime(
-          is_luci=True, is_experimental=True) + api.properties(
-              InputProperties(
-                  clobber=True,
-                  git_url='https://github.com/flutter/engine',
-                  goma_jobs='200',
-                  git_ref='refs/pull/1/head',
-                  fuchsia_ctl_version='version:0.0.2',
-                  build_host=True,
-                  build_fuchsia=True,
-                  build_android_aot=True,
-                  build_android_debug=True,
-                  build_android_vulkan=True,
-                  android_sdk_license='android_sdk_hash',
-                  android_sdk_preview_license='android_sdk_preview_hash')))
-  yield (api.test('pull_request') + api.buildbucket.ci_build(
-      builder='Linux Host Engine',
-      git_repo='https://github.com/flutter/engine',
-      project='flutter') + collect_build_output + api.runtime(
-          is_luci=True, is_experimental=True) + api.properties(
-              InputProperties(
-                  clobber=False,
-                  git_url='https://github.com/flutter/engine',
-                  goma_jobs='200',
-                  git_ref='refs/pull/1/head',
-                  fuchsia_ctl_version='version:0.0.2',
-                  build_host=True,
-                  build_fuchsia=True,
-                  build_android_aot=True,
-                  build_android_debug=True,
-                  build_android_vulkan=True,
-                  android_sdk_license='android_sdk_hash',
-                  android_sdk_preview_license='android_sdk_preview_hash')))
-  yield (api.test('Linux Fuchsia failing test') + api.platform(
-      'linux', 64) + api.buildbucket.ci_build(
-          builder='Linux Engine', git_repo=GIT_REPO,
-          project='flutter') + api.step_data(
-              'gn --fuchsia --fuchsia-cpu x64 --runtime-mode debug --no-lto',
-              retcode=1) + api.properties(
-                  InputProperties(
-                      clobber=False,
-                      goma_jobs='1024',
-                      fuchsia_ctl_version='version:0.0.2',
-                      build_host=False,
-                      build_fuchsia=True,
-                      build_android_aot=False,
-                      build_android_debug=False,
-                      build_android_vulkan=False,
-                      no_maven=False,
-                      upload_packages=True,
-                      android_sdk_license='android_sdk_hash',
-                      android_sdk_preview_license='android_sdk_preview_hash')) +
-         api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef')))
+              android_sdk_preview_license='android_sdk_preview_hash')),
+  )
+  yield api.test(
+      'pull_request',
+      api.buildbucket.ci_build(
+          builder='Linux Host Engine',
+          git_repo='https://github.com/flutter/engine',
+          project='flutter'),
+      collect_build_output,
+      api.runtime(is_luci=True, is_experimental=True),
+      api.properties(
+          InputProperties(
+              clobber=False,
+              git_url='https://github.com/flutter/engine',
+              goma_jobs='200',
+              git_ref='refs/pull/1/head',
+              fuchsia_ctl_version='version:0.0.2',
+              build_host=True,
+              build_fuchsia=True,
+              build_android_aot=True,
+              build_android_debug=True,
+              build_android_vulkan=True,
+              android_sdk_license='android_sdk_hash',
+              android_sdk_preview_license='android_sdk_preview_hash')),
+  )
+  yield api.test(
+      'Linux Fuchsia failing test',
+      api.platform('linux', 64),
+      api.buildbucket.ci_build(
+          builder='Linux Engine', git_repo=GIT_REPO, project='flutter'),
+      api.step_data(
+          'gn --fuchsia --fuchsia-cpu x64 --runtime-mode debug --no-lto',
+          retcode=1),
+      api.properties(
+          InputProperties(
+              clobber=False,
+              goma_jobs='1024',
+              fuchsia_ctl_version='version:0.0.2',
+              build_host=False,
+              build_fuchsia=True,
+              build_android_aot=False,
+              build_android_debug=False,
+              build_android_vulkan=False,
+              no_maven=False,
+              upload_packages=True,
+              android_sdk_license='android_sdk_hash',
+              android_sdk_preview_license='android_sdk_preview_hash')),
+      api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef')),
+  )

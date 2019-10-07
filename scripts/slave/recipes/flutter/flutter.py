@@ -41,7 +41,8 @@ def _PlatformSDK(api):
     yield
   elif api.platform.is_linux:
     with InstallOpenJDK(api):
-        yield
+      yield
+
 
 @contextmanager
 def Install7za(api):
@@ -245,30 +246,35 @@ def RunSteps(api):
 def GenTests(api):
   for experimental in (True, False):
     for should_upload in (True, False):
-      yield (api.test('linux_master_coverage_%s%s' % (
-                          '_experimental' if experimental else '',
-                          '_upload' if should_upload else '')) +
-         api.runtime(is_luci=True, is_experimental=experimental) +
-         api.properties(shard='coverage',
-                        coveralls_lcov_version='5.1.0',
-                        upload_packages=should_upload))
+      yield api.test(
+          'linux_master_coverage_%s%s' %
+          ('_experimental' if experimental else '',
+           '_upload' if should_upload else ''),
+          api.runtime(is_luci=True, is_experimental=experimental),
+          api.properties(
+              shard='coverage',
+              coveralls_lcov_version='5.1.0',
+              upload_packages=should_upload),
+      )
       for platform in ('mac', 'linux', 'win'):
         for branch in ('master', 'dev', 'beta', 'stable'):
           git_ref = 'refs/heads/' + branch
-          test = (
-              api.test('%s_%s%s%s' % (platform, branch,
-                                    '_experimental' if experimental else '',
-                                    '_upload' if should_upload else '')) +
-              api.platform(platform, 64) +
-              api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-              api.properties(shard='tests',
-                             upload_packages=should_upload) +
-              api.runtime(is_luci=True, is_experimental=experimental))
+          test = api.test(
+              '%s_%s%s%s' % (platform, branch, '_experimental' if experimental
+                             else '', '_upload' if should_upload else ''),
+              api.platform(platform, 64),
+              api.buildbucket.ci_build(git_ref=git_ref, revision=None),
+              api.properties(shard='tests', upload_packages=should_upload),
+              api.runtime(is_luci=True, is_experimental=experimental),
+          )
           yield test
 
-  yield (api.test('pull_request') +
-         api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(git_url = 'https://github.com/flutter/flutter',
-                        git_ref = 'refs/pull/1/head',
-                        shard = 'tests',
-                        should_upload=False))
+  yield api.test(
+      'pull_request',
+      api.runtime(is_luci=True, is_experimental=True),
+      api.properties(
+          git_url='https://github.com/flutter/flutter',
+          git_ref='refs/pull/1/head',
+          shard='tests',
+          should_upload=False),
+  )
