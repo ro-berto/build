@@ -225,7 +225,6 @@ def _BuildChromiumFromSource(api, test_root):
     raw_result = api.chromium_tests.run_mb_and_compile(
       compile_targets,
       isolated_targets=[],
-      mb_config_path=test_root.join('infra', 'config.pyl'),
       name_suffix=' (with patch)')
 
   return api.chromium.output_dir, raw_result
