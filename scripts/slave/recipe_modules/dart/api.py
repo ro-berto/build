@@ -723,12 +723,11 @@ class DartApi(recipe_api.RecipeApi):
       builder_fragments,
       ['debug', 'release', 'product'],
       'release')
-    arch = self._get_option(
-      builder_fragments,
-      ['ia32', 'x64', 'arm', 'armv6', 'armv5te', 'arm64', 'simarm', 'simarmv6',
-      'simarmv5te', 'simarm64', 'simdbc', 'simdbc64', 'armsimdbc',
-      'armsimdbc64', 'simarm_x64'],
-      'x64')
+    arch = self._get_option(builder_fragments, [
+        'ia32', 'x64', 'arm', 'armv6', 'armv5te', 'arm64', 'arm_x64', 'simarm',
+        'simarmv6', 'simarmv5te', 'simarm64', 'simdbc', 'simdbc64', 'armsimdbc',
+        'armsimdbc64', 'simarm_x64'
+    ], 'x64')
     runtime = self._get_option(
       builder_fragments,
       ['none', 'd8', 'jsshell', 'edge', 'ie11', 'firefox', 'safari', 'chrome'],
@@ -1041,6 +1040,8 @@ class DartApi(recipe_api.RecipeApi):
         cpu = arch if arch.startswith('arm') else 'x86-64'
         # armsimdbc64 -> arm64 because simdbc isn't a real architecture.
         cpu = cpu.replace('simdbc', '')
+        # arm_x64 -> arm (x64 gen_snapshot creating 32bit arm code).
+        cpu = cpu.replace('_x64', '')
         step.tasks += self.shard(step_name, step.isolate_hash,
                                   xvfb_cmd + [script] + args,
                                   num_shards=shards,
