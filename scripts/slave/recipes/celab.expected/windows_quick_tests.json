@@ -285,7 +285,7 @@
       "-u",
       "run_tests.py",
       "--tests",
-      "sample.test",
+      "sample.test.*",
       "--hosts",
       "[START_DIR]\\hosts",
       "--test_py",
@@ -296,7 +296,11 @@
       "[START_DIR]\\logs",
       "--noprogress",
       "-v",
-      "1"
+      "1",
+      "--include",
+      "quick_test",
+      "--exclude",
+      "long_test"
     ],
     "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\test",
     "env_suffixes": {

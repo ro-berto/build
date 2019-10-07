@@ -297,6 +297,14 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
     if test_py_args:
       extra_args += ['--test_py_args=%s' % test_py_args]
 
+    include_tests = api.properties.get('include')
+    if include_tests:
+      extra_args += ['--include', include_tests]
+
+    exclude_tests = api.properties.get('exclude')
+    if exclude_tests:
+      extra_args += ['--exclude', exclude_tests]
+
     try:
       api.python('run all tests',
         'run_tests.py',
@@ -475,7 +483,12 @@ def GenTests(api):
   )
   yield api.test(
       'windows_quick_tests',
-      api.properties(tests='sample.test', pool_name='celab-try', pool_size=5),
+      api.properties(
+          tests='sample.test.*',
+          include='quick_test',
+          exclude='long_test',
+          pool_name='celab-try',
+          pool_size=5),
       api.platform('win', 64),
       api.buildbucket.ci_build(
           project='celab',
