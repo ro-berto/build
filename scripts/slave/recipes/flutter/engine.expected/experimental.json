@@ -12341,7 +12341,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/fuchsia_bucket/flutter/x64/debug/aot/flutter_aot_runner-0.far",
+      "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_aot_runner-0.far",
       "[CLEANUP]/tmp_tmp_40"
     ],
     "cwd": "[CACHE]/builder",

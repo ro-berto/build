@@ -564,8 +564,8 @@ def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
       api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
       api.file.copy(
           'Copy flutter_runner far',
-          checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
-                        'aot', 'flutter_aot_runner-0.far'), isolated_dir)
+          checkout.join('out', 'fuchsia_debug_x64', 'flutter_aot_runner-0.far'),
+          isolated_dir)
       api.file.copy(
           'Copy flutter_runner_tests far',
           checkout.join('out', 'fuchsia_debug_x64',
