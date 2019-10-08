@@ -153,7 +153,7 @@
   {
     "cmd": [
       "echo",
-      "ios-usb-dependencies/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip"
+      "ios-usb-dependencies/unsigned/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip"
     ],
     "name": "cloud path"
   },
@@ -167,12 +167,12 @@
       "----",
       "cp",
       "[START_DIR]/zips/usbmuxd-flutter.zip",
-      "gs://flutter_infra/ios-usb-dependencies/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip"
+      "gs://flutter_infra/ios-usb-dependencies/unsigned/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload of usbmuxd-flutter.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@usbmuxd-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip@@@"
+      "@@@STEP_LINK@usbmuxd-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/unsigned/usbmuxd/2d72510e447ab60a9728aeea2362d8be2cbd7789/usbmuxd.zip@@@"
     ]
   },
   {

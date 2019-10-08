@@ -153,7 +153,7 @@
   {
     "cmd": [
       "echo",
-      "ios-usb-dependencies/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip"
+      "ios-usb-dependencies/unsigned/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip"
     ],
     "name": "cloud path"
   },
@@ -167,12 +167,12 @@
       "----",
       "cp",
       "[START_DIR]/zips/openssl-flutter.zip",
-      "gs://flutter_infra/ios-usb-dependencies/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip"
+      "gs://flutter_infra/ios-usb-dependencies/unsigned/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload of openssl-flutter.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@openssl-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip@@@"
+      "@@@STEP_LINK@openssl-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/unsigned/openssl/2d72510e447ab60a9728aeea2362d8be2cbd7789/openssl.zip@@@"
     ]
   },
   {

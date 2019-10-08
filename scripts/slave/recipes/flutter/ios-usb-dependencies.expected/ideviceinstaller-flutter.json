@@ -139,7 +139,7 @@
   {
     "cmd": [
       "echo",
-      "ios-usb-dependencies/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip"
+      "ios-usb-dependencies/unsigned/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip"
     ],
     "name": "cloud path"
   },
@@ -153,12 +153,12 @@
       "----",
       "cp",
       "[START_DIR]/zips/ideviceinstaller-flutter.zip",
-      "gs://flutter_infra/ios-usb-dependencies/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip"
+      "gs://flutter_infra/ios-usb-dependencies/unsigned/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload of ideviceinstaller-flutter.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@ideviceinstaller-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip@@@"
+      "@@@STEP_LINK@ideviceinstaller-flutter.zip@https://storage.cloud.google.com/flutter_infra/ios-usb-dependencies/unsigned/ideviceinstaller/2d72510e447ab60a9728aeea2362d8be2cbd7789/ideviceinstaller.zip@@@"
     ]
   },
   {

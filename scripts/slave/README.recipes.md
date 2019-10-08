@@ -5035,25 +5035,27 @@ Uploads the Flutter coverage output to cloud storage and Coveralls.
 
 [DEPS](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#7): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [CopyDeliverable](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#135)(api, deliverable, name, output_path):**
+&mdash; **def [CopyDeliverable](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#136)(api, deliverable, name, output_path):**
 
 &mdash; **def [GetBrewBin](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#102)(api):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#115)(api, package_name):**
 
-&mdash; **def [GetCommitHash](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#123)(api):**
+Location of cloud bucket for unsigned binaries
+
+&mdash; **def [GetCommitHash](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#124)(api):**
 
 &mdash; **def [GetLocalPath](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#112)(api, package_name):**
 
 &mdash; **def [InstallHomebrew](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#84)(api, homebrew_dir):**
 
-&mdash; **def [InstallPackage](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#126)(api, package, name):**
+&mdash; **def [InstallPackage](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#127)(api, package, name):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#156)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#157)(api):**
 
 &mdash; **def [TapCustomBrews](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#105)(api):**
 
-&mdash; **def [ZipAndUploadDeliverables](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#142)(api, package_name, input_path, zip_out_dir):**
+&mdash; **def [ZipAndUploadDeliverables](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#143)(api, package_name, input_path, zip_out_dir):**
 ### *recipes* / [gae\_sdk:examples/full](/scripts/slave/recipe_modules/gae_sdk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/gae_sdk/examples/full.py#5): [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

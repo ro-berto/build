@@ -113,9 +113,10 @@ def GetLocalPath(api, package_name):
   return api.path['start_dir'].join('homebrew', 'opt', package_name)
 
 def GetCloudPath(api, package_name):
+  '''Location of cloud bucket for unsigned binaries'''
   commit_hash = GetCommitHash(api)
   short_name = package_name.replace('-flutter', '')
-  return 'ios-usb-dependencies/%s/%s/%s.zip' % (
+  return 'ios-usb-dependencies/unsigned/%s/%s/%s.zip' % (
       short_name,
       commit_hash,
       short_name)
