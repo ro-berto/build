@@ -105,21 +105,35 @@ def CollectBuilds(api, builds):
   return api.buildbucket.collect_builds([build.id for build in builds])
 
 
+def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
+  targets = [
+      'flutter/shell/platform/fuchsia/flutter:flutter_jit_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/flutter:flutter_aot_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/dart_runner:dart_jit_%srunner' %
+      ('product_' if product else ''),
+      'flutter/shell/platform/fuchsia/dart:kernel_compiler',
+  ]
+  if include_test_targets:
+    targets.append(
+        'flutter/shell/platform/fuchsia/flutter:flutter_runner_tests')
+  return targets
+
+
 def GetFuchsiaOutputFiles(product):
-  # TODO(dnfield): the versions here shouldn't be hard coded, but it's not clear
-  # right now what would ever cause them to change, and they're hard coded
-  # in other places. See https://github.com/flutter/flutter/issues/42017
-  # We will have to fix these and the other places where `-0.far` exist in this
-  # recipe eventually.
   return [
-      'dart_jit_%srunner-0.far' % ('product_' if product else ''),
-      'flutter_jit_%srunner-0.far' % ('product_' if product else ''),
-      'flutter_aot_%srunner-0.far' % ('product_' if product else ''),
+      'dart_jit_%srunner' % ('product_' if product else ''),
+      'flutter_jit_%srunner' % ('product_' if product else ''),
+      'flutter_aot_%srunner' % ('product_' if product else ''),
   ]
 
 
 def GetFuchsiaOutputDirs(product):
   return [
+      'dart_jit_%srunner_far' % ('product_' if product else ''),
+      'flutter_jit_%srunner_far' % ('product_' if product else ''),
+      'flutter_aot_%srunner_far' % ('product_' if product else ''),
       'dart_runner_patched_sdk',
       'flutter_runner_patched_sdk',
       'clang_x64',
@@ -129,18 +143,20 @@ def GetFuchsiaOutputDirs(product):
 def BuildAndTestFuchsia(api, build_script, git_rev):
   RunGN(api, '--fuchsia', '--fuchsia-cpu', 'x64', '--runtime-mode', 'debug',
         '--no-lto')
-  Build(api, 'fuchsia_debug_x64')
+  Build(api, 'fuchsia_debug_x64', *GetFlutterFuchsiaBuildTargets(False, True))
+
+  fuchsia_package_cmd = [
+      'python', build_script, '--engine-version', git_rev, '--skip-build',
+      '--archs', 'x64', '--runtime-mode', 'debug'
+  ]
 
   if api.platform.is_linux:
+    api.step('Package Fuchsia Artifacts', fuchsia_package_cmd)
     TestFuchsia(api)
-
-  RunGN(api, '--fuchsia', '--fuchsia-cpu', 'x64', '--runtime-mode', 'debug',
-        '--unoptimized')
-  Build(api, 'fuchsia_debug_unopt_x64')
 
   RunGN(api, '--fuchsia', '--fuchsia-cpu', 'arm64', '--runtime-mode', 'debug',
         '--no-lto')
-  Build(api, 'fuchsia_debug_arm64')
+  Build(api, 'fuchsia_debug_arm64', *GetFlutterFuchsiaBuildTargets(False, True))
 
 
 def RunGN(api, *args):
@@ -548,6 +564,21 @@ def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
                       target_dir)
 
 
+def PackageFlutterRunnerTests(api, checkout, fuchsia_tools):
+  package_cmd = [
+      checkout.join('flutter', 'tools', 'fuchsia', 'gen_package.py'),
+      '--pm-bin',
+      fuchsia_tools.join('pm'),
+      '--package-dir',
+      checkout.join('out', 'fuchsia_debug_x64', 'flutter_runner_tests_far'),
+      '--signing-key',
+      checkout.join('flutter', 'tools', 'fuchsia', 'development.key'),
+      '--far-name',
+      'flutter_runner_tests',
+  ]
+  api.step('Generate far', package_cmd)
+
+
 def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
   """
   Gets the system image for the current Fuchsia SDK from cloud storage, adds it
@@ -564,8 +595,8 @@ def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
       api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
       api.file.copy(
           'Copy flutter_runner far',
-          checkout.join('out', 'fuchsia_debug_x64', 'flutter_aot_runner-0.far'),
-          isolated_dir)
+          checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
+                        'aot', 'flutter_aot_runner-0.far'), isolated_dir)
       api.file.copy(
           'Copy flutter_runner_tests far',
           checkout.join('out', 'fuchsia_debug_x64',
@@ -577,11 +608,11 @@ def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
     isolated.add_dir(isolated_dir)
     return isolated.archive('Archive Fuchsia Test Isolate')
 
-
 def TestFuchsia(api):
   """
-  Sends the flutter_runner test artifacts, fuchsia_ctl, and the relevant system
-  image to isolated. The isolated is used to create a swarming task that:
+  Packages the flutter_runner build artifacts into a FAR, and then sends them
+  and related artifacts to isolated. The isolated is used to create a swarming
+  task that:
     - Downloads the isolated artifacts
     - Gets fuchsia_ctl from CIPD
     - Runs the script to pave, test, and reboot the Fuchsia device
@@ -590,6 +621,7 @@ def TestFuchsia(api):
   fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
   image_name = 'generic-x64.tgz'
 
+  PackageFlutterRunnerTests(api, checkout, fuchsia_tools)
   isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
       image_name)
 
@@ -646,6 +678,7 @@ def BuildFuchsia(api):
             'builds': [{
                 'gn_args': gn_args,
                 'dir': 'fuchsia_%s_%s' % (build_mode, arch),
+                'targets': GetFlutterFuchsiaBuildTargets(product),
                 'output_files': GetFuchsiaOutputFiles(product),
                 'output_dirs': GetFuchsiaOutputDirs(product),
             }]

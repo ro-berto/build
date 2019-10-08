@@ -13737,7 +13737,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_runner-0.far\", \"flutter_jit_runner-0.far\", \"flutter_aot_runner-0.far\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -13782,14 +13782,23 @@
       "@@@STEP_LOG_LINE@request@                \"profile\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_dirs\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"clang_x64\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
-      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner-0.far\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner\"@@@",
+      "@@@STEP_LOG_LINE@request@              ], @@@",
+      "@@@STEP_LOG_LINE@request@              \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"@@@",
       "@@@STEP_LOG_LINE@request@              ]@@@",
       "@@@STEP_LOG_LINE@request@            }@@@",
       "@@@STEP_LOG_LINE@request@          ]@@@",
@@ -13833,7 +13842,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (2)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_product_runner-0.far\", \"flutter_jit_product_runner-0.far\", \"flutter_aot_product_runner-0.far\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_arm64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"arm64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -13878,14 +13887,23 @@
       "@@@STEP_LOG_LINE@request@                \"release\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_dirs\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"clang_x64\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
-      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner-0.far\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner\"@@@",
+      "@@@STEP_LOG_LINE@request@              ], @@@",
+      "@@@STEP_LOG_LINE@request@              \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"@@@",
       "@@@STEP_LOG_LINE@request@              ]@@@",
       "@@@STEP_LOG_LINE@request@            }@@@",
       "@@@STEP_LOG_LINE@request@          ]@@@",
@@ -13929,7 +13947,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (3)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_runner-0.far\", \"flutter_jit_runner-0.far\", \"flutter_aot_runner-0.far\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133d\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_profile_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"profile\"], \"output_dirs\": [\"dart_jit_runner_far\", \"flutter_jit_runner_far\", \"flutter_aot_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_runner\", \"flutter_jit_runner\", \"flutter_aot_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133d\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -13974,14 +13992,23 @@
       "@@@STEP_LOG_LINE@request@                \"profile\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_dirs\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"clang_x64\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
-      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner-0.far\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_runner\"@@@",
+      "@@@STEP_LOG_LINE@request@              ], @@@",
+      "@@@STEP_LOG_LINE@request@              \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_aot_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"@@@",
       "@@@STEP_LOG_LINE@request@              ]@@@",
       "@@@STEP_LOG_LINE@request@            }@@@",
       "@@@STEP_LOG_LINE@request@          ]@@@",
@@ -14025,7 +14052,7 @@
     },
     "infra_step": true,
     "name": "buildbucket.schedule (4)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_product_runner-0.far\", \"flutter_jit_product_runner-0.far\", \"flutter_aot_product_runner-0.far\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001340\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"Linux Engine Drone\", \"project\": \"flutter\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"external/github.com/flutter/engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"builds\": [{\"dir\": \"fuchsia_release_x64\", \"gn_args\": [\"--fuchsia\", \"--fuchsia-cpu\", \"x64\", \"--runtime-mode\", \"release\"], \"output_dirs\": [\"dart_jit_product_runner_far\", \"flutter_jit_product_runner_far\", \"flutter_aot_product_runner_far\", \"dart_runner_patched_sdk\", \"flutter_runner_patched_sdk\", \"clang_x64\"], \"output_files\": [\"dart_jit_product_runner\", \"flutter_jit_product_runner\", \"flutter_aot_product_runner\"], \"targets\": [\"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"]}]}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001340\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -14070,14 +14097,23 @@
       "@@@STEP_LOG_LINE@request@                \"release\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_dirs\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner_far\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner_far\", @@@",
       "@@@STEP_LOG_LINE@request@                \"dart_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"flutter_runner_patched_sdk\", @@@",
       "@@@STEP_LOG_LINE@request@                \"clang_x64\"@@@",
       "@@@STEP_LOG_LINE@request@              ], @@@",
       "@@@STEP_LOG_LINE@request@              \"output_files\": [@@@",
-      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner-0.far\", @@@",
-      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner-0.far\"@@@",
+      "@@@STEP_LOG_LINE@request@                \"dart_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter_aot_product_runner\"@@@",
+      "@@@STEP_LOG_LINE@request@              ], @@@",
+      "@@@STEP_LOG_LINE@request@              \"targets\": [@@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/flutter:flutter_aot_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart_runner:dart_jit_product_runner\", @@@",
+      "@@@STEP_LOG_LINE@request@                \"flutter/shell/platform/fuchsia/dart:kernel_compiler\"@@@",
       "@@@STEP_LOG_LINE@request@              ]@@@",
       "@@@STEP_LOG_LINE@request@            }@@@",
       "@@@STEP_LOG_LINE@request@          ]@@@",
@@ -14244,7 +14280,12 @@
       "-j",
       "1024",
       "-C",
-      "[CACHE]/builder/src/out/fuchsia_debug_x64"
+      "[CACHE]/builder/src/out/fuchsia_debug_x64",
+      "flutter/shell/platform/fuchsia/flutter:flutter_jit_runner",
+      "flutter/shell/platform/fuchsia/flutter:flutter_aot_runner",
+      "flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner",
+      "flutter/shell/platform/fuchsia/dart:kernel_compiler",
+      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14261,7 +14302,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_x64"
+    "name": "build fuchsia_debug_x64 flutter/shell/platform/fuchsia/flutter:flutter_jit_runner flutter/shell/platform/fuchsia/flutter:flutter_aot_runner flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner flutter/shell/platform/fuchsia/dart:kernel_compiler flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
   },
   {
     "cmd": [],
@@ -14403,7 +14444,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_x64",
+      "build fuchsia_debug_x64 flutter/shell/platform/fuchsia/flutter:flutter_jit_runner flutter/shell/platform/fuchsia/flutter:flutter_aot_runner flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner flutter/shell/platform/fuchsia/dart:kernel_compiler flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -14478,6 +14519,64 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "[CACHE]/builder/src/flutter/tools/fuchsia/build_fuchsia_artifacts.py",
+      "--engine-version",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--skip-build",
+      "--archs",
+      "x64",
+      "--runtime-mode",
+      "debug"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Package Fuchsia Artifacts"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/src/flutter/tools/fuchsia/gen_package.py",
+      "--pm-bin",
+      "[CACHE]/builder/src/fuchsia/sdk/linux/tools/pm",
+      "--package-dir",
+      "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_runner_tests_far",
+      "--signing-key",
+      "[CACHE]/builder/src/flutter/tools/fuchsia/development.key",
+      "--far-name",
+      "flutter_runner_tests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Generate far"
   },
   {
     "cmd": [],
@@ -14587,7 +14686,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_aot_runner-0.far",
+      "[CACHE]/builder/src/out/fuchsia_bucket/flutter/x64/debug/aot/flutter_aot_runner-0.far",
       "[CLEANUP]/tmp_tmp_40"
     ],
     "cwd": "[CACHE]/builder",
@@ -14997,10 +15096,10 @@
       "--goma",
       "--fuchsia",
       "--fuchsia-cpu",
-      "x64",
+      "arm64",
       "--runtime-mode",
       "debug",
-      "--unoptimized"
+      "--no-lto"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -15017,7 +15116,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --fuchsia --fuchsia-cpu x64 --runtime-mode debug --unoptimized"
+    "name": "gn --fuchsia --fuchsia-cpu arm64 --runtime-mode debug --no-lto"
   },
   {
     "cmd": [],
@@ -15137,7 +15236,12 @@
       "-j",
       "1024",
       "-C",
-      "[CACHE]/builder/src/out/fuchsia_debug_unopt_x64"
+      "[CACHE]/builder/src/out/fuchsia_debug_arm64",
+      "flutter/shell/platform/fuchsia/flutter:flutter_jit_runner",
+      "flutter/shell/platform/fuchsia/flutter:flutter_aot_runner",
+      "flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner",
+      "flutter/shell/platform/fuchsia/dart:kernel_compiler",
+      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -15154,7 +15258,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_unopt_x64"
+    "name": "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia/flutter:flutter_jit_runner flutter/shell/platform/fuchsia/flutter:flutter_aot_runner flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner flutter/shell/platform/fuchsia/dart:kernel_compiler flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
   },
   {
     "cmd": [],
@@ -15296,7 +15400,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_unopt_x64",
+      "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia/flutter:flutter_jit_runner flutter/shell/platform/fuchsia/flutter:flutter_aot_runner flutter/shell/platform/fuchsia/dart_runner:dart_jit_runner flutter/shell/platform/fuchsia/dart:kernel_compiler flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -15368,388 +15472,6 @@
     },
     "infra_step": true,
     "name": "postprocess_for_goma (26).stop cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "[CACHE]/builder/src/flutter/tools/gn",
-      "--goma",
-      "--fuchsia",
-      "--fuchsia-cpu",
-      "arm64",
-      "--runtime-mode",
-      "debug",
-      "--no-lto"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gn --fuchsia --fuchsia-cpu arm64 --runtime-mode debug --no-lto"
-  },
-  {
-    "cmd": [],
-    "name": "preprocess_for_goma (27)"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/goma/data/Linux_Engine"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (27).goma cache directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (27).start_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "cloudtail",
-      "--pid-file",
-      "[TMP_BASE]/cloudtail.pid",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma (27).start cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
-      "-j",
-      "1024",
-      "-C",
-      "[CACHE]/builder/src/out/fuchsia_debug_arm64"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "build fuchsia_debug_arm64"
-  },
-  {
-    "cmd": [],
-    "name": "postprocess_for_goma (27)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (27).goma_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (27).goma_stat",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Engine",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (27).stop_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--log-url-json-file",
-      "/path/to/tmp/json",
-      "--gsutil-py-path",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "--bigquery-upload",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
-      "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
-      "--build-exit-status",
-      "0",
-      "--build-step-name",
-      "build fuchsia_debug_arm64",
-      "--goma-stats-file",
-      "[TMP_BASE]/goma_stats",
-      "--goma-counterz-file",
-      "[TMP_BASE]/goma_counterz",
-      "--goma-crash-report-id-file",
-      "[TMP_BASE]/crash_report_id",
-      "--build-id",
-      "8945511751514863184",
-      "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux Engine\", \"project\": \"flutter\"}",
-      "--is-luci",
-      "--is-experimental",
-      "--buildbot-buildername",
-      "Linux Engine"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (27).upload_log",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "postprocess_for_goma (27).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
