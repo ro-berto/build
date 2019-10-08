@@ -429,6 +429,7 @@
           "experimental_tests"
         ],
         "excluded_builders" : [
+          "ios-simulator-noncq",
           "mac-osxbeta-rel"
         ],
         "builders": {
