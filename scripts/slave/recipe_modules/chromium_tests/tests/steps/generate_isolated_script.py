@@ -138,8 +138,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
           buildnumber=1),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )
 
   yield api.test(
@@ -157,8 +162,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
       api.post_process(
           post_process.StepCommandContains, '[trigger] base_unittests',
           ['--service-account', 'test-account@serviceaccount.com']),
@@ -189,8 +199,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -217,8 +232,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -238,8 +258,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -259,8 +284,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -280,8 +310,13 @@ def GenTests(api):
               'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -306,8 +341,13 @@ def GenTests(api):
               'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -368,8 +408,13 @@ def GenTests(api):
               'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
       api.post_process(
           post_process.Filter(
               # Ensure that we still pass the full step name to the test result
@@ -394,8 +439,13 @@ def GenTests(api):
               'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
   )
 
   yield api.test(
@@ -421,8 +471,13 @@ def GenTests(api):
               'base_unittests_run': 'deadbeef',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=1),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=1,
+      ),
       api.post_process(
           post_process.StepCommandContains, '[trigger] base_unittests', [
               '--cipd-package',

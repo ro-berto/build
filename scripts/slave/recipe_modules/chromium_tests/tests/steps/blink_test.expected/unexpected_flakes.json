@@ -54,6 +54,8 @@
       "blink_web_tests (with patch)",
       "--chrome-revision",
       "0",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -157,6 +159,8 @@
       "blink_web_tests (without patch)",
       "--chrome-revision",
       "0",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],

@@ -31,6 +31,6 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          buildername='test_buildername', current_time='20170425T203027'),
+      api.properties(current_time='20170425T203027'),
+      api.buildbucket.ci_build(builder='test_buildername'),
   )

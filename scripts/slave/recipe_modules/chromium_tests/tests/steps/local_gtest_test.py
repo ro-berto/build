@@ -7,6 +7,7 @@ DEPS = [
     'chromium_android',
     'chromium_tests',
     'depot_tools/bot_update',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -50,18 +51,28 @@ def GenTests(api):
       'basic',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )
 
   yield api.test(
       'retry',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data('base_unittests (with patch)',
                              api.test_utils.canned_gtest_output(passing=False)),
       api.override_step_data('base_unittests (without patch)',
@@ -72,8 +83,13 @@ def GenTests(api):
       'android',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123,
-          target_platform='android'),
+          target_platform='android',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )

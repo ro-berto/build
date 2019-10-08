@@ -5,6 +5,7 @@
 DEPS = [
     'chromium_android',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
@@ -30,7 +31,12 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.properties(
-          buildbotURL='https://example/url',
-          buildername='test_buildername',
-          buildnumber=123),
+          # Used by IncrementalCoverageTest.
+          buildbotURL='https://example/url',),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )

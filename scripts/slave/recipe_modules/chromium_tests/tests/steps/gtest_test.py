@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/bot_update',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -44,7 +45,12 @@ def GenTests(api):
       'basic',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123),
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )

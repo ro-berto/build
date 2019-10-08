@@ -51,7 +51,8 @@ def GenTests(api):
           expected_args=[u'8945511751514863184'],
       ),
       api.buildbucket.ci_build(
-          project='chromium/src',
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
@@ -69,7 +70,8 @@ def GenTests(api):
           expected_args=[u'8945511751514863184'],
       ),
       api.buildbucket.ci_build(
-          project='chromium/src',
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
@@ -87,7 +89,8 @@ def GenTests(api):
           expected_args=[u'8945511751514863184'],
       ),
       api.buildbucket.ci_build(
-          project='chromium/src',
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),

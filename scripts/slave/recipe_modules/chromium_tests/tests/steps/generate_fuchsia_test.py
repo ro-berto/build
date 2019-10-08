@@ -51,8 +51,12 @@ def GenTests(api):
               'test': 'gtest_test',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123,
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )

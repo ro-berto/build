@@ -9,6 +9,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/gsutil',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/file',
     'recipe_engine/path',
@@ -33,7 +34,7 @@ def RunSteps(api):
   api.test_results.set_config('public_server')
 
   mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
+  buildername = api.buildbucket.build.builder.builder
 
   if 'fyi' in mastername:
     perf_config_mappings = PERF_CONFIG_MAPPINGS
@@ -66,20 +67,26 @@ def RunSteps(api):
 
 def GenTests(api):
   typical_properties = api.properties(
-        mastername='chromium.webrtc',
-        buildername='WebRTC Chromium Linux Tester',
-        buildnumber=123,
-        bot_id='test_bot_id',
-        parent_got_revision='a' * 40)
+      mastername='chromium.webrtc',
+      bot_id='test_bot_id',
+      parent_got_revision='a' * 40)
+  typical_ci_build = api.buildbucket.ci_build(
+      project='chromium',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+      builder='WebRTC Chromium Linux Tester',
+      build_number=123,
+  )
 
   yield api.test(
       'webrtc_tester',
       typical_properties,
+      typical_ci_build,
   )
 
   yield api.test(
       'webrtc_tester_failed',
       typical_properties,
+      typical_ci_build,
       api.step_data('test_name', retcode=1),
       api.post_process(post_process.StepFailure, 'test_name'),
       api.post_process(post_process.StatusFailure),
@@ -90,9 +97,13 @@ def GenTests(api):
       'webrtc_fyi_tester',
       api.properties(
           mastername='chromium.webrtc.fyi',
-          buildername='WebRTC Chromium FYI Linux Tester',
-          buildnumber=123,
           bot_id='test_bot_id',
           parent_got_revision='a' * 40,
           parent_got_cr_revision='builder-chromium-tot'),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='WebRTC Chromium FYI Linux Tester',
+          build_number=123,
+      ),
   )

@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -37,30 +38,36 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id'),
+      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
   )
 
   yield api.test(
       'invalid_results',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id'),
+      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data('script_test', api.json.output({})),
   )
 
   yield api.test(
       'failure',
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id'),
+      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'script_test',
           api.json.output({

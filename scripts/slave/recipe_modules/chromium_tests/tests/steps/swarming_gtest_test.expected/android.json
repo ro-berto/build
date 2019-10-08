@@ -47,6 +47,8 @@
       "--tag",
       "name:base_unittests",
       "--tag",
+      "spec_name:chromium.ci:test_buildername",
+      "--tag",
       "stepname:base_unittests",
       "--cipd-package",
       ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
@@ -234,6 +236,8 @@
       "base_unittests",
       "--chrome-revision",
       "0",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],

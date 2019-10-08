@@ -32,6 +32,8 @@
       "base_unittests",
       "--chrome-revision",
       "refs/x@{#0}",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -81,6 +83,8 @@
       "base_unittests",
       "--chrome-revision",
       "refs/x@{#0}",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],

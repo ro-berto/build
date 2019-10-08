@@ -47,10 +47,12 @@ def GenTests(api):
       'experiment_on',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100'),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)'),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
@@ -62,10 +64,12 @@ def GenTests(api):
       'experiment_off',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='0'),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.DoesNotRun,
                        'pre_run inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun, 'inner_test (experimental)'),
@@ -77,11 +81,13 @@ def GenTests(api):
       'experiment_on_invalid_results',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
           has_valid_results=False),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.MustRun,
                        'has_valid_results inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun,
@@ -93,11 +99,13 @@ def GenTests(api):
       'experiment_off_invalid_results',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='0',
           has_valid_results=False),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -105,11 +113,13 @@ def GenTests(api):
       'experiment_on_valid_failures',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
           failures=['foo']),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -117,11 +127,13 @@ def GenTests(api):
       'experiment_off_valid_failures',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='0',
           failures=['foo']),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -129,10 +141,12 @@ def GenTests(api):
       'failure_in_pre_run',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100'),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data('pre_run inner_test (experimental)', retcode=1),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)'),
@@ -144,10 +158,12 @@ def GenTests(api):
       'failure_in_run',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100'),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data('inner_test (experimental)', retcode=1),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
       api.post_process(post_process.StatusSuccess),
@@ -158,12 +174,14 @@ def GenTests(api):
       'abort_on_failure',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
           failures=['foo'],
           abort_on_failure=True),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -173,11 +191,13 @@ def GenTests(api):
       'with_patch',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
           patch_issue='456',
           experiment_percentage='100',
           suffix='with patch'),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (with patch, experimental)'),
       api.post_process(post_process.MustRun,

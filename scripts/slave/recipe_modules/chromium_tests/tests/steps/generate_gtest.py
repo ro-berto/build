@@ -66,9 +66,13 @@ def GenTests(api):
               'total_shards': 2,
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -91,12 +95,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -111,12 +119,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
       api.post_process(post_process.StepCommandContains,
                        '[trigger] base_unittests', [
@@ -150,12 +162,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -207,12 +223,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -229,12 +249,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -256,9 +280,13 @@ def GenTests(api):
               }],
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -280,9 +308,13 @@ def GenTests(api):
               }],
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -304,9 +336,13 @@ def GenTests(api):
               }],
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -323,12 +359,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -347,12 +387,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
       api.post_process(post_process.Filter('[trigger] base_unittests')),
   )
@@ -370,12 +414,16 @@ def GenTests(api):
               },
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
       ),
   )
 
@@ -390,12 +438,16 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests (experimental)',
           api.chromium_swarming.canned_summary_output(None, retcode=1)),
@@ -419,12 +471,16 @@ def GenTests(api):
               'test': 'base_unittests',
           },
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           bot_id='test_bot_id',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          project='chromium',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(NotIdempotent, '[trigger] base_unittests'),
       api.post_process(post_process.DropExpectation),

@@ -9,6 +9,7 @@ DEPS = [
     'code_coverage',
     'depot_tools/bot_update',
     'isolate',
+    'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -76,11 +77,13 @@ def GenTests(api):
       'basic',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -109,11 +112,13 @@ def GenTests(api):
       'bulk_log',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -141,11 +146,13 @@ def GenTests(api):
       'filepath',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -176,11 +183,13 @@ def GenTests(api):
       'http',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -198,11 +207,13 @@ def GenTests(api):
       'corrupt_tests',
       api.properties(
           mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber=123,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
+      api.buildbucket.ci_build(
+          builder='test_buildername',
+          build_number=123,
+      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
