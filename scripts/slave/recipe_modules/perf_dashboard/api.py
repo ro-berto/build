@@ -101,7 +101,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
     return change
 
-  def post(self, name, url, data, halt_on_failure, **kwargs):
+  def post(self, name, url, data, halt_on_failure, step_test_data=None,
+           **kwargs):
     """Send a POST request to a URL with a payload.
 
     Args:
@@ -110,17 +111,19 @@ class PerfDashboardApi(recipe_api.RecipeApi):
       data: A dict of parameters to send in the body of the request.
       halt_on_failure: If True, the step turns purple on failure. Otherwise, it
           turns orange.
-      debug_info (list[str]|None): An optional list of log lines to add to the
-          post step as debugging information.
+      step_test_data: Opional recipe simulation data. Defaults to a successful
+          request.
     """
     post_json_args = [
         url, '-i', self.m.json.input(data), '-o', self.m.json.output()]
     if self.m.runtime.is_luci:
       token = self.m.service_account.default().get_access_token()
       post_json_args += ['-t', self.m.raw_io.input_text(token)]
+    step_test_data = step_test_data or (
+        lambda: self.m.json.test_api.output({'status_code': 200}))
     step_result = self.m.python(
         name=name, script=self.resource('post_json.py'), args=post_json_args,
-        **kwargs)
+        step_test_data=step_test_data, **kwargs)
 
     response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover

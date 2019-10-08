@@ -14,11 +14,10 @@
     ],
     "name": "pinpoint isolate upload",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   }
 ]

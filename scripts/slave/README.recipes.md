@@ -2929,9 +2929,9 @@ Args:
 
 &mdash; **def [get\_skeleton\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#20)(self, test, revision, value, bot=None):**
 
-&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#137)(self, step_result, reason):**
+&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#140)(self, step_result, reason):**
 
-&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#104)(self, name, url, data, halt_on_failure, \*\*kwargs):**
+&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#104)(self, name, url, data, halt_on_failure, step_test_data=None, \*\*kwargs):**
 
 Send a POST request to a URL with a payload.
 
@@ -2941,14 +2941,14 @@ Args:
   data: A dict of parameters to send in the body of the request.
   halt_on_failure: If True, the step turns purple on failure. Otherwise, it
       turns orange.
-  debug_info (list[str]|None): An optional list of log lines to add to the
-      post step as debugging information.
+  step_test_data: Opional recipe simulation data. Defaults to a successful
+      request.
 
 &mdash; **def [set\_default\_config](/scripts/slave/recipe_modules/perf_dashboard/api.py#62)(self):**
 
 &mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#70)(self, builder_name, change, isolate_server, isolate_map, halt_on_failure=False, \*\*kwargs):**
 
-&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#142)(self, step_result, reason):**
+&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#145)(self, step_result, reason):**
 ### *recipe_modules* / [puppet\_service\_account](/scripts/slave/recipe_modules/puppet_service_account)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
