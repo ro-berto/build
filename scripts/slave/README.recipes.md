@@ -1059,7 +1059,7 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#84)(self, bot_config, \*\*kwargs):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#64)(self, bot_config, \*\*kwargs):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
@@ -1068,10 +1068,7 @@ Wrapper for bot_update.ensure_checkout with chromium-specific additions.
 
 Returns directory where checkout can be created.
 
-TODO: Cache this result for a given "bot_config.checkout_dir" value so we
-don't have to "makedirs" each time the checkout dir is queried.
-
-&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#62)(self, relative_to='src/', cwd=None):**
+&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#42)(self, relative_to='src/', cwd=None):**
 
 Returns list of POSIX paths of files affected by patch for "analyze".
 
@@ -4203,9 +4200,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/zip_and_upload_build.py#11)(api):**
 ### *recipes* / [chromium\_checkout:tests/full](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#18)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_tot](/scripts/slave/recipes/chromium_clang_coverage_tot.py)
 
 [DEPS](/scripts/slave/recipes/chromium_clang_coverage_tot.py#6): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

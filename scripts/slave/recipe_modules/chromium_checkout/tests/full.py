@@ -11,7 +11,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -43,42 +42,20 @@ def GenTests(api):
   def try_build():
     return api.buildbucket.try_build(
         project='chromium',
-        builder='linux',
+        builder='builder',
         git_repo='https://chromium.googlesource.com/chromium/src')
 
   yield api.test(
-      'buildbot_annotated_run',
+      'win',
       try_build(),
-      api.runtime(is_luci=False, is_experimental=False),
       api.platform('win', 64),
-      api.properties(buildername='example_buildername', path_config='buildbot'),
-      api.post_process(verify_checkout_dir, api.path['start_dir'].join('src')),
+      api.post_process(verify_checkout_dir, api.path['cache'].join(
+          'builder', 'src')),
   )
 
   yield api.test(
-      'buildbot_remote_run',
+      'linux',
       try_build(),
-      api.runtime(is_luci=False, is_experimental=False),
-      api.properties(buildername='example_buildername',
-                     path_config='kitchen'),  # not a typo... T_T
-      api.post_process(verify_checkout_dir, api.path['builder_cache'].join(
-          'linux', 'src')),
-  )
-
-  yield api.test(
-      'buildbot_remote_run_kitchen',
-      try_build(),
-      api.runtime(is_luci=False, is_experimental=False),
-      api.properties(buildername='example_buildername', path_config='generic'),
-      api.post_process(verify_checkout_dir, api.path['builder_cache'].join(
-          'linux', 'src')),
-  )
-
-  yield api.test(
-      'luci',
-      try_build(),
-      api.runtime(is_luci=True, is_experimental=False),
-      api.properties(buildername='does not matter'),
       api.post_process(verify_checkout_dir, api.path['cache'].join(
           'builder', 'src')),
   )

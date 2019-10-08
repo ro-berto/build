@@ -22,42 +22,22 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     return self._working_dir
 
   def get_checkout_dir(self, bot_config):
-    """Returns directory where checkout can be created.
-
-    TODO: Cache this result for a given "bot_config.checkout_dir" value so we
-    don't have to "makedirs" each time the checkout dir is queried.
-    """
-    if self.m.runtime.is_luci:
-      # On LUCI, Buildbucket by default maps a per-builder unique directory in
-      # as the 'builder' cache. Builders that are intended to share a cache
-      # should have a CacheEntry config like:
-      #
-      #   caches {
-      #     path: "builder"
-      #     name: "some common name shared by different builders"
-      #   }
-      #
-      # Which will mount that named cache to exactly the same folder.
-      #
-      # It's important to maintain the same mounted location because file paths
-      # can end up in cached goma keys/objects; mounting the named cache to an
-      # alternate location could result in goma cache bloating.
-      return self.m.path['cache'].join('builder')
-
-    # If explicitly specified, use the named builder cache base directory.
-    try:
-      builder_cache = self.m.path['builder_cache']
-    except KeyError:
-      # No explicit builder cache directory defined. Use the "start_dir"
-      # directory.
-      return self.m.path['start_dir']
-
-    checkout_name = ''.join(
-        c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
-    checkout_dir = builder_cache.join(
-        bot_config.get('checkout_dir', checkout_name))
-    self.m.file.ensure_directory('makedirs checkout path', checkout_dir)
-    return checkout_dir
+    """Returns directory where checkout can be created."""
+    # On LUCI, Buildbucket by default maps a per-builder unique directory in
+    # as the 'builder' cache. Builders that are intended to share a cache
+    # should have a CacheEntry config like:
+    #
+    #   caches {
+    #     path: "builder"
+    #     name: "some common name shared by different builders"
+    #   }
+    #
+    # Which will mount that named cache to exactly the same folder.
+    #
+    # It's important to maintain the same mounted location because file paths
+    # can end up in cached goma keys/objects; mounting the named cache to an
+    # alternate location could result in goma cache bloating.
+    return self.m.path['cache'].join('builder')
 
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
     """Returns list of POSIX paths of files affected by patch for "analyze".
