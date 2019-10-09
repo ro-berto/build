@@ -819,13 +819,17 @@ def BuildMac(api):
   if api.properties.get('build_android_aot', True):
     RunGN(api, '--runtime-mode', 'profile', '--android')
     RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=x64')
     RunGN(api, '--runtime-mode', 'release', '--android')
     RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=x64')
 
     Build(api, 'android_profile', 'flutter/lib/snapshot')
     Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
+    Build(api, 'android_profile_x64', 'flutter/lib/snapshot')
     Build(api, 'android_release', 'flutter/lib/snapshot')
     Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
+    Build(api, 'android_release_x64', 'flutter/lib/snapshot')
 
     UploadArtifacts(api, "android-arm-profile" , [
       'out/android_profile/clang_x64/gen_snapshot',
@@ -833,12 +837,25 @@ def BuildMac(api):
     UploadArtifacts(api, "android-arm64-profile" , [
       'out/android_profile_arm64/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
+    UploadArtifacts(
+        api,
+        "android-x64-profile", [
+            'out/android_profile_x64/clang_x64/gen_snapshot',
+        ],
+        archive_name='darwin-x64.zip')
     UploadArtifacts(api, "android-arm-release" , [
       'out/android_release/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
     UploadArtifacts(api, "android-arm64-release" , [
       'out/android_release_arm64/clang_x64/gen_snapshot',
     ], archive_name='darwin-x64.zip')
+    UploadArtifacts(
+        api,
+        "android-x64-release", [
+            'out/android_release_x64/clang_x64/gen_snapshot',
+        ],
+        archive_name='darwin-x64.zip')
+
 
 def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name,
     strip_bitcode=False):
@@ -1037,24 +1054,39 @@ def BuildWindows(api):
   if api.properties.get('build_android_aot', True):
     RunGN(api, '--runtime-mode', 'profile', '--android')
     RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=x64')
     RunGN(api, '--runtime-mode', 'release', '--android')
     RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+    RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=x64')
     Build(api, 'android_profile', 'gen_snapshot')
     Build(api, 'android_profile_arm64', 'gen_snapshot')
+    Build(api, 'android_profile_x64', 'gen_snapshot')
     Build(api, 'android_release', 'gen_snapshot')
     Build(api, 'android_release_arm64', 'gen_snapshot')
+    Build(api, 'android_release_x64', 'gen_snapshot')
     UploadArtifacts(api, "android-arm-profile" , [
       'out/android_profile/gen_snapshot.exe',
     ], archive_name='windows-x64.zip')
     UploadArtifacts(api, "android-arm64-profile" , [
       'out/android_profile_arm64/gen_snapshot.exe',
     ], archive_name='windows-x64.zip')
+    UploadArtifacts(
+        api,
+        "android-x64-profile", [
+            'out/android_profile_x64/gen_snapshot.exe',
+        ],
+        archive_name='windows-x64.zip')
     UploadArtifacts(api, "android-arm-release" , [
       'out/android_release/gen_snapshot.exe',
     ], archive_name='windows-x64.zip')
     UploadArtifacts(api, "android-arm64-release" , [
       'out/android_release_arm64/gen_snapshot.exe',
     ], archive_name='windows-x64.zip')
+    UploadArtifacts(
+        api,
+        "android-x64-release", ['out/android_release_x64/gen_snapshot.exe'],
+        archive_name='windows-x64.zip')
+
 
 def BuildJavadoc(api):
   checkout = GetCheckoutPath(api)
