@@ -675,7 +675,7 @@ class V8Api(recipe_api.RecipeApi):
       }
       points.append(p)
     if points:
-      self.m.perf_dashboard.add_point(points, halt_on_failure=True)
+      self.m.perf_dashboard.add_point(points)
 
   def _track_binary_size(self, binary, category):
     """Track and upload binary size of configured binaries.
@@ -703,7 +703,7 @@ class V8Api(recipe_api.RecipeApi):
         bot=category,
     )
     point.update(point_defaults)
-    self.m.perf_dashboard.add_point([point], halt_on_failure=True)
+    self.m.perf_dashboard.add_point([point])
 
   def compile(
       self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
@@ -784,9 +784,8 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def should_collect_post_compile_metrics(self):
     return (
-        not self.is_pure_swarming_tester and self.should_build and (
-            self.m.v8.bot_config.get('track_build_dependencies') or
-            self.m.v8.bot_config.get('binary_size_tracking')))
+        self.m.v8.bot_config.get('track_build_dependencies') or
+        self.m.v8.bot_config.get('binary_size_tracking'))
 
   def collect_post_compile_metrics(self):
     with self.ensure_osx_sdk_if_needed():

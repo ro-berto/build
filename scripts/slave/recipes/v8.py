@@ -166,6 +166,9 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
         compile_failure = v8.compile(test_spec)
         if compile_failure:
           return compile_failure
+      if api.v8.should_collect_post_compile_metrics:
+        with api.step.nest('measurements'):
+          api.v8.collect_post_compile_metrics()
 
     if v8.should_upload_build:
       v8.upload_build()
@@ -188,10 +191,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
     v8.upload_gcov_coverage_report()
 
   v8.maybe_trigger(test_spec=test_spec, **additional_trigger_properties)
-
-  if api.v8.should_collect_post_compile_metrics:
-    with api.step.nest('measurements'):
-      api.v8.collect_post_compile_metrics()
 
 
 def GenTests(api):
@@ -1079,21 +1078,6 @@ def GenTests(api):
         'measurements.perf dashboard post',
         'measurements.perf dashboard post (2)',
     ))
-  )
-
-  # Test overall failure on upload failures.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Foobar',
-        'measurements_upload_failure',
-        track_build_dependencies=True,
-    ) +
-    api.override_step_data(
-        'measurements.perf dashboard post',
-        api.json.output({'status_code': 403})) +
-    api.post_process(StatusFailure) +
-    api.post_process(DropExpectation)
   )
 
   # Test windows-specific build steps.
