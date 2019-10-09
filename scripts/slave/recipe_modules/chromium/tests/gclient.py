@@ -59,6 +59,11 @@ def GenTests(api):
       api.post_process(DropExpectation),
   )
   yield api.test(
+      'webkit_ios_tot',
+      api.properties(apply_gclient_config='webkit_ios_tot'),
+      api.post_process(DropExpectation),
+  )
+  yield api.test(
       'no_checkout_flash',
       api.properties(apply_gclient_config='no_checkout_flash'),
       api.post_process(DropExpectation),

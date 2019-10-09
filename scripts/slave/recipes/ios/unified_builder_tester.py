@@ -15,11 +15,14 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  # Clang tip-of-tree bots need to have a gclient config applied. Since the
-  # build config hasn't been checked out yet, it can't be specified there.
+  # Clang and WebKit tip-of-tree bots need to have a gclient config
+  # applied. Since the build config hasn't been checked out yet, it can't be
+  # specified there.
   gclient_apply_config = []
   if api.m.properties['mastername'] == 'chromium.clang':
     gclient_apply_config = ['clang_tot']
+  elif api.m.buildbucket.builder_name == 'ios12-beta-simulator':
+    gclient_apply_config = ['webkit_ios_tot']
 
   api.ios.checkout(gclient_apply_config)
   api.ios.read_build_config()
@@ -33,6 +36,23 @@ def RunSteps(api):
   api.ios.test_swarming()
 
 def GenTests(api):
+
+  def verify_webkit_custom_vars(check, step_odict, expected):
+    # Verifies that the command for the "bot_update" step either contains or
+    # does not contain the strings "checkout_ios_webkit" and
+    # "ios_webkit_revision". Does not verify that these custom_vars are set
+    # correctly, only that the strings appear.
+    step = step_odict['bot_update']
+    found_checkout_ios_webkit = False
+    found_ios_webkit_revision = False
+    for arg in step.cmd:
+      if 'checkout_ios_webkit' in arg:
+        found_checkout_ios_webkit = True
+      if 'ios_webkit_revision' in arg:
+        found_ios_webkit_revision = True
+    check(expected == found_checkout_ios_webkit)
+    check(expected == found_ios_webkit_revision)
+
   basic_common = (
     api.platform('mac', 64)
     + api.properties(
@@ -97,6 +117,7 @@ def GenTests(api):
       'basic',
       basic_common,
       api.runtime(is_luci=False, is_experimental=False),
+      api.post_process(verify_webkit_custom_vars, False),
   )
 
   yield api.test(
@@ -227,5 +248,34 @@ def GenTests(api):
           'bootstrap swarming.swarming.py --version',
           stdout=api.raw_io.output_text('1.2.3'),
       ),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'webkit-ios-tot',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+      ),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios12-beta-simulator',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode version': 'fakexcodeversion-customwebkit',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="arm"',
+          ],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
+      api.post_process(verify_webkit_custom_vars, True),
       api.post_process(post_process.DropExpectation),
   )

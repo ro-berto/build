@@ -310,6 +310,13 @@ def clang_tot(c):
 def openscreen_tot(c):
   c.revisions['src/third_party/openscreen/src'] = 'HEAD'
 
+
+@CONFIG_CTX()
+def webkit_ios_tot(c):
+  c.solutions[0].custom_vars['checkout_ios_webkit'] = 'True'
+  c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/master'
+
+
 @CONFIG_CTX()
 def no_checkout_flash(c):
   # internal perf tester does not need to checkout flash related repositories.
