@@ -1,7 +1,7 @@
 [
   {
     "directory": "package_index_testdata/input/src/out/Debug",
-    "command": "clang-cl.exe --driver-mode=cl \"-DSK_USER_CONFIG_HEADER=\\\"../../skia/config/SkUserConfig.h\\\"\" /c test.cc /Fotest.obj",
+    "command": "path\\\\to\\\\clang-cl.exe --driver-mode=cl -imsvcfoo\\\\bar\\\\baz \"-DSK_USER_CONFIG_HEADER=\\\"../../skia/config/SkUserConfig.h\\\"\" /c test.cc /Fotest.obj",
     "file": "../../test.cc"
   }
 ]

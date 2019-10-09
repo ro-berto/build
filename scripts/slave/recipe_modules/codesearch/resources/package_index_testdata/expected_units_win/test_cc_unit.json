@@ -1,8 +1,9 @@
 {
   "unit": {
     "argument": [
-      "clang-cl.exe",
+      "path\\to\\clang-cl.exe",
       "--driver-mode=cl",
+      "-imsvcfoo/bar/baz",
       "/c",
       "test.cc",
       "/Fotest.obj",

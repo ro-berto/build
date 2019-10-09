@@ -468,9 +468,9 @@ class IndexPack(object):
     if not output_file:
       print('No output file path found for %s' % filename)
 
-    # Convert any args starting with -imsvc to use forward slashes, since this
-    # is what Kythe expects.
-    if command_list[0].startswith('clang-cl'):
+    if 'clang-cl' in command_list[0]:
+      # Convert any args starting with -imsvc to use forward slashes, since
+      # this is what Kythe expects.
       for i in range(len(command_list)):
         if command_list[i].startswith('-imsvc'):
           command_list[i] = command_list[i].replace('\\', '/')
