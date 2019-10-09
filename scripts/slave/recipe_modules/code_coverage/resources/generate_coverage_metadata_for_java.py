@@ -350,6 +350,10 @@ def main():
       class_files.extend(json_file_data['input_path'])
       source_dirs.extend(json_file_data['source_dirs'])
 
+  if not class_files:
+    logging.info('Skip processing data as no source file was affected in CL')
+    return
+
   cmd = [
       'java', '-jar',
       os.path.join(params.src_path, 'third_party', 'jacoco', 'lib',

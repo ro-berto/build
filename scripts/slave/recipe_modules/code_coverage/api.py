@@ -383,9 +383,15 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.resource('generate_coverage_metadata_for_java.py'),
           args=args,
           **kwargs)
+      metadata_path = coverage_dir.join('all.json.gz')
+      if not self.m.path.exists(metadata_path):
+        self.m.python.succeeding_step(
+            'skip processing because no metadata was generated', '')
+        return
+
       gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
       upload_step = self.m.gsutil.upload(
-          source=coverage_dir.join('all.json.gz'),
+          source=metadata_path,
           bucket=self._gs_bucket,
           dest='%s/all.json.gz' % gs_path,
           name='Upload JSON metadata',

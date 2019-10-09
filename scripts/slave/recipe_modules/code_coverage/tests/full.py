@@ -41,6 +41,9 @@ def RunSteps(api):
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
         api.code_coverage.profdata_dir().join('merged.profdata'))
+  if api.properties.get('mock_java_metadata_path', True):
+    api.path.mock_add_paths(
+        api.chromium.output_dir.join('coverage').join('all.json.gz'))
 
   tests = [
       api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
@@ -386,5 +389,32 @@ def GenTests(api):
        api.post_process(
           post_process.MustRun,
           'Clean up JaCoCo sources JSON files'),
+       api.post_process(post_process.StatusSuccess),
+       api.post_process(post_process.DropExpectation),)
+
+  yield api.test('java metadata does not exist',
+       api.properties.generic(
+          mastername='tryserver.chromium.android',
+          buildername='android-marshmallow-arm64-coverage-rel',
+          buildnumber=54),
+       api.code_coverage(use_java_coverage=True),
+       api.buildbucket.try_build(
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
+       api.properties(
+          files_to_instrument=[
+            'some/path/to/FileTest.java',
+            'some/other/path/to/FileTest.java',
+          ]),
+       api.properties(
+          mock_java_metadata_path = False),
+       api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'generate line number mapping from bot to Gerrit'),
+       api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'Generate Java coverage metadata'),
+       api.post_process(
+          post_process.MustRun, 'process java coverage.'
+          'skip processing because no metadata was generated'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
