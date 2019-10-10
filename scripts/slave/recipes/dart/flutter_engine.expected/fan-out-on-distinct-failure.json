@@ -8,7 +8,7 @@
     ],
     "infra_step": true,
     "name": "schedule bisect (b)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"b\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"bisect_newer\": [\"a\"], \"bisect_older\": [\"c\"], \"bisect_reason\": \"different failure\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"b\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"bisect_newer\": [\"a\"], \"bisect_older\": [\"c\"], \"bisect_reason\": \"different failure\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -41,6 +41,7 @@
       "@@@STEP_LOG_LINE@request@          \"project\": \"linear_sdk_flutter_engine\", @@@",
       "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
       "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
       "@@@STEP_LOG_LINE@request@          \"bisect_newer\": [@@@",
       "@@@STEP_LOG_LINE@request@            \"a\"@@@",
@@ -74,7 +75,7 @@
     ],
     "infra_step": true,
     "name": "schedule bisect (d)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"d\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"properties\": {\"bisect_newer\": [\"c\"], \"bisect_older\": [\"e\"], \"bisect_reason\": \"Infra Failure: Step('everything') (retcode: 1)\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"d\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"bisect_newer\": [\"c\"], \"bisect_older\": [\"e\"], \"bisect_reason\": \"Infra Failure: Step('everything') (retcode: 1)\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-00000000133a\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -107,6 +108,7 @@
       "@@@STEP_LOG_LINE@request@          \"project\": \"linear_sdk_flutter_engine\", @@@",
       "@@@STEP_LOG_LINE@request@          \"ref\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
       "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
       "@@@STEP_LOG_LINE@request@          \"bisect_newer\": [@@@",
       "@@@STEP_LOG_LINE@request@            \"c\"@@@",
