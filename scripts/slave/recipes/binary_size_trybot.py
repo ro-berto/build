@@ -47,6 +47,7 @@ _ARCHIVED_URL_PREFIX = (
     'https://storage.googleapis.com/' + _NDJSON_GS_BUCKET + '/')
 _RESULT_JSON_STEP_NAME = 'Read diff results'
 _RESULTS_STEP_NAME = 'Trybot Results'
+_PLUGIN_OUTPUT_PROPERTY_NAME = 'binary_size_plugin'
 
 _TEST_TIME = 1454371200
 _TEST_BUILDER = 'android_binary_size'
@@ -99,6 +100,11 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
     affected_files = api.chromium_checkout.get_files_affected_by_patch()
     if not api.filter.analyze(affected_files, analyze_targets, None,
                               'trybot_analyze_config.json')[0]:
+      step_result = api.step.active_result
+      step_result.presentation.properties[_PLUGIN_OUTPUT_PROPERTY_NAME] = {
+          'listings': [],
+          'extras': [],
+      }
       return
 
     api.chromium.ensure_goma()
@@ -241,7 +247,7 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
         url = _LinkifyFilenames(url, filename_map)
         extra['url'] = url
     step_result.presentation.properties[
-        'binary_size_plugin'] = gerrit_plugin_details
+        _PLUGIN_OUTPUT_PROPERTY_NAME] = gerrit_plugin_details
 
 
   if not allow_regressions and result_json['status_code'] != 0:
@@ -339,7 +345,10 @@ def GenTests(api):
 
   yield (
       props('noop_because_of_analyze') +
-      override_analyze(no_changes=True) +
+      api.post_check(
+          lambda check, steps:
+          check(steps['analyze']
+                .output_properties['binary_size_plugin'] is not None)) +
       api.post_process(post_process.MustRun, 'analyze') +
       api.post_process(post_process.DoesNotRunRE, r'.*build') +
       api.post_process(post_process.DropExpectation)
