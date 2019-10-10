@@ -175,6 +175,9 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
       args['ANDROID_ARM_MODE'] = 'arm'
   if _HasToken(buildername, 'fips'):
     args['FIPS'] = '1'
+    if _HasToken(buildername, 'android'):
+      # FIPS mode on Android uses shared libraries.
+      args['BUILD_SHARED_LIBS'] = '1'
   if _HasToken(buildername, 'ios'):
     args['CMAKE_OSX_SYSROOT'] = 'iphoneos'
     args['CMAKE_OSX_ARCHITECTURES'] = 'armv7'
@@ -414,6 +417,7 @@ def GenTests(api):
       ('android_arm_armmode_rel', api.platform('linux', 64)),
       ('android_aarch64', api.platform('linux', 64)),
       ('android_aarch64_rel', api.platform('linux', 64)),
+      ('android_aarch64_fips', api.platform('linux', 64)),
       # This is not a builder configuration, but it ensures _AppendFlags handles
       # appending to CMAKE_CXX_FLAGS when there is already a value in there.
       ('linux_nothreads_small', api.platform('linux', 64)),
