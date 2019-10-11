@@ -21,8 +21,8 @@ def RunSteps(api):
   gclient_apply_config = []
   if api.m.properties['mastername'] == 'chromium.clang':
     gclient_apply_config = ['clang_tot']
-  elif api.m.buildbucket.builder_name == 'ios12-beta-simulator':
-    gclient_apply_config = ['webkit_ios_tot']
+  elif api.m.buildbucket.builder_name == 'ios-webkit-tot':
+    gclient_apply_config = ['ios_webkit_tot']
 
   api.ios.checkout(gclient_apply_config)
   api.ios.read_build_config()
@@ -252,7 +252,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'webkit-ios-tot',
+      'ios-webkit-tot',
       api.platform('mac', 64),
       api.properties(
           mastername='chromium.fake',
@@ -260,7 +260,7 @@ def GenTests(api):
       ),
       api.buildbucket.try_build(
           project='chromium',
-          builder='ios12-beta-simulator',
+          builder='ios-webkit-tot',
           build_number=1,
           revision='HEAD',
           git_repo='https://chromium.googlesource.com/chromium/src',

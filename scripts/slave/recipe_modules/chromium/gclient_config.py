@@ -312,7 +312,7 @@ def openscreen_tot(c):
 
 
 @CONFIG_CTX()
-def webkit_ios_tot(c):
+def ios_webkit_tot(c):
   c.solutions[0].custom_vars['checkout_ios_webkit'] = 'True'
   c.solutions[0].custom_vars['ios_webkit_revision'] = 'refs/heads/master'
 
