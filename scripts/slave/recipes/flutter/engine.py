@@ -1181,6 +1181,12 @@ def RunSteps(api, properties, env_properties):
       env_prefixes=env_prefixes), api.depot_tools.on_path():
     GetCheckout(api)
 
+    # Presence of tags in git repo is critical for determining dart version.
+    dart_sdk_dir = GetCheckoutPath(api).join('third_party', 'dart')
+    with api.context(cwd=dart_sdk_dir):
+      api.step('Fetch dart tags', ['git', 'fetch'])
+    api.gclient.runhooks()
+
     with api.step.nest('Android SDK Licenses'):
       api.file.ensure_directory('mkdir licenses', android_home.join('licenses'))
       api.file.write_text('android sdk license',
