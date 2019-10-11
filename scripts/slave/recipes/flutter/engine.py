@@ -92,6 +92,7 @@ def RunTests(api, out_dir, android_out_dir=None, types='all'):
 
 def ScheduleBuilds(api, builder_name, drone_props):
   req = api.buildbucket.schedule_request(
+      swarming_parent_run_id=api.swarming.task_id,
       builder=builder_name, properties=drone_props)
   return api.buildbucket.schedule([req])
 
