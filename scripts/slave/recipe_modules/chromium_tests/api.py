@@ -613,16 +613,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           build_name=bot_config.get('gs_build_name'),
       )
     if bot_config.get('cf_archive_build') and not self.m.tryserver.is_tryserver:
-       self.m.archive.clusterfuzz_archive(
-         build_dir=self.m.chromium.c.build_dir.join(
-         self.m.chromium.c.build_config_fs),
-         update_properties=update_step.presentation.properties,
-         gs_bucket=bot_config.get('cf_gs_bucket'),
-         gs_acl=bot_config.get('cf_gs_acl'),
-         archive_prefix=bot_config.get('cf_archive_name'),
-         archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
-         revision_dir=bot_config.get('cf_revision_dir'),
-       )
+      self.m.archive.clusterfuzz_archive(
+          build_dir=self.m.chromium.c.build_dir.join(
+              self.m.chromium.c.build_config_fs),
+          update_properties=update_step.presentation.properties,
+          gs_bucket=bot_config.get('cf_gs_bucket'),
+          gs_acl=bot_config.get('cf_gs_acl'),
+          archive_prefix=bot_config.get('cf_archive_name'),
+          archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
+          revision_dir=bot_config.get('cf_revision_dir'),
+      )
 
   def trigger_child_builds(self, mastername, buildername, update_step, bot_db,
                            additional_properties=None):
@@ -1229,12 +1229,35 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def trybot_steps(self, builders=None, trybots=None):
     return self.run_tests_with_and_without_changes(
-      builders=builders, mirrored_bots=trybots,
-      deapply_changes=self.deapply_patch)
+        builders=builders,
+        mirrored_bots=trybots,
+        deapply_changes=self.deapply_patch)
 
-  def run_tests_with_and_without_changes(self, builders, mirrored_bots,
-                                         deapply_changes):
+  def trybot_steps_for_tests(self, builders=None, trybots=None, tests=None):
+    """Similar to trybot_steps, but only runs certain tests.
+
+    This is currently experimental code. Talk to martiniss@ if you want to
+    use this."""
+    return self.run_tests_with_and_without_changes(
+        builders=builders,
+        mirrored_bots=trybots,
+        deapply_changes=self.deapply_patch,
+        tests=tests)
+
+  def run_tests_with_and_without_changes(self,
+                                         builders,
+                                         mirrored_bots,
+                                         deapply_changes,
+                                         tests=None):
     """Compile and run tests for chromium_trybot recipe.
+
+    Args:
+      builders: All the builders which exist.
+      mirrored_bots: The set of mirrored bots.
+      deapply_changes: A function which deapplies changes to the code being
+        tested.
+      tests: A list of tests to run on this bot. Before using this argument,
+        please talk to martiniss@.
 
     Returns:
       - A RawResult object with the status of the build and
@@ -1242,7 +1265,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     raw_result, task = self._calculate_tests_to_run(
-        builders=builders, mirrored_bots=mirrored_bots)
+        builders=builders, mirrored_bots=mirrored_bots, tests_to_run=tests)
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
@@ -1396,7 +1419,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     config = self.get_tests(bot.settings, bot_db)
     return config.tests_in_scope(), config.all_tests()
 
-  def _calculate_tests_to_run(self, builders=None, mirrored_bots=None):
+  def _calculate_tests_to_run(self,
+                              builders=None,
+                              mirrored_bots=None,
+                              tests_to_run=None):
     """Determines which tests need to be run.
 
     Args:
@@ -1406,6 +1432,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mirrored_bots: An optional mapping from <mastername, buildername> of the
                      trybot to configurations of the mirrored CI bot. Defaults
                      are in ChromiumTestsApi.
+      tests_to_run: A list of test suites to run.
 
     Returns:
       A Tuple of
@@ -1441,6 +1468,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     test_targets, compile_targets = self._determine_compilation_targets(
         bot, affected_files, bot_db)
+
+    if tests_to_run:
+      filter_tests = lambda t: t.name in tests_to_run
+      tests = filter(filter_tests, tests)
+      tests_including_triggered = filter(filter_tests,
+                                         tests_including_triggered)
+      filter_str = lambda target: target in tests_to_run
+      compile_targets = filter(filter_str, compile_targets)
+      test_targets = filter(filter_str, test_targets)
+
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if compile_targets:
