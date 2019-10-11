@@ -127,8 +127,6 @@
   {
     "cmd": [
       "vpython",
-      "-vpython-spec",
-      "[START_DIR]/infra/luci/.vpython",
       "-u",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
       "--issue",

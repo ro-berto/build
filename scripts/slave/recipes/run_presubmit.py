@@ -195,11 +195,6 @@ def _RunStepsInternal(api):
     # the scripts from presubmit_build checkout).
     env['PYTHONPATH'] = ''
 
-  # Repos that have '.vpython' spec.
-  venv = None
-  if repo_name == 'luci_py':
-    venv = abs_root.join('.vpython')
-
   raw_result = result_pb2.RawResult()
   with api.context(env=env):
     # 8 minutes seems like a reasonable upper bound on presubmit timings.
@@ -211,7 +206,7 @@ def _RunStepsInternal(api):
     timeout = 900 if repo_name == 'luci_py' else 480
     # ok_ret='any' causes all exceptions to be ignored in this step
     step_json = api.presubmit(*presubmit_args,
-      venv=venv, timeout=timeout, ok_ret='any')
+      venv=True, timeout=timeout, ok_ret='any')
     # Set recipe result values
     if step_json:
       raw_result.summary_markdown = _createSummaryMarkdown(step_json)
