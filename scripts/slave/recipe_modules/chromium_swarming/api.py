@@ -1132,10 +1132,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       if pending > max_pending[0]:
         max_pending = (pending, i)
 
-      if shard.get('completed_ts'):
+      if shard.get('completed_ts') and shard.get('duration'):
         duration = (parse_time(shard['completed_ts']) - started).total_seconds()
         overhead = duration - shard['duration']
         runtime = shard['duration']
+
         duration_sum += duration
         overhead_sum += overhead
         runtime_sum += runtime
@@ -1588,11 +1589,11 @@ class SwarmingApi(recipe_api.RecipeApi):
         # Display text for shard duration to reflect runtime + overhead
         delta = parse_time(shard['completed_ts']) - parse_time(
             shard['started_ts'])
-        duration = fmt_time(delta.total_seconds())
-        runtime = shard['duration']
-        overhead = delta.total_seconds() - runtime
+        duration = delta.total_seconds()
+        runtime = shard.get('duration', duration)
+        overhead = duration - runtime
         display_text = ('shard #%d (runtime (%s) + overhead (%s): %s)' % (
-            index, fmt_time(runtime), fmt_time(overhead), duration))
+            index, fmt_time(runtime), fmt_time(overhead), fmt_time(duration)))
       else:
         display_text = 'shard #%d' % index
 
@@ -1625,7 +1626,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         has_valid_results = False
       elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
-          display_text = ('shard #%d timed out after %s' % (index, duration))
+          display_text = (
+              'shard #%d timed out after %s' % (index, fmt_time(duration)))
         else: # pragma: no cover
           # TODO(tikuta): Add coverage for this code.
           display_text = (
@@ -1634,9 +1636,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         failed_shards.append(index)
         has_valid_results = False
       elif self._get_exit_code(shard) != 0:
-        # TODO(bpastene): Add coverage for this code.
-        if duration is not None:  # pragma: no cover
-          display_text = 'shard #%d (failed) (%s)' % (index, duration)
+        if duration is not None:
+          display_text = 'shard #%d (failed) (%s)' % (index, fmt_time(duration))
         else:
           display_text = 'shard #%d (failed)' % index
         expected_errors.append(display_text)

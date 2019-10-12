@@ -647,3 +647,20 @@ def GenTests(api):
           show_shards_in_collect_step=True,
           gtest_task=True),
   )
+
+  missing_duration_data = api.chromium_swarming.canned_summary_output_raw()
+  del missing_duration_data['shards'][0]['duration']
+  yield api.test(
+      'missing_duration',
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+      api.step_data(
+          'hello_world',
+          api.chromium_swarming.summary(
+              api.test_utils.canned_gtest_output(True), missing_duration_data)),
+      api.properties(
+          platforms=('linux',),
+          show_shards_in_collect_step=True,
+          gtest_task=True), api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
