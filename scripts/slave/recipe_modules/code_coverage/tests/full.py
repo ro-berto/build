@@ -329,7 +329,7 @@ def GenTests(api):
           'gsutil Upload zipped JaCoCo HTML report'),
        api.post_process(
           post_process.MustRun,
-          'Clean up JaCoCo sources JSON files'),
+          'Clean up Java coverage files'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
@@ -350,7 +350,7 @@ def GenTests(api):
           'skip processing coverage data because no source file changed'),
        api.post_process(
           post_process.MustRun,
-          'Clean up JaCoCo sources JSON files'),
+          'Clean up Java coverage files'),
        api.post_process(post_process.DropExpectation),)
 
   yield api.test('process java coverage for per-cl',
@@ -388,7 +388,7 @@ def GenTests(api):
           'gsutil Upload zipped JaCoCo HTML report'),
        api.post_process(
           post_process.MustRun,
-          'Clean up JaCoCo sources JSON files'),
+          'Clean up Java coverage files'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 

@@ -6,6 +6,7 @@
 import argparse
 import logging
 import os
+import shutil
 import sys
 
 import generate_coverage_metadata_for_java as generator
@@ -28,6 +29,10 @@ def _parse_args(args):
       type=str,
       help='absolute path to the directory to traverse'
       '*__jacoco_sources.json files')
+  parser.add_argument(
+      '--java-coverage-dir',
+      type=str,
+      help='absolute path to the directory to store Java coverage data')
   params = parser.parse_args(args=args)
 
   if not os.path.isdir(params.sources_json_dir):
@@ -44,6 +49,9 @@ def main():
 
   for sources_json_file in sources_json_files:
     os.remove(sources_json_file)
+
+  if params.java_coverage_dir:
+    shutil.rmtree(params.java_coverage_dir)
 
   logging.info('Cleaning up finished')
 

@@ -283,11 +283,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.process_java_coverage_data()
       finally:
         self.m.python(
-            'Clean up JaCoCo sources JSON files',
-            self.resource('clean_up_jacoco_sources_json.py'),
+            'Clean up Java coverage files',
+            self.resource('clean_up_java_coverage_files.py'),
             args=[
                 '--sources-json-dir',
                 self.m.chromium.output_dir,
+                '--java-coverage-dir',
+                self.m.chromium.output_dir.join('coverage'),
             ])
 
   def process_clang_coverage_data(self, tests):
