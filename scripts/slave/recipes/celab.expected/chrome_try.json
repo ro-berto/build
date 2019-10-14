@@ -847,6 +847,36 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"1st test\": [{\"elapsed_time_ms\": 0, \"status\": \"FAILURE\"}]}]}",
+      "--master-name",
+      "tryserver.chrome.win",
+      "--builder-name",
+      "win-celab-try-rel",
+      "--build-number",
+      "0",
+      "--test-type",
+      "celab_tests",
+      "--chrome-revision",
+      "0",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test",
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]\\packages_tests\\bin"
+      ]
+    },
+    "name": "Upload to test-results [celab_tests]"
+  },
+  {
     "name": "$result"
   }
 ]

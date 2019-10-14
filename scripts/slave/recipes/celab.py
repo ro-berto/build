@@ -336,9 +336,9 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
       # Parse the test summary file and organize results in a readable way.
       tests_summary = _ParseTestSummary(api, storage_logs, logs_dir)
 
-      # Upload chromium results to test-results.
+      # Upload chromium & chrome results to test-results.
       project = api.buildbucket.build.builder.project
-      if tests_summary and project == 'chromium':
+      if tests_summary and (project == 'chromium' or project == 'chrome'):
         _UploadTestResults(api, tests_summary)
 
 
