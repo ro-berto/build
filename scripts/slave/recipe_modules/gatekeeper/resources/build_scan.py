@@ -77,6 +77,10 @@ def MultiPool(processes):
     pool.join()
 
 
+def authorizeHttp(http):
+  return LUCICredentials().authorize(http)
+
+
 def fetch(method, url, data=None, http=None):
   headers = {
     'Accept': 'application/json',
@@ -85,7 +89,7 @@ def fetch(method, url, data=None, http=None):
   }
   if not http:
     http = httplib2.Http()
-  http = LUCICredentials().authorize(http)
+  http = authorizeHttp(http)
   logging.info('%s %s with %s' % (method, url, data))
 
   attempts = 0
