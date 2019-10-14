@@ -582,7 +582,13 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
 
 def generate_build_url(build):
   """Creates a URL to reference the build."""
-  return 'https://cr-buildbucket.appspot.com/build/%d' % build['build']['id']
+  # TODO(crbug.com/878912): Use 'https://{buildbucket_hostname}/build/{id}'
+  # which redirects to the right place.
+  return '%s/builders/%s/builds/%d' % (
+      build['base_url'].rstrip('/'),
+      urllib.quote(build['build']['builder']['builder']),
+      build['build']['number']
+  )
 
 
 # TODO(crbug.com/878912): Remove once chromium-build app is modified to accept
