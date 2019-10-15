@@ -306,7 +306,6 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'archive_build': True,
       'gs_bucket': 'chromium-v8-snapshots',
-      'gs_acl': 'public-read',
       'testing': {
         'platform': 'linux',
         'source_side_spec_file': 'chromium.linux.json',
