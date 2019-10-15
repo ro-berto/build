@@ -1090,57 +1090,6 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Mac FYI 10.14 Release (AMD)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
-      'serialize_tests': True,
-    },
-    'Mac FYI 10.14 Release (Intel)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
-      'serialize_tests': True,
-    },
-    'Mac FYI 10.14 Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
-      'serialize_tests': True,
-    },
     'GPU FYI Perf Android 64 Builder': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
