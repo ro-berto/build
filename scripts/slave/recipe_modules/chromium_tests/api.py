@@ -66,11 +66,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   BotMetadata = BotMetadata
   Task = Task
 
-  def __init__(self, *args, **kwargs):
-    super(ChromiumTestsApi, self).__init__(*args, **kwargs)
+  def __init__(self, input_properties, **kwargs):
+    super(ChromiumTestsApi, self).__init__(**kwargs)
     self._builders = {}
     self.add_builders(chromium_tests_builders.BUILDERS)
     self._precommit_mode = False
+    self._bucketed_triggers = input_properties.get('bucketed_triggers', False)
 
   @property
   def builders(self):
@@ -624,6 +625,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           revision_dir=bot_config.get('cf_revision_dir'),
       )
 
+  def _get_scheduler_jobs_to_trigger(self, mastername, buildername, bot_db):
+    """Get the LUCI scheduler jobs to trigger.
+
+    Child builds are triggered through LUCI scheduler rather than buildbucket
+    so that if so configured, multiple outstanding triggers are collapsed into a
+    single build (e.g. a CI builder completes multiple builds during a CI tester
+    run, only a single additional run of the test occurs).
+    """
+    get_job_name = lambda buildername: buildername
+    if self._bucketed_triggers:
+      prefix = self.m.buildbucket.build.builder.bucket + '-'
+      get_job_name = lambda buildername: prefix + buildername
+
+    scheduler_jobs = collections.defaultdict(list)
+    for luci_project, _, loop_buildername, _ in sorted(
+        bot_db.bot_configs_matching_parent_buildername(mastername,
+                                                       buildername)):
+      job = get_job_name(loop_buildername)
+      scheduler_jobs[luci_project].append(job)
+
+    return scheduler_jobs
+
   def trigger_child_builds(self, mastername, buildername, update_step, bot_db,
                            additional_properties=None):
     additional_properties = additional_properties or {}
@@ -643,21 +666,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     properties.update(additional_properties)
 
-    scheduler_jobs = collections.defaultdict(list)
-    for luci_project, _, loop_buildername, _ in sorted(
-        bot_db.bot_configs_matching_parent_buildername(
-            mastername, buildername)):
-      # LUCI mode will emulate triggering of builds inside master.chromium*
-      # masters which are all mapped into luci.chromium.ci bucket. The
-      # triggering will go through LUCI Scheduler to ensure that outstanding
-      # triggers get merged if triggered builder (aka loop_buildername) is too
-      # slow. LUCI Scheduler `project` is chromium and `job` names are the same
-      # as builder names. Config is located here:
-      # https://chromium.googlesource.com/chromium/src/+/infra/config/luci-scheduler.cfg
-      #
-      # Schematically:
-      #   <this build> --triggers--> LUCI Scheduler --triggers--> Buildbucket.
-      scheduler_jobs[luci_project].append(loop_buildername)
+    scheduler_jobs = self._get_scheduler_jobs_to_trigger(
+        mastername, buildername, bot_db)
 
     if scheduler_jobs:
       self.m.scheduler.emit_triggers(
