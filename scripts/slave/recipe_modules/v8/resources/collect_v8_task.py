@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import fileinput
 import json
 import optparse
 import os
@@ -14,6 +15,7 @@ import traceback
 
 from slave import slave_utils
 
+COMPLETED_TESTS_LOG = "completed_tests.log"
 
 MISSING_SHARDS_MSG = r"""Missing results from the following shard(s): %s
 
@@ -34,8 +36,22 @@ def emit_warning(title, log=None):
     slave_utils.WriteLogLines(title, log.split('\n'))
 
 
+
+def _shards_summary(output_dir):
+  # summary.json is produced by swarming.py itself. We are mostly interested
+  # in the number of shards.
+  try:
+    with open(os.path.join(output_dir, 'summary.json')) as f:
+      return json.load(f)
+  except (IOError, ValueError):
+    emit_warning(
+        'summary.json is missing or can not be read',
+        'Something is seriously wrong with swarming_client/ or the bot.'
+    )
+    return None
+
 def merge_shard_results(
-    output_dir, sancov_merger=None, coverage_dir=None):
+    output_dir, summary, sancov_merger=None, coverage_dir=None):
   """Reads JSON test output from all shards and combines them into one.
 
   Also merges sancov coverage data if coverage_dir is spefied.
@@ -43,15 +59,7 @@ def merge_shard_results(
   Returns dict with merged test output on success or None on failure. Emits
   annotations.
   """
-  # summary.json is produced by swarming.py itself. We are mostly interested
-  # in the number of shards.
-  try:
-    with open(os.path.join(output_dir, 'summary.json')) as f:
-      summary = json.load(f)
-  except (IOError, ValueError):
-    emit_warning(
-        'summary.json is missing or can not be read',
-        'Something is seriously wrong with swarming_client/ or the bot.')
+  if not summary:
     return None
 
   # Merge all JSON files together.
@@ -133,6 +141,43 @@ def load_shard_json(output_dir, task_id):
     return None
 
 
+def shard_logs(shards_root, summary):
+  """Collect all test completion logs from shard dirs"""
+  return [
+    os.path.join(shards_root, result['task_id'], COMPLETED_TESTS_LOG)
+    for result in summary['shards']
+  ]
+
+def concatenate_logs(options, shards_root, summary):
+  """Concatenate all completion logs in one big file (--concatenated-completion)
+  """
+  if summary:
+    try:
+      with open(options.concatenated_completion, "w+") as outfile:
+        input_lines = fileinput.input(shard_logs(shards_root, summary))
+        outfile.writelines(input_lines)
+    except IOError as e:
+      emit_warning(e)
+      emit_warning('failed to process completed tests logs',
+                   traceback.format_exc())
+  else:
+    emit_warning('a failure to read summary json file prevents completed ' +
+      'tests log concatenation', traceback.format_exc())
+
+def process_shard_results(options, task_output_dir, summary):
+  # Output parsing should not change exit code no matter what, so catch any
+  # exceptions and just log them.
+  try:
+    with open(options.merged_test_output, 'wb') as f:
+      json.dump(
+          merge_shard_results(task_output_dir, summary, options.sancov_merger,
+                              options.coverage_dir),
+          f,
+          separators=(',', ':'))
+  except Exception:
+    emit_warning('failed to process v8 output JSON', traceback.format_exc())
+
+
 def main(args):
   # Split |args| into options for shim and options for swarming.py script.
   if '--' in args:
@@ -147,6 +192,7 @@ def main(args):
   parser.add_option('--merged-test-output')
   parser.add_option('--coverage-dir')
   parser.add_option('--sancov-merger')
+  parser.add_option('--concatenated-completion')
   options, extra_args = parser.parse_args(shim_args)
 
   # Validate options.
@@ -178,20 +224,11 @@ def main(args):
     # failed, not the swarming.py invocation itself.
     exit_code = subprocess.call(args)
 
-    # Output parsing should not change exit code no matter what, so catch any
-    # exceptions and just log them.
-    try:
-      with open(options.merged_test_output, 'wb') as f:
-        json.dump(
-            merge_shard_results(
-                task_output_dir,
-                options.sancov_merger,
-                options.coverage_dir),
-            f, separators=(',', ':'))
-    except Exception:
-      emit_warning(
-          'failed to process v8 output JSON', traceback.format_exc())
+    summary = _shards_summary(task_output_dir)
 
+    process_shard_results(options, task_output_dir, summary)
+
+    concatenate_logs(options, task_output_dir, summary)
   finally:
     shutil.rmtree(task_output_dir, ignore_errors=True)
 

@@ -92,7 +92,7 @@
       "--raw-cmd",
       "--",
       "tools/run-tests.py",
-      "--progress=verbose",
+      "--progress=ci",
       "--mode",
       "Release",
       "--outdir",
@@ -107,7 +107,9 @@
       "V8 Foobar",
       "--swarming",
       "--json-test-results",
-      "${ISOLATED_OUTDIR}/output.json"
+      "${ISOLATED_OUTDIR}/output.json",
+      "--ci-test-completion",
+      "${ISOLATED_OUTDIR}/completed_tests.log"
     ],
     "name": "trigger tests.[trigger] Check"
   },
@@ -126,6 +128,8 @@
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
+      "--concatenated-completion",
+      "/path/to/tmp/",
       "--",
       "collect",
       "-server",
