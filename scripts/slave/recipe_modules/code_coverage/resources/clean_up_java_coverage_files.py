@@ -50,7 +50,7 @@ def main():
   for sources_json_file in sources_json_files:
     os.remove(sources_json_file)
 
-  if params.java_coverage_dir:
+  if params.java_coverage_dir and os.path.isdir(params.java_coverage_dir):
     shutil.rmtree(params.java_coverage_dir)
 
   logging.info('Cleaning up finished')
