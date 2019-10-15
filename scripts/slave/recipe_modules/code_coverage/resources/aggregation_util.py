@@ -9,6 +9,7 @@ https://chromium.googlesource.com/infra/infra/+/refs/heads/master/appengine/find
 
 from collections import defaultdict
 import os
+import posixpath
 
 
 def get_aggregated_coverage_data_from_files(files_coverage_data,
@@ -75,13 +76,13 @@ def _caclulate_per_directory_summaries(files_coverage_data):
   per_directory_summaries = defaultdict(
       lambda: _new_summaries(files_coverage_data[0]['summaries']))
   for file_record in files_coverage_data:
-    parent_dir = os.path.dirname(file_record['path'])
+    parent_dir = posixpath.dirname(file_record['path'])
     while parent_dir != '//':
       # In the coverage data format, dirs end with '/' except for root.
       parent_coverage_path = parent_dir + '/'
       _merge_summary(per_directory_summaries[parent_coverage_path],
                      file_record['summaries'])
-      parent_dir = os.path.dirname(parent_dir)
+      parent_dir = posixpath.dirname(parent_dir)
 
     _merge_summary(per_directory_summaries['//'], file_record['summaries'])
 

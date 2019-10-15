@@ -253,6 +253,17 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   filename = file_coverage_data['filename']
   rel_file_path = os.path.relpath(filename, src_path)
+  # TODO(crbug.com/1010267) Remove prefixes when Clang supports relative paths
+  # for coverage.
+  prefixes = [src_path, r'C:\botcode\w']
+  coverage_path = os.path.normpath(filename)
+  for prefix in prefixes:
+    if coverage_path.startswith(prefix):
+      coverage_path = coverage_path[len(prefix):]
+      break
+  # Convert the filesystem path to a source-absolute (GN-style) path.
+  coverage_path = '//' + coverage_path.replace(os.sep, '/').lstrip('/')
+
   line_data, block_data = _extract_coverage_info(segments)
   line_data = sorted(line_data.items(), key=lambda x: x[0])
   if diff_mapping and rel_file_path in diff_mapping:
@@ -263,7 +274,7 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   lines, uncovered_blocks = _to_compressed_format(line_data, block_data)
   data = {
       'path':
-          '//' + rel_file_path,
+          coverage_path,
       'lines':
           lines,
       'summaries':

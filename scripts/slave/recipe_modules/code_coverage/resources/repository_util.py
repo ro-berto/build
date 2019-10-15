@@ -11,8 +11,12 @@ import collections
 import logging
 import multiprocessing
 import os
+import platform
 import subprocess
 import time
+
+IS_WIN = platform.system() == 'Windows'
+GIT = 'git' if not IS_WIN else 'git.bat'
 
 
 class _VarImpl(object):
@@ -122,7 +126,7 @@ def _RetrieveRevisionFromGit(args):
   path_in_dep_repo = path[len(checkout_dir):]
   try:
     git_output = subprocess.check_output(
-        ['git', 'log', '-n', '1', '--pretty=format:%H:%ct', path_in_dep_repo],
+        [GIT, 'log', '-n', '1', '--pretty=format:%H:%ct', path_in_dep_repo],
         cwd=cwd)
 
     lines = git_output.splitlines()
@@ -154,7 +158,7 @@ def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
     checkout_dir = os.path.join(root_dir, checkout[2:])
     if not os.path.isdir(checkout_dir):
       continue
-    git_output = subprocess.check_output(['git', 'ls-files'], cwd=checkout_dir)
+    git_output = subprocess.check_output([GIT, 'ls-files'], cwd=checkout_dir)
     for path in git_output.splitlines():
       all_files[checkout].add(os.path.join(checkout, path))
   return all_files
