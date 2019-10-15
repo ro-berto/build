@@ -16,4 +16,4 @@ def CheckChangeOnCommit(input_api, output_api):
       output_api,
       os.path.join(input_api.PresubmitLocalPath(), 'resources'),
       # TODO(crbug.com/991689): Add more gatekeeper tests as they are fixed.
-      whitelist=[r'build_scan_test\.py$'])
+      whitelist=[r'(gatekeeper_ng_config|build_scan)_test\.py$'])

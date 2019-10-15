@@ -4,22 +4,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Unit tests for gatekeeper_ng_config.py.
-
-"""
+"""Unit tests for gatekeeper_ng_config.py."""
 
 import json
-import os
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=relative-import
-
 import gatekeeper_ng_config
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# TODO(stip, martiniss): convert rest of old config tests to this style
 
 class GatekeeperTest(unittest.TestCase):
   def setUp(self):
