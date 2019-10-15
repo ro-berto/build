@@ -574,9 +574,9 @@ def chromium_official(c):
 
 @config_ctx(includes=['chromium_official'])
 def chromium_official_internal(c):
-   # TODO(mmoss): This isn't right, since CHECKOUT_PATH is the directory that
-   # the primary solution (i.e. 'src') is checked out to, but we need the
-   # top-level, .gclient path.
+  # TODO(mmoss): This isn't right, since CHECKOUT_PATH is the directory that
+  # the primary solution (i.e. 'src') is checked out to, but we need the
+  # top-level, .gclient path.
   c.project_generator.config_path = c.CHECKOUT_PATH.join(
       'src-internal', 'tools', 'mb', 'mb_config.pyl')
 
@@ -641,3 +641,7 @@ def xcode_10e1001(c):
 @config_ctx()
 def xcode_11m382q(c):
   c.mac_toolchain.xcode_build_version = '11m382q'
+
+@config_ctx()
+def xcode_11a1027(c):
+  c.mac_toolchain.xcode_build_version = '11a1027'
