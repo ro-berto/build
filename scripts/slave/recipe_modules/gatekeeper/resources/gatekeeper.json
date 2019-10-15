@@ -373,6 +373,7 @@
           "*": {}
         },
         "excluded_builders" : [
+          "Leak Detection Linux",
           "linux-jumbo-rel"
         ],
         "tree_notify": [
