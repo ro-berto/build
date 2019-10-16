@@ -290,13 +290,13 @@ def get_build_json(request_tuple):
   """Used by get_build_jsons to download the json of a specific build."""
   master_url, builder, buildnum, bucket, project = request_tuple
   request = {
-    'builder': {
-      'project': project,
-      'bucket': bucket,
-      'builder': builder,
-    },
-    'buildNumber': buildnum,
-    'fields': 'endTime,steps,input,builder,number,status',
+      'builder': {
+          'project': project,
+          'bucket': bucket,
+          'builder': builder,
+      },
+      'buildNumber': buildnum,
+      'fields': 'endTime,steps,input,builder,number,status,id',
   }
   resp = call_buildbucket('GetBuild', request)
   return (resp, master_url, builder, buildnum)
