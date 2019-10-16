@@ -209,7 +209,7 @@
     ],
     "infra_step": true,
     "name": "schedule bisect (f4d35da881f8fd329a4d3e01dd78b66a502d5c49)",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"f4d35da881f8fd329a4d3e01dd78b66a502d5c49\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"bisect_newer\": [\"8331c527346abecfe0ad081df241512bb4b7df50\"], \"bisect_older\": [], \"bisect_reason\": \"Infra Failure: Step('everything') (retcode: 1)\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"ci\", \"builder\": \"flutter-engine-linux\", \"project\": \"project\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"gitilesCommit\": {\"host\": \"dart.googlesource.com\", \"id\": \"f4d35da881f8fd329a4d3e01dd78b66a502d5c49\", \"project\": \"linear_sdk_flutter_engine\", \"ref\": \"refs/heads/master\"}, \"priority\": 30, \"properties\": {\"bisect_newer\": [\"8331c527346abecfe0ad081df241512bb4b7df50\"], \"bisect_older\": [], \"bisect_reason\": \"Infra Failure: Step('everything') (retcode: 1)\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -235,6 +235,7 @@
       "@@@STEP_LOG_LINE@request@          \"builder\": \"flutter-engine-linux\", @@@",
       "@@@STEP_LOG_LINE@request@          \"project\": \"project\"@@@",
       "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"experimental\": \"NO\", @@@",
       "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
       "@@@STEP_LOG_LINE@request@        \"gitilesCommit\": {@@@",
       "@@@STEP_LOG_LINE@request@          \"host\": \"dart.googlesource.com\", @@@",
