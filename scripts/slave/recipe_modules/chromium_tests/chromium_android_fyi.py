@@ -27,6 +27,22 @@ SPEC = {
                 'platform': 'linux',
             },
         },
+        'Android WebView P OOR-CORS FYI (rel)': {
+            'chromium_config': 'android',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            'android_config': 'main_builder',
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
         'Memory Infra Tester': {
             'chromium_config': 'android',
             'gclient_config': 'chromium',
