@@ -668,7 +668,7 @@
       "python",
       "-u",
       "[CACHE]/builder/src/out/Release/bin/run_base_unittests",
-      "--test_launcher_summary_output",
+      "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--system-log-file",
       "${ISOLATED_OUTDIR}/system_log"
