@@ -14,6 +14,7 @@ DEPS = [
   'chromium_android',
   'emulator',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -51,12 +52,11 @@ BUILDERS = freeze({
 
 
 PROPERTIES = {
-  'buildername': Property(),
   'mastername': Property(),
 }
 
-def RunSteps(api, mastername, buildername):
-  builder = BUILDERS[mastername][buildername]
+def RunSteps(api, mastername):
+  builder = BUILDERS[mastername][api.buildbucket.builder_name]
   api.chromium_android.configure_from_properties(
       builder['config'],
       REPO_NAME='src',
@@ -75,7 +75,7 @@ def RunSteps(api, mastername, buildername):
   api.chromium.runhooks()
 
   if api.chromium.c.project_generator.tool == 'mb':
-    api.chromium.mb_gen(mastername, buildername, use_goma=True)
+    api.chromium.mb_gen(mastername, api.buildbucket.builder_name, use_goma=True)
 
   targets = []
   for target in builder.get('unittests', []):
@@ -119,21 +119,21 @@ def GenTests(api):
     for buildername in master:
       yield api.test(
           '%s_test_basic' % sanitize(buildername),
-          api.properties.generic(
-              buildername=buildername, mastername=mastername),
+          api.buildbucket.generic_build(builder=buildername),
+          api.properties(mastername=mastername),
       )
 
   yield api.test(
       'x86_Emulator_Tester_test_fail',
-      api.properties.generic(
-          buildername='x86 Emulator Tester', mastername='chromium.android.fyi'),
+      api.buildbucket.generic_build(builder='x86 Emulator Tester'),
+      api.properties(mastername='chromium.android.fyi'),
       api.step_data('android_webview_unittests', retcode=2),
   )
 
   yield api.test(
       'compile_failure',
-      api.properties.generic(
-          buildername='x86 Emulator Tester', mastername='chromium.android.fyi'),
+      api.buildbucket.generic_build(builder='x86 Emulator Tester'),
+      api.properties(mastername='chromium.android.fyi'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

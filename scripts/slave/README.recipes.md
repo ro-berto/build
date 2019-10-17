@@ -4815,14 +4815,14 @@ A generic recipe that runs a given docker container and exits.
 &mdash; **def [RunSteps](/scripts/slave/recipes/emscripten_releases.py#45)(api):**
 ### *recipes* / [emulator](/scripts/slave/recipes/emulator.py)
 
-[DEPS](/scripts/slave/recipes/emulator.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/emulator.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/emulator.py#58)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/emulator.py#58)(api, mastername):**
 ### *recipes* / [emulator:examples/full](/scripts/slave/recipe_modules/emulator/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/emulator/examples/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/emulator/examples/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/emulator/examples/full.py#44)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/emulator/examples/full.py#44)(api, mastername):**
 ### *recipes* / [filter:examples/full](/scripts/slave/recipe_modules/filter/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/examples/full.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

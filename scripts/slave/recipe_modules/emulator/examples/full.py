@@ -12,6 +12,7 @@ DEPS = [
   'chromium_android',
   'emulator',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -37,12 +38,11 @@ BUILDERS = freeze({
 })
 
 PROPERTIES = {
-  'buildername': Property(),
   'mastername': Property(),
 }
 
-def RunSteps(api, mastername, buildername):
-  builder = BUILDERS[mastername][buildername]
+def RunSteps(api, mastername):
+  builder = BUILDERS[mastername][api.buildbucket.builder_name]
   api.chromium_android.configure_from_properties(
       builder['config'],
       REPO_NAME='src',
@@ -82,6 +82,6 @@ def GenTests(api):
     for buildername in master:
       yield api.test(
           '%s_test_basic' % sanitize(buildername),
-          api.properties.generic(
-              buildername=buildername, mastername=mastername),
+          api.buildbucket.generic_build(builder=buildername),
+          api.properties(mastername=mastername),
       )
