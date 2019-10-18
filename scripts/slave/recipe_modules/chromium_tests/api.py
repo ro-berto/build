@@ -1480,13 +1480,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot, affected_files, bot_db)
 
     if tests_to_run:
-      filter_tests = lambda t: t.name in tests_to_run
-      tests = filter(filter_tests, tests)
-      tests_including_triggered = filter(filter_tests,
-                                         tests_including_triggered)
-      filter_str = lambda target: target in tests_to_run
-      compile_targets = filter(filter_str, compile_targets)
-      test_targets = filter(filter_str, test_targets)
+      compile_targets = [t for t in compile_targets if t in tests_to_run]
+      test_targets = [t for t in test_targets if t in tests_to_run]
+      # TODO(crbug.com/840252): Using startswith for now to allow layout tests
+      # to work, since the # ninja target which gets computed has exparchive as
+      # the suffix. Can switch to plain comparison after the bug is fixed.
+      tests = [
+          t for t in tests if any(
+              t.target_name.startswith(target_name)
+              for target_name in tests_to_run)
+      ]
+      tests_including_triggered = [
+          t for t in tests_including_triggered if any(
+              t.target_name.startswith(target_name)
+              for target_name in tests_to_run)
+      ]
 
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
