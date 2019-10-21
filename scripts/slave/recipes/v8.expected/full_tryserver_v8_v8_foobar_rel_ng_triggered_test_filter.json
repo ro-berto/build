@@ -155,7 +155,7 @@
       "--raw-cmd",
       "--",
       "tools/run-tests.py",
-      "--progress=verbose",
+      "--progress=ci",
       "--mode",
       "Release",
       "--outdir",
@@ -174,7 +174,9 @@
       "v8_foobar_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
-      "${ISOLATED_OUTDIR}/output.json"
+      "${ISOLATED_OUTDIR}/output.json",
+      "--ci-test-completion",
+      "${ISOLATED_OUTDIR}/completed_tests.log"
     ],
     "name": "trigger tests.[trigger] Check"
   },
@@ -193,6 +195,8 @@
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
+      "--concatenated-completion",
+      "/path/to/tmp/",
       "--",
       "collect",
       "-server",
@@ -214,6 +218,9 @@
     "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@completed tests@Done executing test1@@@",
+      "@@@STEP_LOG_LINE@completed tests@Test failed test 2@@@",
+      "@@@STEP_LOG_END@completed tests@@@",
       "@@@STEP_LOG_LINE@test filter@mjsunit/regression/*@@@",
       "@@@STEP_LOG_LINE@test filter@intl/foo@@@",
       "@@@STEP_LOG_LINE@test filter@intl/bar@@@",

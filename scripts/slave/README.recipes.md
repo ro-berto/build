@@ -3473,7 +3473,7 @@ Entry method for using the v8 api.
 
 Absolute path to the build product based on the 'checkout' path.
 
-&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1449)(self, requests, project=None, bucket=None, step_name='trigger'):**
+&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1451)(self, requests, project=None, bucket=None, step_name='trigger'):**
 
 Triggers builds via buildbucket.
 
@@ -3490,7 +3490,7 @@ Returns:
 
 Returns a list of names of this builder and all its triggered testers.
 
-&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1556)(self, sequence, subsequence, value):**
+&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1558)(self, sequence, subsequence, value):**
 
 Calculate a list of missing values from a subsequence.
 
@@ -3575,9 +3575,9 @@ in the test spec of the current builder.
 
 &emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#972)(self):**
 
-&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1532)(self, bisect_range):**
+&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1534)(self, bisect_range):**
 
-&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1481)(self):**
+&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1483)(self):**
 
 &mdash; **def [get\_test\_roots](/scripts/slave/recipe_modules/v8/api.py#187)(self):**
 
@@ -3633,7 +3633,7 @@ Returns: Test config dict.
 
 Set predifined test configs from build repository.
 
-&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1578)(self, available_bisect_range):**
+&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1580)(self, available_bisect_range):**
 
 &mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#1061)(self, test_results, test_spec):**
 
@@ -3643,7 +3643,7 @@ Build-local bisection for one failure.
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [maybe\_nest](/scripts/slave/recipe_modules/v8/api.py#997)(self, condition, parent_step_name):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1359)(self, test_spec=v8_builders.EmptyTestSpec, \*\*additional_properties):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1361)(self, test_spec=v8_builders.EmptyTestSpec, \*\*additional_properties):**
 
 &mdash; **def [parse\_revision\_props](/scripts/slave/recipe_modules/v8/api.py#389)(self, got_revision, got_revision_cp=None):**
 
@@ -3669,17 +3669,17 @@ Args:
 Returns: v8_builders.TestSpec object, filtered by interesting builders
   (current builder and all its triggered testers).
 
-&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1594)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1596)(self, ref, step_name_desc):**
 
 Read and return the version-file content at a paricular ref.
 
-&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1603)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1605)(self, ref, step_name_desc):**
 
 Read and return the version at a paricular ref.
 
 &emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#499)(self):**
 
-&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1583)(self, culprit_range):**
+&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1585)(self, culprit_range):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#463)(self, \*\*kwargs):**
 
@@ -3759,7 +3759,7 @@ Capture coverage data and upload a report.
 
 &mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#845)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1607)(blob):**
+&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1609)(blob):**
 ### *recipe_modules* / [webrtc](/scripts/slave/recipe_modules/webrtc)
 
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#5): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [goma](#recipe_modules-goma), [ios](#recipe_modules-ios), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
