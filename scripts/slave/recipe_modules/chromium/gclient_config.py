@@ -54,6 +54,8 @@ def chromium_bare(c):
       'src/third_party/flac', 'HEAD')
   p['https://chromium.googlesource.com/chromium/deps/icu'] = (
       'src/third_party/icu', 'HEAD')
+  p['https://chromium.googlesource.com/devtools/devtools-frontend'] = (
+      'src/third_party/devtools-frontend/src', 'HEAD')
   p['https://pdfium.googlesource.com/pdfium'] = (
       'src/third_party/pdfium', 'HEAD')
   p['https://skia.googlesource.com/skia'] = ('src/third_party/skia', 'HEAD')
