@@ -1110,7 +1110,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   @staticmethod
   def _display_time_stats(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
-    and also displays the min and max shard duration accross all shards."""
+    and also displays the min and max shard duration across all shards."""
     max_pending = (-1, None)
     ShardStats = collections.namedtuple(
         'ShardStats', ['duration', 'runtime', 'overhead', 'index'])
@@ -1132,10 +1132,12 @@ class SwarmingApi(recipe_api.RecipeApi):
       if pending > max_pending[0]:
         max_pending = (pending, i)
 
-      if shard.get('completed_ts') and shard.get('duration'):
-        duration = (parse_time(shard['completed_ts']) - started).total_seconds()
-        overhead = duration - shard['duration']
-        runtime = shard['duration']
+      completed_ts = shard.get('completed_ts')
+      runtime = shard.get('duration')
+
+      if completed_ts and runtime:
+        duration = (parse_time(completed_ts) - started).total_seconds()
+        overhead = duration - runtime
 
         duration_sum += duration
         overhead_sum += overhead
