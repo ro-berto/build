@@ -1,0 +1,31 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "hash1",
+      "-I",
+      "server1",
+      "--verbose"
+    ],
+    "name": "Run isolated test 'hash1'"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "hash2",
+      "-I",
+      "server2",
+      "--verbose"
+    ],
+    "name": "Run isolated test 'hash2'"
+  },
+  {
+    "name": "$result"
+  }
+]

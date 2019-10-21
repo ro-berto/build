@@ -41,4 +41,14 @@ message InputProperties {
   // Test override for chromium_tests.builders. Only set during testing.
   // This is a json-encoded object.
   string test_override_builders = 6;
+
+  // Identifies a particular isolate object.
+  message IsolateObject {
+    string server = 1;
+    string hash = 2;
+  }
+
+  // Isolate tests to run. If provided, other fields are ignored and the
+  // isolates are run as-is.
+  repeated IsolateObject isolate_targets = 7;
 }

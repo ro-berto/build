@@ -24,6 +24,7 @@ DEPS = [
     'depot_tools/tryserver',
     'filter',
     'findit',
+    'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -34,6 +35,12 @@ PROPERTIES = InputProperties
 
 
 def RunSteps(api, properties):
+  if properties.isolate_targets:
+    for target in properties.isolate_targets:
+      api.isolate.isolate_server = target.server
+      api.isolate.run_isolated("Run isolated test '%s'" % target.hash,
+                               target.hash)
+    return
 
   # 0. Validate properties.
   assert (
@@ -390,3 +397,8 @@ def GenTests(api):
       api.post_process(StatusSuccess),
       api.post_process(DropExpectation),
   )
+
+  isolate_properties = InputProperties()
+  isolate_properties.isolate_targets.add(server='server1', hash='hash1')
+  isolate_properties.isolate_targets.add(server='server2', hash='hash2')
+  yield api.test('isolate_targets', api.properties(isolate_properties))
