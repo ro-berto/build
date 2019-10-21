@@ -293,6 +293,21 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE[build::binary_size_trybot].resources/trybot_failed_expectations_checker.py",
+      "--clear-expectations",
+      "--build-vars-path",
+      "[CACHE]/builder/src/out/Release/build_vars.txt"
+    ],
+    "cwd": "[CACHE]/builder/src/out/Release",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Clear Expectation Files"
+  },
+  {
+    "cmd": [
       "git",
       "-c",
       "core.quotePath=false",
@@ -871,6 +886,30 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "supersize archive (MonochromePublic.minimal.apks) (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE[build::binary_size_trybot].resources/trybot_failed_expectations_checker.py",
+      "--check-expectations",
+      "--results-path",
+      "/path/to/tmp/json",
+      "--build-vars-path",
+      "[CACHE]/builder/src/out/Release/build_vars.txt"
+    ],
+    "cwd": "[CACHE]/builder/src/out/Release",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Run Expectations Script",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failed_messages\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"success\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -1680,7 +1719,7 @@
       "--after-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--results-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/results.json",
+      "[CLEANUP]/binary-size-trybot_tmp_1/size_results.json",
       "--staging-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1"
     ],
@@ -1691,11 +1730,15 @@
     "name": "Generate diffs"
   },
   {
+    "cmd": [],
+    "name": "Checking for expectation failures"
+  },
+  {
     "cmd": [
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CLEANUP]/binary-size-trybot_tmp_1/results.json",
+      "[CLEANUP]/binary-size-trybot_tmp_1/size_results.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
