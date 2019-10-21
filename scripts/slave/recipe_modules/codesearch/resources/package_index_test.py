@@ -8,12 +8,14 @@
 from __future__ import absolute_import
 
 import hashlib
-import json
 import os
 import shutil
 import tempfile
 import unittest
 import zipfile
+
+import google.protobuf.text_format
+from kythe.proto import analysis_pb2
 
 import package_index
 
@@ -68,7 +70,7 @@ class PackageIndexTest(unittest.TestCase):
     self.assertTrue(os.path.exists(
         os.path.join(self.unpacked_index_dir, 'kzip', 'files')))
     self.assertTrue(os.path.exists(
-        os.path.join(self.unpacked_index_dir, 'kzip', 'units')))
+        os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits')))
 
   def tearDown(self):
     if os.path.exists(self.archive_path):
@@ -89,40 +91,48 @@ class PackageIndexTest(unittest.TestCase):
           self.assertEqual(golden_file.read(), actual_file.read())
 
   def _GetDictOfUnitFilesInDir(self, units_dir):
-    """Parses all JSON files in a dir and returns them in a dict.
+    """Parses all unit files in a dir and returns them in a dict.
 
-    Assumes that the dicts contain entries accessible at
-    dict['unit']['v_name']['corpus'] and dict['unit']['source_file'][0], which
-    are used for keying.
+    Assumes that the files contain text or wire format
+    kythe.proto.IndexedCompilation protos which have fields unit.v_name.corpus
+    and unit.source_file[0] set, as they are used for keying.
     """
-    unit_dicts = {}
+    unit_protos = {}
     for filename in os.listdir(units_dir):
       with open(os.path.join(units_dir, filename), 'r') as unit_file:
-        unit_dict = json.load(unit_file)
-        key = (unit_dict['unit']['v_name']['corpus'],
-               unit_dict['unit']['source_file'][0])
-        unit_dicts[key] = unit_dict
-    return unit_dicts
+        unit_file_data = unit_file.read()
+
+        unit_proto = analysis_pb2.IndexedCompilation()
+        unit_proto.ParseFromString(unit_file_data)
+
+        key = (unit_proto.unit.v_name.corpus, unit_proto.unit.source_file[0])
+        unit_protos[key] = str(unit_proto).splitlines()
+    return unit_protos
+
+  def _GetDictOfGoldenUnitFilesInDir(self, units_dir):
+    unit_protos = {}
+    for filename in os.listdir(units_dir):
+      with open(os.path.join(units_dir, filename), 'r') as unit_file:
+        unit_protos[filename] = unit_file.read().splitlines()
+    return unit_protos
 
   def _CheckUnitFilesMatch(self, out_dir, golden_dir):
-    """Checks that the JSON files in out_dir and golden_dir are equivalent.
+    """Checks that the proto files in out_dir and golden_dir are equivalent.
 
-    Doesn't care about filenames or formatting of the JSON files; only that the
-    dicts are equivalent after parsing.
+    Doesn't care about filenames, only that the contained protos are equivalent.
 
-    Assumes that the dicts contain entries accessible at
-    dict['unit']['v_name']['corpus'] and dict['unit']['source_file'][0], which
-    are used for keying.
+    Assumes that the protos have fields unit.v_name.corpus and
+    unit.source_file[0] set, as they are used for keying.
     """
     actual_files = os.listdir(out_dir)
     golden_files = os.listdir(golden_dir)
     self.assertEqual(len(golden_files), len(actual_files))
 
     actual_dicts = self._GetDictOfUnitFilesInDir(out_dir)
-    golden_dicts = self._GetDictOfUnitFilesInDir(golden_dir)
+    golden_dicts = self._GetDictOfGoldenUnitFilesInDir(golden_dir)
     for key, unit_dict in actual_dicts.items():
-      self.assertIn(key, golden_dicts.keys())
-      self.assertEqual(golden_dicts[key], unit_dict)
+      golden_key = os.path.basename(key[1])
+      self.assertEqual(golden_dicts[golden_key], unit_dict)
 
   def testGenerateDataFiles(self):
     self._CheckFilesMatchExactly(
@@ -131,7 +141,7 @@ class PackageIndexTest(unittest.TestCase):
 
   def testGenerateUnitFiles(self):
     self._CheckUnitFilesMatch(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'units'),
+        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units'))
 
   def testGenerateUnitFilesWindows(self):
@@ -155,13 +165,13 @@ class PackageIndexTest(unittest.TestCase):
     z.close()
 
     self._CheckUnitFilesMatch(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'units'),
+        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units_win'))
 
   def testCreateArchive(self):
     # Verify the structure of the archive. It should be as follows:
     # kzip/              # Any valid non-empty directory name
-    #   units/
+    #   pbunits/
     #     abcd1234       # Compilation unit (name is SHA256 of content)
     #     ...
     #   files/
@@ -175,15 +185,15 @@ class PackageIndexTest(unittest.TestCase):
     self.assertIn(root + os.path.sep, zipped_filenames);
 
     # Verify that the units/ dir has its own entry.
-    self.assertIn(os.path.join(root, 'units', ''), zipped_filenames)
+    self.assertIn(os.path.join(root, 'pbunits', ''), zipped_filenames)
 
     # Rather than hardcode the SHA256 of the unit files here, we simply verify
     # that at least one exists and that they are all present in the zip.
-    units_dir = os.path.join(self.unpacked_index_dir, 'kzip', 'units')
+    units_dir = os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits')
     unit_files = os.listdir(units_dir)
     self.assertNotEqual(0, len(unit_files))
     for unit_file_name in unit_files:
-      self.assertIn(os.path.join(root, 'units', unit_file_name),
+      self.assertIn(os.path.join(root, 'pbunits', unit_file_name),
                     zipped_filenames)
 
     # Verify that the files/ dir has its own entry.

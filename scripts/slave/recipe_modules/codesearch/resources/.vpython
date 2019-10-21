@@ -1,0 +1,11 @@
+python_version: "2.7"
+
+wheel: <
+  name: "infra/python/wheels/six-py2_py3"
+  version: "version:1.11.0"
+>
+
+wheel: <
+  name: "infra/python/wheels/protobuf-py2_py3"
+  version: "version:3.6.1"
+>
