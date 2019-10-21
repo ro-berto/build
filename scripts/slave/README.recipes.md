@@ -1688,7 +1688,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#551)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#553)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 

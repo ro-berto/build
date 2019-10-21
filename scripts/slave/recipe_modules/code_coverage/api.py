@@ -402,6 +402,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = (
           self._gs_bucket)
+      upload_step.presentation.properties['coverage_is_presubmit'] = (
+          self._is_per_cl_coverage)
 
       jacoco_html_report_dir = coverage_dir.join('coverage_html')
       self.m.python(
@@ -688,6 +690,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = (
           self._gs_bucket)
+      upload_step.presentation.properties['coverage_is_presubmit'] = (
+          self._is_per_cl_coverage)
 
   def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files,
                                                        output_dir):
