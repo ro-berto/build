@@ -40,9 +40,6 @@ _DEFAULT_COMPILE_TARGETS = [
 ]
 _DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
 
-_EXPECTATIONS_STEP_NAME = 'Checking for expectation failures'
-_BUILD_VARS_PATH = 'build_vars.txt'
-
 _PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
@@ -100,9 +97,6 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
       bot_update_step = api.chromium_checkout.ensure_checkout(bot_config)
     api.chromium.runhooks(name='runhooks' + suffix)
 
-    with api.context(cwd=api.chromium.output_dir):
-      _ClearFailedExpectationFiles(api)
-
     affected_files = api.chromium_checkout.get_files_affected_by_patch()
     if not api.filter.analyze(affected_files, analyze_targets, None,
                               'trybot_analyze_config.json')[0]:
@@ -120,11 +114,6 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
 
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
-
-    with api.context(cwd=api.chromium.output_dir):
-      expectations_result_path = staging_dir.join('expectations_result.json')
-      expectations_json = _CheckForFailedExpectationFiles(
-        api, expectations_result_path)
 
     with api.context(cwd=api.chromium_checkout.working_dir):
       api.bot_update.deapply_patch(bot_update_step)
@@ -150,16 +139,12 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
     api.chromium.runhooks(name='runhooks' + suffix)
 
     with api.context(cwd=api.path['checkout']):
-      size_results_path = staging_dir.join('size_results.json')
+      results_path = staging_dir.join('results.json')
+
       _CreateDiffs(api, apk_name, author, without_results_dir,
-                   with_results_dir, size_results_path, staging_dir)
-      expectation_success = _MaybeFailForExpectationFiles(
-          api, expectations_json)
-      binary_size_success = _CheckForUndocumentedIncrease(
-          api, size_results_path, staging_dir, allow_regressions)
-      if not expectation_success or not binary_size_success:
-        raise api.step.StepFailure(
-            'Failed Checks. See Failing steps for details')
+                   with_results_dir, results_path, staging_dir)
+      _CheckForUndocumentedIncrease(api, results_path, staging_dir,
+                                    allow_regressions)
 
 
 def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
@@ -267,8 +252,7 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir,
 
   if not allow_regressions and result_json['status_code'] != 0:
     step_result.presentation.status = api.step.FAILURE
-    return False
-  return True
+    raise api.step.StepFailure('Undocumented size increase detected')
 
 
 def _LinkifyFilenames(url, filename_map):
@@ -310,41 +294,6 @@ def _ArchiveArtifact(api, staging_dir, filename):
       name='archive ' + filename,
       unauthenticated_url=True)
   return _ARCHIVED_URL_PREFIX + gs_dest
-
-
-def _CheckForFailedExpectationFiles(api, results_path):
-  checker_script = api.resource('trybot_failed_expectations_checker.py')
-  build_vars_path = api.chromium.output_dir.join(_BUILD_VARS_PATH)
-
-  step_result = api.python('Run Expectations Script', checker_script, [
-      '--check-expectations',
-      '--results-path',
-      api.json.output(),
-      '--build-vars-path',
-      build_vars_path,
-  ])
-  return step_result.json.output
-
-
-def _MaybeFailForExpectationFiles(api, expectations_json):
-  with api.step.nest(_EXPECTATIONS_STEP_NAME) as presentation:
-    if not expectations_json['success']:
-      presentation.status = api.step.FAILURE
-      presentation.logs['failed expectations'] = '\n'.join(
-          expectations_json['failed_messages'])
-      return False
-    return True
-
-
-def _ClearFailedExpectationFiles(api):
-  checker_script = api.resource('trybot_failed_expectations_checker.py')
-  build_vars_path = api.chromium.output_dir.join(_BUILD_VARS_PATH)
-
-  api.python('Clear Expectation Files', checker_script, [
-      '--clear-expectations',
-      '--build-vars-path',
-      build_vars_path,
-  ])
 
 
 def GenTests(api):
@@ -394,11 +343,6 @@ def GenTests(api):
             'compile_targets': _DEFAULT_ANALYZE_TARGETS,
             'test_targets': [] if no_changes else _DEFAULT_COMPILE_TARGETS}))
 
-  def override_expectation():
-    return api.step_data(
-        'Run Expectations Script',
-         api.json.output({'success': True, 'failed_messages':[]}))
-
   yield (
       props('noop_because_of_analyze') +
       api.post_check(
@@ -426,7 +370,6 @@ def GenTests(api):
   yield (
       props('normal_build') +
       override_analyze() +
-      override_expectation() +
       api.post_check(
           lambda check, steps:
           check(steps[_RESULTS_STEP_NAME].links['Supersize HTML Diff'] ==
@@ -440,13 +383,11 @@ def GenTests(api):
                 == '{}{}/{}/{}/result.txt'.format(
                   _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
                   _TEST_BUILDNUMBER))) +
-      api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME)+
-      api.post_process(post_process.StatusSuccess)
+      api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME)
   )
   yield (
       props('unexpected_increase') +
       override_analyze() +
-      override_expectation() +
       api.override_step_data(
          _RESULT_JSON_STEP_NAME,
          api.json.output({
@@ -455,34 +396,11 @@ def GenTests(api):
              'archive_filenames': [],
              'links': [],
          })) +
-      api.post_process(post_process.StepFailure, _RESULTS_STEP_NAME) +
-      api.post_process(post_process.StatusFailure)
-  )
-  yield (
-      props('expectations_file_failure') +
-      override_analyze() +
-      api.override_step_data(
-        'Run Expectations Script',
-        api.json.output({
-            'success': False,
-            'failed_messages': [
-                'ProGuard flag expectations file needs updating. For details '
-                'see:\nhttps://chromium.googlesource.com/chromium/src/+/HEAD/'
-                'chrome/android/java/README.md\n',
-            ]})) +
-      api.post_process(post_process.StepFailure,
-                       _EXPECTATIONS_STEP_NAME) +
-      api.post_check(
-          lambda check, steps:
-          check(steps[_EXPECTATIONS_STEP_NAME].logs['failed expectations']
-                is not None)) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
+      api.post_process(post_process.StepFailure, _RESULTS_STEP_NAME)
   )
   yield (
       props('pass_because_of_size_footer', size_footer=True) +
       override_analyze() +
-      override_expectation() +
       api.override_step_data(
          _RESULT_JSON_STEP_NAME,
          api.json.output({
@@ -497,7 +415,6 @@ def GenTests(api):
   yield (
       props('pass_because_of_revert', commit_message='Revert some change') +
       override_analyze() +
-      override_expectation() +
       api.override_step_data(
          _RESULT_JSON_STEP_NAME,
          api.json.output({
