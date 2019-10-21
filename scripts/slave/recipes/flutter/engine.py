@@ -107,15 +107,7 @@ def CollectBuilds(api, builds):
 
 
 def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
-  targets = [
-      'flutter/shell/platform/fuchsia/flutter:flutter_jit_%srunner' %
-      ('product_' if product else ''),
-      'flutter/shell/platform/fuchsia/flutter:flutter_aot_%srunner' %
-      ('product_' if product else ''),
-      'flutter/shell/platform/fuchsia/dart_runner:dart_jit_%srunner' %
-      ('product_' if product else ''),
-      'flutter/shell/platform/fuchsia/dart:kernel_compiler',
-  ]
+  targets = ['flutter/shell/platform/fuchsia:fuchsia']
   if include_test_targets:
     targets.append(
         'flutter/shell/platform/fuchsia/flutter:flutter_runner_tests')
@@ -674,6 +666,7 @@ def BuildFuchsia(api):
         '--fuchsia', '--fuchsia-cpu', arch, '--runtime-mode', build_mode
     ]
     product = build_mode == 'release'
+    fuchsia_output_dirs = GetFuchsiaOutputDirs(product)
     builds += ScheduleBuilds(
         api, 'Linux Engine Drone', {
             'builds': [{
@@ -681,7 +674,7 @@ def BuildFuchsia(api):
                 'dir': 'fuchsia_%s_%s' % (build_mode, arch),
                 'targets': GetFlutterFuchsiaBuildTargets(product),
                 'output_files': GetFuchsiaOutputFiles(product),
-                'output_dirs': GetFuchsiaOutputDirs(product),
+                'output_dirs': fuchsia_output_dirs,
             }]
         })
 
