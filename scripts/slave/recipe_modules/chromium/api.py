@@ -514,11 +514,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       # also ninja). However, when ninja is launched under another subprocess
       # (such as cmd), this is necessary. Therefore, adding the ninja's
       # directory directly will make the code less brittle.
-      # This is only for LUCI, buildbot bots already have this directory
-      # includeded in PATH.
       # TODO(crbug.com/872740): Remove once msvc -t processes are no longer
       # needed.
-      if self.c.TARGET_PLATFORM == 'win' and self.m.runtime.is_luci:
+      if self.c.TARGET_PLATFORM == 'win':
         ninja_env['PATH'] = self.m.path.pathsep.join(
            (self.m.path.dirname(self.m.depot_tools.ninja_path), '%(PATH)s'))
 
@@ -577,22 +575,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     # TODO(tikuta): Remove this and let goma module set '-j'
     #               inside build_with_goma.
     if use_goma_module:
-      if self.m.runtime.is_luci:
-        # The right way to configure goma jobs number is in cr-buildbucket.cfg.
-        # See also doc for goma.jobs.
-        command += ['-j', self.m.goma.jobs]
-        if self.m.goma.debug:
-          ninja_env['GOMA_DUMP'] = '1'
-      else:
-        # TODO(tandrii): delete this block after we migrate off buildbot.
-        # Set -j just before 'with self.m.goma.build_with_goma('
-        # for ninja_log_command being set correctly if starting goma
-        # fails.
-        if self.c.compile_py.goma_high_parallel:
-          # This flag is set for experiment.
-          command += ['-j', 3 * self.m.goma.recommended_goma_jobs]
-        else:  # pragma: no cover
-          command += ['-j', self.m.goma.recommended_goma_jobs]
+      # The right way to configure goma jobs number is in cr-buildbucket.cfg.
+      # See also doc for goma.jobs.
+      command += ['-j', self.m.goma.jobs]
+      if self.m.goma.debug:
+        ninja_env['GOMA_DUMP'] = '1'
 
     if targets is not None:
       # Add build targets to command ('All', 'chrome' etc).
@@ -827,20 +814,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       # be the checkout, when instead it's kitchen-workdir. We also can't use
       # self.m.path['checkout'] since that has an extra '/src' added onto it
       # compared to what runtest.py expects.
-      if self.m.runtime.is_luci:
-        with self.m.context(cwd=self.m.path['cache'].join('builder')):
-          return self.m.build.python(
-            step_name,
-            runtest_path,
-            args=full_args,
-            **kwargs
-          )
-      return self.m.build.python(
-        step_name,
-        runtest_path,
-        args=full_args,
-        **kwargs
-      )
+      with self.m.context(cwd=self.m.path['cache'].join('builder')):
+        return self.m.build.python(
+          step_name,
+          runtest_path,
+          args=full_args,
+          **kwargs
+        )
 
   @_with_chromium_layout
   def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
@@ -876,8 +856,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # If we're on LUCI, we need to upload using the HistogramSet format
       # because IP whitelisting (what the older ChartJSON format uses for
       # authentication) does not really work on LUCI.
-      if self.m.runtime.is_luci:
-        run_tests_args.append('--use-histograms')
+      run_tests_args.append('--use-histograms')
 
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.

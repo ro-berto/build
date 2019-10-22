@@ -98,15 +98,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'official_linux_buildbot',
-      api.properties(
-          target_platform='linux',
-          buildername='test_buildername',
-          chromium_apply_config=['official']),
-      api.runtime(is_luci=False, is_experimental=False),
-  )
-
-  yield api.test(
       'chromeos',
       api.properties(
           buildername='test_buildername',

@@ -69,6 +69,7 @@ def GenTests(api):
           use_histograms=True),
   )
 
+  # In order to get coverage of the LUCI-specific code in runtest.
   yield api.test(
       'android',
       api.properties(
@@ -76,18 +77,6 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
           target_platform='android'),
-      api.runtime(is_luci=False, is_experimental=False),
-  )
-
-  # In order to get coverage of the LUCI-specific code in runtest.
-  yield api.test(
-      'luci',
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id',
-          target_platform='android'),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
