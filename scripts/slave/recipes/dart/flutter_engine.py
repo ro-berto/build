@@ -330,12 +330,16 @@ def RunSteps(api):
 
 def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
   run_env = {
-      'GOMA_DIR': api.goma.goma_dir,
+      'GOMA_DIR':
+          api.goma.goma_dir,
       # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
       # its cached state into the given folder. If something goes wrong with
       # the cache we can clobber it by requesting normal clobber via Buildbot
       # UI.
-      'ANALYZER_STATE_LOCATION_OVERRIDE': start_dir.join('.dartServer')
+      'ANALYZER_STATE_LOCATION_OVERRIDE':
+          start_dir.join('.dartServer'),
+      'ANDROID_SDK_ROOT':
+          checkout_dir.join('third_party', 'android_tools', 'sdk')
   }
   with api.context(cwd=start_dir, env=run_env):
     BuildLinux(api, checkout_dir)

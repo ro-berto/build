@@ -163,6 +163,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
@@ -191,6 +192,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -209,6 +211,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -246,6 +249,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -265,6 +269,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "build host_debug"
@@ -284,6 +289,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -319,6 +325,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -343,6 +350,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -399,6 +407,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "postprocess_for_goma.upload_log",
@@ -428,6 +437,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -455,6 +465,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -473,6 +484,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -510,6 +522,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -530,6 +543,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "build host_debug create_full_sdk"
@@ -549,6 +563,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -584,6 +599,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -608,6 +624,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -664,6 +681,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "postprocess_for_goma (2).upload_log",
@@ -693,6 +711,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -709,6 +728,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
@@ -737,6 +757,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -755,6 +776,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -792,6 +814,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -811,6 +834,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "build host_debug_unopt"
@@ -830,6 +854,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -865,6 +890,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -889,6 +915,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -945,6 +972,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "postprocess_for_goma (3).upload_log",
@@ -974,6 +1002,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1001,6 +1030,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1019,6 +1049,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1056,6 +1087,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1076,6 +1108,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "build host_debug_unopt generate_dart_ui"
@@ -1095,6 +1128,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1130,6 +1164,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1154,6 +1189,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1210,6 +1246,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "postprocess_for_goma (4).upload_log",
@@ -1239,6 +1276,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1255,6 +1293,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
@@ -1283,6 +1322,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1301,6 +1341,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1338,6 +1379,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1357,6 +1399,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "build host_release"
@@ -1376,6 +1419,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1411,6 +1455,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1435,6 +1480,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1491,6 +1537,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "postprocess_for_goma (5).upload_log",
@@ -1520,6 +1567,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "infra_step": true,
@@ -1536,6 +1584,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1549,6 +1598,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1569,6 +1619,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1584,6 +1635,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1613,6 +1665,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1632,6 +1685,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1670,6 +1724,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1690,6 +1745,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1710,6 +1766,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1746,6 +1803,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1771,6 +1829,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1828,6 +1887,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1858,6 +1918,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1886,6 +1947,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1905,6 +1967,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1943,6 +2006,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1964,6 +2028,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -1984,6 +2049,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2020,6 +2086,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2045,6 +2112,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2102,6 +2170,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2132,6 +2201,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2151,6 +2221,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2180,6 +2251,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2199,6 +2271,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2237,6 +2310,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2258,6 +2332,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2278,6 +2353,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2314,6 +2390,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2339,6 +2416,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2396,6 +2474,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2426,6 +2505,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2444,6 +2524,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2473,6 +2554,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2492,6 +2574,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2530,6 +2613,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2550,6 +2634,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2570,6 +2655,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2606,6 +2692,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2631,6 +2718,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2688,6 +2776,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2718,6 +2807,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2736,6 +2826,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2765,6 +2856,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2784,6 +2876,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2822,6 +2915,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2842,6 +2936,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -2862,6 +2957,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2898,6 +2994,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2923,6 +3020,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2980,6 +3078,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3010,6 +3109,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3029,6 +3129,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3058,6 +3159,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3077,6 +3179,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3115,6 +3218,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3135,6 +3239,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3155,6 +3260,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3191,6 +3297,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3216,6 +3323,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3273,6 +3381,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3303,6 +3412,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3322,6 +3432,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3351,6 +3462,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3370,6 +3482,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3408,6 +3521,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3428,6 +3542,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3448,6 +3563,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3484,6 +3600,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3509,6 +3626,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3566,6 +3684,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3596,6 +3715,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
@@ -3614,6 +3734,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3630,6 +3751,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3644,6 +3766,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3665,6 +3788,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3685,6 +3809,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3706,6 +3831,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3726,6 +3852,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3747,6 +3874,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3767,6 +3895,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3788,6 +3917,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3808,6 +3938,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3829,6 +3960,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3849,6 +3981,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3870,6 +4003,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3892,6 +4026,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3912,6 +4047,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3933,6 +4069,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3949,6 +4086,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3964,6 +4102,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3979,6 +4118,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -3999,6 +4139,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -4020,6 +4161,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -4041,6 +4183,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -4057,6 +4200,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -4074,6 +4218,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
@@ -4091,6 +4236,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "add_to_app_tests",
@@ -4109,6 +4255,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "build_tests",
@@ -4127,6 +4274,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "framework_coverage",
@@ -4145,6 +4293,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "framework_tests",
@@ -4163,6 +4312,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "hostonly_devicelab_tests",
@@ -4181,6 +4331,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "tool_coverage",
@@ -4199,6 +4350,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "tool_tests",
@@ -4217,6 +4369,7 @@
     "cwd": "[CACHE]/builder/flutter",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
       "SHARD": "web_tests",
