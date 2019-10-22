@@ -131,908 +131,907 @@ def override_compile_targets(base_config, compile_targets):
 
 
 SPEC = {
-  'settings': {
-    'build_gs_bucket': 'chromium-fyi-archive',
-  },
-  'builders': {
-    'mac-osxbeta-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'swarming_dimensions': {
-        'os': 'Mac-10.14',
-      },
-      'bot_type': 'tester',
-      'checkout_dir': 'mac',
-      'test_results_config': 'staging_server',
-      'parent_mastername': 'chromium.mac',
-      'parent_buildername': 'Mac Builder',
-      'testing': {
-        'platform': 'mac',
-      },
+    'settings': {
+        'build_gs_bucket': 'chromium-fyi-archive',
     },
-    'Chromium Mac 10.13': {
-      'checkout_dir': 'mac',
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'swarming_dimensions': {
-        # This can be removed once (if?) we get 10.13 VMs.
-        'gpu': '8086:0a2e',
-        'os': 'Mac-10.13',
-      },
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    # There are no slaves for the following two "Dummy Builders" and they
-    # do not appear on the actual continuous waterfall; this configuration
-    # is here so that a try bot can be added.
-    'WebKit Linux composite_after_paint Dummy Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [],
-      'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
-    },
-    'WebKit Linux layout_ng_disabled Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [],
-      'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
-    },
-    # TODO(jbudorick): Remove these three once the bots have been renamed.
-    'Fuchsia': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_x64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder_tester',
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Fuchsia (dbg)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_x64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder',
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Fuchsia ARM64': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_arm64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder_tester',
-      # Serialize the tests so as to not overwhelm the limited number of bots.
-      'serialize_tests': True,
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'fuchsia-fyi-arm64-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_arm64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder_tester',
-      # Serialize the tests to limit capacity usage.
-      'serialize_tests': True,
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'fuchsia-fyi-x64-dbg': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_x64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder',
-      # Serialize the tests to limit capacity usage.
-      'serialize_tests': True,
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'fuchsia-fyi-x64-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['fuchsia_x64'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'fuchsia',
-      },
-      'bot_type': 'builder_tester',
-      # Serialize the tests to limit capacity usage.
-      'serialize_tests': True,
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Mac OpenSSL': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Site Isolation Android': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'content_unittests',
-        'content_browsertests',
-      ],
-      'android_config': 'arm64_builder_mb',
-      'root_devices': True,
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Win Builder Localoutputcache': chromium_apply_configs(
-        no_archive(chromium_win.SPEC['builders']['Win Builder']),
-        ['goma_localoutputcache']),
-
-    'Win Builder Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_canary', 'goma_use_local']),
-    'Win Builder (dbg) Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_canary']),
-    'win32-archive-rel-goma-canary-localoutputcache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['win-archive-rel']),
-        ['goma_canary', 'goma_localoutputcache']),
-
-    # TODO(b/78251210) remove after removal of cl.exe builders.
-    'Win cl.exe Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_compile_targets(no_archive(
-          chromium.SPEC['builders']['win-archive-rel'])),
-        ['goma_canary', 'goma_localoutputcache']),
-    'WinMSVC64 Goma Canary': chromium_apply_configs(
-        {
-          'chromium_config': 'chromium',
-          'chromium_apply_config': ['mb'],
-          'gclient_config': 'chromium',
-          'chromium_config_kwargs': {
-            'BUILD_CONFIG': 'Release',
-            'TARGET_PLATFORM': 'win',
-            'TARGET_BITS': 64,
-          },
-          'bot_type': 'builder',
-          'checkout_dir': 'win',
-          'testing': {
-            'platform': 'win',
-          },
-          # Workaround so that recipes doesn't add random build targets to our
-          # compile line. We want to build everything.
-          'add_tests_as_compile_targets': False,
+    'builders': {
+        'mac-osxbeta-rel': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'swarming_dimensions': {
+                'os': 'Mac-10.14',
+            },
+            'bot_type': 'tester',
+            'checkout_dir': 'mac',
+            'test_results_config': 'staging_server',
+            'parent_mastername': 'chromium.mac',
+            'parent_buildername': 'Mac Builder',
+            'testing': {
+                'platform': 'mac',
+            },
         },
-        ['goma_canary']),
-    # TODO(b/139556893): remove after win7 builders removal.
-    'Win7 Builder Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
-    'Win7 Builder (dbg) Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_canary']),
-
-    'chromeos-amd64-generic-rel-goma-canary': chromium_apply_configs(
-        chromium_chromiumos.SPEC['builders'][
-            'chromeos-amd64-generic-rel'],
-        ['goma_canary']),
-    'Linux Builder Goma Canary': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'],
-        ['goma_canary','goma_use_local']),
-    'linux-archive-rel-goma-canary': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-                   ['goma_canary']),
-    'linux-archive-rel-goma-canary-localoutputcache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_canary', 'goma_localoutputcache']),
-    # RBE
-    'chromeos-amd64-generic-rel-goma-rbe-canary': chromium_apply_configs(
-        chromium_chromiumos.SPEC['builders'][
-            'chromeos-amd64-generic-rel'],
-        ['goma_canary']),
-    'Linux Builder Goma RBE Canary': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'],
-        ['goma_canary','goma_use_local']),
-    'linux-archive-rel-goma-rbe-canary': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-                   ['goma_canary']),
-    'linux-archive-rel-goma-rbe-ats-canary': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-                   ['goma_canary']),
-
-    'Mac Builder Goma Canary': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder'],
-        ['goma_canary', 'goma_use_local']),
-    'Mac Builder (dbg) Goma Canary': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'], ['goma_canary']),
-    'mac-archive-rel-goma-canary': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_canary']),
-    'Mac Builder (dbg) Goma Canary (clobber)': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_canary', 'clobber']),
-    # Mac has less disks, so use small localoutputcache.
-    # Build chrome only. Even with smaller localoutputcache, disk is short.
-    # See crbug.com/825536
-    'mac-archive-rel-goma-canary-localoutputcache': chromium_apply_configs(
-        override_compile_targets(
-            no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-            ['chrome']),
-        ['goma_canary', 'goma_localoutputcache_small']),
-    # RBE
-    'mac-archive-rel-goma-rbe-canary': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_canary']),
-    'Mac Builder (dbg) Goma RBE Canary (clobber)': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_canary', 'clobber']),
-
-    # Latest Goma Client
-    'Win Builder Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_latest_client', 'goma_use_local']),
-    'Win Builder (dbg) Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_latest_client']),
-    'win32-archive-rel-goma-latest-localoutputcache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['win-archive-rel']),
-        ['goma_latest_client', 'goma_localoutputcache']),
-    # RBE
-    'Win Builder Goma RBE Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'],
-        ['goma_latest_client', 'goma_use_local']),
-    'Win Builder (dbg) Goma RBE Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_latest_client']),
-
-    # TODO(b/78251210): remove after removal of cl.exe
-    'Win cl.exe Goma Latest Client LocalOutputCache': chromium_apply_configs(
-        no_compile_targets(no_archive(
-          chromium.SPEC['builders']['win-archive-rel'])),
-        ['goma_latest_client', 'goma_localoutputcache']),
-    'WinMSVC64 Goma Latest Client': chromium_apply_configs(
-        {
-          'chromium_config': 'chromium',
-          'chromium_apply_config': ['mb'],
-          'gclient_config': 'chromium',
-          'chromium_config_kwargs': {
-            'BUILD_CONFIG': 'Release',
-            'TARGET_PLATFORM': 'win',
-            'TARGET_BITS': 64,
-          },
-          'bot_type': 'builder',
-          'checkout_dir': 'win',
-          'testing': {
-            'platform': 'win',
-          },
-          # Workaround so that recipes doesn't add random build targets to our
-          # compile line. We want to build everything.
-          'add_tests_as_compile_targets': False,
+        'Chromium Mac 10.13': {
+            'checkout_dir': 'mac',
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'swarming_dimensions': {
+                # This can be removed once (if?) we get 10.13 VMs.
+                'gpu': '8086:0a2e',
+                'os': 'Mac-10.13',
+            },
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'mac',
+            },
         },
-        ['goma_latest_client']),
-    # TODO(b/139556893): remove after removal of win7.
-    'Win7 Builder Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_latest_client']),
-    'Win7 Builder (dbg) Goma Latest Client': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_latest_client']),
+        # There are no slaves for the following two "Dummy Builders" and they
+        # do not appear on the actual continuous waterfall; this configuration
+        # is here so that a try bot can be added.
+        'WebKit Linux composite_after_paint Dummy Builder': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'compile_targets': ['blink_tests',],
+            'tests': [],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'WebKit Linux layout_ng_disabled Builder': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'compile_targets': ['blink_tests',],
+            'tests': [],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        # TODO(jbudorick): Remove these three once the bots have been renamed.
+        'Fuchsia': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_x64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder_tester',
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Fuchsia (dbg)': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_x64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder',
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Fuchsia ARM64': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_arm64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder_tester',
+            # Serialize the tests so as to not overwhelm the limited
+            # number of bots.
+            'serialize_tests': True,
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'fuchsia-fyi-arm64-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_arm64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder_tester',
+            # Serialize the tests to limit capacity usage.
+            'serialize_tests': True,
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'fuchsia-fyi-x64-dbg': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_x64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder',
+            # Serialize the tests to limit capacity usage.
+            'serialize_tests': True,
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'fuchsia-fyi-x64-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['fuchsia_x64'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'fuchsia',
+            },
+            'bot_type': 'builder_tester',
+            # Serialize the tests to limit capacity usage.
+            'serialize_tests': True,
+            'checkout_dir': 'linux',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Mac OpenSSL': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            },
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
+        'Site Isolation Android': {
+            'chromium_config': 'android',
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            'bot_type': 'builder_tester',
+            'compile_targets': [
+                'content_unittests',
+                'content_browsertests',
+            ],
+            'android_config': 'arm64_builder_mb',
+            'root_devices': True,
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Win Builder Localoutputcache':
+            chromium_apply_configs(
+                no_archive(chromium_win.SPEC['builders']['Win Builder']),
+                ['goma_localoutputcache']),
+        'Win Builder Goma Canary':
+            chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
+                                   ['goma_canary', 'goma_use_local']),
+        'Win Builder (dbg) Goma Canary':
+            chromium_apply_configs(
+                chromium_win.SPEC['builders']['Win Builder (dbg)'],
+                ['goma_canary']),
+        'win32-archive-rel-goma-canary-localoutputcache':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['win-archive-rel']),
+                ['goma_canary', 'goma_localoutputcache']),
 
-    'chromeos-amd64-generic-rel-goma-latest': chromium_apply_configs(
-        chromium_chromiumos.SPEC['builders'][
-            'chromeos-amd64-generic-rel'],
-        ['goma_latest_client']),
-    # For building targets instrumented for code coverage.
-    'linux-code-coverage':{
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'linux',
-    },
-    'Linux Builder Goma Latest Client': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'],
-        ['goma_latest_client','goma_use_local']),
-    'linux-archive-rel-goma-latest': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client']),
-    'linux-archive-rel-goma-latest-localoutputcache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client', 'goma_localoutputcache']),
-    # RBE
-    'chromeos-amd64-generic-rel-goma-rbe-latest': chromium_apply_configs(
-        chromium_chromiumos.SPEC['builders'][
-            'chromeos-amd64-generic-rel'],
-        ['goma_latest_client']),
-    'Linux Builder Goma RBE Latest Client': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'],
-        ['goma_latest_client','goma_use_local']),
-    'linux-archive-rel-goma-rbe-latest': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client']),
-    'linux-archive-rel-goma-rbe-ats-latest': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['linux-archive-rel']),
-        ['goma_latest_client']),
+        # TODO(b/78251210) remove after removal of cl.exe builders.
+        'Win cl.exe Goma Canary LocalOutputCache':
+            chromium_apply_configs(
+                no_compile_targets(
+                    no_archive(chromium.SPEC['builders']['win-archive-rel'])),
+                ['goma_canary', 'goma_localoutputcache']),
+        'WinMSVC64 Goma Canary':
+            chromium_apply_configs(
+                {
+                    'chromium_config': 'chromium',
+                    'chromium_apply_config': ['mb'],
+                    'gclient_config': 'chromium',
+                    'chromium_config_kwargs': {
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 64,
+                    },
+                    'bot_type': 'builder',
+                    'checkout_dir': 'win',
+                    'testing': {
+                        'platform': 'win',
+                    },
+                    # Workaround so that recipes doesn't add random build
+                    # targets to our compile line. We want to build everything.
+                    'add_tests_as_compile_targets': False,
+                },
+                ['goma_canary']),
+        # TODO(b/139556893): remove after win7 builders removal.
+        'Win7 Builder Goma Canary':
+            chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
+                                   ['goma_canary']),
+        'Win7 Builder (dbg) Goma Canary':
+            chromium_apply_configs(
+                chromium_win.SPEC['builders']['Win Builder (dbg)'],
+                ['goma_canary']),
+        'chromeos-amd64-generic-rel-goma-canary':
+            chromium_apply_configs(
+                chromium_chromiumos.SPEC['builders']
+                ['chromeos-amd64-generic-rel'], ['goma_canary']),
+        'Linux Builder Goma Canary':
+            chromium_apply_configs(
+                chromium_linux.SPEC['builders']['Linux Builder'],
+                ['goma_canary', 'goma_use_local']),
+        'linux-archive-rel-goma-canary':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_canary']),
+        'linux-archive-rel-goma-canary-localoutputcache':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_canary', 'goma_localoutputcache']),
+        # RBE
+        'chromeos-amd64-generic-rel-goma-rbe-canary':
+            chromium_apply_configs(
+                chromium_chromiumos.SPEC['builders']
+                ['chromeos-amd64-generic-rel'], ['goma_canary']),
+        'Linux Builder Goma RBE Canary':
+            chromium_apply_configs(
+                chromium_linux.SPEC['builders']['Linux Builder'],
+                ['goma_canary', 'goma_use_local']),
+        'linux-archive-rel-goma-rbe-canary':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_canary']),
+        'linux-archive-rel-goma-rbe-ats-canary':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_canary']),
+        'Mac Builder Goma Canary':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['Mac Builder'],
+                                   ['goma_canary', 'goma_use_local']),
+        'Mac Builder (dbg) Goma Canary':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_canary']),
+        'mac-archive-rel-goma-canary':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                ['goma_canary']),
+        'Mac Builder (dbg) Goma Canary (clobber)':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_canary', 'clobber']),
+        # Mac has less disks, so use small localoutputcache.
+        # Build chrome only. Even with smaller localoutputcache, disk is short.
+        # See crbug.com/825536
+        'mac-archive-rel-goma-canary-localoutputcache':
+            chromium_apply_configs(
+                override_compile_targets(
+                    no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                    ['chrome']),
+                ['goma_canary', 'goma_localoutputcache_small']),
+        # RBE
+        'mac-archive-rel-goma-rbe-canary':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                ['goma_canary']),
+        'Mac Builder (dbg) Goma RBE Canary (clobber)':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_canary', 'clobber']),
 
-    'Mac Builder Goma Latest Client': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder'],
-        ['goma_latest_client', 'goma_use_local']),
-    'Mac Builder (dbg) Goma Latest Client': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_latest_client']),
-    'mac-archive-rel-goma-latest': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_latest_client']),
+        # Latest Goma Client
+        'Win Builder Goma Latest Client':
+            chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
+                                   ['goma_latest_client', 'goma_use_local']),
+        'Win Builder (dbg) Goma Latest Client':
+            chromium_apply_configs(
+                chromium_win.SPEC['builders']['Win Builder (dbg)'],
+                ['goma_latest_client']),
+        'win32-archive-rel-goma-latest-localoutputcache':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['win-archive-rel']),
+                ['goma_latest_client', 'goma_localoutputcache']),
+        # RBE
+        'Win Builder Goma RBE Latest Client':
+            chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
+                                   ['goma_latest_client', 'goma_use_local']),
+        'Win Builder (dbg) Goma RBE Latest Client':
+            chromium_apply_configs(
+                chromium_win.SPEC['builders']['Win Builder (dbg)'],
+                ['goma_latest_client']),
 
-    'Mac Builder (dbg) Goma Latest Client (clobber)': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_latest_client', 'clobber']),
-    # Mac has less disks, so use small localoutputcache.
-    # Build chrome only. Even with smaller localoutputcache, disk is short.
-    # See crbug.com/825536
-    'mac-archive-rel-goma-latest-localoutputcache': chromium_apply_configs(
-        override_compile_targets(
-            no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-            ['chrome']),
-        ['goma_latest_client', 'goma_localoutputcache_small']),
-    # RBE
-    'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
-      chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
-        ['goma_latest_client', 'clobber']),
-    'mac-archive-rel-goma-rbe-latest': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['mac-archive-rel']),
-        ['goma_latest_client']),
+        # TODO(b/78251210): remove after removal of cl.exe
+        'Win cl.exe Goma Latest Client LocalOutputCache':
+            chromium_apply_configs(
+                no_compile_targets(
+                    no_archive(chromium.SPEC['builders']['win-archive-rel'])),
+                ['goma_latest_client', 'goma_localoutputcache']),
+        'WinMSVC64 Goma Latest Client':
+            chromium_apply_configs(
+                {
+                    'chromium_config': 'chromium',
+                    'chromium_apply_config': ['mb'],
+                    'gclient_config': 'chromium',
+                    'chromium_config_kwargs': {
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 64,
+                    },
+                    'bot_type': 'builder',
+                    'checkout_dir': 'win',
+                    'testing': {
+                        'platform': 'win',
+                    },
+                    # Workaround so that recipes doesn't add random build
+                    # targets to our compile line. We want to build everything.
+                    'add_tests_as_compile_targets': False,
+                },
+                ['goma_latest_client']),
+        # TODO(b/139556893): remove after removal of win7.
+        'Win7 Builder Goma Latest Client':
+            chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
+                                   ['goma_latest_client']),
+        'Win7 Builder (dbg) Goma Latest Client':
+            chromium_apply_configs(
+                chromium_win.SPEC['builders']['Win Builder (dbg)'],
+                ['goma_latest_client']),
+        'chromeos-amd64-generic-rel-goma-latest':
+            chromium_apply_configs(
+                chromium_chromiumos.SPEC['builders']
+                ['chromeos-amd64-generic-rel'], ['goma_latest_client']),
+        # For building targets instrumented for code coverage.
+        'linux-code-coverage': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': [
+                'mb',
+                'goma_high_parallel',
+            ],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'checkout_dir': 'linux',
+        },
+        'Linux Builder Goma Latest Client':
+            chromium_apply_configs(
+                chromium_linux.SPEC['builders']['Linux Builder'],
+                ['goma_latest_client', 'goma_use_local']),
+        'linux-archive-rel-goma-latest':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_latest_client']),
+        'linux-archive-rel-goma-latest-localoutputcache':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_latest_client', 'goma_localoutputcache']),
+        # RBE
+        'chromeos-amd64-generic-rel-goma-rbe-latest':
+            chromium_apply_configs(
+                chromium_chromiumos.SPEC['builders']
+                ['chromeos-amd64-generic-rel'], ['goma_latest_client']),
+        'Linux Builder Goma RBE Latest Client':
+            chromium_apply_configs(
+                chromium_linux.SPEC['builders']['Linux Builder'],
+                ['goma_latest_client', 'goma_use_local']),
+        'linux-archive-rel-goma-rbe-latest':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_latest_client']),
+        'linux-archive-rel-goma-rbe-ats-latest':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['linux-archive-rel']),
+                ['goma_latest_client']),
+        'Mac Builder Goma Latest Client':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['Mac Builder'],
+                                   ['goma_latest_client', 'goma_use_local']),
+        'Mac Builder (dbg) Goma Latest Client':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_latest_client']),
+        'mac-archive-rel-goma-latest':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                ['goma_latest_client']),
+        'Mac Builder (dbg) Goma Latest Client (clobber)':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_latest_client', 'clobber']),
+        # Mac has less disks, so use small localoutputcache.
+        # Build chrome only. Even with smaller localoutputcache, disk is short.
+        # See crbug.com/825536
+        'mac-archive-rel-goma-latest-localoutputcache':
+            chromium_apply_configs(
+                override_compile_targets(
+                    no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                    ['chrome']),
+                ['goma_latest_client', 'goma_localoutputcache_small']),
+        # RBE
+        'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
+            chromium_apply_configs(
+                chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+                ['goma_latest_client', 'clobber']),
+        'mac-archive-rel-goma-rbe-latest':
+            chromium_apply_configs(
+                no_archive(chromium.SPEC['builders']['mac-archive-rel']),
+                ['goma_latest_client']),
+        'Win Builder (ANGLE)': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['angle_top_of_tree'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            },
+            'bot_type': 'builder',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'win',
+            },
+            'patch_root': 'src/third_party/angle',
+        },
+        'Win7 Tests (ANGLE)': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['angle_top_of_tree'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            },
+            'bot_type': 'tester',
+            'parent_buildername': 'Win Builder (ANGLE)',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'win',
+            },
+        },
+        'win32-arm64-rel': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_ARCH': 'arm'
+            },
+            'bot_type': 'builder',
+            'testing': {
+                'platform': 'win',
+            },
+        },
 
-    'Win Builder (ANGLE)': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-      'patch_root': 'src/third_party/angle',
+        # This builder no longer exists, but keep it around so that
+        # Goma's canary bots can copy its config.
+        'Android Builder (dbg)': {
+            'chromium_config': 'android',
+            'chromium_apply_config': ['mb', 'download_vr_test_apks'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+            },
+            'android_config': 'main_builder',
+            'bot_type': 'builder',
+            'compile_targets': ['chromedriver_webview_shell_apk',],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Win 10 Fast Ring': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'win',
+            },
+        },
+        'Linux remote_run Builder': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Linux remote_run Tester': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'tester',
+            'parent_buildername': 'Linux remote_run Builder',
+            'tests': [steps.LocalGTestTest('base_unittests'),],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Mojo Android': {
+            'chromium_config': 'android',
+            'chromium_apply_config': ['android'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            'bot_type': 'builder_tester',
+            'android_config': 'arm64_builder_mb',
+            'root_devices': True,
+            # TODO(crbug.com/876570): Here and below, we should move the Mojo
+            # builders to a different "master" and get rid of this property; we
+            # don't really want different builders on the same master to have
+            # different priorities, it makes reasoning about builders harder for
+            # sheriffs and troopers.
+            'swarming_default_priority': 25,
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'android-mojo-webview-rel': {
+            'chromium_config': 'android',
+            'chromium_apply_config': ['android'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            'bot_type': 'builder_tester',
+            'android_config': 'arm64_builder_mb',
+            'swarming_default_priority': 25,
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Mojo ChromiumOS': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['chromeos'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'linux',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'swarming_default_priority': 25,
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Mojo Linux': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'swarming_default_priority': 25,
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'mac-mojo-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'swarming_default_priority': 25,
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
+        'Mojo Windows': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'swarming_default_priority': 25,
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'win',
+                'TARGET_BITS': 32,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'win',
+            },
+        },
+        'chromeos-amd64-generic-rel-vm-tests': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['chromeos'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'tests': {},
+        },
+        'chromeos-kevin-rel-hw-tests': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['chromeos'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_CROS_BOARD': 'kevin',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'tests': {},
+        },
+        'chromeos-vm-code-coverage': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'tests': {},
+        },
+        'linux-autofill-captured-sites-rel': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'linux',
+            },
+            'bot_type': 'builder_tester',
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'linux-chromeos-code-coverage': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': [
+                'mb',
+                'goma_high_parallel',
+            ],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'tests': {},
+        },
+        'mac-autofill-captured-sites-rel': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
+            },
+            'bot_type': 'builder_tester',
+            'compile_targets': ['captured_sites_interactive_tests',],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
+        'win-autofill-captured-sites-rel': {
+            'chromium_config': 'chromium',
+            'gclient_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'win',
+            },
+            'bot_type': 'builder_tester',
+            'compile_targets': ['captured_sites_interactive_tests',],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'win',
+            },
+        },
+        'ios-simulator-cr-recipe': {
+            'chromium_config':
+                'chromium',
+            'chromium_apply_config': [
+                'mb',
+                'mac_toolchain',
+                # TODO(crbug.com/1014539): Temp config until properties
+                # are read from
+                'xcode_11a1027',
+            ],
+            'chromium_tests_apply_config': [],
+            'gclient_config':
+                'ios',  # add 'ios' to target_os
+            'gclient_apply_config': [],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+            },
+            'testing': {
+                'platform': 'mac',
+            },
+        },
+        'ios-simulator-code-coverage': {
+            'chromium_config':
+                'chromium',
+            'chromium_apply_config': [
+                'ios_release_simulator', 'mac_toolchain', 'xcode_11m382q'
+            ],
+            'gclient_config':
+                'ios',
+            'gclient_apply_config': ['use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+            },
+            'bot_type':
+                'builder_tester',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
+        'android-code-coverage': {
+            'chromium_config': 'android',
+            'chromium_apply_config': ['download_vr_test_apks', 'mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            'android_config': 'main_builder',
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+        },
+        'Win10 Tests x64 1803': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'tester',
+            'tests': [],
+            'parent_mastername': 'chromium.win',
+            'parent_buildername': 'Win x64 Builder',
+            'checkout_dir': 'win',
+            'testing': {
+                'platform': 'win',
+            },
+        },
+        'win10-code-coverage': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': [
+                'mb',
+                'goma_high_parallel',
+            ],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'win',
+            },
+        },
     },
-    'Win7 Tests (ANGLE)': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['angle_top_of_tree'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Win Builder (ANGLE)',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'win32-arm64-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_ARCH': 'arm'
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
-    # This builder no longer exists, but keep it around so that Goma's canary
-    # bots can copy its config.
-    'Android Builder (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'mb',
-        'download_vr_test_apks'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder',
-      'compile_targets': [
-        'chromedriver_webview_shell_apk',
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Win 10 Fast Ring': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Linux remote_run Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Linux remote_run Tester': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Linux remote_run Builder',
-      'tests': [
-        steps.LocalGTestTest('base_unittests'),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Mojo Android': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['android'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'arm64_builder_mb',
-      'root_devices': True,
-      # TODO(crbug.com/876570): Here and below, we should move the Mojo
-      # builders to a different "master" and get rid of this property; we
-      # don't really want different builders on the same master to have
-      # different priorities, it makes reasoning about builders harder for
-      # sheriffs and troopers.
-      'swarming_default_priority': 25,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'android-mojo-webview-rel': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['android'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'arm64_builder_mb',
-      'swarming_default_priority': 25,
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Mojo ChromiumOS': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'linux',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'swarming_default_priority': 25,
-      'testing': { 'platform': 'linux', },
-    },
-    'Mojo Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'swarming_default_priority': 25,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'mac-mojo-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'swarming_default_priority': 25,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Mojo Windows': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'swarming_default_priority': 25,
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'builder_tester',
-      'testing': { 'platform': 'win', },
-    },
-
-    'chromeos-amd64-generic-rel-vm-tests': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'intel',
-        'TARGET_BITS': 64,
-        'TARGET_CROS_BOARD': 'amd64-generic',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {},
-    },
-
-    'chromeos-kevin-rel-hw-tests': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 32,
-        'TARGET_CROS_BOARD': 'kevin',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {},
-    },
-
-    'chromeos-vm-code-coverage': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'intel',
-        'TARGET_BITS': 64,
-        'TARGET_CROS_BOARD': 'amd64-generic',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {},
-    },
-
-    'linux-autofill-captured-sites-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'linux',
-      },
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'linux-chromeos-code-coverage': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'intel',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {},
-    },
-
-    'mac-autofill-captured-sites-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'mac',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'captured_sites_interactive_tests',
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-
-    'win-autofill-captured-sites-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'win',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'captured_sites_interactive_tests',
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
-    'ios-simulator-cr-recipe': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'mac_toolchain',
-        # TODO(crbug.com/1014539): Temp config until properties are read from
-        'xcode_11a1027',
-      ],
-      'chromium_tests_apply_config': [],
-      'gclient_config': 'ios', # add 'ios' to target_os
-      'gclient_apply_config': [],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'ios',
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-
-    'ios-simulator-code-coverage': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'ios_release_simulator',
-        'mac_toolchain',
-        'xcode_11m382q'
-      ],
-      'gclient_config': 'ios',
-      'gclient_apply_config': ['use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'ios',
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-
-    'android-code-coverage': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'download_vr_test_apks',
-        'mb'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Win10 Tests x64 1803': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'tests': [],
-      'parent_mastername': 'chromium.win',
-      'parent_buildername': 'Win x64 Builder',
-      'checkout_dir': 'win',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
-    'win10-code-coverage':{
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-  },
 }
 
 SPEC['builders']['android-archive-dbg-goma-canary'] = chromium_apply_configs(
