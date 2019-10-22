@@ -316,14 +316,9 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
-  build_jobs = 2
-  if not api.runtime.is_luci:
-    # Non-luci bot can have more jobs.
-    build_jobs = 8
-
   with api.context(env=env):
     api.step('build target', [art_tools.join('buildbot-build.sh'),
-                              '-j%d' % (build_jobs), '--target'])
+                              '-j2', '--target'])
 
   with api.step.defer_results():
     with api.context(env=test_env):
@@ -690,10 +685,6 @@ def GenTests(api):
             ) +
             (api.properties(clobber='') if clb else api.properties())
           )
-  yield (
-      test('fugu_buildbot', 'fugu-ndebug') +
-      api.runtime(is_luci=False, is_experimental=False))
-
   yield (
       test('x86_32_test_failure', 'host-x86-ndebug') +
       api.step_data('test jdwp interpreter', retcode=1))
