@@ -35,8 +35,7 @@ def RunSteps(api):
   with api.context(cwd=util):
     api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output])
   # Upload docs only if run after commit and on not experimental builds.
-  # TODO(tandrii, davidben): remove support for buildbot.
-  if api.buildbucket.build.builder.bucket == 'ci' or not api.runtime.is_luci:
+  if api.buildbucket.build.builder.bucket == 'ci':
     if api.runtime.is_experimental:
       api.step('skipping uploading docs on experimental build', cmd=None)
     else:
@@ -57,8 +56,13 @@ def GenTests(api):
   )
   yield api.test(
       'docs-experimental',
-      api.runtime(is_luci=False, is_experimental=True),
-      api.properties.generic(mastername='client.boringssl', buildername='docs'),
+      api.runtime(is_luci=True, is_experimental=True),
+      api.buildbucket.ci_build(
+          project='boringssl',
+          bucket='ci',
+          builder='docs',
+          git_repo='https://boringssl.googlesource.com/boringssl',
+      ),
   )
 
   yield api.test(
