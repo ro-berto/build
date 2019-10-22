@@ -279,8 +279,9 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
         'dart', '--enable-asserts', 'dev/bots/analyze.dart', '--dart-sdk',
         just_built_dart_sdk], timeout=20*60) # 20 minutes
     shards = [
-        'tests', 'web_tests', 'tool_tests', 'tool_coverage', 'build_tests',
-        'coverage', 'integration_tests', 'add2app_test'
+        'add_to_app_tests', 'build_tests', 'framework_coverage',
+        'framework_tests', 'hostonly_devicelab_tests', 'tool_coverage',
+        'tool_tests', 'web_tests'
     ]
     for shard in shards:
       with api.context(env={'SHARD': shard}):

@@ -4093,64 +4093,10 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "tests",
+      "SHARD": "add_to_app_tests",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "flutter test tests",
-    "timeout": 7200
-  },
-  {
-    "cmd": [
-      "dart",
-      "dev/bots/test.dart",
-      "--local-engine=host_debug",
-      "--local-engine-src-path=[CACHE]/builder/src"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "web_tests",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "name": "flutter test web_tests",
-    "timeout": 7200
-  },
-  {
-    "cmd": [
-      "dart",
-      "dev/bots/test.dart",
-      "--local-engine=host_debug",
-      "--local-engine-src-path=[CACHE]/builder/src"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "tool_tests",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "name": "flutter test tool_tests",
-    "timeout": 7200
-  },
-  {
-    "cmd": [
-      "dart",
-      "dev/bots/test.dart",
-      "--local-engine=host_debug",
-      "--local-engine-src-path=[CACHE]/builder/src"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "tool_coverage",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "name": "flutter test tool_coverage",
+    "name": "flutter test add_to_app_tests",
     "timeout": 7200
   },
   {
@@ -4183,10 +4129,10 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "coverage",
+      "SHARD": "framework_coverage",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "flutter test coverage",
+    "name": "flutter test framework_coverage",
     "timeout": 7200
   },
   {
@@ -4201,10 +4147,10 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "integration_tests",
+      "SHARD": "framework_tests",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "flutter test integration_tests",
+    "name": "flutter test framework_tests",
     "timeout": 7200
   },
   {
@@ -4219,10 +4165,64 @@
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "SHARD": "add2app_test",
+      "SHARD": "hostonly_devicelab_tests",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "flutter test add2app_test",
+    "name": "flutter test hostonly_devicelab_tests",
+    "timeout": 7200
+  },
+  {
+    "cmd": [
+      "dart",
+      "dev/bots/test.dart",
+      "--local-engine=host_debug",
+      "--local-engine-src-path=[CACHE]/builder/src"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "SHARD": "tool_coverage",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "name": "flutter test tool_coverage",
+    "timeout": 7200
+  },
+  {
+    "cmd": [
+      "dart",
+      "dev/bots/test.dart",
+      "--local-engine=host_debug",
+      "--local-engine-src-path=[CACHE]/builder/src"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "SHARD": "tool_tests",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "name": "flutter test tool_tests",
+    "timeout": 7200
+  },
+  {
+    "cmd": [
+      "dart",
+      "dev/bots/test.dart",
+      "--local-engine=host_debug",
+      "--local-engine-src-path=[CACHE]/builder/src"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "SHARD": "web_tests",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "name": "flutter test web_tests",
     "timeout": 7200
   },
   {
