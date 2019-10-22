@@ -571,11 +571,6 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.linux',
                     'buildername': 'linux-gcc-rel',
                 }),
-            'linux-jumbo-rel':
-                simple_bot({
-                    'mastername': 'chromium.linux',
-                    'buildername': 'linux-jumbo-rel',
-                }),
             'linux-ozone-rel':
                 simple_bot({
                     'mastername': 'chromium.linux',
@@ -886,11 +881,6 @@ TRYBOTS = freeze({
     },
     'tryserver.chromium.mac': {
         'builders': {
-            'mac-jumbo-rel':
-                simple_bot({
-                    'mastername': 'chromium.mac',
-                    'buildername': 'mac-jumbo-rel',
-                }),
             'mac_chromium_archive_rel_ng':
                 simple_bot({
                     'mastername': 'chromium',
@@ -1115,11 +1105,6 @@ TRYBOTS = freeze({
                 simple_bot({
                     'mastername': 'chromium.memory',
                     'buildername': 'win-asan',
-                }),
-            'win-jumbo-rel':
-                simple_bot({
-                    'mastername': 'chromium.win',
-                    'buildername': 'win-jumbo-rel',
                 }),
             'win-annotator-rel':
                 simple_bot({

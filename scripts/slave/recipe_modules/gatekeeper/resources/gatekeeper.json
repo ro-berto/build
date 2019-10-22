@@ -373,8 +373,7 @@
           "*": {}
         },
         "excluded_builders" : [
-          "Leak Detection Linux",
-          "linux-jumbo-rel"
+          "Leak Detection Linux"
         ],
         "tree_notify": [
           "thomasanderson@chromium.org"
@@ -659,28 +658,6 @@
             "forgiving_optional": [
               "*"
             ]
-          },
-          "Jumbo Linux x64": {
-            "tree_notify": [
-              "brucedawson@chromium.org",
-              "dpranke@chromium.org",
-              "mostynb+jumbo@vewd.com"
-            ],
-            "forgiving_optional": ["*"]
-          },
-          "Jumbo Mac": {
-            "tree_notify": [
-              "brucedawson@chromium.org",
-              "dpranke@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
-          "Jumbo Win x64": {
-            "tree_notify": [
-              "brucedawson@chromium.org",
-              "dpranke@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
           },
           "CFI Linux ToT": {
             "tree_notify": [

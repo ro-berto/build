@@ -73,20 +73,6 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
-    'linux-jumbo-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': [
-          'mb',
-      ],
-      'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-      },
-      'testing': {
-          'platform': 'linux',
-      },
-    },
     'linux-ozone-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],

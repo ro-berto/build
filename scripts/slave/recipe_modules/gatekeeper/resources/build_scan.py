@@ -38,8 +38,6 @@ BUILDBUCKET_ENDPOINT = (
 # These builders are skipped because buildbucket returns 500 when fetching
 # recent builds for them.
 BUILDER_BLACKLIST = (
-    'mac-jumbo-rel',
-    'win-jumbo-rel',
     'Linux remote_run Builder',
     'Linux remote_run Tester',
 )

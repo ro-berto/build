@@ -9,20 +9,6 @@ SPEC = {
     'build_gs_bucket': 'chromium-mac-archive',
   },
   'builders': {
-    'mac-jumbo-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': [
-          'mb',
-      ],
-      'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-      },
-      'testing': {
-          'platform': 'mac',
-      },
-    },
     'Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
