@@ -59,27 +59,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'kitchen',
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='kitchen'),
-      api.step_data(
-          'reading gatekeeper_trees.json',
-          api.gatekeeper.fake_test_data(),
-      ),
-  )
-
-  yield api.test(
-      'kitchen_buildbot',
-      api.runtime(is_luci=False, is_experimental=False),
-      api.properties.generic(
-          buildername='Chromium Gatekeeper', path_config='kitchen'),
-      api.step_data(
-          'reading gatekeeper_trees.json',
-          api.gatekeeper.fake_test_data(),
-      ),
-  )
-
-  yield api.test(
       'json_infra_side',
       api.properties.generic(
           buildername='Chromium Gatekeeper', path_config='kitchen'),

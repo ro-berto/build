@@ -22,9 +22,6 @@ class Gatekeeper(recipe_api.RecipeApi):
       build_db_path = self.m.path['cache'].join('builder')
     else:
       build_db_path = self.m.path['builder_cache']
-      if not self.m.runtime.is_luci:
-        # TODO(machenbach): Deprecate after moving to LUCI.
-        build_db_path = build_db_path.join('gate_keeper')
 
     self.m.file.ensure_directory('ensure cache', build_db_path)
 
