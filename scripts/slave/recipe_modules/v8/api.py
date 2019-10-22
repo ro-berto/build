@@ -1292,11 +1292,9 @@ class V8Api(recipe_api.RecipeApi):
   def _setup_test_runner(self, test, applied_test_filter, test_step_config):
     env = {}
     full_args = [
-        '--progress=ci',
-        '--mode',
-        self.m.chromium.c.build_config_fs,
-        '--outdir',
-        self.m.path.split(self.m.chromium.c.build_dir)[-1],
+      '--progress=verbose',
+      '--mode', self.m.chromium.c.build_config_fs,
+      '--outdir', self.m.path.split(self.m.chromium.c.build_dir)[-1],
     ]
 
     # TODO(machenbach): Remove exception for branches once tested on main
