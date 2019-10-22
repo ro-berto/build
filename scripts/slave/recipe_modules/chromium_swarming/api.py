@@ -889,6 +889,10 @@ class SwarmingApi(recipe_api.RecipeApi):
         'env var %s is not a string: %s' % (name, value)
       args.extend(['--env', name, value])
 
+    # TODO(crbug.com/869227): Remove debug logging.
+    if 'net_unittests' in task.task_name and not self.m.platform.is_win:
+      args.extend(['--env', 'VPYTHON_LOG_TRACE', 'crbug.com/869227'])
+
     for name, relpath in sorted(named_caches.iteritems()):
       args.extend(['--named-cache', name, relpath])
 

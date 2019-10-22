@@ -122,6 +122,7 @@
   * [chromium_libfuzzer_clang_tot](#recipes-chromium_libfuzzer_clang_tot)
   * [chromium_libfuzzer_trybot](#recipes-chromium_libfuzzer_trybot)
   * [chromium_swarming:examples/full](#recipes-chromium_swarming_examples_full)
+  * [chromium_swarming:examples/net_unittests](#recipes-chromium_swarming_examples_net_unittests)
   * [chromium_swarming:tests/configure_swarming](#recipes-chromium_swarming_tests_configure_swarming)
   * [chromium_swarming:tests/shards_to_retry](#recipes-chromium_swarming_tests_shards_to_retry)
   * [chromium_swarming:tests/task](#recipes-chromium_swarming_tests_task)
@@ -1134,7 +1135,7 @@ Tags can be added per individual task.
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1066)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/chromium_swarming/api.py#1070)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -1146,7 +1147,7 @@ Args:
   task: SwarmingTask instance, previously triggered with 'trigger' method.
   kwargs: passed to recipe step constructor as-is.
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1741)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/api.py#1745)(self, project_name, precommit, mastername=None, default_priority=None, path_to_testing_dir=None):**
 
 Configures default swarming dimensions and tags.
 
@@ -1201,11 +1202,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/chromium_swarming/api.py#369)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1692)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/chromium_swarming/api.py#1696)(self, task):**
 
 SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1515)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/chromium_swarming/api.py#1519)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -1259,7 +1260,7 @@ Recipes are free to use other OS dimension if there's a need for it. For
 example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
 dimension.
 
-&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1088)(self):**
+&mdash; **def [report\_stats](/scripts/slave/recipe_modules/chromium_swarming/api.py#1092)(self):**
 
 Report statistics on all tasks ran so far.
 
@@ -1390,7 +1391,7 @@ Returns:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1424)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/chromium_swarming/api.py#1428)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 
@@ -4278,6 +4279,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/examples/full.py#42)(api, platforms, custom_trigger_script, show_outputs_ref_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, wait_for_tasks):**
+### *recipes* / [chromium\_swarming:examples/net\_unittests](/scripts/slave/recipe_modules/chromium_swarming/examples/net_unittests.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_swarming/examples/net_unittests.py#7): [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_swarming/examples/net_unittests.py#15)(api):**
 ### *recipes* / [chromium\_swarming:tests/configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#8): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
