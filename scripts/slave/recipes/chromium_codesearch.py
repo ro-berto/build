@@ -136,18 +136,33 @@ SPEC = freeze({
 })
 
 PROPERTIES = {
-    'root_solution_revision': Property(
-        kind=str,
-        help='The revision to checkout and build.',
-        default=None),
-    'root_solution_revision_timestamp': Property(
-        kind=config.Single((int, float)),
-        help='The commit timestamp of the revision to checkout and build, in '
-             'seconds since the UNIX epoch.',
-        default=None),
+    'root_solution_revision':
+        Property(
+            kind=str, help='The revision to checkout and build.', default=None),
+    'root_solution_revision_timestamp':
+        Property(
+            kind=config.Single((int, float)),
+            help='The commit timestamp of the revision to checkout and build, '
+            'in seconds since the UNIX epoch.',
+            default=None),
+    'codesearch_mirror_revision':
+        Property(
+            kind=str,
+            help='The revision for codesearch to use for kythe references. '
+            'Uses root_solution_revision if not available.',
+            default=None),
+    'codesearch_mirror_revision_timestamp':
+        Property(
+            kind=config.Single((int, float)),
+            help='The commit timestamp of the revision for codesearch to use, '
+            'in seconds since the UNIX epoch. Uses '
+            'root_solution_revision_timestamp if not available.',
+            default=None),
 }
 
-def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
+
+def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
+             codesearch_mirror_revision, codesearch_mirror_revision_timestamp):
   bot_config = SPEC.get('builders', {}).get(api.buildbucket.builder_name)
   platform = bot_config.get('platform', 'linux')
   experimental = bot_config.get('experimental', False)
@@ -226,7 +241,9 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_timestamp=int(root_solution_revision_timestamp or api.time.time()))
+      commit_hash=codesearch_mirror_revision or None,
+      commit_timestamp=int(codesearch_mirror_revision_timestamp or
+                           root_solution_revision_timestamp or api.time.time()))
 
   # Check out the generated files repo and sync the generated files
   # into this checkout. This may fail due to other builders pushing to the

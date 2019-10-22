@@ -15,6 +15,9 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   update_step = api.bot_update.ensure_checkout()
   properties = update_step.json.output['properties']
+  kythe_commit_hash = 'a' * 40
+  if api.properties.get('set_kythe_commit_hash_to_none'):
+    kythe_commit_hash = None
   if api.properties.get('set_got_revision_cp_to_none'):
     properties.pop('got_revision_cp', 0)
   api.chromium.set_build_properties(properties)
@@ -27,11 +30,17 @@ def RunSteps(api):
       CORPUS=api.properties.get('corpus', 'chromium'),
       ROOT=api.properties.get('root', 'linux'),
   )
-  api.codesearch.create_and_upload_kythe_index_pack(commit_timestamp=1337000000)
+  api.codesearch.create_and_upload_kythe_index_pack(
+      commit_hash=kythe_commit_hash, commit_timestamp=1337000000)
 
 
 def GenTests(api):
   yield api.test('basic')
+
+  yield api.test(
+      'without_kythe_revision',
+      api.properties(set_kythe_commit_hash_to_none=True),
+  )
 
   yield api.test(
       'bucket_name_not_set_failed',

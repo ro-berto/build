@@ -1722,7 +1722,7 @@ This metadata is used to connect things in the generated file to the thing
 in the Mojom file which generated it. This is made possible by annotations
 added to the generated file by the Mojo compiler.
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#232)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#235)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1734,11 +1734,13 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#146)(self, commit_timestamp):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#146)(self, commit_hash, commit_timestamp):**
 
 Create the kythe index pack and upload it to google storage.
 
 Args:
+  commit_hash: Hash of the commit at which we're creating the index pack,
+    if None use got_revision.
   commit_timestamp: Timestamp of the commit at which we're creating the
     index pack, in integer seconds since the UNIX epoch.
 
@@ -4230,10 +4232,10 @@ Returns: the list of matched targets.
 
 [DEPS](/scripts/slave/recipes/chromium_codesearch.py#11): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#150)(api, root_solution_revision, root_solution_revision_timestamp):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#164)(api, root_solution_revision, root_solution_revision_timestamp, codesearch_mirror_revision, codesearch_mirror_revision_timestamp):**
 ### *recipes* / [chromium\_codesearch\_initiator](/scripts/slave/recipes/chromium_codesearch_initiator.py)
 
-[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#14): [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#14): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 A recipe for picking a stable HEAD revision for chromium/src.
 
@@ -4241,7 +4243,7 @@ This recipe picks a commit at HEAD, and then triggers the other codesearch
 recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#57)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#40)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]

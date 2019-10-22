@@ -161,34 +161,64 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "RECIPE CRASH (Uncaught exception)",
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
+      "--checkout-dir",
+      "[START_DIR]/src",
+      "--path-to-compdb",
+      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "--path-to-gn-targets",
+      "[START_DIR]/src/out/Debug/gn_targets.json",
+      "--path-to-archive-output",
+      "[START_DIR]/src/out/Debug/chromium_linux.kzip",
+      "--corpus",
+      "chromium"
+    ],
+    "name": "create kythe index pack"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/Debug/chromium_linux.kzip",
+      "gs://chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000000.kzip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_EXCEPTION@@@",
-      "The recipe has crashed at point 'Uncaught exception'!",
-      "",
-      "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/engine.py\", in run_steps",
-      "    raw_result = recipe_obj.run_steps(api, engine)",
-      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/recipe_deps.py\", in run_steps",
-      "    properties_def, api=api)",
-      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in invoke_with_properties",
-      "    arg_names, **additional_args)",
-      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
-      "    return callable_obj(*props, **additional_args)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py\", line 27, in RunSteps",
-      "    api.codesearch.checkout_generated_files_repo_and_sync()",
-      "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/recipe_api.py\", in _inner",
-      "    return func(*a, **kw)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/api.py\", line 242, in checkout_generated_files_repo_and_sync",
-      "    'Trying to check out generated files repo,'",
-      "AssertionError: Trying to check out generated files repo, but the repo is not indicated"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000000.kzip@@@"
     ]
   },
   {
-    "failure": {
-      "humanReason": "Uncaught Exception: AssertionError('Trying to check out generated files repo, but the repo is not indicated',)"
-    },
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "gs://chrome-codesearch/debug/compile_commands_linux_170242.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload compile_commands.json",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_170242.json@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

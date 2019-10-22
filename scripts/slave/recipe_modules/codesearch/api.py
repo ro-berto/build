@@ -143,22 +143,25 @@ class CodesearchApi(recipe_api.RecipeApi):
     if commit and GIT_COMMIT_HASH_RE.match(commit):
       return commit
 
-  def create_and_upload_kythe_index_pack(self, commit_timestamp):
+  def create_and_upload_kythe_index_pack(self, commit_hash, commit_timestamp):
     """Create the kythe index pack and upload it to google storage.
 
     Args:
+      commit_hash: Hash of the commit at which we're creating the index pack,
+        if None use got_revision.
       commit_timestamp: Timestamp of the commit at which we're creating the
         index pack, in integer seconds since the UNIX epoch.
     """
     commit_position = self._get_commit_position()
+    commit_hash = commit_hash or self._get_revision()
     index_pack_kythe_name = 'chromium_%s.kzip' % self.c.PLATFORM
     # TODO(jsca): Delete the second part of the below condition after LUCI
     # migration is complete.
     experimental_suffix = '_experimental' if (
         self.c.EXPERIMENTAL or self.m.runtime.is_experimental) else ''
     index_pack_kythe_name_with_revision = 'chromium_%s_%s_%s+%d%s.kzip' % (
-        self.c.PLATFORM, commit_position, self._get_revision(),
-        commit_timestamp, experimental_suffix)
+        self.c.PLATFORM, commit_position, commit_hash, commit_timestamp,
+        experimental_suffix)
     self._create_kythe_index_pack(index_pack_kythe_name)
 
     assert self.c.bucket_name, (
