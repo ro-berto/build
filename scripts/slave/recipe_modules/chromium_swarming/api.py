@@ -1804,8 +1804,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       # The experimental half of LUCI conversions should be lower than
       # everything else.
       self.default_priority = 40
-    if self.m.runtime.is_luci:
-      self.add_default_tag('purpose:luci')
 
     # TODO(tikuta): Remove this (crbug.com/894045).
     self.use_go_client = True # pylint: disable=attribute-defined-outside-init

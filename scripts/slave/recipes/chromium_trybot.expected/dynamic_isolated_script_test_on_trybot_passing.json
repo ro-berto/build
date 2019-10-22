@@ -975,8 +975,6 @@
       "--tag",
       "purpose:ManualTS",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:pre-commit",
       "--tag",
       "slavename:test_bot",

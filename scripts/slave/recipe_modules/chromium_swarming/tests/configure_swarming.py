@@ -51,20 +51,12 @@ def GenTests(api):
   yield api.test(
       'experimental',
       api.properties(precommit=False),
-      api.runtime(is_luci=False, is_experimental=True),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'luci',
-      api.properties(precommit=False),
-      api.runtime(is_luci=True, is_experimental=False),
+      api.runtime(is_luci=True, is_experimental=True),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'default_priority',
       api.properties(precommit=False, default_priority=10),
-      api.runtime(is_luci=True, is_experimental=False),
       api.post_process(post_process.DropExpectation),
   )

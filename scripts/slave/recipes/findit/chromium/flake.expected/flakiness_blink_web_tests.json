@@ -1137,8 +1137,6 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:build1-a1",
