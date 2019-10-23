@@ -1771,7 +1771,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     for k, v in swarming_dims.iteritems():
       self.set_default_dimension(k, v)
 
-    self.set_default_dimension('pool', 'Chrome')
+    self.set_default_dimension('pool', 'chromium.tests')
     self.add_default_tag('project:%s' % project_name)
     self.default_idempotent = True
     self.show_shards_in_collect_step = True
