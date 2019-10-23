@@ -248,6 +248,21 @@ def GenTests(api):
   )
 
   yield api.test(
+      'mac_toolchain_properties',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.mac',
+          buildername='Mac Builder',
+          bot_id='build1-a1',
+          buildnumber='77457',
+          out_dir='/tmp',
+          target_platform='mac',
+          configs=['mac_toolchain'],
+          xcode_build_version='12345',
+      ),
+  )
+
+  yield api.test(
       'chromeos_simplechrome',
       api.platform('linux', 64),
       api.properties(

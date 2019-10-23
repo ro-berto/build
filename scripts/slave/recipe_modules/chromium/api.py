@@ -969,7 +969,13 @@ class ChromiumApi(recipe_api.RecipeApi):
   def ensure_mac_toolchain(self):
     if not self.c.mac_toolchain.enabled:
       return
-    xcode_build_version = self.c.mac_toolchain.xcode_build_version.lower()
+
+    if 'xcode_build_version' in self.m.properties:
+      xcode_build_version = self.m.properties['xcode_build_version']
+    else:
+      # TODO(crbug.com/1014539): Remove once xcode_build_version migrated
+      xcode_build_version = self.c.mac_toolchain.xcode_build_version.lower()
+
     kind = self.c.mac_toolchain.kind or self.c.TARGET_PLATFORM
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named
     # cache. Make sure it exists, to avoid downloading Xcode on every build.
