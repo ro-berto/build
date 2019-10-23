@@ -498,9 +498,8 @@ def setup_aosp_builder(api, read_barrier):
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
         api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
-        api.step('Build %s' % build, ['build/soong/soong_ui.bash',
-                                      '--make-mode',
-                                      '-j8'])
+        api.step('Build %s' % build,
+                 ['build/soong/soong_ui.bash', '--make-mode', '-j4'])
         api.step('Dump oat boot %s' % build, ['build/soong/soong_ui.bash',
                                               '--make-mode',
                                               '-j8',

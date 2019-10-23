@@ -54,7 +54,7 @@
     "cmd": [
       "build/soong/soong_ui.bash",
       "--make-mode",
-      "-j8"
+      "-j4"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -127,7 +127,7 @@
     "cmd": [
       "build/soong/soong_ui.bash",
       "--make-mode",
-      "-j8"
+      "-j4"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -200,7 +200,7 @@
     "cmd": [
       "build/soong/soong_ui.bash",
       "--make-mode",
-      "-j8"
+      "-j4"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -273,7 +273,7 @@
     "cmd": [
       "build/soong/soong_ui.bash",
       "--make-mode",
-      "-j8"
+      "-j4"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
