@@ -1157,6 +1157,8 @@ def RunSteps(api, properties, env_properties):
   if properties.clobber:
     api.file.rmtree('Clobber cache', cache_root)
 
+  api.file.rmtree('Clobber build output', checkout.join('out'))
+
   api.file.ensure_directory('Ensure checkout cache', cache_root)
   api.goma.ensure_goma()
   dart_bin = checkout.join(
