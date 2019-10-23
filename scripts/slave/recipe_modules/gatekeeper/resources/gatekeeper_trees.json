@@ -88,6 +88,7 @@
         },
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
+            "https://build.chromium.org/p/client.v8.clusterfuzz": ["*"],
             "https://build.chromium.org/p/client.v8.fyi": ["*"],
             "https://build.chromium.org/p/client.v8.ports": ["*"]
         },

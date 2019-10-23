@@ -172,6 +172,9 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.clusterfuzz\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.v8.fyi\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
@@ -302,6 +305,7 @@
       "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.v8.fyi",
       "https://build.chromium.org/p/client.v8",
+      "https://build.chromium.org/p/client.v8.clusterfuzz",
       "https://build.chromium.org/p/client.v8.ports"
     ],
     "name": "gatekeeper: v8-tree-closers"
