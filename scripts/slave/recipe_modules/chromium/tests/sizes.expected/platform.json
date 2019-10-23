@@ -121,7 +121,7 @@
       "--perf-dashboard-id=sizes",
       "--perf-id=test-perf-id",
       "--use-histograms",
-      "--perf-config={'r_clang_rev': '123456'}",
+      "--perf-config={'r_clang_rev': '123456-7'}",
       "None/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",

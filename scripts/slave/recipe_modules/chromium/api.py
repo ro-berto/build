@@ -861,7 +861,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.
       if self._clang_version:
-        clang_rev = re.match(r'(\d+)(-\d+)?', self._clang_version).group(1)
+        clang_rev = re.match(r'([\w-]+)', self._clang_version).group(1)
         run_tests_args.append(
             "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
 
