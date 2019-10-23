@@ -74,23 +74,14 @@ def RunSteps(api):
   api.python('update fuchsia sdk',
       api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py'))
 
-  if api.runtime.is_luci:
-    with api.osx_sdk('ios'):
-      with api.depot_tools.on_path():
-        api.python('download binutils',
-            api.path['checkout'].join('third_party', 'binutils', 'download.py'))
-        api.python(
-            'package clang',
-            api.path['checkout'].join(
-                'tools', 'clang', 'scripts', 'package.py'),
-            args=['--upload'])
-  else:
+  with api.osx_sdk('ios'):
     with api.depot_tools.on_path():
       api.python('download binutils',
           api.path['checkout'].join('third_party', 'binutils', 'download.py'))
       api.python(
           'package clang',
-          api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
+          api.path['checkout'].join(
+              'tools', 'clang', 'scripts', 'package.py'),
           args=['--upload'])
 
 
@@ -99,9 +90,8 @@ def GenTests(api):
     yield test
 
   yield api.test(
-      'mac-luci',
+      'mac',
       api.platform.name('mac'),
-      api.runtime(is_experimental=False, is_luci=True),
       api.properties.tryserver(
           buildername='mac_upload_clang', mastername='tryserver.chromium.mac'),
       api.buildbucket.try_build(
@@ -115,9 +105,8 @@ def GenTests(api):
   )
 
   yield api.test(
-      'linux-buildbot',
+      'linux',
       api.platform.name('linux'),
-      api.runtime(is_experimental=False, is_luci=False),
       api.properties.tryserver(
           buildername='linux_upload_clang',
           mastername='tryserver.chromium.linux'),
