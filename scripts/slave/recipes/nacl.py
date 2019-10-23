@@ -11,7 +11,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/runtime',
   'recipe_engine/step',
 
   'depot_tools/bot_update',
@@ -43,11 +42,10 @@ trigger_map = {
 @contextmanager
 def _PlatformSDK(api):
   sdk = None
-  if api.runtime.is_luci:
-    if api.platform.is_win:
-      sdk = api.windows_sdk()
-    elif api.platform.is_mac:
-      sdk = api.osx_sdk('mac')
+  if api.platform.is_win:
+    sdk = api.windows_sdk()
+  elif api.platform.is_mac:
+    sdk = api.osx_sdk('mac')
 
   if sdk is None:
     yield
@@ -150,34 +148,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'luci_win',
-      api.runtime(is_luci=True, is_experimental=False),
-      api.platform('win', 64),
-      api.properties(
-          mastername='client.nacl',
-          buildername='win7-64-glibc-dbg',
-          revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
-      ),
-  )
-
-  yield api.test(
-      'luci_mac',
-      api.runtime(is_luci=True, is_experimental=False),
-      api.platform('mac', 64),
-      api.properties(
-          mastername='client.nacl',
-          buildername='mac-newlib-dbg-asan',
-          revision='a' * 40,
-          bot_id='TestSlave',
-          buildnumber=1234,
-          slavetype='BuilderTester',
-      ),
-  )
-
-  yield api.test(
       'win',
       api.platform('win', 64),
       api.properties(
@@ -189,6 +159,20 @@ def GenTests(api):
           slavetype='BuilderTester',
       ),
   )
+
+  yield api.test(
+      'mac',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='client.nacl',
+          buildername='mac-newlib-dbg-asan',
+          revision='a' * 40,
+          bot_id='TestSlave',
+          buildnumber=1234,
+          slavetype='BuilderTester',
+      ),
+  )
+
 
   yield api.test(
       'linux_triggering_failed',
