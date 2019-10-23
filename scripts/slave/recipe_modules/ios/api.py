@@ -315,10 +315,6 @@ class iOSApi(recipe_api.RecipeApi):
           '-xcode-version', xcode_build_version,
           '-output-dir', xcode_app_path,
       ]
-      if not self.m.runtime.is_luci:
-        install_xcode_cmd.extend([
-            '-service-account-json', self.CIPD_CREDENTIALS,
-        ])
       self.m.step('install xcode', install_xcode_cmd, infra_step=True)
       self.m.step('select xcode',
                   ['sudo', 'xcode-select', '-switch', xcode_app_path],

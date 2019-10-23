@@ -18,7 +18,7 @@
       "src@HEAD"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -241,9 +241,7 @@
       "-xcode-version",
       "9a123",
       "-output-dir",
-      "[CACHE]/xcode_ios_9a123.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+      "[CACHE]/xcode_ios_9a123.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",

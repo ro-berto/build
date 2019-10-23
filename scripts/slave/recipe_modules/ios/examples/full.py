@@ -759,13 +759,7 @@ def GenTests(api):
 
   yield api.test(
       'xcode_build_version',
-      api.runtime(is_luci=False, is_experimental=False),
-      xcode_build_version,
-  )
-
-  yield api.test(
-      'xcode_build_version_luci',
-      api.runtime(is_luci=True, is_experimental=True),
+      api.runtime(is_luci=True, is_experimental=False),
       xcode_build_version,
   )
 
