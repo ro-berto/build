@@ -1882,7 +1882,7 @@
       ]
     },
     "name": "Zip linux-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[CACHE]/builder/src/third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/flutter_tester\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_1/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[CACHE]/builder/src/third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester\", \"path\": \"[CACHE]/builder/src/out/host_debug/flutter_tester\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[CACHE]/builder/src/out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_1/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -2337,7 +2337,7 @@
     "cmd": [
       "dart",
       "[CACHE]/builder/src/flutter/shell/testing/observatory/test.dart",
-      "[CACHE]/builder/src/out/host_debug_unopt/flutter_tester",
+      "[CACHE]/builder/src/out/host_debug/flutter_tester",
       "[CACHE]/builder/src/flutter/shell/testing/observatory/empty_main.dart"
     ],
     "cwd": "[CACHE]/builder/src",

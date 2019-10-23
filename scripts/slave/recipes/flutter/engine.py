@@ -511,11 +511,11 @@ def BuildLinux(api):
   Build(api, 'host_debug')
   Build(api, 'host_release')
   UploadArtifacts(api, 'linux-x64', [
-    ICU_DATA_PATH,
-    'out/host_debug_unopt/flutter_tester',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+      ICU_DATA_PATH,
+      'out/host_debug/flutter_tester',
+      'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+      'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+      'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug/flutter_embedder.h',
@@ -715,7 +715,7 @@ def BuildFuchsia(api):
 
 def TestObservatory(api):
   checkout = GetCheckoutPath(api)
-  flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
+  flutter_tester_path = checkout.join('out/host_debug/flutter_tester')
   empty_main_path = \
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
@@ -761,12 +761,12 @@ def BuildMac(api):
       host_release_path.join('FlutterMacOS.framework.zip'))
 
     UploadArtifacts(api, 'darwin-x64', [
-      ICU_DATA_PATH,
-      'out/host_debug_unopt/flutter_tester',
-      'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-      'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-      'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
-      'out/host_debug_unopt/gen_snapshot',
+        ICU_DATA_PATH,
+        'out/host_debug/flutter_tester',
+        'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+        'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+        'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+        'out/host_debug_unopt/gen_snapshot',
     ])
     UploadArtifacts(api, 'darwin-x64-profile', [
       'out/host_profile/gen_snapshot',
