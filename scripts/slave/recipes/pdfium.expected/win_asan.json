@@ -134,7 +134,7 @@
       "--root=[CACHE]\\builder\\pdfium",
       "gen",
       "//out/release_v8_clang_asan",
-      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=true is_asan=true"
+      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=true use_cxx11=false is_asan=true"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "name": "gn gen"
@@ -407,7 +407,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_asan build_number 1234",
       "--gold_key",
-      "asan true clang true debug false is_standalone true os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true os windows skia false skia_paths false use_cxx11 false v8 true xfa false",
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output"
     ],
@@ -471,7 +471,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_asan build_number 1234",
       "--gold_key",
-      "asan true clang true debug false is_standalone true os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true os windows skia false skia_paths false use_cxx11 false v8 true xfa false",
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output"
     ],
@@ -542,7 +542,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_asan build_number 1234",
       "--gold_key",
-      "asan true clang true debug false is_standalone true os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true os windows skia false skia_paths false use_cxx11 false v8 true xfa false",
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output"
     ],

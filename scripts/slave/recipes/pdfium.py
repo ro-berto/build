@@ -146,8 +146,8 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     # All other platforms already build with Clang, so no need to set it.
     assert not clang
 
-  if skia or skia_paths:
-    # PDFium defaults to C++11 but newer Skia requires C++14.
+  if skia or skia_paths or v8:
+    # PDFium defaults to C++11 but newer Skia / V8 requires C++14.
     args.append('use_cxx11=false')
 
   if jumbo:
