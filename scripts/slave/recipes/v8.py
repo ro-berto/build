@@ -5,7 +5,7 @@
 from recipe_engine import recipe_test_api
 from recipe_engine.post_process import (
     Filter, DoesNotRun, DropExpectation, MustRun,
-    ResultReasonRE, StepException, StatusFailure)
+    ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -1092,7 +1092,7 @@ def GenTests(api):
     api.override_step_data(
         'measurements.perf dashboard post',
         api.json.output({'status_code': 403})) +
-    api.post_process(StatusFailure) +
+    api.post_process(StatusException) +
     api.post_process(DropExpectation)
   )
 

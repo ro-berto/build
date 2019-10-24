@@ -139,8 +139,8 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
   def halt(self, step_result, reason):  # pragma: no cover
     step_result.presentation.step_text = reason
-    step_result.presentation.status = self.m.step.FAILURE
-    raise self.m.step.StepFailure(reason)
+    step_result.presentation.status = self.m.step.EXCEPTION
+    raise self.m.step.InfraFailure(reason)
 
   def warning(self, step_result, reason):  # pragma: no cover
     step_result.presentation.step_text = reason
