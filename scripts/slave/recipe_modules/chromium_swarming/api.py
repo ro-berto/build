@@ -43,10 +43,10 @@ IMPLIED_ENV_PREFIXES = {
 IMPLIED_CIPD_BINARIES = {
     # Both vpython versions MUST be changed together.
     'infra/tools/luci/vpython/${platform}': {
-        'version': 'git_revision:10e1d79ac9ced2b819221e06535f457093b2a14c',
+        'version': 'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
     },
     'infra/tools/luci/vpython-native/${platform}': {
-        'version': 'git_revision:10e1d79ac9ced2b819221e06535f457093b2a14c',
+        'version': 'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
     },
     'infra/tools/luci/logdog/butler/${platform}': {
         'version': 'git_revision:e1abc57be62d198b5c2f487bfb2fa2d2eb0e867c',
