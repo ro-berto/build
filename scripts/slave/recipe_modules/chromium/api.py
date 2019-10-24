@@ -970,11 +970,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not self.c.mac_toolchain.enabled:
       return
 
-    if 'xcode_build_version' not in self.m.properties:
-      raise self.m.step.StepFailure(
-          'No Xcode version was provided as a recipe property.')
-
-    xcode_build_version = self.m.properties.get('xcode_build_version')
+    if 'xcode_build_version' in self.m.properties:
+      xcode_build_version = self.m.properties['xcode_build_version']
+    else:
+      # TODO(crbug.com/1014539): Remove once xcode_build_version migrated
+      xcode_build_version = self.c.mac_toolchain.xcode_build_version.lower()
 
     kind = self.c.mac_toolchain.kind or self.c.TARGET_PLATFORM
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named

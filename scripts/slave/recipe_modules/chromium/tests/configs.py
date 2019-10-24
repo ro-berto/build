@@ -141,4 +141,10 @@ def GenTests(api):
 
   yield from_config('ios_release_simulator')
 
+  yield from_config('xcode_10e1001')
+
+  yield from_config('xcode_11m382q')
+
+  yield from_config('xcode_11a1027')
+
   yield from_config('official_no_clobber')

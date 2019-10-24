@@ -78,6 +78,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     ),
     mac_toolchain = ConfigGroup(
       enabled = Single(bool, empty_val=False, required=False),
+      # The build version of Xcode itself. Update its value to change the Xcode
+      # version.
+      xcode_build_version = Single(basestring),
       # Xcode installer configs. These normally don't change with Xcode version.
       installer_cipd_package = Single(basestring),
       installer_version = Single(basestring),
@@ -204,6 +207,7 @@ def BASE(c):
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
   if c.HOST_PLATFORM == 'mac':
+    c.mac_toolchain.xcode_build_version = '9C40b'
     c.mac_toolchain.installer_cipd_package = (
         'infra/tools/mac_toolchain/${platform}')
     c.mac_toolchain.installer_version = (
@@ -608,11 +612,13 @@ def download_vr_test_apks(c):
   c.gyp_env.DOWNLOAD_VR_TEST_APKS = 1
 
 @config_ctx()
-def mac_toolchain(c):
+def mac_toolchain(c, xcode_build_version=None):
   if c.HOST_PLATFORM != 'mac': # pragma: no cover
     raise BadConf('Cannot setup Xcode on "%s"' % c.HOST_PLATFORM)
 
   c.mac_toolchain.enabled = True
+  if xcode_build_version: # pragma: no cover
+    c.mac_toolchain.xcode_build_version = xcode_build_version
   # TODO(crbug.com/797051): remove this when all builds switch to the new Xcode
   # flow.
   c.env.FORCE_MAC_TOOLCHAIN = 0
@@ -627,3 +633,15 @@ def android_internal_isolate_maps(c):
 @config_ctx()
 def ios_release_simulator(c):
   c.build_config_fs = 'Release-iphonesimulator'
+
+@config_ctx()
+def xcode_10e1001(c):
+  c.mac_toolchain.xcode_build_version = '10E1001'
+
+@config_ctx()
+def xcode_11m382q(c):
+  c.mac_toolchain.xcode_build_version = '11m382q'
+
+@config_ctx()
+def xcode_11a1027(c):
+  c.mac_toolchain.xcode_build_version = '11a1027'
