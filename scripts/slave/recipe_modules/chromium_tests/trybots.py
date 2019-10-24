@@ -1268,6 +1268,18 @@ TRYBOTS = freeze({
                     'buildername': 'GPU FYI Win x64 dEQP Builder',
                     'tester': 'Win10 FYI x64 dEQP Release (NVIDIA)',
                 }),
+            'gpu-fyi-try-win10-nvidia-dx12vk-dbg-64':
+                simple_bot({
+                    'mastername': 'chromium.gpu.fyi',
+                    'buildername': 'GPU FYI Win x64 DX12 Vulkan Builder (dbg)',
+                    'tester': 'Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)',
+                }),
+            'gpu-fyi-try-win10-nvidia-dx12vk-rel-64':
+                simple_bot({
+                    'mastername': 'chromium.gpu.fyi',
+                    'buildername': 'GPU FYI Win x64 DX12 Vulkan Builder',
+                    'tester': 'Win10 FYI x64 DX12 Vulkan Release (NVIDIA)',
+                }),
             'gpu-fyi-try-win10-nvidia-exp-64':
                 simple_bot({
                     'mastername': 'chromium.gpu.fyi',
