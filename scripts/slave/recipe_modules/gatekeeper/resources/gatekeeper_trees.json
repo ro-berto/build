@@ -23,6 +23,22 @@
         "status-url": "https://chromium-status.appspot.com",
         "track-revisions": true
     },
+    "devtools": {
+        "build-db": "devtools_tree_closers_build_db.json",
+        "gitiles-config": {
+          "repo_url": "https://chromium.googlesource.com/devtools/devtools-frontend",
+          "ref": "refs/heads/infra/config",
+          "path": "gatekeeper/tree_closers.json"
+        },
+        "masters": {
+            "https://build.chromium.org/p/client.devtools-frontend.integration": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/v8_status_password",
+        "set-status": true,
+        "status-url": "https://devtools-status.appspot.com",
+        "track-revisions": true
+    },
     "android": {
         "open-tree": false,
         "set-status": false,
