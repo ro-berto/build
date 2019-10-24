@@ -48,6 +48,7 @@ KNOWN_BUCKETS = (
     'luci.chromium.ci',
     'luci.chromium.try',
     'luci.crashpad.ci',
+    'luci.devtools-frontend.ci',
     'luci.infra.ci',
     'luci.infra.cron',
     'luci.nacl.ci',
