@@ -56,11 +56,14 @@ def RunSteps(api):
 
   api.path['checkout'] = checkout_dir.join('src')
   with api.context(cwd=api.path['checkout'], env=env):
-    api.git('fetch', SOURCE_REPO, 'HEAD')
+    # Discard any commits from previous runs.
+    api.git('reset', '--hard', 'HEAD')
+
+    api.git('fetch')
 
     mirror_hash = api.git(
         'rev-parse',
-        'HEAD',
+        'FETCH_HEAD',
         name='fetch mirror hash',
         stdout=api.raw_io.output_text()).stdout.strip()
 
@@ -69,13 +72,13 @@ def RunSteps(api):
             'log',
             '-1',
             '--format=%ct',
-            'HEAD',
+            'FETCH_HEAD',
             name='fetch mirror timestamp',
             stdout=api.raw_io.output_text()).stdout.strip())
 
     commit_hash = api.git(
         'rev-parse',
-        'HEAD^',
+        'FETCH_HEAD^',
         name='fetch source hash',
         stdout=api.raw_io.output_text()).stdout.strip()
 
@@ -84,7 +87,7 @@ def RunSteps(api):
             'log',
             '-1',
             '--format=%ct',
-            'HEAD^',
+            'FETCH_HEAD^',
             name='fetch source timestamp',
             stdout=api.raw_io.output_text()).stdout.strip())
 
