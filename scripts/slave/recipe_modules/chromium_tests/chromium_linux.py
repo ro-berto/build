@@ -107,9 +107,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      # 5% of the linux-rel builds will use exparchive instead of
-      # batcharchive to allow comparison of performance.
-      'force_exparchive': 5,
       'checkout_dir': 'linux',
     },
     'linux-trusty-rel': {

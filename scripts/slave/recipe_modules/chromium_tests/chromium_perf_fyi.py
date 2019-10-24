@@ -72,7 +72,6 @@ _AddBuildSpec('android_arm64-cfi-builder-perf-fyi', 'android',
                                      'system_webview_shell_apk',])
 
 _AddBuildSpec('chromeos-kevin-builder-perf-fyi', 'chromeos',
-              force_exparchive=True,
               target_bits=32,
               target_arch='arm',
               cros_board='kevin',

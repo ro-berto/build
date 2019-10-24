@@ -76,17 +76,21 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   return spec
 
 
-def BuildSpec(
-  config_name, platform, target_bits,
-  compile_targets=None, extra_compile_targets=None, force_exparchive=False,
-  run_sizes=True, cros_board=None, target_arch=None,
-  extra_gclient_apply_config=None):
+def BuildSpec(config_name,
+              platform,
+              target_bits,
+              compile_targets=None,
+              extra_compile_targets=None,
+              run_sizes=True,
+              cros_board=None,
+              target_arch=None,
+              extra_gclient_apply_config=None):
   if not compile_targets:
     compile_targets = ['chromium_builder_perf']
 
   tests = []
-    # TODO: Run sizes on Android.
-    # TODO (crbug.com/953108): do not run test for chromeos for now
+  # TODO: Run sizes on Android.
+  # TODO (crbug.com/953108): do not run test for chromeos for now
   if run_sizes and not platform in ('android', 'chromeos'):
     tests = [steps.SizesStep('https://chromeperf.appspot.com', config_name)]
 
@@ -99,9 +103,6 @@ def BuildSpec(
   )
 
   spec['perf_isolate_lookup'] = True
-
-  if force_exparchive:
-    spec['force_exparchive'] = force_exparchive
 
   spec['compile_targets'] = compile_targets
   if extra_compile_targets:
@@ -148,14 +149,17 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
   SPEC['builders'][name] = spec
 
 
-def _AddBuildSpec(
-  name, platform, target_bits=64, add_to_bisect=False,
-  extra_compile_targets=None, force_exparchive=False):
+def _AddBuildSpec(name,
+                  platform,
+                  target_bits=64,
+                  add_to_bisect=False,
+                  extra_compile_targets=None):
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', platform, target_bits,
-      extra_compile_targets=extra_compile_targets,
-      force_exparchive=force_exparchive)
+      'chromium_perf',
+      platform,
+      target_bits,
+      extra_compile_targets=extra_compile_targets)
 
   if add_to_bisect:
     SPEC['settings']['bisect_builders'].append(name)
@@ -188,16 +192,11 @@ _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 
-_AddBuildSpec(
-  'win32-builder-perf', 'win', target_bits=32, force_exparchive=True)
-_AddBuildSpec(
-  'win64-builder-perf', 'win', add_to_bisect=True, force_exparchive=True)
-_AddBuildSpec(
-  'mac-builder-perf', 'mac', add_to_bisect=True, force_exparchive=True)
+_AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
+_AddBuildSpec('win64-builder-perf', 'win', add_to_bisect=True)
+_AddBuildSpec('mac-builder-perf', 'mac', add_to_bisect=True)
 
-
-_AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True,
-              force_exparchive=True)
+_AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True)
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('android-nexus5x-perf', 'android',

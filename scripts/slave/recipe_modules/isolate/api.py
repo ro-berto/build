@@ -178,10 +178,10 @@ class IsolateApi(recipe_api.RecipeApi):
         suffix: suffix of isolate_tests step.
             e.g. ' (with patch)', ' (without patch)'.
     """
-    # TODO(tansell): Make all steps in this function nested under one overall
+    # FIXME: Make all steps in this function nested under one overall
     # 'isolate tests' master step.
 
-    # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
+    # FIXME: Always require |targets| to be passed explicitly. Currently
     # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
     # autodiscovery. The code path in chromium_trybot that needs it is being
     # deprecated in favor of to *_ng builders, that pass targets explicitly.
@@ -201,65 +201,37 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    batch_targets = []
-    archive_targets = []
-    for t in targets:
-      if t.endswith('_exparchive'):
-        archive_targets.append(t)
-      else:
-        batch_targets.append(t)
-
     isolate_steps = []
     try:
       exe = self.m.path['checkout'].join('tools', 'luci-go', 'isolate')
+
+      # FIXME: Differentiate between bad *.isolate and upload errors.
+      # Raise InfraFailure on upload errors.
       args = [
           exe,
-          'archive',
-          '--dump-json', self.m.json.output(),
-          '--isolate-server', self._isolate_server,
-          '--namespace', self._namespace,
-          '--eventlog-endpoint', 'prod',
+          'batcharchive',
+          '--dump-json',
+          self.m.json.output(),
+          '--isolate-server',
+          self._isolate_server,
+          '--namespace',
+          self._namespace,
+          '--eventlog-endpoint',
+          'prod',
       ] + (['--verbose'] if verbose else [])
       args.extend(self._blacklist_args_for_isolate())
 
       if self.service_account_json:
         args.extend(['--service-account-json', self.service_account_json])
 
-      for target in archive_targets:
-        isolate_steps.append(
-            self.m.step(
-                'isolate %s%s' % (target, suffix),
-                args + [
-                    '--isolate', build_dir.join('%s.isolate' % target),
-                    '--isolated', build_dir.join('%s.isolated' % target),
-                ],
-                step_test_data=lambda: self.test_api.output_json([target]),
-                **kwargs))
+      args.extend([build_dir.join('%s.isolated.gen.json' % t) for t in targets])
 
-      if batch_targets:
-        # TODO(vadimsh): Differentiate between bad *.isolate and upload errors.
-        # Raise InfraFailure on upload errors.
-        args = [
-            exe,
-            'batcharchive',
-            '--dump-json', self.m.json.output(),
-            '--isolate-server', self._isolate_server,
-            '--namespace', self._namespace,
-            '--eventlog-endpoint', 'prod',
-        ] + (['--verbose'] if verbose else [])
-        args.extend(self._blacklist_args_for_isolate())
-
-        if self.service_account_json:
-          args.extend(['--service-account-json', self.service_account_json])
-
-        args.extend([
-            build_dir.join('%s.isolated.gen.json' % t) for t in batch_targets])
-
-        isolate_steps.append(
-            self.m.step(
-                step_name or ('isolate tests%s' % suffix), args,
-                step_test_data=lambda: self.test_api.output_json(batch_targets),
-                **kwargs))
+      isolate_steps.append(
+          self.m.step(
+              step_name or ('isolate tests%s' % suffix),
+              args,
+              step_test_data=lambda: self.test_api.output_json(targets),
+              **kwargs))
 
       # TODO(tansell): Change this to return a dummy "isolate results" or the
       # top level master step.

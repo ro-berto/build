@@ -155,7 +155,6 @@ def GenTests(api):
                         'testing': {
                           'platform': 'linux',
                         },
-                        'force_exparchive': 5,
                         'checkout_dir': 'linux',
                     },
                     'findit_tester': {

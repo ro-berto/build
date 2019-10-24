@@ -197,61 +197,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  # Check the 5% experiment for exparchive only runs on 5% of builds. It uses
-  # the buildnumber to determine when to be enabled. When enabled you get
-  # individual isolate steps for each test, when disabled you get a single
-  # isolate step for all tests.
-  yield api.test(
-      'exparchive_5percent_experiment_enabled',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          buildnumber=1020,  # 5% is (x % 100/5 == 0)
-          swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
-          path_config='kitchen'),
-      api.runtime(is_experimental=False, is_luci=True),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
-                  'gtest_tests': [{
-                      'test': 'base_unittests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                      }
-                  }],
-              },
-          }),
-      api.filter.suppress_analyze(),
-      api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-  for i in range(1, 20):
-    yield api.test(
-        'exparchive_5percent_experiment_disabled_%i' % i,
-        api.properties.tryserver(
-            mastername='tryserver.chromium.linux',
-            buildername='linux-rel',
-            buildnumber=1020 + i,
-            swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
-            path_config='kitchen'),
-        api.runtime(is_experimental=False, is_luci=True),
-        api.chromium_tests.read_source_side_spec(
-            'chromium.linux', {
-                'Linux Tests': {
-                    'gtest_tests': [{
-                        'test': 'base_unittests',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True,
-                        }
-                    }],
-                },
-            }),
-        api.filter.suppress_analyze(),
-        api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-        api.post_process(post_process.DoesNotRun, 'isolate base_unittests'),
-        api.post_process(post_process.DropExpectation),
-    )
-
 
   CUSTOM_PROPS = api.properties.tryserver(
       mastername='tryserver.chromium.test',
