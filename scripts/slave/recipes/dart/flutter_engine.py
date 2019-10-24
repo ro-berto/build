@@ -342,6 +342,10 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
           checkout_dir.join('third_party', 'android_tools', 'sdk')
   }
   with api.context(cwd=start_dir, env=run_env):
+    api.step('accept android licenses', [
+        'bash', '-c', 'yes | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --licenses'
+    ])
+
     BuildLinux(api, checkout_dir)
     prebuilt_dart_bin = checkout_dir.join('third_party', 'dart', 'tools',
       'sdks', 'dart-sdk', 'bin')

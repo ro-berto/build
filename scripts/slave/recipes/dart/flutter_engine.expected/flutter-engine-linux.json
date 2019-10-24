@@ -157,6 +157,20 @@
   },
   {
     "cmd": [
+      "bash",
+      "-c",
+      "yes | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --licenses"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "name": "accept android licenses"
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--full-dart-sdk"
     ],
