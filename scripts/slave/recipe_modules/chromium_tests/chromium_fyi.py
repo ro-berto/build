@@ -939,18 +939,13 @@ SPEC = {
             },
         },
         'ios-simulator-cr-recipe': {
-            'chromium_config':
-                'chromium',
+            'chromium_config': 'chromium',
             'chromium_apply_config': [
                 'mb',
                 'mac_toolchain',
-                # TODO(crbug.com/1014539): Temp config until properties
-                # are read from
-                'xcode_11a1027',
             ],
             'chromium_tests_apply_config': [],
-            'gclient_config':
-                'ios',  # add 'ios' to target_os
+            'gclient_config': 'ios',  # add 'ios' to target_os
             'gclient_apply_config': [],
             'chromium_config_kwargs': {
                 'BUILD_CONFIG': 'Debug',
@@ -965,7 +960,8 @@ SPEC = {
             'chromium_config':
                 'chromium',
             'chromium_apply_config': [
-                'ios_release_simulator', 'mac_toolchain', 'xcode_11m382q'
+                'ios_release_simulator',
+                'mac_toolchain',
             ],
             'gclient_config':
                 'ios',

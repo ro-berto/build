@@ -180,7 +180,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'xcode_10e1001'
       ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
@@ -203,7 +202,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'xcode_10e1001'
       ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
@@ -226,7 +224,6 @@ SPEC = {
           'dcheck',
           'mb',
           'mac_toolchain',
-          'xcode_10e1001'
       ],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
