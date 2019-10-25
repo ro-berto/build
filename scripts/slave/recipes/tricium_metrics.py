@@ -33,7 +33,7 @@ def _RunMetricsAnalyzer(api, checkout_dir, prev_dir, src_metrics_paths,
   ensure_file.add_package('infra/tricium/function/metrics', 'live')
   api.cipd.ensure(packages_dir, ensure_file)
 
-  metrics = packages_dir.join('histograms_check')
+  metrics = packages_dir.join('metrics_analyzer')
   out_dir = api.path['cleanup'].join('out')
   enums_path = api.path.join('src', 'tools', 'metrics', 'histograms',
                              'enums.xml')
