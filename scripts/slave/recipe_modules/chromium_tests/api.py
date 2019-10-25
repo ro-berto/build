@@ -862,8 +862,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           failing_swarming_tests,
           ' (%s)' % suffix
       )
-      if raw_result and raw_result.status != common_pb.SUCCESS:
-        return raw_result
+      if raw_result:
+        # Clobber the bot upon compile failure without patch.
+        # See crbug.com/724533 for more detail.
+        if raw_result.status == common_pb.FAILURE:
+          self.m.file.rmtree('clobber', self.m.chromium.output_dir)
+
+        if raw_result.status != common_pb.SUCCESS:
+          return raw_result
 
       if failing_swarming_tests:
         swarm_hashes_property_name = 'swarm_hashes'

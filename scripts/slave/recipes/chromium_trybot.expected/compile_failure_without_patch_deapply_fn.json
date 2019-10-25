@@ -1461,6 +1461,23 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "clobber"
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "#### Step _compile (without patch)_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
