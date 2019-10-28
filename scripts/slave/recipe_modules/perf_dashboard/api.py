@@ -114,11 +114,12 @@ class PerfDashboardApi(recipe_api.RecipeApi):
       step_test_data: Opional recipe simulation data. Defaults to a successful
           request.
     """
+    token = self.m.service_account.default().get_access_token()
     post_json_args = [
-        url, '-i', self.m.json.input(data), '-o', self.m.json.output()]
-    if self.m.runtime.is_luci:
-      token = self.m.service_account.default().get_access_token()
-      post_json_args += ['-t', self.m.raw_io.input_text(token)]
+        url,
+        '-i', self.m.json.input(data),
+        '-o', self.m.json.output(),
+        '-t', self.m.raw_io.input_text(token)]
     step_test_data = step_test_data or (
         lambda: self.m.json.test_api.output({'status_code': 200}))
     step_result = self.m.python(
