@@ -149,6 +149,10 @@ def GenTests(api):
             api.gitiles.make_encoded_file(api.json.dumps(TEST_CONFIG))),
         api.step_data('read V8 ToT revision',
                       api.gitiles.make_log_test_data('deadbeef')),
+        api.buildbucket.generic_build(
+            project='v8',
+            bucket='try.triggered',
+            builder='v8_verify_flakes'),
         api.buildbucket.simulated_schedule_output(
             rpc_pb2.BatchResponse(
                 responses=[dict(schedule_build=dict(id=123))],),

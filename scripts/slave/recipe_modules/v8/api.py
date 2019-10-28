@@ -1462,6 +1462,9 @@ class V8Api(recipe_api.RecipeApi):
     if project is None:
       project = self.m.buildbucket.INHERIT
 
+    if bucket is None:
+      bucket = self.m.buildbucket.INHERIT
+
     # Add user_agent:cq to child builds if the parent is also triggered by CQ.
     extra_tags = {}
     if any(tag.key == 'user_agent' and tag.value == 'cq'
