@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 from contextlib import contextmanager
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from recipe_engine.post_process import (DropExpectation, StatusFailure)
 
 DEPS = [
   'chromium',
@@ -30,8 +32,11 @@ def RunSteps(api):
   with _in_builder_cache_depot_on_path(api):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
-    api.chromium.run_gn()
-    api.chromium.compile()
+    api.chromium.ensure_goma()
+    api.chromium.run_gn(use_goma=True)
+    compilation_result = api.chromium.compile(use_goma_module=True)
+    if compilation_result.status != common_pb.SUCCESS:
+      return compilation_result
     for step, script in STEPS_N_SCRIPTS:
       run_script(api, step, script)
 
@@ -55,6 +60,7 @@ def _configure_build(api):
   build_cfg = api.chromium.make_config()
   build_cfg.build_config_fs = 'Release'
   build_cfg.compile_py.use_autoninja = True
+  build_cfg.compile_py.compiler = 'goma'
   api.chromium.c = build_cfg
 
 
@@ -74,3 +80,5 @@ def _in_builder_cache_depot_on_path(api):
 
 def GenTests(api):
   yield api.test('basic', api.properties(path_config='kitchen'))
+  yield (api.test('compile failure', api.properties(path_config='kitchen')) +
+         api.step_data('compile', retcode=1) + api.post_process(StatusFailure))
