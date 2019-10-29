@@ -129,6 +129,7 @@ def RunSteps(api, target_mastername, target_testername,
 
 def GenTests(api):
   def base(isolated_targets, tester_name):
+    # TODO(crbug/1018836): Use distro specific name instead of Linux.
     properties = {
         'path_config': 'kitchen',
         'mastername': 'chromium.findit',

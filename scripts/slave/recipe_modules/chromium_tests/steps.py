@@ -1575,6 +1575,7 @@ class SwarmingTest(Test):
     elif os.lower().startswith('windows'):
       os_name = 'Windows'
     else:
+      # TODO(crbug/1018836): Use distro specific name instead of Linux.
       os_name = 'Linux'
 
     return 'on %s GPU on %s' % (gpu_vendor, os_name)

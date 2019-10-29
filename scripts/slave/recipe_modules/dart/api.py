@@ -189,6 +189,7 @@ class DartApi(recipe_api.RecipeApi):
                                    '--shard=%s' % (shard + 1),
                                    '--output-directory=${ISOLATED_OUTDIR}'],
                                   ignore_task_failure=ignore_failure)
+      # TODO(crbug/1018836): Use distro specific name instead of Linux.
       os_names = {
         'android': 'Android',
         'linux': 'Linux',
