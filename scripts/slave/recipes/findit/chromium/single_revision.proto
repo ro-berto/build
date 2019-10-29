@@ -48,7 +48,8 @@ message InputProperties {
     string hash = 2;
   }
 
-  // Isolate tests to run. If provided, other fields are ignored and the
-  // isolates are run as-is.
+  // Isolate tests to run. If provided, other fields identifying targets to run
+  // are ignored, as the isolate hash uniquely identifies the test already.
+  // test_repeat_count is still used.
   repeated IsolateObject isolate_targets = 7;
 }

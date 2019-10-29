@@ -38,8 +38,11 @@ def RunSteps(api, properties):
   if properties.isolate_targets:
     for target in properties.isolate_targets:
       api.isolate.isolate_server = target.server
+
+      args = ['--gtest_repeat=%d' % properties.test_repeat_count
+             ] if properties.test_repeat_count else []
       api.isolate.run_isolated("Run isolated test '%s'" % target.hash,
-                               target.hash)
+                               target.hash, args)
     return
 
   # 0. Validate properties.
