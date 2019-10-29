@@ -611,6 +611,21 @@ SPEC = {
             chromium_apply_configs(
                 no_archive(chromium.SPEC['builders']['mac-archive-rel']),
                 ['goma_latest_client']),
+        'mac-code-coverage': {
+            'checkout_dir': 'mac',
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['use_clang_coverage'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
         'Win Builder (ANGLE)': {
             'chromium_config': 'chromium',
             'gclient_config': 'chromium',
