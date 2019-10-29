@@ -117,6 +117,7 @@ def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
 def GetFuchsiaOutputFiles(product):
   return [
       'dart_jit_%srunner' % ('product_' if product else ''),
+      'dart_aot_%srunner' % ('product_' if product else ''),
       'flutter_jit_%srunner' % ('product_' if product else ''),
       'flutter_aot_%srunner' % ('product_' if product else ''),
   ]
@@ -125,6 +126,7 @@ def GetFuchsiaOutputFiles(product):
 def GetFuchsiaOutputDirs(product):
   return [
       'dart_jit_%srunner_far' % ('product_' if product else ''),
+      'dart_aot_%srunner_far' % ('product_' if product else ''),
       'flutter_jit_%srunner_far' % ('product_' if product else ''),
       'flutter_aot_%srunner_far' % ('product_' if product else ''),
       'dart_runner_patched_sdk',
