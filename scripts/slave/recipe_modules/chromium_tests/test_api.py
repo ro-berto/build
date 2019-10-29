@@ -91,4 +91,3 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
                 step_prefix or '', filename, step_suffix or ''),
             self.m.json.output(contents))
     )
-

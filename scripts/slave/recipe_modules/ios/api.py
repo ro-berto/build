@@ -760,25 +760,19 @@ class iOSApi(recipe_api.RecipeApi):
     tasks = []
 
     cmd = [
-      '%s/run.py' % scripts_dir,
-      '--app', '<(app_path)',
-      '--host-app', '<(host_app_path)',
-      '--args-json',
-      '{"test_args": <(test_args), \
+        '%s/run.py' % scripts_dir, '--app', '<(app_path)', '--host-app',
+        '<(host_app_path)', '--args-json', '{"test_args": <(test_args), \
         "xctest": <(xctest), \
         "test_cases": <(test_cases), \
         "restart": <(restart), \
         "xcode_parallelization": <(xcode_parallelization), \
-        "xcodebuild_device_runner": <(xcodebuild_device_runner)}',
-      '--out-dir', '${ISOLATED_OUTDIR}',
-      '--retries', self.__config.get('retries', '3'),
-      '--shards', '<(shards)',
-      '--<(xcode_arg_name)', '<(xcode_version)',
-      '--mac-toolchain-cmd', '%s/mac_toolchain' %
-          self.m.chromium_tests.steps.MAC_TOOLCHAIN_ROOT,
-      '--xcode-path', self.XCODE_APP_PATH,
-      '--wpr-tools-path', '<(wpr_tools_path)',
-      '--replay-path', '<(replay_path)'
+        "xcodebuild_device_runner": <(xcodebuild_device_runner)}', '--out-dir',
+        '${ISOLATED_OUTDIR}', '--retries',
+        self.__config.get('retries', '3'), '--shards', '<(shards)',
+        '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd',
+        '%s/mac_toolchain' % self.m.chromium_tests.steps.MAC_TOOLCHAIN_ROOT,
+        '--xcode-path', self.XCODE_APP_PATH, '--wpr-tools-path',
+        '<(wpr_tools_path)', '--replay-path', '<(replay_path)'
     ]
 
     files = [

@@ -22,7 +22,7 @@ import subprocess
 import sys
 
 # The revision from which v8 coverage is supported.
-# TODO(machenbach): Remove this as soon as it's supported for 1000+ revisions. 
+# TODO(machenbach): Remove this as soon as it's supported for 1000+ revisions.
 V8_COVERAGE_SUPPORT_COMMIT = 'e7f99c1ed52a5724ffef41c361920786e97f240d'
 
 assert len(sys.argv) == 4

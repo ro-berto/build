@@ -6,7 +6,7 @@ from . import steps
 
 
 def CreateStandardConfig(platform, apply_configs):
-    """Generates a builder recipe config for non-Android builder.
+  """Generates a builder recipe config for non-Android builder.
 
     Args:
         platform: win, linux, mac
@@ -16,22 +16,22 @@ def CreateStandardConfig(platform, apply_configs):
         A dict mapping string keys to field values in the build config format.
     """
 
-    return {
-        'chromium_config': 'chromium',
-        # Non-Android builder always uses regular mb.
-        'chromium_apply_config': ['mb'] + apply_configs,
-        'gclient_config': 'chromium',
-        'chromium_config_kwargs': {
-            'TARGET_BITS': 64,
-        },
-        'testing': {
-            'platform': platform,
-        },
-    }
+  return {
+      'chromium_config': 'chromium',
+      # Non-Android builder always uses regular mb.
+      'chromium_apply_config': ['mb'] + apply_configs,
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+          'TARGET_BITS': 64,
+      },
+      'testing': {
+          'platform': platform,
+      },
+  }
 
 
 def CreateAndroidConfig(bits, apply_configs):
-    """Generates a builder recipe config specifically for Android.
+  """Generates a builder recipe config specifically for Android.
 
     Args:
         bits: Target architecture number of bits (e.g. 32 or 64).
@@ -41,20 +41,20 @@ def CreateAndroidConfig(bits, apply_configs):
         A dict mapping string keys to field values in the build config format.
     """
 
-    return {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': apply_configs,
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['android'],
-        'chromium_config_kwargs': {
-            'TARGET_BITS': bits,
-            'TARGET_PLATFORM': 'android',
-        },
-        'android_config': 'main_builder_mb',
-        'testing': {
-            'platform': 'linux',  # Android builder always uses Linux.
-        },
-    }
+  return {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': apply_configs,
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+          'TARGET_BITS': bits,
+          'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'testing': {
+          'platform': 'linux',  # Android builder always uses Linux.
+      },
+  }
 
 
 def CreateGenericConfig(chromium_config='chromium',
@@ -63,7 +63,7 @@ def CreateGenericConfig(chromium_config='chromium',
                         gclient_apply_config=None,
                         chromium_config_kwargs=None,
                         platform='linux'):
-    """
+  """
     Generates a builder recipe config that differs from the standard config or
     Android config.
 
@@ -78,28 +78,28 @@ def CreateGenericConfig(chromium_config='chromium',
     Returns:
         A dict mapping string keys to field values in the build config format.
     """
-    # Specify default values here to avoid mutable object default values in
-    # method definition.
-    # TODO(crbug.com/947436): |chromium_apply_config| defaults to None but is
-    # always specified in current use. If we specify a non-None default value
-    # here, the recipes test will complain that it is not covered. Once we need
-    # to call this function without explicitly specifying
-    # |chromium_apply_config|, then we should provide a proper default value.
-    if gclient_apply_config is None:
-        gclient_apply_config = []
-    if chromium_config_kwargs is None:
-        chromium_config_kwargs = {}
+  # Specify default values here to avoid mutable object default values in
+  # method definition.
+  # TODO(crbug.com/947436): |chromium_apply_config| defaults to None but is
+  # always specified in current use. If we specify a non-None default value
+  # here, the recipes test will complain that it is not covered. Once we need
+  # to call this function without explicitly specifying
+  # |chromium_apply_config|, then we should provide a proper default value.
+  if gclient_apply_config is None:
+    gclient_apply_config = []
+  if chromium_config_kwargs is None:
+    chromium_config_kwargs = {}
 
-    return {
-        'chromium_config': chromium_config,
-        'chromium_apply_config': chromium_apply_config,
-        'gclient_config': gclient_config,
-        'gclient_apply_config': gclient_apply_config,
-        'chromium_config_kwargs': chromium_config_kwargs,
-        'testing': {
-            'platform': platform,
-        },
-    }
+  return {
+      'chromium_config': chromium_config,
+      'chromium_apply_config': chromium_apply_config,
+      'gclient_config': gclient_config,
+      'gclient_apply_config': gclient_apply_config,
+      'chromium_config_kwargs': chromium_config_kwargs,
+      'testing': {
+          'platform': platform,
+      },
+  }
 
 
 _SPEC_BUILDERS = {

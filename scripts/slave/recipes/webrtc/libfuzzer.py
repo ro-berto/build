@@ -98,14 +98,10 @@ def GenTests(api):
       yield (generate_builder(bucketname, buildername, revision='a' * 40) +
              api.step_data('calculate targets',
                  stdout=api.raw_io.output_text('target1 target2 target3')))
-  yield (
-      generate_builder(
-        'luci.webrtc.ci',
-        'Linux64 Release (Libfuzzer)',
-        revision='a' * 40,
-        suffix='_compile_failure',
-        fail_compile=True
-      ) +
-      api.post_process(post_process.StatusFailure) +
-      api.post_process(post_process.DropExpectation)
-  )
+  yield (generate_builder(
+      'luci.webrtc.ci',
+      'Linux64 Release (Libfuzzer)',
+      revision='a' * 40,
+      suffix='_compile_failure',
+      fail_compile=True) + api.post_process(post_process.StatusFailure) +
+         api.post_process(post_process.DropExpectation))

@@ -34,19 +34,19 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   @staticmethod
   def SLOWEST_TESTS():
     return [
-    {
-      'name': 'mjsunit/Cool.Test',
-      'flags': ['-f'],
-      'command': 'd8 -f mjsunit/Cool.Test',
-      'duration': 61.0028,
-    },
-    {
-      'name': 'mjsunit/Cool.Test2',
-      'flags': ['-f', '-g'],
-      'command': 'd8 -f mjsunit/Cool.Test2',
-      'duration': 0.1012,
-    },
-  ]
+        {
+            'name': 'mjsunit/Cool.Test',
+            'flags': ['-f'],
+            'command': 'd8 -f mjsunit/Cool.Test',
+            'duration': 61.0028,
+        },
+        {
+            'name': 'mjsunit/Cool.Test2',
+            'flags': ['-f', '-g'],
+            'command': 'd8 -f mjsunit/Cool.Test2',
+            'duration': 0.1012,
+        },
+    ]
 
   def output_json(self, has_failures=False, wrong_results=False, flakes=False,
                   unmarked_slow_test=False):

@@ -42,18 +42,18 @@ def config(name,
   }
 
   if android_config:
-      cfg['android_config'] = android_config
-      cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
-      cfg['gclient_apply_config'].append('android')
+    cfg['android_config'] = android_config
+    cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
+    cfg['gclient_apply_config'].append('android')
 
   if official:
-      cfg['gclient_apply_config'].append('chrome_internal')
-      cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
-      cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
-      cfg['swarming_dimensions'] = {
+    cfg['gclient_apply_config'].append('chrome_internal')
+    cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
+    cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
+    cfg['swarming_dimensions'] = {
         'pool': 'chrome.tests',
         'os': 'Ubuntu-14.04',
-      }
+    }
 
   return name, cfg
 

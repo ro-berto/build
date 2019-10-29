@@ -404,7 +404,10 @@ def GenTests(api):
   def override_expectation():
     return api.step_data(
         'Run Expectations Script',
-         api.json.output({'success': True, 'failed_messages':[]}))
+        api.json.output({
+            'success': True,
+            'failed_messages': []
+        }))
 
   yield (
       props('noop_because_of_analyze') +

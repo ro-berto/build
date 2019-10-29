@@ -26,7 +26,7 @@ def _GetDashboardJson(options):
           'a_build_uri': '[%s](%s)' % ('Build status', options.build_url),
       },
       'versions': {
-          'webrtc_git':options.got_webrtc_revision
+          'webrtc_git': options.got_webrtc_revision
       },
       'chart_data': chart_json,
   }

@@ -290,7 +290,7 @@ class GomaApi(recipe_api.RecipeApi):
           args=['jsonstatus',
                 self.m.json.output(leak_to=self.json_path)],
           step_test_data=lambda: self.m.json.test_api.output(
-              data={'notice':[{
+              data={'notice': [{
                   'infra_status': {
                       'ping_status_code': 200,
                       'num_user_error': 0,
@@ -343,12 +343,12 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
       self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
       if self._enable_ats:
-          self._goma_ctl_env['GOMA_ARBITRARY_TOOLCHAIN_SUPPORT'] = 'true'
+        self._goma_ctl_env['GOMA_ARBITRARY_TOOLCHAIN_SUPPORT'] = 'true'
       if self._goma_server_host:
-          self._goma_ctl_env['GOMA_SERVER_HOST'] = self._goma_server_host
+        self._goma_ctl_env['GOMA_SERVER_HOST'] = self._goma_server_host
       if self._goma_rpc_extra_params:
-          self._goma_ctl_env['GOMA_RPC_EXTRA_PARAMS'] = (
-              self._goma_rpc_extra_params)
+        self._goma_ctl_env['GOMA_RPC_EXTRA_PARAMS'] = (
+            self._goma_rpc_extra_params)
 
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env

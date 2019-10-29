@@ -109,4 +109,3 @@ _AddIsolatedTestSpec('chromeos-kevin-perf-fyi', 'chromeos',
                      target_bits=32,
                      target_arch='arm',
                      cros_board='kevin')
-

@@ -62,7 +62,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if not minimal:
       t.add_result('good%stotally-awesome.html' % sep, 'PASS')
     for i in xrange(num_additional_failures):
-        t.add_result('bad%sfailing%d.html' % (sep, i), 'PASS', 'FAIL')
+      t.add_result('bad%sfailing%d.html' % (sep, i), 'PASS', 'FAIL')
     if unexpected_flakes:
       t.add_result('flake%sflakey.html' % sep, 'PASS', 'FAIL PASS')
 
@@ -344,9 +344,9 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       files_dict = {}
       for index, i in enumerate(shard_indices):
         if isolated_script_retcode is None:
-            exit_code = '1' if not passing or swarming_internal_failure else '0'
+          exit_code = '1' if not passing or swarming_internal_failure else '0'
         else:
-            exit_code = str(isolated_script_retcode)
+          exit_code = str(isolated_script_retcode)
         jsonish_shards.append({
           'failure': not passing,
           'internal_failure': swarming_internal_failure,
