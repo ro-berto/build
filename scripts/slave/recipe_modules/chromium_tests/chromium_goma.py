@@ -190,7 +190,7 @@ _SPEC_BUILDERS = {
         chromium_apply_config=['mb', 'goma_rbe_prod']),
     'chromeos-amd64-generic-rel (Goma RBE FYI)':
     CreateGenericConfig(
-        chromium_apply_config=['mb', 'goma_rbe_tot'],
+        chromium_apply_config=['mb', 'goma_rbe_prod'],
         gclient_apply_config=['chromeos'],
         chromium_config_kwargs={
             'TARGET_CROS_BOARD': 'amd64-generic',
