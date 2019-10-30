@@ -28,8 +28,7 @@ DEPS = [
 ]
 
 
-def _RunMetricsAnalyzer(api, checkout_dir, prev_dir, src_metrics_paths,
-                        patch_path):
+def _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path):
   packages_dir = api.path['cleanup'].join('packages')
   ensure_file = api.cipd.EnsureFile()
   ensure_file.add_package('infra/tricium/function/metrics', 'live')
@@ -37,12 +36,12 @@ def _RunMetricsAnalyzer(api, checkout_dir, prev_dir, src_metrics_paths,
 
   metrics = packages_dir.join('metrics_analyzer')
   out_dir = api.path['cleanup'].join('out')
-  enums_path = api.path.join('src', 'tools', 'metrics', 'histograms',
+  enums_path = api.path.join('tools', 'metrics', 'histograms',
                              'enums.xml')
   api.step('metrics', [
-      metrics, '-input', checkout_dir, '-output', out_dir, '-previous',
+      metrics, '-input', src_dir, '-output', out_dir, '-previous',
       prev_dir, '-patch', patch_path, '-enums', enums_path, '--'
-  ] + src_metrics_paths)
+  ] + metrics_paths)
 
   # This is where the Tricium metrics analyzer should write all results to.
   out_file = out_dir.join('tricium', 'data', 'results.json')
@@ -102,9 +101,9 @@ def RunSteps(api):
         return
 
       # Put last version of changed files in temporary directory.
-      prev_dir = api.path['cleanup'].join('previous')
+      prev_dir = api.path['cleanup'].join('previous', 'src')
       for path in metrics_paths:
-        prev_dir_path = prev_dir.join('src', path)
+        prev_dir_path = prev_dir.join(path)
         api.file.ensure_directory('create_directories',
                                   api.path.dirname(prev_dir_path))
         api.git(
@@ -115,19 +114,14 @@ def RunSteps(api):
       # Get the diff itself, with paths formatted as Tricium analyzer expects.
       patch_path = api.path['cleanup'].join('tricium_generated_diff.patch')
       diff_arg_list = [
-          'diff', 'FETCH_HEAD~', 'FETCH_HEAD', '--output=' + str(patch_path),
-          '--src-prefix=' + str(api.path.join('a', 'src', '')),
-          '--dst-prefix=' + str(api.path.join('b', 'src', '')), '--'
+          'diff', 'FETCH_HEAD~', 'FETCH_HEAD', 
+          '--output=' + str(patch_path), '--'
       ] + metrics_paths
       api.git(*diff_arg_list)
 
-      # Prepend src/ to each path, as the Tricium analyzer expects.
-      src_metrics_paths = [api.path.join('src', p) for p in metrics_paths]
-
       # Run the metrics analyzer.
       with api.step.nest('metrics'):
-        _RunMetricsAnalyzer(api, checkout_dir, prev_dir, src_metrics_paths,
-                            patch_path)
+        _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path)
 
 
 def GenTests(api):
