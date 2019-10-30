@@ -22,6 +22,7 @@ import aggregation_util
 import repository_util
 
 IS_WIN = platform.system() == 'Windows'
+IS_MAC = platform.system() == 'Darwin'
 
 
 def _extract_coverage_info(segments):
@@ -331,7 +332,7 @@ def _show_system_resource_usage(proc):
     logging.info('Thread numbers: %d', proc.num_threads())
 
     p_mem = proc.memory_info()
-    if IS_WIN:
+    if IS_WIN or IS_MAC:
       logging.info('llvm-cov Memory: '
                    'RSS=%s,  VMS=%s', bytes_to_gb(p_mem.rss),
                    bytes_to_gb(p_mem.vms))
@@ -341,7 +342,7 @@ def _show_system_resource_usage(proc):
                    bytes_to_gb(p_mem.vms), bytes_to_gb(p_mem.shared))
 
     os_vm = psutil.virtual_memory()
-    if IS_WIN:
+    if IS_WIN or IS_MAC:
       logging.info('OS virtual Memory: '
                    'available=%s, used=%s, free=%s',
                    bytes_to_gb(os_vm.available), bytes_to_gb(os_vm.used),
