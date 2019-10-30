@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
+
 DEPS = [
   'archive',
   'recipe_engine/json',
@@ -44,6 +46,7 @@ def RunSteps(api):
       primary_project=api.properties.get('primary_project'),
       bitness=api.properties.get('bitness'),
       use_legacy=api.properties.get('use_legacy', True),
+      sortkey_datetime=api.properties.get('sortkey_datetime', None),
   )
 
 
@@ -128,4 +131,20 @@ def GenTests(api):
       api.platform('linux', 64),
       api.properties(
           build_archive_url='gs://dummy-bucket/Linux Release/full-build.zip'),
+  )
+
+  update_properties = {
+      'got_revision': TEST_HASH_MAIN,
+  }
+  yield api.test(
+      'cf_archiving_with_sortkey_datetime',
+      api.platform('linux', 64),
+      api.properties(
+          update_properties=update_properties,
+          gs_acl='public-read',
+          archive_subdir_suffix='subdir',
+          sortkey_datetime=datetime.datetime.utcfromtimestamp(100),
+      ),
+      api.override_step_data('filter build_dir',
+                             api.json.output(['chrome', 'resources'])),
   )

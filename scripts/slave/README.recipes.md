@@ -362,7 +362,7 @@ If you need to upload or download build artifacts (or any other files) for
 something other than Chromium flavor, consider using 'zip' + 'gsutil' or
 'isolate' modules instead.
 
-&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#139)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, \*\*kwargs):**
+&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#139)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, sortkey_datetime=None, \*\*kwargs):**
 
 Archives and uploads a build to google storage.
 
@@ -400,13 +400,17 @@ Args:
            names.
   use_legacy: Specify if legacy paths and archive names should be used. Set
               to false for new builders.
+  sortkey_datetime: If set, the api will use this datetime as the sortable
+                    key path in the archive name, instead of trying to infer
+                    it from the commit information.  This will be formatted
+                    as YYYYMMDDHHMM.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#302)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#316)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#412)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#426)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -417,11 +421,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#351)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#365)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#401)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#415)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.
@@ -3917,9 +3921,9 @@ Packages Android SDK packages as CIPD packages.
 &mdash; **def [RunSteps](/scripts/slave/recipes/angle.py#111)(api, target_cpu, debug, clang):**
 ### *recipes* / [archive:examples/full](/scripts/slave/recipe_modules/archive/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/archive/examples/full.py#5): [archive](#recipe_modules-archive), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/archive/examples/full.py#7): [archive](#recipe_modules-archive), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/archive/examples/full.py#21)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/archive/examples/full.py#23)(api):**
 ### *recipes* / [archive:tests/download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/tests/download_and_unzip_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/archive/tests/download_and_unzip_build.py#5): [archive](#recipe_modules-archive), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

@@ -136,11 +136,19 @@ class ArchiveApi(recipe_api.RecipeApi):
       return '%s-%s' % (branch, number)
     return str(number)
 
-  def clusterfuzz_archive(
-      self, build_dir, update_properties, gs_bucket,
-      archive_prefix, archive_subdir_suffix='', gs_acl=None,
-      revision_dir=None, primary_project=None, bitness=None, use_legacy=True,
-      **kwargs):
+  def clusterfuzz_archive(self,
+                          build_dir,
+                          update_properties,
+                          gs_bucket,
+                          archive_prefix,
+                          archive_subdir_suffix='',
+                          gs_acl=None,
+                          revision_dir=None,
+                          primary_project=None,
+                          bitness=None,
+                          use_legacy=True,
+                          sortkey_datetime=None,
+                          **kwargs):
     # TODO(machenbach): Merge revision_dir and primary_project. The
     # revision_dir is only used for building the archive name while the
     # primary_project is authoritative for the commit position.
@@ -180,15 +188,28 @@ class ArchiveApi(recipe_api.RecipeApi):
                names.
       use_legacy: Specify if legacy paths and archive names should be used. Set
                   to false for new builders.
+      sortkey_datetime: If set, the api will use this datetime as the sortable
+                        key path in the archive name, instead of trying to infer
+                        it from the commit information.  This will be formatted
+                        as YYYYMMDDHHMM.
     """
     # We should distinguish build archives also by bitness on new bots, so that
     # 32 and 64 bit bots can coexist. We don't change old bots to not confuse
     # clusterfuzz bisect jobs.
     assert use_legacy or bitness, 'Must specify bitness for new builders.'
     target = self.m.path.split(build_dir)[-1]
-    commit_position = self._get_commit_position(
-        update_properties, primary_project)
-    cp_ref, cp_number = self.m.commit_position.parse(commit_position)
+    gs_metadata = {}
+    if sortkey_datetime is not None:
+      sortkey_path = sortkey_datetime.strftime('%Y%m%d%H%M')
+    else:
+      commit_position = self._get_commit_position(update_properties,
+                                                  primary_project)
+      cp_ref, cp_number = self.m.commit_position.parse(commit_position)
+      sortkey_path = self._get_comparable_upload_path_for_sort_key(
+          cp_ref, cp_number)
+      gs_metadata[GS_COMMIT_POSITION_NUMBER_KEY] = cp_number
+      if commit_position:
+        gs_metadata[GS_COMMIT_POSITION_KEY] = commit_position
     build_git_commit = self._get_git_commit(update_properties, primary_project)
     staging_dir = self.m.path['cleanup'].join('chrome_staging')
     self.m.file.ensure_directory('create staging_dir', staging_dir)
@@ -252,8 +273,6 @@ class ArchiveApi(recipe_api.RecipeApi):
     if revision_dir:
       component = '-%s-component' % revision_dir
 
-    sortkey_path = self._get_comparable_upload_path_for_sort_key(
-        cp_ref, cp_number)
     zip_file_base_name = '%s-%s-%s%s-%s' % (archive_prefix,
                                             platform_name,
                                             target_name,
@@ -278,11 +297,6 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     zip_file = staging_dir.join(zip_file_name)
 
-    gs_metadata = {
-      GS_COMMIT_POSITION_NUMBER_KEY: cp_number,
-    }
-    if commit_position:
-      gs_metadata[GS_COMMIT_POSITION_KEY] = commit_position
     if build_git_commit:
       gs_metadata[GS_GIT_COMMIT_KEY] = build_git_commit
 
