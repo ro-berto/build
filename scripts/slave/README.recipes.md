@@ -1813,7 +1813,7 @@ Builds dart using the specified build_args
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#243)(self, steps):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#244)(self, steps):**
 
 Collects the results of a sharded test run.
 
@@ -1825,7 +1825,7 @@ The commit hash of a CI build or the patch set of a CQ build
 
 Returns the path to the checked-in SDK dart executable.
 
-&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#625)(self):**
+&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#626)(self):**
 
 Deletes the debug log file
 
@@ -1839,7 +1839,7 @@ Decrypts the specified secret and returns the location of the result
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#613)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#614)(self):**
 
 Reads the debug log file
 
@@ -1848,7 +1848,7 @@ Reads the debug log file
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#631)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#632)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.
@@ -2558,13 +2558,13 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#884)(self, triggered_tests):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#878)(self, triggered_tests):**
 
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#44)(self):**
 
 &mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#299)(self, xcode_build_version):**
 
-&mdash; **def [generate\_test\_from\_task](/scripts/slave/recipe_modules/ios/api.py#848)(self, task, upload_test_results=True, result_callback=None):**
+&mdash; **def [generate\_test\_from\_task](/scripts/slave/recipe_modules/ios/api.py#842)(self, task, upload_test_results=True, result_callback=None):**
 
 Generates a Test subclass that can run tests and parse/store results.
 
@@ -2587,16 +2587,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#959)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#953)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#946)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#940)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#974)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#968)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2630,7 +2630,7 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#909)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True, retry_failed_shards=False):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#903)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True, retry_failed_shards=False):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
