@@ -294,18 +294,12 @@
       "base_unittests",
       "boringssl_crypto_tests",
       "boringssl_ssl_tests",
-      "pdfium_fuzzer",
-      "third_party_re2_fuzzer",
       "-c",
       "[CACHE]/builder/src/out/Release/base_unittests",
       "-c",
       "[CACHE]/builder/src/out/Release/boringssl_crypto_tests",
       "-c",
       "[CACHE]/builder/src/out/Release/boringssl_ssl_tests",
-      "-c",
-      "[CACHE]/builder/src/out/Release/pdfium_fuzzer -runs=1000",
-      "-c",
-      "[CACHE]/builder/src/out/Release/third_party_re2_fuzzer -runs=1000",
       "-b",
       "[CACHE]/builder/src/out/Release",
       "-o",
@@ -380,46 +374,6 @@
       "@@@STEP_LOG_LINE@boringssl_ssl_tests_output.log@aaa@@@",
       "@@@STEP_LOG_LINE@boringssl_ssl_tests_output.log@bbb@@@",
       "@@@STEP_LOG_END@boringssl_ssl_tests_output.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/src/out/clang_tot_coverage_report/linux/logs/pdfium_fuzzer_output.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "name": "read log output of pdfium_fuzzer",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@aaa@@@",
-      "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@bbb@@@",
-      "@@@STEP_LOG_END@pdfium_fuzzer_output.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/src/out/clang_tot_coverage_report/linux/logs/third_party_re2_fuzzer_output.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "name": "read log output of third_party_re2_fuzzer",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@third_party_re2_fuzzer_output.log@aaa@@@",
-      "@@@STEP_LOG_LINE@third_party_re2_fuzzer_output.log@bbb@@@",
-      "@@@STEP_LOG_END@third_party_re2_fuzzer_output.log@@@"
     ]
   },
   {

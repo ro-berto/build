@@ -50,8 +50,6 @@ BUILDERS = freeze({
 SAMPLE_TARGETS = [
     'base_unittests', 'boringssl_crypto_tests', 'boringssl_ssl_tests'
 ]
-SAMPLE_FUZZER_TARGETS = ['pdfium_fuzzer', 'third_party_re2_fuzzer']
-
 
 def RunSteps(api):
   mastername = api.m.properties['mastername']
@@ -83,21 +81,8 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
   cmd_args = []
   cmd_args.extend(SAMPLE_TARGETS)
 
-  # TODO(crbug.com/790747): Test fuzzer targets on Mac when the bug is fixed.
-  if not api.platform.is_mac:
-    cmd_args.extend(SAMPLE_FUZZER_TARGETS)
-
   for target in SAMPLE_TARGETS:
     cmd_args.extend(['-c', api.path['checkout'].join('out', 'Release', target)])
-
-  # TODO(crbug.com/790747): Test fuzzer targets on Mac when the bug is fixed.
-  if not api.platform.is_mac:
-    for fuzzer_target in SAMPLE_FUZZER_TARGETS:
-      cmd_args.extend([
-          '-c',
-          '%s -runs=1000' % api.path['checkout'].join('out', 'Release',
-                                                      fuzzer_target)
-      ])
 
   cmd_args.extend(['-b', api.path['checkout'].join('out', 'Release')])
   cmd_args.extend(['-o', output_dir_path])
@@ -110,12 +95,8 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
   with api.depot_tools.on_path():
     api.python('run coverage script', coverage_script_path, cmd_args)
 
-  # TODO(crbug.com/790747): Test fuzzer targets on Mac when the bug is fixed.
-  executed_targets = SAMPLE_TARGETS if api.platform.is_mac else (
-      SAMPLE_TARGETS + SAMPLE_FUZZER_TARGETS)
-
   # Following steps are added for debugging purpose.
-  for target in executed_targets:
+  for target in SAMPLE_TARGETS:
     log_file_name = '%s_output.log' % target
     log_file_path = output_dir_path.join(api.platform.name, 'logs',
                                          log_file_name)
