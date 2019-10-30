@@ -15,9 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--refs",
-      "refs/heads/master"
+      "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {

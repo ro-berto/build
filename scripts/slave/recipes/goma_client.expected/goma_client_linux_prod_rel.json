@@ -16,8 +16,6 @@
       "/path/to/tmp/json",
       "--revision",
       "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
-      "--refs",
-      "refs/heads/master",
       "--gerrit_no_reset"
     ],
     "env_suffixes": {

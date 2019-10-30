@@ -21,9 +21,7 @@
       "--revision",
       "node-ci@HEAD",
       "--revision",
-      "node-ci/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--refs",
-      "refs/heads/master"
+      "node-ci/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {

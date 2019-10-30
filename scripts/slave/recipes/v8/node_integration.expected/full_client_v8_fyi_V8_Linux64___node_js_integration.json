@@ -21,9 +21,7 @@
       "--revision",
       "node.js@vee-eight-lkgr",
       "--revision",
-      "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--refs",
-      "refs/heads/master"
+      "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
