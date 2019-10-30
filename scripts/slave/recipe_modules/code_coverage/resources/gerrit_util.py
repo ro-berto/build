@@ -11,6 +11,7 @@ https://gerrit-review.googlesource.com/Documentation/rest-api.html.
 
 import base64
 import json
+import logging
 import time
 import urllib2
 
@@ -101,6 +102,7 @@ def _retry_url_open(url):
       return urllib2.urlopen(url)
     except urllib2.URLError:
       if tries == 0:
+        logging.error('Failed to open URL: %s', url)
         raise
 
       time.sleep(delay_seconds)
