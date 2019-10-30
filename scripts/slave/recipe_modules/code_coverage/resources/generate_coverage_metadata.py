@@ -371,11 +371,12 @@ def _show_system_resource_usage(proc):
     logging.info('OS-level disk io: write=%s, read=%s',
                  bytes_to_gb(os_disk_io.write_bytes),
                  bytes_to_gb(os_disk_io.read_bytes))
-    p_disk_io = proc.io_counters()
-    logging.info('llvm-cov disk io: write=%s, read=%s',
-                 bytes_to_gb(p_disk_io.write_bytes),
-                 bytes_to_gb(p_disk_io.read_bytes))
-  except psutil.Error:  # The process might already finish.
+    if not IS_MAC:
+      p_disk_io = proc.io_counters()
+      logging.info('llvm-cov disk io: write=%s, read=%s',
+                   bytes_to_gb(p_disk_io.write_bytes),
+                   bytes_to_gb(p_disk_io.read_bytes))
+  except psutil.Error:  # The process might already have finished.
     pass
 
 
