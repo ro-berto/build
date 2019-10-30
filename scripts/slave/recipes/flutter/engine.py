@@ -123,7 +123,7 @@ def GetFuchsiaOutputFiles(product):
   ]
 
 
-def GetFuchsiaOutputDirs(product):
+def GetFuchsiaOutputDirs(product, build_mode, target_arch):
   return [
       'dart_jit_%srunner_far' % ('product_' if product else ''),
       'dart_aot_%srunner_far' % ('product_' if product else ''),
@@ -132,6 +132,7 @@ def GetFuchsiaOutputDirs(product):
       'dart_runner_patched_sdk',
       'flutter_runner_patched_sdk',
       'clang_x64',
+      'flutter-debug-symbols-%s-fuchsia-%s' % (build_mode, target_arch),
   ]
 
 
@@ -638,7 +639,7 @@ def TestFuchsia(api):
                   3600).with_idempotent(True).with_containment_type('AUTO')))
 
   # Trigger the task request.
-  metadata = api.swarming.trigger('Trigger Fuchsia Tess', requests=[request])
+  metadata = api.swarming.trigger('Trigger Fuchsia Tests', requests=[request])
   # Collect the result of the task by metadata.
   fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
   api.file.ensure_directory('swarming output', fuchsia_output)
@@ -647,6 +648,28 @@ def TestFuchsia(api):
   for result in results:
     result.analyze()
 
+
+def UploadFuchsiaDebugSymbols(api):
+  checkout = GetCheckoutPath(api)
+  dbg_symbols_script = str(
+      checkout.join('flutter/tools/fuchsia/merge_and_upload_debug_symbols.py'))
+  git_rev = api.buildbucket.gitiles_commit.id or 'HEAD'
+
+  archs = ['arm64', 'x64']
+  modes = ['debug', 'profile', 'release']
+  for arch in archs:
+    symbol_dirs = []
+    for mode in modes:
+      base_dir = 'fuchsia_%s_%s' % (mode, arch)
+      symbols_basename = 'flutter-debug-symbols-%s-fuchsia-%s' % (mode, arch)
+      symbol_dir = checkout.join('out', base_dir, symbols_basename)
+      symbol_dirs.append(symbol_dir)
+    debug_symbols_cmd = [
+        'python', dbg_symbols_script, '--engine-version', git_rev, '--upload',
+        '--target-arch', arch, '--symbol-dirs'
+    ] + symbol_dirs
+    api.step('Upload Fuchsia Debug Symbols for %s' % arch, debug_symbols_cmd)
+  return
 
 
 def BuildFuchsia(api):
@@ -668,7 +691,7 @@ def BuildFuchsia(api):
         '--fuchsia', '--fuchsia-cpu', arch, '--runtime-mode', build_mode
     ]
     product = build_mode == 'release'
-    fuchsia_output_dirs = GetFuchsiaOutputDirs(product)
+    fuchsia_output_dirs = GetFuchsiaOutputDirs(product, build_mode, arch)
     builds += ScheduleBuilds(
         api, 'Linux Engine Drone', {
             'builds': [{
@@ -708,6 +731,7 @@ def BuildFuchsia(api):
         '--upload',
     ]
     api.step('Upload Fuchsia Artifacts', fuchsia_package_cmd)
+    UploadFuchsiaDebugSymbols(api)
     stamp_file = api.path['cleanup'].join('fuchsia_stamp')
     api.file.write_text('fuchsia.stamp', stamp_file, '')
     remote_file = GetCloudPath(api, 'fuchsia/fuchsia.stamp')
