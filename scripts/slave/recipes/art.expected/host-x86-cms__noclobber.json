@@ -16,7 +16,8 @@
       "RECIPE_REPO[depot_tools]/repo",
       "sync",
       "-f",
-      "-c"
+      "-c",
+      "-j16"
     ],
     "infra_step": true,
     "name": "repo sync"
