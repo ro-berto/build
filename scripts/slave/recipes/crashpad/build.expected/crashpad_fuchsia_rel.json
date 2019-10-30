@@ -90,7 +90,22 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read swarming_test_spec"
+    "name": "read swarming_test_spec",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@[@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@  {@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@    'builders': ['crashpad_try_win_dbg'],@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@    'step_name': 'run_tests_on_x86',@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@    'isolate': 'out/Debug/run_tests.isolate',@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@    'args': [@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@       '-d', 'os', 'Windows-7',@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@       '-d', 'os', 'x86-32',@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@       '-d', 'os', 'Chrome',@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@    ],@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@  },@@@",
+      "@@@STEP_LOG_LINE@swarming_test_spec.pyl@]@@@",
+      "@@@STEP_LOG_END@swarming_test_spec.pyl@@@"
+    ]
   },
   {
     "name": "$result"

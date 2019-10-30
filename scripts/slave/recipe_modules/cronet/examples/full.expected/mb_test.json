@@ -662,7 +662,14 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "get version"
+    "name": "get version",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@VERSION@MAJOR=51@@@",
+      "@@@STEP_LOG_LINE@VERSION@MINOR=0@@@",
+      "@@@STEP_LOG_LINE@VERSION@BUILD=2704@@@",
+      "@@@STEP_LOG_LINE@VERSION@PATCH=0@@@",
+      "@@@STEP_LOG_END@VERSION@@@"
+    ]
   },
   {
     "cmd": [

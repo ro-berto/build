@@ -139,6 +139,13 @@
     "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@{\"V8 Foobar\": {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@        {\"name\": \"v8testing\"},@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@        {\"name\": \"test262_variants\", \"test_args\": [\"--extra-flags=--flag\"]},@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      ],@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@    }}@@@",
+      "@@@STEP_LOG_END@builders.pyl@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
       "@@@STEP_LOG_LINE@test_spec@  test262_variants(1) None@@@",

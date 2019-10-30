@@ -228,7 +228,9 @@
     "infra_step": true,
     "name": "Read clang revision",
     "~followup_annotations": [
-      "@@@STEP_TEXT@332838-1@@@"
+      "@@@STEP_TEXT@332838-1@@@",
+      "@@@STEP_LOG_LINE@cr_build_revision@332838-1@@@",
+      "@@@STEP_LOG_END@cr_build_revision@@@"
     ]
   },
   {

@@ -40,7 +40,13 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Finding lines changed in added file fake/file1.java"
+    "name": "Finding lines changed in added file fake/file1.java",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@file1.java@int n = 0;@@@",
+      "@@@STEP_LOG_LINE@file1.java@n++;@@@",
+      "@@@STEP_LOG_LINE@file1.java@for (int i = 0; i < n; i++) {@@@",
+      "@@@STEP_LOG_END@file1.java@@@"
+    ]
   },
   {
     "cmd": [
@@ -54,7 +60,13 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Finding lines changed in added file fake/file2.java;"
+    "name": "Finding lines changed in added file fake/file2.java;",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@file2.java;@int n = 0;@@@",
+      "@@@STEP_LOG_LINE@file2.java;@n++;@@@",
+      "@@@STEP_LOG_LINE@file2.java;@for (int i = 0; i < n; i++) {@@@",
+      "@@@STEP_LOG_END@file2.java;@@@"
+    ]
   },
   {
     "cmd": [
@@ -68,7 +80,13 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "Finding lines changed in added file fake/file3.java"
+    "name": "Finding lines changed in added file fake/file3.java",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@file3.java@int n = 0;@@@",
+      "@@@STEP_LOG_LINE@file3.java@n++;@@@",
+      "@@@STEP_LOG_LINE@file3.java@for (int i = 0; i < n; i++) {@@@",
+      "@@@STEP_LOG_END@file3.java@@@"
+    ]
   },
   {
     "cmd": [

@@ -178,7 +178,10 @@
       "ChocolateyInstall": "[CLEANUP]\\chocolatey"
     },
     "infra_step": true,
-    "name": "read installer"
+    "name": "read installer",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@chocolateyInstall.ps1@@@"
+    ]
   },
   {
     "cmd": [

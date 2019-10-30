@@ -311,6 +311,11 @@
     "infra_step": true,
     "name": "get version",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Version@MAJOR=123@@@",
+      "@@@STEP_LOG_LINE@Version@MINOR=1@@@",
+      "@@@STEP_LOG_LINE@Version@BUILD=9876@@@",
+      "@@@STEP_LOG_LINE@Version@PATCH=2@@@",
+      "@@@STEP_LOG_END@Version@@@",
       "@@@STEP_LOG_LINE@stdout@version:{'MAJOR': '123', 'BUILD': '9876', 'MINOR': '1', 'PATCH': '2'}@@@",
       "@@@STEP_LOG_LINE@stdout@android_version_name:123.1.9876.2@@@",
       "@@@STEP_LOG_LINE@stdout@android_version_code:987600200@@@",

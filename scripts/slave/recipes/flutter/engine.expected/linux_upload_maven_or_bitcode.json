@@ -13860,7 +13860,11 @@
       ]
     },
     "infra_step": true,
-    "name": "Read manifest"
+    "name": "Read manifest",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@manifest.json@{\"id\": 123}@@@",
+      "@@@STEP_LOG_END@manifest.json@@@"
+    ]
   },
   {
     "cmd": [

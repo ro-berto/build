@@ -13,7 +13,14 @@
     "infra_step": true,
     "name": "initialization.read test config (test_checkout)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@config.pyl@{@@@",
+      "@@@STEP_LOG_LINE@config.pyl@      'foounit': {@@@",
+      "@@@STEP_LOG_LINE@config.pyl@        'name': 'Foounit',@@@",
+      "@@@STEP_LOG_LINE@config.pyl@        'tests': ['foounit'],@@@",
+      "@@@STEP_LOG_LINE@config.pyl@      },@@@",
+      "@@@STEP_LOG_LINE@config.pyl@    }@@@",
+      "@@@STEP_LOG_END@config.pyl@@@"
     ]
   },
   {
@@ -31,6 +38,14 @@
     "name": "initialization.read test spec (test_checkout)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@{\"V8 Foobar\": {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@        {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@          \"name\": \"foounit\",@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@        },@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      ],@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@    }}@@@",
+      "@@@STEP_LOG_END@builders.pyl@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  foounit(1) None@@@",
       "@@@STEP_LOG_END@test_spec@@@"

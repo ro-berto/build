@@ -662,7 +662,14 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read vpython file"
+    "name": "read vpython file",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@.vpython@wheel: <@@@",
+      "@@@STEP_LOG_LINE@.vpython@              name: \"infra/celab/celab/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@.vpython@              version: \"celab_package_version\"@@@",
+      "@@@STEP_LOG_LINE@.vpython@            >@@@",
+      "@@@STEP_LOG_END@.vpython@@@"
+    ]
   },
   {
     "cmd": [
