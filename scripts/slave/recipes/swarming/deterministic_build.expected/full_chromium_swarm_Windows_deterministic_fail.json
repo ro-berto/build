@@ -30,7 +30,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@c14d891d44f0afff64e56ed7c9702df1d807b1ee"
+      "src@c14d891d44f0afff64e56ed7c9702df1d807b1ee",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]\\builder",
     "env_suffixes": {

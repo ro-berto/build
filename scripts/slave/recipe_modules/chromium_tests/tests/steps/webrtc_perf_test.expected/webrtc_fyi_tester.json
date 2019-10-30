@@ -17,7 +17,9 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/third_party/webrtc@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src/third_party/webrtc@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {

@@ -146,7 +146,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "emscripten-releases@2d72510e447ab60a9728aeea2362d8be2cbd7789"
+      "emscripten-releases@2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
