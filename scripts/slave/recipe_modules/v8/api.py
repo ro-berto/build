@@ -429,7 +429,7 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming', True):
       self.m.chromium_swarming.check_client_version()
 
-    self.m.chromium_swarming.set_default_dimension('pool', 'Chrome')
+    self.m.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
     self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
     self.m.chromium_swarming.set_default_dimension('gpu', 'none')
     # TODO(machenbach): Investigate if this is causing a priority inversion
