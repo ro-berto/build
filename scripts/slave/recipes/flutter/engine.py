@@ -664,11 +664,12 @@ def UploadFuchsiaDebugSymbols(api):
       symbols_basename = 'flutter-debug-symbols-%s-fuchsia-%s' % (mode, arch)
       symbol_dir = checkout.join('out', base_dir, symbols_basename)
       symbol_dirs.append(symbol_dir)
-    debug_symbols_cmd = [
-        'python', dbg_symbols_script, '--engine-version', git_rev, '--upload',
-        '--target-arch', arch, '--symbol-dirs'
-    ] + symbol_dirs
-    api.step('Upload Fuchsia Debug Symbols for %s' % arch, debug_symbols_cmd)
+    with MakeTempDir(api, 'FuchsiaDebugSymbols') as temp_dir:
+      debug_symbols_cmd = [
+          'python', dbg_symbols_script, '--engine-version', git_rev, '--upload',
+          '--target-arch', arch, '--out-dir', temp_dir, '--symbol-dirs'
+      ] + symbol_dirs
+      api.step('Upload Fuchsia Debug Symbols for %s' % arch, debug_symbols_cmd)
   return
 
 
