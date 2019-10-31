@@ -283,11 +283,12 @@ def UploadSkyEngineToCIPD(api, package_name):
     cipd_package_name = 'flutter/%s' % package_name
     api.cipd.build(
         folder_path, zip_path, cipd_package_name, install_mode='copy')
-    api.cipd.register(
-        cipd_package_name,
-        zip_path,
-        refs=['latest'],
-        tags={'git_revision': git_rev})
+    if ShouldUploadPackages(api):
+      api.cipd.register(
+          cipd_package_name,
+          zip_path,
+          refs=['latest'],
+          tags={'git_revision': git_rev})
 
 
 def UploadSkyEngineDartPackage(api):
