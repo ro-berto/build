@@ -78,7 +78,12 @@ def RunSteps(api):
     bot_config = {}
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     with api.context(cwd=checkout_dir):
-      api.chromium_checkout.ensure_checkout(bot_config)
+      # Do not rebase the patch, so that the Tricium analyzer observes
+      # the correct line numbers. Otherwise, line numbers would be
+      # relative to origin/master, which will typically be synced to
+      # include changes subsequent to the actual patch.
+      api.chromium_checkout.ensure_checkout(
+          bot_config, gerrit_no_rebase_patch_ref=True)
 
     src_dir = checkout_dir.join('src')
     with api.context(cwd=src_dir):
@@ -108,14 +113,14 @@ def RunSteps(api):
                                   api.path.dirname(prev_dir_path))
         api.git(
             'show',
-            'HEAD~:' + path,
+            'FETCH_HEAD~:' + path,
             stdout=api.raw_io.output(leak_to=prev_dir_path))
 
       # Get the diff itself, with paths formatted as Tricium analyzer expects.
       patch_path = api.path['cleanup'].join('tricium_generated_diff.patch')
       diff_arg_list = [
-          'diff', 'FETCH_HEAD~', 'FETCH_HEAD', 
-          '--output=' + str(patch_path), '--'
+          'diff', 'FETCH_HEAD~', 'FETCH_HEAD', '--output=' + str(patch_path),
+          '--'
       ] + metrics_paths
       api.git(*diff_arg_list)
 
