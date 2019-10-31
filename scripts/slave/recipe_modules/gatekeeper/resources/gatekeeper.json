@@ -475,6 +475,7 @@
           "*": {}
         },
         "excluded_builders": [
+          "Android CFI",
           "android-asan"
         ]
       }
