@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter
+from recipe_engine.post_process import DoesNotRun, DropExpectation, Filter
+from recipe_engine.recipe_api import Property
 
 DEPS = [
     'depot_tools/bot_update',
@@ -19,6 +20,9 @@ DEPS = [
     'recipe_engine/step'
 ]
 
+PROPERTIES = {
+    'archive': Property(default=True, kind=bool),
+}
 
 step_test_data = { "linux": {
   "build_steps": [
@@ -42,7 +46,8 @@ step_test_data = { "linux": {
   ]
 }}
 
-def RunSteps(api):
+
+def RunSteps(api, archive):
   api.gclient.set_config('emscripten_releases')
   goma_dir = api.goma.ensure_goma()
   env = {
@@ -79,7 +84,7 @@ def RunSteps(api):
                                  test_data=step_test_data)
 
   builder = api.buildbucket.builder_name
-  assert builder in ('linux', 'mac', 'win')
+  assert builder in ('linux', 'mac', 'win', 'linux-test-suites')
 
   # Depot tools on path is for ninja
   with api.depot_tools.on_path():
@@ -98,9 +103,10 @@ def RunSteps(api):
       finally:
         api.goma.stop(build_exit_status=exit_status)
 
-      # Upload the results before running the test.
-      api.python('Upload archive', waterfall_build,
-                 build_only_flags + ['--build-include=archive'])
+      if archive:
+        # Upload the results before running the test.
+        api.python('Upload archive', waterfall_build,
+                   build_only_flags + ['--build-include=archive'])
 
       with api.step.defer_results():
         for step in bot_steps[builder]['test_steps']:
@@ -137,4 +143,11 @@ def GenTests(api):
       api.step_data('Emscripten testsuite (upstream)', retcode=1) +
       api.post_process(Filter('Emscripten testsuite (asm2wasm)',
                               '$result'))
+  )
+
+  yield (
+      test('linux_tests') +
+      api.properties(archive=False) +
+      api.post_process(DoesNotRun, 'Upload archive') +
+      api.post_process(DropExpectation)
   )
