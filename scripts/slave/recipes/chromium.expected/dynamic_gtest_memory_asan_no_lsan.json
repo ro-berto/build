@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.memory\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Linux ASan Tests (sandboxed)@https://ci.chromium.org/p/chromium/src/builders/ci/Linux ASan Tests (sandboxed)@@@"
     ]
   },
   {

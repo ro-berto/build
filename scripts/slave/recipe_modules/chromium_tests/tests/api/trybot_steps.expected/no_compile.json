@@ -24,7 +24,9 @@
       "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.gpu\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p//builders/ci/Linux Builder@@@",
+      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p//builders/ci/GPU Linux Builder@@@"
     ]
   },
   {

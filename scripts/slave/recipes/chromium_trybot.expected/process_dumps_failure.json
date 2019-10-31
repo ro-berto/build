@@ -20,7 +20,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.win\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win Builder@@@"
     ]
   },
   {

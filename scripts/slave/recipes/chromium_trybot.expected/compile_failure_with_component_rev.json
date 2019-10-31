@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"client.v8.fyi\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@V8 Linux GN@https://ci.chromium.org/p/chromium/builders/ci/V8 Linux GN@@@"
     ]
   },
   {

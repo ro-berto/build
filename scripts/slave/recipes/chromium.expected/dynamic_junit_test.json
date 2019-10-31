@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.android\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@android-kitkat-arm-rel@https://ci.chromium.org/p/chromium/src/builders/ci/android-kitkat-arm-rel@@@"
     ]
   },
   {

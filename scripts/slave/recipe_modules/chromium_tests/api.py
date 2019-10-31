@@ -1568,6 +1568,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     result.presentation.logs['bots.json'] = self.m.json.dumps(
         bots_json, indent=2).split('/n')
 
+    # Links to upstreams help people figure out if upstreams are broken too
+    # TODO(guterman): at some point the /ci/ in the link should be generalized,
+    # but we currently don't have a more authoritative mapping from try builder
+    # to waterfall builder
+    for bot_id in bot_config.bot_ids:
+      result.presentation.links[bot_id.buildername] = (
+          'https://ci.chromium.org/p/%s/builders/ci/%s' % (
+              self.m.buildbucket.build.builder.project,
+              bot_id.buildername,
+          ))
+
+
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""
     return sorted(set(x

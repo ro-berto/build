@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.fyi\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Fuchsia@https://ci.chromium.org/p/chromium/src/builders/ci/Fuchsia@@@"
     ]
   },
   {

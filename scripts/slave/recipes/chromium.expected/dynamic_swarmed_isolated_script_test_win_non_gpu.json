@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.win\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/src/builders/ci/Win7 Tests (1)@@@"
     ]
   },
   {

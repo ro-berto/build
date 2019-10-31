@@ -18,7 +18,8 @@
       "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.fyi\"@@@",
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
-      "@@@STEP_LOG_END@bots.json@@@"
+      "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@mac10.12-blink-rel-dummy@https://ci.chromium.org/p/chromium/builders/ci/mac10.12-blink-rel-dummy@@@"
     ]
   },
   {
