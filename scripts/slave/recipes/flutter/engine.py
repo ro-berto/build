@@ -273,6 +273,28 @@ def UploadDartPackage(api, package_name):
       "%s.zip" % package_name)  # zip_name
 
 
+def UploadSkyEngineToCIPD(api, package_name):
+  git_rev = api.buildbucket.gitiles_commit.id or 'HEAD'
+  package_dir = 'src/out/android_debug/dist/packages'
+  parent_dir = api.path['cache'].join('builder', package_dir)
+  folder_path = parent_dir.join(package_name)
+  with MakeTempDir(api, package_name) as temp_dir:
+    zip_path = temp_dir.join('%s.zip' % package_name)
+    cipd_package_name = 'flutter/%s' % package_name
+    api.cipd.build(
+        folder_path, zip_path, cipd_package_name, install_mode='copy')
+    api.cipd.register(
+        cipd_package_name,
+        zip_path,
+        refs=['latest'],
+        tags={'git_revision': git_rev})
+
+
+def UploadSkyEngineDartPackage(api):
+  UploadDartPackage(api, 'sky_engine')
+  UploadSkyEngineToCIPD(api, 'sky_engine')
+
+
 def UploadFlutterPatchedSdk(api):
   UploadFolder(api,
     'Upload Flutter patched sdk', # dir_label
@@ -416,7 +438,7 @@ def BuildLinuxAndroid(api, swarming_task_id):
     ], swarming_task_id)
 
     Build(api, 'android_debug', ':dist')
-    UploadDartPackage(api, 'sky_engine')
+    UploadSkyEngineDartPackage(api)
     BuildJavadoc(api)
 
   if api.properties.get('build_android_vulkan', True):

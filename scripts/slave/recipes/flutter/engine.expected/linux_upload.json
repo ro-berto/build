@@ -6146,9 +6146,119 @@
   },
   {
     "cmd": [
+      "cipd",
+      "pkg-build",
+      "-in",
+      "[CACHE]/builder/src/out/android_debug/dist/packages/sky_engine",
+      "-name",
+      "flutter/sky_engine",
+      "-out",
+      "[CLEANUP]/tmp_tmp_19/sky_engine.zip",
+      "-hash-algo",
+      "sha256",
+      "-install-mode",
+      "copy",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "build sky_engine",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"flutter/sky_engine\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "pkg-register",
+      "[CLEANUP]/tmp_tmp_19/sky_engine.zip",
+      "-ref",
+      "latest",
+      "-tag",
+      "git_revision:2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "register flutter/sky_engine",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"flutter/sky_engine\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@flutter/sky_engine@https://chrome-infra-packages.appspot.com/p/flutter/sky_engine/+/40-chars-fake-of-the-package-instance_id@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/tmp_tmp_19"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "temp dir for sky_engine"
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/src/flutter/tools/gen_javadoc.py",
       "--out-dir",
-      "[CLEANUP]/tmp_tmp_19"
+      "[CLEANUP]/tmp_tmp_20"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -6189,7 +6299,7 @@
       ]
     },
     "name": "archive javadoc",
-    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/tmp_tmp_19\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/android_javadoc.zip\", \"root\": \"[CLEANUP]/tmp_tmp_19\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/tmp_tmp_20\", \"type\": \"dir\"}], \"output\": \"[CACHE]/builder/src/out/android_javadoc.zip\", \"root\": \"[CLEANUP]/tmp_tmp_20\"}"
   },
   {
     "cmd": [
@@ -6199,7 +6309,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_19"
+      "[CLEANUP]/tmp_tmp_20"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -7810,7 +7920,7 @@
       ]
     },
     "name": "Zip android-arm64-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_20/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_21/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -7821,7 +7931,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_20/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_21/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -7853,7 +7963,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_20"
+      "[CLEANUP]/tmp_tmp_21"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -7961,7 +8071,7 @@
       ]
     },
     "name": "Zip android-arm64-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_21/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_22/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -7972,7 +8082,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_21/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_22/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -8004,7 +8114,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_21"
+      "[CLEANUP]/tmp_tmp_22"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -8046,7 +8156,7 @@
       ]
     },
     "name": "Zip android-arm64-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_22/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_23/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -8057,7 +8167,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_22/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_23/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-profile/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -8089,7 +8199,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_22"
+      "[CLEANUP]/tmp_tmp_23"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -8862,7 +8972,7 @@
       ]
     },
     "name": "Zip android-arm64-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_23/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_24/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -8873,7 +8983,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_23/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_24/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -8905,7 +9015,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_23"
+      "[CLEANUP]/tmp_tmp_24"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -9013,7 +9123,7 @@
       ]
     },
     "name": "Zip android-arm64-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_24/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_25/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -9024,7 +9134,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_24/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_25/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -9056,7 +9166,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_24"
+      "[CLEANUP]/tmp_tmp_25"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -9098,7 +9208,7 @@
       ]
     },
     "name": "Zip android-arm64-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_25/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release_arm64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_26/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -9109,7 +9219,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_25/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_26/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -9141,7 +9251,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_25"
+      "[CLEANUP]/tmp_tmp_26"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -9169,7 +9279,7 @@
       "--library",
       "[CACHE]/builder/src/out/android_release_arm64/libflutter.so",
       "--destdir",
-      "[CLEANUP]/tmp_tmp_26/sizes",
+      "[CLEANUP]/tmp_tmp_27/sizes",
       "--addr2line-binary",
       "[CACHE]/builder/src/third_party/android_tools/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-addr2line"
     ],
@@ -9200,7 +9310,7 @@
       "----",
       "cp",
       "-r",
-      "[CLEANUP]/tmp_tmp_26/sizes",
+      "[CLEANUP]/tmp_tmp_27/sizes",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm64-release"
     ],
     "cwd": "[CACHE]/builder",
@@ -9232,7 +9342,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_26"
+      "[CLEANUP]/tmp_tmp_27"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -10005,7 +10115,7 @@
       ]
     },
     "name": "Zip android-arm-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_27/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_28/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -10016,7 +10126,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_27/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_28/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -10048,7 +10158,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_27"
+      "[CLEANUP]/tmp_tmp_28"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -10156,7 +10266,7 @@
       ]
     },
     "name": "Zip android-arm-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_28/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_29/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -10167,7 +10277,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_28/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_29/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -10199,7 +10309,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_28"
+      "[CLEANUP]/tmp_tmp_29"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -10241,7 +10351,7 @@
       ]
     },
     "name": "Zip android-arm-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_29/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_30/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -10252,7 +10362,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_29/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_30/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-profile/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -10284,7 +10394,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_29"
+      "[CLEANUP]/tmp_tmp_30"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -11057,7 +11167,7 @@
       ]
     },
     "name": "Zip android-arm-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_30/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_31/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -11068,7 +11178,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_30/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_31/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -11100,7 +11210,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_30"
+      "[CLEANUP]/tmp_tmp_31"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -11208,7 +11318,7 @@
       ]
     },
     "name": "Zip android-arm-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_31/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_32/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -11219,7 +11329,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_31/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_32/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -11251,7 +11361,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_31"
+      "[CLEANUP]/tmp_tmp_32"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -11293,7 +11403,7 @@
       ]
     },
     "name": "Zip android-arm-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_32/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_33/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -11304,7 +11414,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_32/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_33/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -11336,7 +11446,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_32"
+      "[CLEANUP]/tmp_tmp_33"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -11364,7 +11474,7 @@
       "--library",
       "[CACHE]/builder/src/out/android_release/libflutter.so",
       "--destdir",
-      "[CLEANUP]/tmp_tmp_33/sizes",
+      "[CLEANUP]/tmp_tmp_34/sizes",
       "--addr2line-binary",
       "[CACHE]/builder/src/third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line"
     ],
@@ -11395,7 +11505,7 @@
       "----",
       "cp",
       "-r",
-      "[CLEANUP]/tmp_tmp_33/sizes",
+      "[CLEANUP]/tmp_tmp_34/sizes",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-arm-release"
     ],
     "cwd": "[CACHE]/builder",
@@ -11427,7 +11537,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_33"
+      "[CLEANUP]/tmp_tmp_34"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -12200,7 +12310,7 @@
       ]
     },
     "name": "Zip android-x64-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_34/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_35/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -12211,7 +12321,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_34/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_35/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-profile/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -12243,7 +12353,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_34"
+      "[CLEANUP]/tmp_tmp_35"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -12351,7 +12461,7 @@
       ]
     },
     "name": "Zip android-x64-profile linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_35/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_36/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -12362,7 +12472,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_35/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_36/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-profile/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -12394,7 +12504,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_35"
+      "[CLEANUP]/tmp_tmp_36"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -12436,7 +12546,7 @@
       ]
     },
     "name": "Zip android-x64-profile symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_36/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_profile_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_37/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -12447,7 +12557,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_36/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_37/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-profile/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -12479,7 +12589,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_36"
+      "[CLEANUP]/tmp_tmp_37"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -13252,7 +13362,7 @@
       ]
     },
     "name": "Zip android-x64-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_37/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter.jar\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/flutter.jar\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_38/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -13263,7 +13373,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_37/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_38/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-release/artifacts.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -13295,7 +13405,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_37"
+      "[CLEANUP]/tmp_tmp_38"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -13403,7 +13513,7 @@
       ]
     },
     "name": "Zip android-x64-release linux-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_38/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_39/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -13414,7 +13524,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_38/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_39/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-release/linux-x64.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -13446,7 +13556,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_38"
+      "[CLEANUP]/tmp_tmp_39"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -13488,7 +13598,7 @@
       ]
     },
     "name": "Zip android-x64-release symbols.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_39/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter.so\", \"path\": \"[CACHE]/builder/src/out/android_release_x64/libflutter.so\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_40/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
@@ -13499,7 +13609,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/tmp_tmp_39/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_40/artifacts.zip",
       "gs://flutter_infra/flutter/2d72510e447ab60a9728aeea2362d8be2cbd7789/android-x64-release/symbols.zip"
     ],
     "cwd": "[CACHE]/builder",
@@ -13531,7 +13641,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_39"
+      "[CLEANUP]/tmp_tmp_40"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14643,7 +14753,7 @@
       "/path/to/tmp/json",
       "copy",
       "RECIPE[build::flutter/engine].resources/fuchsia-tests.sh",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14675,7 +14785,7 @@
       "/path/to/tmp/json",
       "copy",
       "[CACHE]/builder/src/fuchsia/sdk/linux/tools/dev_finder",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14707,7 +14817,7 @@
       "/path/to/tmp/json",
       "copy",
       "[CACHE]/builder/src/fuchsia/sdk/linux/tools/pm",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14739,7 +14849,7 @@
       "/path/to/tmp/json",
       "copy",
       "[CACHE]/builder/src/out/fuchsia_bucket/flutter/x64/debug/aot/flutter_aot_runner-0.far",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14771,7 +14881,7 @@
       "/path/to/tmp/json",
       "copy",
       "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_runner_tests-0.far",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14837,7 +14947,7 @@
       "----",
       "cp",
       "gs://fuchsia/development/123/images/generic-x64.tgz",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14916,7 +15026,7 @@
       "-dump-hash",
       "/path/to/tmp/",
       "-dirs",
-      "[CLEANUP]/tmp_tmp_40:."
+      "[CLEANUP]/tmp_tmp_41:."
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14947,7 +15057,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_40"
+      "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -15735,7 +15845,7 @@
       "--target-arch",
       "arm64",
       "--out-dir",
-      "[CLEANUP]/tmp_tmp_41",
+      "[CLEANUP]/tmp_tmp_42",
       "--symbol-dirs",
       "[CACHE]/builder/src/out/fuchsia_debug_arm64/flutter-debug-symbols-debug-fuchsia-arm64",
       "[CACHE]/builder/src/out/fuchsia_profile_arm64/flutter-debug-symbols-profile-fuchsia-arm64",
@@ -15766,7 +15876,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_41"
+      "[CLEANUP]/tmp_tmp_42"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -15796,7 +15906,7 @@
       "--target-arch",
       "x64",
       "--out-dir",
-      "[CLEANUP]/tmp_tmp_42",
+      "[CLEANUP]/tmp_tmp_43",
       "--symbol-dirs",
       "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter-debug-symbols-debug-fuchsia-x64",
       "[CACHE]/builder/src/out/fuchsia_profile_x64/flutter-debug-symbols-profile-fuchsia-x64",
@@ -15827,7 +15937,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]/tmp_tmp_42"
+      "[CLEANUP]/tmp_tmp_43"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
