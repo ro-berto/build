@@ -128,7 +128,12 @@ def RunSteps(api):
     bot_config = {}
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     with api.context(cwd=checkout_dir):
-      api.chromium_checkout.ensure_checkout(bot_config)
+      # Do not rebase the patch, so that the Tricium analyzer observes
+      # the correct line numbers. Otherwise, line numbers would be
+      # relative to origin/master, which may be synced to
+      # include changes subsequent to the actual patch.
+      api.chromium_checkout.ensure_checkout(
+          bot_config, gerrit_no_rebase_patch_ref=True)
 
     api.chromium.runhooks(name='runhooks (with patch)')
 
