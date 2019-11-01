@@ -174,8 +174,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       for test in tests:
         assert isinstance(test, steps.IosTest)
         test_dict = {
-          'pool': 'Chrome',
-          'priority': 30,
+            'pool': 'chromium.tests',
+            'priority': 30,
         }
         # Apply generic parameters.
         test_dict.update(self.bot.config.get('ios_testing', {}))
