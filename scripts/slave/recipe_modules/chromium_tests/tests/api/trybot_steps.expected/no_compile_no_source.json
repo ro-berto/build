@@ -25,7 +25,9 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p//builders/ci/Linux Tests@@@",
       "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p//builders/ci/Linux Builder@@@",
+      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p//builders/ci/Linux Release (NVIDIA)@@@",
       "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p//builders/ci/GPU Linux Builder@@@"
     ]
   },

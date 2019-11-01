@@ -1573,6 +1573,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # but we currently don't have a more authoritative mapping from try builder
     # to waterfall builder
     for bot_id in bot_config.bot_ids:
+      if bot_id.tester:
+        result.presentation.links[bot_id.tester] = (
+            'https://ci.chromium.org/p/%s/builders/ci/%s' % (
+                self.m.buildbucket.build.builder.project,
+                bot_id.tester,
+            ))
+
       result.presentation.links[bot_id.buildername] = (
           'https://ci.chromium.org/p/%s/builders/ci/%s' % (
               self.m.buildbucket.build.builder.project,
