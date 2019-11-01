@@ -28,6 +28,7 @@ def chromium_bare(c):
   m['got_dawn_revision'] = 'src/third_party/dawn'
   m['got_nacl_revision'] = 'src/native_client'
   m['got_swarming_client_revision'] = 'src/tools/swarming_client'
+  m['got_swiftshader_revision'] = 'src/third_party/swiftshader'
   m['got_v8_revision'] = 'src/v8'
   m['got_webrtc_revision'] = 'src/third_party/webrtc'
 
@@ -37,6 +38,7 @@ def chromium_bare(c):
   p['parent_got_dawn_revision'] = 'dawn_revision'
   p['parent_got_nacl_revision'] = 'nacl_revision'
   p['parent_got_swarming_client_revision'] = 'swarming_revision'
+  p['parent_got_swiftshader_revision'] = 'swiftshader_revision'
   p['parent_got_v8_revision'] = 'v8_revision'
   p['parent_got_webrtc_revision'] = 'webrtc_revision'
 
@@ -61,6 +63,9 @@ def chromium_bare(c):
   p['https://skia.googlesource.com/skia'] = ('src/third_party/skia', 'HEAD')
   p['https://chromium.googlesource.com/v8/v8'] = ('src/v8', 'HEAD')
   p['https://webrtc.googlesource.com/src'] = ('src/third_party/webrtc', 'HEAD')
+  p['https://swiftshader.googlesource.com/SwiftShader/'] = (
+      'src/third_party/swiftshader', 'HEAD')
+
 
 @CONFIG_CTX(includes=['chromium_bare'])
 def chromium_empty(c):
@@ -243,6 +248,15 @@ def dawn_top_of_tree(c):  # pragma: no cover
   Sets up ToT instead of the DEPS-pinned revision for Dawn.
   """
   c.revisions['src/third_party/dawn'] = 'HEAD'
+
+
+@CONFIG_CTX()
+def swiftshader_top_of_tree(c):  # pragma: no cover
+  """Configures the top-of-tree SwiftShader in a Chromium checkout.
+
+  Sets up ToT instead of the DEPS-pinned revision for SwiftShader.
+  """
+  c.revisions['src/third_party/swiftshader'] = 'HEAD'
 
 # TODO(phajdan.jr): Move to proper repo and add coverage.
 @CONFIG_CTX()

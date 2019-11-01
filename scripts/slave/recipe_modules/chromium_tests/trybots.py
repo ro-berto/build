@@ -1409,6 +1409,71 @@ TRYBOTS = freeze({
             },
         },
     },
+    # SWANGLE bots
+    'tryserver.chromium.swangle': {
+        'builders': {
+            'linux-swangle-try-tot-angle-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-tot-angle-x64',
+                }),
+            'linux-swangle-try-tot-angle-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-tot-angle-x86',
+                }),
+            'linux-swangle-try-tot-swiftshader-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-tot-swiftshader-x64',
+                }),
+            'linux-swangle-try-tot-swiftshader-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-tot-swiftshader-x86',
+                }),
+            'linux-swangle-try-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-x64',
+                }),
+            'linux-swangle-try-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'linux-swangle-x86',
+                }),
+            'win-swangle-try-tot-angle-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-tot-angle-x64',
+                }),
+            'win-swangle-try-tot-angle-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-tot-angle-x86',
+                }),
+            'win-swangle-try-tot-swiftshader-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-tot-swiftshader-x64',
+                }),
+            'win-swangle-try-tot-swiftshader-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-tot-swiftshader-x86',
+                }),
+            'win-swangle-try-x64':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-x64',
+                }),
+            'win-swangle-try-x86':
+                simple_bot({
+                    'mastername': 'chromium.swangle',
+                    'buildername': 'win-swangle-x86',
+                }),
+        },
+    },
     'tryserver.devtools-frontend': {
         'builders': {
             'devtools_frontend_linux_blink_rel':
