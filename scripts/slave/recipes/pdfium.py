@@ -313,25 +313,6 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
     raise test_exception  # pylint: disable=E0702
 
 
-def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-             msvc, rel, jumbo, component, skip_test, target_os):
-  revision = _checkout_step(api, target_os)
-
-  out_dir = _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang,
-                               msvc, rel, jumbo, component)
-
-  with api.osx_sdk('mac'):
-    build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
-                                  target_cpu, clang, msvc, rel, jumbo,
-                                  component, target_os, out_dir)
-    _build_steps(api, clang, msvc, out_dir)
-
-    if skip_test:
-      return
-
-    _run_tests(api, memory_tool, v8, out_dir, build_config, revision)
-
-
 def _get_gold_params(api, build_config, revision):
   """Get the parameters to be passed to the testing call to
   generate the dm.json file expected by Gold and to upload
@@ -538,6 +519,25 @@ def _gen_ci_build(api, builder):
       build_number=1234,
       git_repo='https://pdfium.googlesource.com/pdfium',
   )
+
+
+def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
+             msvc, rel, jumbo, component, skip_test, target_os):
+  revision = _checkout_step(api, target_os)
+
+  out_dir = _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang,
+                               msvc, rel, jumbo, component)
+
+  with api.osx_sdk('mac'):
+    build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
+                                  target_cpu, clang, msvc, rel, jumbo,
+                                  component, target_os, out_dir)
+    _build_steps(api, clang, msvc, out_dir)
+
+    if skip_test:
+      return
+
+    _run_tests(api, memory_tool, v8, out_dir, build_config, revision)
 
 
 def GenTests(api):
