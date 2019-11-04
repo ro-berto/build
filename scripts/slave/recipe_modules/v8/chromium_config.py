@@ -35,6 +35,11 @@ def default_target_v8_clusterfuzz(c):
 
 
 @CONFIG_CTX(includes=['v8'])
+def default_target_d8(c):
+  c.compile_py.default_targets = ['d8']
+
+
+@CONFIG_CTX(includes=['v8'])
 def default_target_v8_archive(c):
   c.compile_py.default_targets = ['v8_archive']
 

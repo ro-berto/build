@@ -257,6 +257,14 @@ class V8Api(recipe_api.RecipeApi):
 
     return test_configs
 
+  def _configure_clusterfuzz_builders(self):
+    if self.bot_config.get('clusterfuzz_archive'):
+      self.m.chromium.apply_config('default_target_v8_clusterfuzz')
+
+  def _configure_perf_builders(self):
+    if self.m.properties.get('mastername') == 'client.v8.perf':
+      self.m.chromium.apply_config('default_target_d8')
+
   def apply_bot_config(self, bot_config):
     """Entry method for using the v8 api."""
     self.bot_config = bot_config
@@ -279,9 +287,8 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
-    # On clusterfuzz builders use the default clusterfuzz gn target.
-    if self.bot_config.get('clusterfuzz_archive'):
-      self.m.chromium.apply_config('default_target_v8_clusterfuzz')
+    self._configure_clusterfuzz_builders()
+    self._configure_perf_builders()
 
     # Infer gclient variable that instructs sysroot download.
     if (self.m.chromium.c.TARGET_PLATFORM != 'android' and

@@ -1061,6 +1061,13 @@ def GenTests(api):
     ))
   )
 
+  # Test configurations for perf builders.
+  yield (api.v8.test(
+      'client.v8.perf',
+      'V8 Foobar perf',
+      'perf',
+  ) + api.post_process(Filter('build.compile')))
+
   # Test configurations for post-compilation build measurements.
   yield (
     api.v8.test(
