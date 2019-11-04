@@ -209,6 +209,7 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
                                              'engine', 'common',
                                              'flutter_patched_sdk_product')
   dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
+  pkg = flutter.join('bin', 'cache', 'pkg')
   # In case dart-sdk symlink was left from previous run we need to [remove] it,
   # rather than [rmtree] because rmtree is going to remove symlink target
   # folder. We are not able to use api.file classes for this because there is
@@ -217,6 +218,12 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     '/bin/bash', '-c',
     'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': dart_sdk}])
+  api.step('cleanup pkg', [
+      '/bin/bash', '-c',
+      'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' % {
+          'dir': pkg
+      }
+  ])
   api.step('cleanup flutter_patched_sdk', [
     '/bin/bash', '-c',
     'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
@@ -225,8 +232,11 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     '/bin/bash', '-c',
     'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': flutter_patched_sdk_product}])
-  api.file.symlink('make cached dart-sdk point to just built dart sdk',
-    engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
+  api.file.copytree('copy just built dart sdk to cached location',
+                    engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
+  api.file.copytree('copy just built pkg from dart sdk to cached location',
+                    engine_src.join('out', 'host_debug', 'gen', 'dart-pkg'),
+                    pkg)
   api.file.symlink(
     'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
     engine_src.join('out', 'host_debug', 'flutter_patched_sdk'),

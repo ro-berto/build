@@ -4111,6 +4111,22 @@
     "cmd": [
       "/bin/bash",
       "-c",
+      "if [ -L \"[CACHE]/builder/flutter/bin/cache/pkg\" ]; then rm \"[CACHE]/builder/flutter/bin/cache/pkg\"; else rm -rf \"[CACHE]/builder/flutter/bin/cache/pkg\"; fi"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "name": "cleanup pkg"
+  },
+  {
+    "cmd": [
+      "/bin/bash",
+      "-c",
       "if [ -L \"[CACHE]/builder/flutter/bin/cache/artifacts/engine/common/flutter_patched_sdk\" ]; then rm \"[CACHE]/builder/flutter/bin/cache/artifacts/engine/common/flutter_patched_sdk\"; else rm -rf \"[CACHE]/builder/flutter/bin/cache/artifacts/engine/common/flutter_patched_sdk\"; fi"
     ],
     "cwd": "[CACHE]/builder/flutter",
@@ -4146,7 +4162,7 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "symlink",
+      "copytree",
       "[CACHE]/builder/src/out/host_debug/dart-sdk",
       "[CACHE]/builder/flutter/bin/cache/dart-sdk"
     ],
@@ -4159,7 +4175,29 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "make cached dart-sdk point to just built dart sdk"
+    "name": "copy just built dart sdk to cached location"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CACHE]/builder/src/out/host_debug/gen/dart-pkg",
+      "[CACHE]/builder/flutter/bin/cache/pkg"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CACHE]/builder/.dartServer",
+      "ANDROID_SDK_ROOT": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "copy just built pkg from dart sdk to cached location"
   },
   {
     "cmd": [
