@@ -36,7 +36,6 @@ UPLOAD_ATTEMPTS = 5
 PROPERTIES = {
     'clang': Property(default=False, kind=bool),
     'component': Property(default=False, kind=bool),
-    'jumbo': Property(default=False, kind=bool),
     'memory_tool': Property(default=None, kind=str),
     'msvc': Property(default=False, kind=bool),
     'rel': Property(default=False, kind=bool),
@@ -71,7 +70,7 @@ def _checkout_step(api, target_os):
 
 
 def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
-                       jumbo, component):
+                       component):
   out_dir = 'release' if rel else 'debug'
 
   if skia:
@@ -87,9 +86,6 @@ def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
     out_dir += "_clang"
   elif msvc:
     out_dir += "_msvc"
-
-  if jumbo:
-    out_dir += "_jumbo"
 
   if component:
     out_dir += "_component"
@@ -107,7 +103,7 @@ def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
 # _gn_gen_builds() calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
 def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
-                   clang, msvc, rel, jumbo, component, target_os, out_dir):
+                   clang, msvc, rel, component, target_os, out_dir):
   enable_goma = _is_goma_enabled(msvc)
   if enable_goma:
     api.goma.ensure_goma()
@@ -149,13 +145,6 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
   if skia or skia_paths or v8:
     # PDFium defaults to C++11 but newer Skia / V8 requires C++14.
     args.append('use_cxx11=false')
-
-  if jumbo:
-    # Note: The jumbo_file_merge_limit value below comes from
-    # build/config/jumbo.gni. It is set here to make this jumbo/goma build act
-    # more like a jumbo without goma build. If the value changes in jumbo.gni,
-    # it needs to be updated here as well.
-    args.extend(['use_jumbo_build=true', 'jumbo_file_merge_limit=50'])
 
   if memory_tool == 'asan':
     args.append('is_asan=true')
@@ -522,16 +511,16 @@ def _gen_ci_build(api, builder):
 
 
 def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-             msvc, rel, jumbo, component, skip_test, target_os):
+             msvc, rel, component, skip_test, target_os):
   revision = _checkout_step(api, target_os)
 
   out_dir = _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang,
-                               msvc, rel, jumbo, component)
+                               msvc, rel, component)
 
   with api.osx_sdk('mac'):
     build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
-                                  target_cpu, clang, msvc, rel, jumbo,
-                                  component, target_os, out_dir)
+                                  target_cpu, clang, msvc, rel, component,
+                                  target_os, out_dir)
     _build_steps(api, clang, msvc, out_dir)
 
     if skip_test:
@@ -642,15 +631,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'win_xfa_jumbo',
-      api.platform('win', 64),
-      api.properties(
-          xfa=True, jumbo=True, mastername='client.pdfium',
-          bot_id='test_slave'),
-      _gen_ci_build(api, 'windows_xfa_jumbo'),
-  )
-
-  yield api.test(
       'win_xfa_msvc_32',
       api.platform('win', 64),
       api.properties(
@@ -722,15 +702,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'linux_xfa_jumbo',
-      api.platform('linux', 64),
-      api.properties(
-          xfa=True, jumbo=True, mastername='client.pdfium',
-          bot_id='test_slave'),
-      _gen_ci_build(api, 'linux_xfa_jumbo'),
-  )
-
-  yield api.test(
       'mac_component',
       api.platform('mac', 64),
       api.properties(
@@ -779,15 +750,6 @@ def GenTests(api):
       api.properties(
           xfa=True, rel=True, mastername='client.pdfium', bot_id='test_slave'),
       _gen_ci_build(api, 'mac_xfa_rel'),
-  )
-
-  yield api.test(
-      'mac_xfa_jumbo',
-      api.platform('mac', 64),
-      api.properties(
-          xfa=True, jumbo=True, mastername='client.pdfium',
-          bot_id='test_slave'),
-      _gen_ci_build(api, 'mac_xfa_jumbo'),
   )
 
   yield api.test(
