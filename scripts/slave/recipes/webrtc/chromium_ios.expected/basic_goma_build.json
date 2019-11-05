@@ -885,7 +885,7 @@
       "iOS-8.0",
       "--dimension",
       "pool",
-      "Chrome",
+      "chromium.tests",
       "--dimension",
       "xcode_version",
       "fake xcode version",

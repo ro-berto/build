@@ -533,7 +533,7 @@ def setup_swarming(
   api.chromium_swarming.default_priority = swarming_priority
   api.chromium_swarming.default_user = 'v8-flake-bisect'
   api.chromium_swarming.add_default_tag('purpose:v8-flake-bisect')
-  api.chromium_swarming.set_default_dimension('pool', 'Chrome')
+  api.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
   api.chromium_swarming.set_default_dimension('gpu', 'none')
   api.chromium_swarming.task_output_stdout = 'all'
 
@@ -808,17 +808,14 @@ def GenTests(api):
     if check(step in steps):
       check(all(arg != 'cpu' for arg in steps[step].cmd))
       check(all(arg != 'gpu' for arg in steps[step].cmd))
-  yield (
-      test('android_dimensions') +
-      api.properties(
-          repro_only=True,
-          swarming_dimensions=[
-            'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
-            'device_type:bullhead', 'pool:Chrome']) +
-      isolated_lookup(0, True) +
-      api.post_process(check_dimensions) +
-      api.post_process(DropExpectation)
-  )
+
+  yield (test('android_dimensions') + api.properties(
+      repro_only=True,
+      swarming_dimensions=[
+          'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
+          'device_type:bullhead', 'pool:chromium.tests'
+      ]) + isolated_lookup(0, True) + api.post_process(check_dimensions) +
+         api.post_process(DropExpectation))
 
   # Simulate not finding enough flakes during calibration.
   # Also test cutting off overly long test names in step names.

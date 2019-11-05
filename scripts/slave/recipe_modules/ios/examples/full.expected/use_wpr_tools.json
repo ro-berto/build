@@ -606,7 +606,7 @@
       "Mac",
       "--dimension",
       "pool",
-      "Chrome",
+      "chromium.tests",
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",

@@ -2806,7 +2806,7 @@ class SwarmingIosTest(SwarmingTest):
             dimension_set.pop('host os')
 
     self._dimensions = {
-      'pool': 'Chrome',
+        'pool': 'chromium.tests',
     }
 
     # TODO(crbug.com/835036): remove this when all configs are migrated to
