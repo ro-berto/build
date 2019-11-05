@@ -683,6 +683,12 @@
             "forgive_all": "true",
             "forgiving_optional": ["*"]
           },
+          "linux-blink-heap-concurrent-marking-tsan-rel": {
+            "tree_notify": [
+              "omerkatz+fyi-bots@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "linux-blink-heap-verification": {
             "tree_notify": [
               "mlippautz+fyi-bots@chromium.org"
