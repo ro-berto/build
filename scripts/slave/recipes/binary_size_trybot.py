@@ -329,8 +329,8 @@ def _MaybeFailForExpectationFiles(api, expectations_json):
   with api.step.nest(_EXPECTATIONS_STEP_NAME) as presentation:
     if not expectations_json['success']:
       presentation.status = api.step.FAILURE
-      presentation.logs['failed expectations'] = '\n'.join(
-          expectations_json['failed_messages'])
+      presentation.logs['failed expectations'] = expectations_json[
+          'failed_messages']
       return False
     return True
 
