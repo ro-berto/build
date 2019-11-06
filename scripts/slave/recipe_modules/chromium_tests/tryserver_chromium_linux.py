@@ -4,20 +4,33 @@
 
 
 SPEC = {
-  'builders': {
-      'linux-layout-tests-fragment-item': {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': ['mb'],
-        'gclient_config': 'chromium',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
+    'builders': {
+        'linux-layout-tests-fragment-item': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'tests': [],
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
         },
-        'tests': [],
-        'test_results_config': 'staging_server',
-        'testing': {
-          'platform': 'linux',
+        'linux-layout-tests-fragment-paint': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'test_results_config': 'staging_server',
+            'testing': {
+                'platform': 'linux',
+            },
         },
-      }
-  },
+    },
 }
