@@ -500,10 +500,6 @@ class V8Api(recipe_api.RecipeApi):
     return self.bot_type in ['tester', 'builder_tester']
 
   @property
-  def should_upload_build(self):
-    return self.bot_config.get('triggers_proxy')
-
-  @property
   def relative_path_to_d8(self):
     return self.m.path.join('out', self.m.chromium.c.build_config_fs, 'd8')
 
@@ -834,13 +830,6 @@ class V8Api(recipe_api.RecipeApi):
         self.m.properties['mastername'],
         self.m.buildbucket.builder_name,
     )
-
-  def upload_build(self, name_suffix='', archive=None):
-    self.m.archive.zip_and_upload_build(
-          'package build' + name_suffix,
-          self.m.chromium.c.build_config_fs,
-          archive or self._get_default_archive(),
-          src_dir=self.checkout_root.join('v8'))
 
   @property
   def isolated_archive_path(self):
@@ -1430,7 +1419,8 @@ class V8Api(recipe_api.RecipeApi):
         ))
       else:
         ci_properties = dict(properties)
-        if self.should_upload_build:
+        #TODO(liviurau): rename or remove this property
+        if self.bot_config.get('triggers_proxy'):
           ci_properties['archive'] = self._get_default_archive()
         self.m.scheduler.emit_triggers(
             [(

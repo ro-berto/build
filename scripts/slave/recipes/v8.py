@@ -167,9 +167,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
         if compile_failure:
           return compile_failure
 
-    if v8.should_upload_build:
-      v8.upload_build()
-
     v8.maybe_create_clusterfuzz_archive(update_step)
 
   if v8.should_test:
