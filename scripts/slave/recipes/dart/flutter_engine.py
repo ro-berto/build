@@ -234,9 +234,8 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     {'dir': flutter_patched_sdk_product}])
   api.file.copytree('copy just built dart sdk to cached location',
                     engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
-  api.file.copytree('copy just built pkg from dart sdk to cached location',
-                    engine_src.join('out', 'host_debug', 'gen', 'dart-pkg'),
-                    pkg)
+  api.file.symlink('symlink just built pkg from dart sdk to cached location',
+                   engine_src.join('out', 'host_debug', 'gen', 'dart-pkg'), pkg)
   api.file.symlink(
     'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
     engine_src.join('out', 'host_debug', 'flutter_patched_sdk'),

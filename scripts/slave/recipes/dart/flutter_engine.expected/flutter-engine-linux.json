@@ -4184,7 +4184,7 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "copytree",
+      "symlink",
       "[CACHE]/builder/src/out/host_debug/gen/dart-pkg",
       "[CACHE]/builder/flutter/bin/cache/pkg"
     ],
@@ -4197,7 +4197,7 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "copy just built pkg from dart sdk to cached location"
+    "name": "symlink just built pkg from dart sdk to cached location"
   },
   {
     "cmd": [
