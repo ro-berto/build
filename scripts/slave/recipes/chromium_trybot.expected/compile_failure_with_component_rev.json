@@ -86,7 +86,8 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@HEAD"
+      "src/v8@HEAD",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

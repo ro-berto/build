@@ -96,7 +96,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

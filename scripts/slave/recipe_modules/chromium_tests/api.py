@@ -1068,6 +1068,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot = self._lookup_bot_metadata(builders)
     self._report_builders(bot.settings)
     self.configure_build(bot.settings)
+    # TODO(crbug.com/1019824): We fetch tags here because |no_fetch_tags|
+    # is not specified as True. Since chromium has 10k+ tags this can be slow.
+    # We should pass False here for bots that do not need tags. (Do any bots
+    # need tags?)
     update_step, bot_db = self.prepare_checkout(
         bot.settings, timeout=3600)
 
@@ -1231,8 +1235,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # before the tested commit, effectively deapplying the gitiles commit
       # (latest commit currently being tested) and reverts back to DEPS
       # revisions.
+      # Chromium has a lot of tags which slow us down, we don't need them to
+      # deapply, so don't fetch them.
       self.m.bot_update.ensure_checkout(
-          patch=False, update_presentation=False, ignore_input_commit=True)
+          patch=False,
+          no_fetch_tags=True,
+          update_presentation=False,
+          ignore_input_commit=True)
 
     with self.m.context(cwd=self.m.path['checkout']):
       # NOTE: "without patch" phrase is used to keep consistency with the API
@@ -1468,8 +1477,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # This rolls chromium checkout, applies the patch, runs gclient sync to
     # update all DEPS.
+    # Chromium has a lot of tags which slow us down, we don't need them on
+    # trybots, so don't fetch them.
     bot_update_step, bot_db = self.prepare_checkout(
-        bot.settings, timeout=3600)
+        bot.settings, timeout=3600, no_fetch_tags=True)
 
     self.m.chromium_swarming.configure_swarming(
       'chromium', precommit=True)

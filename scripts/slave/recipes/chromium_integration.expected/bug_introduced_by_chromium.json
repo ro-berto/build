@@ -40,7 +40,8 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@2d72510e447ab60a9728aeea2362d8be2cbd7789"
+      "src/v8@2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1305,7 +1306,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

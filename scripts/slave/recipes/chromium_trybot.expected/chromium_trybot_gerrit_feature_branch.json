@@ -63,7 +63,8 @@
       "--revision",
       "src@refs/heads/experimental/feature",
       "--refs",
-      "refs/heads/experimental/feature"
+      "refs/heads/experimental/feature",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
