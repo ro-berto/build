@@ -134,7 +134,7 @@
       "--root=[CACHE]\\builder\\pdfium",
       "gen",
       "//out/debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true use_cxx11=true"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "name": "gn gen"
@@ -445,7 +445,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_no_v8 build_number 1234",
       "--gold_key",
-      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 v8 false xfa false",
+      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 use_cxx11 true v8 false xfa false",
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\debug\\gold_output"
     ],
@@ -513,7 +513,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_no_v8 build_number 1234",
       "--gold_key",
-      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 v8 false xfa false",
+      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 use_cxx11 true v8 false xfa false",
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\debug\\gold_output"
     ],
