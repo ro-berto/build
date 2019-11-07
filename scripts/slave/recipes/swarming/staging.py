@@ -61,7 +61,7 @@ def RunSteps(api, buildername, mastername):
     # Force os:Windows-10 instead of os:Windows which may trigger on Windows 7.
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')
 
-  api.chromium_swarming.set_default_dimension('pool', 'Chrome')
+  api.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
   api.chromium_swarming.add_default_tag('project:chromium')
   api.chromium_swarming.add_default_tag('purpose:staging')
   api.chromium_swarming.default_idempotent = True
