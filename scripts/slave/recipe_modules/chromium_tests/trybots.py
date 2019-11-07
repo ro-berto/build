@@ -1500,6 +1500,12 @@ TRYBOTS = freeze({
                     'buildername': 'win_chromium_compile',
                 },
                            analyze_mode='compile'),
+            'win_chromium_compile_dbg':
+                simple_bot({
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'win_chromium_compile_dbg',
+                },
+                           analyze_mode='compile'),
             'mac_chromium_compile':
                 simple_bot({
                     'mastername': 'tryserver.webrtc',
@@ -1510,6 +1516,12 @@ TRYBOTS = freeze({
                 simple_bot({
                     'mastername': 'tryserver.webrtc',
                     'buildername': 'linux_chromium_compile',
+                },
+                           analyze_mode='compile'),
+            'linux_chromium_compile_dbg':
+                simple_bot({
+                    'mastername': 'tryserver.webrtc',
+                    'buildername': 'linux_chromium_compile_dbg',
                 },
                            analyze_mode='compile'),
             'android_chromium_compile':
