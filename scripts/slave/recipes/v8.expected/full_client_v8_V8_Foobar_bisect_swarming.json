@@ -19,7 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
@@ -823,7 +825,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@a0"
+      "v8@a0",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
@@ -1291,7 +1295,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@a2"
+      "v8@a2",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
@@ -1797,7 +1803,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@a1"
+      "v8@a1",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
