@@ -30,9 +30,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "cel@2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--refs",
-      "refs/heads/master"
+      "cel@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise",
     "env_suffixes": {

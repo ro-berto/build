@@ -15,9 +15,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@gfedcba0987654321",
-      "--refs",
-      "refs/heads/master"
+      "src@gfedcba0987654321"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -359,9 +357,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@gfedcba0987654321",
-      "--refs",
-      "refs/heads/master"
+      "src@gfedcba0987654321"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {

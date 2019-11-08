@@ -22,9 +22,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "boringssl@2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--refs",
-      "refs/heads/master"
+      "boringssl@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "env_suffixes": {
       "PATH": [

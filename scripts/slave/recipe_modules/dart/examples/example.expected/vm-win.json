@@ -47,9 +47,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@3456abce78ef",
-      "--refs",
-      "refs/heads/master"
+      "sdk@3456abce78ef"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

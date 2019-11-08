@@ -39,8 +39,6 @@
       "--revision",
       "v8@refs/branch-heads/3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
-      "refs/branch-heads/3.4",
-      "--refs",
       "refs/branch-heads/3.4"
     ],
     "cwd": "[BUILDER_CACHE]",
