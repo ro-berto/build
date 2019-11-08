@@ -31,6 +31,8 @@ per-file client_openscreen*.py=file://scripts/slave/recipes/openscreen.expected/
 per-file client_v8_*=machenbach@chromium.org
 per-file tryserver_chromium_perf.py=simonhatch@chromium.org
 per-file tryserver_webrtc.py=phoglund@chromium.org
+per-file tryserver_devtools_frontend.py=machenbach@chromium.org
+per-file tryserver_devtools_frontend.py=liviurau@chromium.org
 
 # Waterfall owners should be able to update trybots.py.
 per-file trybots.py=kbr@chromium.org
