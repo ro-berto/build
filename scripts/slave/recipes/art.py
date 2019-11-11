@@ -13,60 +13,91 @@ DEPS = [
   'repo',
 ]
 
+
+# "Repo sync jobs" parameter: value passed to option `-j` of command
+# `repo sync`.
+REPO_SYNC_JOBS = 16
+
+# "Make jobs" parameter: value passed to option `-j` of
+# - build commands (`build/soong/soong_ui.bash`, directly or via ART's
+#   `buildbot-build.sh` script);
+# - test commands, when supported (ART's `testrunner.py` and `run-gtests.sh`
+#   scripts).
+#
+# Values for commands running on target (device).
+# - Default value.
+TARGET_DEFAULT_MAKE_JOBS = 4
+# - Lower value for Fugu (Nexus Player) devices.
+FUGU_MAKE_JOBS = 1
+# - Lower value for MIPS boards.
+MIPS_BOARD_MAKE_JOBS = 1
+#
+# Values for commands running on host.
+# - Default value.
+HOST_DEFAULT_MAKE_JOBS = 8
+# - Lower value for interpreter tests (on host).
+HOST_TEST_INTERPRETER_MAKE_JOBS = 5
+# - Value for building target artifacts (on host).
+# TODO: Raise this value to 8 (`HOST_DEFAULT_MAKE_JOBS`)?
+HOST_BUILD_TARGET_MAKE_JOBS = 2
+# - Value for building a whole AOSP product (`aosp-builder-*` targets).
+HOST_BUILD_AOSP_MAKE_JOBS = 4
+
 _TARGET_DEVICE_MAP = {
     'walleye-armv7': {
-      'bitness': 32,
-      'make_jobs': 4,
-      'product': 'arm_krait',
-      },
+        'bitness': 32,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'arm_krait',
+    },
     'walleye-armv8': {
-      'bitness': 64,
-      'make_jobs': 4,
-      'product': 'armv8',
-      },
+        'bitness': 64,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'armv8',
+    },
     'angler-armv7': {
-      'bitness': 32,
-      'make_jobs': 4,
-      'product': 'arm_krait',
-      },
+        'bitness': 32,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'arm_krait',
+    },
     'fugu': {
-      'bitness': 32,
-      'make_jobs': 1,
-      'product': 'silvermont',
-      },
+        'bitness': 32,
+        'make_jobs': FUGU_MAKE_JOBS,
+        'product': 'silvermont',
+    },
     'mips32': {
-      'bitness': 32,
-      'make_jobs': 2,
-      'product': 'mips32r2_fp_xburst',
-      },
+        'bitness': 32,
+        'make_jobs': MIPS_BOARD_MAKE_JOBS,
+        'product': 'mips32r2_fp_xburst',
+    },
     'angler-armv8': {
-      'bitness': 64,
-      'make_jobs': 4,
-      'product': 'armv8',
-      },
+        'bitness': 64,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'armv8',
+    },
     'bullhead-armv8': {
-      'bitness': 64,
-      'make_jobs': 4,
-      'product': 'armv8',
-      },
+        'bitness': 64,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'armv8',
+    },
     'bullhead-armv7': {
-      'bitness': 32,
-      'make_jobs': 4,
-      'product': 'arm_krait',
-      },
-    }
+        'bitness': 32,
+        'make_jobs': TARGET_DEFAULT_MAKE_JOBS,
+        'product': 'arm_krait',
+    },
+}
+
 
 def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master-art')
-  api.repo.sync("-f", "-c", "-j16", "--no-tags")
+  api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
   api.repo.manifest()
 
 
 def full_checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master')
-  api.repo.sync("-f", "-c", "-j16", "--no-tags")
+  api.repo.sync('-f', '-c', '-j%d' % (REPO_SYNC_JOBS), "--no-tags")
   api.repo.manifest()
 
 
@@ -143,55 +174,61 @@ def setup_host_x86(api,
     common_options += ['--cdex-' + cdex_level]
 
   with api.context(env=env):
-    api.step('build sdk-eng',
-             [art_tools.join('buildbot-build.sh'), '-j8', '--host'])
+    api.step('build sdk-eng', [
+        art_tools.join('buildbot-build.sh'),
+        '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--host'
+    ])
 
     with api.step.defer_results():
-      api.step('test gtest', ['build/soong/soong_ui.bash',
-                              '--make-mode',
-                              '-j8',
-                              'test-art-host-gtest%d' % bitness])
+      api.step('test gtest', [
+          'build/soong/soong_ui.bash', '--make-mode',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS),
+          'test-art-host-gtest%d' % bitness
+      ])
 
-      api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
-                                   '-j8',
-                                   '--optimizing'] + common_options)
+      api.step('test optimizing', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--optimizing'
+      ] + common_options)
 
-      api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
-                                   '-j8',
-                                   '--jit',
-                                   '--debuggable'] + common_options)
+      api.step('test debuggable', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit', '--debuggable'
+      ] + common_options)
 
-      # Use a lower -j number for interpreter, some tests take a long time
+      # Use a lower `-j` number for interpreter, some tests take a long time
       # to run on it.
-      api.step('test interpreter', ['./art/test/testrunner/testrunner.py',
-                                    '-j5',
-                                    '--interpreter'] + common_options)
+      api.step('test interpreter', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_TEST_INTERPRETER_MAKE_JOBS), '--interpreter'
+      ] + common_options)
 
-      api.step('test baseline', ['./art/test/testrunner/testrunner.py',
-                                 '-j8',
-                                 '--baseline'] + common_options)
+      api.step('test baseline', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--baseline'
+      ] + common_options)
 
-      api.step('test jit', ['./art/test/testrunner/testrunner.py',
-                            '-j8',
-                            '--jit'] + common_options)
+      api.step('test jit', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit'
+      ] + common_options)
 
       if cdex_level != "none":
-        api.step('test cdex-redefine-stress-optimizing',
-                 ['./art/test/testrunner/testrunner.py',
-                  '-j8',
-                  '--optimizing',
-                  '--redefine-stress',
-                  '--debuggable'] + common_options)
-        api.step('test cdex-redefine-stress-jit',
-                 ['./art/test/testrunner/testrunner.py',
-                  '-j8',
-                  '--jit',
-                  '--redefine-stress',
-                  '--debuggable'] + common_options)
+        api.step('test cdex-redefine-stress-optimizing', [
+            './art/test/testrunner/testrunner.py',
+            '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--optimizing',
+            '--redefine-stress', '--debuggable'
+        ] + common_options)
+        api.step('test cdex-redefine-stress-jit', [
+            './art/test/testrunner/testrunner.py',
+            '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--jit', '--redefine-stress',
+            '--debuggable'
+        ] + common_options)
 
-      api.step('test speed-profile', ['./art/test/testrunner/testrunner.py',
-                                      '-j8',
-                                      '--speed-profile'] + common_options)
+      api.step('test speed-profile', [
+          './art/test/testrunner/testrunner.py',
+          '-j%d' % (HOST_DEFAULT_MAKE_JOBS), '--speed-profile'
+      ] + common_options)
 
       libcore_command = [art_tools.join('run-libcore-tests.sh'),
                          '--mode=host',
@@ -317,8 +354,10 @@ def setup_target(api,
     make_jobs = 1
 
   with api.context(env=env):
-    api.step('build target', [art_tools.join('buildbot-build.sh'),
-                              '-j2', '--target'])
+    api.step('build target', [
+        art_tools.join('buildbot-build.sh'),
+        '-j%d' % (HOST_BUILD_TARGET_MAKE_JOBS), '--target'
+    ])
 
   with api.step.defer_results():
     with api.context(env=test_env):
@@ -498,12 +537,15 @@ def setup_aosp_builder(api, read_barrier):
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):
         api.step('Pre clean %s' % build, ['rm', '-rf', 'out'])
-        api.step('Build %s' % build,
-                 ['build/soong/soong_ui.bash', '--make-mode', '-j4'])
-        api.step('Dump oat boot %s' % build, ['build/soong/soong_ui.bash',
-                                              '--make-mode',
-                                              '-j8',
-                                              'dump-oat-boot-%s' % build])
+        api.step('Build %s' % build, [
+            'build/soong/soong_ui.bash', '--make-mode',
+            '-j%d' % (HOST_BUILD_AOSP_MAKE_JOBS)
+        ])
+        api.step('Dump oat boot %s' % build, [
+            'build/soong/soong_ui.bash', '--make-mode',
+            '-j%d' % (HOST_DEFAULT_MAKE_JOBS),
+            'dump-oat-boot-%s' % build
+        ])
         api.step('Post clean %s' % build, ['rm', '-rf', 'out'])
 
 
