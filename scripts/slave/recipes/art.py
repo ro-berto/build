@@ -360,11 +360,6 @@ def setup_target(api,
 
   with api.step.defer_results():
     with api.context(env=test_env):
-      # Temporary work-around to try to diagnose excessive timeouts.
-      if gcstress:
-        api.step('adb reboot', ['adb', 'reboot'])
-        api.step('adb wait-for-device', ['adb', 'wait-for-device'])
-
       api.step('device pre-run cleanup', [
           art_tools.join('cleanup-buildbot-device.sh')])
 
