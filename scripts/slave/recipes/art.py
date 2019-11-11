@@ -38,8 +38,7 @@ HOST_DEFAULT_MAKE_JOBS = 8
 # - Lower value for interpreter tests (on host).
 HOST_TEST_INTERPRETER_MAKE_JOBS = 5
 # - Value for building target artifacts (on host).
-# TODO: Raise this value to 8 (`HOST_DEFAULT_MAKE_JOBS`)?
-HOST_BUILD_TARGET_MAKE_JOBS = 2
+HOST_BUILD_TARGET_MAKE_JOBS = HOST_DEFAULT_MAKE_JOBS
 # - Value for building a whole AOSP product (`aosp-builder-*` targets).
 HOST_BUILD_AOSP_MAKE_JOBS = 4
 
