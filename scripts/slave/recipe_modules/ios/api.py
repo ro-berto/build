@@ -699,9 +699,18 @@ class iOSApi(recipe_api.RecipeApi):
   def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template,
                             bot=None):
     """Isolate earlgrey test into small shards"""
-    cmd = ['otool', '-ov', '%s/%s' %
-      (self.m.path.join(self.most_recent_app_path, '%s.app' % test['app']),
-       test['app'])]
+    if 'host' in test:
+      # For EG2 test info is stored in Plugins/*.xctest/.
+      test_app = '%s/%s' % (
+          self.m.path.join(
+              self.most_recent_app_path,
+              '{0}-Runner.app/PlugIns/{0}.xctest'.format(test['app'])),
+          test['app'])
+    else:
+      test_app = '%s/%s' % (
+          self.m.path.join(self.most_recent_app_path, '%s.app' % test['app']),
+          test['app'])
+    cmd = ['otool', '-ov', test_app]
     step_result = self.m.step(
       'shard EarlGrey test',
       cmd,
@@ -736,10 +745,11 @@ class iOSApi(recipe_api.RecipeApi):
       '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
     test_names = test_pattern.findall(step_result.stdout)
     tests_set = set()
+    # 'ChromeTestCase' and 'BaseEarlGreyTestCase' are parent classes
+    # of all EarlGrey/EarlGrey2 test classes. They have no real tests.
+    parent_test_classes = {'BaseEarlGreyTestCase', 'ChromeTestCase'}
     for test_name in test_names:
-      # 'ChromeTestCase' is the parent class of all EarlGrey test classes. It
-      # has no real tests.
-      if 'ChromeTestCase' != test_name[0]:
+      if test_name[0] not in parent_test_classes:
         tests_set.add('%s' % test_name[0])
     testcases = sorted(tests_set)
 
