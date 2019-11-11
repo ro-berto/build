@@ -926,7 +926,8 @@ class Failure(object):
     # Add results for each run of a command.
     for result in sorted(self.results, key=lambda r: int(r['run'])):
       lines.append('Run #%d' % int(result['run']))
-      lines.append('Exit code: %s' % result['exit_code'])
+      hex_value = '0x%02X' % (result['exit_code'] & 0xffffffff)
+      lines.append('Exit code: %s [%s]' % (result['exit_code'], hex_value))
       lines.append('Result: %s' % result['result'])
       if result.get('expected'):
         lines.append('Expected outcomes: %s' % ", ".join(result['expected']))

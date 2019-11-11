@@ -339,7 +339,7 @@
       "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'to_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'timeout_sec=60' -p 'variant=\"default\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"gpu:none\", \"os:Ubuntu-16.04\", \"pool:chromium.tests\"]' -p 'test_name=\"suite-name/dir/test-name\"' -p 'build_config=\"Release\"' -p 'isolated_name=\"bot_default\"' -p 'bisect_mastername=\"client.v8\"' -p 'extra_args=[]' -p 'total_timeout_sec=120'@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Run #1@@@",
-      "@@@STEP_LOG_LINE@test-name@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@test-name@Exit code: 1 [0x01]@@@",
       "@@@STEP_LOG_LINE@test-name@Result: FAIL@@@",
       "@@@STEP_LOG_LINE@test-name@Expected outcomes: PASS, SLOW@@@",
       "@@@STEP_LOG_LINE@test-name@Duration: 00:05:000@@@",
