@@ -32,23 +32,33 @@ def _GetDashboardJson(options):
   }
 
 
-def _SendResultsJson(url, results_json):
+def _SendResultsJson(url, results_json, oauth_token_file):
   """Make a HTTP POST with the given JSON to the Performance Dashboard.
 
   Args:
     url: URL of Performance Dashboard instance, e.g.
         "https://chromeperf.appspot.com".
     results_json: JSON string that contains the data to be sent.
+    oauth_token_file: Optional path to file with OAuth token string to pass
+        to server. If specified, the request will be sent as authorised thus
+        not requiring sender IP to be whitelisted.
   """
+  headers = {}
+  if oauth_token_file:
+    with open(oauth_token_file) as oauth_token_fd:
+      headers['Authorization'] = 'Bearer %s' % oauth_token_fd.read()
+
   # When data is provided to urllib2.Request, a POST is sent instead of GET.
   # The data must be in the application/x-www-form-urlencoded format.
   data = urllib.urlencode({'data': results_json})
-  req = urllib2.Request(url + '/add_point', data)
+  req = urllib2.Request(url=url + '/add_point', data=data, headers=headers)
   return urllib2.urlopen(req)
 
 
 def _CreateParser():
   parser = argparse.ArgumentParser()
+  parser.add_argument('--oauth-token-file',
+                      help='File with oauth token string to pass to server')
   parser.add_argument('--perf-dashboard-machine-group', required=True)
   parser.add_argument('--perf-id', required=True)
   parser.add_argument('--name', required=True)
@@ -69,7 +79,9 @@ def main(args):
   if options.output_json_file:
     with options.output_json_file as output_file:
       json.dump(dashboard_json, output_file)
-  _SendResultsJson(options.results_url, json.dumps(dashboard_json))
+  _SendResultsJson(url=options.results_url,
+                   results_json=json.dumps(dashboard_json),
+                   oauth_token_file=options.oauth_token_file)
 
 
 if __name__ == '__main__':

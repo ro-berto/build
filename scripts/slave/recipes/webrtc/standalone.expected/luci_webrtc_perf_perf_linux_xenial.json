@@ -555,6 +555,17 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -563,6 +574,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::webrtc]/resources/upload_perf_dashboard_results.py",
+      "--oauth-token-file",
+      "extra.secret.token.should.not.be.logged",
       "--build-url",
       "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Xenial/0",
       "--name",
@@ -733,6 +746,17 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "get access token for default account (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -741,6 +765,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::webrtc]/resources/upload_perf_dashboard_results.py",
+      "--oauth-token-file",
+      "extra.secret.token.should.not.be.logged",
       "--build-url",
       "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Xenial/0",
       "--name",
@@ -911,6 +937,17 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "get access token for default account (3)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -919,6 +956,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::webrtc]/resources/upload_perf_dashboard_results.py",
+      "--oauth-token-file",
+      "extra.secret.token.should.not.be.logged",
       "--build-url",
       "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Xenial/0",
       "--name",

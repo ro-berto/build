@@ -538,6 +538,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
   def upload_to_perf_dashboard(self, name, step_result):
+    token = self.m.service_account.default().get_access_token()
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
     if self._test_data.enabled and test_succeeded:
@@ -567,6 +568,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     for perf_results in results_to_upload:
       args = [
+          '--oauth-token-file', self.m.raw_io.input_text(token),
           '--build-url', self.build_url,
           '--name', name,
           '--perf-id', self.c.PERF_ID,

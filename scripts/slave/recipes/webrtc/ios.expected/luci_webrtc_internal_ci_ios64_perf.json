@@ -1163,6 +1163,16 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -1171,6 +1181,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::webrtc]/resources/upload_perf_dashboard_results.py",
+      "--oauth-token-file",
+      "extra.secret.token.should.not.be.logged",
       "--build-url",
       "https://ci.chromium.org/p/webrtc-internal/builders/luci.webrtc-internal.ci/iOS64%20Perf/0",
       "--name",
