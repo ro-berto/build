@@ -59,14 +59,14 @@ _TARGET_DEVICE_MAP = {
 def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master-art')
-  api.repo.sync("-f", "-c", "-j16")
+  api.repo.sync("-f", "-c", "-j16", "--no-tags")
   api.repo.manifest()
 
 
 def full_checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master')
-  api.repo.sync("-f", "-c", "-j16")
+  api.repo.sync("-f", "-c", "-j16", "--no-tags")
   api.repo.manifest()
 
 
