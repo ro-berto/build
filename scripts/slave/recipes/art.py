@@ -29,8 +29,6 @@ REPO_SYNC_JOBS = 16
 TARGET_DEFAULT_MAKE_JOBS = 2
 # - Lower value for Fugu (Nexus Player) devices.
 FUGU_MAKE_JOBS = 1
-# - Lower value for MIPS boards.
-MIPS_BOARD_MAKE_JOBS = 1
 #
 # Values for commands running on host.
 # - Default value.
@@ -62,11 +60,6 @@ _TARGET_DEVICE_MAP = {
         'bitness': 32,
         'make_jobs': FUGU_MAKE_JOBS,
         'product': 'silvermont',
-    },
-    'mips32': {
-        'bitness': 32,
-        'make_jobs': MIPS_BOARD_MAKE_JOBS,
-        'product': 'mips32r2_fp_xburst',
     },
     'angler-armv8': {
         'bitness': 64,
