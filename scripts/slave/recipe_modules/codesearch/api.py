@@ -242,13 +242,9 @@ class CodesearchApi(recipe_api.RecipeApi):
         'Trying to check out generated files repo,'
         ' but the repo is not indicated')
 
-    # Check out the generated files repo. On LUCI, we use a named cache so that
-    # the checkout stays around between builds (this saves ~15 mins of build
-    # time).
-    if self.m.runtime.is_luci:
-      generated_repo_dir = self.m.path['cache'].join('generated')
-    else:
-      generated_repo_dir = self.m.path['start_dir'].join('generated')
+    # Check out the generated files repo. We use a named cache so that the
+    # checkout stays around between builds (this saves ~15 mins of build time).
+    generated_repo_dir = self.m.path['cache'].join('generated')
 
     # Windows is unable to checkout files with names longer than 260 chars.
     # This git setting works around this limitation.
