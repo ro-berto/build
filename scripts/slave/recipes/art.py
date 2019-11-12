@@ -232,20 +232,6 @@ def setup_host_x86(api,
 
       api.step('test libcore', libcore_command)
 
-      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
-                      '--mode=host',
-                      '--variant=X%d' % bitness]
-      if debug:
-        jdwp_command.append('--debug')
-      if gcstress:
-        jdwp_command += ['--vm-arg', '-Xgc:gcstress']
-
-      api.step('test jdwp jit', jdwp_command)
-
-      # Disable interpreter jdwp runs with gcstress, they time out.
-      if not gcstress:
-        api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
-
       libjdwp_run = art_tools.join('run-libjdwp-tests.sh')
       libjdwp_common_command = [libjdwp_run,
                                 '--mode=host',
@@ -456,26 +442,6 @@ def setup_target(api,
       with api.context(env=test_env):
         api.step('test libcore', libcore_command)
       test_logging(api, 'test libcore')
-
-    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
-                    '--mode=device',
-                    '--variant=X%d' % bitness]
-    if debug:
-      jdwp_command.append('--debug')
-    if gcstress:
-      jdwp_command += ['--vm-arg', '-Xgc:gcstress']
-
-    # Disable jit jdwp runs with gcstress and debug, they time out.
-    if not (gcstress and debug):
-      with api.context(env=test_env):
-        api.step('test jdwp jit', jdwp_command)
-      test_logging(api, 'test jdwp jit')
-
-    # Disable interpreter jdwp runs with gcstress, they time out.
-    if not gcstress:
-      with api.context(env=test_env):
-        api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
-      test_logging(api, 'test jdwp interpreter')
 
     libjdwp_command = [art_tools.join('run-libjdwp-tests.sh'),
                        '--mode=device',
@@ -714,15 +680,8 @@ def GenTests(api):
             (api.properties(clobber='') if clb else api.properties())
           )
   yield (
-      test('x86_32_test_failure', 'host-x86-ndebug') +
-      api.step_data('test jdwp interpreter', retcode=1))
-
-  yield (
       test('target_angler_setup_failure', 'angler-armv7-ndebug') +
       api.step_data('setup device', retcode=1))
-  yield (
-      test('target_angler_test_failure', 'angler-armv7-ndebug') +
-      api.step_data('test jdwp interpreter', retcode=1))
   yield (
       test(
           'target_angler_device_pre_run_cleanup_failure',

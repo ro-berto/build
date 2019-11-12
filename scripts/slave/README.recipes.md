@@ -1628,7 +1628,7 @@ This module contains apis to generate code coverage data.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#240)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#241)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1642,7 +1642,7 @@ Args:
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#296)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#297)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1650,7 +1650,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#272)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#273)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1658,7 +1658,7 @@ Args:
   tests (list of self.m.chromium_tests.steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#341)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#342)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1692,7 +1692,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#554)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#555)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
@@ -3934,7 +3934,7 @@ Packages Android SDK packages as CIPD packages.
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#679)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#645)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#82)(api):**
 
@@ -3942,11 +3942,11 @@ Packages Android SDK packages as CIPD packages.
 
 &mdash; **def [full\_checkout](/scripts/slave/recipes/art.py#89)(api):**
 
-&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#507)(api, read_barrier):**
+&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#473)(api, read_barrier):**
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#101)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
-&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#267)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#253)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
 ### *recipes* / [binary\_size\_trybot](/scripts/slave/recipes/binary_size_trybot.py)
 
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#10): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
