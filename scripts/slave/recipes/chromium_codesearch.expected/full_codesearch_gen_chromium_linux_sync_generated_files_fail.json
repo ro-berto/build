@@ -695,7 +695,8 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/build/download_translation_unit_tool.py"
+      "[CACHE]/builder/src/tools/clang/scripts/update.py",
+      "--package==translation_unit"
     ],
     "name": "download translation_unit clang tool"
   },

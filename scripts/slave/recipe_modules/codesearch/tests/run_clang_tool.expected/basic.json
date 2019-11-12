@@ -3,7 +3,8 @@
     "cmd": [
       "python",
       "-u",
-      "None/build/download_translation_unit_tool.py"
+      "None/tools/clang/scripts/update.py",
+      "--package==translation_unit"
     ],
     "name": "download translation_unit clang tool"
   },

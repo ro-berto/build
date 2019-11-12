@@ -878,7 +878,8 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/clang/scripts/download_objdump.py"
+      "[CACHE]/builder/src/tools/clang/scripts/update.py",
+      "--package=objdump"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1518,7 +1519,8 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/clang/scripts/download_objdump.py"
+      "[CACHE]/builder/src/tools/clang/scripts/update.py",
+      "--package=objdump"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

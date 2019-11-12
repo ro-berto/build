@@ -682,7 +682,8 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/download_translation_unit_tool.py"
+      "[START_DIR]/src/tools/clang/scripts/update.py",
+      "--package==translation_unit"
     ],
     "name": "download translation_unit clang tool"
   },

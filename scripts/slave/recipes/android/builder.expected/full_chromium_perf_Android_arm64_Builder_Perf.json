@@ -726,7 +726,8 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
+      "[START_DIR]/src/tools/clang/scripts/update.py",
+      "--package=objdump"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -798,7 +799,8 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
+      "[START_DIR]/src/tools/clang/scripts/update.py",
+      "--package=objdump"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
@@ -870,7 +872,8 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
+      "[START_DIR]/src/tools/clang/scripts/update.py",
+      "--package=objdump"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
