@@ -193,6 +193,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['telemetry_gpu_unittests', None],
           ['devtools_closure_compile', None],
           ['devtools_eslint', None],
+          ['devtools_lint_check', None],
           ['devtools_type_check', None],
           ['python3_smoketest', None],
 
