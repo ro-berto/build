@@ -686,11 +686,11 @@
       "    arg_names, **additional_args)",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/internal/property_invoker.py\", in _invoke_with_properties",
       "    return callable_obj(*props, **additional_args)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 67, in RunSteps",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 69, in RunSteps",
       "    compile_failure = _RunStepsChromium(api)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 129, in _RunStepsChromium",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 131, in _RunStepsChromium",
       "    version = _GetCelabVersionFromVPython(api, test_root.join(\".vpython\"))",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 114, in _GetCelabVersionFromVPython",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 116, in _GetCelabVersionFromVPython",
       "    raise ValueError('Couldn\\'t find CELab version in vpython file: %s' % path)",
       "ValueError: Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\.vpython"
     ]
