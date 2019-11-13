@@ -8,6 +8,9 @@ from RECIPE_MODULES.build.chromium import CONFIG_CTX
 @CONFIG_CTX(includes=['ninja'])
 def v8(c):
   c.project_generator.tool = 'mb'
+  c.project_generator.isolate_map_paths = [
+      c.CHECKOUT_PATH.join('infra', 'mb', 'gn_isolate_map.pyl'),
+  ]
   c.build_dir = c.CHECKOUT_PATH.join('out')
 
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:

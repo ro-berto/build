@@ -117,6 +117,8 @@
       "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--json-output",
       "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
       "--swarming-targets-file",
       "bot_default\nperf\n",
       "//out/Release"

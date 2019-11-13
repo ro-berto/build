@@ -202,6 +202,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -586,6 +588,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -841,6 +845,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
@@ -1128,6 +1134,8 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[BUILDER_CACHE]/v8/infra/mb/gn_isolate_map.pyl",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
