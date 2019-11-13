@@ -103,7 +103,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     self.m.python(
         'download translation_unit clang tool', self.m.path['checkout'].join(
             'tools', 'clang', 'scripts', 'update.py'),
-        ['--package==translation_unit'])
+        ['--package=translation_unit'])
 
     # Run the clang tool
     args = ['--tool', self.m.path['checkout'].join('third_party', 'llvm-build',

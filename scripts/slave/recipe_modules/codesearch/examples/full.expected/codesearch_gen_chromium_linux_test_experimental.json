@@ -680,7 +680,7 @@
       "python",
       "-u",
       "[START_DIR]/src/tools/clang/scripts/update.py",
-      "--package==translation_unit"
+      "--package=translation_unit"
     ],
     "name": "download translation_unit clang tool"
   },
