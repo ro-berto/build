@@ -2180,7 +2180,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return task
 
   def validate_task_results(self, api, step_result):
-    results_json = getattr(step_result, 'isolated_script_results', None) or {}
+    if getattr(step_result, 'json') and getattr(step_result.json, 'output'):
+      results_json = step_result.json.output
+    else:
+      results_json = {}
 
     test_run_dictionary = (
         self.results_handler.validate_results(api, results_json))

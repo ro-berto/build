@@ -1501,9 +1501,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     step_result.presentation.logs['outdir_json'] = (
         outdir_json.splitlines())
 
-    step_result.isolated_script_results = step_result.json.output
-    self._check_for_missing_shard(
-        step_result.isolated_script_results, step_result, task)
+    self._check_for_missing_shard(step_result.json.output, step_result, task)
 
     # Obtain perftest results if present
     perftest_results, is_histogramset = \
