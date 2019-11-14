@@ -10,6 +10,7 @@ from __future__ import absolute_import
 import hashlib
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -99,7 +100,7 @@ class PackageIndexTest(unittest.TestCase):
     """
     unit_protos = {}
     for filename in os.listdir(units_dir):
-      with open(os.path.join(units_dir, filename), 'r') as unit_file:
+      with open(os.path.join(units_dir, filename), 'rb') as unit_file:
         unit_file_data = unit_file.read()
 
         unit_proto = analysis_pb2.IndexedCompilation()
@@ -140,16 +141,41 @@ class PackageIndexTest(unittest.TestCase):
         golden_dir=os.path.join(TEST_DATA_DIR, 'expected_files'))
 
   def testGenerateUnitFiles(self):
-    self._CheckUnitFilesMatch(
-        out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
-        golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units'))
+    # Do not run the linux tests pbunits on windows, windows shell escaping is
+    # just too broken to trust the unit test results.
+    if sys.platform != 'win32':
+      self._CheckUnitFilesMatch(
+          out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
+          golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units'))
 
   def testGenerateUnitFilesWindows(self):
+    # Since most development is done in linux, windows tests are runnable
+    # in both linux and windows. However, win32 treats \ on the command line
+    # very differently, so fix the commands file so it can be tested in windows.
+    # * windows treats \'s differently than shlex.  (see
+    #   https://docs.microsoft.com/en-us/windows/win32/api/shellapi/
+    #   nf-shellapi-commandlinetoargvw#remarks) so, we need to halve the
+    #   \'s for windows runs (assuming no in/out of quotes)
+    # * Json needs \ escaping, so replacing 2 \'s with 1 \ requires replacing
+    #   4 \'s with 2 \'s.
+    win32_fix_dir = ""
+    compile_commands_file = os.path.join(self.build_dir,
+                                         'compile_commands_win.json')
+    if sys.platform == 'win32':
+      win32_fix_dir = tempfile.mkdtemp()
+      with open(compile_commands_file) as commands:
+        win32_fix_dir = tempfile.mkdtemp()
+        compile_commands_file = os.path.join(win32_fix_dir,
+                                             'compile_commands_win.json')
+        with open(compile_commands_file, 'w') as new_commands:
+          for line in commands:
+            new_commands.write(line.replace(r'\\\\', r'\\'))
+
     # Recreate the index pack using a different compilation database.
     self.index_pack = package_index.IndexPack(
         self.archive_path,
         TEST_DATA_INPUT_DIR,
-        os.path.join(self.build_dir, 'compile_commands_win.json'),
+        compile_commands_file,
         os.path.join(self.build_dir, 'gn_targets.json'),
         corpus=CORPUS,
         build_config=BUILD_CONFIG,
@@ -158,6 +184,8 @@ class PackageIndexTest(unittest.TestCase):
     self.index_pack.GenerateIndexPack()
     self.index_pack.close()
 
+    if win32_fix_dir:
+      shutil.rmtree(win32_fix_dir)
     shutil.rmtree(self.unpacked_index_dir)
     self.unpacked_index_dir = tempfile.mkdtemp()
     z = zipfile.ZipFile(self.archive_path, 'r')
@@ -181,23 +209,24 @@ class PackageIndexTest(unittest.TestCase):
     with zipfile.ZipFile(self.archive_path, 'r') as archive:
       zipped_filenames = archive.namelist()
 
+    # kzips use unix path separators, not the native os separator
     root = 'kzip'
-    self.assertIn(root + os.path.sep, zipped_filenames);
+    self.assertIn(root + '/', zipped_filenames)
 
     # Verify that the units/ dir has its own entry.
-    self.assertIn(os.path.join(root, 'pbunits', ''), zipped_filenames)
+    self.assertIn('/'.join([root, 'pbunits', '']), zipped_filenames)
 
     # Rather than hardcode the SHA256 of the unit files here, we simply verify
     # that at least one exists and that they are all present in the zip.
-    units_dir = os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits')
+    units_dir = '/'.join([self.unpacked_index_dir, 'kzip', 'pbunits'])
     unit_files = os.listdir(units_dir)
     self.assertNotEqual(0, len(unit_files))
     for unit_file_name in unit_files:
-      self.assertIn(os.path.join(root, 'pbunits', unit_file_name),
+      self.assertIn('/'.join([root, 'pbunits', unit_file_name]),
                     zipped_filenames)
 
     # Verify that the files/ dir has its own entry.
-    self.assertIn(os.path.join(root, 'files', ''), zipped_filenames)
+    self.assertIn('/'.join([root, 'files', '']), zipped_filenames)
 
     # Verify that the kzip contains all expected data files.
     data_filenames = [os.path.basename(path)

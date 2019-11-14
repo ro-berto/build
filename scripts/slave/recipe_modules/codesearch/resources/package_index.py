@@ -346,7 +346,8 @@ class IndexPack(object):
       unit_proto = analysis_pb2.CompilationUnit()
 
       source_files = [
-          self._ConvertGnPath(source) for source in target['sources']
+          self._ConvertPathToForwardSlashes(self._ConvertGnPath(source))
+          for source in target['sources']
       ]
       unit_proto.source_file.extend(source_files)
 
