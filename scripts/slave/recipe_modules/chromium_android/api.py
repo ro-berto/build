@@ -871,16 +871,7 @@ class AndroidApi(recipe_api.RecipeApi):
         trace_json_path = self.m.raw_io.input_text(trace_json)
         self._upload_trace_results(trace_json_path, name)
 
-      # Need to copy gtest results over. A few places call
-      # |run_instrumentation_suite| function and then look for results in
-      # the active_result.
-      self.copy_gtest_results(result_step, self.m.step.active_result)
     return result_step
-
-  def copy_gtest_results(self, result_step, active_step):
-    if (hasattr(result_step, 'test_utils') and
-        hasattr(result_step.test_utils, 'gtest_results')):
-      active_step.test_utils = result_step.test_utils
 
   def create_result_details(self, step_name, json_results_file):
     presentation_args = ['--json-file', json_results_file,
@@ -1200,8 +1191,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                                     json_results)
           self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
               details_link)
-        self.copy_gtest_results(result_step,
-                                self.m.step.active_result)
 
   def run_java_unit_test_suite(self,
                                suite,
@@ -1285,7 +1274,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                                     json_results)
           self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
               details_link)
-        self.copy_gtest_results(step_result, self.m.step.active_result)
     return step_result
 
 
