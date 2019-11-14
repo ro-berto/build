@@ -53,23 +53,8 @@ def _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path):
       results_msg)
 
 
-def _should_skip_analyzer(api):
-  revision_info = api.gerrit.get_revision_info(
-      'https://%s' % api.tryserver.gerrit_change.host,
-      api.tryserver.gerrit_change.change, api.tryserver.gerrit_change.patchset)
-
-  # FIXME(ltina): remove this once testing is done
-  commit_message = revision_info['commit']['message']
-  author = revision_info['commit']['author']['email']
-  is_ltina = author == 'ltina@google.com'
-  return not (is_ltina and 'TriciumTest' in commit_message)
-
-
 def RunSteps(api):
   assert api.tryserver.is_tryserver
-
-  if _should_skip_analyzer(api):
-    return
 
   with api.chromium.chromium_layout():
     api.gclient.set_config('chromium')
@@ -142,21 +127,7 @@ def GenTests(api):
             mastername='tryserver.chromium.linux',
             buildername='tricium-metrics-analysis',
             buildnumber='1234',
-            patch_set=1) + api.platform('linux', 64) + api.override_step_data(
-                'gerrit changes',
-                api.json.output([{
-                    'revisions': {
-                        'a' * 40: {
-                            '_number': 1,
-                            'commit': {
-                                'author': {
-                                    'email': author,
-                                },
-                                'message': "TriciumTest",
-                            }
-                        }
-                    }
-                }])))
+            patch_set=1))
 
     if include_diff:
       test += api.step_data('git diff to analyze patch',
@@ -210,12 +181,3 @@ def GenTests(api):
             '[ERROR]: Removed' in
             steps['metrics.write_results'].output_properties['tricium']
       ) + api.post_process(post_process.DropExpectation))
-
-  yield (test_with_patch(
-      'skip_not_ltina',
-      affected_files=['some/test/test2/histograms.xml'],
-      author='woof@doge.goog',
-      include_diff=False) + api.post_process(
-          post_process.DoesNotRun, 'bot_update') + api.post_process(
-              post_process.StatusSuccess) + api.post_process(
-                  post_process.DropExpectation))
