@@ -418,3 +418,40 @@ def GenTests(api):
           'skip processing because no metadata was generated'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
+
+  yield api.test('raise failure for java full-codebase coverage',
+       api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='android-code-coverage',
+          buildnumber=54),
+       api.code_coverage(use_java_coverage=True),
+       api.step_data(
+          'process java coverage.Generate Java coverage metadata',
+          retcode=1),
+       api.post_check(lambda check, steps: check(steps[
+              'process java coverage.Generate Java coverage metadata'
+          ].output_properties['process_coverage_data_failure'] == True)),
+       api.post_process(post_process.StatusFailure),
+       api.post_process(post_process.DropExpectation),)
+
+  yield api.test('do not raise failure for java per-cl coverage',
+       api.properties.generic(
+          mastername='tryserver.chromium.android',
+          buildername='android-marshmallow-arm64-coverage-rel',
+          buildnumber=54),
+       api.code_coverage(use_java_coverage=True),
+       api.properties(
+          files_to_instrument=[
+            'some/path/to/file.java',
+            'some/other/path/to/file.java',
+          ]),
+       api.buildbucket.try_build(
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
+       api.step_data(
+          'process java coverage.Generate Java coverage metadata',
+          retcode=1),
+       api.post_check(lambda check, steps: check(steps[
+              'process java coverage.Generate Java coverage metadata'
+          ].output_properties['process_coverage_data_failure'] == True)),
+       api.post_process(post_process.StatusSuccess),
+       api.post_process(post_process.DropExpectation),)

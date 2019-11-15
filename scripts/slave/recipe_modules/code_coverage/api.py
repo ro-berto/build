@@ -354,84 +354,92 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     with self.m.step.nest('process java coverage'):
-      coverage_dir = self.m.chromium.output_dir.join('coverage')
-      args = [
-          '--src-path',
-          self.m.path['checkout'],
-          '--output-dir',
-          coverage_dir,
-          '--coverage-dir',
-          coverage_dir,
-          '--sources-json-dir',
-          self.m.chromium.output_dir,
-      ]
+      try:
+        coverage_dir = self.m.chromium.output_dir.join('coverage')
+        args = [
+            '--src-path',
+            self.m.path['checkout'],
+            '--output-dir',
+            coverage_dir,
+            '--coverage-dir',
+            coverage_dir,
+            '--sources-json-dir',
+            self.m.chromium.output_dir,
+        ]
 
-      if self._is_per_cl_coverage:
-        args.append('--source-files')
-        args.extend(self._affected_source_files)
-        self._generate_line_number_mapping_from_bot_to_gerrit(
-            self._affected_source_files, coverage_dir)
-        args.extend([
-            '--diff-mapping-path',
-            coverage_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
-        ])
-      else:
-        component_mapping_path = self._generate_component_mapping()
-        args.extend([
-            '--component-mapping-path',
-            component_mapping_path,
-        ])
+        if self._is_per_cl_coverage:
+          args.append('--source-files')
+          args.extend(self._affected_source_files)
+          self._generate_line_number_mapping_from_bot_to_gerrit(
+              self._affected_source_files, coverage_dir)
+          args.extend([
+              '--diff-mapping-path',
+              coverage_dir.join(_BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
+          ])
+        else:
+          component_mapping_path = self._generate_component_mapping()
+          args.extend([
+              '--component-mapping-path',
+              component_mapping_path,
+          ])
 
-      self.m.python(
-          'Generate Java coverage metadata',
-          self.resource('generate_coverage_metadata_for_java.py'),
-          args=args,
-          **kwargs)
-      metadata_path = coverage_dir.join('all.json.gz')
-      if not self.m.path.exists(metadata_path):
-        self.m.python.succeeding_step(
-            'skip processing because no metadata was generated', '')
-        return
+        self.m.python(
+            'Generate Java coverage metadata',
+            self.resource('generate_coverage_metadata_for_java.py'),
+            args=args,
+            **kwargs)
+        metadata_path = coverage_dir.join('all.json.gz')
+        if not self.m.path.exists(metadata_path):
+          self.m.python.succeeding_step(
+              'skip processing because no metadata was generated', '')
+          return
 
-      gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
-      upload_step = self.m.gsutil.upload(
-          source=metadata_path,
-          bucket=self._gs_bucket,
-          dest='%s/all.json.gz' % gs_path,
-          name='Upload JSON metadata',
-          link_name='Coverage metadata',
-          **kwargs)
-      upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
-      upload_step.presentation.properties['coverage_gs_bucket'] = (
-          self._gs_bucket)
-      upload_step.presentation.properties['coverage_is_presubmit'] = (
-          self._is_per_cl_coverage)
+        gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
+        upload_step = self.m.gsutil.upload(
+            source=metadata_path,
+            bucket=self._gs_bucket,
+            dest='%s/all.json.gz' % gs_path,
+            name='Upload JSON metadata',
+            link_name='Coverage metadata',
+            **kwargs)
+        upload_step.presentation.properties[
+            'coverage_metadata_gs_path'] = gs_path
+        upload_step.presentation.properties['coverage_gs_bucket'] = (
+            self._gs_bucket)
+        upload_step.presentation.properties['coverage_is_presubmit'] = (
+            self._is_per_cl_coverage)
 
-      jacoco_html_report_dir = coverage_dir.join('coverage_html')
-      self.m.python(
-          'Generate JaCoCo HTML report',
-          self.m.path['checkout'].join('build', 'android',
-                                       'generate_jacoco_report.py'),
-          args=[
-              '--format', 'html', '--coverage-dir', coverage_dir,
-              '--sources-json-dir', self.m.chromium.output_dir, '--output-dir',
-              jacoco_html_report_dir, '--cleanup'
-          ],
-          **kwargs)
-      # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
-      output_zip = coverage_dir.join('jacoco_html_report.zip')
-      self.m.zip.directory(
-          step_name='Zip generated JaCoCo HTML report files',
-          directory=jacoco_html_report_dir,
-          output=output_zip)
-      self.m.gsutil.upload(
-          source=output_zip,
-          bucket=self._gs_bucket,
-          dest=self._compose_gs_path_for_coverage_data(
-              'java_html_report/jacoco_html_report.zip'),
-          link_name='JaCoCo HTML report',
-          name='Upload zipped JaCoCo HTML report',
-          **kwargs)
+        jacoco_html_report_dir = coverage_dir.join('coverage_html')
+        self.m.python(
+            'Generate JaCoCo HTML report',
+            self.m.path['checkout'].join('build', 'android',
+                                         'generate_jacoco_report.py'),
+            args=[
+                '--format', 'html', '--coverage-dir', coverage_dir,
+                '--sources-json-dir', self.m.chromium.output_dir,
+                '--output-dir', jacoco_html_report_dir, '--cleanup'
+            ],
+            **kwargs)
+        # TODO(crbug/980592): Make HTML report display directly on cloud bucket.
+        output_zip = coverage_dir.join('jacoco_html_report.zip')
+        self.m.zip.directory(
+            step_name='Zip generated JaCoCo HTML report files',
+            directory=jacoco_html_report_dir,
+            output=output_zip)
+        self.m.gsutil.upload(
+            source=output_zip,
+            bucket=self._gs_bucket,
+            dest=self._compose_gs_path_for_coverage_data(
+                'java_html_report/jacoco_html_report.zip'),
+            link_name='JaCoCo HTML report',
+            name='Upload zipped JaCoCo HTML report',
+            **kwargs)
+      except self.m.step.StepFailure:
+        self.m.step.active_result.presentation.properties[
+            'process_coverage_data_failure'] = True
+        if not self._is_per_cl_coverage:
+          # Do not raise coverage steps exception for per-cl coverage.
+          raise
 
   def _merge_and_upload_profdata(self):
     """Merges the profdata generated by each step to a single profdata.
