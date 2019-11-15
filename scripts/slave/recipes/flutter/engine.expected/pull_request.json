@@ -77,6 +77,8 @@
       "--revision",
       "src/flutter@refs/pull/1/head",
       "--refs",
+      "refs/heads/master",
+      "--refs",
       "refs/pull/1/head"
     ],
     "cwd": "[CACHE]/builder",

@@ -19,7 +19,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {

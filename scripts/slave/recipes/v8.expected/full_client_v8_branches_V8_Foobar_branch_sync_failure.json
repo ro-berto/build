@@ -24,6 +24,8 @@
       "--revision",
       "v8@refs/branch-heads/4.3:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--refs",
+      "refs/branch-heads/4.3",
+      "--refs",
       "refs/branch-heads/4.3"
     ],
     "cwd": "[BUILDER_CACHE]",

@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r10"
+      "src@r10",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -317,7 +319,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r6"
+      "src@r6",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -1042,7 +1046,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r7"
+      "src@r7",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -1767,7 +1773,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r9"
+      "src@r9",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -2492,7 +2500,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r10"
+      "src@r10",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {

@@ -15,7 +15,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r0"
+      "src@r0",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -339,7 +341,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@r0"
+      "src@r0",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
