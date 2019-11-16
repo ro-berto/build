@@ -155,25 +155,6 @@ SPEC = {
                 'platform': 'mac',
             },
         },
-        'Chromium Mac 10.13': {
-            'checkout_dir': 'mac',
-            'chromium_config': 'chromium',
-            'chromium_apply_config': ['mb'],
-            'gclient_config': 'chromium',
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            'swarming_dimensions': {
-                # This can be removed once (if?) we get 10.13 VMs.
-                'gpu': '8086:0a2e',
-                'os': 'Mac-10.13',
-            },
-            'test_results_config': 'staging_server',
-            'testing': {
-                'platform': 'mac',
-            },
-        },
         # There are no slaves for the following two "Dummy Builders" and they
         # do not appear on the actual continuous waterfall; this configuration
         # is here so that a try bot can be added.
