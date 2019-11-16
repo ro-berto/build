@@ -913,6 +913,12 @@ TRYBOTS = freeze({
                     },
                 ],
             },
+            'mac_chromium_10.10':
+                simple_bot({
+                    'mastername': 'chromium.mac',
+                    'buildername': 'Mac Builder',
+                    'tester': 'Mac10.10 Tests',
+                }),
             'mac_chromium_10.12_rel_ng':
                 simple_bot({
                     'mastername': 'chromium.mac',
@@ -925,11 +931,11 @@ TRYBOTS = freeze({
                     'buildername': 'Mac Builder',
                     'tester': 'Mac10.13 Tests',
                 }),
-            'mac_chromium_10.10':
+            'mac_chromium_10.14_rel_ng':
                 simple_bot({
-                    'mastername': 'chromium.mac',
-                    'buildername': 'Mac Builder',
-                    'tester': 'Mac10.10 Tests',
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'Mac Builder Next',
+                    'tester': 'Mac10.14 Tests',
                 }),
             'mac_chromium_compile_dbg_ng':
                 simple_bot({

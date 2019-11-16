@@ -135,6 +135,34 @@ SPEC = {
         'build_gs_bucket': 'chromium-fyi-archive',
     },
     'builders': {
+        'Mac Builder Next': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder',
+            'testing': {
+                'platform': 'mac',
+            },
+            'checkout_dir': 'mac',
+        },
+        'Mac10.14 Tests': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb',],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'tester',
+            'parent_buildername': 'Mac Builder Next',
+            'testing': {
+                'platform': 'mac',
+            },
+        },
         'mac-osxbeta-rel': {
             'chromium_config': 'chromium',
             'gclient_config': 'chromium',
