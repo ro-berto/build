@@ -187,7 +187,7 @@
       "--root=[CACHE]/builder/pdfium",
       "gen",
       "//out/debug_xfa_v8_component",
-      "--args=is_debug=true is_component_build=true pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" use_cxx11=false"
+      "--args=is_debug=true is_component_build=true pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "gn gen"

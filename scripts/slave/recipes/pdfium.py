@@ -142,12 +142,7 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
     # All other platforms already build with Clang, so no need to set it.
     assert not clang
 
-  if skia or skia_paths or v8:
-    # PDFium defaults to C++11 but newer Skia / V8 requires C++14.
-    # TODO(crbug.com/pdfium/1407): Remove when C++14 is the default. This is
-    # here just to facilitate the switch over without breaking the bots.
-    args.append('use_cxx11=false')
-  else:
+  if not (skia or skia_paths or v8):
     # PDFium defaults to C++11, but will soon default to C++14. To support
     # developers that may not be ready for C++14 through this transition,
     # continue to support C++11 when C++14 is not strictly required.
