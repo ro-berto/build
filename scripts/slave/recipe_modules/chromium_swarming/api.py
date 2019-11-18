@@ -1369,62 +1369,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_result, has_valid_results
 
-  def _merge_isolated_script_perftest_output_shards(self, task, step_result):
-    # Taken from third_party/catapult/telemetry/telemetry/internal/results/
-    # chart_json_output_formatter.py, the json entries are as follows:
-    # result_dict = {
-    #   'format_version': '0.1',
-    #   'next_version': '0.2',
-    #   'benchmark_name': benchmark_metadata.name,
-    #   'benchmark_description': benchmark_metadata.description,
-    #   'trace_rerun_options': benchmark_metadata.rerun_options,
-    #   'benchmark_metadata': benchmark_metadata.AsDict(),
-    #   'charts': charts,
-    # }
-    #
-    # Therefore, all entries should be the same and we should only need to merge
-    # the chart from each shard.
-    collected_results = []
-    for i in task.shard_indices:
-      path = self.m.path.join(str(i), 'perftest-output.json')
-      if path not in step_result.raw_io.output_dir:
-        # perf test results were not written for this shard, not an error,
-        # just continue to the next shard
-        continue
-
-      results_raw = step_result.raw_io.output_dir[path]
-      if not results_raw:
-        continue
-      perf_results_json = self.m.json.loads(results_raw)
-      collected_results.append(perf_results_json)
-
-    if collected_results:
-      # If the first result is a dict, we assume that we're dealing with
-      # chart JSON. By contrast, HistogramSets are serialized as lists.
-      if isinstance(collected_results[0], dict):
-        return self._merge_chartjson_results(collected_results), False
-      elif isinstance(collected_results[0], list):
-        return self._merge_histogram_results(collected_results), True
-
-    return {}, False
-
-  def _merge_chartjson_results(self, chartjson_dicts):
-    merged_results = chartjson_dicts[0]
-    for chartjson_dict in chartjson_dicts[1:]:
-      for key in chartjson_dict:
-        if key == 'charts':
-          for add_key in chartjson_dict[key]:
-            merged_results[key][add_key] = chartjson_dict[key][add_key]
-
-    return merged_results
-
-  def _merge_histogram_results(self, histogram_lists):
-    merged_results = []
-    for histogram_list in histogram_lists:
-      merged_results += histogram_list
-
-    return merged_results
-
   def wait_for_finished_task_set(self, task_sets, suffix=None, attempts=0):
     """Waits for a finished set of tasks.
 
@@ -1502,15 +1446,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         outdir_json.splitlines())
 
     self._check_for_missing_shard(step_result.json.output, step_result, task)
-
-    # Obtain perftest results if present
-    perftest_results, is_histogramset = \
-      self._merge_isolated_script_perftest_output_shards(
-          task, step_result)
-    step_result.isolated_script_perf_results = {
-      'is_histogramset': is_histogramset,
-      'data': perftest_results
-    }
 
     return step_result, has_valid_results
 
