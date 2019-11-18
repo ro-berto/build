@@ -75,7 +75,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    'cpu': 'x86',
+                    'cpu': 'x86-64-E5-2670',
                 }
             },
             'Win32 Release': {
