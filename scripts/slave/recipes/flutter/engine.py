@@ -148,7 +148,8 @@ def BuildAndTestFuchsia(api, build_script, git_rev):
 
   if api.platform.is_linux:
     api.step('Package Fuchsia Artifacts', fuchsia_package_cmd)
-    TestFuchsia(api)
+    # Disable fuchsia tests: https://github.com/flutter/flutter/issues/45132.
+    # TestFuchsia(api)
 
   RunGN(api, '--fuchsia', '--fuchsia-cpu', 'arm64', '--runtime-mode', 'debug',
         '--no-lto')
@@ -567,109 +568,100 @@ def BuildLinux(api):
   UploadWebSdk(api, archive_name='flutter-web-sdk-linux-x64.zip')
 
 
-def GetFuchsiaBuildId(api):
-  checkout = GetCheckoutPath(api)
-  manifest_path = checkout.join('fuchsia', 'sdk', 'linux', 'meta',
-                                'manifest.json')
-  manifest_data = api.file.read_json(
-      'Read manifest', manifest_path, test_data={'id': 123})
-  return manifest_data['id']
+# def GetFuchsiaBuildId(api):
+#   checkout = GetCheckoutPath(api)
+#   manifest_path = checkout.join('fuchsia', 'sdk', 'linux', 'meta',
+#                                 'manifest.json')
+#   manifest_data = api.file.read_json(
+#       'Read manifest', manifest_path, test_data={'id': 123})
+#   return manifest_data['id']
 
+# def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
+#                                image_name):
+#   api.gsutil.download(bucket_name,
+#                       'development/%s/images/%s' % (build_id, image_name),
+#                       target_dir)
 
-def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
-                               image_name):
-  api.gsutil.download(bucket_name,
-                      'development/%s/images/%s' % (build_id, image_name),
-                      target_dir)
+# def PackageFlutterRunnerTests(api, checkout, fuchsia_tools):
+#   package_cmd = [
+#       checkout.join('flutter', 'tools', 'fuchsia', 'gen_package.py'),
+#       '--pm-bin',
+#       fuchsia_tools.join('pm'),
+#       '--package-dir',
+#       checkout.join('out', 'fuchsia_debug_x64', 'flutter_runner_tests_far'),
+#       '--signing-key',
+#       checkout.join('flutter', 'tools', 'fuchsia', 'development.key'),
+#       '--far-name',
+#       'flutter_runner_tests',
+#   ]
+#   api.step('Generate far', package_cmd)
 
+# def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
+#   with MakeTempDir(api, 'isolated') as isolated_dir:
+#     with api.step.nest('Copy files'):
+#       api.file.copy('Copy test script', api.resource('fuchsia-tests.sh'),
+#                     isolated_dir)
+#       api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
+#                     isolated_dir)
+#       api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
+#       api.file.copy(
+#           'Copy flutter_runner far',
+#           checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
+#                         'aot', 'flutter_aot_runner-0.far'), isolated_dir)
+#       api.file.copy(
+#           'Copy flutter_runner_tests far',
+#           checkout.join('out', 'fuchsia_debug_x64',
+#                         'flutter_runner_tests-0.far'), isolated_dir)
 
-def PackageFlutterRunnerTests(api, checkout, fuchsia_tools):
-  package_cmd = [
-      checkout.join('flutter', 'tools', 'fuchsia', 'gen_package.py'),
-      '--pm-bin',
-      fuchsia_tools.join('pm'),
-      '--package-dir',
-      checkout.join('out', 'fuchsia_debug_x64', 'flutter_runner_tests_far'),
-      '--signing-key',
-      checkout.join('flutter', 'tools', 'fuchsia', 'development.key'),
-      '--far-name',
-      'flutter_runner_tests',
-  ]
-  api.step('Generate far', package_cmd)
+#     DownloadFuchsiaSystemImage(api, isolated_dir, 'fuchsia',
+#                                GetFuchsiaBuildId(api), image_name)
+#     isolated = api.isolated.isolated(isolated_dir)
+#     isolated.add_dir(isolated_dir)
+#     return isolated.archive('Archive Fuchsia Test Isolate')
 
+# def TestFuchsia(api):
+#   """
+#   Packages the flutter_runner build artifacts into a FAR, and then sends them
+#   and related artifacts to isolated. The isolated is used to create a swarming
+#   task that:
+#     - Downloads the isolated artifacts
+#     - Gets fuchsia_ctl from CIPD
+#     - Runs the script to pave, test, and reboot the Fuchsia device
+#   """
+# checkout = GetCheckoutPath(api)
+# fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
+# image_name = 'generic-x64.tgz'
 
-def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
-  """
-  Gets the system image for the current Fuchsia SDK from cloud storage, adds it
-  to an isolated along with the `pm` and `dev_finder` utilities, as well as the
-  flutter_runner_tests and the flutter_runner FAR, and a bash script (in
-  engine.resources/fuchsia-tests.sh) to drive the flutter_ctl.
-  """
-  with MakeTempDir(api, 'isolated') as isolated_dir:
-    with api.step.nest('Copy files'):
-      api.file.copy('Copy test script', api.resource('fuchsia-tests.sh'),
-                    isolated_dir)
-      api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
-                    isolated_dir)
-      api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
-      api.file.copy(
-          'Copy flutter_runner far',
-          checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
-                        'aot', 'flutter_aot_runner-0.far'), isolated_dir)
-      api.file.copy(
-          'Copy flutter_runner_tests far',
-          checkout.join('out', 'fuchsia_debug_x64',
-                        'flutter_runner_tests-0.far'), isolated_dir)
+# PackageFlutterRunnerTests(api, checkout, fuchsia_tools)
+# isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
+#     image_name)
 
-    DownloadFuchsiaSystemImage(api, isolated_dir, 'fuchsia',
-                               GetFuchsiaBuildId(api), image_name)
-    isolated = api.isolated.isolated(isolated_dir)
-    isolated.add_dir(isolated_dir)
-    return isolated.archive('Archive Fuchsia Test Isolate')
+# ensure_file = api.cipd.EnsureFile()
+# ensure_file.add_package('flutter/fuchsia_ctl/${platform}',
+#     api.properties.get('fuchsia_ctl_version'))
 
-def TestFuchsia(api):
-  """
-  Packages the flutter_runner build artifacts into a FAR, and then sends them
-  and related artifacts to isolated. The isolated is used to create a swarming
-  task that:
-    - Downloads the isolated artifacts
-    - Gets fuchsia_ctl from CIPD
-    - Runs the script to pave, test, and reboot the Fuchsia device
-  """
-  checkout = GetCheckoutPath(api)
-  fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
-  image_name = 'generic-x64.tgz'
+# request = (
+#     api.swarming.task_request().with_name('flutter_runner_fuchsia')
+#     .with_priority(100))
 
-  PackageFlutterRunnerTests(api, checkout, fuchsia_tools)
-  isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
-      image_name)
+# request = (
+#     request.with_slice(
+#         0, request[0].with_cipd_ensure_file(ensure_file).with_command(
+#             ['./fuchsia-tests.sh',
+#               image_name]).with_dimensions(pool='luci.flutter.tests')
+#         .with_isolated(isolated_hash).with_expiration_secs(
+#             3600).with_io_timeout_secs(3600).with_execution_timeout_secs(
+#                 3600).with_idempotent(True).with_containment_type('AUTO')))
 
-  ensure_file = api.cipd.EnsureFile()
-  ensure_file.add_package('flutter/fuchsia_ctl/${platform}',
-      api.properties.get('fuchsia_ctl_version'))
-
-  request = (
-      api.swarming.task_request().with_name('flutter_runner_fuchsia')
-      .with_priority(100))
-
-  request = (
-      request.with_slice(
-          0, request[0].with_cipd_ensure_file(ensure_file).with_command(
-              ['./fuchsia-tests.sh',
-                image_name]).with_dimensions(pool='luci.flutter.tests')
-          .with_isolated(isolated_hash).with_expiration_secs(
-              3600).with_io_timeout_secs(3600).with_execution_timeout_secs(
-                  3600).with_idempotent(True).with_containment_type('AUTO')))
-
-  # Trigger the task request.
-  metadata = api.swarming.trigger('Trigger Fuchsia Tests', requests=[request])
-  # Collect the result of the task by metadata.
-  fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
-  api.file.ensure_directory('swarming output', fuchsia_output)
-  results = api.swarming.collect(
-      'collect', metadata, output_dir=fuchsia_output, timeout='30m')
-  for result in results:
-    result.analyze()
+# # Trigger the task request.
+# metadata = api.swarming.trigger('Trigger Fuchsia Tests', requests=[request])
+# # Collect the result of the task by metadata.
+# fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
+# api.file.ensure_directory('swarming output', fuchsia_output)
+# results = api.swarming.collect(
+#     'collect', metadata, output_dir=fuchsia_output, timeout='30m')
+# for result in results:
+#   result.analyze()
 
 
 def UploadFuchsiaDebugSymbols(api):
