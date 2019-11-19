@@ -538,6 +538,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
   def upload_to_perf_dashboard(self, name, step_result):
+    token = self.m.service_account.default().get_access_token()
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
     if self._test_data.enabled and test_succeeded:
@@ -567,31 +568,21 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     for perf_results in results_to_upload:
       args = [
-          '--build-page-url',
-          self.build_url,
-          '--test-suite',
-          name,
-          '--bot',
-          self.c.PERF_ID,
-          '--output-json-file',
-          self.m.json.output(),
-          '--input-results-file',
-          self.m.json.input(perf_results),
-          '--dashboard-url',
-          DASHBOARD_UPLOAD_URL,
-          '--commit-position',
-          self.revision_number,
-          '--webrtc-git-hash',
-          self.revision,
-          '--perf-dashboard-machine-group',
-          perf_bot_group,
+          '--oauth-token-file', self.m.raw_io.input_text(token),
+          '--build-url', self.build_url,
+          '--name', name,
+          '--perf-id', self.c.PERF_ID,
+          '--output-json-file', self.m.json.output(),
+          '--results-file', self.m.json.input(perf_results),
+          '--results-url', DASHBOARD_UPLOAD_URL,
+          '--commit-position', self.revision_number,
+          '--got-webrtc-revision', self.revision,
+          '--perf-dashboard-machine-group', perf_bot_group,
       ]
 
-      upload_script = self.m.path['checkout'].join(
-          'tools_webrtc', 'perf', 'webrtc_dashboard_upload.py')
-      self.m.python(
+      self.m.build.python(
           '%s Dashboard Upload' % name,
-          upload_script,
+          self.resource('upload_perf_dashboard_results.py'),
           args,
           step_test_data=lambda: self.m.json.test_api.output({}),
           infra_step=True)

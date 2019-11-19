@@ -34,6 +34,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/scheduler',
+  'recipe_engine/service_account',
   'recipe_engine/step',
   'test_results',
   'test_utils',
