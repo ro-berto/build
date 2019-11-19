@@ -902,7 +902,9 @@ class ScriptTest(Test):  # pylint: disable=W0232
       result = api.step.active_result
       self._suffix_step_name_map[suffix] = result.step['name']
 
-      failures = result.json.output.get('failures')
+      failures = None
+      if result.json.output:
+        failures = result.json.output.get('failures')
       if failures is None:
         self.update_test_run(
             api, suffix, api.test_utils.canonical.result_format())
