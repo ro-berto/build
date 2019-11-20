@@ -75,7 +75,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    'cpu': 'x86-64-E5-2670',
+                    'cpu': 'x86-32',
                 }
             },
             'Win32 Release': {
@@ -90,7 +90,7 @@ BUILDERS = freeze({
                 },
                 'swarming_dimensions': {
                     'os': 'Windows-7-SP1',
-                    'cpu': 'x86',
+                    'cpu': 'x86-32',
                 },
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
