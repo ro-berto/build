@@ -59,17 +59,6 @@ def RunSteps(api):
         args=['--build-dir', build_out_dir,
               '--target', build_target, '--non-stop'])
 
-    # 3. Run test
-    api.python(
-        name='goma_ctl tests',
-        script=api.path['checkout'].join('test', 'goma_ctl_test.py'),
-        args=[
-            # We don't have time to setup full test in public repo.
-            '--small',
-            '--goma-dir',
-            build_out_dir,
-        ])
-
   # 4. Create archive.
   api.python(
       name='archive',

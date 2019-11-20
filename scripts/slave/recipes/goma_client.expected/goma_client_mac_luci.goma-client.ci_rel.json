@@ -166,17 +166,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/client/test/goma_ctl_test.py",
-      "--small",
-      "--goma-dir",
-      "[START_DIR]/client/out"
-    ],
-    "name": "goma_ctl tests"
-  },
-  {
-    "cmd": [
       "sudo",
       "xcode-select",
       "--reset"
