@@ -58,7 +58,7 @@ SPEC = {
       },
     },
     'linux-gcc-rel': {
-      'chromium_config': 'chromium',
+      'chromium_config': 'chromium_no_goma',
       'chromium_apply_config': [
         'mb',
       ],
