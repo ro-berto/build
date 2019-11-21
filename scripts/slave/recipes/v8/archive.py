@@ -55,6 +55,8 @@ def make_archive(api, bot_config, ref, version, archive_type, step_suffix='',
                  archive_suffix=''):
   with api.step.nest('sync' + step_suffix):
     api.v8.apply_bot_config(bot_config)
+    if archive_type == 'ref':
+      api.chromium.c.gn_args.append('is_official_build=true')
     api.chromium.apply_config('clobber')
     api.chromium.apply_config('default_target_v8_archive')
     if api.chromium.c.build_config_fs == 'Debug':
