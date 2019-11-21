@@ -97,6 +97,7 @@ BUILDERS = freeze({
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
                     'os': 'Windows',
+                    'cpu': 'x86',
                     'gpu': None,
                 }
             },
@@ -159,6 +160,7 @@ BUILDERS = freeze({
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal',
                     'os': 'Windows',
+                    'cpu': 'x86',
                     'gpu': None,
                 }
             },
@@ -1038,6 +1040,7 @@ BUILDERS = freeze({
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
                     'os': 'Windows',
+                    'cpu': 'x86',
                     'gpu': None,
                 }
             },
@@ -1149,6 +1152,7 @@ BUILDERS = freeze({
                 'baremetal_swarming_dimensions': {
                     'pool': 'WebRTC-baremetal-try',
                     'os': 'Windows',
+                    'cpu': 'x86',
                     'gpu': None,
                 }
             },
