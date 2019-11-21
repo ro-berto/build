@@ -1,19 +1,6 @@
 [
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CACHE]/builder"
-    ],
-    "infra_step": true,
-    "name": "Clobber cache"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",

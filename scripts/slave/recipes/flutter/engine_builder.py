@@ -81,7 +81,6 @@ def IsolateOutputs(api, output_files, output_dirs):
 
 def RunSteps(api, properties):
   cache_root = api.path['cache'].join('builder')
-  api.file.rmtree('Clobber cache', cache_root)
   with api.context(cwd=cache_root):
     GetCheckout(api, properties.git_url, properties.git_ref)
     api.goma.ensure_goma()
