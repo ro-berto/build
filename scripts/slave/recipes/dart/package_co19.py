@@ -17,10 +17,13 @@ DEPS = [
 
 def RunSteps(api):
   revision = api.buildbucket.gitiles_commit.id or 'HEAD'
+  variant = api.properties.get('variant')
   got_revision = api.git.checkout(url='https://dart.googlesource.com/co19',
       ref=revision, set_got_revision=True)
   co19_path = api.path['checkout']
   package_name = 'dart/third_party/co19'
+  if variant:
+    package_name += '/' + variant
   pkg = api.cipd.PackageDefinition(package_name, co19_path, 'copy')
   pkg.add_dir(co19_path)
   api.cipd.create_from_pkg(pkg, tags={'git_revision': got_revision})
@@ -43,4 +46,14 @@ def GenTests(api):
           revision='abcdefgh',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
+  )
+
+  yield api.test(
+      'basic-with-variant',
+      api.buildbucket.ci_build(
+          builder='co19',
+          revision='abcdefgh',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.properties(variant='legacy'),
   )
