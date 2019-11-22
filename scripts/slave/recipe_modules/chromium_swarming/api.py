@@ -796,31 +796,26 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return step_results
 
-  def _generate_trigger_task_shard_args(self, task, **kwargs):
-    """Generates the arguments for triggered shards.
+  def slice_with_implied_cipd_packages(self, task_slice):
+    """Returns a copy of |task_slice| with the implied CIPD packages.
 
-    This generates all arguments other than sharding parameters.
+    This will also add the packages' required PATH environment prefixes.
+    See IMPLIED_CIPD_BINARIES for a complete list of packages. CIPD packages
+    previously specified by the task_slice will remain.
 
-    Returns: (script, pre_trigger_args, post_trigger_args)
-      script: The script to invoke
-      pre_trigger_args: All arguments up to and including 'trigger'
-      post_triggers_args: All arguments following 'trigger'
+    Args:
+      task_slice: a swarming.TaskSlice object.
+    Returns:
+      A copy of task_slice with the implied CIPD packages added.
     """
-    task_request = task.request
-    task_slice = task.request[0]
-
     # Mix in standard infra packages 'vpython' and 'logdog' so that the task can
     # always access them on $PATH.
+    cipd_ensure_file = task_slice.cipd_ensure_file
     task_cipd_packages = task_slice.cipd_ensure_file.packages
-    cipd_packages = []
     if task_cipd_packages:
-      for path in sorted(task_cipd_packages):
-        for pkg in task_cipd_packages[path]:
-          cipd_packages.append(((path or '.'), pkg.name, pkg.version))
-
-    for pkg in cipd_packages:
-      assert not pkg[0].startswith(IMPLIED_BINARY_PATH), \
-        'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,)
+      for path in task_cipd_packages:
+        assert not path.startswith(IMPLIED_BINARY_PATH), (
+            'cipd_packages may not be installed to %r' % (IMPLIED_BINARY_PATH,))
 
     to_add = dict(IMPLIED_CIPD_BINARIES)
 
@@ -840,7 +835,24 @@ class SwarmingApi(recipe_api.RecipeApi):
       else:
         path_env_prefix.add(path)
       vers = 'TEST_VERSION' if self._test_data.enabled else details['version']
-      cipd_packages.append((path, pkg, vers))
+      cipd_ensure_file.add_package(pkg, vers, subdir=path)
+
+    return (
+        task_slice.with_cipd_ensure_file(cipd_ensure_file).with_env_prefixes(
+            PATH=sorted(path_env_prefix, key=lambda x: (len(x), x))))
+
+  def _generate_trigger_task_shard_args(self, task, **kwargs):
+    """Generates the arguments for triggered shards.
+
+    This generates all arguments other than sharding parameters.
+
+    Returns: (script, pre_trigger_args, post_trigger_args)
+      script: The script to invoke
+      pre_trigger_args: All arguments up to and including 'trigger'
+      post_triggers_args: All arguments following 'trigger'
+    """
+    task_request = task.request
+    task_slice = self.slice_with_implied_cipd_packages(task_request[0])
 
     # update implied caches
     named_caches = dict(task.named_caches or {})
@@ -851,8 +863,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # update $PATH
     env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
-    env_prefixes.setdefault('PATH', [])[:0] = sorted(  # prepend stuff
-      path_env_prefix, key=lambda x: (len(x), x))
     for k, path in IMPLIED_ENV_PREFIXES.iteritems():
       env_prefixes.setdefault(k, [path])
 
@@ -943,9 +953,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task_request.user:
       args.extend(['--user', task_request.user])
 
-    if cipd_packages:
-      for path, pkg, version in cipd_packages:
-        args.extend(['--cipd-package', '%s:%s:%s' % (path, pkg, version)])
+    for path, package_list in sorted(
+        task_slice.cipd_ensure_file.packages.iteritems()):
+      for package_name, package_version in package_list:
+        args.extend([
+            '--cipd-package',
+            '%s:%s:%s' % (path or '.', package_name, package_version)
+        ])
 
     if env_prefixes:
       for key, paths in sorted(env_prefixes.items()):
