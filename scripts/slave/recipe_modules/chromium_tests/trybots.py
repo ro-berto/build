@@ -544,6 +544,11 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.fyi',
                     'buildername': 'linux-annotator-rel',
                 }),
+            'linux-bfcache-debug':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'linux-bfcache-debug',
+                }),
             'linux-blink-heap-concurrent-marking-tsan-rel':
                 simple_bot({
                     'mastername':
