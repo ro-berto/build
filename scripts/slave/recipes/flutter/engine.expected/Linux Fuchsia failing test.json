@@ -14335,11 +14335,10 @@
   },
   {
     "cmd": [
-      "buildbucket",
-      "cancel",
+      "bb",
+      "batch",
       "-host",
-      "cr-buildbucket.appspot.com",
-      "8922054662172514000"
+      "cr-buildbucket.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14358,19 +14357,38 @@
     },
     "infra_step": true,
     "name": "buildbucket.cancel",
+    "stdin": "{\"requests\": [{\"cancelBuild\": {\"id\": \"8922054662172514000\", \"summaryMarkdown\": \" \"}}]}",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8922054662172514000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"status\": \"CANCELED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"8922054662172514000\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"summaryMarkdown\": \" \"@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@"
     ]
   },
   {
     "cmd": [
-      "buildbucket",
-      "cancel",
+      "bb",
+      "batch",
       "-host",
-      "cr-buildbucket.appspot.com",
-      "8922054662172514001"
+      "cr-buildbucket.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14389,19 +14407,38 @@
     },
     "infra_step": true,
     "name": "buildbucket.cancel (2)",
+    "stdin": "{\"requests\": [{\"cancelBuild\": {\"id\": \"8922054662172514001\", \"summaryMarkdown\": \" \"}}]}",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8922054662172514001\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"status\": \"CANCELED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"8922054662172514001\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"summaryMarkdown\": \" \"@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@"
     ]
   },
   {
     "cmd": [
-      "buildbucket",
-      "cancel",
+      "bb",
+      "batch",
       "-host",
-      "cr-buildbucket.appspot.com",
-      "8922054662172514002"
+      "cr-buildbucket.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14420,19 +14457,38 @@
     },
     "infra_step": true,
     "name": "buildbucket.cancel (3)",
+    "stdin": "{\"requests\": [{\"cancelBuild\": {\"id\": \"8922054662172514002\", \"summaryMarkdown\": \" \"}}]}",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8922054662172514002\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"status\": \"CANCELED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"8922054662172514002\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"summaryMarkdown\": \" \"@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@"
     ]
   },
   {
     "cmd": [
-      "buildbucket",
-      "cancel",
+      "bb",
+      "batch",
       "-host",
-      "cr-buildbucket.appspot.com",
-      "8922054662172514003"
+      "cr-buildbucket.appspot.com"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -14451,10 +14507,30 @@
     },
     "infra_step": true,
     "name": "buildbucket.cancel (4)",
+    "stdin": "{\"requests\": [{\"cancelBuild\": {\"id\": \"8922054662172514003\", \"summaryMarkdown\": \" \"}}]}",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"8922054662172514003\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"status\": \"CANCELED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"cancelBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"id\": \"8922054662172514003\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"summaryMarkdown\": \" \"@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@"
     ]
   },
   {
