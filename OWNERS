@@ -1,19 +1,17 @@
+# ATTENTION: If you're looking for chromium/src's //build/OWNERS file, you've
+# come to the wrong place. The correct location for that is:
+# https://chromium.googlesource.com/chromium/src/+/master/build/OWNERS
+
 set noparent
 agable@chromium.org
 agable@google.com
 bpastene@chromium.org
 bpastene@google.com
-djd@chromium.org
-djd@google.com
 dpranke@chromium.org
 efoo@chromium.org
 estaab@chromium.org
 estaab@google.com
 gbeaty@chromium.org
-glider@chromium.org
-glider@google.com
-hinoka@chromium.org
-hinoka@google.com
 iannucci@chromium.org
 iannucci@google.com
 jam@chromium.org
@@ -21,8 +19,6 @@ jbudorick@chromium.org
 jchinlee@chromium.org
 jchinlee@google.com
 jochen@chromium.org
-johnw@chromium.org
-johnw@google.com
 jsca@chromium.org
 jsca@google.com
 mark@chromium.org
@@ -40,7 +36,6 @@ smut@google.com
 tandrii@chromium.org
 tandrii@google.com
 thakis@chromium.org
-thomasvl@chromium.org
 vadimsh@chromium.org
 vadimsh@google.com
 
