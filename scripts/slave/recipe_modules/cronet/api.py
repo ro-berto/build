@@ -15,26 +15,6 @@ class CronetApi(recipe_api.RecipeApi):
     super(CronetApi, self).__init__(**kwargs)
     self._repo_path = None
 
-  INSTRUMENTATION_TESTS = freeze([
-    {
-      'target': 'cronet_sample_test_apk',
-    },
-    {
-      'target': 'cronet_smoketests_missing_native_library_instrumentation_apk',
-    },
-    {
-      'target': 'cronet_smoketests_platform_only_instrumentation_apk',
-    },
-    {
-      'target': 'cronet_test_instrumentation_apk',
-    },
-  ])
-
-  UNIT_TESTS = freeze([
-    'cronet_unittests_android',
-    'net_unittests',
-  ])
-
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
   def init_and_sync(self, recipe_config, kwargs,
@@ -128,27 +108,6 @@ class CronetApi(recipe_api.RecipeApi):
               chartjson_file=True,
               perf_id=perf_id)
 
-
-  def run_tests(
-      self, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):
-
-    if unit_tests is None:
-      unit_tests = self.UNIT_TESTS
-
-    droid = self.m.chromium_android
-    droid.common_tests_setup_steps()
-    with self.m.step.defer_results():
-      for suite in unit_tests:
-        droid.run_test_suite(suite, shard_timeout=180)
-      for suite in instrumentation_tests:
-        droid.run_instrumentation_suite(
-            name=suite['target'],
-            verbose=True,
-            wrapper_script_suite_name=suite['target'],
-            num_retries=0,
-            result_details=True,
-            **suite.get('kwargs', {}))
-      droid.common_tests_final_steps()
 
   def run_perf_tests(self, perf_id):
     # Don't track performance on experimental bots.

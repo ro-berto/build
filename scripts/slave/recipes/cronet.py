@@ -17,42 +17,24 @@ DEPS = [
 BUILDERS = freeze({
   'local_test': {
     'recipe_config': 'main_builder_mb',
-    'run_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
       'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
-      'report_sizes': True,
       'PERF_ID': 'android_cronet_local_test_builder',
     },
     'use_goma': False,
   },
-  'Android Cronet Marshmallow 64bit Perf': {
-    'recipe_config': 'arm64_builder_mb',
-    'run_tests': False,
-    'run_perf_tests': True,
-    'kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'REPO_NAME': 'src',
-    },
-    'cronet_kwargs': {
-      'report_sizes': False,
-      'PERF_ID': 'android_cronet_m64_perf',
-    },
-    'chromium_apply_config': ['cronet_official'],
-  },
   'android-cronet-marshmallow-arm64-perf-rel': {
     'recipe_config': 'arm64_builder_mb',
-    'run_tests': False,
     'run_perf_tests': True,
     'kwargs': {
       'BUILD_CONFIG': 'Release',
       'REPO_NAME': 'src',
     },
     'cronet_kwargs': {
-      'report_sizes': False,
       'PERF_ID': 'android_cronet_m64_perf',
     },
     'chromium_apply_config': ['cronet_official'],
@@ -75,10 +57,6 @@ def RunSteps(api):
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
-  if cronet_kwargs.get('report_sizes') and cronet_kwargs.get('PERF_ID'):
-    api.cronet.sizes(cronet_kwargs['PERF_ID'])
-  if builder_config.get('run_tests'):
-    api.cronet.run_tests()
   if builder_config.get('run_perf_tests'):
     return api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'])
 
