@@ -446,7 +446,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     """
     # TODO(martiniss): This is a terrible hack and needs to be removed. See
     # https://crbug.com/984451 for more information
-    kwargs['no_prune_venv'] = True
+    if not self.c.compile_py.prune_venv:
+      kwargs['no_prune_venv'] = True
 
     build_exit_status = None
 

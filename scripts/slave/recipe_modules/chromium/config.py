@@ -57,6 +57,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           # cr-buildbucket.cfg.
           goma_high_parallel=Single(bool, empty_val=False, required=False),
           use_autoninja=Single(bool, empty_val=False, required=False),
+          prune_venv=Single(bool, empty_val=False, required=False),
       ),
       gyp_env=ConfigGroup(
           DOWNLOAD_VR_TEST_APKS=Single(int, required=False),
