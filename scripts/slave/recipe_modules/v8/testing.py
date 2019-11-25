@@ -386,6 +386,14 @@ class V8Test(BaseTest):
       )
     return self.post_run(test)
 
+  @staticmethod
+  def has_only_stress_opt_failures(output):
+    result_variants = set(
+        '--stress-opt' in result['command']
+        for result in output.get('results', [])
+    )
+    return result_variants == set([True])
+
   def post_run(self, test, coverage_context=NULL_COVERAGE):
     # The active step was either a local test run or the swarming collect step.
     step_result = self.api.step.active_result
@@ -427,6 +435,9 @@ class V8Test(BaseTest):
       self.api.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
       self._add_flake_links(flakes, step_result.presentation)
+
+    if self.has_only_stress_opt_failures(json_output[0]):
+      self.api.step('Found isolated stress failures', cmd=None)
 
     coverage_context.post_run()
 

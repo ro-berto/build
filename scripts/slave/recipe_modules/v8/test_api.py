@@ -289,7 +289,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'tags': ['UNRELIABLE_RESULTS'],
     }])
 
-  def failures_example(self, variant='default'):
+  def failures_example(self, variant1='default', variant2='default'):
+    flags = {'default': '', 'stress': ' --stress-opt'}
     return self.m.json.output([{
       'arch': 'theArch',
       'mode': 'theMode',
@@ -299,13 +300,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'result': 'FAIL',
           'expected': ['PASS', 'SLOW'],
           'duration': 3,
-          'variant': variant,
+          'variant': variant1,
           'random_seed': 123,
           'run': 1,
           'stdout': 'Some output.',
           'stderr': 'Some errput.',
           'name': 'suite-name/dir/slow',
-          'command': 'd8 test.js',
+          'command': 'd8%s test.js' % flags[variant1],
           'target_name': 'd8',
           'exit_code': 1,
         },
@@ -314,13 +315,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           'result': 'FAIL',
           'expected': ['PASS', 'SLOW'],
           'duration': 1.5,
-          'variant': variant,
+          'variant': variant2,
           'random_seed': 123,
           'run': 1,
           'stdout': 'Some output.',
           'stderr': 'Some errput.',
           'name': 'suite-name/dir/fast',
-          'command': 'd8 test.js',
+          'command': 'd8%s test.js' % flags[variant2],
           'target_name': 'd8',
           'exit_code': 1,
         },
@@ -663,9 +664,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     test += self.post_process(keep_fields)
     return test
 
-  def fail(self, step_name, variant='default'):
+  def fail(self, step_name, variant1='default', variant2='default'):
     return self.override_step_data(
-        step_name, self.failures_example(variant=variant))
+        step_name, self.failures_example(variant1=variant1, variant2=variant2))
 
   @staticmethod
   def _check_step(check, steps, step):

@@ -649,6 +649,30 @@ def GenTests(api):
     api.time.step(120)
   )
 
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'stress_only_failures',
+    ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check', variant1='stress', variant2='stress') +
+    api.post_process(MustRun, 'Found isolated stress failures') +
+    api.post_process(DropExpectation)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'mixed_failures',
+    ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check', variant1='stress', variant2='default') +
+    api.post_process(DoesNotRun, 'Found isolated stress failures') +
+    api.post_process(DropExpectation)
+  )
+
   # Explicitly highlight slow tests not marked as slow.
   yield (
     api.v8.test(
