@@ -841,6 +841,21 @@ class SwarmingApi(recipe_api.RecipeApi):
         task_slice.with_cipd_ensure_file(cipd_ensure_file).with_env_prefixes(
             PATH=sorted(path_env_prefix, key=lambda x: (len(x), x))))
 
+  def slice_with_implied_named_caches(self, task_slice):
+    """Returns a copy of |task_slice| with the implied named caches.
+
+    See IMPLIED_CACHES for a complete list of named caches.
+
+    Args:
+      task_slice: a swarming.TaskSlice object.
+    Returns:
+      A copy of task_slice with the implied named caches added.
+    """
+    return task_slice.with_named_caches({
+        '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE, v))
+        for k, v in IMPLIED_CACHES.iteritems()
+    })
+
   def _generate_trigger_task_shard_args(self, task, **kwargs):
     """Generates the arguments for triggered shards.
 
@@ -852,14 +867,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       post_triggers_args: All arguments following 'trigger'
     """
     task_request = task.request
-    task_slice = self.slice_with_implied_cipd_packages(task_request[0])
-
-    # update implied caches
-    named_caches = dict(task.named_caches or {})
-    named_caches.update({
-      '_'.join((IMPLIED_CACHE_NAME, k)): '/'.join((IMPLIED_CACHE_BASE,v))
-      for k, v in IMPLIED_CACHES.iteritems()
-    })
+    task_slice = task_request[0].with_named_caches(task.named_caches)
+    task_slice = self.slice_with_implied_cipd_packages(task_slice)
+    task_slice = self.slice_with_implied_named_caches(task_slice)
 
     # update $PATH
     env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
@@ -903,7 +913,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if 'net_unittests' in task.task_name and not self.m.platform.is_win:
       args.extend(['--env', 'VPYTHON_LOG_TRACE', 'crbug.com/869227'])
 
-    for name, relpath in sorted(named_caches.iteritems()):
+    for name, relpath in sorted(task_slice.named_caches.iteritems()):
       args.extend(['--named-cache', name, relpath])
 
     if task_request.service_account:
