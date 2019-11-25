@@ -28,16 +28,23 @@ DEPS = [
 ]
 
 GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
-BASE_URL = 'https://chromium.googlesource.com'
-V8_REPO = BASE_URL + '/v8/v8'
-CR_REPO = BASE_URL + '/chromium/src'
-LOG_TEMPLATE = 'Rolling v8/%s: %s/+log/%s..%s'
-CIPD_LOG_TEMPLATE = 'Rolling v8/%s: %s..%s'
+BASE_URL = 'https://chromium.googlesource.com/'
+CR_PROJECT_NAME = 'chromium/src'
 MAX_COMMIT_LOG_ENTRIES = 8
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 
+TARGET_CONFIG_V8 = {
+  'project_name': 'v8/v8',
+  'account': 'v8-ci-autoroll-builder@'
+             'chops-service-accounts.iam.gserviceaccount.com',
+  'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
+  'cipd_log_template': 'Rolling v8/%s: %s..%s',
+  'gclient_config': 'v8',
+}
+
 BOT_CONFIGS = {
   'Auto-roll - test262': {
+    'target_config': TARGET_CONFIG_V8,
     'subject': 'Update test262.',
     'whitelist': [
       # Only roll these dependencies (list without solution name prefix).
@@ -50,6 +57,7 @@ BOT_CONFIGS = {
     'show_commit_log': True,
   },
   'Auto-roll - v8 deps': {
+    'target_config': TARGET_CONFIG_V8,
     'subject': 'Update V8 DEPS.',
     'blacklist': [
       # https://crrev.com/c/1547863
@@ -71,6 +79,7 @@ BOT_CONFIGS = {
     'show_commit_log': False,
   },
   'Auto-roll - wasm-spec': {
+    'target_config': TARGET_CONFIG_V8,
     'subject': 'Update wasm-spec.',
     'whitelist': [
       # Only roll these dependencies (list without solution name prefix).
@@ -84,14 +93,14 @@ BOT_CONFIGS = {
   },
 }
 
-def GetDEPS(api, name, repo):
+def GetDEPS(api, name, project_name):
   # Make a fake spec. Gclient is not nice to us when having two solutions
   # side by side. The latter checkout kills the former's gclient file.
   spec = ('solutions=[{'
       '\'managed\':False,'
       '\'name\':\'%s\','
       '\'url\':\'%s\','
-      '\'deps_file\':\'DEPS\'}]' % (name, repo))
+      '\'deps_file\':\'DEPS\'}]' % (name, BASE_URL + project_name))
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
@@ -167,16 +176,16 @@ def commit_messages_log_entries(api, repo, from_commit, to_commit):
 def RunSteps(api):
   # Configure this particular instance of the auto-roller.
   bot_config = BOT_CONFIGS[api.buildbucket.builder_name]
+  target_config = bot_config['target_config']
 
   # Bail out on existing roll. Needs to be manually closed.
   commits = api.gerrit.get_changes(
       GERRIT_BASE_URL,
       query_params=[
-          ('project', 'v8/v8'),
+          ('project', target_config['project_name']),
           # TODO(sergiyb): Use api.service_account.default().get_email() when
           # https://crbug.com/846923 is resolved.
-          ('owner', 'v8-ci-autoroll-builder@'
-                    'chops-service-accounts.iam.gserviceaccount.com'),
+          ('owner', target_config['account']),
           ('status', 'open'),
       ],
       limit=20,
@@ -188,14 +197,16 @@ def RunSteps(api):
       api.gerrit.abandon_change(
           GERRIT_BASE_URL, commit['_number'], 'stale roll')
 
-  api.gclient.set_config('v8')
+  api.gclient.set_config(target_config['gclient_config'])
   api.gclient.apply_config('chromium')
 
-  # Chromium and V8 side-by-side makes the got_revision mapping ambiguous.
+  # Chromium and another project side-by-side makes the got_revision mapping
+  # ambiguous.
   api.gclient.c.got_revision_mapping.pop('src', None)
-  api.gclient.c.got_revision_reverse_mapping['got_revision'] = 'v8'
+  api.gclient.c.got_revision_reverse_mapping['got_revision'] = (
+      target_config['gclient_config'])
 
-  # Allow rolling all v8 os deps.
+  # Allow rolling all os deps.
   api.gclient.c.target_os.add('android')
   api.gclient.c.target_os.add('win')
 
@@ -222,11 +233,11 @@ def RunSteps(api):
     api.git('clean', '-ffd')
     api.git('new-branch', 'roll')
 
-  # Get chromium's and v8's deps information.
+  # Get chromium's and the target repo's deps information.
   cr_deps = GetDEPS(
-      api, 'src', CR_REPO)
-  v8_deps = GetDEPS(
-      api, 'v8', V8_REPO)
+      api, 'src', CR_PROJECT_NAME)
+  target_deps = GetDEPS(
+      api, target_config['gclient_config'], target_config['project_name'])
 
   commit_message = []
 
@@ -236,7 +247,7 @@ def RunSteps(api):
 
   # Iterate over all v8 deps.
   failed_deps = []
-  for name in sorted(v8_deps.keys()):
+  for name in sorted(target_deps.keys()):
     if blacklist and name in blacklist:
       continue
     if whitelist and name not in whitelist:
@@ -246,19 +257,20 @@ def RunSteps(api):
           'Found %s value %s without pinned revision.' % (solution_name, name))
       return value.split('@')
 
-    v8_loc, v8_ver = SplitValue('v8', v8_deps[name])
+    target_loc, target_ver = SplitValue('v8', target_deps[name])
     cr_value = cr_deps.get(name)
-    is_cipd_dep = v8_loc.startswith(CIPD_DEP_URL_PREFIX)
+    is_cipd_dep = target_loc.startswith(CIPD_DEP_URL_PREFIX)
     if cr_value:
       # Use the given revision from chromium's DEPS file.
       cr_repo, new_ver = SplitValue('src', cr_value)
-      if v8_loc != cr_repo:
+      if target_loc != cr_repo:
         # The gclient tool does not have commands that allow overriding the
         # repo, hence we'll need to make changes like this manually. However,
         # this should not block updating other DEPS and creating roll CL, hence
         # just create a failing step and continue.
         step_result = api.step(
-            'dep %s has changed repo from %s to %s' % (name, v8_loc, cr_repo),
+            'dep %s has changed repo from %s to %s' % (
+                name, target_loc, cr_repo),
             cmd=None)
         step_result.presentation.status = api.step.FAILURE
         failed_deps.append(name)
@@ -267,11 +279,11 @@ def RunSteps(api):
       if is_cipd_dep:
         # Use the 'latest' ref for CIPD package.
         new_ver = api.cipd.describe(
-            v8_loc[len(CIPD_DEP_URL_PREFIX):], 'latest').pin.instance_id
+            target_loc[len(CIPD_DEP_URL_PREFIX):], 'latest').pin.instance_id
       else:
         # Use the HEAD of the deps repo.
         step_result = api.git(
-          'ls-remote', v8_loc, 'HEAD',
+          'ls-remote', target_loc, 'HEAD',
           name='look up %s' % name.replace('/', '_'),
           stdout=api.raw_io.output_text(),
         )
@@ -279,7 +291,7 @@ def RunSteps(api):
       api.step.active_result.presentation.step_text = new_ver
 
     # Check if an update is necessary.
-    if v8_ver != new_ver:
+    if target_ver != new_ver:
       with api.context(cwd=api.path['checkout']):
         step_result = api.gclient(
             'setdep %s' % name.replace('/', '_'),
@@ -294,14 +306,17 @@ def RunSteps(api):
           # contain ${platform}, which can usually be resolved to multiple
           # distinct packages.
           path, _ = name.split(':')
-          commit_message.append(CIPD_LOG_TEMPLATE % (path, v8_ver, new_ver))
+          commit_message.append(
+              target_config['cipd_log_template'] % (path, target_ver, new_ver))
         else:
-          repo = v8_loc[:-len('.git')] if v8_loc.endswith('.git') else v8_loc
-          commit_message.append(LOG_TEMPLATE % (
-              name, repo, v8_ver[:7], new_ver[:7]))
+          repo = target_loc
+          if repo.endswith('.git'):
+            repo = repo[:-len('.git')]
+          commit_message.append(target_config['log_template'] % (
+              name, repo, target_ver[:7], new_ver[:7]))
           if bot_config['show_commit_log']:
             commit_message.extend(commit_messages_log_entries(
-                api, repo, v8_ver, new_ver))
+                api, repo, target_ver, new_ver))
       else:
         step_result.presentation.status = api.step.WARNING
 
