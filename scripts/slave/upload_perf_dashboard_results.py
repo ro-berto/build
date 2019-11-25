@@ -52,16 +52,14 @@ def _GetDashboardJson(options):
   if not 'charts' in results:
     # These are legacy results.
     dashboard_json = results_dashboard.MakeListOfPoints(
-        results,
-        options.perf_id,
-        stripped_test_name, {},
-        _GetMachineGroup(options),
-        revisions_dict=revisions
-    )
+      results, options.perf_id, stripped_test_name, options.buildername,
+      options.buildnumber, {}, _GetMachineGroup(options),
+      revisions_dict=revisions)
   else:
     dashboard_json = results_dashboard.MakeDashboardJsonV1(
       results,
       revisions, stripped_test_name, options.perf_id,
+      options.buildername, options.buildnumber,
       {}, reference_build,
       perf_dashboard_machine_group=_GetMachineGroup(options))
   return dashboard_json

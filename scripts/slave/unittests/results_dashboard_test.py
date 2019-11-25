@@ -64,6 +64,8 @@ class ResultsDashboardFormatTest(unittest.TestCase):
           },
           'foo_test',
           'my-bot',
+          'Builder',
+          '10',
           {'a_annotation': 'xyz', 'r_my_rev': '789abc01'},
           True, 'ChromiumPerf')
       self.assertEqual(
@@ -76,6 +78,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
               'point_id': 307226,
               'supplemental': {
                   'annotation': 'xyz',
+                  'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                  '/my.master/builders/Builder/builds/10/steps/'
+                                  'foo_test/logs/stdio)')
               },
               'versions': {
                   'v8_rev': '73a34f',
@@ -94,16 +99,16 @@ class ResultsDashboardFormatTest(unittest.TestCase):
       f.flush()
 
       def _mock_call(args):
-        self.assertEqual(
-            args, [
-                sys.executable,
-                '/path/to/chromium/src/third_party/catapult/tracing/bin/'
-                'add_reserved_diagnostics', '--benchmarks', 'foo.test',
-                '--bots', 'bot', '--builds', '1', '--masters', 'ChromiumPerf',
-                '--is_reference_build', '', f.name
-            ]
-        )
-
+        self.assertEqual(args, [
+          sys.executable,
+         '/path/to/chromium/src/third_party/catapult/tracing/bin/'
+         'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
+         'bot', '--builds', '1', '--masters', 'ChromiumPerf',
+         '--is_reference_build', '', '--log_urls_k', 'Buildbot stdio',
+         '--log_urls_v',
+         'http://build.chromium.org/p/my.master/'
+         'builders/builder/builds/1/steps/foo.test/logs/stdio',
+         f.name])
       call.side_effect = _mock_call
 
       results_dashboard.MakeHistogramSetWithDiagnostics(
@@ -113,12 +118,14 @@ class ResultsDashboardFormatTest(unittest.TestCase):
   def test_MakeListOfPoints_MinimalCase(self):
     """A very simple test of a call to MakeListOfPoints."""
 
-    actual_points = results_dashboard.MakeListOfPoints({
-        'bar': {
-            'traces': {'baz': ["100.0", "5.0"]},
-            'rev': '307226',
-        }
-    }, 'my-bot', 'foo_test', {}, 'MyMaster')
+    actual_points = results_dashboard.MakeListOfPoints(
+        {
+            'bar': {
+                'traces': {'baz': ["100.0", "5.0"]},
+                'rev': '307226',
+            }
+        },
+        'my-bot', 'foo_test', 'Builder', 10, {}, 'MyMaster')
     expected_points = [
         {
             'master': 'MyMaster',
@@ -129,6 +136,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'supplemental_columns': {
                 'r_commit_pos': 307226,
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         }
     ]
@@ -138,12 +148,14 @@ class ResultsDashboardFormatTest(unittest.TestCase):
     """A very simple test of a call to MakeListOfPoints."""
 
     actual_points = results_dashboard.MakeListOfPoints(
-        {'bar': {'traces': {'baz': ["100.0", "5.0"]},}},
-        'my-bot',
-        'foo_test', {},
-        revisions_dict={'rev': '377777'},
-        perf_dashboard_machine_group='MyMaster'
-    )
+        {
+            'bar': {
+                'traces': {'baz': ["100.0", "5.0"]},
+            }
+        },
+        'my-bot', 'foo_test', 'Builder',
+        10, {}, revisions_dict={'rev': '377777'},
+        perf_dashboard_machine_group='MyMaster')
     expected_points = [
         {
             'master': 'MyMaster',
@@ -154,6 +166,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'supplemental_columns': {
                 'r_commit_pos': 377777,
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         }
     ]
@@ -175,7 +190,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'units': 'KB',
             },
             'x': {
-                'traces': {'y': [10.0, 0],},
+                'traces': {
+                    'y': [10.0, 0],
+                },
                 'important': ['y'],
                 'rev': '23456',
                 'git_revision': '46790669f8a2ecd7249ab92418260316b1c60dbf',
@@ -183,14 +200,12 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'units': 'count',
             },
         },
-        'my-bot',
-        'foo_test',
+        'my-bot', 'foo_test', 'Builder', 10,
         {
             'r_bar': '89abcdef',
             # The supplemental columns here are included in all points.
         },
-        'MyMaster'
-    )
+        'MyMaster')
     expected_points = [
         {
             'master': 'MyMaster',
@@ -203,6 +218,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'supplemental_columns': {
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
                 # Note that v8 rev is not included since it was 'undefined'.
             },
         },
@@ -217,6 +235,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'supplemental_columns': {
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         },
         {
@@ -232,6 +253,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
                 'r_v8_rev': '2345',
                 'r_bar': '89abcdef',
                 'r_chromium': '46790669f8a2ecd7249ab92418260316b1c60dbf',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         },
     ]
@@ -240,12 +264,14 @@ class ResultsDashboardFormatTest(unittest.TestCase):
   @mock.patch('datetime.datetime', new=FakeDateTime)
   def test_MakeListOfPoints_TimestampUsedWhenRevisionIsNaN(self):
     """Tests sending data with a git hash as "revision"."""
-    actual_points = results_dashboard.MakeListOfPoints({
-        'bar': {
-            'traces': {'baz': ["100.0", "5.0"]},
-            'rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
-        }
-    }, 'my-bot', 'foo_test', {}, 'ChromiumPerf')
+    actual_points = results_dashboard.MakeListOfPoints(
+        {
+            'bar': {
+                'traces': {'baz': ["100.0", "5.0"]},
+                'rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
+            }
+        },
+        'my-bot', 'foo_test', 'Builder', 10, {}, 'ChromiumPerf')
     expected_points = [
         {
             'master': 'ChromiumPerf',
@@ -257,10 +283,25 @@ class ResultsDashboardFormatTest(unittest.TestCase):
             'error': '5.0',
             'supplemental_columns': {
                 'r_chromium': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
+                'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                                '/my.master/builders/Builder/builds/10/steps/'
+                                'foo_test/logs/stdio)')
             },
         }
     ]
     self.assertEqual(expected_points, actual_points)
+
+
+  @mock.patch('datetime.datetime', new=FakeDateTime)
+  def test_GetStdioUri(self):
+    expected_supplemental_column = {
+        'a_stdio_uri': ('[Buildbot stdio](http://build.chromium.org/p'
+                        '/my.master/builders/Builder/builds/10/steps/'
+                        'foo_test/logs/stdio)')
+    }
+    stdio_uri_column = results_dashboard._GetStdioUriColumn(
+        'foo_test', 'Builder', 10)
+    self.assertEqual(expected_supplemental_column, stdio_uri_column)
 
 
 class ResultsDashboardSendDataTest(unittest.TestCase):
