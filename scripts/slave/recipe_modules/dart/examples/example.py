@@ -3,7 +3,8 @@
 # found in the LICENSE file.
 
 
-from recipe_engine.post_process import (DoesNotRun, DropExpectation)
+from recipe_engine.post_process import (DoesNotRun, DropExpectation, Filter,
+                                        StatusException, StatusSuccess)
 
 
 DEPS = [
@@ -70,156 +71,209 @@ TRIGGER_RESULT = {
 
 
 TEST_MATRIX = {
-  "filesets": {
-    "test": "[]",
-    "trigger": "[]"
-  },
-  "global": {
-    "chrome": "66.0.3359.139",
-    "firefox": "61"
-  },
-  "builder_configurations": [
-    {
-      "builders": [
-        "vm-kernel-win-release-simarm_x64",
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "gn",
-        "script": "tools/gn.py",
-        "arguments": ["--bytecode", "--gen-snapshot=${build_root}/gen_snapshot"]
-      }, {
-        "name": "build",
-        "script": "tools/build.py",
-        "arguments": ["--arch=x64", "runtime"]
-      }, {
-        "name": "test1",
-        "script": "tools/test.py",
-        "arguments": ["foo", "-ndartk-${system}-${mode}-${arch}",
-                      "language_2", "co19_2", "--exclude_suite=co19"],
-        "shards": 2,
-        "fileset": "test"
-      }, {
-        "name": "test2",
-        "arguments": ["foo", "--bar", "-ndartk-${system}-${mode}-${arch}"],
-      }, {
-        "name": "trigger",
-        "fileset": "trigger",
-        "trigger": ["foo-builder", "bar-builder"]
-      }, {
-        "name": "dart",
-        "script": "out/ReleaseX64/dart",
-        "arguments": ["--bar", "foo.dart"]
-      }, {
-        "name": "test3",
-        "arguments": ["-ndartk-${system}-${mode}-${arch}", "foo", "--bar"],
-        "fileset": "test",
-        "shards": 2
-      }]
+    "filesets": {
+        "test": "[]",
+        "trigger": "[]"
     },
-    {
-      "builders": [
-        "analyzer-linux-release",
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "build",
-        "script": "tools/build.py"
-      }, {
-        "name": "test1",
-        "script": "tools/test.py",
-        "fileset": "test",
-        "shards": 2,
-        "arguments": ["-nunittest-asserts-${mode}-${system}"]
-      }, {
-        "name": "test2",
-        "arguments": ["foo", "--bar", "-ndartk-${system}-${mode}-${arch}"],
-      }, {
-        "name": "trigger",
-        "fileset": "trigger",
-        "trigger": ["foo-builder", "bar-builder"]
-      }, {
-        "name": "test3",
-        "arguments": ["-nanalyzer-asserts-${system}", "foo", "--bar"],
-        "fileset": "test",
-        "shards": 2
-      }]
+    "global": {
+        "chrome": "66.0.3359.139",
+        "firefox": "61"
     },
-    {
-      "builders": [
-        "dart2js-strong-mac-x64-chrome",
-        "dart2js-strong-linux-x64-firefox",
-        "dart2js-strong-win-x64-chrome"
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "test1",
-        "script": "tools/test.py",
-        "arguments": ["-ndart2js-${system}-${runtime}", "foo", "--bar",
-                      "-e co19, language_2"],
-        "shards": 2,
-        "fileset": "test"
-      }, {
-        "name": "custom",
-        "script": "tools/custom_thing.py",
-        "arguments": ["foo", "--bar", "--buildername"]
-      }, {
-        "name": "custom_runner",
-        "script": "tools/custom_test_runner.py",
-        "testRunner": True,
-        "arguments": ["foo", "--bar", "--buildername"]
-      }, {
-        "name": "test2",
-        "arguments": ["-ndart2js-${system}-${runtime}", "foo", "--bar", "co19"],
-      }]
-    },
-    {
-      "builders": [
-        "vm-kernel-mac-release-x64"
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "build",
-        "script": "tools/build.py",
-        "arguments": []
-      }, {
-        "name": "custom",
-        "script": "out/custom_thing",
-        "arguments": ["foo", "--bar", "--buildername"]
-      }]
-    },
-    {
-      "builders": [
-        "vm-kernel-precomp-android-release-armsimdbc64"
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "android",
-        "shards": 2,
-        "fileset": "test",
-        "arguments": ["-ndartkp-android-${mode}-${arch}"]
-      }]
-    },
-    {
-      "builders": [
-        "fuzz-linux"
-      ],
-      "steps": [{
-        "name": "make a fuzz",
-        "script": "out/ReleaseX64/dart",
-        "arguments": [
-          "runtime/tools/dartfuzz/dartfuzz_test.dart",
-          "--isolates",
-          "8",
-          "--no-show-stats",
-          "--time",
-          "2700"
-        ],
-        "shards": 2,
-        "fileset": "test"
-      }]
-    }
-  ]
+    "builder_configurations": [
+        {
+            "builders": ["vm-kernel-win-release-simarm_x64",],
+            "meta": {},
+            "steps": [{
+                "name":
+                    "gn",
+                "script":
+                    "tools/gn.py",
+                "arguments": [
+                    "--bytecode", "--gen-snapshot=${build_root}/gen_snapshot"
+                ]
+            },
+                      {
+                          "name": "build",
+                          "script": "tools/build.py",
+                          "arguments": ["--arch=x64", "runtime"]
+                      },
+                      {
+                          "name":
+                              "test1",
+                          "script":
+                              "tools/test.py",
+                          "arguments": [
+                              "foo", "-ndartk-${system}-${mode}-${arch}",
+                              "language_2", "co19_2", "--exclude_suite=co19"
+                          ],
+                          "shards":
+                              2,
+                          "fileset":
+                              "test"
+                      },
+                      {
+                          "name":
+                              "test2",
+                          "arguments": [
+                              "foo", "--bar",
+                              "-ndartk-${system}-${mode}-${arch}"
+                          ],
+                      },
+                      {
+                          "name": "trigger",
+                          "fileset": "trigger",
+                          "trigger": ["foo-builder", "bar-builder"]
+                      },
+                      {
+                          "name": "dart",
+                          "script": "out/ReleaseX64/dart",
+                          "arguments": ["--bar", "foo.dart"]
+                      },
+                      {
+                          "name":
+                              "test3",
+                          "arguments": [
+                              "-ndartk-${system}-${mode}-${arch}", "foo",
+                              "--bar"
+                          ],
+                          "fileset":
+                              "test",
+                          "shards":
+                              2
+                      }]
+        },
+        {
+            "builders": ["co19",],
+            "meta": {},
+            "steps": [{
+                "name": "co19",
+                "arguments": ["co19", "co19_2"],
+                "fileset": "test",
+                "shards": 1
+            }]
+        },
+        {
+            "builders": ["analyzer-linux-release",],
+            "meta": {},
+            "steps": [{
+                "name": "build",
+                "script": "tools/build.py"
+            },
+                      {
+                          "name": "test1",
+                          "script": "tools/test.py",
+                          "fileset": "test",
+                          "shards": 2,
+                          "arguments": ["-nunittest-asserts-${mode}-${system}"]
+                      },
+                      {
+                          "name":
+                              "test2",
+                          "arguments": [
+                              "foo", "--bar",
+                              "-ndartk-${system}-${mode}-${arch}"
+                          ],
+                      },
+                      {
+                          "name": "trigger",
+                          "fileset": "trigger",
+                          "trigger": ["foo-builder", "bar-builder"]
+                      },
+                      {
+                          "name":
+                              "test3",
+                          "arguments": [
+                              "-nanalyzer-asserts-${system}", "foo", "--bar"
+                          ],
+                          "fileset":
+                              "test",
+                          "shards":
+                              2
+                      }]
+        },
+        {
+            "builders": [
+                "dart2js-strong-mac-x64-chrome",
+                "dart2js-strong-linux-x64-firefox",
+                "dart2js-strong-win-x64-chrome"
+            ],
+            "meta": {},
+            "steps": [{
+                "name":
+                    "test1",
+                "script":
+                    "tools/test.py",
+                "arguments": [
+                    "-ndart2js-${system}-${runtime}", "foo", "--bar",
+                    "-e co19, language_2"
+                ],
+                "shards":
+                    2,
+                "fileset":
+                    "test"
+            },
+                      {
+                          "name": "custom",
+                          "script": "tools/custom_thing.py",
+                          "arguments": ["foo", "--bar", "--buildername"]
+                      },
+                      {
+                          "name": "custom_runner",
+                          "script": "tools/custom_test_runner.py",
+                          "testRunner": True,
+                          "arguments": ["foo", "--bar", "--buildername"]
+                      },
+                      {
+                          "name":
+                              "test2",
+                          "arguments": [
+                              "-ndart2js-${system}-${runtime}", "foo", "--bar",
+                              "co19"
+                          ],
+                      }]
+        },
+        {
+            "builders": ["vm-kernel-mac-release-x64"],
+            "meta": {},
+            "steps": [{
+                "name": "build",
+                "script": "tools/build.py",
+                "arguments": []
+            },
+                      {
+                          "name": "custom",
+                          "script": "out/custom_thing",
+                          "arguments": ["foo", "--bar", "--buildername"]
+                      }]
+        },
+        {
+            "builders": ["vm-kernel-precomp-android-release-armsimdbc64"],
+            "meta": {},
+            "steps": [{
+                "name": "android",
+                "shards": 2,
+                "fileset": "test",
+                "arguments": ["-ndartkp-android-${mode}-${arch}"]
+            }]
+        },
+        {
+            "builders": ["fuzz-linux"],
+            "steps": [{
+                "name":
+                    "make a fuzz",
+                "script":
+                    "out/ReleaseX64/dart",
+                "arguments": [
+                    "runtime/tools/dartfuzz/dartfuzz_test.dart", "--isolates",
+                    "8", "--no-show-stats", "--time", "2700"
+                ],
+                "shards":
+                    2,
+                "fileset":
+                    "test"
+            }]
+        }
+    ]
 }
 
 RESULT_DATA = (
@@ -283,6 +337,7 @@ def _canned_step(api, name, shards=0, local_shard=True, suffix='',
                 stdout=api.raw_io.output('Flaky/Test/1\nFlaky/Test/2'))
 
   return data
+
 
 def GenTests(api):
   yield api.test(
@@ -438,4 +493,65 @@ def GenTests(api):
           builder='fuzz-linux',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
+  )
+
+  legacy_revinfo = {
+      "sdk/tests/co19_2/src:dart/third_party/co19": {
+          "url":
+              "https://chrome-infra-packages.appspot.com/dart/third_party/co19",
+          "rev":
+              "git_revision:co19_2_hash"
+      }
+  }
+  yield api.test(
+      'co19_2-legacy',
+      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data('gclient get co19 versions',
+                    api.json.output(name='revinfo', data=legacy_revinfo)),
+      _canned_step(api, 'co19', 1, False),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.post_process(StatusSuccess),
+      api.post_process(Filter().include_re(r'.*co19.*')),
+  )
+
+  yield api.test(
+      'co19',
+      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      _canned_step(api, 'co19', 1, False),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.post_process(StatusSuccess),
+      api.post_process(Filter().include_re(r'.*co19.*')),
+  )
+
+  yield api.test(
+      'co19-no-revinfo',
+      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data('gclient get co19 versions',
+                    api.json.output(name='revinfo', data={})),
+      api.post_process(StatusException),
+      api.post_process(Filter().include_re(r'.*co19.*')),
   )

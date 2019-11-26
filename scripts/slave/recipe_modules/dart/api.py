@@ -32,6 +32,10 @@ FIREFOX_PATH_ARGUMENT = {
   'win': '--firefox=browsers\\firefox\\firefox.exe'
 }
 
+CO19_PACKAGE = 'dart/third_party/co19'
+CO19_LEGACY_PACKAGE = 'dart/third_party/co19/legacy'
+CIPD_SERVER_URL = 'https://chrome-infra-packages.appspot.com'
+
 
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes.
@@ -737,19 +741,43 @@ class DartApi(recipe_api.RecipeApi):
       checked_in_sdk_version = self.m.gclient('get checked-in SDK version',
           ['getdep', '-r', 'sdk/tools/sdks:dart/dart-sdk/${platform}'],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      co19_version = self.m.gclient('get co19 version',
-          ['getdep', '-r', 'sdk/tests/co19_2/src:dart/third_party/co19'],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      # TODO(athom): Remove co19_2 legacy support when the test suite has been
+      #              deleted from all release branches.
+      filter_arg = '--filter=%s/%s' % (CIPD_SERVER_URL, CO19_PACKAGE)
+      result = self.m.gclient(
+          'get co19 versions', [
+              'revinfo', filter_arg, filter_arg + '/legacy', '--output-json',
+              self.m.json.output(name='revinfo')
+          ],
+          step_test_data=self._canned_revinfo)
+      revinfo = result.json.outputs.get('revinfo')
+      if not revinfo:
+        raise recipe_api.InfraFailure('failed to retrieve co19 versions')
+      co19_version = None
+      if 'sdk/tests/co19_2/src:' + CO19_PACKAGE in revinfo:
+        # legacy mode, DEPS doesn't have co19, only co19_2
+        co19_2_version = revinfo['sdk/tests/co19_2/src:' + CO19_PACKAGE]['rev']
+        co19_2_package = CO19_PACKAGE
+      else:
+        co19_2_package = CO19_LEGACY_PACKAGE
+        co19_2_version = revinfo['sdk/tests/co19_2/src:' +
+                                 CO19_LEGACY_PACKAGE]['rev']
+        co19_version = revinfo['sdk/tests/co19/src:' + CO19_PACKAGE]['rev']
+
     out = 'xcodebuild' if self.m.platform.name == 'mac' else 'out'
     build_root = out + '/' + mode.capitalize() + arch.upper()
-    environment = {'system': system,
-                   'mode': mode,
-                   'arch': arch,
-                   'build_root': build_root,
-                   'copy-coredumps': False,
-                   'checked_in_sdk_version': checked_in_sdk_version,
-                   'co19_version': co19_version,
-                   'out': out}
+    environment = {
+        'system': system,
+        'mode': mode,
+        'arch': arch,
+        'build_root': build_root,
+        'copy-coredumps': False,
+        'checked_in_sdk_version': checked_in_sdk_version,
+        'co19_version': co19_version,
+        'co19_2_version': co19_2_version,
+        'co19_2_package': co19_2_package,
+        'out': out
+    }
     # Linux and vm-*-win builders should use copy-coredumps
     environment['copy-coredumps'] = (system == 'linux' or system == 'mac' or
             (system.startswith('win') and builder_name.startswith('vm-')))
@@ -1014,9 +1042,11 @@ class DartApi(recipe_api.RecipeApi):
         'dart/dart-sdk/${platform}',
         environment['checked_in_sdk_version']))
     if 'co19_2' in args:
-      cipd_packages.append(('tests/co19_2/src',
-          'dart/third_party/co19',
-          environment['co19_version']))
+      cipd_packages.append(('tests/co19_2/src', environment['co19_2_package'],
+                            environment['co19_2_version']))
+    if 'co19' in args:
+      cipd_packages.append(('tests/co19/src', CO19_PACKAGE,
+                            environment['co19_version']))
 
     ok_ret = 'any' if ignore_failure else {0}
     runtime = environment.get('runtime', None)
@@ -1072,6 +1102,18 @@ class DartApi(recipe_api.RecipeApi):
     else:
       self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
 
+  def _canned_revinfo(self):
+    revinfo = {
+        "sdk/tests/co19/src:dart/third_party/co19": {
+            "url": "%s/dart/third_party/co19" % CIPD_SERVER_URL,
+            "rev": "git_revision:co19_hash"
+        },
+        "sdk/tests/co19_2/src:dart/third_party/co19/legacy": {
+            "url": "%s/dart/third_party/co19/legacy" % CIPD_SERVER_URL,
+            "rev": "git_revision:co19_2_hash"
+        }
+    }
+    return self.m.json.test_api.output(name='revinfo', data=revinfo)
 
   class TestMatrixStep:
     def __init__(self, m, builder_name, config, step_json, environment, index):
