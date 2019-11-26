@@ -118,8 +118,6 @@ class ChromiumApi(recipe_api.RecipeApi):
           map(str, self.c.env.PATH) + ['%(PATH)s'])
     if self.c.env.GOMA_SERVER_HOST:
       ret['GOMA_SERVER_HOST'] = self.c.env.GOMA_SERVER_HOST
-    if self.c.env.GOMA_RPC_EXTRA_PARAMS:
-      ret['GOMA_RPC_EXTRA_PARAMS'] = self.c.env.GOMA_RPC_EXTRA_PARAMS
     if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB:
       ret['GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB'] = \
         self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB

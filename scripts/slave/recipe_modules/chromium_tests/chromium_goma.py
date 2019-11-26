@@ -5,7 +5,7 @@
 from . import steps
 
 
-def CreateStandardConfig(platform, apply_configs):
+def CreateStandardConfig(platform, apply_configs=None):
   """Generates a builder recipe config for non-Android builder.
 
     Args:
@@ -16,11 +16,17 @@ def CreateStandardConfig(platform, apply_configs):
         A dict mapping string keys to field values in the build config format.
     """
 
+  if apply_configs is None:
+    apply_configs = []
+
   return {
-      'chromium_config': 'chromium',
+      'chromium_config':
+          'chromium',
       # Non-Android builder always uses regular mb.
-      'chromium_apply_config': ['mb'] + apply_configs,
-      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'goma_failfast', 'use_autoninja'] +
+                               apply_configs,
+      'gclient_config':
+          'chromium',
       'chromium_config_kwargs': {
           'TARGET_BITS': 64,
       },
@@ -30,7 +36,7 @@ def CreateStandardConfig(platform, apply_configs):
   }
 
 
-def CreateAndroidConfig(bits, apply_configs):
+def CreateAndroidConfig(bits, apply_configs=None):
   """Generates a builder recipe config specifically for Android.
 
     Args:
@@ -41,16 +47,23 @@ def CreateAndroidConfig(bits, apply_configs):
         A dict mapping string keys to field values in the build config format.
     """
 
+  if apply_configs is None:
+    apply_configs = []
+
   return {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': apply_configs,
-      'gclient_config': 'chromium',
+      'chromium_config':
+          'chromium',
+      'chromium_apply_config': ['goma_failfast', 'use_autoninja'] +
+                               apply_configs,
+      'gclient_config':
+          'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
           'TARGET_BITS': bits,
           'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder_mb',
+      'android_config':
+          'main_builder_mb',
       'testing': {
           'platform': 'linux',  # Android builder always uses Linux.
       },
@@ -102,116 +115,125 @@ def CreateGenericConfig(chromium_config='chromium',
   }
 
 
+# Predefined builder configs:
+_LINUX_CONFIG = CreateStandardConfig('linux')
+_LINUX_CLOBBER_CONFIG = CreateStandardConfig('linux', ['clobber'])
+
+_MAC_CONFIG = CreateStandardConfig('mac')
+_MAC_CLOBBER_CONFIG = CreateStandardConfig('mac', ['clobber'])
+
+_WIN_CONFIG = CreateStandardConfig('win')
+_WIN_CLOBBER_CONFIG = CreateStandardConfig('win', ['clobber'])
+
+_ANDROID32_CONFIG = CreateAndroidConfig(32)
+_ANDROID32_CLOBBER_CONFIG = CreateAndroidConfig(32, ['clobber'])
+
 _SPEC_BUILDERS = {
     # clients5
     'Chromium Linux Goma Staging':
-    CreateStandardConfig('linux', ['goma_staging', 'clobber']),
+        CreateStandardConfig('linux', ['goma_staging', 'clobber']),
     'Chromium Mac Goma Staging':
-    CreateStandardConfig('mac', ['goma_staging', 'clobber']),
+        CreateStandardConfig('mac', ['goma_staging', 'clobber']),
     'CrWinGomaStaging':
-    CreateStandardConfig('win', ['goma_staging', 'clobber']),
+        CreateStandardConfig('win', ['goma_staging', 'clobber']),
 
     # Linux RBE
     'Chromium Linux Goma RBE ToT':
-    CreateStandardConfig('linux', ['goma_rbe_tot']),
+        CreateStandardConfig('linux', ['goma_client_candidate']),
     'Chromium Linux Goma RBE ToT (ATS)':
-    CreateStandardConfig('linux', ['goma_rbe_tot']),
+        CreateStandardConfig('linux', ['goma_client_candidate']),
     'Chromium Linux Goma RBE Staging':
-    CreateStandardConfig('linux', ['goma_mixer_staging']),
+        _LINUX_CONFIG,
     'Chromium Linux Goma RBE Staging (clobber)':
-    CreateStandardConfig('linux', ['goma_mixer_staging', 'clobber']),
+        _LINUX_CLOBBER_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg)':
-    CreateStandardConfig('linux', ['goma_mixer_staging']),
+        _LINUX_CLOBBER_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg) (clobber)':
-    CreateStandardConfig('linux', ['goma_mixer_staging', 'clobber']),
+        _LINUX_CONFIG,
     'Chromium Linux Goma RBE Prod':
-    CreateStandardConfig('linux', ['goma_rbe_prod']),
+        _LINUX_CONFIG,
     'Chromium Linux Goma RBE Prod (clobber)':
-    CreateStandardConfig('linux', ['goma_rbe_prod', 'clobber']),
+        _LINUX_CLOBBER_CONFIG,
     'Chromium Linux Goma RBE Prod (dbg)':
-    CreateStandardConfig('linux', ['goma_rbe_prod']),
+        _LINUX_CONFIG,
     'Chromium Linux Goma RBE Prod (dbg) (clobber)':
-    CreateStandardConfig('linux', ['goma_rbe_prod', 'clobber']),
+        _LINUX_CLOBBER_CONFIG,
 
     # Mac RBE
     'Chromium Mac Goma RBE ToT':
-    CreateStandardConfig('mac', ['goma_rbe_tot']),
+        CreateStandardConfig('mac', ['goma_client_candidate']),
     'Chromium Mac Goma RBE Staging':
-    CreateStandardConfig('mac', ['goma_mixer_staging']),
+        _MAC_CONFIG,
     'Chromium Mac Goma RBE Staging (clobber)':
-    CreateStandardConfig('mac', ['goma_mixer_staging', 'clobber']),
+        _MAC_CLOBBER_CONFIG,
     'Chromium Mac Goma RBE Staging (dbg)':
-    CreateStandardConfig('mac', ['goma_mixer_staging']),
+        _MAC_CONFIG,
     'Chromium Mac Goma RBE Prod':
-    CreateStandardConfig('mac', ['goma_rbe_prod']),
+        _MAC_CONFIG,
     'Chromium Mac Goma RBE Prod (clobber)':
-    CreateStandardConfig('mac', ['goma_rbe_prod', 'clobber']),
+        _MAC_CLOBBER_CONFIG,
     'Chromium Mac Goma RBE Prod (dbg)':
-    CreateStandardConfig('mac', ['goma_rbe_prod']),
+        _MAC_CONFIG,
     'Chromium Mac Goma RBE Prod (dbg) (clobber)':
-    CreateStandardConfig('mac', ['goma_rbe_prod', 'clobber']),
+        _MAC_CLOBBER_CONFIG,
 
     # Android ARM 32-bit RBE
     'Chromium Android ARM 32-bit Goma RBE ToT':
-    CreateAndroidConfig(32, ['goma_rbe_tot']),
+        CreateAndroidConfig(32, ['goma_client_candidate']),
     'Chromium Android ARM 32-bit Goma RBE ToT (ATS)':
-    CreateAndroidConfig(32, ['goma_rbe_tot']),
+        CreateAndroidConfig(32, ['goma_client_candidate']),
     'Chromium Android ARM 32-bit Goma RBE Staging':
-    CreateAndroidConfig(32, ['goma_mixer_staging']),
+        _ANDROID32_CONFIG,
     'Chromium Android ARM 32-bit Goma RBE Prod':
-    CreateAndroidConfig(32, ['goma_rbe_prod']),
+        _ANDROID32_CONFIG,
     'Chromium Android ARM 32-bit Goma RBE Prod (clobber)':
-    CreateAndroidConfig(32, ['goma_rbe_prod', 'clobber']),
+        _ANDROID32_CLOBBER_CONFIG,
     'Chromium Android ARM 32-bit Goma RBE Prod (dbg)':
-    CreateAndroidConfig(32, ['goma_rbe_prod']),
+        _ANDROID32_CONFIG,
     'Chromium Android ARM 32-bit Goma RBE Prod (dbg) (clobber)':
-    CreateAndroidConfig(32, ['goma_rbe_prod', 'clobber']),
+        _ANDROID32_CLOBBER_CONFIG,
 
     # Windows RBE
     'Chromium Win Goma RBE ToT':
-    CreateStandardConfig('win', ['goma_rbe_tot']),
+        CreateStandardConfig('win', ['goma_client_candidate']),
     'Chromium Win Goma RBE Staging':
-    CreateStandardConfig('win', ['goma_mixer_staging']),
+        _WIN_CONFIG,
     'Chromium Win Goma RBE Staging (clobber)':
-    CreateStandardConfig('win', ['goma_mixer_staging', 'clobber']),
+        _WIN_CLOBBER_CONFIG,
     'Chromium Win Goma RBE Prod':
-    CreateStandardConfig('win', ['goma_rbe_prod']),
+        _WIN_CONFIG,
     'Chromium Win Goma RBE Prod (clobber)':
-    CreateStandardConfig('win', ['goma_rbe_prod', 'clobber']),
+        _WIN_CLOBBER_CONFIG,
     'Chromium Win Goma RBE Prod (dbg)':
-    CreateStandardConfig('win', ['goma_rbe_prod']),
+        _WIN_CONFIG,
     'Chromium Win Goma RBE Prod (dbg) (clobber)':
-    CreateStandardConfig('win', ['goma_rbe_prod', 'clobber']),
+        _WIN_CLOBBER_CONFIG,
 
     # FYI builders of various config flavors.
     'Cast Linux (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_config='chromium_clang',
-        chromium_apply_config=['mb', 'goma_rbe_prod']),
+        CreateGenericConfig(
+            chromium_config='chromium_clang', chromium_apply_config=['mb']),
     'chromeos-amd64-generic-rel (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_apply_config=['mb', 'goma_rbe_prod'],
-        gclient_apply_config=['chromeos'],
-        chromium_config_kwargs={
-            'TARGET_CROS_BOARD': 'amd64-generic',
-            'TARGET_PLATFORM': 'chromeos',
-        }),
+        CreateGenericConfig(
+            chromium_apply_config=['mb'],
+            gclient_apply_config=['chromeos'],
+            chromium_config_kwargs={
+                'TARGET_CROS_BOARD': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            }),
     'Linux ASan LSan Builder (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_config='chromium_asan',
-        chromium_apply_config=['lsan', 'mb', 'goma_rbe_prod']),
+        CreateGenericConfig(
+            chromium_config='chromium_asan',
+            chromium_apply_config=['lsan', 'mb']),
     'Linux MSan Builder (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_config='chromium_msan',
-        chromium_apply_config=['mb', 'goma_rbe_prod']),
+        CreateGenericConfig(
+            chromium_config='chromium_msan', chromium_apply_config=['mb']),
     'fuchsia-fyi-arm64-rel (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_apply_config=['mb', 'goma_rbe_prod'],
-        gclient_apply_config=['fuchsia']),
+        CreateGenericConfig(
+            chromium_apply_config=['mb'], gclient_apply_config=['fuchsia']),
     'fuchsia-fyi-x64-rel (Goma RBE FYI)':
-    CreateGenericConfig(
-        chromium_apply_config=['mb', 'goma_rbe_prod'],
-        gclient_apply_config=['fuchsia']),
+        CreateGenericConfig(
+            chromium_apply_config=['mb'], gclient_apply_config=['fuchsia']),
 }
 
 

@@ -293,30 +293,8 @@ def goma_staging(c):
 
 
 @config_ctx()
-def goma_rbe_tot(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SERVER_HOST = ('rbe-tot.endpoints.cxx-compiler-service.cloud.goog')
-  c.compile_py.use_autoninja = True
+def goma_client_candidate(c):
   c.compile_py.goma_client_type = 'candidate'
-
-
-@config_ctx()
-def goma_mixer_staging(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SERVER_HOST = 'staging-goma.chromium.org'
-  c.env.GOMA_RPC_EXTRA_PARAMS = '?staging'
-  c.compile_py.use_autoninja = True
-
-
-# TODO(ukai): add goma_mixer_prod
-
-
-@config_ctx()
-def goma_rbe_prod(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SERVER_HOST = 'goma.chromium.org'
-  c.env.GOMA_RPC_EXTRA_PARAMS = '?prod'
-  c.compile_py.use_autoninja = True
 
 
 @config_ctx()

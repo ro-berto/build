@@ -123,6 +123,13 @@ def GenTests(api):
   )
 
   yield api.test(
+      'goma_client_candidate',
+      api.properties(
+          buildername='test_buildername',
+          chromium_apply_config=['goma_client_candidate']),
+  )
+
+  yield api.test(
       'goma_localoutputcache_small',
       api.properties(
           buildername='test_buildername',
