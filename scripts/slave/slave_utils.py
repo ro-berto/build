@@ -287,8 +287,17 @@ def GSUtilGetMetadataField(name, provider_prefix=None):
   return '%s-%s' % (provider_prefix, name)
 
 
-def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
-               metadata=None, override_gsutil=None, add_quiet_flag=False):
+def GSUtilCopy(
+    source,
+    dest,
+    mimetype=None,
+    gs_acl=None,
+    cache_control=None,
+    metadata=None,
+    override_gsutil=None,
+    add_quiet_flag=False,
+    compress=False
+):
   """Copy a file to Google Storage.
 
   Runs the following command:
@@ -336,6 +345,8 @@ def GSUtilCopy(source, dest, mimetype=None, gs_acl=None, cache_control=None,
   command.extend(['cp'])
   if gs_acl:
     command.extend(['-a', gs_acl])
+  if compress:
+    command.extend(['-Z'])
   command.extend([source, dest])
   return chromium_utils.RunCommand(command)
 
