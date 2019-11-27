@@ -529,6 +529,22 @@ def GenTests(api):
     api.v8.test(
         'client.v8',
         'V8 Foobar',
+        'fuchsia-unittests',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "fuchsia-unittests"}]}',
+    ) +
+    api.post_process(MustRun, 'Unittests') +
+    api.post_process(
+        Filter()
+            .include_re(r'.*Unittests.*')
+    )
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
         'perf',
         parent_buildername='V8 Foobar - builder',
         parent_bot_config=release_bot_config,

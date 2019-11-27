@@ -159,6 +159,10 @@ TEST_CONFIGS = freeze({
     'tool': 'check-static-initializers',
     'isolated_target': 'check-static-initializers',
   },
+  'fuchsia-unittests': {
+    'tool': 'fuchsia-unittests',
+    'isolated_target': 'fuchsia-unittests',
+  },
   'v8testing': {
     'name': 'Check',
     'tests': ['bot_default'],
@@ -714,6 +718,16 @@ class V8CheckInitializers(V8GenericSwarmingTest):
       self.api.v8.relative_path_to_d8,
     ]
 
+class V8FuchsiaUnittests(V8GenericSwarmingTest):
+  @property
+  def title(self):
+    return 'Unittests'
+
+  @property
+  def command(self):
+    return [
+      str(self.api.v8.build_output_dir.join('bin', 'run_v8_unittests')),
+    ]
 
 class V8CheckBytecodeBaseline(V8GenericSwarmingTest):
   @property
@@ -809,6 +823,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'run-num-fuzzer': V8SwarmingTest,
   'run-perf': V8RunPerf,
   'run-tests': V8SwarmingTest,
+  'fuchsia-unittests': V8FuchsiaUnittests,
 })
 
 
