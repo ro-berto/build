@@ -81,8 +81,10 @@ class TestStepConfig(object):
         variants=V8Variant.unpack(packed[2]) if packed[2] else None,
         suffix=packed[3],
         test_args=packed[4],
-        swarming_dimensions=dict((swarming_dimensions or {}), **packed[5]),
-        swarming_task_attrs=dict((swarming_task_attrs or {}), **packed[6]),
+        swarming_dimensions=
+          dict((swarming_dimensions or {}), **(packed[5] or {})),
+        swarming_task_attrs=
+          dict((swarming_task_attrs or {}), **(packed[6] or {})),
     )
 
   @staticmethod
