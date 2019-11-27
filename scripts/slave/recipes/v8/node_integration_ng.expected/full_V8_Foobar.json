@@ -138,7 +138,7 @@
       "--root=[BUILDER_CACHE]/node-ci",
       "gen",
       "//out/Release",
-      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=is_clang=true use_sysroot=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/node-ci",
     "env": {

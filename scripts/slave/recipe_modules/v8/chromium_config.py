@@ -68,4 +68,3 @@ def node_ci(c):
   c.use_gyp_env = False
   if c.HOST_PLATFORM != 'win':
     c.gn_args.append('use_sysroot=true')
-    c.gn_args.append('use_custom_libcxx=true')
