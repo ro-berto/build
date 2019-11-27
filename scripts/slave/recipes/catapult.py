@@ -19,11 +19,9 @@ DEPS = [
   'recipe_engine/runtime',
 ]
 
-from recipe_engine.recipe_api import Property
+from PB.recipes.build.catapult import InputProperties
 
-PROPERTIES = {
-  'platform': Property(default=None, kind=str),
-}
+PROPERTIES = InputProperties
 
 
 def _CheckoutSteps(api):
@@ -33,7 +31,7 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _RemoteSteps(api, app_engine_sdk_path, platform):
+def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only):
   """Runs the build steps specified in catapult_build/build_steps.py.
 
   Steps are specified in catapult repo in order to avoid multi-sided patches
@@ -53,10 +51,12 @@ def _RemoteSteps(api, app_engine_sdk_path, platform):
       '--app-engine-sdk-pythonpath', app_engine_sdk_path,
       '--platform', platform or api.platform.name,
   ]
+  if dashboard_only:
+    args.append('--dashboard_only')
   return api.generator_script(*args)
 
 
-def RunSteps(api, platform):
+def RunSteps(api, properties):
   _CheckoutSteps(api)
 
   # The dashboard unit tests depend on Python modules in the App Engine SDK,
@@ -76,16 +76,13 @@ def RunSteps(api, platform):
     with api.context(
         env_prefixes={'PATH': [packages_root,
                                packages_root.join('bin')]}):
-      _RemoteSteps(api, app_engine_sdk_path, platform)
+      _RemoteSteps(api, app_engine_sdk_path, properties.platform,
+                   properties.dashboard_only)
 
 
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          mastername='master.client.catapult',
-          buildername='windows',
-          bot_id='windows_slave'),
       api.platform.name('win'),
       api.generator_script(
           'build_steps.py',
@@ -98,10 +95,6 @@ def GenTests(api):
 
   yield api.test(
       'mac',
-      api.properties(
-          mastername='master.client.catapult',
-          buildername='mac',
-          bot_id='mac_slave'),
       api.platform.name('mac'),
       api.generator_script(
           'build_steps.py',
@@ -115,9 +108,6 @@ def GenTests(api):
   yield api.test(
       'android',
       api.properties(
-          mastername='master.client.catapult',
-          buildername='android',
-          bot_id='android_slave',
           platform='android'),
       api.runtime(is_luci=True, is_experimental=False),
       api.generator_script(
@@ -127,4 +117,18 @@ def GenTests(api):
               'cmd': ['run_py_tests', '--no-hooks']
           },
       ),
+  )
+
+  yield api.test(
+    'dashboard_only',
+    api.platform.name('linux'),
+    api.properties(
+        platform='linux',
+        dashboard_only=True,
+    ),
+    api.runtime(is_luci=True, is_experimental=False),
+    api.generator_script(
+        'build_steps.py',
+        {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
+    )
   )

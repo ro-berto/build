@@ -1,0 +1,16 @@
+// Copyright 2019 The LUCI Authors. All rights reserved.
+// Use of this source code is governed under the Apache License, Version 2.0
+// that can be found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.catapult;
+
+message InputProperties {
+  // Indicate the platform we're running on, usually one of 'linux', 'mac', or
+  // 'windows'.
+  string platform = 1;
+
+  // Indicate whether we want to only run the dashboard-specific tests.
+  bool dashboard_only = 2;
+}
