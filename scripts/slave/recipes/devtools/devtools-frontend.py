@@ -19,9 +19,10 @@ DEPS = [
 ]
 
 STEPS_N_SCRIPTS = [
-  ('Compile Frontend', 'compile_frontend.py'),
-  ('Lint', 'lint_javascript.py'),
-  ('Run Tests', 'run_tests.py'),
+  ('Unit Tests', 'run_unittests.py'),
+  ('Type Check', 'run_type_check.py'),
+  ('Lint Check', 'run_lint_check.py'),
+  ('Localization Check', 'run_localization_check.py'),
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
@@ -66,7 +67,7 @@ def _configure_build(api):
 
 def run_script(api, step_name, script):
   with api.step.defer_results():
-    sc_path = api.path['checkout'].join('scripts', script)
+    sc_path = api.path['checkout'].join('scripts', 'test', script)
     api.python(step_name, sc_path)
 
 
