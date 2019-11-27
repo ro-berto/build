@@ -19,6 +19,13 @@ DEPS = [
 # Number of tests. Needed by the tests.
 _NUM_TESTS = 7
 
+# For trybot test data. If not given, buildbucket module will make the gerrit
+# project the same as the buildbucket project, but since
+# 'chromium' != 'chromium/src', and we check the patch's project against a
+# whitelist, let's pass this to the buildbucket test api to populate the values
+# as in production.
+_DEFAULT_GIT_REPO = 'https://chromium.googlesource.com/chromium/src'
+
 
 def RunSteps(api):
   mastername = api.properties['mastername']
@@ -151,7 +158,7 @@ def GenTests(api):
             'some/other/path/to/file.cc',
           ]),
        api.buildbucket.try_build(
-          project='chromium', builder='linux-rel'),
+          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
        api.post_process(
           post_process.MustRun, 'save paths of affected files'),
        api.post_process(
@@ -191,6 +198,28 @@ def GenTests(api):
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
+  yield api.test('tryserver unsupported repo',
+       api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          buildnumber=54),
+       api.code_coverage(use_clang_coverage=True),
+       api.properties(
+          files_to_instrument=[
+            'some/path/to/file.cc',
+            'some/other/path/to/file.cc',
+          ]),
+       api.buildbucket.try_build(
+           project='chromium', builder='linux-rel',
+           git_repo='https://chromium.googlesource.com/v8/v8'),
+       api.post_process(
+          post_process.MustRun,
+          'skip processing coverage data, project(s) '
+          'chromium-review.googlesource.com/v8/v8 is(are) unsupported',
+       ),
+       api.post_process(post_process.StatusSuccess),
+       api.post_process(post_process.DropExpectation),)
+
   yield api.test('merge errors',
        api.properties.generic(
           mastername='chromium.fyi',
@@ -217,7 +246,7 @@ def GenTests(api):
             'some/path/to/non_source_file.txt'
           ]),
        api.buildbucket.try_build(
-          project='chromium/src', builder='linux-rel'),
+          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
        api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed'),
@@ -235,7 +264,7 @@ def GenTests(api):
           'some/other/path/to/file.cc',
         ]),
      api.buildbucket.try_build(
-        project='chromium', builder='linux-rel'),
+        project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
      api.override_step_data(
       'process clang code coverage data.filter binaries with valid data for %s '
       'binaries' % (_NUM_TESTS - 1),
@@ -277,7 +306,7 @@ def GenTests(api):
             'some/other/path/to/file.cc',
           ]),
        api.buildbucket.try_build(
-          project='chromium', builder='linux-rel'),
+          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
        api.step_data(
           ('process clang code coverage data.generate metadata for %s tests' %
            _NUM_TESTS),
@@ -360,7 +389,8 @@ def GenTests(api):
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          git_repo=_DEFAULT_GIT_REPO),
        api.properties(
           files_to_instrument=[
             'some/path/to/file.java',
@@ -399,7 +429,8 @@ def GenTests(api):
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          git_repo=_DEFAULT_GIT_REPO),
        api.properties(
           files_to_instrument=[
             'some/path/to/FileTest.java',
@@ -446,7 +477,8 @@ def GenTests(api):
             'some/other/path/to/file.java',
           ]),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel'),
+          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          git_repo=_DEFAULT_GIT_REPO),
        api.step_data(
           'process java coverage.Generate Java coverage metadata',
           retcode=1),

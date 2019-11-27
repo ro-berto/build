@@ -31,6 +31,11 @@ _EXCLUDE_SOURCES = {
     'all_test_files': r'.*test.*',
 }
 
+# Only generate coverage data for CLs in these gerrit projects.
+# This is a list of (host, project) pairs
+_SUPPORTED_PATCH_PROJECTS = [('chromium-review.googlesource.com',
+                              'chromium/src')]
+
 
 class CodeCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to generate code coverage data."""
@@ -277,6 +282,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       tests (list of self.m.chromium_tests.steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
+    if self._is_per_cl_coverage:
+      unsupported_projects = self._get_unsupported_projects()
+      if unsupported_projects:
+        self.m.python.succeeding_step(
+            'skip processing coverage data, project(s) %s is(are) unsupported' %
+            unsupported_projects, '')
+        return
+
     if self.use_clang_coverage:
       self.process_clang_coverage_data(tests)
 
@@ -294,11 +307,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                 self.m.chromium.output_dir.join('coverage'),
             ])
 
+  def _get_unsupported_projects(self):
+    """If the build input has changes in unsupported projects, return them."""
+    result = []
+    for change in self.m.buildbucket.build.input.gerrit_changes:
+      if (change.host, change.project) not in _SUPPORTED_PATCH_PROJECTS:
+        result.append((change.host, change.project))
+    return ', '.join('/'.join(p) for p in result)
+
   def process_clang_coverage_data(self, tests):
     """Processes the clang coverage data for html report or metadata.
 
     Args:
-      tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
+      tests (list of self.m.chromium_tests.steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
     if self._is_per_cl_coverage and not self._affected_source_files:
