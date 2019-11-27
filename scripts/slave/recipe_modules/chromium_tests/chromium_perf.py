@@ -195,8 +195,7 @@ _AddBuildSpec(
         'push_apps_to_background_apk',
         'system_webview_apk',
         'system_webview_shell_apk',
-        'weblayer_shell_apk',
-        'weblayer_support_apk',
+        'telemetry_weblayer_apks',
     ])
 
 _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
