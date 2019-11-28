@@ -264,11 +264,11 @@ def UploadFolder(api, dir_label, parent_dir, folder_name, zip_name,
           name='upload %s' % remote_name)
 
 
-def UploadDartPackage(api, package_name):
+def UploadDartPackage(api, package_name, parent_dir):
   UploadFolder(
       api,
       'UploadDartPackage %s' % package_name,  # dir_label
-      'src/out/android_debug/dist/packages',  # parent_dir
+      parent_dir,
       package_name,  # folder_name
       "%s.zip" % package_name)  # zip_name
 
@@ -292,7 +292,20 @@ def UploadSkyEngineToCIPD(api, package_name):
 
 
 def UploadSkyEngineDartPackage(api):
-  UploadDartPackage(api, 'sky_engine')
+  UploadDartPackage(api, 'sky_engine', 'src/out/android_debug/dist/packages')
+  # frontend-server dependencies.
+  UploadDartPackage(api, 'build_integration',
+                    'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'dev_compiler',
+                    'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'flutter_frontend_server',
+                    'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'frontend_server',
+                    'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'front_end', 'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'kernel', 'src/out/host_debug_unopt/gen/dart-pkg')
+  UploadDartPackage(api, 'vm', 'src/out/host_debug_unopt/gen/dart-pkg')
+
   UploadSkyEngineToCIPD(api, 'sky_engine')
 
 
