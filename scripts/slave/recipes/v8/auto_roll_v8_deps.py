@@ -34,12 +34,12 @@ MAX_COMMIT_LOG_ENTRIES = 8
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 
 TARGET_CONFIG_V8 = {
+  'solution_name': 'v8',
   'project_name': 'v8/v8',
   'account': 'v8-ci-autoroll-builder@'
              'chops-service-accounts.iam.gserviceaccount.com',
   'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
   'cipd_log_template': 'Rolling v8/%s: %s..%s',
-  'gclient_config': 'v8',
 }
 
 BOT_CONFIGS = {
@@ -173,6 +173,15 @@ def commit_messages_log_entries(api, repo, from_commit, to_commit):
   return [commit_log(c) for c in commits[:MAX_COMMIT_LOG_ENTRIES]] + ellipse
 
 
+def create_gclient_config(api, target_config):
+  src_cfg = api.gclient.make_config()
+  soln = src_cfg.solutions.add()
+  soln.name = target_config['solution_name']
+  soln.url = BASE_URL + target_config['project_name']
+  soln.revision = 'HEAD'
+  return src_cfg
+
+
 def RunSteps(api):
   # Configure this particular instance of the auto-roller.
   bot_config = BOT_CONFIGS[api.buildbucket.builder_name]
@@ -197,14 +206,8 @@ def RunSteps(api):
       api.gerrit.abandon_change(
           GERRIT_BASE_URL, commit['_number'], 'stale roll')
 
-  api.gclient.set_config(target_config['gclient_config'])
+  api.gclient.c = create_gclient_config(api, target_config)
   api.gclient.apply_config('chromium')
-
-  # Chromium and another project side-by-side makes the got_revision mapping
-  # ambiguous.
-  api.gclient.c.got_revision_mapping.pop('src', None)
-  api.gclient.c.got_revision_reverse_mapping['got_revision'] = (
-      target_config['gclient_config'])
 
   # Allow rolling all os deps.
   api.gclient.c.target_os.add('android')
@@ -237,7 +240,7 @@ def RunSteps(api):
   cr_deps = GetDEPS(
       api, 'src', CR_PROJECT_NAME)
   target_deps = GetDEPS(
-      api, target_config['gclient_config'], target_config['project_name'])
+      api, target_config['solution_name'], target_config['project_name'])
 
   commit_message = []
 
