@@ -91,7 +91,7 @@
       "[dummy hash for fuchsia-unittests]",
       "--raw-cmd",
       "--",
-      "[START_DIR]/swarming.client/out/Release/bin/run_v8_unittests"
+      "out/Release/bin/run_v8_unittests"
     ],
     "name": "trigger tests.[trigger] Unittests"
   },

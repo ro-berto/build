@@ -726,7 +726,9 @@ class V8FuchsiaUnittests(V8GenericSwarmingTest):
   @property
   def command(self):
     return [
-      str(self.api.v8.build_output_dir.join('bin', 'run_v8_unittests')),
+      self.api.path.join(
+          'out', self.api.chromium.c.build_config_fs,
+          'bin', 'run_v8_unittests'),
     ]
 
 class V8CheckBytecodeBaseline(V8GenericSwarmingTest):
