@@ -45,6 +45,8 @@ KNOWN_BUCKETS = (
     'luci.boringssl.ci',
     'luci.catapult.ci',
     'luci.chrome.ci',
+    'luci.chrome.official',
+    'luci.chrome.official.diffs',
     'luci.chromium.ci',
     'luci.chromium.try',
     'luci.crashpad.ci',
