@@ -66,66 +66,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
-      "[CACHE]/builder/src/tools_webrtc/audio_quality"
-    ],
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download audio quality tools"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
-      "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
-    ],
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download video quality tools"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[depot_tools]/download_from_google_storage.py",
-      "--bucket=chromium-webrtc-resources",
-      "--directory",
-      "[CACHE]/builder/src/rtc_tools/testing"
-    ],
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download apprtc"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[depot_tools]/download_from_google_storage.py",
-      "--bucket=chromium-webrtc-resources",
-      "--directory",
-      "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
-    ],
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "download golang"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -181,17 +121,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64",
-      "--clean-isolated-files"
-    ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
@@ -231,8 +160,6 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
-      "--swarming-targets-file",
-      "low_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
       "//out/Android64_Builder_arm64"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -244,10 +171,7 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -349,10 +273,7 @@
       "-C",
       "[CACHE]/builder/src/out/Android64_Builder_arm64",
       "-j",
-      "80",
-      "default",
-      "low_bandwidth_audio_perf_test",
-      "webrtc_perf_tests"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -371,9 +292,6 @@
       "[CACHE]/builder/src/out/Android64_Builder_arm64",
       "-j",
       "80",
-      "default",
-      "low_bandwidth_audio_perf_test",
-      "webrtc_perf_tests",
       "-d",
       "explain",
       "-n"
@@ -490,7 +408,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Android64_Builder_arm64",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_Builder_arm64\", \"-j\", 80, \"default\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_Builder_arm64\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -557,38 +475,6 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/tools/luci-go/isolate",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
-      "--eventlog-endpoint",
-      "prod",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/low_bandwidth_audio_perf_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/webrtc_perf_tests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
@@ -608,59 +494,6 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@binary_sizes@{\"some_binary\": 123456}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "prpc",
-      "call",
-      "-format=json",
-      "luci-scheduler.appspot.com",
-      "scheduler.Scheduler.EmitTriggers"
-    ],
-    "infra_step": true,
-    "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Android64 (L Nexus9)\", \"project\": \"webrtc\"}, {\"job\": \"Perf Android64 (N Pixel)\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"swarm_hashes\": {\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android64 Builder arm64/0\"}}], \"timestamp\": 1337000001500000}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@input@{@@@",
-      "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
-      "@@@STEP_LOG_LINE@input@        {@@@",
-      "@@@STEP_LOG_LINE@input@            \"jobs\": [@@@",
-      "@@@STEP_LOG_LINE@input@                {@@@",
-      "@@@STEP_LOG_LINE@input@                    \"job\": \"Perf Android64 (L Nexus9)\", @@@",
-      "@@@STEP_LOG_LINE@input@                    \"project\": \"webrtc\"@@@",
-      "@@@STEP_LOG_LINE@input@                }, @@@",
-      "@@@STEP_LOG_LINE@input@                {@@@",
-      "@@@STEP_LOG_LINE@input@                    \"job\": \"Perf Android64 (N Pixel)\", @@@",
-      "@@@STEP_LOG_LINE@input@                    \"project\": \"webrtc\"@@@",
-      "@@@STEP_LOG_LINE@input@                }@@@",
-      "@@@STEP_LOG_LINE@input@            ], @@@",
-      "@@@STEP_LOG_LINE@input@            \"trigger\": {@@@",
-      "@@@STEP_LOG_LINE@input@                \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@input@                    \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@input@                        \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"swarm_hashes\": {@@@",
-      "@@@STEP_LOG_LINE@input@                            \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", @@@",
-      "@@@STEP_LOG_LINE@input@                            \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
-      "@@@STEP_LOG_LINE@input@                        }@@@",
-      "@@@STEP_LOG_LINE@input@                    }, @@@",
-      "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@input@                        \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"gitiles_ref:refs/heads/master\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"parent_buildername:Android64 Builder arm64\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"user_agent:recipe\"@@@",
-      "@@@STEP_LOG_LINE@input@                    ]@@@",
-      "@@@STEP_LOG_LINE@input@                }, @@@",
-      "@@@STEP_LOG_LINE@input@                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", @@@",
-      "@@@STEP_LOG_LINE@input@                \"title\": \"Android64 Builder arm64/0\"@@@",
-      "@@@STEP_LOG_LINE@input@            }@@@",
-      "@@@STEP_LOG_LINE@input@        }@@@",
-      "@@@STEP_LOG_LINE@input@    ], @@@",
-      "@@@STEP_LOG_LINE@input@    \"timestamp\": 1337000001500000@@@",
-      "@@@STEP_LOG_LINE@input@}@@@",
-      "@@@STEP_LOG_END@input@@@"
     ]
   },
   {
