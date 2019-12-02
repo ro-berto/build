@@ -34,20 +34,14 @@ The wrapper writes detailed info in JSON format:
 
 """
 
-from __future__ import print_function
-
-from gevent import monkey
-monkey.patch_all()
 
 import argparse
 import collections
-import gevent
 import json
 import os
 import re
 import subprocess
 import sys
-import time
 
 _COLLECT_DEPENDENCIES_RULES = ['CXX', 'CC']
 
@@ -439,55 +433,25 @@ def get_detailed_info(ninja_path, build_path, failed_target_list,
 def parse_args(args):
   """Parse arguments."""
   parser = argparse.ArgumentParser()
-  parser.add_argument(
-      '-o', '--ninja_info_output', help='Optional. Save result in file.')
-  parser.add_argument(
-      'ninja_cmd',
-      nargs='+',
-      help=('Ninja build command, e.g., '
-            '/absolute/path/to/ninja -C build/path build_target'))
-  parser.add_argument(
-      '--failure_output', help='Save output of failed build edges in file.')
-  parser.add_argument(
-      '--no_prune_venv',
-      action='store_true',
-      help=('Don\'t prune the virtual environment when calling ninja. '
-            'This is a hack; don\'t use this unless you talk '
-            'to infra-dev@chromium.org'))
-  parser.add_argument(
-      '-t',
-      '--io_timeout',
-      default=60 * 60 * 2,
-      type=float,
-      help=('Seconds to wait for new output from ninja before killing it. '
-            '0 = let ninja run forever'))
+  parser.add_argument('-o', '--ninja_info_output',
+                      help=('Optional. Save result in file.'))
+  parser.add_argument('ninja_cmd', nargs='+',
+                      help=('Ninja build command, e.g., '
+                            '/absolute/path/to/ninja -C build/path '
+                            'build_target'))
+  parser.add_argument('--failure_output',
+                      help=('Save output of failed build edges in file.'))
+  parser.add_argument('--no_prune_venv', action='store_true',
+                      help='Don\'t prune the virtual environment when calling'
+                      ' ninja. This is a hack; don\'t use this unless you talk'
+                      ' to infra-dev@chromium.org')
 
   options = parser.parse_args(args)
   return options
 
 
-def get_ninja_build_path(ninja_cmd):
-  """Parses the chromium build path from the ninja command
-
-  Args:
-    ninja_cmd: a string representing the full ninja command passed through argv.
-
-  Returns:
-    build_path: a string representing chromium build directory.
-  """
-  prev_cmd = None
-  build_path = None
-  for cmd in ninja_cmd:
-    if prev_cmd == '-C':
-      build_path = cmd
-      break
-    prev_cmd = cmd
-
-  return build_path
-
-
-def main(argv):
-  options = parse_args(argv)
+def main():
+  options = parse_args(sys.argv[1:])
   ninja_cmd = options.ninja_cmd
 
   # NOTE: Based on related handling in depot_tools/gn.py.
@@ -502,76 +466,35 @@ def main(argv):
   if not options.no_prune_venv:
     prune_virtual_env()
 
-  if not options.ninja_info_output and options.io_timeout <= 0:
-    # Options are set such that we don't need to intercept the stdout
+
+  # If first argument isn't file's name, calls ninja directly.
+  if not options.ninja_info_output:
     popen = subprocess.Popen(ninja_cmd, universal_newlines=True)
     return popen.wait()
 
-
-  popen = subprocess.Popen(ninja_cmd, stdout=subprocess.PIPE,
-                           universal_newlines=True)
+  ninja_path = ninja_cmd[0]
+  prev_cmd = None
+  build_path = None
+  for cmd in ninja_cmd:
+    if prev_cmd == '-C':
+      build_path = cmd
+      break
+    prev_cmd = cmd
 
   warning_collector = WarningCollector()
-  if options.ninja_info_output:
-    # Ninja outputs build process info to stdout whenever it fails or succeeds
-    # Parse output nodes and edges into a graph
-    ninja_parser = NinjaBuildOutputStreamingParser(warning_collector)
-  else:
-    ninja_parser = None
+  # Ninja outputs info of build process to stdout whenever it fails or
+  # successes.
+  popen = subprocess.Popen(ninja_cmd, stdout=subprocess.PIPE,
+                           universal_newlines=True)
+  ninja_parser = NinjaBuildOutputStreamingParser(warning_collector)
+  for stdout_line in iter(popen.stdout.readline, ''):
+    # Comma here makes print function not append '\n' to the end of line.
+    print stdout_line,
+    ninja_parser.parse(stdout_line)
 
-  def readline_greenlet():
-    """Readline in a greenlet with a timeout.
-
-    Returns:
-      None if we timeout, a string representing the line we read otherwise.
-    """
-    try:
-      return gevent.spawn(popen.stdout.readline).get(
-          block=True, timeout=options.io_timeout)
-    except gevent.Timeout:
-      return None
-
-  if options.io_timeout > 0:
-    readline = readline_greenlet
-  else:
-    readline = popen.stdout.readline
-
-  timed_out = False
-  for stdout_line in iter(readline, ''):
-    if stdout_line is None:
-      timed_out = True
-      break
-
-    print(stdout_line, end='')
-
-    if ninja_parser:
-      ninja_parser.parse(stdout_line)
-
-  try:
-    # Tidy up
-    popen.stdout.close()
-  except IOError:
-    # If we timed out, stdout pipe is still locked
-    pass
-
-  if timed_out:
-    # Give user feedback
-    message = ('ninja_wrapper.py: Ninja command timed out due to not receiving '
-               'output for {} seconds.\n'.format(options.io_timeout))
-    print(message)
-
-    if options.failure_output:
-      with open(options.failure_output, 'w') as fw:
-        fw.write(message)
-
-    return_code = 124
-    popen.kill()
-  else:
-    return_code = popen.wait()
-
-  if return_code and options.ninja_info_output:
-    ninja_path = ninja_cmd[0]
-    build_path = get_ninja_build_path(ninja_cmd)
+  popen.stdout.close()
+  return_code = popen.wait()
+  if return_code:
     data = get_detailed_info(ninja_path, build_path,
                              ninja_parser.failed_target_list,
                              warning_collector)
@@ -580,7 +503,7 @@ def main(argv):
       json.dump(data, fw)
 
     if options.failure_output:
-      with open(options.failure_output, 'a') as fw:
+      with open(options.failure_output, 'w') as fw:
         if ninja_parser.failure_outputs:
           fw.write(ninja_parser.failure_outputs)
         else:
@@ -591,4 +514,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-  sys.exit(main(sys.argv[1:]))
+  sys.exit(main())
