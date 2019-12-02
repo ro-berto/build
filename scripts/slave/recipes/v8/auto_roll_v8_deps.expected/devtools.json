@@ -1,0 +1,55 @@
+[
+  {
+    "cmd": [
+      "git",
+      "commit",
+      "-a",
+      "-m",
+      "Update Devtools DEPS.",
+      "-m",
+      "Rolling base/trace_event/common: https://chromium.googlesource.com/chromium/src/base/trace_event/common/+log/08b7b94..",
+      "-m",
+      "Rolling build: https://chromium.googlesource.com/chromium/src/build/+log/d3f34f8..",
+      "-m",
+      "Rolling test/test262/data: https://chromium.googlesource.com/external/github.com/tc39/test262/+log/29c2384..",
+      "-m",
+      "Rolling tools/clang/dsymutil: OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC..resolved-instance_id-of-latest----------",
+      "-m",
+      "Rolling tools/gyp: https://chromium.googlesource.com/external/gyp/+log/702ac58..e7079f0",
+      "-m",
+      "Rolling tools/luci-go: git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9..git_revision:3d8f881462b1a93c7525499381fafc8a08691be7",
+      "-m",
+      "Rolling tools/swarming_client: https://chromium.googlesource.com/external/swarming.client/+log/380e326..380e326",
+      "-m",
+      "TBR=machenbach@chromium.org,liviurau@chromium.org"
+    ],
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git commit"
+  },
+  {
+    "cmd": [
+      "git",
+      "cl",
+      "upload",
+      "-f",
+      "--use-commit-queue",
+      "--bypass-hooks",
+      "--gerrit",
+      "--send-mail"
+    ],
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git cl"
+  }
+]

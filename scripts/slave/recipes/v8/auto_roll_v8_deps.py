@@ -33,6 +33,15 @@ CR_PROJECT_NAME = 'chromium/src'
 MAX_COMMIT_LOG_ENTRIES = 8
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 
+TARGET_CONFIG_DEVTOOLS = {
+  'solution_name': 'devtools-frontend',
+  'project_name': 'devtools/devtools-frontend',
+  'account': 'devtools-ci-autoroll-builder@'
+             'chops-service-accounts.iam.gserviceaccount.com',
+  'log_template': 'Rolling %s: %s/+log/%s..%s',
+  'cipd_log_template': 'Rolling %s: %s..%s',
+}
+
 TARGET_CONFIG_V8 = {
   'solution_name': 'v8',
   'project_name': 'v8/v8',
@@ -43,6 +52,16 @@ TARGET_CONFIG_V8 = {
 }
 
 BOT_CONFIGS = {
+  'Auto-roll - devtools deps': {
+    'target_config': TARGET_CONFIG_DEVTOOLS,
+    'subject': 'Update Devtools DEPS.',
+    'blacklist': [],
+    'reviewers': [
+      'machenbach@chromium.org',
+      'liviurau@chromium.org',
+    ],
+    'show_commit_log': False,
+  },
   'Auto-roll - test262': {
     'target_config': TARGET_CONFIG_V8,
     'subject': 'Update test262.',
@@ -260,7 +279,8 @@ def RunSteps(api):
           'Found %s value %s without pinned revision.' % (solution_name, name))
       return value.split('@')
 
-    target_loc, target_ver = SplitValue('v8', target_deps[name])
+    target_loc, target_ver = SplitValue(
+        target_config['solution_name'], target_deps[name])
     cr_value = cr_deps.get(name)
     is_cipd_dep = target_loc.startswith(CIPD_DEP_URL_PREFIX)
     if cr_value:
@@ -298,7 +318,8 @@ def RunSteps(api):
       with api.context(cwd=api.path['checkout']):
         step_result = api.gclient(
             'setdep %s' % name.replace('/', '_'),
-            ['setdep', '-r', 'v8/%s@%s' % (name, new_ver)],
+            ['setdep', '-r', '%s/%s@%s' %
+             (target_config['solution_name'], name, new_ver)],
             ok_ret='any',
         )
       if step_result.retcode == 0:
@@ -369,7 +390,7 @@ src/tools/gyp: https://chromium.googlesource.com/external/gyp.git@e7079f0e0e1410
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7
 v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001"""
 
-  def template(testname, buildername):
+  def template(testname, buildername, solution_name='v8'):
     return api.test(
         testname,
         api.properties.generic(path_config='kitchen'),
@@ -380,7 +401,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
             revision='',
         ),
         api.override_step_data(
-            'gclient get v8 deps',
+            'gclient get %s deps' % solution_name,
             api.raw_io.stream_output(v8_deps_info, stream='stdout'),
         ),
         api.override_step_data(
@@ -416,6 +437,11 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
           'look up test_test262_data',
           api.raw_io.stream_output('deadbeef\tHEAD', stream='stdout'),
       ) +
+      api.post_process(Filter('git commit', 'git cl'))
+  )
+
+  yield (
+      template('devtools', 'Auto-roll - devtools deps', 'devtools-frontend') +
       api.post_process(Filter('git commit', 'git cl'))
   )
 
