@@ -352,7 +352,6 @@ def load_gatekeeper_tree_config(filename):
                       'status-url',
                       'status-user',
                       'track-revisions',
-                      'use-project-email-addresses',
                      ]
 
   for tree_name, tree_config in trees_config.iteritems():
@@ -376,13 +375,6 @@ def load_gatekeeper_tree_config(filename):
     assert isinstance(tree_config.get('status-url', ''), basestring)
     assert isinstance(tree_config.get('status-user', ''), basestring)
     assert isinstance(tree_config.get('track-revisions', True), bool)
-    assert isinstance(
-        tree_config.get('use-project-email-addresses', True), bool)
-
-    assert (not tree_config.get('default-from-email') or
-            not tree_config.get('use-project-email-address')), (
-      'You can only specify one of "default-from-email",'
-      ' "use-project-email-address".')
 
   return trees_config
 

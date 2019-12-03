@@ -69,10 +69,7 @@ class Gatekeeper(recipe_api.RecipeApi):
         args.extend(['--build-db', build_db_path.join(tree_args['build-db'])])
       if tree_args.get('password-file'):
         args.extend(['--password-file', tree_args['password-file']])
-      if tree_args.get('use-project-email-address'):
-        args.extend(['--default-from-email',
-                     '%s-buildbot@chromium-build.appspotmail.com' % tree_name])
-      elif tree_args.get('default-from-email'): # pragma: nocover
+      if tree_args.get('default-from-email'):
         args.extend(['--default-from-email', tree_args['default-from-email']])
       if tree_args.get('filter-domain'):
         args.extend(['--filter-domain', tree_args['filter-domain']])

@@ -22,23 +22,23 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
 
   def fake_test_json(self):
     return {
-      'blink': {
-        'build-db': 'blink_build_db.json',
-        'masters': {
-          'https://build.chromium.org/p/chromium.webkit': ["*"],
+        'blink': {
+            'build-db': 'blink_build_db.json',
+            'masters': {
+                'https://build.chromium.org/p/chromium.webkit': ["*"],
+            },
+            'filter-domain': 'google.com',
+            'open-tree': True,
+            'password-file': '.blink_status_password',
+            'revision-properties': 'got_revision',
+            'set-status': True,
+            'sheriff-url': 'https://build.chromium.org/p/chromium/%s.js',
+            'status-url': 'https://blink-status.appspot.com',
+            'status-user': 'gatekeeper@google.com',
+            'track-revisions': True,
+            'default-from-email': 'gatekeeper@google.com',
         },
-        'filter-domain': 'google.com',
-        'open-tree': True,
-        'password-file': '.blink_status_password',
-        'revision-properties': 'got_revision',
-        'set-status': True,
-        'sheriff-url': 'https://build.chromium.org/p/chromium/%s.js',
-        'status-url': 'https://blink-status.appspot.com',
-        'status-user': 'gatekeeper@google.com',
-        'track-revisions': True,
-        'use-project-email-address': True,
-      },
-      'chromium': {},
+        'chromium': {},
     }
 
   def infra_config_data(self):
