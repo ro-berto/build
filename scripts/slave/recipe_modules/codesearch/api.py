@@ -262,11 +262,17 @@ class CodesearchApi(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.step_text = f.reason_message()
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
-    self.m.git.checkout(
-        self.c.generated_repo,
-        ref=self.c.GEN_REPO_BRANCH,
-        dir_path=generated_repo_dir,
-        submodules=False)
+    env = {
+        # Turn off the low speed limit, since checkout will be long.
+        'GIT_HTTP_LOW_SPEED_LIMIT': '0',
+        'GIT_HTTP_LOW_SPEED_TIME': '0',
+    }
+    with self.m.context(env=env):
+      self.m.git.checkout(
+          self.c.generated_repo,
+          ref=self.c.GEN_REPO_BRANCH,
+          dir_path=generated_repo_dir,
+          submodules=False)
     with self.m.context(cwd=generated_repo_dir):
       self.m.git('config', 'user.email', self.c.generated_author_email)
       self.m.git('config', 'user.name', self.c.generated_author_name)

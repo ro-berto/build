@@ -896,6 +896,10 @@
       "--url",
       "https://chromium.googlesource.com/chromium/src/out"
     ],
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
     "name": "git setup"
   },
   {
@@ -908,6 +912,8 @@
     ],
     "cwd": "[CACHE]/generated",
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0",
       "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
@@ -921,6 +927,10 @@
       "FETCH_HEAD"
     ],
     "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
     "infra_step": true,
     "name": "git checkout"
   },
@@ -931,6 +941,10 @@
       "HEAD"
     ],
     "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
     "infra_step": true,
     "name": "read revision",
     "~followup_annotations": [
@@ -946,6 +960,10 @@
       "-x"
     ],
     "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
     "infra_step": true,
     "name": "git clean"
   },
