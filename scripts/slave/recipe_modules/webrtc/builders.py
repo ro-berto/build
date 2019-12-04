@@ -616,7 +616,7 @@ BUILDERS = freeze({
                 ],
                 'triggers': [
                     'luci.webrtc.perf/Perf Android32 (K Nexus5)',
-                    'luci.webrtc.perf/Perf Android32 (L Nexus5)',
+                    'luci.webrtc.perf/Perf Android32 (M AOSP Nexus6)',
                 ],
             },
             'Android64 (M Nexus5X)(dbg)': {
@@ -675,6 +675,10 @@ BUILDERS = freeze({
                 },
                 'binary_size_files': [
                     'libjingle_peerconnection_so.so', 'apks/AppRTCMobile.apk'
+                ],
+                'triggers': [
+                    'luci.webrtc.perf/Perf Android64 (M Nexus5X)',
+                    'luci.webrtc.perf/Perf Android64 (O Pixel2)',
                 ],
             },
         },
@@ -780,12 +784,12 @@ BUILDERS = freeze({
                     'pool': 'WebRTC-perf',
                     'os': 'Android',
                     'android_devices': '1',
-                    'device_type': 'hammerhead',  # Nexus 5
+                    'device_type': 'hammerhead',  # Nexus 5.
                     'device_os': 'K',
                 },
                 'swarming_timeout': 10800,  # 3h
             },
-            'Perf Android32 (L Nexus5)': {
+            'Perf Android32 (M AOSP Nexus6)': {
                 'recipe_config': 'webrtc_android_perf_swarming',
                 'chromium_config_kwargs': {
                     'BUILD_CONFIG': 'Release',
@@ -793,7 +797,7 @@ BUILDERS = freeze({
                     'TARGET_ARCH': 'arm',
                     'TARGET_BITS': 32,
                 },
-                'perf_id': 'webrtc-android-tests-nexus5',
+                'perf_id': 'webrtc-android-tests-nexus6-mob30k',
                 'bot_type': 'tester',
                 'parent_buildername': 'Android32 Builder arm',
                 'testing': {
@@ -803,8 +807,54 @@ BUILDERS = freeze({
                     'pool': 'WebRTC-perf',
                     'os': 'Android',
                     'android_devices': '1',
-                    'device_type': 'hammerhead',  # Nexus 5
-                    'device_os': 'L',
+                    'device_type': 'shamu',  # Nexus 6.
+                    'device_os': 'MOB30K',
+                },
+                'swarming_timeout': 10800,  # 3h
+            },
+            'Perf Android64 (M Nexus5X)': {
+                'recipe_config': 'webrtc_android_perf_swarming',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'perf_id': 'webrtc-android-tests-nexus5x-marshmallow',
+                'bot_type': 'tester',
+                'parent_buildername': 'Android64 Builder arm64',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'swarming_dimensions': {
+                    'pool': 'WebRTC-perf',
+                    'os': 'Android',
+                    'android_devices': '1',
+                    'device_type': 'bullhead',  # Nexus 5X.
+                    'device_os': 'MMB29Q',
+                },
+                'swarming_timeout': 10800,  # 3h
+            },
+            'Perf Android64 (O Pixel2)': {
+                'recipe_config': 'webrtc_android_perf_swarming',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'perf_id': 'webrtc-android-tests-pixel2-oreo',
+                'bot_type': 'tester',
+                'parent_buildername': 'Android64 Builder arm64',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'swarming_dimensions': {
+                    'pool': 'WebRTC-perf',
+                    'os': 'Android',
+                    'android_devices': '1',
+                    'device_type': 'walleye',  # Pixel 2.
+                    'device_os': 'O',
                 },
                 'swarming_timeout': 10800,  # 3h
             },
