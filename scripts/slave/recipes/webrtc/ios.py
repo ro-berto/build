@@ -165,7 +165,7 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'os': '12.1',
                     'host os': 'Mac-10.13',
                 },
             },
@@ -297,7 +297,7 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'os': '12.1',
                     'host os': 'Mac-10.13',
                 },
             },
@@ -328,7 +328,7 @@ BUILDERS = freeze({
                 },
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'os': '12.1',
                     'pool': 'chrome.tests',
                 },
             },
@@ -410,7 +410,7 @@ BUILDERS = freeze({
                 },
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '12.0',
+                    'os': '12.1',
                     'pool': 'chrome.tests',
                 },
             },
