@@ -38,8 +38,6 @@
           "*": {}
         },
         "excluded_builders": [
-          "win-dbg",
-          "win32-dbg",
           "win-archive-dbg",
           "win32-archive-dbg"
         ]
@@ -146,21 +144,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.gatekeeper": [
-      {
-        "tree_notify": [
-          "chromium-build-heartbeat@chromium-gatekeeper-sentry.appspotmail.com"
-        ],
-
-        "builders": {
-          "Chromium Gatekeeper Failure": {
-            "forgiving_optional": [
-              "*"
-            ]
-          }
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromium.gpu": [
       {
         "tree_notify": ["chrome-gpu-build-failures@google.com"],
@@ -170,38 +153,14 @@
           "experimental_tests"
         ],
         "builders": {
-          "Mac 10.8 Release (Intel)": {
-            "excluded_steps": [
-              "maps_pixel_test"
-            ]
-          },
           "*": {}
         },
-        "comment": [
-          "Keep excluded builders in sync with the gpu closers list in",
-          "masters/master.chromium/templates/announce.html.",
-          "Mac Release (ATI): crbug.com/395305"
-        ],
         "excluded_builders" : [
-          "Android Debug (Nexus 7)",
           "GPU Linux Builder (dbg)",
           "GPU Mac Builder (dbg)",
           "GPU Win x64 Builder (dbg)",
           "Linux Debug (NVIDIA)",
-          "Mac 10.8 Debug (Intel)",
-          "Mac Debug (Intel)",
-          "Mac Release (ATI)",
-          "Mac Retina Debug",
-          "Win7 Debug (NVIDIA)",
-          "Win8 Debug (NVIDIA)"
-        ],
-        "comment": [
-          "Any steps whose results must be temporarily ignored (e.g.",
-          "due to flakiness) can be added here.",
-          "Remove webgl_conformance_tests after crbug.com/383963 fixed"
-        ],
-        "excluded_steps": [
-          "webgl_conformance_tests"
+          "Mac Debug (Intel)"
         ]
       }
     ],
@@ -251,17 +210,7 @@
               "infra_tree_closer"
             ]
           },
-          "infra-continuous-trusty-32": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
           "infra-continuous-precise-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-precise-32": {
             "categories": [
               "infra_tree_closer"
             ]
@@ -276,12 +225,7 @@
               "infra_tree_closer"
             ]
           },
-          "infra-continuous-win-32": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-continuous-recipe-tests": {
+          "infra-continuous-recipes-tests": {
             "categories": [
               "infra_tree_closer"
             ]
@@ -308,21 +252,6 @@
               "infra_tree_closer"
             ]
           },
-          "luci-go-continuous-mac-10.9-64": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-precise-32": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "luci-go-continuous-trusty-32": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
           "luci-go-continuous-trusty-64": {
             "categories": [
               "infra_tree_closer"
@@ -344,7 +273,7 @@
             ]
           },
 
-          "build-recipe-tests": {
+          "build-recipes-tests": {
             "categories": [
               "infra_tree_closer"
             ]
@@ -453,9 +382,6 @@
             "close_tree": false,
             "sheriff_classes": ["sheriff_ios"]
           },
-          "Mac GN (dbg)": {
-            "close_tree": false
-          },
           "*": {}
         }
       }
@@ -489,11 +415,6 @@
           "experimental_tests"
         ],
         "builders": {
-          "Android Builder Perf": {
-            "tree_notify": [
-              "chrome-binary-size-sheriff@grotations.appspotmail.com"
-            ]
-          },
           "*": {}
         }
       }
@@ -609,12 +530,6 @@
             "forgiving_optional": ["*"]
           },
           "fuchsia-fyi-x64-rel": {
-            "forgiving_optional": ["*"]
-          },
-          "Linux Xenial": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ],
             "forgiving_optional": ["*"]
           },
           "Mojo Android": {
