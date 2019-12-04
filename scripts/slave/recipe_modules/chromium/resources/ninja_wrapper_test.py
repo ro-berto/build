@@ -2,12 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from __future__ import print_function
-
 import textwrap
 import unittest
 import mock
-import time
 
 import ninja_wrapper
 
@@ -408,50 +405,6 @@ class NinjaWrapperTestCase(unittest.TestCase):
     options = ninja_wrapper.parse_args(args)
     self.assertListEqual(expected_ninja_cmd, options.ninja_cmd)
     self.assertIsNone(options.ninja_info_output)
-
-
-  @mock.patch('ninja_wrapper.print')
-  @mock.patch('ninja_wrapper.subprocess.Popen')
-  def testMainWithTimeoutOk(self, mock_Popen, mock_print):
-    """Test main() with a timeout that is not raised"""
-
-    mock_popen_instance = mock.MagicMock()
-    mock_popen_instance.stdout.readline.side_effect = ['a', 'b', 'c', '']
-    mock_Popen.return_value = mock_popen_instance
-
-    ninja_wrapper.main(['-o', 'target3', '-t', '1', '--'] +
-                       ['ninja', 'build/path', 'target1', 'target2'])
-
-    self.assertEqual(mock_print.call_count, 3)
-    mock_popen_instance.stdout.close.assert_called()
-
-  @mock.patch('ninja_wrapper.print')
-  @mock.patch('ninja_wrapper.subprocess.Popen')
-  def testMainWithTimeoutNotOk(self, mock_Popen, mock_print):
-    """Test main() with a timeout that is raised"""
-
-    def faulty_readline_sequence():
-      yield 'a'
-      yield 'b'
-      time.sleep(1.0)
-      raise Exception(
-          'This should not be reached, a timeout should have occurred')
-
-    # Makes faulty_readline behave like a regular function not like a generator
-    faulty_readline = iter(faulty_readline_sequence()).next
-
-    mock_popen_instance = mock.MagicMock()
-    mock_popen_instance.stdout.readline = faulty_readline
-    mock_Popen.return_value = mock_popen_instance
-
-    retval = ninja_wrapper.main(
-        ['-t', '.1', '--', 'ninja', 'build/path', 'target1', 'target2'])
-
-    # Only two of these are from readline; one should be the io_timeout print
-    self.assertEqual(mock_print.call_count, 3)
-    self.assertEqual(retval, 124)
-    mock_popen_instance.stdout.close.assert_called()
-
 
 if __name__ == '__main__':
   unittest.main()

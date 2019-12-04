@@ -879,7 +879,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
@@ -2265,7 +2265,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
@@ -3321,7 +3321,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
@@ -4369,7 +4369,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
