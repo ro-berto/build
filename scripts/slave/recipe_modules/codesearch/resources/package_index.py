@@ -37,9 +37,12 @@ from windows_shell_split import WindowsShellSplit
 # is more important here.
 MOJOM_IMPORT_RE = re.compile(r'^\s*import\s*"([^"]*)"', re.MULTILINE)
 
-# A separate corpus name used for Windows SDK sources, so they can be filtered
-# out by Kythe if necessary.
-WIN_SDK_CORPUS = 'winsdk'
+# A list of path prefixes to external corpsus names, used by kythe/grimoire
+# to find external headers.
+EXTERNAL_CORPORA = [
+    ('src/third_party/depot_tools/win_toolchain', 'winsdk'),
+    ('src/build/linux/debian_sid_amd64-sysroot', 'debian_amd64'),
+]
 
 # Substrings of arguments that should be removed from compile commands on
 # Windows.
@@ -546,15 +549,14 @@ def _SetVNameForFile(v_name_proto, filepath, default_corpus):
     default_corpus: The corpus to use if no special corpus is required.
   """
   assert '\\' not in filepath
-  vname = {}
-  win_toolchain, v_name_proto.path = re.match(
-      '(src/third_party/depot_tools/win_toolchain/)?(.*)', filepath).groups()
-  if win_toolchain:
-    v_name_proto.root = win_toolchain[:-1]
-    v_name_proto.corpus = WIN_SDK_CORPUS
-  else:
-    v_name_proto.corpus = default_corpus
-  return vname
+  v_name_proto.corpus = default_corpus
+  v_name_proto.path = filepath
+  for prefix, corpus in EXTERNAL_CORPORA:
+    if filepath.startswith(prefix + '/'):
+      v_name_proto.path = filepath[len(prefix)+1:]
+      v_name_proto.root = prefix
+      v_name_proto.corpus = corpus
+      break
 
 
 def _CorpusForFile(filepath, default_corpus):
@@ -568,8 +570,9 @@ def _CorpusForFile(filepath, default_corpus):
     default_corpus: The corpus to use if no special corpus is required.
   """
   assert '\\' not in filepath
-  if filepath.startswith('src/third_party/depot_tools/win_toolchain'):
-    return WIN_SDK_CORPUS
+  for prefix, corpus in EXTERNAL_CORPORA:
+    if filepath.startswith(prefix):
+      return corpus
   return default_corpus
 
 

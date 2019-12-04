@@ -10,7 +10,7 @@ unit {
     }
     info {
       path: "../../test.cc"
-      digest: "5c441f31fbcdfdf56cef22dcf78c09ec9c94135cc9801cd5e79936c8043dde4c"
+      digest: "b13b6e902655fecf56456f28724bd8518b71e3da8349eba706d46fcae376d4ff"
     }
   }
   required_input {
@@ -42,6 +42,17 @@ unit {
     info {
       path: "../../third_party/depot_tools/win_toolchain/sdk_header.h"
       digest: "d00a30539b38a598d89f113998c1f2fa7924052a4b11b88ef7ead3692576d81d"
+    }
+  }
+  required_input {
+    v_name {
+      corpus: "debian_amd64"
+      root: "src/build/linux/debian_sid_amd64-sysroot"
+      path: "usr/include/debian_header.h"
+    }
+    info {
+      path: "../../build/linux/debian_sid_amd64-sysroot/usr/include/debian_header.h"
+      digest: "5b7b820f13b680cfa034895bcdb46cbe95ad19b9c099a080fc6d23d3e606438c"
     }
   }
   argument: "path\\to\\clang-cl.exe"
