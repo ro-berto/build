@@ -144,7 +144,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
@@ -168,7 +168,7 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "name": "compile"
   },
@@ -192,7 +192,7 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "name": "compile confirm no-op"
   },

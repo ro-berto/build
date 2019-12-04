@@ -347,10 +347,13 @@ class ChromiumApi(recipe_api.RecipeApi):
                             example_failure_output, name='failure_summary'))
     try:
       with self.m.context(env=ninja_env):
-        ninja_step_result = self.m.python(name or 'compile', script=script,
-                                          args=script_args,
-                                          step_test_data=step_test_data,
-                                          **kwargs)
+        ninja_step_result = self.m.python(
+            name or 'compile',
+            script=script,
+            args=script_args,
+            step_test_data=step_test_data,
+            venv=True,
+            **kwargs)
     except self.m.step.StepFailure as ex:
       ninja_step_result = ex.result
       if ninja_step_result.retcode != 1:
@@ -517,7 +520,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # needed.
       if self.c.TARGET_PLATFORM == 'win':
         ninja_env['PATH'] = self.m.path.pathsep.join(
-           (self.m.path.dirname(self.m.depot_tools.ninja_path), '%(PATH)s'))
+            ('%(PATH)s', self.m.path.dirname(self.m.depot_tools.ninja_path)))
 
     if self.c.compile_py.goma_hermetic:
       goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
