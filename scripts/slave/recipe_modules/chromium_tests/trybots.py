@@ -59,6 +59,11 @@ TRYBOTS = freeze({
     },
     'tryserver.chromium.android': {
         'builders': {
+            'android-asan':
+                simple_bot({
+                    'mastername': 'chromium.memory',
+                    'buildername': 'android-asan'
+                }),
             'android-bfcache-debug':
                 simple_bot({
                     'mastername': 'chromium.android.fyi',
