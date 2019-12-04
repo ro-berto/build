@@ -29,6 +29,8 @@ nonessential_dirs = {
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
     'third_party/hunspell/tests',
+    'third_party/jdk/current',
+    'third_party/jdk/extras',
     'third_party/liblouis/src/tests/harness',
     'third_party/sqlite/patched/test',
     'third_party/xdg-utils/tests',
