@@ -445,11 +445,9 @@
           "boringssl@google.com"
         ],
 
-        "forgive_all": "true",
-
         "builders": {
           "*": {
-            "closing_optional": [
+            "forgiving_optional": [
               "*"
             ]
           }
@@ -536,14 +534,12 @@
             "tree_notify": [
               "network-service-sheriffs@chromium.org"
             ],
-            "forgive_all": "true",
             "forgiving_optional": ["*"]
           },
           "Mojo Linux": {
             "tree_notify": [
               "network-service-sheriffs@chromium.org"
             ],
-            "forgive_all": "true",
             "forgiving_optional": ["*"]
           },
           "Site Isolation Android": {
@@ -561,7 +557,6 @@
             "tree_notify": [
               "pcc@chromium.org"
             ],
-            "forgive_all": "true",
             "forgiving_optional": ["*"],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
@@ -569,7 +564,6 @@
             "tree_notify": [
               "pcc@chromium.org"
             ],
-            "forgive_all": "true",
             "forgiving_optional": ["*"],
             "subject_template": "buildbot %(result)s in %(project_name)s on %(builder_name)s, revision %(revision)s"
           },
@@ -577,7 +571,6 @@
             "tree_notify": [
               "wfh@chromium.org"
             ],
-            "forgive_all": "true",
             "forgiving_optional": ["*"]
           },
           "linux-blink-heap-concurrent-marking-tsan-rel": {
