@@ -30,9 +30,12 @@ DEPS = [
 
 def _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path):
   packages_dir = api.path['cleanup'].join('packages')
-  ensure_file = api.cipd.EnsureFile()
-  ensure_file.add_package('infra/tricium/function/metrics', 'live')
-  api.cipd.ensure(packages_dir, ensure_file)
+  version = 'test' if bool(api.tryserver.get_footer('Tricium-Test')) else 'live'
+
+  with api.step.nest('load_' + version + '_analyzer'):
+    ensure_file = api.cipd.EnsureFile()
+    ensure_file.add_package('infra/tricium/function/metrics', version)
+    api.cipd.ensure(packages_dir, ensure_file)
 
   metrics = packages_dir.join('metrics_analyzer')
   out_dir = api.path['cleanup'].join('out')
@@ -120,7 +123,8 @@ def GenTests(api):
                       affected_files,
                       include_diff=True,
                       auto_exist_files=True,
-                      author='ltina@google.com'):
+                      include_parse=False,
+                      test_footer=False):
     test = (
         api.test(name) + api.properties.tryserver(
             build_config='Release',
@@ -132,6 +136,11 @@ def GenTests(api):
     if include_diff:
       test += api.step_data('git diff to analyze patch',
                             api.raw_io.stream_output('\n'.join(affected_files)))
+
+    if include_parse:
+      footer_json = {'Tricium-Test': True} if test_footer else {}
+      test += api.override_step_data('metrics.parse description',
+                                     api.json.output(footer_json))
 
     if auto_exist_files:
       test += api.path.exists(*[
@@ -166,8 +175,22 @@ def GenTests(api):
 
   yield (
       test_with_patch(
-          'analyze_xml',
-          affected_files=['some/test/test2/histograms.xml']) + api.step_data(
+          'test_version_if_footer',
+          affected_files=['some/test/test2/histograms.xml'],
+          include_parse=True,
+          test_footer=True) + api.step_data('metrics.metrics_output',
+                                            api.file.read_json({})) +
+      api.post_process(post_process.DoesNotRun, 'metrics.load_live_analyzer') +
+      api.post_process(post_process.StepSuccess, 'metrics.load_test_analyzer') +
+      api.post_process(post_process.StepSuccess, 'metrics') + api.post_process(
+          post_process.StatusSuccess) + api.post_process(
+              post_process.DropExpectation))
+
+  yield (
+      test_with_patch(
+          'analyze_xml_live',
+          affected_files=['some/test/test2/histograms.xml'],
+          include_parse=True) + api.step_data(
               'metrics.metrics_output',
               api.file.read_json({
                   "comments": [{
@@ -175,9 +198,11 @@ def GenTests(api):
                       "message": "[ERROR]: Removed",
                       "path": "testdata/src/rm/remove_histogram.xml"
                   }]
-              })) + api.post_process(post_process.StepSuccess, 'metrics') +
+              })) + api.post_process(post_process.DoesNotRun,
+                                     'metrics.load_test_analyzer') +
+      api.post_process(post_process.StepSuccess, 'metrics.load_live_analyzer') +
+      api.post_process(post_process.StepSuccess, 'metrics') +
       api.post_process(post_process.StatusSuccess) + api.post_check(
-          lambda check, steps:
-            '[ERROR]: Removed' in
+          lambda check, steps: '[ERROR]: Removed' in 
             steps['metrics.write_results'].output_properties['tricium']
       ) + api.post_process(post_process.DropExpectation))
