@@ -54,9 +54,6 @@ BUILDERS = freeze({
     'resource_size_builder': {
         'resource_size': True,
     },
-    'webview_cts': {
-        'run_webview_cts': True,
-    },
     'device_flags_builder': {
         'device_flags': 'device_flags_file',
     },
@@ -171,22 +168,6 @@ def RunSteps(api, buildername):
 
   api.chromium_android.monkey_test()
 
-  api.chromium_android.run_instrumentation_suite(
-      name='WebViewInstrumentationTest',
-      apk_under_test=api.chromium_android.apk_path(
-        'WebViewInstrumentation.apk'),
-      test_apk=api.chromium_android.apk_path('WebViewInstrumentationTest.apk'),
-      flakiness_dashboard='test-results.appspot.com',
-      annotation='SmallTest',
-      except_annotation='FlakyTest',
-      screenshot=True,
-      timeout_scale=config.get('timeout_scale'),
-      strict_mode=config.get('strict_mode'),
-      additional_apks=['Additional.apk'],
-      device_flags=config.get('device_flags'),
-      json_results_file=config.get('json_results_file'),
-      result_details=config.get('result_details'),
-      store_tombstones=config.get('store_tombstones'))
   api.chromium_android.run_test_suite(
       'unittests',
       result_details=config.get('result_details'),
@@ -203,13 +184,6 @@ def RunSteps(api, buildername):
     api.chromium_android.supersize_archive(
         apk_path=api.chromium_android.apk_path('Example.apk'),
         size_path=api.chromium_android.apk_path('Example.apk.size'))
-
-  if config.get('run_webview_cts'):
-    api.chromium_android.run_webview_cts(
-        android_platform='L',
-        arch='arm64',
-        command_line_args=['--webview_arg_1', '--webview_arg_2'],
-        result_details=True)
 
   if config.get('run_telemetry_browser_tests'):
     api.chromium_android.run_telemetry_browser_test('PopularUrlsTest')

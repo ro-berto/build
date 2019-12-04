@@ -301,23 +301,6 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
         waterfall_buildername=buildername)
 
 
-def generate_cts_test(api, chromium_tests_api, mastername, buildername,
-                      test_spec, bot_update_step,
-                      swarming_dimensions=None,
-                      scripts_compile_targets=None,
-                      bot_config=None):
-  # Unused arguments
-  del api, chromium_tests_api, bot_update_step, swarming_dimensions
-  del scripts_compile_targets, bot_config
-
-  for test in test_spec.get(buildername, {}).get('cts_tests', []):
-    yield steps.WebViewCTSTest(
-        platform=str(test['platform']),
-        command_line_args=test.get('command_line_args'),
-        arch=test.get('arch', 'arm64'),
-        waterfall_mastername=mastername, waterfall_buildername=buildername)
-
-
 def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step,
                     swarming_dimensions=None, scripts_compile_targets=None,

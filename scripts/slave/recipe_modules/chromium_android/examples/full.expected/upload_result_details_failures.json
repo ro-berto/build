@@ -938,60 +938,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
-      "--flakiness-dashboard-server",
-      "test-results.appspot.com",
-      "-A",
-      "SmallTest",
-      "-E",
-      "FlakyTest",
-      "--screenshot",
-      "--json-results-file",
-      "/path/to/tmp/json",
-      "--store-tombstones",
-      "--test-apk",
-      "[START_DIR]/src/out/Release/apks/WebViewInstrumentationTest.apk",
-      "--apk-under-test",
-      "[START_DIR]/src/out/Release/apks/WebViewInstrumentation.apk",
-      "--additional-apk",
-      "Additional.apk",
-      "--release",
-      "--adb-path",
-      "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
-    ],
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release"
-    },
-    "name": "SmallTest"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
-      "--json-file",
-      "{}",
-      "--test-name",
-      "SmallTest",
-      "--builder-name",
-      "result_details",
-      "--build-number",
-      "571",
-      "--cs-base-url",
-      "http://cs.chromium.org",
-      "--bucket",
-      "chromium-result-details"
-    ],
-    "name": "SmallTest: generate result details",
-    "~followup_annotations": [
-      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[START_DIR]/src/out/Release/bin/run_unittests",
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",

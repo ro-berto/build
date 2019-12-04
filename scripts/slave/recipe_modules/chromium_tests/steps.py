@@ -2480,35 +2480,6 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
       **kwargs)
 
 
-class WebViewCTSTest(AndroidTest):
-
-  def __init__(self, platform, arch, command_line_args=None,
-               waterfall_mastername=None, waterfall_buildername=None):
-    super(WebViewCTSTest, self).__init__(
-        'WebView CTS: %s' % platform,
-        ['system_webview_apk'],
-        waterfall_mastername,
-        waterfall_buildername)
-    self._arch = arch
-    self._command_line_args = command_line_args
-    self._platform = platform
-
-  @property
-  def uses_local_devices(self):
-    return True
-
-  def run_tests(self, api, suffix, json_results_file):
-    api.chromium_android.adb_install_apk(
-        api.chromium_android.apk_path('SystemWebView.apk'))
-    return api.chromium_android.run_webview_cts(
-        android_platform=self._platform,
-        suffix=suffix,
-        command_line_args=self._command_line_args,
-        arch=self._arch,
-        json_results_file=json_results_file,
-        result_details=True)
-
-
 class IncrementalCoverageTest(Test):
   def __init__(self, **kwargs):
     super(IncrementalCoverageTest, self).__init__(

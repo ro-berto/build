@@ -730,34 +730,6 @@ class AndroidApi(recipe_api.RecipeApi):
           args,
           **kwargs)
 
-
-  def _upload_trace_results(self, trace_json_path, test_name):
-    dest = '{builder}/trace_{buildnumber}_{name}.html'.format(
-        builder=self.m.buildbucket.builder_name,
-        buildnumber=self.m.buildbucket.build.number,
-        name=test_name)
-
-    test_data = lambda: self.m.raw_io.test_api.output_text('test data',
-                                                           name='trace_html')
-    step_result = self.m.python(
-        name='Convert trace to HTML for %s' % test_name,
-        script=self.m.path['checkout'].join('third_party', 'catapult',
-                                            'tracing', 'bin',
-                                            'trace2html'),
-        args=[trace_json_path, '--output',
-              self.m.raw_io.output_text(name='trace_html')],
-        step_test_data=test_data)
-
-    trace_html = step_result.raw_io.output_texts['trace_html']
-    trace_html_path = self.m.raw_io.input_text(trace_html)
-
-    self.m.gsutil.upload(
-        name='Upload test trace for %s' % test_name,
-        source=trace_html_path,
-        bucket='chromium-testrunner-trace',
-        dest=dest,
-        link_name='Test Trace')
-
   def run_telemetry_browser_test(self, test_name, browser='android-chromium'):
     """Run a telemetry browser test."""
     try:
@@ -776,102 +748,6 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.step.active_result.presentation.step_text += (
           self.m.test_utils.format_step_text(
               [['failures:', test_failures]]))
-
-  def run_instrumentation_suite(self,
-                                name,
-                                test_apk=None,
-                                apk_under_test=None,
-                                additional_apks=None,
-                                flakiness_dashboard=None,
-                                annotation=None, except_annotation=None,
-                                screenshot=False, verbose=False, tool=None,
-                                json_results_file=None,
-                                timeout_scale=None, strict_mode=None,
-                                suffix=None, num_retries=None,
-                                device_flags=None,
-                                wrapper_script_suite_name=None,
-                                result_details=False,
-                                store_tombstones=False,
-                                trace_output=False,
-                                args=None,
-                                **kwargs):
-    args = args or []
-    args.extend(['--blacklist-file', self.blacklist_file,])
-    if tool:
-      args.append('--tool=%s' % tool)
-    if flakiness_dashboard:
-      args.extend(['--flakiness-dashboard-server', flakiness_dashboard])
-    if annotation:
-      args.extend(['-A', annotation])
-    if except_annotation:
-      args.extend(['-E', except_annotation])
-    if screenshot:
-      args.append('--screenshot')
-    if verbose:
-      args.append('--verbose')
-    if self.c.coverage or self.c.incremental_coverage:
-      args.extend(['--coverage-dir', self.coverage_dir])
-    if result_details and not json_results_file:
-      json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
-    if json_results_file:
-      args.extend(['--json-results-file', json_results_file])
-    if store_tombstones:
-      args.append('--store-tombstones')
-    if timeout_scale:
-      args.extend(['--timeout-scale', timeout_scale])
-    if strict_mode:
-      args.extend(['--strict-mode', strict_mode])
-    if num_retries is not None:
-      args.extend(['--num-retries', str(num_retries)])
-    if device_flags:
-      args.extend(['--device-flags-file', device_flags])
-    if test_apk:
-      args.extend(['--test-apk', test_apk])
-    if apk_under_test:
-      args.extend(['--apk-under-test', apk_under_test])
-    for a in additional_apks or []:
-      args.extend(['--additional-apk', a])
-
-    if not wrapper_script_suite_name:
-      args.insert(0, 'instrumentation')
-      if self.m.chromium.c.BUILD_CONFIG == 'Release':
-        args.append('--release')
-
-    step_name = '%s%s' % (
-        annotation or name, ' (%s)' % suffix if suffix else '')
-
-    if trace_output:
-      args.extend([
-          '--trace-output', self.m.raw_io.output_text(name='trace_json'),
-          '--trace-all'])
-      test_data = lambda: self.m.raw_io.test_api.output_text('{"test data"}',
-                                                             name='trace_json')
-      kwargs['step_test_data'] = test_data
-
-    try:
-      self.test_runner(
-          step_name,
-          args=args,
-          wrapper_script_suite_name=wrapper_script_suite_name,
-          **kwargs)
-    finally:
-      result_step = self.m.step.active_result
-      if result_details:
-        if (hasattr(result_step, 'test_utils') and
-            hasattr(result_step.test_utils, 'gtest_results')):
-          json_results = self.m.json.input(
-              result_step.test_utils.gtest_results.raw)
-          details_link = self.create_result_details(step_name,
-                                                    json_results)
-          self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
-              details_link)
-
-      if trace_output:
-        trace_json = result_step.raw_io.output_texts['trace_json']
-        trace_json_path = self.m.raw_io.input_text(trace_json)
-        self._upload_trace_results(trace_json_path, name)
-
-    return result_step
 
   def create_result_details(self, step_name, json_results_file):
     presentation_args = ['--json-file', json_results_file,
@@ -1217,65 +1093,6 @@ class AndroidApi(recipe_api.RecipeApi):
           wrapper_script_suite_name=str(target_name or suite),
           pass_adb_path=False,
           **kwargs)
-
-  def _set_webview_command_line(self, command_line_args):
-    """Set the Android WebView command line.
-
-    Args:
-      command_line_args: A list of command line arguments you want set for
-          webview.
-    """
-    command_line_script_args = [
-        '--adb-path', self.m.adb.adb_path(),
-        '--name', 'webview-command-line',
-    ]
-    command_line_script_args.extend(command_line_args)
-    self.m.python('write webview command line file',
-                  self.m.path['checkout'].join(
-                      'build', 'android', 'adb_command_line.py'),
-                  command_line_script_args)
-
-  def run_webview_cts(self, android_platform, arch,
-                      command_line_args=None, suffix=None,
-                      json_results_file=None,
-                      result_details=False):
-    suffix = ' (%s)' % suffix if suffix else ''
-    if command_line_args:
-      self._set_webview_command_line(command_line_args)
-
-    cts_runner_args = ['--arch', arch,
-                       '--platform', android_platform,
-                       '--skip-expected-failures',
-                       '--apk-dir', self.m.path['cache']]
-
-    if result_details and not json_results_file:
-      json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
-
-    if json_results_file:
-      cts_runner_args.extend(['--json-results-file', json_results_file])
-
-    cts_runner_args.append('--verbose')
-
-    try:
-      self.m.python(
-          'Run CTS%s' % suffix,
-          self.m.path['checkout'].join(
-              'android_webview', 'tools', 'run_cts.py'),
-          cts_runner_args)
-
-    finally:
-      step_result = self.m.step.active_result
-      gtest_results = self.m.test_utils.present_gtest_failures(step_result)
-      if gtest_results:
-        if result_details:
-          json_results = self.m.json.input(
-                step_result.test_utils.gtest_results.raw)
-          details_link = self.create_result_details('CTS',
-                                                    json_results)
-          self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
-              details_link)
-    return step_result
-
 
   def coverage_report(self, upload=True, **kwargs):
     """Creates an EMMA HTML report and optionally uploads it to storage bucket.

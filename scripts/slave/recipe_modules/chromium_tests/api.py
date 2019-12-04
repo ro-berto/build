@@ -98,7 +98,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def all_generators(self):
     return [
       generators.generate_isolated_script,
-      generators.generate_cts_test,
       generators.generate_gtest,
       generators.generate_junit_test,
       generators.generate_script,
