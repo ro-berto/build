@@ -59,7 +59,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/catapult@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "catapult@HEAD"
+      "catapult@HEAD",
+      "--no_fetch_tags"
     ],
     "env_suffixes": {
       "PATH": [

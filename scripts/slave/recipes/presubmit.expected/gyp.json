@@ -59,7 +59,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/gyp@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "gyp@HEAD"
+      "gyp@HEAD",
+      "--no_fetch_tags"
     ],
     "env_suffixes": {
       "PATH": [

@@ -59,7 +59,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/openscreen@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "openscreen@HEAD"
+      "openscreen@HEAD",
+      "--no_fetch_tags"
     ],
     "env_suffixes": {
       "PATH": [

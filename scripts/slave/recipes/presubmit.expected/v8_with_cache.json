@@ -74,7 +74,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/v8/v8@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
-      "v8@HEAD"
+      "v8@HEAD",
+      "--no_fetch_tags"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
     "env_suffixes": {

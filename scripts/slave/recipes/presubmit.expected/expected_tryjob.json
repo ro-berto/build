@@ -59,7 +59,8 @@
       "--patch_ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/56/123456/7",
       "--revision",
-      "s@HEAD"
+      "s@HEAD",
+      "--no_fetch_tags"
     ],
     "env_suffixes": {
       "PATH": [

@@ -76,7 +76,8 @@
       "--revision",
       "v8@refs/heads/infra/config",
       "--refs",
-      "refs/heads/infra/config"
+      "refs/heads/infra/config",
+      "--no_fetch_tags"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit_infra_config",
     "env_suffixes": {
