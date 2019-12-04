@@ -1021,7 +1021,7 @@ SPEC = {
             'chromium_config': 'android',
             'chromium_apply_config': ['download_vr_test_apks', 'mb'],
             'gclient_config': 'chromium',
-            'gclient_apply_config': ['android'],
+            'gclient_apply_config': ['android', 'use_clang_coverage'],
             'chromium_config_kwargs': {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
