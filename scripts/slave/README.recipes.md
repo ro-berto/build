@@ -291,7 +291,6 @@
   * [swarming_client:examples/full](#recipes-swarming_client_examples_full)
   * [swarming_heartbeat:examples/full](#recipes-swarming_heartbeat_examples_full)
   * [tar:examples/full](#recipes-tar_examples_full)
-  * [test](#recipes-test)
   * [test_results:examples/full](#recipes-test_results_examples_full)
   * [test_utils:tests/gtest_results](#recipes-test_utils_tests_gtest_results)
   * [test_utils:tests/present_gtest_failures](#recipes-test_utils_tests_present_gtest_failures)
@@ -5456,11 +5455,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/tar/examples/full.py#14)(api):**
-### *recipes* / [test](/scripts/slave/recipes/test.py)
-
-[DEPS](/scripts/slave/recipes/test.py#2): [yaml](#recipe_modules-yaml), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/test.py#18)(api):**
 ### *recipes* / [test\_results:examples/full](/scripts/slave/recipe_modules/test_results/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
