@@ -48,6 +48,7 @@
   * [ts_mon](#recipe_modules-ts_mon)
   * [v8](#recipe_modules-v8)
   * [webrtc](#recipe_modules-webrtc)
+  * [yaml](#recipe_modules-yaml)
   * [zip](#recipe_modules-zip)
 
 **[Recipes](#Recipes)**
@@ -290,6 +291,7 @@
   * [swarming_client:examples/full](#recipes-swarming_client_examples_full)
   * [swarming_heartbeat:examples/full](#recipes-swarming_heartbeat_examples_full)
   * [tar:examples/full](#recipes-tar_examples_full)
+  * [test](#recipes-test)
   * [test_results:examples/full](#recipes-test_results_examples_full)
   * [test_utils:tests/gtest_results](#recipes-test_utils_tests_gtest_results)
   * [test_utils:tests/present_gtest_failures](#recipes-test_utils_tests_present_gtest_failures)
@@ -322,6 +324,7 @@
   * [webrtc/libfuzzer](#recipes-webrtc_libfuzzer)
   * [webrtc/more_configs](#recipes-webrtc_more_configs)
   * [webrtc/standalone](#recipes-webrtc_standalone)
+  * [yaml:examples/full](#recipes-yaml_examples_full)
   * [zip:examples/full](#recipes-zip_examples_full)
 ## Recipe Modules
 
@@ -3843,6 +3846,30 @@ Args:
 &emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#248)(self):**
 
 &mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#540)(self, name, step_result):**
+### *recipe_modules* / [yaml](/scripts/slave/recipe_modules/yaml)
+
+[DEPS](/scripts/slave/recipe_modules/yaml/__init__.py#1): [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+#### **class [YamlApi](/scripts/slave/recipe_modules/yaml/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+Provides utilities to parse yaml files.
+
+&mdash; **def [read](/scripts/slave/recipe_modules/yaml/api.py#11)(self, step_name, file_path, json_place_holder):**
+
+Reads a yaml file.
+
+It currently shells out to a script which converts the yaml to json,
+this way it can use vpython to import pyyaml. To achieve the same
+from the recipe we need to specify pyyaml at the root file. Please
+change this behavior to be inline if it becomes easier to specify
+vpython packages dependencies in a recipe module.
+
+Args:
+  step_name: (str) the name of the step for reading the yaml.
+  file_path: (str) the path to the yaml file.
+  json_place_holder: (JsonOutputPlaceholder) for the parsed yaml content.
+Returns:
+  StepData with the result from the step.
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -5429,6 +5456,11 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/tar/examples/full.py#14)(api):**
+### *recipes* / [test](/scripts/slave/recipes/test.py)
+
+[DEPS](/scripts/slave/recipes/test.py#2): [yaml](#recipe_modules-yaml), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/test.py#18)(api):**
 ### *recipes* / [test\_results:examples/full](/scripts/slave/recipe_modules/test_results/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/test_results/examples/full.py#7): [test\_results](#recipe_modules-test_results), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -5708,6 +5740,11 @@ The changes are:
 [DEPS](/scripts/slave/recipes/webrtc/standalone.py#12): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_swarming](#recipe_modules-chromium_swarming), [test\_utils](#recipe_modules-test_utils), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/standalone.py#33)(api):**
+### *recipes* / [yaml:examples/full](/scripts/slave/recipe_modules/yaml/examples/full.py)
+
+[DEPS](/scripts/slave/recipe_modules/yaml/examples/full.py#5): [yaml](#recipe_modules-yaml), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/yaml/examples/full.py#20)(api):**
 ### *recipes* / [zip:examples/full](/scripts/slave/recipe_modules/zip/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/zip/examples/full.py#5): [zip](#recipe_modules-zip), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
