@@ -56,6 +56,7 @@ KNOWN_BUCKETS = (
     'luci.nacl.ci',
     'luci.pdfium.ci',
     'luci.v8.ci',
+    'luci.v8-internal.ci',
     'luci.webrtc.ci',
 )
 
