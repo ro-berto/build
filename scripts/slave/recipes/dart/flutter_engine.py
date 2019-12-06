@@ -13,21 +13,22 @@ from PB.go.chromium.org.luci.buildbucket.proto import rpc as rpc_pb2
 
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/gitiles',
-  'goma',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/gitiles',
+    'goma',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
 ]
 
 DART_GERRIT = 'https://dart.googlesource.com/'
@@ -293,7 +294,9 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
         'tool_tests', 'web_tests'
     ]
     for shard in shards:
-      with api.context(env={'SHARD': shard}):
+      with api.context(env={
+          'SHARD': shard,
+      }):
         api.step('flutter test %s' % (shard),
                  test_cmd + test_args, timeout=120*60) # 2 hours
 
@@ -358,17 +361,29 @@ def BuildAndTest(api, start_dir, checkout_dir, flutter_rev):
     BuildLinux(api, checkout_dir)
     prebuilt_dart_bin = checkout_dir.join('third_party', 'dart', 'tools',
       'sdks', 'dart-sdk', 'bin')
-    engine_env = { 'PATH': api.path.pathsep.join((str(prebuilt_dart_bin),
-      '%(PATH)s')) }
+    engine_env = {
+        'PATH': api.path.pathsep.join((str(prebuilt_dart_bin), '%(PATH)s')),
+    }
     just_built_dart_sdk = checkout_dir.join('out', 'host_debug', 'dart-sdk')
+
+    # The web test shards need google-chrome installed.
+    # The chrome version is the version of a package at:
+    # http://go/cipd/p/dart/browsers/chrome/linux-amd64/
+    chrome_version = '76'
+    browser_dir = api.dart.download_browser('chrome', chrome_version)
+    chrome_executable = browser_dir.join('chrome', 'google-chrome')
     flutter_env = {
-      'PATH': api.path.pathsep.join((
-          str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
-      # Prevent test.dart from using git merge-base to determine a fork point.
-      # git merge-base doesn't work without a FETCH_HEAD, which isn't available
-      # on the first run of a bot. The builder tests a single revision, so use
-      # flutter_rev.
-      'TEST_COMMIT_RANGE': flutter_rev,
+        'PATH':
+            api.path.pathsep.join((str(just_built_dart_sdk.join('bin')),
+                                   '%(PATH)s')),
+        # Prevent test.dart from using git merge-base to determine a fork point.
+        # git merge-base doesn't work without a FETCH_HEAD, which isn't
+        # available on the first run of a bot. The builder tests a single
+        # revision, so use flutter_rev.
+        'TEST_COMMIT_RANGE':
+            flutter_rev,
+        'CHROME_EXECUTABLE':
+            chrome_executable,
     }
 
     with api.step.defer_results():

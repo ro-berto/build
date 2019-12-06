@@ -787,7 +787,7 @@ class DartApi(recipe_api.RecipeApi):
         runtime = 'firefox' # pragma: no cover
       environment['runtime'] = runtime
       if runtime == 'chrome' or runtime == 'firefox':
-        self._download_browser(runtime, global_config[runtime])
+        self.download_browser(runtime, global_config[runtime])
     test_steps = []
     sharded_steps = []
     with self.m.step.defer_results():
@@ -899,7 +899,7 @@ class DartApi(recipe_api.RecipeApi):
         self._approve_successes()
 
 
-  def _download_browser(self, runtime, version):
+  def download_browser(self, runtime, version):
     # Download CIPD package
     #  dart/browsers/<runtime>/${platform} <version>
     # to directory
@@ -912,6 +912,7 @@ class DartApi(recipe_api.RecipeApi):
     version_tag = 'version:%s' % version
     package = 'dart/browsers/%s/${platform}' % runtime
     self.m.cipd.ensure(browser_path, { package: version_tag })
+    return browser_path
 
 
   def _upload_results_to_bq(self, results_str):
