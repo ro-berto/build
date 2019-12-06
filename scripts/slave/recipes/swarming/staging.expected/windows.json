@@ -1093,7 +1093,9 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-dev.appspot.com/user/task/110100@@@"
     ]
   },
   {

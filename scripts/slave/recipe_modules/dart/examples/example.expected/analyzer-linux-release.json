@@ -1827,6 +1827,7 @@
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
@@ -1910,6 +1911,7 @@
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/110000@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
@@ -1993,6 +1995,7 @@
       "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/120000@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
@@ -2503,6 +2506,7 @@
       "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/2\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/130000@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },

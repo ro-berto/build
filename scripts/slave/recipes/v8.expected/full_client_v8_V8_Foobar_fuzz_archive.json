@@ -225,6 +225,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

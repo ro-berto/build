@@ -227,7 +227,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._pending_tasks = set()
     self._service_account_json = None
     self._show_outputs_ref_in_collect_step = True
-    self._show_shards_in_collect_step = False
+    self._show_shards_in_collect_step = True
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
