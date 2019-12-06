@@ -210,12 +210,8 @@ class GomaApi(recipe_api.RecipeApi):
             goma_package = ('infra_internal/goma/client/%s' % platform)
             self.m.cipd.ensure(output_dir, {goma_package: client_type})
 
-          platform = self.m.cipd.platform_suffix()
-          # For Windows there's only 64-bit goma client.
-          if self.m.platform.is_win:
-            platform = platform.replace('386', 'amd64')
           self._goma_dir = self.default_client_path
-          Download(platform, self._goma_dir)
+          Download('${platform}', self._goma_dir)
           if additional_platforms:
             assert isinstance(additional_platforms, list) or isinstance(
                 additional_platforms, tuple)

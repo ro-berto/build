@@ -2396,7 +2396,7 @@ property when running the recipe with the full path. e.g.
 Note that the goma client directory must exist inside the recipe workdir.
 A symlink (on mac/linux) is enough, though.
 
-&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#229)(self, platform):**
+&mdash; **def [additional\_goma\_dir](/scripts/slave/recipe_modules/goma/api.py#225)(self, platform):**
 
 Return the Goma client dir for the platform.
 
@@ -2408,7 +2408,7 @@ Returns:
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#83)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#577)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#573)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2464,9 +2464,9 @@ Args:
              This is for mitigating crbug.com/997733 to avoid sharing
              Goma client among builders.
 
-&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#241)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_ctl](/scripts/slave/recipe_modules/goma/api.py#237)(self):**
 
-&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#245)(self):**
+&emsp; **@property**<br>&mdash; **def [goma\_dir](/scripts/slave/recipe_modules/goma/api.py#241)(self):**
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/goma/api.py#66)(self):**
 
@@ -2492,14 +2492,14 @@ This function caches the _recommended_jobs.
 
 &emsp; **@property**<br>&mdash; **def [service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#70)(self):**
 
-&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#318)(self, env=None, \*\*kwargs):**
+&mdash; **def [start](/scripts/slave/recipe_modules/goma/api.py#314)(self, env=None, \*\*kwargs):**
 
 Start goma compiler_proxy.
 
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#401)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#397)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 

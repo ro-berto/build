@@ -136,7 +136,7 @@
       "-in",
       "[START_DIR]\\client\\out\\Release\\goma-win",
       "-name",
-      "infra/goma/client/windows-amd64",
+      "infra/goma/client/${platform}",
       "-out",
       "[TMP_BASE]\\package.cipd",
       "-json-output",
@@ -144,12 +144,12 @@
       "-install-mode",
       "copy"
     ],
-    "name": "build windows-amd64",
+    "name": "build ${platform}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

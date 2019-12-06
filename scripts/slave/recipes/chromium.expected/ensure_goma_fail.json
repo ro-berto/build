@@ -218,7 +218,7 @@
       "-root",
       "[GOMA_CACHE]/client",
       "-ensure-file",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra_internal/goma/client/${platform} release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",

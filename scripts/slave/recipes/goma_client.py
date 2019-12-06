@@ -72,7 +72,7 @@ def RunSteps(api):
   # archive.py creates goma-<platform>/ in out/Release.
   root = build_out_dir.join(build_target, 'goma-%s' % api.platform.name)
   pkg_file = api.path['tmp_base'].join('package.cipd')
-  pkg_name = 'infra/goma/client/%s' % api.cipd.platform_suffix()
+  pkg_name = 'infra/goma/client/${platform}'
   api.cipd.build(root, pkg_file, pkg_name, install_mode='copy')
 
   # 6. Register CIPD package if prod.
