@@ -12204,7 +12204,7 @@
       "-C",
       "[CACHE]/builder/src/out/fuchsia_debug_x64",
       "flutter/shell/platform/fuchsia:fuchsia",
-      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+      "fuchsia_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -12221,7 +12221,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+    "name": "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests"
   },
   {
     "cmd": [],
@@ -12363,7 +12363,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
+      "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -12469,35 +12469,6 @@
     "name": "Package Fuchsia Artifacts"
   },
   {
-    "cmd": [
-      "[CACHE]/builder/src/flutter/tools/fuchsia/gen_package.py",
-      "--pm-bin",
-      "[CACHE]/builder/src/fuchsia/sdk/linux/tools/pm",
-      "--package-dir",
-      "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_runner_tests_far",
-      "--signing-key",
-      "[CACHE]/builder/src/flutter/tools/fuchsia/development.key",
-      "--far-name",
-      "flutter_runner_tests"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
-      ]
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Generate far"
-  },
-  {
     "cmd": [],
     "name": "Copy files"
   },
@@ -12509,7 +12480,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "RECIPE[build::flutter/engine].resources/fuchsia-tests.sh",
+      "[CACHE]/builder/src/flutter/testing/fuchsia/run_tests.sh",
       "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
@@ -12637,7 +12608,42 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/fuchsia_debug_x64/flutter_runner_tests-0.far",
+      "[CACHE]/builder/src/flutter/testing/fuchsia/test_fars",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "Copy files.Retrieve list of test FARs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@test_fars@#this is a comment@@@",
+      "@@@STEP_LOG_LINE@test_fars@test.far@@@",
+      "@@@STEP_LOG_END@test_fars@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/fuchsia_debug_x64/test.far",
       "[CLEANUP]/tmp_tmp_41"
     ],
     "cwd": "[CACHE]/builder",
@@ -12656,7 +12662,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Copy files.Copy flutter_runner_tests far",
+    "name": "Copy files.Copy test.far to isolated",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -12888,7 +12894,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"flutter_runner_fuchsia\", \"priority\": \"100\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"flutter/fuchsia_ctl/${platform}\", \"path\": \".\", \"version\": \"version:0.0.2\"}]}, \"command\": [\"./fuchsia-tests.sh\", \"generic-x64.tgz\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"pool\", \"value\": \"luci.flutter.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"3600\", \"outputs\": []}}]}]}",
+      "{\"requests\": [{\"name\": \"flutter_fuchsia_unittests\", \"priority\": \"100\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"flutter/fuchsia_ctl/${platform}\", \"path\": \".\", \"version\": \"version:0.0.2\"}]}, \"command\": [\"./run_tests.sh\", \"generic-x64.tgz\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"pool\", \"value\": \"luci.flutter.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"3600\", \"outputs\": []}}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -12914,14 +12920,14 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"flutter_runner_fuchsia\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"flutter_fuchsia_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: flutter_runner_fuchsia@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: flutter_fuchsia_unittests@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -12995,7 +13001,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"flutter_runner_fuchsia\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"flutter_fuchsia_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
@@ -13007,9 +13013,9 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: flutter_runner_fuchsia@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: flutter_runner_fuchsia@@@",
-      "@@@STEP_LINK@task isolated outputs: flutter_runner_fuchsia@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
+      "@@@STEP_LOG_LINE@task stdout+stderr: flutter_fuchsia_unittests@hello world!@@@",
+      "@@@STEP_LOG_END@task stdout+stderr: flutter_fuchsia_unittests@@@",
+      "@@@STEP_LINK@task isolated outputs: flutter_fuchsia_unittests@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
   },
   {
@@ -13161,7 +13167,7 @@
       "-C",
       "[CACHE]/builder/src/out/fuchsia_debug_arm64",
       "flutter/shell/platform/fuchsia:fuchsia",
-      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+      "fuchsia_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -13178,7 +13184,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+    "name": "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests"
   },
   {
     "cmd": [],
@@ -13320,7 +13326,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
+      "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",

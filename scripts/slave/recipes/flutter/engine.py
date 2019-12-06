@@ -109,8 +109,7 @@ def CollectBuilds(api, builds):
 def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
   targets = ['flutter/shell/platform/fuchsia:fuchsia']
   if include_test_targets:
-    targets.append(
-        'flutter/shell/platform/fuchsia/flutter:flutter_runner_tests')
+    targets += ['fuchsia_tests']
   return targets
 
 
@@ -583,32 +582,18 @@ def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
                       target_dir)
 
 
-def PackageFlutterRunnerTests(api, checkout, fuchsia_tools):
-  package_cmd = [
-      checkout.join('flutter', 'tools', 'fuchsia', 'gen_package.py'),
-      '--pm-bin',
-      fuchsia_tools.join('pm'),
-      '--package-dir',
-      checkout.join('out', 'fuchsia_debug_x64', 'flutter_runner_tests_far'),
-      '--signing-key',
-      checkout.join('flutter', 'tools', 'fuchsia', 'development.key'),
-      '--far-name',
-      'flutter_runner_tests',
-  ]
-  api.step('Generate far', package_cmd)
-
-
-def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
+def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name,
+                                fuchsia_test_script):
   """
   Gets the system image for the current Fuchsia SDK from cloud storage, adds it
   to an isolated along with the `pm` and `dev_finder` utilities, as well as the
-  flutter_runner_tests and the flutter_runner FAR, and a bash script (in
-  engine.resources/fuchsia-tests.sh) to drive the flutter_ctl.
+  flutter_runner_tests and the required flutter unittest FARs (listed in
+  engine/testing/fuchsia/test_fars), and a bash script (in
+  engine/testing/fuchsia/run_tests.sh) to drive the flutter_ctl.
   """
   with MakeTempDir(api, 'isolated') as isolated_dir:
     with api.step.nest('Copy files'):
-      api.file.copy('Copy test script', api.resource('fuchsia-tests.sh'),
-                    isolated_dir)
+      api.file.copy('Copy test script', fuchsia_test_script, isolated_dir)
       api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
                     isolated_dir)
       api.file.copy('Copy pm', fuchsia_tools.join('pm'), isolated_dir)
@@ -616,10 +601,16 @@ def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name):
           'Copy flutter_runner far',
           checkout.join('out', 'fuchsia_bucket', 'flutter', 'x64', 'debug',
                         'aot', 'flutter_aot_runner-0.far'), isolated_dir)
-      api.file.copy(
-          'Copy flutter_runner_tests far',
-          checkout.join('out', 'fuchsia_debug_x64',
-                        'flutter_runner_tests-0.far'), isolated_dir)
+      test_fars_file = checkout.join('flutter', 'testing', 'fuchsia',
+                                     'test_fars')
+      test_fars_raw = api.file.read_text('Retrieve list of test FARs',
+                                         test_fars_file)
+      test_fars = test_fars_raw.split('\n')
+      for far in test_fars:
+        if (len(far) > 0) and (not far.startswith('#')):
+          api.file.copy('Copy %s to isolated' % far,
+                        checkout.join('out', 'fuchsia_debug_x64', far),
+                        isolated_dir)
 
     DownloadFuchsiaSystemImage(api, isolated_dir, 'fuchsia',
                                GetFuchsiaBuildId(api), image_name)
@@ -640,23 +631,25 @@ def TestFuchsia(api):
   fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
   image_name = 'generic-x64.tgz'
 
-  PackageFlutterRunnerTests(api, checkout, fuchsia_tools)
+  fuchsia_test_script = checkout.join('flutter', 'testing', 'fuchsia',
+                                      'run_tests.sh')
+
   isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
-      image_name)
+                                              image_name, fuchsia_test_script)
 
   ensure_file = api.cipd.EnsureFile()
   ensure_file.add_package('flutter/fuchsia_ctl/${platform}',
       api.properties.get('fuchsia_ctl_version'))
 
   request = (
-      api.swarming.task_request().with_name('flutter_runner_fuchsia')
+      api.swarming.task_request().with_name('flutter_fuchsia_unittests')
       .with_priority(100))
 
   request = (
       request.with_slice(
           0, request[0].with_cipd_ensure_file(ensure_file).with_command(
-              ['./fuchsia-tests.sh',
-                image_name]).with_dimensions(pool='luci.flutter.tests')
+              ['./run_tests.sh',
+               image_name]).with_dimensions(pool='luci.flutter.tests')
           .with_isolated(isolated_hash).with_expiration_secs(
               3600).with_io_timeout_secs(3600).with_execution_timeout_secs(
                   3600).with_idempotent(True).with_containment_type('AUTO')))
@@ -1344,6 +1337,10 @@ def GenTests(api):
           project='flutter'),
       collect_build_output,
       api.runtime(is_luci=True, is_experimental=True),
+      api.step_data(
+          'Copy files.Retrieve list of test FARs',
+          api.file.read_text('#this is a comment\ntest.far\n'),
+      ),
       api.properties(
           InputProperties(
               clobber=True,

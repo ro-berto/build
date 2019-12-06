@@ -8433,7 +8433,7 @@
       "-C",
       "[CACHE]/builder/src/out/fuchsia_debug_x64",
       "flutter/shell/platform/fuchsia:fuchsia",
-      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+      "fuchsia_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -8450,7 +8450,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+    "name": "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests"
   },
   {
     "cmd": [],
@@ -8592,7 +8592,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
+      "build fuchsia_debug_x64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -8816,7 +8816,7 @@
       "-C",
       "[CACHE]/builder/src/out/fuchsia_debug_arm64",
       "flutter/shell/platform/fuchsia:fuchsia",
-      "flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+      "fuchsia_tests"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -8833,7 +8833,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests"
+    "name": "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests"
   },
   {
     "cmd": [],
@@ -8975,7 +8975,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia flutter/shell/platform/fuchsia/flutter:flutter_runner_tests",
+      "build fuchsia_debug_arm64 flutter/shell/platform/fuchsia:fuchsia fuchsia_tests",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
