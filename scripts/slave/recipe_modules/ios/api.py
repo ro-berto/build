@@ -549,7 +549,6 @@ class iOSApi(recipe_api.RecipeApi):
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""
     self.m.chromium_swarming.show_outputs_ref_in_collect_step = False
-    self.m.chromium_swarming.show_shards_in_collect_step = True
     self.m.swarming_client.query_script_version('swarming.py')
 
     # TODO(tikuta): Remove this after the switch (crbug.com/894045).

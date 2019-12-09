@@ -508,7 +508,8 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@"
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
     ]
   },
   {

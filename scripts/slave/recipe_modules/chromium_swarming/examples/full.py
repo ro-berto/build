@@ -29,7 +29,6 @@ PROPERTIES = {
   'platforms': Property(default=('win',)),
   'custom_trigger_script': Property(default=False),
   'show_outputs_ref_in_collect_step': Property(default=True),
-  'show_shards_in_collect_step': Property(default=False),
   'gtest_task': Property(default=False),
   'isolated_script_task': Property(default=False),
   'merge': Property(default=None),
@@ -40,9 +39,9 @@ PROPERTIES = {
 }
 
 def RunSteps(api, platforms, custom_trigger_script,
-             show_outputs_ref_in_collect_step, show_shards_in_collect_step,
-             gtest_task, isolated_script_task, merge, trigger_script,
-             named_caches, service_account, wait_for_tasks):
+             show_outputs_ref_in_collect_step, gtest_task, isolated_script_task,
+             merge, trigger_script, named_caches, service_account,
+             wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -72,8 +71,6 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   api.chromium_swarming.set_default_dimension('inexistent', None)
 
-  api.chromium_swarming.show_shards_in_collect_step = (
-      show_shards_in_collect_step)
   api.chromium_swarming.show_outputs_ref_in_collect_step = (
       show_outputs_ref_in_collect_step)
 
@@ -325,14 +322,6 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
-  )
-
-  yield api.test(
-      'show_shards_in_collect_step',
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')),
-      api.properties(show_shards_in_collect_step=True),
   )
 
   yield api.test(
@@ -591,7 +580,6 @@ def GenTests(api):
               }) + api.test_utils.canned_gtest_output(False), summary_data)),
       api.properties(
           platforms=('linux',),
-          show_shards_in_collect_step=True,
           gtest_task=True),
   )
   yield api.test(
@@ -605,10 +593,7 @@ def GenTests(api):
               api.raw_io.output_dir({
                   'summary.json': json.dumps(summary_data)
               }), summary_data)),
-      api.properties(
-          platforms=('linux',),
-          show_shards_in_collect_step=True,
-          isolated_script_task=True),
+      api.properties(platforms=('linux',), isolated_script_task=True),
   )
 
   summary_data_deduped = {
@@ -644,7 +629,6 @@ def GenTests(api):
               summary_data_deduped)),
       api.properties(
           platforms=('linux',),
-          show_shards_in_collect_step=True,
           gtest_task=True),
   )
 
@@ -661,6 +645,5 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(True), missing_duration_data)),
       api.properties(
           platforms=('linux',),
-          show_shards_in_collect_step=True,
           gtest_task=True), api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))

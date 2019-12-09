@@ -227,7 +227,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._pending_tasks = set()
     self._service_account_json = None
     self._show_outputs_ref_in_collect_step = True
-    self._show_shards_in_collect_step = True
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
@@ -455,15 +454,6 @@ class SwarmingApi(recipe_api.RecipeApi):
   @show_outputs_ref_in_collect_step.setter
   def show_outputs_ref_in_collect_step(self, value):
     self._show_outputs_ref_in_collect_step = value
-
-  @property
-  def show_shards_in_collect_step(self):
-    """Show the shard link in each collect step."""
-    return self._show_shards_in_collect_step
-
-  @show_shards_in_collect_step.setter
-  def show_shards_in_collect_step(self, value):
-    self._show_shards_in_collect_step = value
 
   @staticmethod
   def prefered_os_dimension(platform):
@@ -1624,7 +1614,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             outputs_ref['isolatedserver'], outputs_ref['namespace'],
             outputs_ref['isolated'])
 
-      if url and self.show_shards_in_collect_step and should_show_shard:
+      if url and should_show_shard:
         links[display_text] = url
 
     # Keep track of this in case we want to retry failed shards later. Clients
@@ -1731,7 +1721,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     self.set_default_dimension('pool', 'chromium.tests')
     self.add_default_tag('project:%s' % project_name)
     self.default_idempotent = True
-    self.show_shards_in_collect_step = True
 
     if precommit:
       self.default_priority = 30

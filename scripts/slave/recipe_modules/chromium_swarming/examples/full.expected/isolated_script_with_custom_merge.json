@@ -514,7 +514,8 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LINK@custom_link@http://example.com@@@"
+      "@@@STEP_LINK@custom_link@http://example.com@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
     ]
   },
   {
