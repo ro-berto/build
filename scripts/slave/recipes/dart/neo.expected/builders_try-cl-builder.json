@@ -56,9 +56,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
-      "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
-      "GIT_TRACE_CURL": "1",
-      "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -105,9 +102,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
-      "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
-      "GIT_TRACE_CURL": "1",
-      "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {
@@ -148,9 +142,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
-      "GIT_REDACT_COOKIES": "o,SSO,GSSO_UberProxy",
-      "GIT_TRACE_CURL": "1",
-      "GIT_TRACE_CURL_NO_DATA": "1",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_suffixes": {

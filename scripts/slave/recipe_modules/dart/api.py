@@ -51,12 +51,7 @@ class DartApi(recipe_api.RecipeApi):
 
     with self.m.context(
         cwd=self.m.path['cache'].join('builder'),
-        env={
-            'GOMA_DIR': self.m.goma.goma_dir,
-            'GIT_TRACE_CURL': '1',
-            'GIT_TRACE_CURL_NO_DATA': '1',
-            'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'
-        }):
+        env={'GOMA_DIR': self.m.goma.goma_dir}):
       self.m.bot_update.ensure_checkout()
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
