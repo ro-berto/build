@@ -65,7 +65,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/buildtools/mac/gn",
+      "[CACHE]/builder/buildtools/mac/gn",
       "gen",
       "[CACHE]/builder/crashpad/out/Debug",
       "--args=target_os=\"ios\" target_cpu=\"x64\" is_debug=true"

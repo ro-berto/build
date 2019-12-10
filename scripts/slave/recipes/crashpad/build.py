@@ -116,8 +116,12 @@ def RunSteps(api, config, target_os, target_cpu):
 
   dirname = config
   if is_fuchsia or is_ios or is_linux or is_mac:
-    gn = api.path['start_dir'].join(
-        'buildtools', 'mac' if is_mac or is_ios else 'linux64', 'gn')
+    # TODO(crbug.com/crashpad/319): Simplify once all platforms use the cache.
+    if is_ios:
+      gn = api.path['cache'].join('builder', 'buildtools', 'mac', 'gn')
+    else:
+      gn = api.path['start_dir'].join('buildtools',
+                                      'mac' if is_mac else 'linux64', 'gn')
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
     if not target_cpu:
