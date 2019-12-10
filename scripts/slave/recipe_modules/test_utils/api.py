@@ -15,15 +15,18 @@ from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
 
 class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
+
   def result(self, presentation, test):
     ret = super(TestResultsOutputPlaceholder, self).result(presentation, test)
     return TestResults(ret)
 
 
 class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
+
   def result(self, presentation, test):
     ret = super(GTestResultsOutputPlaceholder, self).result(presentation, test)
     return GTestResults(ret)
+
 
 class TestUtilsApi(recipe_api.RecipeApi):
   """This class helps run tests and parse results.
@@ -79,8 +82,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       limit = self._max_reported_failures
     if len(failures) <= limit:
       return failures, failures
-    overflow_line = '... %d more (%d total) ...' % (
-        len(failures) - limit, len(failures))
+    overflow_line = '... %d more (%d total) ...' % (len(failures) - limit,
+                                                    len(failures))
     # failures might be a set, which doesn't support slicing, so create a list
     # out of an islice so that only the elemnts we are keeping are copied
     limited_failures = list(itertools.islice(failures, limit))
@@ -146,11 +149,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # FIXME: We could theoretically split up each run more. This would
         # require some refactoring in util.py to store each individual run's
         # logs, which we don't do currently.
-        log_name = '%s: %s (status %s)' % (
-            prefix, f, ','.join(set(r.raw_results[f])))
+        log_name = '%s: %s (status %s)' % (prefix, f, ','.join(
+            set(r.raw_results[f])))
         p.logs[log_name] = [
-            "Test '%s' completed with the following status(es): '%s'" % (
-                f, '\',\''.join(r.raw_results[f])),
+            "Test '%s' completed with the following status(es): '%s'" %
+            (f, '\',\''.join(r.raw_results[f])),
             '\n',
             "Test '%s' had the following logs when run:\n" % f,
             '\n',
@@ -184,8 +187,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         emit_log(f, 'Flaky failure')
 
       p.step_text += self.format_step_text([
-          ['deterministic failures [caused step to fail]:',
-           deterministic_failures_text],
+          [
+              'deterministic failures [caused step to fail]:',
+              deterministic_failures_text
+          ],
           ['flaky failures [ignored]:', flaky_failures_text],
       ])
     return r
@@ -230,8 +235,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_tests
 
-  def run_tests(self, caller_api, tests, suffix, sort_by_shard=False,
-                retry_failed_shards=False, retry_invalid_shards=False):
+  def run_tests(self,
+                caller_api,
+                tests,
+                suffix,
+                sort_by_shard=False,
+                retry_failed_shards=False,
+                retry_invalid_shards=False):
     """
     Utility function for running a list of tests and returning the failed tests.
 
@@ -264,8 +274,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'invalid caller_api',
           'caller_api must include the chromium_swarming recipe module')
     invalid_results, failed_tests = self._run_tests_once(
-            caller_api, tests, suffix,
-            sort_by_shard=sort_by_shard)
+        caller_api, tests, suffix, sort_by_shard=sort_by_shard)
     failed_and_invalid_tests = list(set(failed_tests + invalid_results))
     if retry_failed_shards or retry_invalid_shards:
       tests_to_retry = set()
@@ -285,8 +294,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if suffix:
           retry_suffix += ' ' + suffix
         new_swarming_invalid, _ = self._run_tests_once(
-            caller_api, swarming_test_suites, retry_suffix,
-            sort_by_shard=True)
+            caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
 
         # For swarming test suites, if we have valid test results from one of
         # the runs of a test suite, then that test suite by definition doesn't
@@ -295,9 +303,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # 'retry shards with patch' steps, invalid non-swarming test suites are
         # still invalid.
         non_swarming_invalid = [
-            t for t in invalid_results if not t.runs_on_swarming]
-        invalid_results = list(set(invalid_results).intersection(
-            set(new_swarming_invalid))) + non_swarming_invalid
+            t for t in invalid_results if not t.runs_on_swarming
+        ]
+        invalid_results = list(
+            set(invalid_results).intersection(
+                set(new_swarming_invalid))) + non_swarming_invalid
 
         # Some suites might be passing now, since we retried some tests. Remove
         # any suites which are now fully passing.
@@ -308,7 +318,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           return not valid or failures
 
         failed_and_invalid_tests = [
-            t for t in failed_and_invalid_tests if _still_failing(t)]
+            t for t in failed_and_invalid_tests if _still_failing(t)
+        ]
 
     return invalid_results, failed_and_invalid_tests
 
@@ -330,7 +341,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
           invalid_test_suites.
     """
     invalid_test_suites, all_failing_test_suites = self.run_tests(
-        caller_api, tests, 'with patch', sort_by_shard=True,
+        caller_api,
+        tests,
+        'with patch',
+        sort_by_shard=True,
         retry_failed_shards=retry_failed_shards,
         retry_invalid_shards=retry_failed_shards)
 
@@ -351,9 +365,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # for analysis.
     self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
-  def _summarize_new_and_ignored_failures(
-      self, test, new_failures, ignored_failures, suffix, failure_text,
-      ignored_text):
+  def _summarize_new_and_ignored_failures(self, test, new_failures,
+                                          ignored_failures, suffix,
+                                          failure_text, ignored_text):
     """Summarizes new and ignored failures in the test_suite |test|.
 
     Args:
@@ -375,8 +389,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # We add a failure_reason even if we don't mark the build as a failure. This
     # will contribute to the failure hash if the build eventually fails.
     self.m.tryserver.add_failure_reason({
-      'test_name': test.name,
-      'new_failures': new_failures,
+        'test_name': test.name,
+        'new_failures': new_failures,
     })
 
     # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
@@ -390,10 +404,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     step_name = '%s (%s)' % (test.name, suffix)
     _, new_failures = self.limit_failures(new_failures)
     _, ignored_failures = self.limit_failures(ignored_failures)
-    step_text = self.format_step_text([
-        [failure_text, new_failures],
-        [ignored_text, ignored_failures]
-    ])
+    step_text = self.format_step_text([[failure_text, new_failures],
+                                       [ignored_text, ignored_failures]])
 
     result = self.m.python.succeeding_step(step_name, step_text)
     if new_failures:
@@ -403,7 +415,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       result.presentation.status = self.m.step.WARNING
 
     return not bool(new_failures)
-
 
   def summarize_test_with_patch_deapplied(self, caller_api, test_suite):
     """Summarizes test results after a CL has been retried with patch deapplied.
@@ -443,13 +454,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite, new_failures, ignored_failures, 'retry summary',
         failure_text, ignored_text)
 
-
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
     valid_results, new_failures = (
         test_suite.with_patch_failures_including_retry())
 
-    if not valid_results: # pragma: nocover
+    if not valid_results:  # pragma: nocover
       self.m.python.infra_failing_step(
           '{} assertion'.format(test_suite.name),
           'This line should never be reached. If a test has invalid results '
@@ -459,8 +469,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
     failure_text = ('Tests failed, not being retried')
     ignored_text = ('Tests ignored')
     return self._summarize_new_and_ignored_failures(
-        test_suite, new_failures, set(), 'with patch summary',
-        failure_text=failure_text, ignored_text=ignored_text)
+        test_suite,
+        new_failures,
+        set(),
+        'with patch summary',
+        failure_text=failure_text,
+        ignored_text=ignored_text)
 
   def _findit_potential_test_flakes(self, caller_api, test_suite):
     """Returns test failures that FindIt views as potential flakes.
@@ -524,8 +538,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     step_layer_flakiness = {}
     for test_suite in test_suites:
-      potential_test_flakes = self._findit_potential_test_flakes(caller_api,
-                                                                 test_suite)
+      potential_test_flakes = self._findit_potential_test_flakes(
+          caller_api, test_suite)
 
       # We only want to consider tests that failed in 'with patch' but succeeded
       # when retried by 'retry shards with patch'. If a test didn't run in
@@ -544,14 +558,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     potential_build_flakiness = {}
     for test_suite in test_suites:
-      potential_test_flakes = self._findit_potential_test_flakes(caller_api,
-                                                                 test_suite)
+      potential_test_flakes = self._findit_potential_test_flakes(
+          caller_api, test_suite)
 
       valid_retry_shards_results, retry_shards_successes, _ = (
           test_suite.shard_retry_with_patch_results())
       if valid_retry_shards_results:
-        potential_test_flakes = (
-            potential_test_flakes - retry_shards_successes)
+        potential_test_flakes = (potential_test_flakes - retry_shards_successes)
 
       if potential_test_flakes:
         step_name = test_suite.name_of_step_for_suffix('with patch')
@@ -559,14 +572,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # TODO(crbug.com/939063): Surface information about retried shards.
     if step_layer_flakiness or potential_build_flakiness:
-      output = { 'Step Layer Flakiness' : step_layer_flakiness,
-                 'Failing With Patch Tests That Caused Build Failure' :
-                    potential_build_flakiness }
+      output = {
+          'Step Layer Flakiness':
+              step_layer_flakiness,
+          'Failing With Patch Tests That Caused Build Failure':
+              potential_build_flakiness
+      }
       step = caller_api.python.succeeding_step(
           'FindIt Flakiness', 'Metadata for FindIt post processing.')
-      step.presentation.logs['step_metadata'] = (
-          json.dumps(output, sort_keys=True, indent=2)
-      ).splitlines()
+      step.presentation.logs['step_metadata'] = (json.dumps(
+          output, sort_keys=True, indent=2)).splitlines()
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
@@ -574,11 +589,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     script = self.m.chromium.repo_resource(
         'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
     args = [
-        '--retry-summary-json', self.m.json.input(retry_summary),
-        '--build-number', self.m.buildbucket.build.number,
-        '--builder-name', self.m.buildbucket.builder_name,
-        '--gs-bucket', 'gs://chromium-layout-test-archives',
-        '--dest-filename', dest_filename
+        '--retry-summary-json',
+        self.m.json.input(retry_summary), '--build-number',
+        self.m.buildbucket.build.number, '--builder-name',
+        self.m.buildbucket.builder_name, '--gs-bucket',
+        'gs://chromium-layout-test-archives', '--dest-filename', dest_filename
     ]
     args += self.m.build.slave_utils_args
     self.m.build.python('archive_retry_summary', script, args)
@@ -608,11 +623,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     return GTestResultsOutputPlaceholder(self, add_json_log)
 
+
 class TestGroup(object):
+
   def __init__(self, tests):
     self._tests = tests
 
-  def pre_run(self, caller_api, suffix): # pragma: no cover
+  def pre_run(self, caller_api, suffix):  # pragma: no cover
     """Executes the |pre_run| method of each test.
 
     Args:
@@ -621,7 +638,7 @@ class TestGroup(object):
     """
     raise NotImplementedError()
 
-  def run(self, caller_api, suffix): # pragma: no cover
+  def run(self, caller_api, suffix):  # pragma: no cover
     """Executes the |run| method of each test.
 
     Args:
@@ -642,6 +659,7 @@ class TestGroup(object):
 
 
 class LocalGroup(TestGroup):
+
   def __init__(self, tests):
     super(LocalGroup, self).__init__(tests)
 
@@ -657,6 +675,7 @@ class LocalGroup(TestGroup):
 
 
 class SwarmingGroup(TestGroup):
+
   def __init__(self, tests):
     super(SwarmingGroup, self).__init__(tests)
     self._task_ids_to_test = {}
@@ -685,8 +704,9 @@ class SwarmingGroup(TestGroup):
 
       finished_sets, attempts = (
           caller_api.chromium_swarming.wait_for_finished_task_set(
-              list(self._task_ids_to_test), suffix=(
-                  (' (%s)' % suffix) if suffix else ''), attempts=attempts))
+              list(self._task_ids_to_test),
+              suffix=((' (%s)' % suffix) if suffix else ''),
+              attempts=attempts))
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
         test.run(caller_api, suffix)
@@ -695,17 +715,17 @@ class SwarmingGroup(TestGroup):
     # Testing this suite is hard, because the step_test_data for get_states
     # means that it's hard to force it to never return COMPLETED for tasks. This
     # shouldn't happen anyways, so hopefully not testing this will be fine.
-    if self._task_ids_to_test: # pragma: no cover
+    if self._task_ids_to_test:  # pragma: no cover
       # Something weird is going on, just collect tasks like normal, and log a
       # warning.
       result = caller_api.python.succeeding_step(
-          'swarming tasks.get_states issue', (
-          'swarming tasks.get_states seemed to indicate that all tasks for this'
-          ' build were finished collecting, but the recipe thinks the following'
-          ' tests still need to be collected:\n%s\nSomething is probably wrong'
-          ' with the swarming server. Falling back on the old collection logic.'
-          % ', '.join(
-              test.name for test in self._task_ids_to_test.values())))
+          'swarming tasks.get_states issue',
+          ('swarming tasks.get_states seemed to indicate that all tasks for'
+           ' this build were finished collecting, but the recipe thinks the'
+           ' following tests still need to be collected:\n%s\nSomething is'
+           ' probably wrong with the swarming server. Falling back on the old'
+           ' collection logic.' % ', '.join(
+               test.name for test in self._task_ids_to_test.values())))
       result.presentation.status = caller_api.step.WARNING
 
       for test in self._task_ids_to_test.values():
