@@ -29,10 +29,13 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  'config': Property(kind=str, help='Debug or Release', default='Debug'),
-  'target_os':
-    Property(kind=str, help='win, mac, linux, or fuchsia', default=None),
-  'target_cpu': Property(kind=str, help='x64, arm64, or ""', default=''),
+    'config':
+        Property(kind=str, help='Debug or Release', default='Debug'),
+    'target_os':
+        Property(
+            kind=str, help='win, mac, ios, linux, or fuchsia', default=None),
+    'target_cpu':
+        Property(kind=str, help='x64, arm64, or ""', default=''),
 }
 
 FAKE_SWARMING_TEST_SPEC = """\
@@ -57,9 +60,11 @@ def RunSteps(api, config, target_os, target_cpu):
 
   env = {}
 
-  is_fuchsia = is_linux = is_mac = is_win = False
+  is_fuchsia = is_ios = is_linux = is_mac = is_win = False
   if target_os == 'fuchsia':
     is_fuchsia = True
+  elif target_os == 'ios':
+    is_ios = True
   elif target_os == 'linux':
     is_linux = True
   elif target_os == 'mac':
@@ -67,12 +72,12 @@ def RunSteps(api, config, target_os, target_cpu):
   elif target_os == 'win':
     is_win = True
 
-  assert is_fuchsia or is_linux or is_mac or is_win
+  assert is_fuchsia or is_ios or is_linux or is_mac or is_win
 
   @contextlib.contextmanager
   def sdk(os, arch='x64'):
-    if os == 'mac':
-      with api.osx_sdk('mac'):
+    if os == 'ios' or os == 'mac':
+      with api.osx_sdk(os):
         yield
     elif os == 'win':
       assert arch in ('x86', 'x64')
@@ -92,7 +97,14 @@ def RunSteps(api, config, target_os, target_cpu):
     # also the setting of clang_path below.
     api.gclient.c.solutions[0].custom_vars['pull_linux_clang'] = True
 
-  api.bot_update.ensure_checkout()
+  # Place the checkout inside the "builder" cache on iOS, to avoid conflicting
+  # with existing Mac checkouts on the same machine.
+  # TODO(crbug.com/crashpad/319): Use the builder cache on all platforms.
+  if is_ios:
+    with api.context(cwd=api.path['cache'].join('builder')):
+      api.bot_update.ensure_checkout()
+  else:
+    api.bot_update.ensure_checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with
   # 'in'
@@ -103,9 +115,9 @@ def RunSteps(api, config, target_os, target_cpu):
     api.gclient.runhooks()
 
   dirname = config
-  if is_fuchsia or is_linux or is_mac:
+  if is_fuchsia or is_ios or is_linux or is_mac:
     gn = api.path['start_dir'].join(
-        'buildtools', 'mac' if is_mac else 'linux64', 'gn')
+        'buildtools', 'mac' if is_mac or is_ios else 'linux64', 'gn')
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
     if not target_cpu:
@@ -159,6 +171,10 @@ def RunSteps(api, config, target_os, target_cpu):
       # to (and should) do `build/run_fuchsia_qemu.py start` before, and `...
       # stop` after calling run_tests.py.
       # https://bugs.chromium.org/p/crashpad/issues/detail?id=219.
+      return
+
+    if is_ios:
+      # TODO(crbug.com/crashpad/317): Run tests on iOS.
       return
 
     with api.context(env=env):
@@ -219,6 +235,7 @@ def GenTests(api):
       ('crashpad_try_win_dbg', 'win', ''),
       ('crashpad_try_linux_rel', 'linux', ''),
       ('crashpad_fuchsia_rel', 'fuchsia', ''),
+      ('crashpad_ios_simulator_dbg', 'ios', ''),
   ]
   for t, os, cpu in tests:
     yield api.test(
