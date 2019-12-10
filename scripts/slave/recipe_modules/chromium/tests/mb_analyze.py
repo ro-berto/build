@@ -36,9 +36,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(
-          mastername='test_mastername',
-          path_config='kitchen'),
+      api.properties(mastername='test_mastername', path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.post_process(post_process.MustRun, 'analyze'),
       api.post_process(post_process.StatusSuccess),
@@ -48,9 +46,7 @@ def GenTests(api):
   yield api.test(
       'analyze_failure',
       api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(
-          mastername='test_mastername',
-          path_config='kitchen'),
+      api.properties(mastername='test_mastername', path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.step_data(
           'analyze',
@@ -75,9 +71,7 @@ def GenTests(api):
   yield api.test(
       'analyze_failure_no_output',
       api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(
-          mastername='test_mastername',
-          path_config='kitchen'),
+      api.properties(mastername='test_mastername', path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.step_data(
           'analyze',

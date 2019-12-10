@@ -63,7 +63,7 @@ def GenTests(api):
   def test(name, **kwargs):
     return api.test(
         name,
-        api.properties(path_config='kitchen', **kwargs),
+        api.properties(path_config='generic', **kwargs),
         api.buildbucket.ci_build(
             project='wasm',
             bucket='ci',

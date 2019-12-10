@@ -72,7 +72,7 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='ClangToTLinuxASanLibfuzzer',
-          path_config='kitchen'),
+          path_config='generic'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

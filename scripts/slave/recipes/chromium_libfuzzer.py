@@ -253,21 +253,12 @@ def GenTests(api):
     yield test
 
   yield api.test(
-      'kitchen_paths',
-      api.platform.name('mac'),
-      api.properties.generic(
-          mastername='chromium.fuzz',
-          buildername='Libfuzzer Upload Mac ASan',
-          path_config='kitchen'),
-  )
-
-  yield api.test(
       'compile_failure',
       api.platform.name('mac'),
       api.properties.generic(
           mastername='chromium.fuzz',
           buildername='Libfuzzer Upload Mac ASan',
-          path_config='kitchen'),
+          path_config='generic'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

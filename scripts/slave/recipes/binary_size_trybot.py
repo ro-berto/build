@@ -356,7 +356,7 @@ def _ClearFailedExpectationFiles(api):
 
 def GenTests(api):
   def props(name, commit_message='message', size_footer=False, **kwargs):
-    kwargs.setdefault('path_config', 'kitchen')
+    kwargs.setdefault('path_config', 'generic')
     kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     revision_info = {
         '_number': 1,

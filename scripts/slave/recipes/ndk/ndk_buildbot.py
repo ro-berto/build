@@ -23,13 +23,12 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('basic') +
-    api.properties.generic(
-      mastername='client.ndk',
-      branch='master',
-      cbb_config='ndk-linux-arm64-v8a',
-      # chromite module uses path['root'] which exists only in Buildbot.
-      path_config='buildbot',
-    )
+  yield api.test(
+      'basic',
+      api.properties.generic(
+          mastername='client.ndk',
+          branch='master',
+          cbb_config='ndk-linux-arm64-v8a',
+          path_config='generic',
+      ),
   )

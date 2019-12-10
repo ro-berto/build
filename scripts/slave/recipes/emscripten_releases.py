@@ -119,7 +119,7 @@ def GenTests(api):
   def test(name):
     return api.test(
         name,
-        api.properties(path_config='kitchen'),
+        api.properties(path_config='generic'),
         api.buildbucket.ci_build(
             project='emscripten-releases',
             builder='linux',

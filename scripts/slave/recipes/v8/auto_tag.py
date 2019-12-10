@@ -250,7 +250,7 @@ def GenTests(api):
     test_data = api.test(
         name,
         api.properties.generic(
-            mastername='client.v8.branches', path_config='kitchen'),
+            mastername='client.v8.branches', path_config='generic'),
         api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
@@ -343,7 +343,7 @@ def GenTests(api):
   yield api.test(
       'missing_branch',
       api.properties.generic(
-          mastername='client.v8.branches', path_config='kitchen'),
+          mastername='client.v8.branches', path_config='generic'),
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',

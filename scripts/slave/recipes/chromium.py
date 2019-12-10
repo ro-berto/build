@@ -1418,32 +1418,14 @@ def GenTests(api):
     }))
   )
 
-  yield (
-    api.test('kitchen_path_config') +
-    props(
-        mastername='chromium.fyi',
-        builder='Linux remote_run Builder',
-        build_number=77457,
-        path_config='kitchen')
-  )
-
-  yield (
-    api.test('generic_path_config') +
-    props(
-        mastername='chromium.fyi',
-        builder='Linux remote_run Builder',
-        build_number=77457,
-        path_config='generic')
-  )
-
-  yield (
-    api.test('ensure_goma_fail') +
-    props(
-        mastername='chromium.fyi',
-        builder='Linux remote_run Builder',
-        build_number=77457,
-        path_config='kitchen') +
-    api.override_step_data('ensure_goma.ensure_installed', retcode=1)
+  yield api.test(
+      'ensure_goma_fail',
+      props(
+          mastername='chromium.fyi',
+          builder='Linux remote_run Builder',
+          build_number=77457,
+          path_config='generic'),
+      api.override_step_data('ensure_goma.ensure_installed', retcode=1),
   )
 
 

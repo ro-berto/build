@@ -46,7 +46,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
             mastername=mastername,
             buildername=buildername,
             bot_id='bot_id',
-            path_config='kitchen',
+            path_config='generic',
             BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']),
         self.m.platform(bot_config['testing']['platform'],
                         chromium_kwargs.get('TARGET_BITS', 64)),

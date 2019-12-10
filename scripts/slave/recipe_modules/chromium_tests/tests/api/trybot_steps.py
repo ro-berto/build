@@ -92,7 +92,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
@@ -109,7 +109,7 @@ def GenTests(api):
           buildername='staging-chromium-rel',
           builders=_TEST_BUILDERS,
           trybots=_TEST_TRYBOTS,
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
@@ -128,7 +128,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_clobber_rel_ng',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
   )
 
@@ -137,7 +137,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='fuchsia_x64',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.override_step_data(
           'read filter exclusion spec',
@@ -163,7 +163,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
   )
 
@@ -172,7 +172,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.override_step_data('git diff to analyze patch',
                              api.raw_io.stream_output('OWNERS')),
@@ -184,7 +184,7 @@ def GenTests(api):
           mastername='tryserver.chromium.unmirrored',
           buildername='unmirrored-chromium-rel',
           builders=_TEST_BUILDERS,
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec(
           'tryserver.chromium.unmirrored', {
@@ -197,17 +197,13 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-
   CUSTOM_PROPS = api.properties.tryserver(
       mastername='tryserver.chromium.test',
       buildername='retry-shards',
       builders=_TEST_BUILDERS,
       trybots=_TEST_TRYBOTS,
-      swarm_hashes={
-        'base_unittests':
-        '[dummy hash for base_unittests]'
-      },
-      path_config='kitchen')
+      swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
+      path_config='generic')
 
   yield api.test(
       'retry_shards',
@@ -280,7 +276,7 @@ def GenTests(api):
           builders=_TEST_BUILDERS,
           trybots=_TEST_TRYBOTS,
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
@@ -315,7 +311,7 @@ def GenTests(api):
           builders=_TEST_BUILDERS,
           trybots=_TEST_TRYBOTS,
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
@@ -354,7 +350,7 @@ def GenTests(api):
           builders=_TEST_BUILDERS,
           trybots=_TEST_TRYBOTS,
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
@@ -393,7 +389,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen',
+          path_config='generic',
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
       ),
       api.runtime(is_experimental=False, is_luci=True),
@@ -429,7 +425,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen',
+          path_config='generic',
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
       ),
       api.runtime(is_experimental=False, is_luci=True),
@@ -470,7 +466,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen',
+          path_config='generic',
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'},
       ),
       api.runtime(is_experimental=False, is_luci=True),
@@ -528,7 +524,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen'),
+          path_config='generic'),
       api.runtime(is_experimental=False, is_luci=True),
       multiple_base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(),

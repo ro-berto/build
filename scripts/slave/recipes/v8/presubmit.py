@@ -38,7 +38,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(path_config='kitchen'),
+      api.properties(path_config='generic'),
       api.runtime(is_luci=True, is_experimental=False),
       api.post_process(Filter('Presubmit')),
   )

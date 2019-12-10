@@ -54,64 +54,61 @@ def GenTests(api):
     check(expected == found_ios_webkit_revision)
 
   basic_common = (
-    api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      path_config='kitchen',
-    )
-    + api.buildbucket.try_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode version': 'fake xcode version',
-      'env': {
-        'fake env var 1': 'fake env value 1',
-        'fake env var 2': 'fake env value 2',
-      },
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'bucket': 'fake-bucket-1',
-      'tests': [
-        {
-          'app': 'fake tests 1',
-          'device type': 'fake device',
-          'os': '8.0',
-        },
-        {
-          'app': 'fake tests 2',
-          'device type': 'fake device',
-          'os': '7.1',
-        },
-        {
-          'app': 'fake_eg_test_host',
-          'device type': 'fake device 3',
-          'os': '9.3',
-          'xctest': True,
-        },
-      ],
-      'upload': [
-        {
-          'artifact': 'fake tests 1.app',
-          'compress': True,
-        },
-        {
-          'artifact': 'fake tests 2.app',
-          'bucket': 'fake-bucket-2',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-  )
+      api.platform('mac', 64) + api.properties(
+          mastername='chromium.fake',
+          bot_id='fake-vm',
+          path_config='generic',
+      ) + api.buildbucket.try_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ) + api.ios.make_test_build_config({
+          'xcode version':
+              'fake xcode version',
+          'env': {
+              'fake env var 1': 'fake env value 1',
+              'fake env var 2': 'fake env value 2',
+          },
+          'gn_args': [
+              'is_debug=true',
+              'target_cpu="x86"',
+          ],
+          'bucket':
+              'fake-bucket-1',
+          'tests': [
+              {
+                  'app': 'fake tests 1',
+                  'device type': 'fake device',
+                  'os': '8.0',
+              },
+              {
+                  'app': 'fake tests 2',
+                  'device type': 'fake device',
+                  'os': '7.1',
+              },
+              {
+                  'app': 'fake_eg_test_host',
+                  'device type': 'fake device 3',
+                  'os': '9.3',
+                  'xctest': True,
+              },
+          ],
+          'upload': [
+              {
+                  'artifact': 'fake tests 1.app',
+                  'compress': True,
+              },
+              {
+                  'artifact': 'fake tests 2.app',
+                  'bucket': 'fake-bucket-2',
+              },
+          ],
+      }) + api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ))
 
   yield api.test(
       'basic',
@@ -131,7 +128,7 @@ def GenTests(api):
       api.properties(
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='kitchen',
+          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -161,7 +158,7 @@ def GenTests(api):
       api.properties(
           mastername='chromium.fake',
           bot_id='fake-vm',
-          path_config='kitchen',
+          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',
@@ -227,7 +224,7 @@ def GenTests(api):
       api.properties(
           mastername='chromium.clang',
           bot_id='fake-vm',
-          path_config='kitchen',
+          path_config='generic',
       ),
       api.buildbucket.try_build(
           project='chromium',

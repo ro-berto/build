@@ -24,7 +24,7 @@ def GenTests(api):
   def ci_props(config='Release', mastername='chromium.linux',
                builder='Linux Builder',
                extra_swarmed_tests=None, **kwargs):
-    kwargs.setdefault('path_config', 'kitchen')
+    kwargs.setdefault('path_config', 'generic')
     swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:

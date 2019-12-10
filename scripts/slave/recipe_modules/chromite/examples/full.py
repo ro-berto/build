@@ -37,8 +37,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      # chromite module uses path['root'] which exists only in Buildbot.
-      api.properties(path_config='buildbot', cbb_config='auron-paladin'),
+      api.properties(path_config='generic', cbb_config='auron-paladin'),
       api.buildbucket.try_build(
           'basic',
           git_repo='https://chromium.googlesource.com/chromiumos/manifest',
@@ -47,9 +46,8 @@ def GenTests(api):
 
   yield api.test(
       'pass_repo_sync_args',
-      # chromite module uses path['root'] which exists only in Buildbot.
       api.properties(
-          path_config='buildbot',
+          path_config='generic',
           cbb_config='auron-paladin',
           repo_sync_args=['-j16']),
       api.buildbucket.try_build(
@@ -60,9 +58,8 @@ def GenTests(api):
 
   yield api.test(
       'chromiumos_coverage',
-      # chromite module uses path['root'] which exists only in Buildbot.
       api.properties(
-          path_config='buildbot',
+          path_config='generic',
           clobber=None,
           cbb_config='cros-x86-generic-tot-chrome-pfq-informational',
           cbb_master_build_id='24601',
@@ -80,10 +77,8 @@ def GenTests(api):
 
   yield api.test(
       'pass_branch',
-      # chromite module uses path['root'] which exists only in Buildbot.
       api.properties(
-          path_config='buildbot',
-          cbb_config='auron-paladin',
+          path_config='generic', cbb_config='auron-paladin',
           branch='foobarnch'),
       api.post_process(post_process.DropExpectation),
       api.buildbucket.try_build(

@@ -131,7 +131,7 @@ def GenTests(api):
   def base(isolated_targets, tester_name):
     # TODO(crbug/1018836): Use distro specific name instead of Linux.
     properties = {
-        'path_config': 'kitchen',
+        'path_config': 'generic',
         'mastername': 'chromium.findit',
         'bot_id': 'beefy_vm',
         'target_mastername': 'chromium.findit',
@@ -144,17 +144,17 @@ def GenTests(api):
                     'findit_builder': {
                         'chromium_config': 'chromium',
                         'chromium_apply_config': [
-                          'mb',
-                          'goma_high_parallel',
+                            'mb',
+                            'goma_high_parallel',
                         ],
                         'gclient_config': 'chromium',
                         'chromium_config_kwargs': {
-                          'BUILD_CONFIG': 'Release',
-                          'TARGET_BITS': 64,
+                            'BUILD_CONFIG': 'Release',
+                            'TARGET_BITS': 64,
                         },
                         'bot_type': 'builder',
                         'testing': {
-                          'platform': 'linux',
+                            'platform': 'linux',
                         },
                     },
                     'findit_tester': {
@@ -162,13 +162,13 @@ def GenTests(api):
                         'chromium_apply_config': ['mb'],
                         'gclient_config': 'chromium',
                         'chromium_config_kwargs': {
-                          'BUILD_CONFIG': 'Release',
-                          'TARGET_BITS': 64,
+                            'BUILD_CONFIG': 'Release',
+                            'TARGET_BITS': 64,
                         },
                         'bot_type': 'tester',
                         'parent_buildername': 'findit_builder',
                         'testing': {
-                          'platform': 'linux',
+                            'platform': 'linux',
                         },
                         'swarming_dimensions': {
                             'os': 'Linux',
@@ -179,12 +179,12 @@ def GenTests(api):
                         'chromium_apply_config': ['mb'],
                         'gclient_config': 'chromium',
                         'chromium_config_kwargs': {
-                          'BUILD_CONFIG': 'Release',
-                          'TARGET_BITS': 64,
+                            'BUILD_CONFIG': 'Release',
+                            'TARGET_BITS': 64,
                         },
                         'bot_type': 'builder_tester',
                         'testing': {
-                          'platform': 'linux',
+                            'platform': 'linux',
                         },
                         'swarming_dimensions': {
                             'os': 'Linux',

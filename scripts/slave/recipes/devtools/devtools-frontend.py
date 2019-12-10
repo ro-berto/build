@@ -80,6 +80,13 @@ def _in_builder_cache_depot_on_path(api):
 
 
 def GenTests(api):
-  yield api.test('basic', api.properties(path_config='kitchen'))
-  yield (api.test('compile failure', api.properties(path_config='kitchen')) +
-         api.step_data('compile', retcode=1) + api.post_process(StatusFailure))
+  yield api.test(
+      'basic',
+      api.properties(path_config='generic'),
+  )
+  yield api.test(
+      'compile failure',
+      api.properties(path_config='generic'),
+      api.step_data('compile', retcode=1),
+      api.post_process(StatusFailure),
+  )

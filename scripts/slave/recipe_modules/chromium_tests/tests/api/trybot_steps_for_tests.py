@@ -33,7 +33,7 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
-          path_config='kitchen',
+          path_config='generic',
           tests=['base_unittests'],
       ),
       api.runtime(is_experimental=False, is_luci=True),

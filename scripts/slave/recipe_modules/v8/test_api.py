@@ -539,7 +539,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     else:
       properties_fn = self.m.properties.generic
 
-    kwargs.setdefault('path_config', 'kitchen')
+    kwargs.setdefault('path_config', 'generic')
     test = (
         recipe_test_api.RecipeTestApi.test(
             self.test_name(mastername, buildername, suffix)) +

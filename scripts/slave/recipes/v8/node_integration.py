@@ -332,7 +332,7 @@ def GenTests(api):
           _sanitize_nonalpha('full', mastername, buildername),
           properties_fn(
               mastername=mastername,
-              path_config='kitchen',
+              path_config='generic',
           ),
           buildbucket_fn(**buildbucket_kwargs),
           api.platform(bot_config['testing']['platform'], 64),

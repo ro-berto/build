@@ -116,7 +116,7 @@ def GenTests(api):
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
-          path_config='kitchen'),
+          path_config='generic'),
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
@@ -128,7 +128,7 @@ def GenTests(api):
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
-          path_config='kitchen'),
+          path_config='generic'),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
               'Linux Swarm': {
@@ -162,7 +162,7 @@ def GenTests(api):
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
-          path_config='kitchen'),
+          path_config='generic'),
       api.platform('win', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
@@ -189,7 +189,7 @@ def GenTests(api):
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
-          path_config='kitchen'),
+          path_config='generic'),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
               'Linux Swarm': {

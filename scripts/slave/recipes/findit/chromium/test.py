@@ -304,7 +304,7 @@ def GenTests(api):
       bad_revision=None, suspected_revisions=None,
       test_on_good_revision=True, test_repeat_count=20):
     properties = {
-        'path_config': 'kitchen',
+        'path_config': 'generic',
         'mastername': 'tryserver.chromium.%s' % platform_name,
         'bot_id': 'build1-a1',
         'target_mastername': 'chromium.%s' % platform_name,
