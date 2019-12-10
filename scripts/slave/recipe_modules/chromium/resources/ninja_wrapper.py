@@ -550,8 +550,12 @@ def main(argv):
   try:
     # Tidy up
     popen.stdout.close()
-  except IOError:
-    # If we timed out, stdout pipe is still locked
+  except (IOError, RuntimeError):
+    # If we timed out, stdout pipe is still locked which can throw an IOError,
+    # and the greenlet is actually still alive reading from stdout,
+    # which can throw a
+    # "RuntimeError: reentrant call inside <_io.BufferedReader>"
+    # See gevent/subprocess.py:communicate()
     pass
 
   if timed_out:
@@ -566,6 +570,11 @@ def main(argv):
 
     return_code = 124
     popen.kill()
+
+    # Debugging info for help diagnosing the timeout
+    print('Showing ps auxwwf to help debug why ninja timed out')
+    subprocess.call(['ps', 'auxwwf'])
+    print('End of ps auxwwf')
   else:
     return_code = popen.wait()
 
