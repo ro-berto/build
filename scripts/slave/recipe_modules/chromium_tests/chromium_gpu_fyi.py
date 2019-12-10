@@ -22,7 +22,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win Builder (dbg)': {
             'chromium_config': 'chromium',
@@ -37,7 +36,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win dEQP Builder': {
             'chromium_config': 'chromium',
@@ -58,7 +56,6 @@ SPEC = {
             # is a risk we're willing to take because checkouts take a lot
             # of disk space, and this is expected to be a corner case rather
             # than the common case.
-            'checkout_dir': 'win',
         },
         'Win7 FYI Debug (AMD)': {
             'chromium_config': 'chromium',
@@ -133,7 +130,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win x64 Builder (dbg)': {
             'chromium_config': 'chromium',
@@ -148,7 +144,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win x64 Builder DEPS ANGLE': {
             'chromium_config': 'chromium',
@@ -163,7 +158,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win x64 dEQP Builder': {
             'chromium_config': 'chromium',
@@ -184,7 +178,6 @@ SPEC = {
             # is a risk we're willing to take because checkouts take a lot
             # of disk space, and this is expected to be a corner case rather
             # than the common case.
-            'checkout_dir': 'win',
         },
         'GPU FYI Win x64 DX12 Vulkan Builder': {
             'chromium_config': 'chromium',
@@ -199,7 +192,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'GPU FYI Win x64 DX12 Vulkan Builder (dbg)': {
             'chromium_config': 'chromium',
@@ -214,7 +206,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
         },
         'Win10 FYI x64 Debug (NVIDIA)': {
             'chromium_config': 'chromium',
@@ -469,7 +460,6 @@ SPEC = {
             'testing': {
                 'platform': 'win',
             },
-            'checkout_dir': 'win',
             # This causes the builder to upload isolates to a location where
             # Pinpoint can access them in addition to the usual isolate server.
             # This is necessary because "Win10 FYI x64 Release XR perf
@@ -506,7 +496,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'linux',
         },
         'GPU FYI Linux Builder DEPS ANGLE': {
             'chromium_config': 'chromium',
@@ -521,7 +510,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'linux',
         },
         'GPU FYI Linux Ozone Builder': {
             'chromium_config': 'chromium',
@@ -550,7 +538,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'linux',
         },
         'GPU FYI Linux dEQP Builder': {
             'chromium_config': 'chromium',
@@ -571,7 +558,6 @@ SPEC = {
             # is a risk we're willing to take because checkouts take a lot
             # of disk space, and this is expected to be a corner case rather
             # than the common case.
-            'checkout_dir': 'linux',
         },
         'Linux FYI Release (NVIDIA)': {
             'chromium_config': 'chromium',
@@ -772,8 +758,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir':
-                'linux',
         },
         'GPU FYI Mac Builder': {
             'chromium_config': 'chromium',
@@ -788,7 +772,6 @@ SPEC = {
             'testing': {
                 'platform': 'mac',
             },
-            'checkout_dir': 'mac',
         },
         'GPU FYI Mac Builder DEPS ANGLE': {
             'chromium_config': 'chromium',
@@ -803,7 +786,6 @@ SPEC = {
             'testing': {
                 'platform': 'mac',
             },
-            'checkout_dir': 'mac',
         },
         'GPU FYI Mac Builder (dbg)': {
             'chromium_config': 'chromium',
@@ -821,7 +803,6 @@ SPEC = {
             'testing': {
                 'platform': 'mac',
             },
-            'checkout_dir': 'mac',
         },
         'GPU FYI Mac dEQP Builder': {
             'chromium_config': 'chromium',
@@ -842,7 +823,6 @@ SPEC = {
             # is a risk we're willing to take because checkouts take a lot
             # of disk space, and this is expected to be a corner case rather
             # than the common case.
-            'checkout_dir': 'mac',
         },
         'Mac FYI Release (Intel)': {
             'chromium_config': 'chromium',
@@ -1052,7 +1032,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
             # This causes the builder to upload isolates to a location where
             # Pinpoint can access them in addition to the usual isolate server.
             # This is necessary because "Android FYI 64 Perf (Pixel 2)", which
@@ -1075,7 +1054,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (Nexus 5X)': {
             'chromium_config': 'android',
@@ -1090,7 +1068,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (Nexus 6)': {
             'chromium_config': 'android',
@@ -1107,7 +1084,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (Nexus 6P)': {
             'chromium_config': 'android',
@@ -1121,7 +1097,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (Nexus 9)': {
             'chromium_config': 'android',
@@ -1135,7 +1110,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (NVIDIA Shield TV)': {
             'chromium_config': 'android',
@@ -1149,7 +1123,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI Release (Pixel 2)': {
             'chromium_config': 'android',
@@ -1163,7 +1136,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI dEQP Release (Nexus 5X)': {
             'chromium_config': 'android',
@@ -1177,7 +1149,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI 32 Vk Release (Pixel 2)': {
             'chromium_config': 'android',
@@ -1193,7 +1164,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI 64 Vk Release (Pixel 2)': {
             'chromium_config': 'android',
@@ -1209,7 +1179,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI 32 dEQP Vk Release (Pixel 2)': {
             'chromium_config': 'android',
@@ -1225,7 +1194,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI 64 dEQP Vk Release (Pixel 2)': {
             'chromium_config': 'android',
@@ -1241,7 +1209,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI SkiaRenderer GL (Nexus 5X)': {
             'chromium_config': 'android',
@@ -1257,7 +1224,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI SkiaRenderer Vulkan (Pixel 2)': {
             'chromium_config': 'android',
@@ -1273,7 +1239,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'Android FYI 64 Perf (Pixel 2)': {
             'chromium_config': 'android',
@@ -1288,7 +1253,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
             'serialize_tests': True,
         },
         'GPU Fake Linux Builder': {
@@ -1479,7 +1443,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'android',
         },
         'ANGLE GPU Linux Release (NVIDIA)': {
             'chromium_config': 'chromium',

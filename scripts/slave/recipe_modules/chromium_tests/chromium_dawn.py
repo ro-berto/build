@@ -20,7 +20,6 @@ def CreateBuilderConfig(os, bits, top_of_tree):
     'testing': {
       'platform': os,
     },
-    'checkout_dir': os,
   }
 
 def CreateTesterConfig(os, bits, builder):

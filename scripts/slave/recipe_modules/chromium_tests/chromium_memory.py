@@ -162,7 +162,6 @@ SPEC = {
       ],
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
-      'checkout_dir': 'mac',
     },
     'Mac ASan 64 Tests (1)': {
       'chromium_config': 'chromium_asan',
@@ -213,7 +212,6 @@ SPEC = {
       'chromium_apply_config': ['asan', 'mb'],
       'tests': [],
       'testing': {'platform': 'linux'},
-      'checkout_dir': 'linux_layout',
     },
     'WebKit Linux MSAN': {
       'chromium_config': 'chromium_clang',
@@ -225,7 +223,6 @@ SPEC = {
       'chromium_apply_config': ['asan', 'mb'],
       'tests': [],
       'testing': {'platform': 'linux'},
-      'checkout_dir': 'linux_layout',
     },
     'WebKit Linux Leak': {
       'chromium_config': 'chromium',

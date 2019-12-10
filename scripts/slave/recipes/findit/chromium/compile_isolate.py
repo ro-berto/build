@@ -156,7 +156,6 @@ def GenTests(api):
                         'testing': {
                           'platform': 'linux',
                         },
-                        'checkout_dir': 'linux',
                     },
                     'findit_tester': {
                         'chromium_config': 'chromium',

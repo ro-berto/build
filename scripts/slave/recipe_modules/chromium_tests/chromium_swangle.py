@@ -24,7 +24,6 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
       'testing': {
           'platform': os,
       },
-      'checkout_dir': os,
       'serialize_tests': True,
   }
 

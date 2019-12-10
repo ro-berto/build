@@ -17,7 +17,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
       },
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -37,7 +36,6 @@ SPEC = {
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_build_name': 'Win',
       'gs_acl': 'public-read',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -53,7 +51,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -73,7 +70,6 @@ SPEC = {
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_build_name': 'Win_x64',
       'gs_acl': 'public-read',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -89,7 +85,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'checkout_dir': 'mac',
       'testing': {
         'platform': 'mac',
       },
@@ -109,7 +104,6 @@ SPEC = {
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_build_name': 'Mac',
       'gs_acl': 'public-read',
-      'checkout_dir': 'mac',
       'testing': {
         'platform': 'mac',
       },
@@ -125,7 +119,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
       },
-      'checkout_dir': 'linux_clobber',
       'testing': {
         'platform': 'linux',
       },
@@ -145,7 +138,6 @@ SPEC = {
       'gs_bucket': 'chromium-browser-snapshots',
       'gs_build_name': 'Linux_x64',
       'gs_acl': 'public-read',
-      'checkout_dir': 'linux_clobber',
       'testing': {
         'platform': 'linux',
       },

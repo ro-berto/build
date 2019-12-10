@@ -20,7 +20,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -36,7 +35,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -52,7 +50,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -71,7 +68,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'linux-ozone-rel': {
       'chromium_config': 'chromium',
@@ -83,7 +79,6 @@ SPEC = {
       },
       'bot_type': 'builder',
       'compile_targets': [],
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -107,7 +102,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'linux-trusty-rel': {
       'chromium_config': 'chromium',
@@ -122,7 +116,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'Linux Tests': {
       'chromium_config': 'chromium',
@@ -156,7 +149,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'Linux Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -172,7 +164,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',
@@ -225,7 +216,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -241,7 +231,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -257,7 +246,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },
@@ -273,7 +261,6 @@ SPEC = {
         'TARGET_PLATFORM': 'fuchsia',
       },
       'bot_type': 'builder',
-      'checkout_dir': 'linux',
       'testing': {
         'platform': 'linux',
       },

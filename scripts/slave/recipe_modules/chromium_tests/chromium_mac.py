@@ -23,7 +23,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'checkout_dir': 'mac',
     },
     'Mac10.13 Tests': {
       'chromium_config': 'chromium',
@@ -103,7 +102,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'checkout_dir': 'mac',
     },
     'Mac10.13 Tests (dbg)': {
       'chromium_config': 'chromium',
@@ -136,7 +134,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'checkout_dir': 'mac',
     },
   },
 }

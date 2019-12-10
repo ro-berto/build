@@ -27,7 +27,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'checkout_dir': 'win',
   },
   'WebKit Win10': {
     'chromium_config': 'chromium',
@@ -47,7 +46,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'win',
     },
-    'checkout_dir': 'win',
   },
   'WebKit Mac Builder': {
     'chromium_config': 'chromium',
@@ -63,7 +61,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'checkout_dir': 'mac',
   },
   'WebKit Mac10.13 (retina)': {
     'chromium_config': 'chromium',
@@ -80,7 +77,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'mac',
     },
-    'checkout_dir': 'mac',
   },
   'WebKit Linux ASAN': {
     'chromium_config': 'chromium_clang',
@@ -94,7 +90,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'checkout_dir': 'linux_layout',
   },
   'WebKit Linux MSAN': {
     'chromium_config': 'chromium_clang',
@@ -111,7 +106,6 @@ SPEC['builders'] = {
     'testing': {
       'platform': 'linux',
     },
-    'checkout_dir': 'linux_layout',
   },
   'WebKit Linux Leak': {
     'chromium_config': 'chromium',

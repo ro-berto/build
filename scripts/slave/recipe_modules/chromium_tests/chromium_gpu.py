@@ -23,7 +23,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'checkout_dir': 'win',
     },
     'GPU Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -88,7 +87,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'GPU Linux Builder (dbg)': {
       'chromium_config': 'chromium',
@@ -151,7 +149,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'checkout_dir': 'mac',
     },
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',

@@ -25,7 +25,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'Linux - Future (dbg)': {
       'chromium_config': 'chromium',
@@ -39,7 +38,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'checkout_dir': 'linux',
     },
     'Linux V8 API Stability': {
       'chromium_config': 'chromium',

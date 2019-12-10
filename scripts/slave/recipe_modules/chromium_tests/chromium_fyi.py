@@ -147,7 +147,6 @@ SPEC = {
             'testing': {
                 'platform': 'mac',
             },
-            'checkout_dir': 'mac',
         },
         'Mac10.14 Tests': {
             'chromium_config': 'chromium',
@@ -175,7 +174,6 @@ SPEC = {
                 'os': 'Mac-10.14',
             },
             'bot_type': 'tester',
-            'checkout_dir': 'mac',
             'test_results_config': 'staging_server',
             'parent_mastername': 'chromium.mac',
             'parent_buildername': 'Mac Builder',
@@ -228,7 +226,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             'bot_type': 'builder_tester',
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -245,7 +242,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             'bot_type': 'builder',
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -265,7 +261,6 @@ SPEC = {
             # Serialize the tests so as to not overwhelm the limited
             # number of bots.
             'serialize_tests': True,
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -284,7 +279,6 @@ SPEC = {
             'bot_type': 'builder_tester',
             # Serialize the tests to limit capacity usage.
             'serialize_tests': True,
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -303,7 +297,6 @@ SPEC = {
             'bot_type': 'builder',
             # Serialize the tests to limit capacity usage.
             'serialize_tests': True,
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -322,7 +315,6 @@ SPEC = {
             'bot_type': 'builder_tester',
             # Serialize the tests to limit capacity usage.
             'serialize_tests': True,
-            'checkout_dir': 'linux',
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -395,7 +387,6 @@ SPEC = {
                         'TARGET_BITS': 64,
                     },
                     'bot_type': 'builder',
-                    'checkout_dir': 'win',
                     'testing': {
                         'platform': 'win',
                     },
@@ -518,7 +509,6 @@ SPEC = {
                         'TARGET_BITS': 64,
                     },
                     'bot_type': 'builder',
-                    'checkout_dir': 'win',
                     'testing': {
                         'platform': 'win',
                     },
@@ -556,7 +546,6 @@ SPEC = {
             'testing': {
                 'platform': 'linux',
             },
-            'checkout_dir': 'linux',
         },
         'Linux Builder Goma Latest Client':
             chromium_apply_configs(
@@ -621,7 +610,6 @@ SPEC = {
                 no_archive(chromium.SPEC['builders']['mac-archive-rel']),
                 ['goma_latest_client']),
         'mac-code-coverage': {
-            'checkout_dir': 'mac',
             'chromium_config': 'chromium',
             'chromium_apply_config': ['mb'],
             'gclient_config': 'chromium',
@@ -1045,7 +1033,6 @@ SPEC = {
             'tests': [],
             'parent_mastername': 'chromium.win',
             'parent_buildername': 'Win x64 Builder',
-            'checkout_dir': 'win',
             'testing': {
                 'platform': 'win',
             },

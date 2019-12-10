@@ -430,7 +430,6 @@ SPEC = {
         'platform': 'linux',
       },
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'checkout_dir': 'android',
     },
   },
 }

@@ -24,7 +24,6 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [],
       'parent_buildername': 'Win Builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -42,7 +41,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -58,7 +56,6 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [],
       'parent_buildername': 'Win x64 Builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -77,7 +74,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win Builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -97,7 +93,6 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [],
       'parent_buildername': 'Win Builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -111,7 +106,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -127,7 +121,6 @@ SPEC = {
       'bot_type': 'tester',
       'tests': [],
       'parent_buildername': 'Win x64 Builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -141,7 +134,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -156,7 +148,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -171,7 +162,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win Builder (dbg)',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
@@ -186,7 +176,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Win x64 Builder (dbg)',
-      'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
       },
