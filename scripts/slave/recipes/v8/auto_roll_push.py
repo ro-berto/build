@@ -42,8 +42,7 @@ def RunSteps(api):
     push_account = (
         # TODO(sergiyb): Replace with api.service_account.default().get_email()
         # when https://crbug.com/846923 is resolved.
-        'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
-        if api.runtime.is_luci else 'v8-autoroll@chromium.org')
+        'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
     api.python(
         'push candidate',
         api.path['checkout'].join('tools', 'release', 'auto_push.py'),

@@ -46,7 +46,7 @@ def GenTests(api):
     )
   yield api.test(
       'linux-experimental',
-      api.runtime(is_luci=False, is_experimental=True),
+      api.runtime(is_luci=True, is_experimental=True),
       api.properties(
           buildername='example_buildername', gs_acl='public', platform='linux'),
       api.post_process(Filter('zip build')),

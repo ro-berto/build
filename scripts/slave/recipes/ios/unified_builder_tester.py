@@ -116,7 +116,6 @@ def GenTests(api):
   yield api.test(
       'basic',
       basic_common,
-      api.runtime(is_luci=False, is_experimental=False),
       api.post_process(verify_webkit_custom_vars, False),
   )
 

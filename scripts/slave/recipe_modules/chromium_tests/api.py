@@ -243,18 +243,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
       self.m.chromium_swarming.set_default_dimension(key, value)
 
-    if (bot_config.get('swarming_service_account') and
-        not self.m.runtime.is_luci):
-      self.m.chromium_swarming.service_account_json = (
-          self.m.puppet_service_account.get_key_path(
-              bot_config.get('swarming_service_account')))
-
-    if (bot_config.get('isolate_service_account') and
-        not self.m.runtime.is_luci):
-      self.m.isolate.service_account_json = (
-          self.m.puppet_service_account.get_key_path(
-              bot_config.get('isolate_service_account')))
-
   def runhooks(self, update_step):
     if self.m.tryserver.is_tryserver:
       try:
@@ -1098,34 +1086,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       non_isolated_tests = [
           t for t in test_config.tests_on(bot.mastername, bot.buildername)
           if not t.uses_isolate]
-      isolate_transfer = (
-          # Some of the old buildbot trigger infrastructure may not be
-          # able to handle the large number of hashes added to trigger
-          # properties below (e.g. crbug.com/882889), so we restrict
-          # isolate transfer to LUCI.
-          self.m.runtime.is_luci and
-
-          not bool(non_isolated_tests))
+      isolate_transfer = not non_isolated_tests
       package_transfer = not isolate_transfer
 
     else:
-      isolate_transfer = (
-          # Same as above.
-          self.m.runtime.is_luci and
-
-          any(t.uses_isolate
-              for t in test_config.tests_triggered_by(
-                    bot.mastername, bot.buildername)))
+      isolate_transfer = any(
+          t.uses_isolate for t in test_config.tests_triggered_by(
+              bot.mastername, bot.buildername))
       non_isolated_tests = [
           t for t in test_config.tests_triggered_by(
               bot.mastername, bot.buildername)
           if not t.uses_isolate]
       package_transfer = (
-          # Always use package transfer on buildbot.
-          not self.m.runtime.is_luci or
-
           bool(non_isolated_tests) or
-
           bot.settings.get('enable_package_transfer'))
 
     if package_transfer:

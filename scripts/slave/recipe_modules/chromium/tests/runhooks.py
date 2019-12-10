@@ -35,8 +35,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'mac_buildbot',
+      'mac',
       api.platform.name('mac'),
       api.properties(target_platform='mac'),
-      api.runtime(is_luci=False, is_experimental=False),
   )

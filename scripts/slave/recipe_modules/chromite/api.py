@@ -369,11 +369,16 @@ class ChromiteApi(recipe_api.RecipeApi):
     # Set "DEPOT_TOOLS_UPDATE" to prevent any invocations of "depot_tools"
     # scripts that call "//update_depot_tools" (e.g., "gclient") from trying
     # to self-update from their pinned version (crbug.com/736890).
-    context_key = 'env_suffixes' if self.m.runtime.is_luci else 'env_prefixes'
-    with self.m.context(**{
+    ctx = {
         'cwd': self.m.path['start_dir'],
-        context_key: {'PATH': [self.depot_tools_path]},
-        'env': {'DEPOT_TOOLS_UPDATE': '0'}}):
+        'env_suffixes': {
+            'PATH': [self.depot_tools_path]
+        },
+        'env': {
+            'DEPOT_TOOLS_UPDATE': '0'
+        }
+    }
+    with self.m.context(**ctx):
       return self.cbuildbot(str('cbuildbot_launch [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)
