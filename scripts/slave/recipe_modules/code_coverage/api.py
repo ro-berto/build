@@ -653,12 +653,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _generate_component_mapping(self):
     """Generates the mapping from crbug components to directories."""
     component_mapping = self.m.path.mkdtemp().join(_COMPONENT_MAPPING_FILE_NAME)
-    command_path = self.m.path['checkout'].join('tools', 'checkteamtags',
+    script = self.m.path['checkout'].join('tools', 'checkteamtags',
                                                 'extract_components.py')
-    command_parts = [command_path, '-o', component_mapping]
-    self.m.step(
+    self.m.python(
         'Run component extraction script to generate mapping',
-        command_parts,
+        script,
+        args=['-o', component_mapping],
         stdout=self.m.raw_io.output_text(add_output_log=True))
     return component_mapping
 
