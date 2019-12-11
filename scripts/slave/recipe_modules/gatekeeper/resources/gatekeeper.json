@@ -20,8 +20,12 @@
     "https://build.chromium.org/p/chromium": [
       {
         "categories": [
-          "chromium_tree_closer",
+          "webrtc_tree_closer",
           "experimental_tests"
+        ],
+        "excluded_builders": [
+          "win-archive-dbg",
+          "win32-archive-dbg"
         ],
 
         "builders": {
@@ -36,11 +40,7 @@
             ]
           },
           "*": {}
-        },
-        "excluded_builders": [
-          "win-archive-dbg",
-          "win32-archive-dbg"
-        ]
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.android": [
@@ -701,6 +701,16 @@
         "compile",
         "gn"
       ]
+    },
+    "webrtc_tree_closer": {
+      "closing_optional": [
+        "bot_update",
+        "compile",
+        "gclient runhooks",
+        "runhooks",
+        "update"
+      ],
+      "status_template": "Tree is closed (Automatic: \"%(unsatisfied)s\" on %(build_url)s \"%(builder_name)s\" from %(revision)s: %(blamelist)s)"
     }
   }
 }
