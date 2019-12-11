@@ -228,6 +228,7 @@
   * [findit/chromium/test](#recipes-findit_chromium_test)
   * [findit/chromium/update_components](#recipes-findit_chromium_update_components) &mdash; Traverse the source tree and update a cloud file with component mappings.
   * [findit:examples/full](#recipes-findit_examples_full)
+  * [flutter/cocoon](#recipes-flutter_cocoon) &mdash; Recipe for cocoon repository tests.
   * [flutter/engine](#recipes-flutter_engine)
   * [flutter/engine_builder](#recipes-flutter_engine_builder)
   * [flutter/flutter](#recipes-flutter_flutter)
@@ -4929,6 +4930,15 @@ world-readable cloud location.
 [DEPS](/scripts/slave/recipe_modules/findit/examples/full.py#5): [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/findit/examples/full.py#14)(api):**
+### *recipes* / [flutter/cocoon](/scripts/slave/recipes/flutter/cocoon.py)
+
+[DEPS](/scripts/slave/recipes/flutter/cocoon.py#7): [yaml](#recipe_modules-yaml), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Recipe for cocoon repository tests.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/cocoon.py#20)(api):**
+
+Steps to checkout cocoon, dependencies and execute tests.
 ### *recipes* / [flutter/engine](/scripts/slave/recipes/flutter/engine.py)
 
 [DEPS](/scripts/slave/recipes/flutter/engine.py#14): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
