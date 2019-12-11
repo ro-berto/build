@@ -104,7 +104,7 @@ TEST_MATRIX = {
                               "tools/test.py",
                           "arguments": [
                               "foo", "-ndartk-${system}-${mode}-${arch}",
-                              "language_2", "co19_2", "--exclude_suite=co19"
+                              "language_2", "co19_2/sel", "--exclude_suite=co19"
                           ],
                           "shards":
                               2,
@@ -147,7 +147,7 @@ TEST_MATRIX = {
             "meta": {},
             "steps": [{
                 "name": "co19",
-                "arguments": ["co19", "co19_2"],
+                "arguments": ["co19/nnbd", "co19_2"],
                 "fileset": "test",
                 "shards": 1
             }]

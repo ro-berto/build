@@ -1037,10 +1037,10 @@ class DartApi(recipe_api.RecipeApi):
     cipd_packages.append(('tools/sdks',
         'dart/dart-sdk/${platform}',
         environment['checked_in_sdk_version']))
-    if 'co19_2' in args:
+    if any(arg.startswith('co19_2') for arg in args):
       cipd_packages.append(('tests/co19_2/src', environment['co19_2_package'],
                             environment['co19_2_version']))
-    if 'co19' in args:
+    if any(arg.startswith('co19/') or arg == 'co19' for arg in args):
       cipd_packages.append(('tests/co19/src', CO19_PACKAGE,
                             environment['co19_version']))
 
