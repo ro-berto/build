@@ -3,25 +3,25 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
-  'chromium_checkout',
-  'chromium_tests',
-  'test_results',
-  'depot_tools/bot_update',
-  'depot_tools/cipd',
-  'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
-  'recipe_engine/time',
-  'zip',
+    'chromium',
+    'chromium_checkout',
+    'chromium_tests',
+    'test_results',
+    'depot_tools/bot_update',
+    'depot_tools/gclient',
+    'depot_tools/gsutil',
+    'recipe_engine/buildbucket',
+    'recipe_engine/cipd',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
+    'recipe_engine/time',
+    'zip',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -149,7 +149,9 @@ def _RunStepsChromium(api):
 
 def _GetCelabFromCipd(api, version):
   packages_root = api.path['start_dir'].join('packages')
-  api.cipd.ensure(packages_root, {'infra/celab/celab/${platform}': version})
+  ensure_file = api.cipd.EnsureFile().add_package(
+      'infra/celab/celab/${platform}', version)
+  api.cipd.ensure(packages_root, ensure_file)
   return _get_bin_directory(api, packages_root)
 
 
@@ -170,12 +172,13 @@ def _BuildCelabFromSource(api, checkout):
   go_root = api.path['start_dir'].join('go')
 
   # Install Go & Protoc
-  packages = {}
-  packages['infra/go/${platform}'] = 'version:1.11.2'
-  packages['infra/tools/protoc/${platform}'] = 'protobuf_version:v3.6.1'
-  packages['infra/third_party/cacert'] = 'date:2017-01-18'
   packages_root = api.path['start_dir'].join('packages')
-  api.cipd.ensure(packages_root, packages)
+  ensure_file = api.cipd.EnsureFile()
+  ensure_file.add_package('infra/go/${platform}', 'version:1.11.2')
+  ensure_file.add_package('infra/tools/protoc/${platform}',
+                          'protobuf_version:v3.6.1')
+  ensure_file.add_package('infra/third_party/cacert', 'date:2017-01-18')
+  api.cipd.ensure(packages_root, ensure_file)
 
   add_paths = [
     go_root.join('bin'),
@@ -271,8 +274,10 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
 
     # Install required package for gsutil.
     packages_root = api.path['start_dir'].join('packages_tests')
-    packages = {'infra/gcloud/${platform}': 'version:251.0.0.chromium0'}
-    api.cipd.ensure(packages_root, packages)
+
+    ensure_file = api.cipd.EnsureFile().add_package(
+        'infra/gcloud/${platform}', 'version:251.0.0.chromium0')
+    api.cipd.ensure(packages_root, ensure_file)
     add_paths = [packages_root.join('bin')]
 
     # Get a unique storage prefix for these tests (diff runs share the bucket)
