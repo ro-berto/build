@@ -831,6 +831,11 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.linux',
                     'buildername': 'linux-trusty-rel',
                 }),
+            'linux-wpt-fyi-rel':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'linux-wpt-fyi-rel',
+                }),
         },
     },
     'tryserver.chromium.chromiumos': {
