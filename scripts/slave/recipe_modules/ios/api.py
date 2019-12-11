@@ -13,8 +13,6 @@ class iOSApi(recipe_api.RecipeApi):
   # Service account to use in swarming tasks.
   SWARMING_SERVICE_ACCOUNT = \
     'ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com'
-  CIPD_CREDENTIALS = \
-    '/creds/service_accounts/service-account-xcode-cipd-access.json'
 
   # Map Xcode short version to Xcode build version.
   XCODE_BUILD_VERSIONS = {
@@ -291,9 +289,10 @@ class iOSApi(recipe_api.RecipeApi):
 
   def get_mac_toolchain_cmd(self):
     cipd_root = self.m.path['start_dir']
-    self.m.cipd.ensure(cipd_root, {
-        self.m.chromium_tests.steps.MAC_TOOLCHAIN_PACKAGE:
-        self.m.chromium_tests.steps.MAC_TOOLCHAIN_VERSION})
+    ensure_file = self.m.cipd.EnsureFile().add_package(
+        self.m.chromium_tests.steps.MAC_TOOLCHAIN_PACKAGE,
+        self.m.chromium_tests.steps.MAC_TOOLCHAIN_VERSION)
+    self.m.cipd.ensure(cipd_root, ensure_file)
     return cipd_root.join('mac_toolchain')
 
   def ensure_xcode(self, xcode_build_version):
