@@ -385,6 +385,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "bucket:master.tryserver.chromium.linux",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:linux-rel",

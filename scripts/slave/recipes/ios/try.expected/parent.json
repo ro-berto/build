@@ -795,6 +795,8 @@
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
+      "bucket:try",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:ios",

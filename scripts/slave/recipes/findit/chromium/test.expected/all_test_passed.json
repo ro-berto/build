@@ -1076,6 +1076,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "bucket:ci",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:findit_variable",

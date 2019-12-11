@@ -977,6 +977,8 @@
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--wait-for-capacity",
       "--tag",
+      "bucket:ci",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:iOS64 Perf",

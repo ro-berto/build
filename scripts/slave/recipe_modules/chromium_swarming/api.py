@@ -245,6 +245,8 @@ class SwarmingApi(recipe_api.RecipeApi):
   def initialize(self):
     self.add_default_tag(
         'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
+    if self.m.buildbucket.build.builder.bucket:
+      self.add_default_tag('bucket:' + self.m.buildbucket.build.builder.bucket)
 
   @recipe_util.returns_placeholder
   def summary(self):

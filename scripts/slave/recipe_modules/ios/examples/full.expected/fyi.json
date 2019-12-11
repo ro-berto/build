@@ -613,6 +613,8 @@
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
+      "bucket:ci",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:ios",

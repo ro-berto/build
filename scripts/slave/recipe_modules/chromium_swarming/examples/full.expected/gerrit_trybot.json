@@ -377,6 +377,8 @@
       "--auth-service-account-json",
       "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
+      "bucket:try",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:linux",

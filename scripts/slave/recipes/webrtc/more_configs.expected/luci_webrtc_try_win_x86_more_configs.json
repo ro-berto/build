@@ -1312,6 +1312,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "bucket:try",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:win_x86_more_configs",

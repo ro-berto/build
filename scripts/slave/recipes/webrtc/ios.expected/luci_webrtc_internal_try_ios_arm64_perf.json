@@ -1020,6 +1020,8 @@
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--wait-for-capacity",
       "--tag",
+      "bucket:try",
+      "--tag",
       "build_is_experimental:false",
       "--tag",
       "buildername:ios_arm64_perf",
