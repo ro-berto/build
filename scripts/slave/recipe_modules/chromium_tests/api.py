@@ -741,8 +741,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def _make_legacy_build_url(self, master_config, mastername):
     # The master where the build was zipped and uploaded from.
     source_master = self.m.properties.get('parent_mastername')
+    # TODO(gbeaty) I think this can be removed, this method is only used when
+    # downloading and unzipping a build, which should always be on a builder
+    # triggered, which will have the parent_mastername property set
     if not source_master:
-      source_master = self.m.properties['mastername']
+      source_master = self.m.properties['mastername']  # pragma: no cover
     return self.m.archive.legacy_download_url(
                master_config.get('build_gs_bucket'),
                extra_url_components=(

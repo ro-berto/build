@@ -12,6 +12,7 @@ from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 DEPS = [
+    'chromium',
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
@@ -251,10 +252,8 @@ def GenTests(api):
           'mastername': 'chromium.linux',
           'buildername': 'Linux Builder'
       }]),
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Builder',
-          path_config='generic'),
+      api.chromium.ci_build(
+          mastername='chromium.linux', builder='Linux Builder'),
       api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'trigger',
@@ -284,11 +283,10 @@ def GenTests(api):
           'mastername': 'chromium.linux',
           'buildername': 'Linux Tests'
       }]),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildername='Linux Tests',
-          parent_buildername='Linux Builder',
-          path_config='generic'),
+          builder='Linux Tests',
+          parent_buildername='Linux Builder'),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -298,9 +296,9 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_ci_bots',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-chromeos-code-coverage',
+      api.chromium.ci_build(
+          mastername='chromium.fyi', builder='linux-chromeos-code-coverage'),
+      api.properties(
           swarm_hashes={'base_unittests': '[dummy hash for base_unittests]'}),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_tests.read_source_side_spec(
@@ -333,13 +331,11 @@ def GenTests(api):
 
   yield api.test(
       'java_code_coverage_ci_bots',
-      api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='android-code-coverage',
-          swarm_hashes={
-              'chrome_public_test_apk':
-                  '[dummy hash for chrome_public_test_apk]'
-          }),
+      api.chromium.ci_build(
+          mastername='chromium.fyi', builder='android-code-coverage'),
+      api.properties(swarm_hashes={
+          'chrome_public_test_apk': '[dummy hash for chrome_public_test_apk]'
+      }),
       api.code_coverage(use_java_coverage=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.fyi', {
@@ -381,12 +377,12 @@ def GenTests(api):
 
   yield api.test(
       'isolate_transfer_builder',
-      api.properties(
-          bot_id='isolated_transfer_builder_id',
-          buildername='Isolated Transfer Builder',
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder='Isolated Transfer Builder',
+          build_number=123,
+          bot_id='isolated_transfer_builder_id'),
+      api.properties(custom_builders=True),
       api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
@@ -410,13 +406,14 @@ def GenTests(api):
 
   yield api.test(
       'isolate_transfer_tester',
-      api.properties(
-          bot_id='isolated_transfer_tester_id',
-          buildername='Isolated Transfer Tester',
-          buildnumber=123,
-          custom_builders=True,
+      api.chromium.ci_build(
           mastername='chromium.example',
+          builder='Isolated Transfer Tester',
           parent_buildername='Isolated Transfer Builder',
+          build_number=123,
+          bot_id='isolated_transfer_tester_id'),
+      api.properties(
+          custom_builders=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
@@ -440,13 +437,13 @@ def GenTests(api):
 
   yield api.test(
       'isolated_transfer__mixed_builder_isolated_tester',
-      api.properties(
-          bot_id='isolated_transfer_builder_id',
-          buildername=(
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder=(
               'Isolated Transfer: mixed builder, isolated tester (builder)'),
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+          build_number=123,
+          bot_id='isolated_transfer_builder_id'),
+      api.properties(custom_builders=True),
       api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
@@ -476,12 +473,12 @@ def GenTests(api):
 
   yield api.test(
       'isolated_transfer__mixed_bt_isolated_tester',
-      api.properties(
-          bot_id='isolated_transfer_builder_tester_id',
-          buildername=('Isolated Transfer: mixed BT, isolated tester (BT)'),
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder='Isolated Transfer: mixed BT, isolated tester (BT)',
+          build_number=123,
+          bot_id='isolated_transfer_builder_tester_id'),
+      api.properties(custom_builders=True),
       api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'read test spec (chromium.example.json)',
@@ -511,12 +508,12 @@ def GenTests(api):
 
   yield api.test(
       'package_transfer_builder',
-      api.properties(
-          bot_id='packaged_transfer_builder_id',
-          buildername='Packaged Transfer Builder',
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder='Packaged Transfer Builder',
+          build_number=123,
+          bot_id='packaged_transfer_builder_id'),
+      api.properties(custom_builders=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
@@ -535,12 +532,12 @@ def GenTests(api):
 
   yield api.test(
       'package_transfer_enabled_builder',
-      api.properties(
-          bot_id='packaged_transfer_builder_id',
-          buildername='Packaged Transfer Enabled Builder',
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder='Packaged Transfer Enabled Builder',
+          build_number=123,
+          bot_id='packaged_transfer_builder_id'),
+      api.properties(custom_builders=True),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
               'Packaged Transfer Tester': {
@@ -559,13 +556,14 @@ def GenTests(api):
 
   yield api.test(
       'package_transfer_tester',
-      api.properties(
-          bot_id='packaged_transfer_tester_id',
-          buildername='Packaged Transfer Tester',
-          buildnumber=123,
-          custom_builders=True,
+      api.chromium.ci_build(
           mastername='chromium.example',
+          builder='Packaged Transfer Tester',
           parent_buildername='Packaged Transfer Builder',
+          build_number=123,
+          bot_id='packaged_transfer_tester_id'),
+      api.properties(
+          custom_builders=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
@@ -587,12 +585,12 @@ def GenTests(api):
 
   yield api.test(
       'multiple_triggers',
-      api.properties(
-          bot_id='multiple_triggers_builder_id',
-          buildername='Multiple Triggers: Builder',
-          buildnumber=123,
-          custom_builders=True,
-          mastername='chromium.example'),
+      api.chromium.ci_build(
+          mastername='chromium.example',
+          builder='Multiple Triggers: Builder',
+          build_number=123,
+          bot_id='multiple_triggers_builder_id'),
+      api.properties(custom_builders=True),
       api.runtime(is_luci=True, is_experimental=False),
       api.chromium_tests.read_source_side_spec(
           'chromium.example', {
@@ -628,8 +626,8 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.properties.generic(
-          mastername='chromium.linux', buildername='Linux Builder'),
+      api.chromium.ci_build(
+          mastername='chromium.linux', builder='Linux Builder'),
       api.properties(fail_compile=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason, 'Compile step failed.'),

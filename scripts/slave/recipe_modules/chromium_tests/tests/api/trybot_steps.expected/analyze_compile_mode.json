@@ -16,7 +16,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@linux-archive-rel@https://ci.chromium.org/p//builders/ci/linux-archive-rel@@@"
+      "@@@STEP_LINK@linux-archive-rel@https://ci.chromium.org/p/chromium/builders/ci/linux-archive-rel@@@"
     ]
   },
   {

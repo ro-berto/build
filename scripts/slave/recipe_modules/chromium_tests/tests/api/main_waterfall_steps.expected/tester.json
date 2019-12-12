@@ -16,7 +16,7 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p//builders/ci/Linux Tests@@@"
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux Tests@@@"
     ]
   },
   {
@@ -35,7 +35,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--refs",
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -51,7 +53,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -402,9 +404,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/main_waterfall_steps\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"parent_mastername\": \"chromium.linux\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/main_waterfall_steps\", \"slavename\": \"test_bot\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/main_waterfall_steps\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"parent_mastername\": \"chromium.linux\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/main_waterfall_steps\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests",
@@ -439,6 +441,8 @@
       "base_unittests",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],

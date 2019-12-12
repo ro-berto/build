@@ -26,6 +26,65 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     """
     return line_limit
 
+  def test_defaults(self):
+    return self.m.properties(path_config='generic')
+
+  def ci_build(self,
+               project='chromium',
+               bucket='ci',
+               mastername='chromium.linux',
+               builder='Linux Builder',
+               parent_mastername=None,
+               parent_buildername=None,
+               bot_id='test_bot',
+               git_repo='https://chromium.googlesource.com/chromium/src',
+               revision='2d72510e447ab60a9728aeea2362d8be2cbd7789',
+               build_number=571,
+               tags=None):
+    props = self.m.properties(bot_id=bot_id)
+    if mastername is not None:
+      props += self.m.properties(mastername=mastername)
+    if parent_buildername is not None:
+      parent_mastername = parent_mastername or mastername
+      props += self.m.properties(
+          parent_mastername=parent_mastername,
+          parent_buildername=parent_buildername,
+      )
+    return props + self.test_defaults() + self.m.buildbucket.ci_build(
+        project=project,
+        bucket=bucket,
+        builder=builder,
+        build_number=build_number,
+        revision=revision,
+        git_repo=git_repo,
+        tags=tags,
+    )
+
+  def try_build(self,
+                project='chromium',
+                bucket='try',
+                mastername='tryserver.chromium.linux',
+                builder='linux-rel',
+                bot_id='test_bot',
+                git_repo='https://chromium.googlesource.com/chromium/src',
+                build_number=571,
+                change_number=456789,
+                patch_set=12,
+                tags=None):
+    props = self.m.properties(bot_id=bot_id)
+    if mastername is not None:
+      props += self.m.properties(mastername=mastername)
+    return props + self.test_defaults() + self.m.buildbucket.try_build(
+        project=project,
+        bucket=bucket,
+        builder=builder,
+        build_number=build_number,
+        git_repo=git_repo,
+        change_number=change_number,
+        patch_set=patch_set,
+        tags=tags,
+    )
+
   def override_version(self, major=64, minor=0, build=3282, patch=0):
     assert isinstance(major, int)
     assert isinstance(minor, int)
@@ -60,17 +119,17 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
                             _sanitize_nonalpha(buildername)),
             self.m.platform.name(platform_name),
         )
-        test += self.m.properties.generic(
-            mastername=mastername, path_config='generic')
         if mastername.startswith('tryserver'):
-          test += self.m.buildbucket.try_build(
+          test += self.try_build(
               project=project,
+              mastername=mastername,
               builder=buildername,
               git_repo=git_repo,
           )
         else:
-          test += self.m.buildbucket.ci_build(
+          test += self.ci_build(
               project=project,
+              mastername=mastername,
               builder=buildername,
               git_repo=git_repo,
           )

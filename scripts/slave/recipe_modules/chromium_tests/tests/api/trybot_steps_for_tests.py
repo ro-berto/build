@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
@@ -30,12 +31,11 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.tryserver(
+      api.chromium.try_build(
           mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          path_config='generic',
-          tests=['base_unittests'],
+          builder='linux-rel',
       ),
+      api.properties(tests=['base_unittests'],),
       api.runtime(is_experimental=False, is_luci=True),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {

@@ -25,10 +25,10 @@
       "@@@STEP_LOG_LINE@bots.json@  }@@@",
       "@@@STEP_LOG_LINE@bots.json@]@@@",
       "@@@STEP_LOG_END@bots.json@@@",
-      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p//builders/ci/Linux Tests@@@",
-      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p//builders/ci/Linux Builder@@@",
-      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p//builders/ci/Linux Release (NVIDIA)@@@",
-      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p//builders/ci/GPU Linux Builder@@@"
+      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux Tests@@@",
+      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux Builder@@@",
+      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux Release (NVIDIA)@@@",
+      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/GPU Linux Builder@@@"
     ]
   },
   {
@@ -781,8 +781,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux-rel\", \"project\": \"\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
       "--is-luci",
       "--buildbot-buildername",
       "linux-rel",
@@ -858,9 +860,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"mastername\": \"tryserver.chromium.linux\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"test_bot\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"bot_id\": \"test_bot\", \"mastername\": \"tryserver.chromium.linux\", \"path_config\": \"generic\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests (with patch)",
@@ -895,6 +897,8 @@
       "base_unittests",
       "--chrome-revision",
       "refs/heads/master@{#170242}",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],

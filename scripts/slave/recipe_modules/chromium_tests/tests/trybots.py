@@ -13,7 +13,9 @@ from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'filter',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
@@ -27,8 +29,13 @@ def GenTests(api):
     for buildername in builders_dict['builders']:
       yield api.test(
           ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
-          api.properties.generic(
-              mastername=mastername, buildername=buildername),
+          api.chromium.try_build(
+              mastername=mastername,
+              builder=buildername,
+          ),
+          # Supress analysis so that all targets show up as affected and we run
+          # recipe code for each configured test
+          api.filter.suppress_analyze(),
           # We want any errors when creating the BotConfig to be surfaced
           # directly to the test rather than creating a failing step
           api.chromium_tests.handle_bot_config_errors(False),
