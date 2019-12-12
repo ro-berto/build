@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 # Number of tests. Needed by the tests.
-_NUM_TESTS = 7
+_NUM_TESTS = 8
 
 # For trybot test data. If not given, buildbucket module will make the gerrit
 # project the same as the buildbucket project, but since
@@ -58,6 +58,7 @@ def RunSteps(api):
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.SwarmingGTestTest('xr_browser_tests'),
       api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
+      api.chromium_tests.steps.SwarmingGTestTest('telemetry_gpu_unittests'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
       api.chromium_tests.steps.SwarmingIsolatedScriptTest(
           'blink_web_tests',
@@ -187,7 +188,7 @@ def GenTests(api):
        api.post_process(
           post_process.MustRun,
           'process clang code coverage data.filter binaries with valid data '
-          'for %s binaries' % (_NUM_TESTS - 1)),
+          'for %s binaries' % (_NUM_TESTS - 2)),
        api.post_process(
           post_process.MustRun,
           ('process clang code coverage data.generate metadata for %s tests' %
@@ -267,7 +268,7 @@ def GenTests(api):
         project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
      api.override_step_data(
       'process clang code coverage data.filter binaries with valid data for %s '
-      'binaries' % (_NUM_TESTS - 1),
+      'binaries' % (_NUM_TESTS - 2),
       step_test_data=lambda: self.m.json.test_api.output([])),
      api.post_process(
         post_process.MustRun,
@@ -485,5 +486,53 @@ def GenTests(api):
        api.post_check(lambda check, steps: check(steps[
               'process java coverage.Generate Java coverage metadata'
           ].output_properties['process_coverage_data_failure'] == True)),
+       api.post_process(post_process.StatusSuccess),
+       api.post_process(post_process.DropExpectation),)
+
+  yield api.test('android native code coverage CI',
+       api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='android-code-coverage-native',
+          buildnumber=54),
+       api.code_coverage(use_clang_coverage=True),
+       api.step_data(
+          'process clang code coverage data.'
+          'Get all Android unstripped artifacts paths',
+          api.json.output(['/chromium/output_dir/'
+            'lib.unstrippedlibbase_unittests__library.so'])),
+       api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+                       _NUM_TESTS, _NUM_TESTS),
+       api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data.merge profile data for %s tests' %
+           _NUM_TESTS)),
+       api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.gsutil upload merged.profdata'),
+       api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.Finding merging errors'),
+       api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.'
+          'Get all Android unstripped artifacts paths'),
+       api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.Run component extraction script to '
+          'generate mapping'),
+       api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data.generate metadata for %s tests' %
+           _NUM_TESTS)),
+       api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.gsutil upload coverage metadata'),
+       api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data.generate html report for %s '
+          'tests' % _NUM_TESTS),
+       api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data.gsutil upload html report'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)

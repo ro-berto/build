@@ -180,6 +180,21 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # TODO(crbug.com/899974): Implement a sturdier approach that also works in
     # separate builder-tester setup.
     binaries = []
+
+    # Android platform needs to use unstripped files for llvm-cov.
+    # The unstripped artifacts will be generated under lib.unstripped/ or
+    # exe.unstripped/.
+    if self.m.chromium.c.TARGET_PLATFORM == 'android':
+      step_result = self.m.python(
+          'Get all Android unstripped artifacts paths',
+          self.resource('get_android_unstripped_paths.py'),
+          args=[
+              '--chromium-output-dir', self.m.chromium.output_dir,
+              '--output-json',
+              self.m.json.output()
+          ])
+      android_paths = step_result.json.output
+
     for t in tests:
       # There are a number of local isolated scripts such as
       # check_static_initializers, checkdeps, checkperms etc. that introduce
@@ -219,11 +234,22 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['.*', target],
       ]
       for pattern, binary in patterns:
-        if re.match(pattern, target):
-          if binary is not None:
-            binaries.append(self.m.chromium.output_dir.join(binary))
-
+        if not re.match(pattern, target):
+          continue
+        if binary is None:
           break
+
+        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          so_library_name = 'lib' + binary + '__library.so'
+          for android_path in android_paths:
+            if android_path.endswith(binary) or android_path.endswith(
+                so_library_name):
+              binaries.append(android_path)
+              break
+        else:
+          binaries.append(self.m.chromium.output_dir.join(binary))
+
+        break
 
     return list(set(binaries))  # Remove duplicates.
 

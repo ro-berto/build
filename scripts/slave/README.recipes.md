@@ -1641,7 +1641,7 @@ This module contains apis to generate code coverage data.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#247)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/code_coverage/api.py#273)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1655,7 +1655,7 @@ Args:
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#319)(self, tests):**
+&mdash; **def [process\_clang\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#345)(self, tests):**
 
 Processes the clang coverage data for html report or metadata.
 
@@ -1663,7 +1663,7 @@ Args:
   tests (list of self.m.chromium_tests.steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#279)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#305)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1671,7 +1671,7 @@ Args:
   tests (list of self.m.chromium_tests.steps.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#364)(self, \*\*kwargs):**
+&mdash; **def [process\_java\_coverage\_data](/scripts/slave/recipe_modules/code_coverage/api.py#390)(self, \*\*kwargs):**
 
 Generates metadata and JaCoCo HTML report to upload to storage bucket.
 
@@ -1705,7 +1705,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#585)(self, step_name, additional_merge=None):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/code_coverage/api.py#611)(self, step_name, additional_merge=None):**
 
 Returns a merge object understood by the swarming module.
 
