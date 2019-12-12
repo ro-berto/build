@@ -139,10 +139,12 @@
       "infra/goma/client/${platform}",
       "-out",
       "[TMP_BASE]/package.cipd",
-      "-json-output",
-      "/path/to/tmp/json",
+      "-hash-algo",
+      "sha256",
       "-install-mode",
-      "copy"
+      "copy",
+      "-json-output",
+      "/path/to/tmp/json"
     ],
     "name": "build ${platform}",
     "~followup_annotations": [
@@ -160,12 +162,12 @@
       "cipd",
       "pkg-register",
       "[TMP_BASE]/package.cipd",
-      "-json-output",
-      "/path/to/tmp/json",
       "-ref",
       "latest",
       "-tag",
-      "git_revision:8b3cd40a25a512033cc8c0797e41de9ecfc2432c"
+      "git_revision:8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
+      "-json-output",
+      "/path/to/tmp/json"
     ],
     "name": "register infra/goma/client/${platform}",
     "~followup_annotations": [
@@ -175,7 +177,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@infra/goma/client/resolved-platform@https://chrome-infra-packages.appspot.com/p/infra/goma/client/resolved-platform/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {

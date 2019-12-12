@@ -4,11 +4,11 @@
 
 DEPS = [
     'depot_tools/bot_update',
-    'depot_tools/cipd',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/osx_sdk',
     'recipe_engine/buildbucket',
+    'recipe_engine/cipd',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/python',
