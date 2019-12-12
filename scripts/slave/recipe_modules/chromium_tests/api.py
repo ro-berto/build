@@ -1555,20 +1555,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bots_json, indent=2).split('/n')
 
     # Links to upstreams help people figure out if upstreams are broken too
-    # TODO(guterman): at some point the /ci/ in the link should be generalized,
-    # but we currently don't have a more authoritative mapping from try builder
-    # to waterfall builder
+    # TODO(gbeaty): When we switch to using buckets to identify builders instead
+    # of master name, we can have an authoritative value for the bucket to use
+    # in these links, for now rely on convention:
+    # try -> ci
+    # try-beta -> ci-beta
+    # try-stable -> ci-stable
     for bot_id in bot_config.bot_ids:
       if bot_id.tester:
         result.presentation.links[bot_id.tester] = (
-            'https://ci.chromium.org/p/%s/builders/ci/%s' % (
+            'https://ci.chromium.org/p/%s/builders/%s/%s' % (
                 self.m.buildbucket.build.builder.project,
+                self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
                 bot_id.tester,
             ))
 
       result.presentation.links[bot_id.buildername] = (
-          'https://ci.chromium.org/p/%s/builders/ci/%s' % (
+          'https://ci.chromium.org/p/%s/builders/%s/%s' % (
               self.m.buildbucket.build.builder.project,
+              self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
               bot_id.buildername,
           ))
 

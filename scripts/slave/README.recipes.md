@@ -142,6 +142,7 @@
   * [chromium_tests:tests/api/main_waterfall_steps](#recipes-chromium_tests_tests_api_main_waterfall_steps)
   * [chromium_tests:tests/api/package_build](#recipes-chromium_tests_tests_api_package_build)
   * [chromium_tests:tests/api/prepare_checkout](#recipes-chromium_tests_tests_api_prepare_checkout)
+  * [chromium_tests:tests/api/report_builders](#recipes-chromium_tests_tests_api_report_builders)
   * [chromium_tests:tests/api/runhooks](#recipes-chromium_tests_tests_api_runhooks)
   * [chromium_tests:tests/api/set_up_swarming](#recipes-chromium_tests_tests_api_set_up_swarming)
   * [chromium_tests:tests/api/trigger_child_builds](#recipes-chromium_tests_tests_api_trigger_child_builds)
@@ -4412,6 +4413,13 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
+### *recipes* / [chromium\_tests:tests/api/report\_builders](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py#34)(api):**
+
+&mdash; **def [check\_link](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py#40)(check, steps, expected_link):**
 ### *recipes* / [chromium\_tests:tests/api/runhooks](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
