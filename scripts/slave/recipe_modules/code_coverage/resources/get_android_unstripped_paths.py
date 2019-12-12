@@ -61,7 +61,7 @@ def _get_all_paths(chromium_output_dir):
 
 def main():
   params = _parse_args(sys.argv[1:])
-  paths = get_all_paths(params.chromium_output_dir)
+  paths = _get_all_paths(params.chromium_output_dir)
   logging.info('Found all files: %r', paths)
 
   with open(params.output_json, 'w') as f:
