@@ -252,7 +252,9 @@ def GenTests(api):
           'buildername': 'Linux Builder'
       }]),
       api.properties.generic(
-          mastername='chromium.linux', buildername='Linux Builder'),
+          mastername='chromium.linux',
+          buildername='Linux Builder',
+          path_config='generic'),
       api.runtime(is_luci=True, is_experimental=False),
       api.override_step_data(
           'trigger',
@@ -285,7 +287,8 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.linux',
           buildername='Linux Tests',
-          parent_buildername='Linux Builder'),
+          parent_buildername='Linux Builder',
+          path_config='generic'),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],

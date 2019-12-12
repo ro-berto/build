@@ -60,16 +60,15 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
                             _sanitize_nonalpha(buildername)),
             self.m.platform.name(platform_name),
         )
+        test += self.m.properties.generic(
+            mastername=mastername, path_config='generic')
         if mastername.startswith('tryserver'):
-          test += self.m.properties(mastername=mastername)
           test += self.m.buildbucket.try_build(
               project=project,
               builder=buildername,
               git_repo=git_repo,
           )
         else:
-          test += self.m.properties.generic(buildername=buildername,
-                                            mastername=mastername)
           test += self.m.buildbucket.ci_build(
               project=project,
               builder=buildername,
