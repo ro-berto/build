@@ -25,6 +25,10 @@ IS_WIN = platform.system() == 'Windows'
 IS_MAC = platform.system() == 'Darwin'
 
 
+def _posix_path(rawpath):
+  return rawpath.replace(os.sep, '/')
+
+
 def _extract_coverage_info(segments):
   """Returns the line and sub-line block coverage info based on the segments.
 
@@ -263,7 +267,7 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
       coverage_path = coverage_path[len(prefix):]
       break
   # Convert the filesystem path to a source-absolute (GN-style) path.
-  coverage_path = '//' + coverage_path.replace(os.sep, '/').lstrip('/')
+  coverage_path = '//' + _posix_path(coverage_path).lstrip('/')
 
   line_data, block_data = _extract_coverage_info(segments)
   line_data = sorted(line_data.items(), key=lambda x: x[0])
@@ -483,9 +487,10 @@ def _split_metadata_in_shards_if_necessary(
     file_shard_paths = []
     for i, files in enumerate(files_slice):
       file_name = 'files%d.json.gz' % (i + 1)
-      with open(os.path.join(output_dir, files_dir_name, file_name), 'w') as f:
+      with open(os.path.join(output_dir, files_dir_name, file_name), 'wb') as f:
         f.write(zlib.compress(json.dumps({'files': files})))
-      file_shard_paths.append(os.path.join(files_dir_name, file_name))
+      path = os.path.normpath(os.path.join(files_dir_name, file_name))
+      file_shard_paths.append(_posix_path(path))
     compressed_data['file_shards'] = file_shard_paths
 
   return compressed_data
@@ -592,6 +597,7 @@ def _create_index_html(output_dir):
       all_files.append(os.path.relpath(os.path.join(root, f), output_dir))
   with open(os.path.join(output_dir, 'index.html'), 'w') as index_f:
     for f in sorted(all_files):
+      f = _posix_path(f)
       index_f.write('<a href="./%s">%s<a>\n' % (f, f))
       index_f.write('<br>')
 
@@ -692,7 +698,7 @@ def main():
       params.binaries, component_mapping, abs_sources, diff_mapping,
       params.exclusion_pattern)
 
-  with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
+  with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
   _create_index_html(params.output_dir)
 

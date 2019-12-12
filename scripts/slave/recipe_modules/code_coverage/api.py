@@ -179,7 +179,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     # TODO(crbug.com/899974): Implement a sturdier approach that also works in
     # separate builder-tester setup.
-    binaries = []
+    binaries = set()
 
     # Android platform needs to use unstripped files for llvm-cov.
     # The unstripped artifacts will be generated under lib.unstripped/ or
@@ -244,14 +244,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           for android_path in android_paths:
             if android_path.endswith(binary) or android_path.endswith(
                 so_library_name):
-              binaries.append(android_path)
+              binaries.add(android_path)
               break
         else:
-          binaries.append(self.m.chromium.output_dir.join(binary))
+          binaries.add(
+              self.m.chromium.output_dir.join(
+                  binary, platform_ext={'win': '.exe'}))
 
         break
 
-    return list(set(binaries))  # Remove duplicates.
+    return sorted(binaries)
+
 
   def _filter_source_file(self, file_paths, extensions):
     """Filters source files with valid extensions.
