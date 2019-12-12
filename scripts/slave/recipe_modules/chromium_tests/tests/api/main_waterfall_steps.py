@@ -277,16 +277,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'builder_on_buildbot',
-      api.chromium_tests.platform([{
-          'mastername': 'chromium.linux',
-          'buildername': 'Linux Builder'
-      }]),
-      api.properties.generic(
-          mastername='chromium.linux', buildername='Linux Builder'),
-  )
-
-  yield api.test(
       'tester',
       api.chromium_tests.platform([{
           'mastername': 'chromium.linux',
