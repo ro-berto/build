@@ -110,6 +110,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return self.merge_scripts_location.join('merge_results.py')
 
   def _llvm_exec(self, name):
+    name += '.exe' if self.m.platform.is_win else ''
     return self.m.path['checkout'].join('third_party', 'llvm-build',
                                         'Release+Asserts', 'bin', name)
 
