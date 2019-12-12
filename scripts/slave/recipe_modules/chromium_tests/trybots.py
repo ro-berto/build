@@ -45,6 +45,11 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.fyi',
                     'buildername': 'mac10.13-blink-rel-dummy',
                 }),
+            'mac10.14-blink-rel':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'mac10.14-blink-rel-dummy',
+                }),
             'win7-blink-rel':
                 simple_bot({
                     'mastername': 'chromium.fyi',

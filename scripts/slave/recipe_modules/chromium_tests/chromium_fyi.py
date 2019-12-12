@@ -1091,6 +1091,7 @@ SPEC['builders'].update([
     stock_config('mac10.12-blink-rel-dummy', staging=False),
     stock_config('mac10.13_retina-blink-rel-dummy', staging=False),
     stock_config('mac10.13-blink-rel-dummy', staging=False),
+    stock_config('mac10.14-blink-rel-dummy', staging=False),
     stock_config('win7-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win10-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('VR Linux'),
