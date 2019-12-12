@@ -84,7 +84,6 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Android Builder (dbg)',
-      'root_devices': True,
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
@@ -108,7 +107,6 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Android Builder ARM64 (dbg)',
-      'root_devices': True,
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'

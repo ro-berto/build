@@ -290,7 +290,6 @@ SPEC = {
             # Workaround so that recipes doesn't add random build targets to our
             # compile line. We want to build everything.
             'add_tests_as_compile_targets': False,
-            'root_devices': True,
         },
         'ToTAndroid (dbg)': {
             'chromium_config': 'clang_tot_android_dbg',

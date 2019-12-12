@@ -36,7 +36,6 @@ SPEC = {
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc',
       'parent_buildername': 'WebRTC Chromium Android Builder',
-      'root_devices': True,
       'swarming_dimensions': {
         'device_os': 'MMB29Q',
         'device_type': 'bullhead',

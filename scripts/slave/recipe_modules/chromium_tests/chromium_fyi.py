@@ -347,7 +347,6 @@ SPEC = {
                 'content_browsertests',
             ],
             'android_config': 'arm64_builder_mb',
-            'root_devices': True,
             'test_results_config': 'staging_server',
             'testing': {
                 'platform': 'linux',
@@ -743,7 +742,6 @@ SPEC = {
             },
             'bot_type': 'builder_tester',
             'android_config': 'arm64_builder_mb',
-            'root_devices': True,
             # TODO(crbug.com/876570): Here and below, we should move the Mojo
             # builders to a different "master" and get rid of this property; we
             # don't really want different builders on the same master to have
