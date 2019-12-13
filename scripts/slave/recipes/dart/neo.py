@@ -3,18 +3,19 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'dart',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/osx_sdk',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/step',
-  'test_utils',
-  'swarming_client',
+    'dart',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/osx_sdk',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'test_utils',
+    'swarming_client',
 ]
 
 
@@ -139,6 +140,8 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
       api.properties.generic(new_workflow_enabled='true'),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text('{"data":"result data"}\n')),
   )
   yield api.test(
       'builders/try-cl-builder',

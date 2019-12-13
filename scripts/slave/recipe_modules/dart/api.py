@@ -393,16 +393,10 @@ class DartApi(recipe_api.RecipeApi):
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
-  def _upload_results(self, flaky_json_str, logs_str, results_str):
-    # Try builders do not upload results, only publish to pub/sub
+  def _upload_results_to_cloud(self, flaky_json_str, logs_str, results_str):
     builder = str(self.m.buildbucket.builder_name)
-    if builder.endswith('try'):
-      self._publish_results(results_str)
-      return # pragma: no cover
-
     build_revision = str(self.m.buildbucket.gitiles_commit.id)
     build_number = str(self.m.buildbucket.build.number)
-
     self._upload_result(builder, build_number, 'revision', build_revision)
     self._upload_result(builder, build_number, 'logs.json', logs_str)
     self._upload_result(builder, build_number, 'results.json', results_str)
@@ -412,21 +406,19 @@ class DartApi(recipe_api.RecipeApi):
                           'flaky_current_%s.json' % builder, flaky_json_str)
     if self._require_manual_approvals():
       self.m.gsutil.upload(
-        'LATEST/approved_results.json',
-        'dart-test-results',
-        'builders/%s/%s/approved_results.json' % (builder, build_number),
-        name='upload approved_results.json',
-        ok_ret='any' if self._report_new_results() else {0})
+          'LATEST/approved_results.json',
+          'dart-test-results',
+          'builders/%s/%s/approved_results.json' % (builder, build_number),
+          name='upload approved_results.json',
+          ok_ret='any' if self._report_new_results() else {0})
     # Update "latest" file
     new_latest = self.m.raw_io.input_text(build_number, name='latest')
     self.m.gsutil.upload(
-      new_latest,
-      'dart-test-results',
-      'builders/%s/%s' % (builder, 'latest'),
-      name='update "latest" reference',
-      ok_ret='any' if self._report_new_results() else {0})
-    self._upload_results_to_bq(results_str)
-    self._publish_results(results_str)
+        new_latest,
+        'dart-test-results',
+        'builders/%s/%s' % (builder, 'latest'),
+        name='update "latest" reference',
+        ok_ret='any' if self._report_new_results() else {0})
 
 
   def _upload_result(self, builder, build_number, filename, result_str):
@@ -449,6 +441,17 @@ class DartApi(recipe_api.RecipeApi):
          '-f', self.m.raw_io.input_text(results_str),
          '-a', self.m.raw_io.input_text(access_token)],
          ok_ret='any')
+
+
+  def _report_success(self, results_str):
+    if results_str:
+      self.m.step(
+          'check for unapproved new failures', [
+              self.dart_executable(), self.m.path['checkout'].join(
+                  'tools', 'bots', 'get_builder_status.dart'),
+              self.m.buildbucket.builder_name, self.m.buildbucket.build.number
+          ],
+          ok_ret='any')
 
 
   def _extend_results_records(self, results_str, prior_results_path,
@@ -582,6 +585,7 @@ class DartApi(recipe_api.RecipeApi):
             'find ignored flaky test failure logs',
             args + args_logs + ["--flaky"],
             stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+    self._report_success(results_str)
     with self.m.step.defer_results():
       self.m.step('test results', judgement_args)
       doc_url = 'https://goto.google.com/dart-status-file-free-workflow'
@@ -882,11 +886,16 @@ class DartApi(recipe_api.RecipeApi):
             self.m.buildbucket.build.number,
             self.m.git.get_timestamp(test_data='1234567'), self.commit_id())
         try:
-          self._present_results(logs_str, results_str, flaky_json_str)
-        finally:
-          # Upload even if present_results fails the build
+          # Try builders do not upload results, only publish to pub/sub
           with self.m.step.nest('upload new results'):
-            self._upload_results(flaky_json_str, logs_str, results_str)
+            if not self.m.buildbucket.builder_name.endswith('try'):
+              self._upload_results_to_cloud(flaky_json_str, logs_str,
+                                            results_str)
+              self._upload_results_to_bq(results_str)
+            if results_str:
+              self._publish_results(results_str)
+        finally:
+          self._present_results(logs_str, results_str, flaky_json_str)
         # Approve unapproved successes if the build is green (an exception would
         # have been thrown above if it was red). If we approve successes when
         # the builder is red, then a commit that both fixes and breaks tests
@@ -912,7 +921,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def _upload_results_to_bq(self, results_str):
     if not results_str:
-      return
+      return  # pragma: no cover
     assert(results_str[-1] == '\n')
 
     bqupload_path = self.m.path['checkout'].join('bqupload')

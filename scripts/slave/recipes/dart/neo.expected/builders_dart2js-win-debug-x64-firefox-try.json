@@ -1156,162 +1156,6 @@
     "name": "add fields to result records"
   },
   {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--changed",
-      "--failing",
-      "--unapproved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "find unapproved new test failures",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--logs",
-      "",
-      "--logs-only",
-      "--changed",
-      "--failing",
-      "--unapproved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "find unapproved new test failures (logs)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--changed",
-      "--failing",
-      "--approved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "find approved new test failures",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--logs",
-      "",
-      "--logs-only",
-      "--changed",
-      "--failing",
-      "--approved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "find approved new test failures (logs)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--changed",
-      "--passing",
-      "--approved",
-      "--unapproved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "find tests that began passing",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--judgement",
-      "--changed",
-      "--passing",
-      "--failing",
-      "--approved",
-      "--unapproved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
-    },
-    "name": "test results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@@@@",
-      "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LINK@Documentation@https://goto.google.com/dart-status-file-free-workflow@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "upload new results"
   },
@@ -1339,7 +1183,7 @@
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/post_results_to_pubsub.dart",
       "-f",
-      "",
+      "{\"data\":\"result data\"}\n",
       "-a",
       "extra.secret.token.should.not.be.logged"
     ],
@@ -1350,6 +1194,175 @@
     "name": "upload new results.publish results to pub/sub",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--changed",
+      "--failing",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "find unapproved new test failures",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--logs",
+      "",
+      "--logs-only",
+      "--changed",
+      "--failing",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "find unapproved new test failures (logs)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--changed",
+      "--failing",
+      "--approved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "find approved new test failures",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--logs",
+      "",
+      "--logs-only",
+      "--changed",
+      "--failing",
+      "--approved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "find approved new test failures (logs)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--changed",
+      "--passing",
+      "--approved",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "find tests that began passing",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "[CACHE]/builder/sdk/tools/bots/get_builder_status.dart",
+      "dart2js-win-debug-x64-firefox-try",
+      "0"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "check for unapproved new failures"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"data\":\"result data\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--judgement",
+      "--changed",
+      "--passing",
+      "--failing",
+      "--approved",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
+    },
+    "name": "test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@results.json@{\"data\":\"result data\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LINK@Documentation@https://goto.google.com/dart-status-file-free-workflow@@@"
     ]
   },
   {
