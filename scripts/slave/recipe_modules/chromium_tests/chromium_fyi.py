@@ -864,24 +864,6 @@ SPEC = {
             },
             'tests': {},
         },
-        'chromeos-vm-code-coverage': {
-            'chromium_config': 'chromium',
-            'chromium_apply_config': ['mb',],
-            'gclient_config': 'chromium',
-            'gclient_apply_config': ['chromeos', 'use_clang_coverage'],
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'intel',
-                'TARGET_BITS': 64,
-                'TARGET_CROS_BOARD': 'amd64-generic',
-                'TARGET_PLATFORM': 'chromeos',
-            },
-            'bot_type': 'builder_tester',
-            'testing': {
-                'platform': 'linux',
-            },
-            'tests': {},
-        },
         'linux-autofill-captured-sites-rel': {
             'chromium_config': 'chromium',
             'gclient_config': 'chromium',
