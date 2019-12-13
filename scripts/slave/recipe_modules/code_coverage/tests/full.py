@@ -366,7 +366,7 @@ def GenTests(api):
   yield api.test('skip collecting coverage data for java',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-coverage-rel',
+          buildername='android-marshmallow-arm64-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.properties(
@@ -386,11 +386,11 @@ def GenTests(api):
   yield api.test('process java coverage for per-cl',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-coverage-rel',
+          buildername='android-marshmallow-arm64-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          project='chromium', builder='android-marshmallow-arm64-rel',
           git_repo=_DEFAULT_GIT_REPO),
        api.properties(
           files_to_instrument=[
@@ -426,11 +426,11 @@ def GenTests(api):
   yield api.test('java metadata does not exist',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-coverage-rel',
+          buildername='android-marshmallow-arm64-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          project='chromium', builder='android-marshmallow-arm64-rel',
           git_repo=_DEFAULT_GIT_REPO),
        api.properties(
           files_to_instrument=[
@@ -469,7 +469,7 @@ def GenTests(api):
   yield api.test('do not raise failure for java per-cl coverage',
        api.properties.generic(
           mastername='tryserver.chromium.android',
-          buildername='android-marshmallow-arm64-coverage-rel',
+          buildername='android-marshmallow-arm64-rel',
           buildnumber=54),
        api.code_coverage(use_java_coverage=True),
        api.properties(
@@ -478,7 +478,7 @@ def GenTests(api):
             'some/other/path/to/file.java',
           ]),
        api.buildbucket.try_build(
-          project='chromium', builder='android-marshmallow-arm64-coverage-rel',
+          project='chromium', builder='android-marshmallow-arm64-rel',
           git_repo=_DEFAULT_GIT_REPO),
        api.step_data(
           'process java coverage.Generate Java coverage metadata',
