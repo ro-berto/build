@@ -166,11 +166,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       deterministic_failures_set = set(r.deterministic_failures)
       flaky_failures_set = set(r.unique_failures) - deterministic_failures_set
+      non_notrun_failures_set = set([
+          f for f in deterministic_failures_set
+          if set(r.raw_results[f]) != {'NOTRUN'}
+      ])
 
-      non_notrun_failures_set = set()
-      for failure in deterministic_failures_set:
-        if set(r.raw_results[failure]) != {'NOTRUN'}:
-          non_notrun_failures_set.add(failure)
       # If the deterministic_failures_set has other state of failures other
       # than NOTRUN, only report those failures and skip reporting the NOTRUN
       # failures as they will probably not be the 'actual' failures
@@ -283,12 +283,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       if retry_invalid_shards:
         tests_to_retry.update(invalid_results)
 
-      swarming_test_suites = []
-      for test_suite in tests_to_retry:
-        # Assume that non swarming test retries probably won't help.
-        if test_suite.runs_on_swarming:
-          swarming_test_suites.append(test_suite)
-
+      # Assume that non swarming test retries probably won't help.
+      swarming_test_suites = [t for t in tests_to_retry if t.runs_on_swarming]
       if swarming_test_suites:
         retry_suffix = 'retry shards'
         if suffix:
