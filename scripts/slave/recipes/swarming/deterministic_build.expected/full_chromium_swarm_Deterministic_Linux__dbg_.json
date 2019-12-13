@@ -868,7 +868,7 @@
       "--second-build-dir",
       "[CACHE]/builder/src/out/Debug.2",
       "--json-input",
-      "[\"base_unittest\", \"flatc\", \"args.gn\"]",
+      "[\"base_unittest\", \"flatc\", \"args.gn\", \"gen/third_party/blink/renderer/core/style/computed_style_base.h\"]",
       "--output",
       "[CLEANUP]/deterministic_build_tmp_1/deterministic_build_diffs.tgz"
     ],

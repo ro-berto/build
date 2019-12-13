@@ -2697,11 +2697,11 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#359)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#363)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#388)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#392)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 

@@ -336,6 +336,10 @@ class IsolateApi(recipe_api.RecipeApi):
     # archive makes running compare_build_artifacts.py locally easier.
     diffs.append('args.gn')
 
+    # TODO(thakis): Temporary, for debugging https://crbug.com/1031993
+    # Consider comparing all generated files?
+    diffs.append('gen/third_party/blink/renderer/core/style/computed_style_base.h')
+
     t = self.m.path.mkdtemp('deterministic_build')
     output = self.m.path.join(t, TARBALL_NAME)
     self.m.python('create tarball',
