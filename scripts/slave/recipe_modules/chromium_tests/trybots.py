@@ -1182,6 +1182,22 @@ TRYBOTS = freeze({
                     },
                 ],
             },
+            'win10_chromium_x64_coverage_rel_ng': {
+                'retry_failed_shards':
+                    True,
+                'bot_ids': [
+                    {
+                        'mastername': 'chromium.win',
+                        'buildername': 'Win x64 Builder Code Coverage',
+                        'tester': 'Win10 Tests x64 Code Coverage',
+                    },
+                    {
+                        'mastername': 'chromium.gpu',
+                        'buildername': 'GPU Win x64 Builder Code Coverage',
+                        'tester': 'Win10 x64 Release (NVIDIA) Code Coverage',
+                    },
+                ],
+            },
             'win_chromium_compile_dbg_ng':
                 simple_bot({
                     'mastername': 'chromium.win',

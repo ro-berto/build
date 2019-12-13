@@ -60,6 +60,22 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Win10 Tests x64 Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'tests': [],
+      'parent_buildername': 'Win x64 Builder Code Coverage',
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'Win7 (32) Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -101,6 +117,20 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Win x64 Builder Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

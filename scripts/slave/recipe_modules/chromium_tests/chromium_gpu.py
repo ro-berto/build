@@ -24,6 +24,22 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'GPU Win x64 Builder Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'GPU Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -51,6 +67,23 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU Win x64 Builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Win10 x64 Release (NVIDIA) Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU Win x64 Builder Code Coverage',
       'testing': {
         'platform': 'win',
       },
