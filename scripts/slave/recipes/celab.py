@@ -123,7 +123,7 @@ def _RunStepsChromium(api):
 
   # Build Chromium binaries from source and get CELab from CIPD.
   checkout = _CheckoutChromiumRepo(api)
-  test_root = checkout.join('chrome', 'browser', 'policy', 'e2e_test')
+  test_root = checkout.join('chrome', 'test', 'enterprise', 'e2e')
   chromium_bin_dir, raw_result = _BuildChromiumFromSource(api, test_root)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result

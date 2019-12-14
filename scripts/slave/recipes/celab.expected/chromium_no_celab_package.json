@@ -658,7 +658,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\.vpython",
+      "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -693,12 +693,12 @@
       "    version = _GetCelabVersionFromVPython(api, test_root.join(\".vpython\"))",
       "  File \"RECIPE_REPO[build]/scripts/slave/recipes/celab.py\", line 116, in _GetCelabVersionFromVPython",
       "    raise ValueError('Couldn\\'t find CELab version in vpython file: %s' % path)",
-      "ValueError: Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\browser\\policy\\e2e_test\\.vpython"
+      "ValueError: Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython"
     ]
   },
   {
     "failure": {
-      "humanReason": "Uncaught Exception: ValueError(\"Couldn't find CELab version in vpython file: [CACHE]\\\\builder\\\\src\\\\chrome\\\\browser\\\\policy\\\\e2e_test\\\\.vpython\",)"
+      "humanReason": "Uncaught Exception: ValueError(\"Couldn't find CELab version in vpython file: [CACHE]\\\\builder\\\\src\\\\chrome\\\\test\\\\enterprise\\\\e2e\\\\.vpython\",)"
     },
     "name": "$result"
   }
