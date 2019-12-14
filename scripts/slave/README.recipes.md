@@ -3249,7 +3249,7 @@ deterministic errors.
 
 &emsp; **@property**<br>&mdash; **def [canonical](/scripts/slave/recipe_modules/test_utils/api.py#61)(self):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#597)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#605)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#92)(data):**
 
@@ -3264,7 +3264,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#610)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#618)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3312,9 +3312,9 @@ Returns:
   The gtest_results object if it is present in the step result, otherwise
   None.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#238)(self, caller_api, tests, suffix, sort_by_shard=False, retry_failed_shards=False, retry_invalid_shards=False):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#245)(self, caller_api, test_suites, suffix, sort_by_shard=False, retry_failed_shards=False, retry_invalid_shards=False):**
 
-Utility function for running a list of tests and returning the failed tests.
+Runs a list of test suites and returns the failed ones.
 
 Args:
   caller_api - caller's recipe API; this is needed because self.m here
@@ -3325,7 +3325,7 @@ Args:
                use the grouping logic in this method. Unfortunately we can't
                import this module in the test_utils module, as it would
                cause a circular dependency.
-  tests - iterable of objects implementing the Test interface above
+  test_suites - iterable of objects implementing the steps.Test interface.
   suffix - custom suffix, e.g. "with patch", "without patch" indicating
            context of the test run
   sort_by_shard - sort the order of triggering depends on the number of
@@ -3335,16 +3335,16 @@ Args:
   retry_invalid_shards: If true, attempts to retry shards of swarming tests
                         without valid results.
 Returns:
-  A tuple of (list of tests with invalid results,
-              list of tests which failed including invalid results)
+  A tuple of (list of test suites with invalid results,
+              list of test suites which failed including invalid results)
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#322)(self, caller_api, tests, retry_failed_shards=False):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#327)(self, caller_api, test_suites, retry_failed_shards=False):**
 
-Run tests and returns failures.
+Runs tests and returns failures.
 
 Args:
   caller_api: The api object given by the caller of this module.
-  tests: A list of test suites to run with the patch.
+  test_suites - iterable of objects implementing the steps.Test interface.
   retry_failed_shards: If true, attempts to retry failed shards of swarming
                        tests.
 
@@ -3356,11 +3356,11 @@ Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       otherwise unspecified reasons. This is a superset of
       invalid_test_suites.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#453)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#461)(self, caller_api, test_suite):**
 
 Summarizes a failing test suite that is not going to be retried.
 
-&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#516)(self, caller_api, test_suites):**
+&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#524)(self, caller_api, test_suites):**
 
 Exports a summary of flakiness for post-processing by FindIt.
 
@@ -3380,7 +3380,7 @@ This function emits a step with a fixed name, and metadata for FindIt.
 Before making changes to this function, check with the FindIt team to ensure
 that their post-processing will still work correctly.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#415)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#423)(self, caller_api, test_suite):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3395,7 +3395,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#600)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#608)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
