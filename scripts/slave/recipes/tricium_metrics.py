@@ -59,6 +59,10 @@ def _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path):
 def RunSteps(api):
   assert api.tryserver.is_tryserver
 
+  # Do not run if "Tricium-Skip-Metrics" is in the commit message footer.
+  if bool(api.tryserver.get_footer('Tricium-Skip-Metrics')):
+    return
+
   with api.chromium.chromium_layout():
     api.gclient.set_config('chromium')
     api.chromium.set_config('chromium')
@@ -124,6 +128,7 @@ def GenTests(api):
                       include_diff=True,
                       auto_exist_files=True,
                       include_parse=False,
+                      skip_footer=False,
                       test_footer=False):
     test = (
         api.test(name) + api.properties.tryserver(
@@ -133,14 +138,18 @@ def GenTests(api):
             buildnumber='1234',
             patch_set=1))
 
+    skip_footer_json = {'Tricium-Skip-Metrics': True} if skip_footer else {}
+    test += api.override_step_data('parse description',
+                                   api.json.output(skip_footer_json))
+
     if include_diff:
       test += api.step_data('git diff to analyze patch',
                             api.raw_io.stream_output('\n'.join(affected_files)))
 
     if include_parse:
-      footer_json = {'Tricium-Test': True} if test_footer else {}
+      test_footer_json = {'Tricium-Test': True} if test_footer else {}
       test += api.override_step_data('metrics.parse description',
-                                     api.json.output(footer_json))
+                                     api.json.output(test_footer_json))
 
     if auto_exist_files:
       test += api.path.exists(*[
@@ -164,6 +173,15 @@ def GenTests(api):
          api.post_process(post_process.DoesNotRun, 'metrics') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'no_analysis_skip_footer',
+      affected_files=['some/test/test2/histograms.xml'],
+      skip_footer=True,
+      include_diff=False) + api.post_process(
+          post_process.DoesNotRun, 'bot_update') + api.post_process(
+              post_process.StatusSuccess) + api.post_process(
+                  post_process.DropExpectation))
 
   yield (test_with_patch(
       'removed_file',
@@ -203,6 +221,6 @@ def GenTests(api):
       api.post_process(post_process.StepSuccess, 'metrics.load_live_analyzer') +
       api.post_process(post_process.StepSuccess, 'metrics') +
       api.post_process(post_process.StatusSuccess) + api.post_check(
-          lambda check, steps: '[ERROR]: Removed' in 
+          lambda check, steps: '[ERROR]: Removed' in
             steps['metrics.write_results'].output_properties['tricium']
       ) + api.post_process(post_process.DropExpectation))
