@@ -22,6 +22,7 @@ import bisect
 import collections
 import contextlib
 import errno
+import io
 import json
 import logging
 import multiprocessing
@@ -126,7 +127,7 @@ def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
 
   try:
     findings = yaml.load(stream)
-  except yaml.parser.ParserError as v:
+  except (yaml.parser.ParserError, yaml.reader.ReaderError) as v:
     raise _ParseError('Broken yaml: %s' % v)
 
   if findings is None:
@@ -223,7 +224,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
 
     tidy_exited_regularly = return_code == 0
     try:
-      with open(findings_file) as f:
+      with io.open(findings_file, encoding='utf-8', errors='replace') as f:
         findings = list(_parse_tidy_fixes_file(line_offsets, f, in_dir))
     except IOError as e:
       # If tidy died (crashed), it might not have created a file for us.
