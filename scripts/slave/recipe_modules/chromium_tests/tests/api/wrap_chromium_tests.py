@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium_tests',
     'depot_tools/tryserver',
@@ -15,27 +17,43 @@ DEPS = [
 def RunSteps(api):
   tests = []
   if api.properties.get('local_gtest'):
-    tests.append(api.chromium_tests.steps.LocalGTestTest('base_unittests'))
+    tests.append(steps.LocalGTestTest('base_unittests'))
   if api.properties.get('swarming_gtest'):
-    tests.append(api.chromium_tests.steps.SwarmingGTestTest(
-        'base_unittests',
-        set_up=[{'name': 'set_up', 'script': 'set_up_script', 'args': []}],
-        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script',
-                    'args': []}]))
+    tests.append(
+        steps.SwarmingGTestTest(
+            'base_unittests',
+            set_up=[{
+                'name': 'set_up',
+                'script': 'set_up_script',
+                'args': []
+            }],
+            tear_down=[{
+                'name': 'tear_down',
+                'script': 'tear_down_script',
+                'args': []
+            }]))
   if api.properties.get('local_isolated_script_test'):
-    tests.append(api.chromium_tests.steps.LocalIsolatedScriptTest(
-        'base_unittests',
-        set_up=[{'name': 'set_up', 'script': 'set_up_script', 'args': []}],
-        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script',
-                    'args': []}],
-        override_compile_targets=['base_unittests_run']))
+    tests.append(
+        steps.LocalIsolatedScriptTest(
+            'base_unittests',
+            set_up=[{
+                'name': 'set_up',
+                'script': 'set_up_script',
+                'args': []
+            }],
+            tear_down=[{
+                'name': 'tear_down',
+                'script': 'tear_down_script',
+                'args': []
+            }],
+            override_compile_targets=['base_unittests_run']))
   if api.properties.get('script_test'):
-    tests.append(api.chromium_tests.steps.ScriptTest(
-        'script_test',
-        'script.py',
-        {'script.py': ['compile_target']},
-        script_args=['some', 'args'],
-        override_compile_targets=['other_target']))
+    tests.append(
+        steps.ScriptTest(
+            'script_test',
+            'script.py', {'script.py': ['compile_target']},
+            script_args=['some', 'args'],
+            override_compile_targets=['other_target']))
   if api.tryserver.is_tryserver:
     trybot_config = api.chromium_tests.trybots[
         api.properties['mastername']]['builders'][api.properties['buildername']]

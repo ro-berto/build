@@ -10,6 +10,8 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
@@ -45,10 +47,9 @@ def RunSteps(api, mastername, buildername,
     if api.properties.get('shards'):
       kwargs['shards'] = api.properties['shards']
 
-    test = api.chromium_tests.steps.SwarmingGTestTest(
-        'base_unittests', **kwargs)
+    test = steps.SwarmingGTestTest('base_unittests', **kwargs)
   else:
-    test = api.chromium_tests.steps.BlinkTest()
+    test = steps.BlinkTest()
 
   if api.properties.get('use_custom_dimensions', False):
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')

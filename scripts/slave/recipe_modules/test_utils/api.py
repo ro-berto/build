@@ -11,6 +11,7 @@ from recipe_engine import util as recipe_util
 from . import canonical
 from .util import GTestResults, TestResults
 
+from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
 
@@ -206,7 +207,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     local_test_suites = []
     swarming_test_suites = []
     for t in test_suites:
-      if isinstance(t, caller_api.chromium_tests.steps.SwarmingTest):
+      if isinstance(t, steps.SwarmingTest):
         swarming_test_suites.append(t)
       else:
         local_test_suites.append(t)

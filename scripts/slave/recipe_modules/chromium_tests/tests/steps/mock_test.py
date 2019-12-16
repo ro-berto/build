@@ -11,11 +11,14 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
-  test = api.chromium_tests.steps.MockTest(
+  test = steps.MockTest(
       name=api.properties.get('test_name', 'MockTest'),
-      abort_on_failure=api.properties.get('abort_on_failure', False), api=api)
+      abort_on_failure=api.properties.get('abort_on_failure', False),
+      api=api)
 
   test.pre_run(api.chromium_tests.m, '')
 
@@ -31,8 +34,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  failure_code = api.chromium_tests.steps.MockTest.ExitCodes.FAILURE
-  infra_code = api.chromium_tests.steps.MockTest.ExitCodes.INFRA_FAILURE
+  failure_code = steps.MockTest.ExitCodes.FAILURE
+  infra_code = steps.MockTest.ExitCodes.INFRA_FAILURE
 
   yield api.test('basic')
 

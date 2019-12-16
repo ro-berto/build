@@ -25,6 +25,8 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import generators
+
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
@@ -41,12 +43,8 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests._generators.generate_isolated_script(
-      api,
-      api.chromium_tests,
-      'test_mastername',
-      'test_buildername',
-      test_spec,
+  for test in generators.generate_isolated_script(
+      api, api.chromium_tests, 'test_mastername', 'test_buildername', test_spec,
       update_step):
     try:
       test.pre_run(api, '')

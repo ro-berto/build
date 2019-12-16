@@ -4,7 +4,6 @@
 
 DEPS = [
     'chromium',
-    'chromium_tests',
     'depot_tools/bot_update',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
@@ -14,18 +13,17 @@ DEPS = [
     'test_utils',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  test = api.chromium_tests.steps.LocalGTestTest('base_unittests')
+  test = steps.LocalGTestTest('base_unittests')
 
-  test_options = api.chromium_tests.steps.TestOptions(
-      repeat_count=2,
-      test_filter=['foo.bar'],
-      retry_limit=3,
-      run_disabled=True)
+  test_options = steps.TestOptions(
+      repeat_count=2, test_filter=['foo.bar'], retry_limit=3, run_disabled=True)
   test.test_options = test_options
 
   try:

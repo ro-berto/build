@@ -17,6 +17,9 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import generators
+
+
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
@@ -27,12 +30,8 @@ def RunSteps(api):
   single_spec = api.properties.get('single_spec')
   test_spec = single_spec if single_spec else {}
 
-  test_args = api.chromium_tests._generators.get_args_for_test(
-      api,
-      api.chromium_tests,
-      test_spec,
-      update_step
-  )
+  test_args = generators.get_args_for_test(api, api.chromium_tests, test_spec,
+                                           update_step)
   if api.properties.get('expected_args'):
     # For some reason, we get expected_args as a tuple instead of a list
     api.assertions.assertEqual(

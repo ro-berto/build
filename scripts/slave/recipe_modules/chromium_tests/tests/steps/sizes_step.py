@@ -4,19 +4,19 @@
 
 DEPS = [
     'chromium',
-    'chromium_tests',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = api.chromium_tests.steps.SizesStep(
-      results_url='https://example/url',
-      perf_id='test-perf-id')
+  test = steps.SizesStep(
+      results_url='https://example/url', perf_id='test-perf-id')
 
   try:
     test.run(api, '')

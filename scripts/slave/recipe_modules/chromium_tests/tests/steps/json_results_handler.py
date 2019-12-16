@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'chromium_tests',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -11,13 +10,15 @@ DEPS = [
     'traceback',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   results_step = api.step('results', [api.json.output()])
   results = results_step.json.output
   test_results = api.test_utils.create_results_from_json(results)
 
-  handler = api.chromium_tests.steps.JSONResultsHandler()
+  handler = steps.JSONResultsHandler()
 
   presentation_step = api.step('presentation_step', [])
   handler.render_results(api, test_results, presentation_step.presentation)

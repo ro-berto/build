@@ -13,15 +13,18 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
 
-  inner_test = api.chromium_tests.steps.MockTest(
+  inner_test = steps.MockTest(
       'inner_test',
       abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
-      failures=api.properties.get('failures'), api=api)
-  experimental_test = api.chromium_tests.steps.ExperimentalTest(
+      failures=api.properties.get('failures'),
+      api=api)
+  experimental_test = steps.ExperimentalTest(
       inner_test,
       experiment_percentage=api.properties['experiment_percentage'],
       api=api)

@@ -17,8 +17,9 @@ from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import bot_config_and_test_db as bdb_module
-from . import builders as chromium_tests_builders
+from . import builders as builders_module
 from . import generators
+from . import trybots as trybots_module
 from . import steps
 
 
@@ -69,7 +70,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
     self._builders = {}
-    self.add_builders(chromium_tests_builders.BUILDERS)
+    self.add_builders(builders_module.BUILDERS)
     self._precommit_mode = False
     self._bucketed_triggers = input_properties.get('bucketed_triggers', False)
 
@@ -78,34 +79,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return self._builders
 
   @property
-  def steps(self):
-    """The steps module, which contains various Test python classes.
-
-    Usage is generally discouraged.
-    """
-    return steps
-
-  @property
-  def _generators(self):
-    """The generators module. Used in module unittests.
-
-    Usually, you'll probably want all_generators, which is guaranteed to contain
-    all the generators supported.
-    """
-    return generators
-
-  @property
-  def all_generators(self):
-    return [
-      generators.generate_isolated_script,
-      generators.generate_gtest,
-      generators.generate_junit_test,
-      generators.generate_script,
-    ]
-
-  @property
   def trybots(self):
-    return self.test_api.trybots
+    return trybots_module.TRYBOTS
 
   def log(self, message):
     presentation = self.m.step.active_result.presentation
@@ -286,7 +261,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       scripts_compile_targets, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
-    for generator in self.all_generators:
+    for generator in generators.ALL_GENERATORS:
       tests = (
           tuple(generator(
               self.m, self, mastername, buildername, source_side_spec,

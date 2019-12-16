@@ -5,7 +5,6 @@
 DEPS = [
     'build',
     'chromium',
-    'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
@@ -21,13 +20,15 @@ DEPS = [
     'test_utils',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config(
       'chromium',
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
-  test = api.chromium_tests.steps.BlinkTest(extra_args=['--js-flags=--future'])
+  test = steps.BlinkTest(extra_args=['--js-flags=--future'])
 
   try:
     test.run(api, 'with patch')

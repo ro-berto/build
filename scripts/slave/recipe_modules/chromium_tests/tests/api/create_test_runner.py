@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -19,10 +21,9 @@ def RunSteps(api):
   api.test_results.set_config('public_server')
 
   test_runner = api.chromium_tests.create_test_runner(
-      tests=[api.chromium_tests.steps.LocalGTestTest('base_unittests')],
+      tests=[steps.LocalGTestTest('base_unittests')],
       serialize_tests=api.properties.get('serialize_tests'),
-      retry_failed_shards=api.properties.get('retry_failed_shards')
-  )
+      retry_failed_shards=api.properties.get('retry_failed_shards'))
   return test_runner()
 
 

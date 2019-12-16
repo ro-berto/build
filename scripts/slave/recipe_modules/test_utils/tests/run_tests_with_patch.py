@@ -8,12 +8,13 @@ DEPS = [
     'recipe_engine/step',
 
     'chromium_swarming',
-    'chromium_tests',
     'test_utils',
 ]
 
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
 
 PROPERTIES = {
   'retry_failed_shards': Property(default=False),
@@ -42,10 +43,8 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
     run_tests_kwargs['retry_failed_shards'] = retry_failed_shards
 
   tests = [
-      api.chromium_tests.steps.MockTest(name='test', api=api,
-                                        **_get_test_kwargs_by_index(0)),
-      api.chromium_tests.steps.MockTest(name='test2', api=api,
-                                        **_get_test_kwargs_by_index(1)),
+      steps.MockTest(name='test', api=api, **_get_test_kwargs_by_index(0)),
+      steps.MockTest(name='test2', api=api, **_get_test_kwargs_by_index(1)),
   ]
 
   invalid, failing = api.test_utils.run_tests_with_patch(

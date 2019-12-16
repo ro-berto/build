@@ -4,9 +4,10 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
-    'chromium_tests',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -18,7 +19,7 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = api.chromium_tests.steps.MiniInstallerTest()
+  test = steps.MiniInstallerTest()
 
   try:
     test.run(api, '')

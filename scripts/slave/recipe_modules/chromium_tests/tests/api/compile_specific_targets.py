@@ -4,6 +4,8 @@
 
 from recipe_engine.post_process import Filter
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -34,7 +36,7 @@ BUILDERS = {
 def RunSteps(api):
   tests = []
   if api.properties.get('swarming_gtest'):
-    tests.append(api.chromium_tests.steps.SwarmingGTestTest('base_unittests'))
+    tests.append(steps.SwarmingGTestTest('base_unittests'))
 
   mastername = api.properties['mastername']
   buildername = api.properties['buildername']

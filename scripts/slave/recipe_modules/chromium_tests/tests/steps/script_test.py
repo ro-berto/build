@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -18,10 +20,9 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = api.chromium_tests.steps.ScriptTest(
+  test = steps.ScriptTest(
       'script_test',
-      'script.py',
-      {'script.py': ['compile_target']},
+      'script.py', {'script.py': ['compile_target']},
       script_args=['some', 'args'],
       override_compile_targets=['other_target'])
 

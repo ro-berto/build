@@ -6,23 +6,9 @@ from recipe_engine import recipe_test_api
 
 from . import bot_config_and_test_db as bdb_module
 from . import builders
-from . import steps
-from . import trybots
 
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
-  @property
-  def builders(self):
-    return builders.BUILDERS
-
-  @property
-  def steps(self):
-    return steps
-
-  @property
-  def trybots(self):
-    return trybots.TRYBOTS
-
   @recipe_test_api.mod_test_data
   @staticmethod
   def handle_bot_config_errors(handle_bot_config_errors):
@@ -46,7 +32,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return size_limit
 
   def platform(self, bot_ids):
-    bot_config= bdb_module.BotConfig(self.builders, bot_ids)
+    bot_config = bdb_module.BotConfig(builders.BUILDERS, bot_ids)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
         bot_config.get('testing', {}).get('platform'),

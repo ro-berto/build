@@ -17,6 +17,8 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 PROPERTIES = {
   'abort_on_failure': Property(default=False),
   'test_swarming': Property(default=False),
@@ -30,9 +32,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
   api.chromium_tests.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  class MockSwarmingTest(
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest,
-      api.chromium_tests.steps.MockTest):
+  class MockSwarmingTest(steps.SwarmingIsolatedScriptTest, steps.MockTest):
+
     def __init__(self, name, api):
       super(MockSwarmingTest, self).__init__(name=name, api=api)
 
@@ -45,14 +46,14 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
     tests = [
         MockSwarmingTest(name=test_name, api=api),
         MockSwarmingTest(name=test_name + '_2', api=api),
-        api.chromium_tests.steps.MockTest(name='test3', api=api)
+        steps.MockTest(name='test3', api=api)
     ]
     api.chromium_tests.set_config('staging')
   else:
     tests = [
-        api.chromium_tests.steps.MockTest(
+        steps.MockTest(
             name=test_name, abort_on_failure=abort_on_failure, api=api),
-        api.chromium_tests.steps.MockTest(name='test2', api=api)
+        steps.MockTest(name='test2', api=api)
     ]
 
   _, failed_tests = api.test_utils.run_tests(
@@ -64,8 +65,8 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure,
 
 
 def GenTests(api):
-  failure_code = api.chromium_tests.steps.MockTest.ExitCodes.FAILURE
-  infra_code = api.chromium_tests.steps.MockTest.ExitCodes.INFRA_FAILURE
+  failure_code = steps.MockTest.ExitCodes.FAILURE
+  infra_code = steps.MockTest.ExitCodes.INFRA_FAILURE
 
   yield api.test(
       'success',

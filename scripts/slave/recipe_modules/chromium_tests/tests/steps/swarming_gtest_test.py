@@ -23,6 +23,8 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config(
@@ -32,13 +34,12 @@ def RunSteps(api):
   # Fake path, as the real one depends on having done a chromium checkout.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
 
-  test = api.chromium_tests.steps.SwarmingGTestTest(
+  test = steps.SwarmingGTestTest(
       'base_unittests',
       override_compile_targets=api.properties.get('override_compile_targets'),
-      isolate_coverage_data=api.properties.get('isolate_coverage_data', False)
-  )
+      isolate_coverage_data=api.properties.get('isolate_coverage_data', False))
 
-  test_options = api.chromium_tests.steps.TestOptions()
+  test_options = steps.TestOptions()
   test.test_options = test_options
 
   try:

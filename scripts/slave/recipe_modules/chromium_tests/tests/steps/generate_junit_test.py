@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import generators
+
 DEPS = [
     'chromium',
     'chromium_android',
@@ -36,12 +38,8 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests._generators.generate_junit_test(
-      api,
-      api.chromium_tests,
-      'test_mastername',
-      'test_buildername',
-      test_spec,
+  for test in generators.generate_junit_test(
+      api, api.chromium_tests, 'test_mastername', 'test_buildername', test_spec,
       update_step):
     test.run(api, '')
 

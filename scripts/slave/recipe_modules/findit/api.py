@@ -8,7 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-
+from RECIPE_MODULES.build.chromium_tests import steps
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -243,7 +243,7 @@ class FinditApi(recipe_api.RecipeApi):
           return None, None, raw_result
       for test in actual_tests_to_run:
         try:
-          test.test_options = api.m.chromium_tests.steps.TestOptions(
+          test.test_options = steps.TestOptions(
               test_filter=requested_tests.get(test.canonical_name),
               repeat_count=test_repeat_count,
               retry_limit=0 if test_repeat_count else None,

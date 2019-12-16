@@ -12,6 +12,8 @@ without error.
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
+from RECIPE_MODULES.build.chromium_tests import builders
+
 DEPS = [
     'chromium_tests',
     'recipe_engine/platform',
@@ -88,8 +90,7 @@ def RunSteps(api, mastername, buildername):
 
 
 def GenTests(api):
-  for mastername, builders_dict in sorted(
-      api.chromium_tests.builders.iteritems()):
+  for mastername, builders_dict in sorted(builders.BUILDERS.iteritems()):
     for buildername in sorted(builders_dict['builders']):
       yield api.test(
           ('%s-%s' % (mastername, buildername)).replace(' ', '_'),

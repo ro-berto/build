@@ -7,6 +7,8 @@ import re
 
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 class iOSApi(recipe_api.RecipeApi):
 
@@ -290,8 +292,7 @@ class iOSApi(recipe_api.RecipeApi):
   def get_mac_toolchain_cmd(self):
     cipd_root = self.m.path['start_dir']
     ensure_file = self.m.cipd.EnsureFile().add_package(
-        self.m.chromium_tests.steps.MAC_TOOLCHAIN_PACKAGE,
-        self.m.chromium_tests.steps.MAC_TOOLCHAIN_VERSION)
+        steps.MAC_TOOLCHAIN_PACKAGE, steps.MAC_TOOLCHAIN_VERSION)
     self.m.cipd.ensure(cipd_root, ensure_file)
     return cipd_root.join('mac_toolchain')
 
@@ -652,15 +653,16 @@ class iOSApi(recipe_api.RecipeApi):
     use_wpr_tools = test.get('use trusted cert') or test.get(
         'replay package name')
     args.extend([
-      '--config-variable', 'wpr_tools_path', (
-          self.m.chromium_tests.steps.WPR_TOOLS_ROOT
-          if use_wpr_tools else 'NO_PATH'),
+        '--config-variable',
+        'wpr_tools_path',
+        (steps.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'),
     ])
 
     args.extend([
-      '--config-variable', 'replay_path', (
-          self.m.chromium_tests.steps.WPR_REPLAY_DATA_ROOT if
-          test.get('replay package name') else 'NO_PATH'),
+        '--config-variable',
+        'replay_path',
+        (steps.WPR_REPLAY_DATA_ROOT
+         if test.get('replay package name') else 'NO_PATH'),
     ])
 
     args.extend([
@@ -778,9 +780,9 @@ class iOSApi(recipe_api.RecipeApi):
         '${ISOLATED_OUTDIR}', '--retries',
         self.__config.get('retries', '3'), '--shards', '<(shards)',
         '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd',
-        '%s/mac_toolchain' % self.m.chromium_tests.steps.MAC_TOOLCHAIN_ROOT,
-        '--xcode-path', self.XCODE_APP_PATH, '--wpr-tools-path',
-        '<(wpr_tools_path)', '--replay-path', '<(replay_path)'
+        '%s/mac_toolchain' % steps.MAC_TOOLCHAIN_ROOT, '--xcode-path',
+        self.XCODE_APP_PATH, '--wpr-tools-path', '<(wpr_tools_path)',
+        '--replay-path', '<(replay_path)'
     ]
 
     files = [
@@ -866,22 +868,21 @@ class iOSApi(recipe_api.RecipeApi):
       return None
 
     if self.platform == 'device':
-      if not self.m.chromium_tests.steps.IOS_PRODUCT_TYPES.get(
-          task['test']['device type']):
+      if not steps.IOS_PRODUCT_TYPES.get(task['test']['device type']):
         # Create a dummy step so we can annotate it to explain what
         # went wrong.
         step_result = self.m.step('[trigger] %s' % task['step name'], [])
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.logs['supported devices'] = sorted(
-          self.m.chromium_tests.steps.IOS_PRODUCT_TYPES.keys())
+            steps.IOS_PRODUCT_TYPES.keys())
         step_result.presentation.step_text = (
           'Requested unsupported device type.')
         return None
 
     self._ensure_xcode_version(task)
-    return self.m.chromium_tests.steps.SwarmingIosTest(
-        self.swarming_service_account, self.platform, self.__config, task,
-        upload_test_results, result_callback, self._test_data.enabled)
+    return steps.SwarmingIosTest(self.swarming_service_account, self.platform,
+                                 self.__config, task, upload_test_results,
+                                 result_callback, self._test_data.enabled)
 
   def collect(self, triggered_tests):
     failures = set()

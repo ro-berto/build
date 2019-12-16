@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -53,14 +55,14 @@ def RunSteps(api):
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
 
   tests = [
-      api.chromium_tests.steps.LocalIsolatedScriptTest('checkdeps'),
-      api.chromium_tests.steps.SwarmingGTestTest('chrome_all_tast_tests'),
-      api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
-      api.chromium_tests.steps.SwarmingGTestTest('xr_browser_tests'),
-      api.chromium_tests.steps.SwarmingGTestTest('gl_unittests_ozone'),
-      api.chromium_tests.steps.SwarmingGTestTest('telemetry_gpu_unittests'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest(
+      steps.LocalIsolatedScriptTest('checkdeps'),
+      steps.SwarmingGTestTest('chrome_all_tast_tests'),
+      steps.SwarmingGTestTest('base_unittests'),
+      steps.SwarmingGTestTest('xr_browser_tests'),
+      steps.SwarmingGTestTest('gl_unittests_ozone'),
+      steps.SwarmingGTestTest('telemetry_gpu_unittests'),
+      steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
+      steps.SwarmingIsolatedScriptTest(
           'blink_web_tests',
           merge={
               'script':

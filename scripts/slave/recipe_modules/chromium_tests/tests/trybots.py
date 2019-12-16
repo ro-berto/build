@@ -12,6 +12,8 @@ properties set for the entry.
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
+from RECIPE_MODULES.build.chromium_tests import trybots
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -25,7 +27,7 @@ def RunSteps(api):
   api.step('Success', ['echo', 'Success!'])
 
 def GenTests(api):
-  for mastername, builders_dict in api.chromium_tests.trybots.iteritems():
+  for mastername, builders_dict in trybots.TRYBOTS.iteritems():
     for buildername in builders_dict['builders']:
       yield api.test(
           ('%s-%s' % (mastername, buildername)).replace(' ', '_'),

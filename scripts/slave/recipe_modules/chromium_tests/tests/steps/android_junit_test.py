@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_android',
@@ -26,7 +28,7 @@ def RunSteps(api):
   api.chromium_android.set_config('main_builder')
   api.chromium_checkout.ensure_checkout({})
 
-  test = api.chromium_tests.steps.AndroidJunitTest(
+  test = steps.AndroidJunitTest(
       'test_name', target_name=api.properties.get('target_name'))
 
   api.chromium.compile(targets=test.compile_targets(), name='compile')

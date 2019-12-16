@@ -29,6 +29,9 @@ PERF_CONFIG_MAPPINGS = {
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
+
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
@@ -43,12 +46,8 @@ def RunSteps(api):
     perf_config_mappings = {}
     commit_position_property = 'got_revision_cp'
 
-  test = api.chromium_tests.steps.WebRTCPerfTest(
-      'test_name',
-      ['some', 'args'],
-      'test-perf-id',
-      perf_config_mappings,
-      commit_position_property)
+  test = steps.WebRTCPerfTest('test_name', ['some', 'args'], 'test-perf-id',
+                              perf_config_mappings, commit_position_property)
 
   bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium_tests.create_bot_id(mastername, buildername)])

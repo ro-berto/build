@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from RECIPE_MODULES.build.chromium_tests import generators
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -33,13 +35,9 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests._generators.generate_gtest(
-      api,
-      api.chromium_tests,
-      'test_mastername',
-      'test_buildername',
-      test_spec,
-      update_step):
+  for test in generators.generate_gtest(api, api.chromium_tests,
+                                        'test_mastername', 'test_buildername',
+                                        test_spec, update_step):
     test.run(api, '')
 
 

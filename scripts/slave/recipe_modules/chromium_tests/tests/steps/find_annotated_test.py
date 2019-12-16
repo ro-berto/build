@@ -4,7 +4,6 @@
 
 DEPS = [
     'chromium',
-    'chromium_tests',
     'depot_tools/gsutil',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
@@ -14,11 +13,13 @@ DEPS = [
     'recipe_engine/step',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
 
-  test = api.chromium_tests.steps.FindAnnotatedTest()
+  test = steps.FindAnnotatedTest()
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [

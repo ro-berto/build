@@ -5,7 +5,6 @@
 DEPS = [
     'chromium',
     'chromium_swarming',
-    'chromium_tests',
     'depot_tools/bot_update',
     'ios',
     'perf_dashboard',
@@ -22,6 +21,8 @@ DEPS = [
 import json
 
 from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
 
 
 def RunSteps(api):
@@ -55,10 +56,14 @@ def RunSteps(api):
             }
           ]
         }
-  test = api.chromium_tests.steps.SwarmingIosTest(
-      'swarming_service_account', platform, config, task,
-      upload_test_results=True, result_callback=result_callback,
-      use_test_data = True)
+  test = steps.SwarmingIosTest(
+      'swarming_service_account',
+      platform,
+      config,
+      task,
+      upload_test_results=True,
+      result_callback=result_callback,
+      use_test_data=True)
   assert test.runs_on_swarming
 
   test.pre_run(api, '')

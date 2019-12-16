@@ -30,6 +30,8 @@ DEPS = [
 from recipe_engine import post_process
 import json
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_build_properties({
@@ -50,7 +52,7 @@ def RunSteps(api):
   test_repeat_count = api.properties.get('repeat_count')
   test_name = 'blink_web_tests' if test_repeat_count else 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
-  test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
+  test = steps.SwarmingIsolatedScriptTest(
       name=test_name,
       perf_id=api.properties.get('perf_id'),
       perf_dashboard_id='test-perf-dashboard-id',
@@ -68,7 +70,7 @@ def RunSteps(api):
   assert test.shards > 0
 
   if test_repeat_count:
-    test.test_options = api.chromium_tests.steps.TestOptions(
+    test.test_options = steps.TestOptions(
         test_filter=api.properties.get('test_filter'),
         repeat_count=test_repeat_count,
         retry_limit=0,

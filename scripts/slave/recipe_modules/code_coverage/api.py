@@ -309,7 +309,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """Processes the coverage data for html report or metadata.
 
     Args:
-      tests (list of self.m.chromium_tests.steps.Test): A list of test objects
+      tests (list of steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
     if self._is_per_cl_coverage:
@@ -349,7 +349,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """Processes the clang coverage data for html report or metadata.
 
     Args:
-      tests (list of self.m.chromium_tests.steps.Test): A list of test objects
+      tests (list of steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
     if self._is_per_cl_coverage and not self._affected_source_files:

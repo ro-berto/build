@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'chromium_tests',
     'isolate',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -14,13 +13,15 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   test_name = api.properties.get('test_name') or 'base_unittests'
 
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
 
-  test = api.chromium_tests.steps.LocalIsolatedScriptTest(
+  test = steps.LocalIsolatedScriptTest(
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'),
       isolate_coverage_data=isolate_coverage_data)
@@ -29,7 +30,7 @@ def RunSteps(api):
 
   test_repeat_count = api.properties.get('repeat_count')
   if test_repeat_count:
-    test.test_options = api.chromium_tests.steps.TestOptions(
+    test.test_options = steps.TestOptions(
         test_filter=api.properties.get('test_filter'),
         repeat_count=test_repeat_count,
         retry_limit=0,

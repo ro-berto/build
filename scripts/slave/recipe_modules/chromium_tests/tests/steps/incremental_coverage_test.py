@@ -4,17 +4,18 @@
 
 DEPS = [
     'chromium_android',
-    'chromium_tests',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium_android.set_config('incremental_coverage_builder_tests')
 
-  test = api.chromium_tests.steps.IncrementalCoverageTest()
+  test = steps.IncrementalCoverageTest()
 
   test.run(api, '')
 

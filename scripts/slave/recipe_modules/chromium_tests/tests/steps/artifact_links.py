@@ -5,7 +5,6 @@
 DEPS = [
     'chromium',
     'chromium_swarming',
-    'chromium_tests',
     'code_coverage',
     'depot_tools/bot_update',
     'isolate',
@@ -22,6 +21,8 @@ DEPS = [
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 
 def RunSteps(api):
   api.chromium.set_config(
@@ -31,11 +32,9 @@ def RunSteps(api):
   # Fake path, as the real one depends on having done a chromium checkout.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
 
-  test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-      'base_unittests'
-  )
+  test = steps.SwarmingIsolatedScriptTest('base_unittests')
 
-  test_options = api.chromium_tests.steps.TestOptions()
+  test_options = steps.TestOptions()
   test.test_options = test_options
 
   test.pre_run(api, '')

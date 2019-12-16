@@ -383,3 +383,11 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         api, spec, isolated_script_swarming_delegate,
         isolated_script_local_delegate, swarming_dimensions):
       yield t
+
+
+ALL_GENERATORS = [
+    generate_isolated_script,
+    generate_gtest,
+    generate_junit_test,
+    generate_script,
+]

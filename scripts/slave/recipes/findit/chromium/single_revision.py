@@ -16,6 +16,8 @@ from recipe_engine.recipe_api import Property
 from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_checkout',
@@ -193,8 +195,8 @@ def _run_tests(api, bot_config, test_objects, requested_tests,
   for test_obj in test_objects:
     test_filter = tuple(requested_tests[test_obj.canonical_name].names)
     # ScriptTests do not support test_options property
-    if not isinstance(test_obj, api.chromium_tests.steps.ScriptTest):
-      test_obj.test_options = api.chromium_tests.steps.TestOptions(
+    if not isinstance(test_obj, steps.ScriptTest):
+      test_obj.test_options = steps.TestOptions(
           test_filter=test_filter,
           repeat_count=test_repeat_count,
           retry_limit=0 if test_repeat_count else None,
