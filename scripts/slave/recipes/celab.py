@@ -301,8 +301,9 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
   storage_logs = '%s-logs' % pool_name
   with api.context(cwd=test_root, env_suffixes={'PATH': add_paths}):
     extra_args = []
-    if test_py_args:
-      extra_args += ['--test_py_args=%s' % test_py_args]
+
+    test_py_args += " --no_external_access=True"
+    extra_args += ['--test_py_args=%s' % test_py_args.strip()]
 
     include_tests = api.properties.get('include')
     if include_tests:

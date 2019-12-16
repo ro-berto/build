@@ -303,6 +303,7 @@
       "--noprogress",
       "-v",
       "1",
+      "--test_py_args=--no_external_access=True",
       "--include",
       "quick_test",
       "--exclude",

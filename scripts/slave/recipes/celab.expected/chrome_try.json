@@ -818,7 +818,7 @@
       "--noprogress",
       "-v",
       "1",
-      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe"
+      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe --no_external_access=True"
     ],
     "cwd": "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e",
     "env_suffixes": {

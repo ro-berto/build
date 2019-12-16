@@ -347,7 +347,8 @@
       "[START_DIR]/logs",
       "--noprogress",
       "-v",
-      "1"
+      "1",
+      "--test_py_args=--no_external_access=True"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
     "env_suffixes": {
