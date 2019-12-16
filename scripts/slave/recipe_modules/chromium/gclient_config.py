@@ -324,6 +324,12 @@ def arm64(c):
 def use_clang_coverage(c):
   c.solutions[0].custom_vars['checkout_clang_coverage_tools'] = 'True'
 
+
+@CONFIG_CTX()
+def use_clang_tidy(c):
+  c.solutions[0].custom_vars['checkout_clang_tidy'] = 'True'
+
+
 @CONFIG_CTX()
 def clang_tot(c):
   c.solutions[0].custom_vars['llvm_force_head_revision'] = 'True'

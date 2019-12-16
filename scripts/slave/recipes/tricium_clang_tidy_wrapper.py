@@ -27,22 +27,8 @@ DEPS = [
 
 
 def _add_clang_tidy_comments(api, file_paths):
-  ninja_path = {'PATH': [api.path.dirname(api.depot_tools.ninja_path)]}
-  with api.context(env_suffixes=ninja_path):
-    # FIXME(gbiv): We probably should stop building clang-tidy on every run
-    # before we ship this for real.
-    api.python(
-        name='build clang-tidy',
-        script=api.context.cwd.join('tools', 'clang', 'scripts',
-                                    'build_clang_tools_extra.py'),
-        args=[
-            '--fetch',
-            '%s' % api.context.cwd,
-            'clang-tidy',
-        ])
-
   clang_tidy_location = api.context.cwd.join(
-      'tools', 'clang', 'third_party', 'llvm', 'build', 'bin', 'clang-tidy')
+      'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang-tidy')
 
   def add_comment(message, file_path, line):
     api.tricium.add_comment(
@@ -71,6 +57,7 @@ def _add_clang_tidy_comments(api, file_paths):
     ]
     tricium_clang_tidy_args += file_paths
 
+    ninja_path = {'PATH': [api.path.dirname(api.depot_tools.ninja_path)]}
     with api.context(env_suffixes=ninja_path):
       api.python(
           name='tricium_clang_tidy.py',
@@ -120,6 +107,8 @@ def RunSteps(api):
 
   with api.chromium.chromium_layout():
     api.gclient.set_config('chromium')
+    api.gclient.apply_config('use_clang_tidy')
+
     api.chromium.set_config('chromium')
     api.chromium.apply_config('mb')
 
