@@ -217,6 +217,15 @@ class Test(object):
     """
     super(Test, self).__init__()
 
+    # Contains a set of flaky failures that are known to be flaky, and the
+    # content is supposed to be a subset of the set of deterministic failures.
+    self._known_flaky_failures = set()
+
+    # Contains a record of deterministic failures, one for each suffix. Maps
+    # suffix to a list of tests.
+    # Must be updated using update_test_run().
+    self._deterministic_failures = {}
+
     # Contains a record of test runs, one for each suffix. Maps suffix to a dict
     # with the keys 'valid', 'failures', and 'pass_fail_counts'.
     #   'valid': A Boolean indicating whether the test run was valid.
@@ -236,7 +245,6 @@ class Test(object):
     #   datastore has been cleaned up. https://crbug.com/934599.
     # Must be updated using update_test_run()
     self._test_runs = {}
-    self._deterministic_failures = {}
 
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
@@ -289,8 +297,7 @@ class Test(object):
 
   @property
   def isolate_target(self):
-    """Returns isolate target name. Defaults to name.
-    """
+    """Returns isolate target name. Defaults to name."""
     return self.target_name
 
   @property
@@ -300,6 +307,13 @@ class Test(object):
   @property
   def runs_on_swarming(self):
     return False
+
+  # TODO(crbug.com/838735): Remove progma no cover after implementing skipping
+  # retrying flaky failures as it should automatically provide coverage.
+  @property
+  def known_flaky_failures(self):  # pragma: no cover
+    """Return tests that failed but known to be flaky at ToT."""
+    return self._known_flaky_failures
 
   def compile_targets(self):
     """List of compile targets needed by this test."""

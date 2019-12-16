@@ -1,0 +1,17 @@
+// Copyright 2019 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipe_modules.build.test_utils;
+
+message InputProperties {
+  // Used to limit the number of tests that will appear in the step text to
+  // avoid cluttering the UI. If the limit is exceeded, the step text will
+  // indicate the number of additional failures.
+  int32 max_reported_failures = 1;
+  // Used to control whether to skip retrying flaky tests if they're already
+  // known to be flaky on ToT.
+  bool should_exonerate_flaky_failures = 2;
+}

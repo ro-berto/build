@@ -55,9 +55,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
 
-  def __init__(self, max_reported_failures, *args, **kwargs):
+  def __init__(self, properties, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
-    self._max_reported_failures = int(max_reported_failures)
+    self._max_reported_failures = properties.max_reported_failures or 30
+
+    # The main use case is to provide a escape-hatch to disable the feature
+    # and make everything fall back to original behaviors when there is a bug
+    # or outage. When landing the CL that flips the switch, it should be TBRed
+    # and No-tried to minimize the negative impact of an outage.
+    self._should_exonerate_flaky_failures = (
+        properties.should_exonerate_flaky_failures or False)
 
   @property
   def canonical(self):
@@ -243,6 +250,91 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_test_suites
 
+  def _mark_flaky_failures(self, failed_test_suites):
+    """Mark failed tests if they're already known to be flaky.
+
+    This method updates |failed_test_suites| in place by updating their
+    |known_flaky_failures| property, which will be used to skip retrying known
+    flaky failures. A considered alternative is to directly modify the set of
+    deterministic failures, but wasn't chosen because it's more desirable to be
+    able to distinguish a skipped/forgiven failure from a success so that they
+    can be properly surfaced.
+
+    This feature is controlled by the should_exonerate_flaky_failures property,
+    which allows switch on/off with ease and flexibility.
+
+    Args:
+      failed_test_suites ([steps.Test]): A list of failed test suites to check.
+    """
+    if not failed_test_suites:
+      return
+
+    tests_to_check = []
+    for test_suite in failed_test_suites:
+      for t in set(test_suite.deterministic_failures('with patch')):
+        tests_to_check.append({
+            'step_ui_name': test_suite.name_of_step_for_suffix('with patch'),
+            'test_name': t,
+        })
+
+    if len(tests_to_check) > 100:
+      # Bail out if there are too many failed tests because:
+      # 1. It's unlikely they're all legitimate flaky failures.
+      # 2. Avoid overloading the service.
+      return
+
+    builder = self.m.buildbucket.build.builder
+    flakes_input = {
+        'luci_project': builder.project,
+        'luci_bucket': builder.bucket,
+        'luci_builder': builder.builder,
+        'tests': tests_to_check,
+    }
+
+    result = self.m.python(
+        'exonerate known flaky failures',
+        self.resource('query_cq_flakes.py'),
+        args=[
+            '--input-path',
+            self.m.json.input(flakes_input),
+            '--output-path',
+            self.m.json.output(),
+        ],
+        infra_step=True,
+        # Failing to query data from the service for any reason results in a
+        # step with infra failure, but doesn't fail the build to avoid
+        # affecting developers from landing their code, and the recipe will
+        # fall back to the original behavior to retrying failed tests in case
+        # of any issue.
+        ok_ret=('any'))
+
+    result.presentation.logs['input'] = json.dumps(flakes_input, indent=4)
+    result.presentation.logs['output'] = json.dumps(
+        result.json.output, indent=4)
+
+    if not result.json.output:
+      result.presentation.step_text = 'Failed to get known flakes'
+      return
+
+    known_flakes = {}
+    for flake in result.json.output:
+      if ('step_ui_name' not in flake or 'test_name' not in flake or
+          'affected_gerrit_changes' not in flake):
+        # Response is ill-formed. Don't expect to ever happen, but have this
+        # check in place just in case.
+        result.presentation.step_text = 'Output is ill-formed'
+        return
+
+      known_flakes[(flake['step_ui_name'], flake['test_name'])] = {
+          'affected_gerrit_changes': flake['affected_gerrit_changes'],
+      }
+
+    for test_suite in failed_test_suites:
+      for t in set(test_suite.deterministic_failures('with patch')):
+        if (test_suite.name_of_step_for_suffix('with patch'),
+            t) in known_flakes:
+          test_suite.known_flaky_failures.add(t)
+
   def run_tests(self,
                 caller_api,
                 test_suites,
@@ -283,6 +375,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))
     if retry_failed_shards or retry_invalid_shards:
+      if self._should_exonerate_flaky_failures:
+        self._mark_flaky_failures(failed_test_suites)
+
       suites_to_retry = set()
       if retry_failed_shards:
         suites_to_retry.update(failed_test_suites)
