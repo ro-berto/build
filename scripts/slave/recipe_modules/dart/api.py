@@ -445,11 +445,15 @@ class DartApi(recipe_api.RecipeApi):
 
   def _report_success(self, results_str):
     if results_str:
+      access_token = self.m.service_account.default().get_access_token(
+          ['https://www.googleapis.com/auth/cloud-platform'])
       self.m.step(
           'check for unapproved new failures', [
               self.dart_executable(), self.m.path['checkout'].join(
-                  'tools', 'bots', 'get_builder_status.dart'),
-              self.m.buildbucket.builder_name, self.m.buildbucket.build.number
+                  'tools', 'bots', 'get_builder_status.dart'), '-b',
+              self.m.buildbucket.builder_name, '-n',
+              self.m.buildbucket.build.number, '-a',
+              self.m.raw_io.input_text(access_token)
           ],
           ok_ret='any')
 

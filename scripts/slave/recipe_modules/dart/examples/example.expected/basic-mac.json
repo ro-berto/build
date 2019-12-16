@@ -1852,10 +1852,27 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-scopes",
+      "https://www.googleapis.com/auth/cloud-platform",
+      "-lifetime",
+      "3m"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/get_builder_status.dart",
+      "-b",
       "dart2js-strong-mac-x64-chrome",
-      "1357"
+      "-n",
+      "1357",
+      "-a",
+      "extra.secret.token.should.not.be.logged"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "check for unapproved new failures"
