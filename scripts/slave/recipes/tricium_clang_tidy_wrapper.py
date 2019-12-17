@@ -90,13 +90,7 @@ def _should_skip_linting(api):
       api.tryserver.gerrit_change.change, api.tryserver.gerrit_change.patchset)
 
   commit_message = revision_info['commit']['message']
-  if commit_message.startswith('Revert'):
-    return True
-
-  # FIXME(gbiv): remove this once testing is done
-  author = revision_info['commit']['author']['email']
-  is_gbiv = author in ('gbiv@google.com', 'gbiv@chromium.org')
-  return not (is_gbiv and 'TriciumTest' in commit_message)
+  return commit_message.startswith('Revert')
 
 
 def RunSteps(api):
@@ -265,15 +259,6 @@ def GenTests(api):
       'skip_reverted_cl',
       affected_files=['path/to/some/cc/file.cpp'],
       is_revert=True,
-      include_diff=False) + api.post_process(
-          post_process.DoesNotRun, 'bot_update') + api.post_process(
-              post_process.StatusSuccess) + api.post_process(
-                  post_process.DropExpectation))
-
-  yield (test_with_patch(
-      'skip_not_gbiv',
-      affected_files=['path/to/some/cc/file.cpp'],
-      author='woof@doge.goog',
       include_diff=False) + api.post_process(
           post_process.DoesNotRun, 'bot_update') + api.post_process(
               post_process.StatusSuccess) + api.post_process(
