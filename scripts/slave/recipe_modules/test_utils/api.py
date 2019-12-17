@@ -319,14 +319,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     known_flakes = {}
     for flake in result.json.output:
       if ('step_ui_name' not in flake or 'test_name' not in flake or
-          'affected_gerrit_changes' not in flake):
+          'affected_gerrit_changes' not in flake or
+          'monorail_issue' not in flake):
         # Response is ill-formed. Don't expect to ever happen, but have this
         # check in place just in case.
-        result.presentation.step_text = 'Output is ill-formed'
+        result.presentation.step_text = 'Response is ill-formed'
         return
 
       known_flakes[(flake['step_ui_name'], flake['test_name'])] = {
           'affected_gerrit_changes': flake['affected_gerrit_changes'],
+          'monorail_issue': flake['monorail_issue'],
       }
 
     for test_suite in failed_test_suites:
