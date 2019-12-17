@@ -519,6 +519,7 @@ def main():
       help='Number of concurrent `clang_tidy` jobs to run')
   parser.add_argument(
       '--base_path',
+      required=True,
       help='Base path for all files to output. Any paths that aren\'t '
       'subdirectories of this will be ignored.')
   parser.add_argument(
@@ -532,9 +533,6 @@ def main():
       '--all',
       action='store_true',
       help='Run across all C/C++ files known to ninja.')
-  # FIXME: This should be removed once we decide on and productionize a
-  # packaging strategy for clang-tidy. See
-  # https://chromium-review.googlesource.com/c/chromium/src/+/1749646
   parser.add_argument(
       '--clang_tidy_binary', required=True, help='Path to clang-tidy')
   args = parser.parse_args()
