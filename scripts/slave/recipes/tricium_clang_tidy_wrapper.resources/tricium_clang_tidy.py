@@ -244,19 +244,16 @@ _TidyAction = collections.namedtuple('_TidyAction',
 
 
 def _run_tidy_action(tidy_binary, action):
-  # FIXME(gbiv): kick this out when we have a top-level .clang-tidy in
-  # Chromium's tree.
-  checks = [
-      '*',
-      '-clang-analyzer*',
-  ]
-
   try:
     logging.info('Running clang_tidy for %r', action.target)
 
     start_time = time.time()
     exit_code, stdout, findings = _run_clang_tidy(
-        tidy_binary, checks, action.in_dir, action.cc_file, action.flags)
+        clang_tidy_binary=tidy_binary,
+        checks=None,
+        in_dir=action.in_dir,
+        cc_file=action.cc_file,
+        compile_command=action.flags)
     elapsed_time = time.time() - start_time
 
     if exit_code is None:
