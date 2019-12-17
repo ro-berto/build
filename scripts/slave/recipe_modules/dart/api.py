@@ -64,8 +64,10 @@ class DartApi(recipe_api.RecipeApi):
   def get_secret(self, name):
     """Decrypts the specified secret and returns the location of the result"""
     cloudkms_dir = self.m.path['start_dir'].join('cloudkms')
-    self.m.cipd.ensure(cloudkms_dir,
-                    {'infra/tools/luci/cloudkms/${platform}': 'latest'})
+    cloudkms_package = 'infra/tools/luci/cloudkms/${platform}'
+    self.m.cipd.ensure(
+        cloudkms_dir,
+        self.m.cipd.EnsureFile().add_package(cloudkms_package, 'latest'))
 
     with self.m.context(cwd=self.m.path['cleanup']):
       file_name = '%s.encrypted' % name
@@ -916,10 +918,10 @@ class DartApi(recipe_api.RecipeApi):
     # there is an argument to the swarming module task creation api for this.
     browser_path = self.m.path['checkout'].join('browsers')
     self.m.file.ensure_directory('create browser cache', browser_path)
-    self.m.cipd.set_service_account_credentials(None)
     version_tag = 'version:%s' % version
     package = 'dart/browsers/%s/${platform}' % runtime
-    self.m.cipd.ensure(browser_path, { package: version_tag })
+    ensure_file = self.m.cipd.EnsureFile().add_package(package, version_tag)
+    self.m.cipd.ensure(browser_path, ensure_file)
     return browser_path
 
 
@@ -930,7 +932,8 @@ class DartApi(recipe_api.RecipeApi):
 
     bqupload_path = self.m.path['checkout'].join('bqupload')
     package = r'infra/tools/bqupload/${platform}'
-    self.m.cipd.ensure(bqupload_path, {package: 'latest'})
+    ensure_file = self.m.cipd.EnsureFile().add_package(package, 'latest')
+    self.m.cipd.ensure(bqupload_path, ensure_file)
 
     bqupload = bqupload_path.join('bqupload')
     cmd = [bqupload , 'dart-ci.results.results']
