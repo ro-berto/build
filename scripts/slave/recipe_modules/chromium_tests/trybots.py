@@ -101,6 +101,11 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.android.fyi',
                     'buildername': 'android-marshmallow-x86-fyi-rel',
                 }),
+            'android-pie-arm64-coverage-rel':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'android-code-coverage-native',
+                }),
             'android-pie-arm64-rel':
                 simple_bot({
                     'mastername': 'chromium.android',
