@@ -127,7 +127,7 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '10.3',
+                    'os': '10.3.1',
                     'host os': 'Mac-10.13',
                 },
             },
@@ -259,7 +259,7 @@ BUILDERS = freeze({
                 'ensure_sdk': 'ios',
                 'ios_testing': {
                     'device type': 'iPhone 6s',
-                    'os': '10.3',
+                    'os': '10.3.1',
                     'host os': 'Mac-10.13',
                 },
             },
