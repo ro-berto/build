@@ -774,3 +774,220 @@ def GenTests(api):
           '(without patch)', ['--gtest_filter=Test.Two']),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'succeeded_to_exonerate_flaky_failures',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output([{
+              'step_ui_name': 'base_unittests (with patch)',
+              'test_name': 'Test.Two',
+              'affected_gerrit_changes': ['123', '234'],
+          }])),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failed_to_exonerate_flaky_failures',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.step_data('query known flaky failures on CQ', api.json.output([])),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  retry_shards_with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'SUCCESS',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  # This test tests the scenario that if a known flaky failure fails again while
+  # retrying, it doesn't fail a test suite as long as there are no other
+  # non-flaky failures. For example: t1 and t2 failed "with patch", and t2 is
+  # known to be flaky, while retrying, t1 succeeds but t2 fails again, and the
+  # build is expected to be succeed without running "without patch" steps.
+  yield api.test(
+      'known_flaky_failure_failed_again_while_retrying',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output([{
+              'step_ui_name': 'base_unittests (with patch)',
+              'test_name': 'Test.Two',
+              'affected_gerrit_changes': ['123', '234'],
+          }])),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  retry_shards_with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  # This test tests the scenario that a known flaky failure shouldn't be retried
+  # "without patch". For example: t1 and t2 failed "with patch", and t2 is
+  # known to be flaky, while retrying, t1 and t2 fails again, and only t1 is
+  # expected to be retried during "without patch".
+  yield api.test(
+      'without_patch_only_retries_non_flaky_failures',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output([{
+              'step_ui_name': 'base_unittests (with patch)',
+              'test_name': 'Test.Two',
+              'affected_gerrit_changes': ['123', '234'],
+          }])),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run (without patch).[trigger] base_unittests '
+          '(without patch)', ['--gtest_filter=Test.One']),
+      api.post_process(post_process.DropExpectation),
+  )

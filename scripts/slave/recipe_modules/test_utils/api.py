@@ -250,8 +250,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return invalid_results, failed_test_suites
 
-  def _mark_flaky_failures(self, failed_test_suites):
-    """Mark failed tests if they're already known to be flaky.
+  def _query_and_mark_flaky_failures(self, failed_test_suites):
+    """Queries and marks failed tests that are already known to be flaky.
 
     This method updates |failed_test_suites| in place by updating their
     |known_flaky_failures| property, which will be used to skip retrying known
@@ -292,7 +292,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     }
 
     result = self.m.python(
-        'exonerate known flaky failures',
+        'query known flaky failures on CQ',
         self.resource('query_cq_flakes.py'),
         args=[
             '--input-path',
@@ -344,6 +344,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 retry_invalid_shards=False):
     """Runs a list of test suites and returns the failed ones.
 
+    If retry_[failed|invalid]_shards is true, this method retries shards that
+    have deterministic failures or invalid results. Additionally, if the
+    |_should_exonerate_flaky_failures| property is true, this method skips
+    retrying deterministic failures that are already known to be flaky on ToT.
+
     Args:
       caller_api - caller's recipe API; this is needed because self.m here
                    is different than in the caller (different recipe modules
@@ -372,12 +377,28 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'caller_api must include the chromium_swarming recipe module')
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
+    if self._should_exonerate_flaky_failures:
+      # If *all* the deterministic failures are known flaky tests, a test suite
+      # will not be considered failure anymore, and thus will not be retried.
+      #
+      # A long as there is at least one non-flaky failure, all the failed shards
+      # will be retried, including those due to flaky failures, and the reason
+      # is that existing APIs don't allow associating test failures with shard
+      # indices. One could implement such a connection, but the cost is high,
+      # while return is very low from both the CQ cycle time and resource usage
+      # perspective.
+      self._query_and_mark_flaky_failures(failed_test_suites)
+      for t in failed_test_suites[:]:
+        if (set(t.deterministic_failures('with patch')) -
+            t.known_flaky_failures):
+          continue
+
+        failed_test_suites.remove(t)
+
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))
-    if retry_failed_shards or retry_invalid_shards:
-      if self._should_exonerate_flaky_failures:
-        self._mark_flaky_failures(failed_test_suites)
 
+    if retry_failed_shards or retry_invalid_shards:
       suites_to_retry = set()
       if retry_failed_shards:
         suites_to_retry.update(failed_test_suites)
@@ -412,7 +433,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # with patch' and 'with patch' runs into account.
         def _still_failing(suite):
           valid, failures = suite.failures_including_retry(suffix)
-          return not valid or failures
+          if not valid:
+            return True
+
+          return set(failures) - suite.known_flaky_failures
 
         failed_and_invalid_suites = [
             t for t in failed_and_invalid_suites if _still_failing(t)

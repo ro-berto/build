@@ -308,10 +308,8 @@ class Test(object):
   def runs_on_swarming(self):
     return False
 
-  # TODO(crbug.com/838735): Remove progma no cover after implementing skipping
-  # retrying flaky failures as it should automatically provide coverage.
   @property
-  def known_flaky_failures(self):  # pragma: no cover
+  def known_flaky_failures(self):
     """Return tests that failed but known to be flaky at ToT."""
     return self._known_flaky_failures
 
@@ -603,7 +601,8 @@ class Test(object):
     if suffix == 'without patch':
       # Invalid results should be treated as if every test failed.
       valid_results, failures = self.with_patch_failures_including_retry()
-      return sorted(failures) if valid_results else None
+      return sorted(failures -
+                    self.known_flaky_failures) if valid_results else None
 
     # If we don't recognize the step, then return None. This makes it easy for
     # bugs to slip through, but this matches the previous behavior. Importantly,

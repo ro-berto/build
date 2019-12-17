@@ -87,8 +87,9 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data('exonerate known flaky failures', retcode=1),
-      api.post_process(post_process.MustRun, 'exonerate known flaky failures'),
+      api.step_data('query known flaky failures on CQ', retcode=1),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -104,11 +105,12 @@ def GenTests(api):
               },
           }),
       api.step_data(
-          'exonerate known flaky failures',
+          'query known flaky failures on CQ',
           api.json.output([{
               'step_ui_name': 'browser_tests (with patch)'
           }])),
-      api.post_process(post_process.MustRun, 'exonerate known flaky failures'),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -125,7 +127,7 @@ def GenTests(api):
               },
           }),
       api.post_process(post_process.DoesNotRun,
-                       'exonerate known flaky failures'),
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -141,8 +143,9 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data('exonerate known flaky failures', api.json.output([])),
-      api.post_process(post_process.MustRun, 'exonerate known flaky failures'),
+      api.step_data('query known flaky failures on CQ', api.json.output([])),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -161,13 +164,14 @@ def GenTests(api):
               },
           }),
       api.step_data(
-          'exonerate known flaky failures',
+          'query known flaky failures on CQ',
           api.json.output([{
               'step_ui_name': 'failed_test (with patch)',
               'test_name': 'testA',
               'affected_gerrit_changes': ['123', '234'],
           }])),
-      api.post_process(post_process.MustRun, 'exonerate known flaky failures'),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -186,7 +190,7 @@ def GenTests(api):
               },
           }),
       api.step_data(
-          'exonerate known flaky failures',
+          'query known flaky failures on CQ',
           api.json.output([{
               'step_ui_name': 'failed_test (with patch)',
               'test_name': 'testA',
@@ -197,7 +201,8 @@ def GenTests(api):
                                'test_name': 'testB',
                                'affected_gerrit_changes': ['567', '678'],
                            }])),
-      api.post_process(post_process.MustRun, 'exonerate known flaky failures'),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -214,7 +219,7 @@ def GenTests(api):
               },
           }),
       api.post_process(post_process.DoesNotRun,
-                       'exonerate known flaky failures'),
+                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
