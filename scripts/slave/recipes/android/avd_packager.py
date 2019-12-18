@@ -34,10 +34,11 @@ def RunSteps(api, properties):
     for avd_config in properties.avd_configs:
       avd_config_path = chromium_src.join(avd_config)
       create_result = api.python(
-          'avd create %s' % avd_config,
-          avd_script_path,
-          ['create', '-v', '--avd-config', avd_config_path,
-           '--cipd-json-output', api.json.output()])
+          'avd create %s' % avd_config, avd_script_path, [
+              'create', '-v', '--avd-config', avd_config_path, '--snapshot',
+              '--cipd-json-output',
+              api.json.output()
+          ])
       if create_result.json.output:
         cipd_result = create_result.json.output.get('result', {})
         if 'package' in cipd_result and 'instance_id' in cipd_result:
