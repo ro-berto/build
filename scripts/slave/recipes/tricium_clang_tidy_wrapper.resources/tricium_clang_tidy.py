@@ -244,6 +244,16 @@ _TidyAction = collections.namedtuple('_TidyAction',
 
 
 def _run_tidy_action(tidy_binary, action):
+  """Runs clang-tidy, given a _TidyAction.
+
+  The return value here is a bit complicated:
+    - None: an unexpected Exception happened, and was logged
+    - (exit_code, stdout, findings):
+      - if exit_code is None, clang-tidy timed out; stdout has contents, but
+        findings is probably senseless.
+      - if exit_code is not None, clang-tidy terminated with the returned
+        exit-code.
+  """
   try:
     logging.info('Running clang_tidy for %r', action.target)
 
@@ -268,7 +278,11 @@ def _run_tidy_action(tidy_binary, action):
     # Exceptions raised in Pools have ~meaningless tracebacks after they're
     # sent to the main process.
     logging.exception('Running clang-tidy on %r', action.cc_file)
-    raise
+    # A `None` exit-code is a timeout; return `None` instead of a tuple to
+    # indicate that things blew up spectacularly. Don't `raise`, since that
+    # can apparently cause great confusion for `multiprocessing`
+    # (crbug.com/1034646).
+    return None
 
 
 _CompileCommand = collections.namedtuple(
@@ -432,10 +446,19 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   for action, result in results:
     cc_file, flags = action.cc_file, action.flags
 
+    invocation_result = result.get(2**30)
+    if not invocation_result:
+      # Assume that we logged the exception from another thread.
+      logging.error(
+          'Clang-tidy on %r with flags %r died with an unexpected exception',
+          cc_file, flags)
+      failed_cc_files.add(cc_file)
+      continue
+
     # Without a timeout here, signals like KeyboardInterrupt won't be
     # promptly raised. Doesn't matter what the timeout is.
     # https://bugs.python.org/issue21913
-    exit_code, stdout, findings = result.get(2**30)
+    exit_code, stdout, findings = invocation_result
     if exit_code is None:
       logging.error('Clang-tidy timed out on %r with flags %r', cc_file, flags)
       timed_out_cc_files.add(cc_file)
