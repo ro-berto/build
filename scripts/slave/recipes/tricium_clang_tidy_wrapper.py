@@ -80,7 +80,12 @@ def _add_clang_tidy_comments(api, file_paths):
   for diagnostic in clang_tidy_output.get('diagnostics', []):
     assert diagnostic['file_path'], ("Empty paths should've been filtered "
                                      "by tricium_clang_tidy: %s" % diagnostic)
-    add_comment(diagnostic['message'], diagnostic['file_path'],
+    comment_body = ' '.join([
+        diagnostic['message'],
+        '(https://clang.llvm.org/extra/clang-tidy/checks/%s.html)' %
+        diagnostic['diag_name'],
+    ])
+    add_comment(comment_body, diagnostic['file_path'],
                 diagnostic['line_number'])
 
 
@@ -242,11 +247,13 @@ def GenTests(api):
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
                       'line_number': 2,
+                      'diag_name': 'super-cool-diag',
                       'message': 'hello, world',
                   },
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
                       'line_number': 50,
+                      'diag_name': 'moderately-cool-diag',
                       'message': 'hello, world'
                   },
               ]
