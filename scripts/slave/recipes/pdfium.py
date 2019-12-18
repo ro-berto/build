@@ -247,29 +247,37 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
 
   # Add the arguments needed to upload the resulting images.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
-  gold_props, gold_key = _get_gold_params(api, build_config, revision)
+  gold_props = _get_gold_props(api, build_config, revision)
   script_args.extend([
       '--gold_properties',
       gold_props,
-      '--gold_key',
-      gold_key,
       '--gold_output_dir',
       gold_output_dir,
   ])
 
   # Cannot use the standard deferred result mechanism, since some of the
   # operations related to uploading to Gold depend on non-deferred results.
+  # This variable swallows the exception raised by a failed step. The step
+  # will still show up as failed, but processing will continue.
   test_exception = None
 
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
     with api.context(cwd=api.path['checkout'], env=env):
+      additional_args = _get_modifiable_script_args(api, build_config)
       try:
-        api.python('javascript tests', javascript_path, script_args)
+        api.python('javascript tests', javascript_path,
+                   script_args + additional_args)
       except api.step.StepFailure as e:
-        # Swallow the exception. The step will still show up as
-        # failed, but processing will continue.
+        test_exception = e
+
+      additional_args = _get_modifiable_script_args(
+          api, build_config, javascript_disabled=True)
+      try:
+        api.python('javascript tests (javascript disabled)', javascript_path,
+                   script_args + additional_args)
+      except api.step.StepFailure as e:
         test_exception = e
 
   # Setup uploading results to Gold after the javascript tests, since they do
@@ -282,36 +290,59 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
+    additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.python('pixel tests', pixel_tests_path, script_args)
+      api.python('pixel tests', pixel_tests_path, script_args + additional_args)
     except api.step.StepFailure as e:
-      # Swallow the exception. The step will still show up as
-      # failed, but processing will continue.
       test_exception = e
   # Upload immediately, since tests below will overwrite the output directory
   _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
+  if v8:
+    with api.context(cwd=api.path['checkout'], env=env):
+      additional_args = _get_modifiable_script_args(
+          api, build_config, javascript_disabled=True)
+      try:
+        api.python('pixel tests (javascript disabled)', pixel_tests_path,
+                   script_args + additional_args)
+      except api.step.StepFailure as e:
+        test_exception = e
+    # Upload immediately, since tests below will overwrite the output directory
+    _upload_dm_results(api, gold_output_dir, revision, 'pixel')
+
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
+    additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.python('corpus tests', corpus_tests_path, script_args)
+      api.python('corpus tests', corpus_tests_path,
+                 script_args + additional_args)
     except api.step.StepFailure as e:
-      # Swallow the exception. The step will still show up as
-      # failed, but processing will continue.
       test_exception = e
+  # Upload immediately, since tests below will overwrite the output directory
   _upload_dm_results(api, gold_output_dir, revision, 'corpus')
+
+  if v8:
+    with api.context(cwd=api.path['checkout'], env=env):
+      additional_args = _get_modifiable_script_args(
+          api, build_config, javascript_disabled=True)
+      try:
+        api.python('corpus tests (javascript disabled)', corpus_tests_path,
+                   script_args + additional_args)
+      except api.step.StepFailure as e:
+        test_exception = e
+    # Upload immediately, since tests below will overwrite the output directory
+    _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
 
 
-def _get_gold_params(api, build_config, revision):
-  """Get the parameters to be passed to the testing call to
-  generate the dm.json file expected by Gold and to upload
-  the generated images. Returns:
-      (properties_str, key_str)
-  These strings can be passed directly into run_corpus_tests.py.
+def _get_gold_props(api, build_config, revision):
+  """Get the --gold_properties parameter value to be passed
+  to the testing call to generate the dm.json file expected
+  by Gold and to upload the generated images.
+  The string can be passed directly into run_corpus_tests.py.
   """
   builder_name = api.m.buildbucket.builder_name.strip()
   props = [
@@ -338,11 +369,29 @@ def _get_gold_params(api, build_config, revision):
         str(api.buildbucket.build.id),
     ])
 
+  return " ".join(props)
+
+
+def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
+  """ Construct and get the additional arguments for
+  run_corpus_tests.py that can be modified based on whether
+  javascript is disabled.
+  Returns a list that can be concatenated with the other script
+  arguments.
+  """
+
   # Add the os from the builder name to the set of unique identifers.
   keys = build_config.copy()
+  builder_name = api.m.buildbucket.builder_name.strip()
   keys["os"] = builder_name.split("_")[0]
+  keys['javascript'] = 'disabled' if javascript_disabled else 'enabled'
+  _dict_to_str(keys)
 
-  return " ".join(props), _dict_to_str(keys)
+  additional_args = ['--gold_key', _dict_to_str(keys)]
+  if javascript_disabled:
+    additional_args.append('--disable-javascript')
+
+  return additional_args
 
 
 def _dict_to_str(props):
@@ -897,6 +946,14 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fail-javascript-tests-javascript-disabled',
+      api.platform('linux', 64),
+      api.properties(mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('javascript tests (javascript disabled)', retcode=1),
+  )
+
+  yield api.test(
       'fail-pixel-tests',
       api.platform('linux', 64),
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
@@ -905,9 +962,25 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fail-pixel-tests-javascript-disabled',
+      api.platform('linux', 64),
+      api.properties(mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('pixel tests (javascript disabled)', retcode=1),
+  )
+
+  yield api.test(
       'fail-corpus-tests',
       api.platform('linux', 64),
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests', retcode=1),
+  )
+
+  yield api.test(
+      'fail-corpus-tests-javascript-disabled',
+      api.platform('linux', 64),
+      api.properties(mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('corpus tests (javascript disabled)', retcode=1),
   )

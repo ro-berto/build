@@ -446,10 +446,10 @@
       "out/debug",
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_no_v8 build_number 1234",
-      "--gold_key",
-      "debug true is_standalone true os linux skia false skia_paths false use_cxx11 true v8 false xfa false",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output"
+      "[CACHE]/builder/pdfium/out/debug/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript enabled os linux skia false skia_paths false use_cxx11 true v8 false xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests"
@@ -514,10 +514,10 @@
       "out/debug",
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_no_v8 build_number 1234",
-      "--gold_key",
-      "debug true is_standalone true os linux skia false skia_paths false use_cxx11 true v8 false xfa false",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output"
+      "[CACHE]/builder/pdfium/out/debug/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript enabled os linux skia false skia_paths false use_cxx11 true v8 false xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "corpus tests"

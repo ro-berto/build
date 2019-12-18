@@ -20,7 +20,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"pdfium\"}",
       "--git-cache-dir",
@@ -135,8 +135,8 @@
       "--check",
       "--root=[CACHE]/builder/pdfium",
       "gen",
-      "//out/debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" use_cxx11=true target_os=\"android\""
+      "//out/debug_v8",
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "gn gen"
@@ -155,7 +155,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android"
+      "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -172,7 +172,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -214,7 +214,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[CACHE]/builder/pdfium/out/debug",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "-j",
       "80",
       "pdfium_all"
@@ -235,7 +235,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -267,7 +267,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -288,7 +288,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -320,9 +320,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/pdfium/out/debug",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug\", \"-j\", 80, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_v8\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -338,10 +338,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"android\", \"project\": \"pdfium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"pdfium\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android",
+      "linux",
       "--buildbot-mastername",
       "client.pdfium",
       "--buildbot-slavename",
@@ -381,14 +381,14 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug/pdfium_unittests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_unittests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "unittests"
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug/pdfium_embeddertests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_embeddertests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "embeddertests"
@@ -397,8 +397,43 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "javascript tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "--disable-javascript"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "javascript tests (javascript disabled)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt"
+      "[CACHE]/builder/pdfium/out/debug_v8/ignore_hashes.txt"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "infra_step": true,
@@ -443,15 +478,13 @@
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug",
+      "out/debug_v8",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "--gold_ignore_hashes",
-      "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os android skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
+      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests"
@@ -464,13 +497,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "*.png"
     ],
     "infra_step": true,
     "name": "find images",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -484,7 +517,7 @@
       "-m",
       "----",
       "cp",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/*.png",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
     "infra_step": true,
@@ -501,8 +534,8 @@
       "cp",
       "-z",
       "json,log",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000001/pixel/dm.json"
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000001/pixel/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
@@ -511,20 +544,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug",
+      "out/debug_v8",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "--gold_ignore_hashes",
-      "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os android skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
+      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "corpus tests"
+    "name": "pixel tests (javascript disabled)"
   },
   {
     "cmd": [
@@ -534,13 +566,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "*.png"
     ],
     "infra_step": true,
     "name": "find images (2)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -554,7 +586,7 @@
       "-m",
       "----",
       "cp",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/*.png",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
     "infra_step": true,
@@ -571,13 +603,157 @@
       "cp",
       "-z",
       "json,log",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000004/corpus/dm.json"
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000004/pixel/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (2)"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "corpus tests"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000007/corpus/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "--disable-javascript"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "corpus tests (javascript disabled)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (4)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000010/corpus/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (4)"
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('corpus tests (javascript disabled)') (retcode: 1)"
+    },
     "name": "$result"
   }
 ]
