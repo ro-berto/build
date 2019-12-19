@@ -74,28 +74,28 @@ def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
   out_dir = 'release' if rel else 'debug'
 
   if skia:
-    out_dir += "_skia"
+    out_dir += '_skia'
   if skia_paths:
-    out_dir += "_skiapaths"
+    out_dir += '_skiapaths'
   if xfa:
-    out_dir += "_xfa"
+    out_dir += '_xfa'
   if v8:
-    out_dir += "_v8"
+    out_dir += '_v8'
 
   if clang:
-    out_dir += "_clang"
+    out_dir += '_clang'
   elif msvc:
-    out_dir += "_msvc"
+    out_dir += '_msvc'
 
   if component:
-    out_dir += "_component"
+    out_dir += '_component'
 
   if memory_tool == 'asan':
-    out_dir += "_asan"
+    out_dir += '_asan'
   elif memory_tool == 'msan':
-    out_dir += "_msan"
+    out_dir += '_msan'
   elif memory_tool == 'ubsan':
-    out_dir += "_ubsan"
+    out_dir += '_ubsan'
 
   return out_dir
 
@@ -369,11 +369,11 @@ def _get_gold_props(api, build_config, revision):
         str(api.buildbucket.build.id),
     ])
 
-  return " ".join(props)
+  return ' '.join(props)
 
 
 def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
-  """ Construct and get the additional arguments for
+  """Construct and get the additional arguments for
   run_corpus_tests.py that can be modified based on whether
   javascript is disabled.
   Returns a list that can be concatenated with the other script
@@ -383,7 +383,7 @@ def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
   # Add the os from the builder name to the set of unique identifers.
   keys = build_config.copy()
   builder_name = api.m.buildbucket.builder_name.strip()
-  keys["os"] = builder_name.split("_")[0]
+  keys['os'] = builder_name.split('_')[0]
   keys['javascript'] = 'disabled' if javascript_disabled else 'enabled'
   _dict_to_str(keys)
 
@@ -401,28 +401,28 @@ def _dict_to_str(props):
   ret = []
   for k in sorted(props.keys()):
     ret += [k, props[k]]
-  return " ".join(ret)
+  return ' '.join(ret)
 
 
 def _gold_build_config(args):
-  """ Extracts key value pairs from the arguments handed to 'gn gen'
-      and returns them as a dictionary. Since these are used as
-      parameters in Gold we strip common prefixes and disregard
-      some arguments. i.e. 'use_goma' since we don't care about how
-      a binary was built.  Only arguments that follow the
-      'key=value' pattern are considered.
+  """Extracts key value pairs from the arguments handed to 'gn gen'
+  and returns them as a dictionary. Since these are used as
+  parameters in Gold we strip common prefixes and disregard
+  some arguments. i.e. 'use_goma' since we don't care about how
+  a binary was built.  Only arguments that follow the
+  'key=value' pattern are considered.
   """
-  black_list = ["use_goma", "goma_dir", "use_sysroot", "is_component_build"]
-  strip_prefixes = ["is_", "pdf_enable_", "pdf_use_", "pdf_"]
+  exclude_list = ['use_goma', 'goma_dir', 'use_sysroot', 'is_component_build']
+  strip_prefixes = ['is_', 'pdf_enable_', 'pdf_use_', 'pdf_']
   build_config = {}
   for arg in args:
     # Catch multiple k/v pairs separated by spaces.
     parts = arg.split()
     for p in parts:
-      kv = [x.strip() for x in p.split("=")]
+      kv = [x.strip() for x in p.split('=')]
       if len(kv) == 2:
         k, v = kv
-        if k not in black_list:
+        if k not in exclude_list:
           for prefix in strip_prefixes:
             if k.startswith(prefix):
               k = k[len(prefix):]
@@ -443,7 +443,7 @@ def _get_gold_ignore_hashes(api, out_dir):
     with api.context(cwd=api.path['checkout']):
       api.m.python.inline(
           'get uninteresting hashes',
-          program="""
+          program='''
         import contextlib
         import math
         import socket
@@ -473,7 +473,7 @@ def _get_gold_ignore_hashes(api, out_dir):
             waittime = WAIT_BASE * math.pow(2, retry)
             print 'Retry in %d seconds.' % waittime
             time.sleep(waittime)
-        """,
+        ''',
           args=[host_hashes_file],
           infra_step=True)
   except api.step.StepFailure:
@@ -487,9 +487,8 @@ def _get_gold_ignore_hashes(api, out_dir):
 
 
 def _upload_dm_results(api, results_dir, revision, test_type):
-  """ Uploads results of the tests to Gold.
-  This assumes that results_dir contains a JSON file
-  and a set of PNGs.
+  """Uploads results of the tests to Gold.
+  This assumes that results_dir contains a JSON file and a set of PNGs.
   Adapted from:
   https://skia.googlesource.com/skia/+/master/infra/bots/recipes/upload_dm_results.py
   test_type is expected to be 'corpus', 'javascript', or 'pixel'
@@ -536,9 +535,7 @@ def _upload_dm_results(api, results_dir, revision, test_type):
 
 
 def _gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
-  """
-  Copy the src to dst in Google storage.
-  """
+  """Copy the src to dst in Google storage."""
   name = 'upload %s' % name
   for i in xrange(UPLOAD_ATTEMPTS):
     try:
