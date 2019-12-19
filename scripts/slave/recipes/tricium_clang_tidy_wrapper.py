@@ -25,10 +25,24 @@ DEPS = [
     'recipe_engine/tricium',
 ]
 
+_chromium_tidy_path = ('third_party', 'llvm-build', 'Release+Asserts', 'bin',
+                       'clang-tidy')
+
 
 def _add_clang_tidy_comments(api, file_paths):
-  clang_tidy_location = api.context.cwd.join(
-      'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang-tidy')
+  clang_tidy_location = api.context.cwd.join(*_chromium_tidy_path)
+
+  # CLs based before Chromium's src@a55e6bed3d40262fad227ae7fb68ee1fea0e32af
+  # won't sync clang-tidy, and so will show up as red if we try to run
+  # tricium_clang_tidy on them. Avoid that.
+  #
+  # FIXME(crbug.com/1035217): Remove this once M80 is a distant memory.
+  if not api.path.exists(clang_tidy_location):
+    api.step.active_result.presentation.status = 'WARNING'
+    api.step.active_result.presentation.logs['skipped'] = [
+        'No clang-tidy binary found; skipping linting (crbug.com/1035217)'
+    ]
+    return
 
   def add_comment(message, file_path, line):
     api.tricium.add_comment(
@@ -160,6 +174,7 @@ def GenTests(api):
                       is_revert=False,
                       include_diff=True,
                       auto_exist_files=True,
+                      clang_tidy_exists=True,
                       author='gbiv@google.com'):
     commit_message = 'Revert foo' if is_revert else 'foo'
     commit_message += '\nTriciumTest'
@@ -190,10 +205,18 @@ def GenTests(api):
       test += api.step_data('git diff to analyze patch',
                             api.raw_io.stream_output('\n'.join(affected_files)))
 
+    existing_files = []
     if auto_exist_files:
-      test += api.path.exists(*[
+      existing_files += [
           api.path['cache'].join('builder', 'src', x) for x in affected_files
-      ])
+      ]
+
+    if clang_tidy_exists:
+      existing_files.append(api.path['cache'].join('builder', 'src',
+                                                   *_chromium_tidy_path))
+
+    if existing_files:
+      test += api.path.exists(*existing_files)
 
     return test
 
@@ -259,6 +282,14 @@ def GenTests(api):
               ]
           })) + api.post_process(post_process.StepSuccess,
                                  'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'skip_if_no_clang_tidy',
+      affected_files=['path/to/some/cc/file.cpp'],
+      clang_tidy_exists=False,
+  ) + api.post_process(post_process.StepWarning, 'clang-tidy') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              post_process.DropExpectation))
 
