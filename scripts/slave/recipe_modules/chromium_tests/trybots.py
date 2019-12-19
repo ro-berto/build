@@ -37,7 +37,7 @@ TRYBOTS = freeze({
                 }),
             'mac10.13_retina-blink-rel':
                 simple_bot({
-                    'mastername': 'chromium.webkit',
+                    'mastername': 'chromium.mac',
                     'buildername': 'WebKit Mac10.13 (retina)',
                 }),
             'mac10.13-blink-rel':
@@ -746,7 +746,7 @@ TRYBOTS = freeze({
                 }),
             'layout_test_leak_detection':
                 simple_bot({
-                    'mastername': 'chromium.webkit',
+                    'mastername': 'chromium.memory',
                     'buildername': 'WebKit Linux Leak',
                 }),
             # Optional GPU bots.

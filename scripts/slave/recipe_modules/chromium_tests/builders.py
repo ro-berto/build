@@ -23,7 +23,6 @@ from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_swangle
 from . import chromium_swarm
-from . import chromium_webkit
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
 from . import chromium_win
@@ -76,8 +75,6 @@ BUILDERS = freeze({
         chromium_swangle.SPEC,
     'chromium.swarm':
         chromium_swarm.SPEC,
-    'chromium.webkit':
-        chromium_webkit.SPEC,
     'chromium.webrtc':
         chromium_webrtc.SPEC,
     'chromium.webrtc.fyi':
