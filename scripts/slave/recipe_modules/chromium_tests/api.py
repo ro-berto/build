@@ -1275,8 +1275,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       unrecoverable_test_suites: List of failed Test
           (definition can be found in steps.py)
       suffix: current Test suffix, which represents the phase
-      size_limit: max size of the message in characters,
-      failure_limit: max number of deterministic failures listed per test
+      size_limit: max size of the message in characters
+      failure_limit: max number of deterministic failures listed per test suite
 
     Returns:
       String containing a markdown formatted list of test failures
@@ -1289,12 +1289,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure_limit = size_limit / 100
 
     current_size = 0
-    for index, test in enumerate(unrecoverable_test_suites):
-      test_suite_header = '**%s** failed.' % test.name
+    for index, suite in enumerate(unrecoverable_test_suites):
+      test_suite_header = '**%s** failed.' % suite.name
 
-      deterministic_failures = test.deterministic_failures(suffix)
+      if suffix:
+        is_valid, deterministic_failures = suite.failures_including_retry(
+            suffix)
+        if is_valid:
+          is_valid, failures_to_ignore = suite.without_patch_failures_to_ignore(
+          )
+          if is_valid:
+            deterministic_failures = deterministic_failures - failures_to_ignore
+      else:
+        # All the failures on CI builders are unrecoverable.
+        deterministic_failures = suite.deterministic_failures(suffix)
+
+      deterministic_failures = deterministic_failures or set()
       if deterministic_failures:
-        test_suite_header = '**%s** failed because of:' % test.name
+        test_suite_header = '**%s** failed because of:' % suite.name
 
       current_size += len(test_suite_header)
       if current_size >= size_limit:

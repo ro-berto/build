@@ -4,6 +4,8 @@
 
 import json
 
+from google.protobuf import json_format
+
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
@@ -15,6 +17,7 @@ from RECIPE_MODULES.build.chromium_tests import steps
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'recipe_engine/assertions',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -23,15 +26,16 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  'mastername': Property(default=None, kind=str),
-  'buildername': Property(default=None, kind=str),
-  'fail_calculate_tests': Property(default=False, kind=bool),
-  'fail_mb_and_compile': Property(default=False, kind=bool),
+    'mastername': Property(default=None, kind=str),
+    'buildername': Property(default=None, kind=str),
+    'fail_calculate_tests': Property(default=False, kind=bool),
+    'fail_mb_and_compile': Property(default=False, kind=bool),
+    'expected_jsonish_result': Property(default=None),
 }
 
 
-def RunSteps(api, mastername, buildername,
-             fail_calculate_tests, fail_mb_and_compile):
+def RunSteps(api, mastername, buildername, fail_calculate_tests,
+             fail_mb_and_compile, expected_jsonish_result):
   bot = api.chromium_tests._lookup_bot_metadata(builders={})
 
   api.chromium_tests.configure_build(bot.settings)
@@ -86,7 +90,12 @@ def RunSteps(api, mastername, buildername,
   if skip_deapply_patch:
     api.chromium_tests._should_retry_with_patch_deapplied = lambda x: False
 
-  return api.chromium_tests.trybot_steps()
+  result = api.chromium_tests.trybot_steps()
+  if expected_jsonish_result is not None:
+    api.assertions.assertDictEqual(
+        expected_jsonish_result, json.loads(json_format.MessageToJson(result)))
+
+  return result
 
 
 def GenTests(api):
@@ -774,6 +783,105 @@ def GenTests(api):
           '(without patch)', ['--gtest_filter=Test.Two']),
       api.post_process(post_process.DropExpectation),
   )
+
+
+
+  with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Three': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  retry_shards_with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+          'Test.Two': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'SUCCESS',
+          },],
+          'Test.Three': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  without_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'SUCCESS',
+          },],
+          'Test.Three': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  # This test tests that only Test.One is determined as unrecoverable failures
+  # presented to the users because Test.Two is ignored by
+  # "retry shards with patch" and "Test.Three" is ignored by "without patch".
+  yield api.test(
+      'unrecoverable_failure_results_exclude_ignored_failures',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          expected_jsonish_result={
+              'status':
+                  'FAILURE',
+              'summaryMarkdown': (
+                  '1 Test Suite(s) failed.\n\n**base_unittests** failed '
+                  'because of:\n\n- Test.One'),
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(without_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+
 
   yield api.test(
       'succeeded_to_exonerate_flaky_failures',

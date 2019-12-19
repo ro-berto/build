@@ -4445,9 +4445,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_for_tests.py#22)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps\_with\_specific\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#15): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#17): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#33)(api, mastername, buildername, fail_calculate_tests, fail_mb_and_compile):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#36)(api, mastername, buildername, fail_calculate_tests, fail_mb_and_compile, expected_jsonish_result):**
 ### *recipes* / [chromium\_tests:tests/api/wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py#9): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
