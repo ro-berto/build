@@ -477,10 +477,14 @@ class Test(object):
   def failures_including_retry(self, suffix):
     """Returns test failures after retries.
 
-    This method only considers tests to be failures if every test run fails.
-    Flaky tests are considered successes.
+    This method only considers tests to be failures if every test run fails,
+    if the test runner retried tests, they're still considered successes as long
+    as they didn't cause step failures.
 
-    It also considers retried shards when determining if a test failed.
+    It also considers retried shards and the known flaky tests on tip of tree
+    when determining if a test failed, which is to say that a test is determined
+    as a failure if and only if it succeeded neither original run or retry and
+    is NOT known to be flaky on tip of tree.
 
     Returns: A tuple (valid_results, failures).
       valid_results: A Boolean indicating whether results are valid.
@@ -501,13 +505,15 @@ class Test(object):
       # TODO(martiniss): Maybe change this behavior? This allows for failures
       # in 'retry shards with patch' which might not be reported to devs, which
       # may confuse them.
-      return True, set(failures).intersection(retry_shards_failures)
+      return True, (
+          set(failures).intersection(retry_shards_failures) -
+          self.known_flaky_failures)
 
     if original_run_valid:
-      return True, set(failures)
+      return True, set(failures) - self.known_flaky_failures
 
     if retry_shards_valid:
-      return True, set(retry_shards_failures)
+      return True, set(retry_shards_failures) - self.known_flaky_failures
 
     return False, None
 

@@ -910,6 +910,9 @@ def GenTests(api):
               'monorail_issue': '999',
           }])),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'ignoring failures of base_unittests (with patch)',
+                       ['Test.Two: crbug.com/999']),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,
@@ -1017,8 +1020,14 @@ def GenTests(api):
               'monorail_issue': '999',
           }])),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'ignoring failures of base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
+      api.post_process(
+          post_process.StepTextContains,
+          'ignoring failures of base_unittests (retry shards with patch)',
+          ['Test.Two: crbug.com/999']),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (without patch)'),
       api.post_process(post_process.DropExpectation),
@@ -1100,5 +1109,8 @@ def GenTests(api):
           post_process.StepCommandContains,
           'test_pre_run (without patch).[trigger] base_unittests '
           '(without patch)', ['--gtest_filter=Test.One']),
+      api.post_process(
+          post_process.StepTextContains, 'base_unittests (retry summary)',
+          ['Tests ignored as they are known to be flaky:', 'Test.Two']),
       api.post_process(post_process.DropExpectation),
   )

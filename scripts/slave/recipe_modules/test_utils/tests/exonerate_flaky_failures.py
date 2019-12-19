@@ -146,6 +146,8 @@ def GenTests(api):
       api.step_data('query known flaky failures on CQ', api.json.output([])),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.DoesNotRun,
+                       'ignoring failures of failed_test (with patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -173,6 +175,8 @@ def GenTests(api):
           }])),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.DoesNotRun,
+                       'ignoring failures of failed_test (with patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -208,6 +212,9 @@ def GenTests(api):
           ])),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.StepTextContains,
+                       'ignoring failures of failed_test (with patch)',
+                       ['testA: crbug.com/999', 'testB: crbug.com/998']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
