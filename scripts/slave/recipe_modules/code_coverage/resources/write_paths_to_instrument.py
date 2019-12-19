@@ -28,6 +28,24 @@ def _make_argument_parser(*args, **kwargs):
   return parser
 
 
+
+def _rebase_paths(src_path, build_path, path_list):
+  """Rebase elements of path_list to be relative to build_path.
+
+  Each path in path_list must be relative to src_path.
+
+  Returns a new list of paths that use os-native separators.
+  """
+  result = []
+  for p in path_list:
+    p = os.path.join(src_path, p)
+    p = os.path.relpath(p, build_path)
+    # normpath removes redundancy and on Windows converts '/' to '\'.
+    p = os.path.normpath(p)
+    result.append(p)
+  return result
+
+
 def main():
   desc = ('make the paths to the given source files relative to the build dir '
           'and write to a file')
@@ -35,13 +53,9 @@ def main():
   params = parser.parse_args()
 
   with open(params.write_to, 'w') as out_file:
-    # TODO(crbug.com/901597): Ensure that this path computation results in
-    # relative paths using platform-appropriate separators.
-    rebased_paths = [
-        os.path.relpath(os.path.join(params.src_path, f), params.build_path) +
-        '\n' for f in params.sources
-    ]
-    contents = ''.join(rebased_paths)
+    rebased_paths = _rebase_paths(params.src_path, params.build_path,
+                                  params.sources)
+    contents = '\n'.join(rebased_paths) + '\n'
     out_file.write(contents)
 
 
