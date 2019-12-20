@@ -381,6 +381,15 @@ def GenTests(api):
         api.post_process(post_process.DropExpectation),
     )
 
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {
+          'blink_web_tests (with patch)': [
+              'bad/totally-bad-probably.html',
+              'tricky/totally-maybe-not-awesome.html'
+          ],
+      },
+      'Step Layer Flakiness': {},
+  }
   yield api.test(
       'findit_step_layer_flakiness',
       api.properties.tryserver(
@@ -396,11 +405,17 @@ def GenTests(api):
       api.override_step_data('blink_web_tests (without patch)',
                              api.test_utils.canned_test_output(passing=True)),
       api.post_process(
-          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
-          ['bad/totally-bad-probably.html', 'blink_web_tests (with patch)']),
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {},
+      'Step Layer Flakiness': {
+          'base_unittests (with patch) on Windows-10': ['Test.Two',],
+      },
+  }
   yield api.test(
       'findit_step_layer_flakiness_swarming_custom_dimensions',
       api.properties.tryserver(
@@ -421,11 +436,17 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
       api.post_process(
-          post_process.LogContains, 'FindIt Flakiness', 'step_metadata',
-          ['base_unittests (with patch) on Windows-10', 'Test.Two']),
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {
+          'base_unittests (with patch)': ['Test.Two'],
+      },
+      'Step Layer Flakiness': {},
+  }
   yield api.test(
       'findit_step_layer_flakiness_invalid_initial_results',
       api.properties.tryserver(
@@ -448,12 +469,18 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(post_process.LogContains, 'FindIt Flakiness',
-                       'step_metadata',
-                       ['Test.Two', 'base_unittests (with patch)']),
+      api.post_process(
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {},
+      'Step Layer Flakiness': {
+          'base_unittests (with patch)': ['Test.Two'],
+      },
+  }
   yield api.test(
       'findit_step_layer_flakiness_retry_shards',
       api.properties.tryserver(
@@ -471,9 +498,9 @@ def GenTests(api):
           'base_unittests (retry shards with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(passing=True), failure=False)),
-      api.post_process(post_process.LogContains, 'FindIt Flakiness',
-                       'step_metadata',
-                       ['Test.Two', 'base_unittests (with patch)']),
+      api.post_process(
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 
