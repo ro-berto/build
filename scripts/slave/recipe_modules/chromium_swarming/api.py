@@ -1555,7 +1555,13 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and shard.get('deduped_from'):
         display_text += ' (deduped)'
 
-      if not shard:
+      if self.m.code_coverage.using_coverage and not shard:
+        # TODO(crbug.com/1034002) Remove this when a proper fix for disappearing
+        # isolated files is achieved. See also crbug.com/916644
+        expected_errors.append((index, 'possible isolateserver 404 in shard'))
+        failed_shards.append(index)
+        has_valid_results = False
+      elif not shard:
         display_text = 'shard #%d failed without producing output.json' % index
         unexpected_errors.append(
             (index, 'Details unknown (missing shard results)'))

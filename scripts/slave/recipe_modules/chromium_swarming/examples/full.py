@@ -5,21 +5,22 @@
 import json
 
 DEPS = [
-  'isolate',
-  'chromium_checkout',
-  'chromium_swarming',
-  'depot_tools/gclient',
-  'recipe_engine/buildbucket',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'swarming_client',
-  'test_utils',
+    'isolate',
+    'chromium_checkout',
+    'chromium_swarming',
+    'code_coverage',
+    'depot_tools/gclient',
+    'recipe_engine/buildbucket',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
+    'swarming_client',
+    'test_utils',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -595,6 +596,21 @@ def GenTests(api):
               }), summary_data)),
       api.properties(platforms=('linux',), isolated_script_task=True),
   )
+  yield api.test(
+      'coverage_gtest_with_null_shard',
+      api.m.code_coverage(use_clang_coverage=True),
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')),
+      api.step_data(
+          'hello_world',
+          api.chromium_swarming.summary(
+              api.raw_io.output_dir({
+                  'summary.json': json.dumps(summary_data)
+              }) + api.test_utils.canned_gtest_output(False), summary_data)),
+      api.properties(platforms=('linux',), gtest_task=True),
+      api.post_process(post_process.StepFailure, 'hello_world'),
+      api.post_process(post_process.DropExpectation))
 
   summary_data_deduped = {
     'shards': [
