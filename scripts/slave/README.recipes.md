@@ -3242,7 +3242,7 @@ deterministic errors.
 
 &emsp; **@property**<br>&mdash; **def [canonical](/scripts/slave/recipe_modules/test_utils/api.py#69)(self):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#789)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#776)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#100)(data):**
 
@@ -3257,7 +3257,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#802)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#789)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3358,7 +3358,7 @@ Returns: A tuple (invalid_test_suites, all_failing_test_suites).
 
 Summarizes a failing test suite that is not going to be retried.
 
-&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#690)(self, caller_api, test_suites):**
+&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#695)(self, caller_api, test_suites):**
 
 Exports a summary of flakiness for post-processing by FindIt.
 
@@ -3367,10 +3367,6 @@ layer at which the flakiness is discovered. One of these categories is for a
 test that fails, but when retried in a separate step, succeeds. This
 currently applies to 'retry shards with patch'. These are labeled 'Step
 Layer Flakiness'.
-
-'Step Layer Flakiness' doesn't include failures that are already known to be
-flaky on tip of tree, but FindIt still would like to know them, so they're
-exposed and labeled separately as 'Step Layer Skipped Known Flakiness'.
 
 FindIt also wants to know about 'with patch' tests that caused the build to
 fail. If a future build with the same CL succeeds, then the tests are
@@ -3397,7 +3393,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#792)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#779)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
