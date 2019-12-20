@@ -1508,7 +1508,8 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"gl_tests (with patch)\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@      \"Test.Two\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Skipped Known Flakiness\": {}@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@"
     ]
