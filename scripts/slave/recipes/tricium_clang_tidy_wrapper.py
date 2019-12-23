@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+import json
+
 DEPS = [
     'chromium',
     'chromium_checkout',
@@ -94,10 +96,16 @@ def _add_clang_tidy_comments(api, file_paths):
   for diagnostic in clang_tidy_output.get('diagnostics', []):
     assert diagnostic['file_path'], ("Empty paths should've been filtered "
                                      "by tricium_clang_tidy: %s" % diagnostic)
+    diag_name = diagnostic['diag_name']
+    if diag_name in ('clang-diagnostic-error', 'clang-diagnostic-warning'):
+      suffix = 'compile-time ' + diag_name.split('-')[-1]
+    else:
+      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
+          diagnostic['diag_name'])
+
     comment_body = ' '.join([
         diagnostic['message'],
-        '(https://clang.llvm.org/extra/clang-tidy/checks/%s.html)' %
-        diagnostic['diag_name'],
+        '(' + suffix + ')',
     ])
     add_comment(comment_body, diagnostic['file_path'],
                 diagnostic['line_number'],
@@ -166,6 +174,13 @@ def RunSteps(api):
           _add_clang_tidy_comments(api, affected)
 
       api.tricium.write_comments()
+
+
+def tricium_has_message(check, steps, message):
+  output_properties = steps['write results'].output_properties
+  tricium = json.loads(output_properties['tricium'])
+  messages = [c['message'] for c in tricium['comments']]
+  check(message in messages)
 
 
 def GenTests(api):
@@ -272,7 +287,7 @@ def GenTests(api):
                       'file_path': 'path/to/some/cc/file.cpp',
                       'line_number': 2,
                       'diag_name': 'super-cool-diag',
-                      'message': 'hello, world',
+                      'message': 'hello, world 1',
                   },
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
@@ -284,7 +299,26 @@ def GenTests(api):
           })) + api.post_process(post_process.StepSuccess,
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
+             tricium_has_message, 'hello, world 1 (https://clang.llvm.org/'
+             'extra/clang-tidy/checks/super-cool-diag.html)') +
+         api.post_process(post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'diagnostic_warning',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'diagnostics': [{
+                  'file_path': 'path/to/some/cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'clang-diagnostic-warning',
+                  'message': 'hello, world',
+              },]
+          })) + api.post_process(post_process.StepSuccess,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             tricium_has_message, 'hello, world (compile-time warning)') +
+         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'skip_if_no_clang_tidy',
