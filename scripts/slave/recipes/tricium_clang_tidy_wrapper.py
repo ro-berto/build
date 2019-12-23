@@ -44,9 +44,9 @@ def _add_clang_tidy_comments(api, file_paths):
     ]
     return
 
-  def add_comment(message, file_path, line):
+  def add_comment(message, file_path, line, category):
     api.tricium.add_comment(
-        'Lint/clang-tidy',
+        category,
         message,
         file_path,
         # Clang-tidy only gives us one file offset, so we use line comments.
@@ -55,7 +55,7 @@ def _add_clang_tidy_comments(api, file_paths):
 
   def add_file_warning(file_path, message):
     api.step.active_result.presentation.status = 'WARNING'
-    add_comment('warning: ' + message, file_path, line=0)
+    add_comment('warning: ' + message, file_path, line=0, category='ClangTidy')
 
   with api.step.nest('generate-warnings'):
     warnings_file = api.path['cleanup'].join('clang_tidy_complaints.yaml')
@@ -100,7 +100,8 @@ def _add_clang_tidy_comments(api, file_paths):
         diagnostic['diag_name'],
     ])
     add_comment(comment_body, diagnostic['file_path'],
-                diagnostic['line_number'])
+                diagnostic['line_number'],
+                'ClangTidy/' + diagnostic['diag_name'])
 
 
 def _should_skip_linting(api):
