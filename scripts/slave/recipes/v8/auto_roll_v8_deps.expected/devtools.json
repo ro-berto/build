@@ -5,7 +5,7 @@
       "commit",
       "-a",
       "-m",
-      "Update Devtools DEPS.",
+      "Update DevTools DEPS.",
       "-m",
       "Rolling base/trace_event/common: https://chromium.googlesource.com/chromium/src/base/trace_event/common/+log/08b7b94..",
       "-m",

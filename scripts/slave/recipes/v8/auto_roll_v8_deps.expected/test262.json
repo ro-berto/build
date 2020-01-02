@@ -5,7 +5,7 @@
       "commit",
       "-a",
       "-m",
-      "Update test262.",
+      "Update Test262.",
       "-m",
       "Rolling v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39/test262/+log/29c2384..deadbee",
       "-m",

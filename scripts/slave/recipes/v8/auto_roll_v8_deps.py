@@ -54,7 +54,7 @@ TARGET_CONFIG_V8 = {
 BOT_CONFIGS = {
   'Auto-roll - devtools deps': {
     'target_config': TARGET_CONFIG_DEVTOOLS,
-    'subject': 'Update Devtools DEPS.',
+    'subject': 'Update DevTools DEPS.',
     'blacklist': [],
     'reviewers': [
       'machenbach@chromium.org',
@@ -64,7 +64,7 @@ BOT_CONFIGS = {
   },
   'Auto-roll - test262': {
     'target_config': TARGET_CONFIG_V8,
-    'subject': 'Update test262.',
+    'subject': 'Update Test262.',
     'whitelist': [
       # Only roll these dependencies (list without solution name prefix).
       'test/test262/data',
