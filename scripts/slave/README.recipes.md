@@ -4982,7 +4982,7 @@ and if they fail we cancel the scheduled builds.
 
 &mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#73)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1158)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1190)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
@@ -4994,7 +4994,7 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#578)(api, target_dir, bucket_name, build_id, image_name):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1175)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1207)(api):**
 
 &mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#48)(api):**
 
@@ -5010,7 +5010,7 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [GetFuchsiaOutputFiles](/scripts/slave/recipes/flutter/engine.py#116)(product):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1143)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1170)(api):**
 
 &mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#585)(api, checkout, fuchsia_tools, image_name, fuchsia_test_script):**
 
@@ -5030,11 +5030,13 @@ engine/testing/fuchsia/run_tests.sh) to drive the flutter_ctl.
 
 &mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#969)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1196)(api, properties, env_properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1228)(api, properties, env_properties):**
 
 &mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#85)(api, out_dir, android_out_dir=None, types='all'):**
 
 &mdash; **def [ScheduleBuilds](/scripts/slave/recipes/flutter/engine.py#93)(api, builder_name, drone_props):**
+
+&emsp; **@contextmanager**<br>&mdash; **def [SetupMacOSSDK](/scripts/slave/recipes/flutter/engine.py#1150)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#769)(api):**
 
