@@ -187,6 +187,8 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
   if _HasToken(buildername, 'fuzz'):
     args['FUZZ'] = '1'
     args['LIBFUZZER_FROM_DEPS'] = '1'
+  if _HasToken(buildername, 'nosse2'):
+    args['OPENSSL_NO_SSE2_FOR_TESTING'] = '1'
   # Pick one builder to build with the C++ runtime allowed. The default
   # configuration does not compile-check pure virtuals.
   if buildername == 'linux':
@@ -383,6 +385,7 @@ def GenTests(api):
       ('linux_shared', api.platform('linux', 64)),
       ('linux32', api.platform('linux', 64)),
       ('linux_noasm_asan', api.platform('linux', 64)),
+      ('linux_noasm_nosse2', api.platform('linux', 64)),
       ('linux_small', api.platform('linux', 64)),
       ('linux_nothreads', api.platform('linux', 64)),
       ('linux_rel', api.platform('linux', 64)),
