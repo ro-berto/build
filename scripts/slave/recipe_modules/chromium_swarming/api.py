@@ -922,6 +922,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # Default tags.
     tags = set(task.tags)
+    tags.update(task.request.tags or ())
     tags.update(self._default_tags)
 
     tags.add('data:' + task_slice.isolated)
