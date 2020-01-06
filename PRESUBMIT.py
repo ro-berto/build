@@ -131,14 +131,18 @@ def BuildInternalCheck(output, input_api, output_api):
 
 def CheckChangeOnUpload(input_api, output_api):
   output = []
+  # TODO(https://crbug.com/979330) If clang-format is fixed for non-chromium
+  # repos, remove check_clang_format=False so that proto files can be formatted
   output.extend(
-      input_api.canned_checks.CheckPatchFormatted(input_api, output_api))
+      input_api.canned_checks.CheckPatchFormatted(
+          input_api, output_api, check_clang_format=False
+      )
+  )
   return output
 
 
 def CheckChangeOnCommit(input_api, output_api):
   output = CommitChecks(input_api, output_api)
   output.extend(BuildInternalCheck(output, input_api, output_api))
-  output.extend(
-      input_api.canned_checks.CheckPatchFormatted(input_api, output_api))
+  output.extend(CheckChangeOnUpload(input_api, output_api))
   return output
