@@ -14,7 +14,11 @@
           "*": {
             "closing_optional": [ "non-existent-step" ]
           }
-        }
+        },
+        "excluded_builders": [
+          "chromeos-betty-chrome",
+          "chromeos-betty-pi-arc-chrome"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium": [
