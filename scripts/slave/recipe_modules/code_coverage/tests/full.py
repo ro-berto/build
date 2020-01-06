@@ -19,7 +19,7 @@ DEPS = [
 ]
 
 # Number of tests. Needed by the tests.
-_NUM_TESTS = 8
+_NUM_TESTS = 5
 
 # For trybot test data. If not given, buildbucket module will make the gerrit
 # project the same as the buildbucket project, but since
@@ -56,12 +56,12 @@ def RunSteps(api):
 
   tests = [
       steps.LocalIsolatedScriptTest('checkdeps'),
-      steps.SwarmingGTestTest('chrome_all_tast_tests'),
+      # Binary name equals target name.
       steps.SwarmingGTestTest('base_unittests'),
+      # Binary name is different from target name.
       steps.SwarmingGTestTest('xr_browser_tests'),
-      steps.SwarmingGTestTest('gl_unittests_ozone'),
+      # There is no binary, such as Python tests.
       steps.SwarmingGTestTest('telemetry_gpu_unittests'),
-      steps.SwarmingIsolatedScriptTest('abc_fuzzer'),
       steps.SwarmingIsolatedScriptTest(
           'blink_web_tests',
           merge={
@@ -88,56 +88,56 @@ def RunSteps(api):
   _ = api.code_coverage.raw_profile_merge_script
 
 
-# yapf: disable
 def GenTests(api):
-  yield api.test('basic',
-       api.properties.generic(
+  yield api.test(
+      'basic',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-chromeos-code-coverage',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+      api.code_coverage(use_clang_coverage=True),
+      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
           ('process clang code coverage data.merge profile data for %s tests' %
            _NUM_TESTS)),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
           'process clang code coverage data.gsutil upload merged.profdata'),
-       api.post_process(
+      api.post_process(
           post_process.DoesNotRun,
           'process clang code coverage data.generate line number mapping from '
           'bot to Gerrit'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
           'process clang code coverage data.Run component extraction script to '
           'generate mapping'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
           ('process clang code coverage data.generate metadata for %s tests' %
            _NUM_TESTS)),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
           'process clang code coverage data.gsutil upload coverage metadata'),
-       api.post_process(
+      api.post_process(
           post_process.DoesNotRun,
           'process clang code coverage data.generate html report for %s '
           'tests' % _NUM_TESTS),
-       api.post_process(
+      api.post_process(
           post_process.DoesNotRun,
           'process clang code coverage data.gsutil upload html report'),
-       api.post_process(
+      api.post_process(
           post_process.StepCommandContains,
           'process clang code coverage data.Finding merging errors',
           ['--root-dir']),
-       api.post_process(
+      api.post_process(
           post_process.StepCommandContains,
           ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS),
-          ['None/out/Release/chrome']),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+           _NUM_TESTS), ['None/out/Release/content_shell']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
   yield api.test('with_exclusions',
        api.properties.generic(
           mastername='chromium.fyi',
