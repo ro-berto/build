@@ -79,6 +79,7 @@ def GenTests(api):
       api.properties(
           single_spec={
               'test': 'base_unittests',
+              'test_target': '//base:base_unittests',
               'swarming': {
                   'can_use_on_swarming_builders':
                       True,

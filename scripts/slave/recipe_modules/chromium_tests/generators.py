@@ -90,6 +90,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   name = spec.get('name', target_name)
 
   kwargs['target_name'] = target_name
+  kwargs['full_test_target'] = spec.get('test_target')
   kwargs['name'] = name
 
   set_up = list(spec.get('setup', []))
