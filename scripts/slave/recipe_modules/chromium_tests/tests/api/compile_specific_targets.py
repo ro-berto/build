@@ -10,6 +10,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -39,7 +40,7 @@ def RunSteps(api):
     tests.append(steps.SwarmingGTestTest('base_unittests'))
 
   mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
+  buildername = api.buildbucket.builder_name
   if api.tryserver.is_tryserver and mastername in api.chromium_tests.trybots:
     bot_config = api.chromium_tests.trybots[mastername]['builders'][buildername]
     bot_config_object = api.chromium_tests.create_bot_config_object(
@@ -78,8 +79,8 @@ def GenTests(api):
 
   yield api.test(
       'failure_tryserver',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux', buildername='linux-rel'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.step_data('compile (with patch)', retcode=1),
   )
 
@@ -94,17 +95,13 @@ def GenTests(api):
 
   yield api.test(
       'perf_isolate_lookup_tryserver',
-      api.properties.tryserver(
+      api.chromium.try_build(
           mastername='tryserver.chromium.perf',
-          buildername='Mac Builder Perf',
+          builder='Mac Builder Perf',
+          change_number=671632,
+          patch_set=1),
+      api.properties(
           deps_revision_overrides={'src': '1234567890abcdef'},
-          patch_gerrit_url='https://chromium-review.googlesource.com',
-          patch_issue=671632,
-          patch_project='chromium/src',
-          patch_ref='refs/changes/32/671632/1',
-          patch_repository_url='https://chromium.googlesource.com/chromium/src',
-          patch_set=1,
-          patch_storage='gerrit',
           swarming_gtest=True),
       api.post_process(Filter('pinpoint isolate upload')),
   )

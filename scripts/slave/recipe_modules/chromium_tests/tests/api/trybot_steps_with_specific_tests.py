@@ -15,6 +15,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
+    'chromium',
     'chromium_swarming',
     'chromium_tests',
     'recipe_engine/assertions',
@@ -27,15 +28,14 @@ DEPS = [
 
 PROPERTIES = {
     'mastername': Property(default=None, kind=str),
-    'buildername': Property(default=None, kind=str),
     'fail_calculate_tests': Property(default=False, kind=bool),
     'fail_mb_and_compile': Property(default=False, kind=bool),
     'expected_jsonish_result': Property(default=None),
 }
 
 
-def RunSteps(api, mastername, buildername, fail_calculate_tests,
-             fail_mb_and_compile, expected_jsonish_result):
+def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
+             expected_jsonish_result):
   bot = api.chromium_tests._lookup_bot_metadata(builders={})
 
   api.chromium_tests.configure_build(bot.settings)
@@ -101,12 +101,11 @@ def RunSteps(api, mastername, buildername, fail_calculate_tests,
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -115,10 +114,9 @@ def GenTests(api):
 
   yield api.test(
       'calculate_tests_compile_failure',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          fail_calculate_tests=True),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(fail_calculate_tests=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason,
                        'Compile step failed from "_calculate_tests_to_run".'),
@@ -127,9 +125,9 @@ def GenTests(api):
 
   yield api.test(
       'run_mb_and_compile_failure',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           fail_mb_and_compile=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -146,9 +144,9 @@ def GenTests(api):
 
   yield api.test(
       'test_failures_prevent_cq_retry',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -171,9 +169,9 @@ def GenTests(api):
 
   yield api.test(
       'invalid_tests_does_not_prevent_cq_retry',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -195,9 +193,9 @@ def GenTests(api):
 
   yield api.test(
       'skip_without_patch_does_not_prevent_cq_retry',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           skip_deapply_patch=True,
           swarm_hashes={
@@ -218,9 +216,9 @@ def GenTests(api):
 
   yield api.test(
       'bot_update_failure_does_not_prevent_cq_retry',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -236,12 +234,11 @@ def GenTests(api):
   # If a test fails in 'with patch', it should be marked as a failing step.
   yield api.test(
       'recipe_step_is_failure_for_failing_test',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -259,12 +256,11 @@ def GenTests(api):
   # 'with patch'.
   yield api.test(
       'retry_swarming_priority',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -328,9 +324,10 @@ def GenTests(api):
     base_unittests_retry = 'base_unittests (retry shards with patch)'
     yield api.test(
         test_name,
-        api.properties.tryserver(
+        api.chromium.try_build(
             mastername='tryserver.chromium.linux',
-            buildername='linux-rel',
+            builder='linux-rel'),
+        api.properties(
             retry_failed_shards=True,
             shards=2,
             swarm_hashes={
@@ -393,9 +390,9 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           use_gtest=False,
           retry_failed_shards=True,
           swarm_hashes={
@@ -420,9 +417,9 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_swarming_custom_dimensions',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           use_gtest=True,
           use_custom_dimensions=True,
           retry_failed_shards=True,
@@ -452,9 +449,9 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_invalid_initial_results',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -487,9 +484,9 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_retry_shards',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -541,9 +538,9 @@ def GenTests(api):
 
     yield api.test(
         'findit_build_layer_flakiness_' + status,
-        api.properties.tryserver(
-            mastername='tryserver.chromium.linux',
-            buildername='linux-rel',
+        api.chromium.try_build(
+            mastername='tryserver.chromium.linux', builder='linux-rel'),
+        api.properties(
             retry_failed_shards=True,
             swarm_hashes={
                 'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -573,12 +570,11 @@ def GenTests(api):
   }
   yield api.test(
       'findit_potential_build_layer_flakiness_skip_retry_with_patch',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -626,9 +622,9 @@ def GenTests(api):
 
   yield api.test(
       'failure_many_shards',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           shards=20,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -669,12 +665,11 @@ def GenTests(api):
   # flaky on tip of tree, and failures should be ignored.
   yield api.test(
       'retry_without_patch_any_failure',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
 
       # canned_gtest_output(passing=False)) marks Test.One as a success,
       # Test.Two as a failure.
@@ -711,9 +706,9 @@ def GenTests(api):
   # This test confirms that generate_blink_results() generates valid results.
   yield api.test(
       'blink_pass',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           use_gtest=False,
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -729,9 +724,9 @@ def GenTests(api):
 
   yield api.test(
       'disable_deapply_patch_affected_files',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -744,9 +739,9 @@ def GenTests(api):
 
   yield api.test(
       'nonzero_exit_code_no_gtest_output',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -792,9 +787,9 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_only_retries_relevant_tests',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -880,9 +875,9 @@ def GenTests(api):
   # "retry shards with patch" and "Test.Three" is ignored by "without patch".
   yield api.test(
       'unrecoverable_failure_results_exclude_ignored_failures',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -925,9 +920,9 @@ def GenTests(api):
   }
   yield api.test(
       'succeeded_to_exonerate_flaky_failures',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -972,9 +967,9 @@ def GenTests(api):
   }
   yield api.test(
       'failed_to_exonerate_flaky_failures',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -1050,9 +1045,9 @@ def GenTests(api):
   # build is expected to be succeed without running "without patch" steps.
   yield api.test(
       'known_flaky_failure_failed_again_while_retrying',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -1145,9 +1140,9 @@ def GenTests(api):
   # expected to be retried during "without patch".
   yield api.test(
       'without_patch_only_retries_non_flaky_failures',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
           retry_failed_shards=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',

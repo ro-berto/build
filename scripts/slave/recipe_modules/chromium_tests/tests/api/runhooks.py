@@ -3,15 +3,17 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_checkout',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
   bot_config = api.chromium_tests.trybots[
-      api.properties['mastername']]['builders'][api.properties['buildername']]
+      api.properties['mastername']]['builders'][api.buildbucket.builder_name]
   bot_config_object = api.chromium_tests.create_bot_config_object(
       bot_config['bot_ids'])
   api.chromium_tests.configure_build(bot_config_object)
@@ -23,7 +25,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'failure',
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux', buildername='linux-rel'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.override_step_data('gclient runhooks (with patch)', retcode=1),
   )

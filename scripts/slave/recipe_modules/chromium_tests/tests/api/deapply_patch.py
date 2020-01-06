@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/platform',
     'recipe_engine/properties',
 ]
@@ -11,7 +13,7 @@ DEPS = [
 
 def RunSteps(api):
   bot_config = api.chromium_tests.trybots[
-      api.properties['mastername']]['builders'][api.properties['buildername']]
+      api.properties['mastername']]['builders'][api.buildbucket.builder_name]
   bot_config_object = api.chromium_tests.create_bot_config_object(
       bot_config['bot_ids'])
   api.chromium_tests.configure_build(bot_config_object)
@@ -23,6 +25,6 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.platform.name('win'),
-      api.properties.tryserver(
-          mastername='tryserver.chromium.win', buildername='win7-rel'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.win', builder='win7-rel'),
   )

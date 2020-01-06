@@ -7,8 +7,10 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/platform',
     'recipe_engine/properties',
 ]
@@ -56,7 +58,7 @@ def RunSteps(api):
             override_compile_targets=['other_target']))
   if api.tryserver.is_tryserver:
     trybot_config = api.chromium_tests.trybots[
-        api.properties['mastername']]['builders'][api.properties['buildername']]
+        api.properties['mastername']]['builders'][api.buildbucket.builder_name]
     bot_ids = trybot_config['bot_ids']
   else:
     bot_ids = [
@@ -122,8 +124,8 @@ def GenTests(api):
   yield api.test(
       'win',
       api.platform.name('win'),
-      api.properties.tryserver(
-          mastername='tryserver.chromium.win', buildername='win7-rel'),
+      api.chromium.try_build(
+          mastername='tryserver.chromium.win', builder='win7-rel'),
   )
 
   yield api.test(
