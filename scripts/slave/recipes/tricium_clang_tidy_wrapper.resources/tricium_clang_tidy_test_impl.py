@@ -71,15 +71,20 @@ class Tests(unittest.TestCase):
             file_path='/foo1',
             line_number=1,
             diag_name='-Wfoo1',
-            message='foo1'),
+            message='foo1',
+            replacements=()),
         tidy._TidyDiagnostic(
             file_path='/foo2',
             line_number=1,
             diag_name='-Wfoo2',
-            message='foo2'),
+            message='foo2',
+            replacements=()),
         tidy._TidyDiagnostic(
-            file_path='foo3', line_number=2, diag_name='-Wfoo3',
-            message='foo3'),
+            file_path='foo3',
+            line_number=2,
+            diag_name='-Wfoo3',
+            message='foo3',
+            replacements=()),
     ]
 
     diagnostics = [{
@@ -233,9 +238,17 @@ class Tests(unittest.TestCase):
     ]
 
     good_diag = tidy._TidyDiagnostic(
-        file_path='whee', line_number=1, diag_name='-Whee', message='whee')
+        file_path='whee',
+        line_number=1,
+        diag_name='-Whee',
+        message='whee',
+        replacements=())
     bad_diag = tidy._TidyDiagnostic(
-        file_path='oh_no', line_number=1, diag_name='-Whee', message='oh no')
+        file_path='oh_no',
+        line_number=1,
+        diag_name='-Whee',
+        message='oh no',
+        replacements=())
 
     def runner(arg_binary, action):
       self.assertIs(arg_binary, binary)
@@ -260,41 +273,56 @@ class Tests(unittest.TestCase):
   def testLineOffsetMapHandlesNoTextGracefully(self):
     no_text = tidy._LineOffsetMap.for_text('')
     self.assertEqual(no_text.get_line_number(0), 1)
+    self.assertEqual(no_text.get_line_offset(0), 0)
     self.assertEqual(no_text.get_line_number(1), 1)
+    self.assertEqual(no_text.get_line_offset(1), 1)
 
   def testLineOffsetMapIsNextLineAfterEOLCharacter(self):
     newline_start = tidy._LineOffsetMap.for_text('\n')
     self.assertEqual(newline_start.get_line_number(0), 1)
+    self.assertEqual(newline_start.get_line_offset(0), 0)
     self.assertEqual(newline_start.get_line_number(1), 2)
+    self.assertEqual(newline_start.get_line_offset(1), 0)
+    self.assertEqual(newline_start.get_line_number(2), 2)
+    self.assertEqual(newline_start.get_line_offset(2), 1)
 
   def testLineOffsetMapOnRandomInput(self):
     line_offset_pairs = [
-        ('a', 1),
-        ('b', 1),
-        ('\n', 1),
-        ('c', 2),
-        ('\n', 2),
-        ('\n', 3),
-        ('d', 4),
-        ('', 4),
-        ('', 4),
+        ('a', 1, 0),
+        ('b', 1, 1),
+        ('\n', 1, 2),
+        ('c', 2, 0),
+        ('\n', 2, 1),
+        ('\n', 3, 0),
+        ('d', 4, 0),
+        ('', 4, 1),
+        ('', 4, 2),
     ]
     text = tidy._LineOffsetMap.for_text(''.join(
-        x for x, _ in line_offset_pairs))
-    for offset, (_, line_number) in enumerate(line_offset_pairs):
+        x for x, _, _ in line_offset_pairs))
+    for offset, (_, line_number, line_offset) in enumerate(line_offset_pairs):
       self.assertEqual(text.get_line_number(offset), line_number)
+      self.assertEqual(text.get_line_offset(offset), line_offset)
 
   def testFilterInvalidFindingsFiltersAllTheBadThings(self):
     self._silence_logs()
 
     good = [
         tidy._TidyDiagnostic(
-            file_path='foo.c', line_number=1, diag_name='bar', message='baz')
+            file_path='foo.c',
+            line_number=1,
+            diag_name='bar',
+            message='baz',
+            replacements=())
     ]
 
     bad = [
         tidy._TidyDiagnostic(
-            file_path='', line_number=1, diag_name='bar', message='baz')
+            file_path='',
+            line_number=1,
+            diag_name='bar',
+            message='baz',
+            replacements=())
     ]
 
     self.assertEqual(tidy._filter_invalid_findings(good + bad), good)
@@ -328,12 +356,14 @@ class Tests(unittest.TestCase):
             file_path='/foo/bar.cc',
             line_number=1,
             diag_name='foo',
-            message='aaaaa'),
+            message='aaaaa',
+            replacements=()),
         tidy._TidyDiagnostic(
             file_path='/bar/baz.cc',
             line_number=2,
             diag_name='bar',
-            message='bbbbb'),
+            message='bbbbb',
+            replacements=()),
     ]
     self.assertListEqual(
         list(tidy._normalize_diags_to_base(input_list, base)), [
@@ -341,7 +371,8 @@ class Tests(unittest.TestCase):
                 file_path='bar.cc',
                 line_number=1,
                 diag_name='foo',
-                message='aaaaa'),
+                message='aaaaa',
+                replacements=()),
             None,
         ])
 

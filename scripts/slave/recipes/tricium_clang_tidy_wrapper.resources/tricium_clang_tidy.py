@@ -91,14 +91,29 @@ def _try_build_targets(out_dir, targets, jobs):
   return [x for x in targets if not os.path.isfile(os.path.join(out_dir, x))]
 
 
+# File path is omitted, since these are intended to be associated with
+# _TidyDiagnostics with identical paths.
+_TidyReplacement = collections.namedtuple(
+    '_TidyReplacement',
+    ['new_text', 'start_line', 'end_line', 'start_char', 'end_char'])
+
+
 # Note that we shove these in a set for cheap deduplication, and we sort based
 # on the natural element order here. Sorting is mostly just for
 # deterministic/pretty output.
 #
-# FIXME(gbiv): Tidy also emits replacements and notes. Probably want to parse
-# those out and surface them at some point.
-_TidyDiagnostic = collections.namedtuple(
-    '_TidyDiagnostic', ['file_path', 'line_number', 'diag_name', 'message'])
+# FIXME(gbiv): Tidy also notes. Probably want to parse those out and surface
+# them at some point.
+class _TidyDiagnostic(
+    collections.namedtuple(
+        '_TidyDiagnostic',
+        ['file_path', 'line_number', 'diag_name', 'message', 'replacements'])):
+  """A diagnostic emitted by clang-tidy"""
+
+  def to_dict(self):
+    my_dict = self._asdict()
+    my_dict['replacements'] = [x._asdict() for x in my_dict['replacements']]
+    return my_dict
 
 
 class _ParseError(Exception):
@@ -112,10 +127,26 @@ class _LineOffsetMap(object):
   """Convenient API to turn offsets in a file into line numbers."""
 
   def __init__(self, newline_locations):
-    self._newline_locations = sorted(newline_locations)
+    line_starts = sorted(x + 1 for x in newline_locations)
+
+    if line_starts:
+      assert line_starts[0] > 0, line_starts[0]
+      assert line_starts[-1] < sys.maxsize, line_starts[-1]
+
+    # Add boundaries so we don't need to worry about off-by-ones below.
+    line_starts.insert(0, 0)
+    line_starts.append(sys.maxsize)
+
+    self._line_starts = line_starts
 
   def get_line_number(self, char_number):
-    return bisect.bisect_left(self._newline_locations, char_number) + 1
+    assert 0 <= char_number < sys.maxsize, char_number
+    return bisect.bisect_right(self._line_starts, char_number)
+
+  def get_line_offset(self, char_number):
+    assert 0 <= char_number < sys.maxsize, char_number
+    line_start_index = bisect.bisect_right(self._line_starts, char_number) - 1
+    return char_number - self._line_starts[line_start_index]
 
   @staticmethod
   def for_text(data):
@@ -136,9 +167,26 @@ def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
   try:
     for diag in findings['Diagnostics']:
       message = diag['DiagnosticMessage']
-      line_number = line_offsets.get_line_number(message['FileOffset'])
-
       file_path = message['FilePath']
+
+      replacements = []
+      for replacement in message.get('Replacements', ()):
+        replacement_file_path = replacement['FilePath']
+        assert replacement_file_path == file_path, (
+            'Replacement at %r wasn\'t in diag file (%r)' %
+            (replacement_file_path, file_path))
+
+        start_offset = replacement['Offset']
+        end_offset = start_offset + replacement['Length']
+        replacements.append(
+            _TidyReplacement(
+                new_text=replacement['ReplacementText'],
+                start_line=line_offsets.get_line_number(start_offset),
+                end_line=line_offsets.get_line_number(end_offset),
+                start_char=line_offsets.get_line_offset(start_offset),
+                end_char=line_offsets.get_line_offset(end_offset),
+            ))
+
       # Rarely (e.g., in the case of missing `#include`s, clang will emit
       # relative file paths for diagnostics. Fix those here.
       if not os.path.isabs(file_path):
@@ -149,7 +197,8 @@ def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
           diag_name=diag['DiagnosticName'],
           message=message['Message'],
           file_path=file_path,
-          line_number=line_number,
+          line_number=line_offsets.get_line_number(message['FileOffset']),
+          replacements=tuple(replacements),
       )
   except KeyError as k:
     key_name = k.args[0]
@@ -653,7 +702,7 @@ def main():
       # A list of all of the diagnostics we've seen in this run. They're
       # instances of `_TidyDiagnostic`.
       'diagnostics': [
-          x._asdict() for x in logged_normalize(_normalize_diags_to_base,
+          x.to_dict() for x in logged_normalize(_normalize_diags_to_base,
                                                 findings, 'findings')
       ],
   }
