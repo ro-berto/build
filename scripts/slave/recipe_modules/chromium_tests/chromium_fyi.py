@@ -1065,6 +1065,7 @@ SPEC['builders']['android-archive-dbg-goma-rbe-ats-latest'] = (
 
 
 SPEC['builders'].update([
+    stock_config('linux-blink-cors-rel'),
     stock_config('linux-blink-rel-dummy', staging=False),
     stock_config('mac10.10-blink-rel-dummy', staging=False),
     stock_config('mac10.11-blink-rel-dummy', staging=False),
@@ -1081,21 +1082,20 @@ SPEC['builders'].update([
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config('linux-blink-heap-verification'),
-    stock_config('linux-chromium-tests-staging-builder',
-                 bot_type='builder'),
-    stock_config('linux-chromium-tests-staging-tests',
-                 bot_type='tester',
-                 parent_buildername='linux-chromium-tests-staging-builder'),
+    stock_config('linux-chromium-tests-staging-builder', bot_type='builder'),
+    stock_config(
+        'linux-chromium-tests-staging-tests',
+        bot_type='tester',
+        parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel'),
-    stock_config('linux-oor-cors-rel'),
     stock_config('linux-tcmalloc-rel'),
     stock_config('linux-wpt-fyi-rel'),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
-    stock_config('win-pixel-builder-rel',
-                 bot_type='builder'),
-    stock_config('win-pixel-tester-rel',
-                 bot_type='tester',
-                 parent_buildername='win-pixel-builder-rel'),
+    stock_config('win-pixel-builder-rel', bot_type='builder'),
+    stock_config(
+        'win-pixel-tester-rel',
+        bot_type='tester',
+        parent_buildername='win-pixel-builder-rel'),
 ])

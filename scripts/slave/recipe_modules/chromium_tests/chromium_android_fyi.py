@@ -11,7 +11,7 @@ SPEC = {
         'build_gs_bucket': 'chromium-android-archive',
     },
     'builders': {
-        'Android WebView P FYI (rel)': {
+        'Android WebView P Blink-CORS FYI (rel)': {
             'chromium_config': 'android',
             'chromium_apply_config': ['mb'],
             'gclient_config': 'chromium',
@@ -27,7 +27,7 @@ SPEC = {
                 'platform': 'linux',
             },
         },
-        'Android WebView P OOR-CORS FYI (rel)': {
+        'Android WebView P FYI (rel)': {
             'chromium_config': 'android',
             'chromium_apply_config': ['mb'],
             'gclient_config': 'chromium',
