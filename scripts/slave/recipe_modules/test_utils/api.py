@@ -684,13 +684,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # potentially flaky if the the test passed in 'without patch'.
     valid_results, ignored_failures = (
         test_suite.without_patch_failures_to_ignore())
-    # If we've retried a shard, and we didn't run 'without patch', then the
-    # tests passed the second time, and there wasn't a need to run the tests
-    # without the patch. Only give up if 'without patch' never runs.
-    if not (valid_results or valid_retry_shards_results):
-      return set()
 
-    return with_patch_failures - (ignored_failures or set())
+    return with_patch_failures - (ignored_failures if valid_results else set())
 
   def summarize_findit_flakiness(self, caller_api, test_suites):
     """Exports a summary of flakiness for post-processing by FindIt.
@@ -700,6 +695,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     test that fails, but when retried in a separate step, succeeds. This
     currently applies to 'retry shards with patch'. These are labeled 'Step
     Layer Flakiness'.
+
+    'Step Layer Flakiness' doesn't include failures that are already known to be
+    flaky on tip of tree, but FindIt still would like to know them, so they're
+    exposed and labeled separately as 'Step Layer Skipped Known Flakiness'.
 
     FindIt also wants to know about 'with patch' tests that caused the build to
     fail. If a future build with the same CL succeeds, then the tests are
@@ -712,23 +711,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
     that their post-processing will still work correctly.
     """
     step_layer_flakiness = {}
+    step_layer_skipped_known_flakiness = {}
     for test_suite in test_suites:
       potential_test_flakes = self._findit_potential_test_flakes(
           caller_api, test_suite)
 
+      known_flaky_failures = (
+          potential_test_flakes & test_suite.known_flaky_failures)
+      if known_flaky_failures:
+        step_name = test_suite.name_of_step_for_suffix('with patch')
+        step_layer_skipped_known_flakiness[step_name] = sorted(
+            known_flaky_failures)
+
       # We only want to consider tests that failed in 'with patch' but succeeded
-      # when retried by 'retry shards with patch'. If a test didn't run in
-      # either of these steps, then we ignore it.
+      # when retried by 'retry shards with patch' and that they're not known
+      # flaky tests on tip of tree. If a test didn't run in either of these
+      # steps, then we ignore it.
       valid_retry_shards_results, retry_shards_successes, _ = (
           test_suite.shard_retry_with_patch_results())
       if not valid_retry_shards_results:
         continue
 
-      flaky_tests = potential_test_flakes & retry_shards_successes
+      flaky_tests = (
+          potential_test_flakes &
+          retry_shards_successes - test_suite.known_flaky_failures)
       if flaky_tests:
-        suffix = 'with patch'
-
-        step_name = test_suite.name_of_step_for_suffix(suffix)
+        step_name = test_suite.name_of_step_for_suffix('with patch')
         step_layer_flakiness[step_name] = sorted(flaky_tests)
 
     potential_build_flakiness = {}
@@ -741,17 +749,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
       if valid_retry_shards_results:
         potential_test_flakes = (potential_test_flakes - retry_shards_successes)
 
+      potential_test_flakes = (
+          potential_test_flakes - test_suite.known_flaky_failures)
       if potential_test_flakes:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         potential_build_flakiness[step_name] = sorted(potential_test_flakes)
 
     # TODO(crbug.com/939063): Surface information about retried shards.
-    if step_layer_flakiness or potential_build_flakiness:
+    if (step_layer_flakiness or step_layer_skipped_known_flakiness or
+        potential_build_flakiness):
       output = {
           'Step Layer Flakiness':
               step_layer_flakiness,
+          'Step Layer Skipped Known Flakiness':
+              step_layer_skipped_known_flakiness,
           'Failing With Patch Tests That Caused Build Failure':
-              potential_build_flakiness
+              potential_build_flakiness,
       }
       step = caller_api.python.succeeding_step(
           'FindIt Flakiness', 'Metadata for FindIt post processing.')
