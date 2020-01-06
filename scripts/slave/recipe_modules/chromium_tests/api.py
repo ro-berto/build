@@ -72,7 +72,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._builders = {}
     self.add_builders(builders_module.BUILDERS)
     self._precommit_mode = False
-    self._bucketed_triggers = input_properties.get('bucketed_triggers', False)
+    self._bucketed_triggers = input_properties.bucketed_triggers
 
   @property
   def builders(self):
