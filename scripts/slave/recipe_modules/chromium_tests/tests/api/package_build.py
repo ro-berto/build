@@ -6,7 +6,9 @@ from recipe_engine import post_process
 from recipe_engine import recipe_api
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -20,23 +22,26 @@ PROPERTIES = {
 
 
 def RunSteps(api, builders):
-  bot_config = api.chromium_tests.create_bot_config_object([
-      api.chromium_tests.create_bot_id(
-          api.properties['mastername'], api.properties['buildername'])],
-      builders=builders)
+  builder_name = api.buildbucket.builder_name
+  bot_id = api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                            builder_name)
+  bot_config = api.chromium_tests.create_bot_config_object([bot_id],
+                                                           builders=builders)
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.package_build(
-      api.properties['mastername'], api.properties['buildername'],
-      update_step, bot_db, reasons=['for test coverage'])
+      api.properties['mastername'],
+      builder_name,
+      update_step,
+      bot_db,
+      reasons=['for test coverage'])
 
 
 def GenTests(api):
   yield api.test(
       'standard',
-      api.properties.generic(
-          mastername='chromium.fake',
-          buildername='fake-builder',
+      api.chromium.ci_build(mastername='chromium.fake', builder='fake-builder'),
+      api.properties(
           builders={
               'chromium.fake': {
                   'settings': {
@@ -63,9 +68,9 @@ def GenTests(api):
 
   yield api.test(
       'perf-upload',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='fake-perf-builder',
+      api.chromium.ci_build(
+          mastername='chromium.perf', builder='fake-perf-builder'),
+      api.properties(
           builders={
               'chromium.perf': {
                   'settings': {
@@ -91,9 +96,9 @@ def GenTests(api):
 
   yield api.test(
       'bisect',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='fake-bisect-builder',
+      api.chromium.ci_build(
+          mastername='chromium.perf', builder='fake-bisect-builder'),
+      api.properties(
           builders={
               'chromium.perf': {
                   'settings': {

@@ -5,7 +5,9 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/json',
     'recipe_engine/platform',
@@ -67,15 +69,17 @@ CUSTOM_BUILDERS = {
 }
 
 def RunSteps(api):
+  builder_name = api.buildbucket.builder_name
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(
-          api.properties['mastername'], api.properties['buildername'])],
+      [
+          api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                           builder_name)
+      ],
       builders=CUSTOM_BUILDERS)
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.trigger_child_builds(
-      api.properties['mastername'], api.properties['buildername'],
-      update_step, bot_db)
+  api.chromium_tests.trigger_child_builds(api.properties['mastername'],
+                                          builder_name, update_step, bot_db)
 
 
 def GenTests(api):
@@ -90,14 +94,12 @@ def GenTests(api):
       'cross_master_trigger',
       api.runtime(is_luci=True, is_experimental=False),
       api.platform.name('linux'),
-      api.properties.generic(
-          buildername='Fake Builder',
+      api.chromium.ci_build(
+          builder='Fake Builder',
           mastername='chromium.example',
           parent_buildername='Android arm Builder (dbg)',
           parent_mastername='chromium.android'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(
-          trigger_includes_bucket,
-          builder='Fake Tester'),
+      api.post_process(trigger_includes_bucket, builder='Fake Tester'),
       api.post_process(post_process.DropExpectation),
   )

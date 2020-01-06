@@ -30,22 +30,16 @@ def GenTests(api):
       for test in extra_swarmed_tests:
         swarm_hashes[test] = '[dummy hash for %s]' % test
 
-    return (
-      api.properties.generic(
-        build_config=config,
-        mastername=mastername,
-        swarm_hashes=swarm_hashes,
-        **kwargs
-      ) +
-      api.buildbucket.ci_build(
-        builder=builder,
-        git_repo='https://chromium.googlesource.com/v8/v8.git',
-      ) +
-      api.runtime(
-        is_luci=True,
-        is_experimental=False
-      )
-    )
+    return sum([
+        api.chromium.ci_build(
+            mastername=mastername,
+            builder=builder,
+            git_repo='https://chromium.googlesource.com/v8/v8.git',
+        ),
+        api.properties(
+            build_config=config, swarm_hashes=swarm_hashes, **kwargs),
+        api.runtime(is_luci=True, is_experimental=False),
+    ], api.empty_test_data())
 
   yield api.test(
       'deapply_deps_after_failure',

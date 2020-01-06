@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -12,25 +14,24 @@ DEPS = [
 
 
 def RunSteps(api):
+  builder_name = api.buildbucket.builder_name
   bot_config = api.chromium_tests.create_bot_config_object([
-      api.chromium_tests.create_bot_id(
-          api.properties['mastername'], api.properties['buildername'])])
+      api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                       builder_name)
+  ])
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.archive_build(
-      api.properties['mastername'], api.properties['buildername'],
-      update_step, bot_db)
+  api.chromium_tests.archive_build(api.properties['mastername'], builder_name,
+                                   update_step, bot_db)
 
 
 def GenTests(api):
   yield api.test(
       'cf_archive_build',
-      api.properties.generic(
-          mastername='chromium.lkgr', buildername='ASAN Release'),
+      api.chromium.ci_build(mastername='chromium.lkgr', builder='ASAN Release'),
   )
 
   yield api.test(
       'archive_build',
-      api.properties.generic(
-          mastername='chromium', buildername='linux-archive-rel'),
+      api.chromium.ci_build(mastername='chromium', builder='linux-archive-rel'),
   )

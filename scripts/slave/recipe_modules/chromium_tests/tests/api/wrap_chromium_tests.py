@@ -62,8 +62,8 @@ def RunSteps(api):
     bot_ids = trybot_config['bot_ids']
   else:
     bot_ids = [
-        api.chromium_tests.create_bot_id(
-            api.properties['mastername'], api.properties['buildername'])
+        api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                         api.buildbucket.builder_name)
     ]
   bot_config_object = api.chromium_tests.create_bot_config_object(
       bot_ids,
@@ -102,11 +102,9 @@ def GenTests(api):
 
   yield api.test(
       'require_device_steps',
-      api.properties.generic(
-          mastername='chromium.example',
-          buildername='android-basic',
-          local_gtest=True,
-          builders=test_builders),
+      api.chromium.ci_build(
+          mastername='chromium.example', builder='android-basic'),
+      api.properties(local_gtest=True, builders=test_builders),
       api.post_process(post_process.MustRun, 'device_recovery'),
       api.post_process(post_process.MustRun, 'provision_devices'),
       api.post_process(post_process.MustRun, 'device_status'),
@@ -115,8 +113,8 @@ def GenTests(api):
 
   yield api.test(
       'use_clang_coverage',
-      api.properties.generic(
-          mastername='chromium.fyi', buildername='linux-code-coverage'),
+      api.chromium.ci_build(
+          mastername='chromium.fyi', builder='linux-code-coverage'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -130,25 +128,18 @@ def GenTests(api):
 
   yield api.test(
       'isolated_targets',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          swarming_gtest=True),
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(swarming_gtest=True),
   )
 
   yield api.test(
       'local_isolated_script_test',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          local_isolated_script_test=True,
-      ),
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(local_isolated_script_test=True,),
   )
 
   yield api.test(
       'script_test',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          script_test=True),
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(script_test=True),
   )

@@ -62,18 +62,14 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'linux_tests',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          swarming_gtest=True),
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(swarming_gtest=True),
   )
 
   yield api.test(
       'failure',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
-          swarming_gtest=True),
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(swarming_gtest=True),
       api.step_data('compile', retcode=1),
   )
 
@@ -86,10 +82,9 @@ def GenTests(api):
 
   yield api.test(
       'perf_isolate_lookup',
-      api.properties.generic(
-          mastername='chromium.perf',
-          buildername='linux-builder-perf',
-          swarming_gtest=True),
+      api.chromium.ci_build(
+          mastername='chromium.perf', builder='linux-builder-perf'),
+      api.properties(swarming_gtest=True),
       api.post_process(Filter('pinpoint isolate upload')),
   )
 
@@ -108,13 +103,12 @@ def GenTests(api):
 
   yield api.test(
       'android',
-      api.properties.generic(
-          mastername='chromium.android', buildername='android-cronet-arm-rel'),
+      api.chromium.ci_build(
+          mastername='chromium.android', builder='android-cronet-arm-rel'),
   )
 
   yield api.test(
       'android_version',
-      api.properties.generic(
-          mastername='fake.master', buildername='Test Version'),
+      api.chromium.ci_build(mastername='fake.master', builder='Test Version'),
       api.chromium.override_version(major=123, minor=1, build=9876, patch=2),
   )

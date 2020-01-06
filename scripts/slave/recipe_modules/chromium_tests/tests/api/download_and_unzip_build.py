@@ -1,13 +1,15 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
 def RunSteps(api):
   mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
+  buildername = api.buildbucket.builder_name
   bot_config = api.chromium_tests.create_bot_config_object([
       api.chromium_tests.create_bot_id(mastername, buildername)])
   api.chromium_tests.configure_build(bot_config)
@@ -19,9 +21,8 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'read-gn-args',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(
           parent_mastername='chromium.linux',
           parent_buildername='Linux Builder',
           kwargs=dict(read_gn_args=True)),
@@ -31,9 +32,8 @@ def GenTests(api):
 
   yield api.test(
       'do-not-read-gn-args',
-      api.properties.generic(
-          mastername='chromium.linux',
-          buildername='Linux Tests',
+      api.chromium.ci_build(mastername='chromium.linux', builder='Linux Tests'),
+      api.properties(
           parent_mastername='chromium.linux',
           parent_buildername='Linux Builder',
           kwargs=dict(read_gn_args=False)),

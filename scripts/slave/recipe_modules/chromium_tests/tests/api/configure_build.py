@@ -7,7 +7,9 @@ from recipe_engine import post_process
 
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/platform',
     'recipe_engine/properties',
 ]
@@ -43,8 +45,10 @@ BUILDERS = {
 
 def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(
-          api.properties['mastername'], api.properties['buildername'])],
+      [
+          api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                           api.buildbucket.builder_name)
+      ],
       builders=BUILDERS)
   api.chromium_tests.configure_build(bot_config_object)
 
@@ -52,22 +56,22 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'set_component_rev',
-      api.properties.generic(
-          mastername='fake.master', buildername='Component Rev Builder'),
+      api.chromium.ci_build(
+          mastername='fake.master', builder='Component Rev Builder'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'android_apply_config',
-      api.properties.generic(
-          mastername='fake.master', buildername='Android Apply Config Builder'),
+      api.chromium.ci_build(
+          mastername='fake.master', builder='Android Apply Config Builder'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'chromium_tests_apply_config',
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='fake.master',
-          buildername='Chromium Tests Apply Config Builder'),
+          builder='Chromium Tests Apply Config Builder'),
       api.post_process(post_process.DropExpectation),
   )

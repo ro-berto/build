@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
@@ -38,8 +39,10 @@ DUMMY_BUILDERS = {
 
 def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(
-          api.properties['mastername'], api.properties['buildername'])],
+      [
+          api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                           api.buildbucket.builder_name)
+      ],
       builders=api.properties.get('builders'))
   api.chromium_tests.configure_build(bot_config_object)
   api.chromium_tests.prepare_checkout(bot_config_object)
@@ -48,22 +51,21 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties.generic(
-          mastername='chromium.linux', buildername='Linux Builder'),
+      api.chromium.ci_build(
+          mastername='chromium.linux', builder='Linux Builder'),
   )
 
   yield api.test(
       'disable_tests',
-      api.properties.generic(
-          mastername='chromium.lkgr', buildername='Win ASan Release'),
+      api.chromium.ci_build(
+          mastername='chromium.lkgr', builder='Win ASan Release'),
   )
 
   yield api.test(
       'cross_master_trigger',
-      api.properties.generic(
-          mastername='chromium.fake',
-          buildername='cross-master-trigger-builder',
-          builders=DUMMY_BUILDERS),
+      api.chromium.ci_build(
+          mastername='chromium.fake', builder='cross-master-trigger-builder'),
+      api.properties(builders=DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
                        'read test spec (chromium.fake.fyi.json)'),
       api.post_process(post_process.DropExpectation),

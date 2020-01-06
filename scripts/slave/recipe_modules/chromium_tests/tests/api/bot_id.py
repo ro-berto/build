@@ -7,29 +7,32 @@ from recipe_engine import post_process
 
 
 DEPS = [
+    'chromium',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  bot_id = api.chromium_tests.create_bot_id(
-      api.properties['mastername'], api.properties['buildername'],
-      api.properties.get('testername'))
-  assert bot_id['buildername'] == api.properties['buildername']
+  builder_name = api.buildbucket.builder_name
+  bot_id = api.chromium_tests.create_bot_id(api.properties['mastername'],
+                                            builder_name,
+                                            api.properties.get('testername'))
+  assert bot_id['buildername'] == builder_name
   assert bot_id.get('tester') == api.properties.get('testername')
 
 
 def GenTests(api):
   yield api.test(
       'without_testername',
-      api.properties.generic(mastername='fake.master', buildername='builder'),
+      api.chromium.ci_build(mastername='fake.master', builder='builder'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'with_testername',
-      api.properties.generic(
-          mastername='fake.master', buildername='builder', testername='tester'),
+      api.chromium.ci_build(mastername='fake.master', builder='builder'),
+      api.properties(testername='tester'),
       api.post_process(post_process.DropExpectation),
   )
