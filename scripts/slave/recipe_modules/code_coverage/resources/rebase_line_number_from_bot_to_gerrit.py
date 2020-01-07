@@ -74,13 +74,16 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
   file_to_line_num_mapping = {}
   for filename, content in zip(sources_to_rebase, gerrit_files_content):
     local_file_path = os.path.join(src_path, filename)
-    gerrit_file = tempfile.NamedTemporaryFile()
-    try:
+    gerrit_file_path = None
+    # On Windows, the file returned by NamedTemporaryFile cannot be opened a
+    # second time by its name until it has been closed. Therefore we must ensure
+    # it is closed before passing its name to the subprocess.
+    with tempfile.NamedTemporaryFile(delete=False) as gerrit_file:
       gerrit_file.write(content)
-      gerrit_file.flush()
-
+      gerrit_file_path = gerrit_file.name
+    try:
       diff_cmd = [
-          'git', 'diff', '--no-index', local_file_path, gerrit_file.name
+          'git', 'diff', '--no-index', local_file_path, gerrit_file_path
       ]
       diff_output = None
 
@@ -90,10 +93,9 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
     except subprocess.CalledProcessError as e:
       if e.returncode != 1:
         raise
-
       diff_output = e.output
     finally:
-      gerrit_file.close()
+      os.remove(gerrit_file_path)
 
     diff_lines = diff_output.splitlines()
     with open(local_file_path) as f:
