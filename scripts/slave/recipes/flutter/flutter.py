@@ -31,6 +31,7 @@ DEPS = [
 BUCKET_NAME = 'flutter_infra'
 PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
 
+
 @contextmanager
 def _PlatformSDK(api):
   if api.platform.is_win:
@@ -48,53 +49,57 @@ def _PlatformSDK(api):
 def Install7za(api):
   if api.platform.is_win:
     sevenzip_cache_dir = api.path['cache'].join('builder', '7za')
-    api.cipd.ensure(sevenzip_cache_dir, api.cipd.EnsureFile()
-      .add_package(
-        'flutter_internal/tools/7za/${platform}',
-        'version:19.00')
-    )
+    api.cipd.ensure(
+        sevenzip_cache_dir,
+        api.cipd.EnsureFile().add_package(
+            'flutter_internal/tools/7za/${platform}', 'version:19.00'))
     with api.context(env_prefixes={'PATH': [sevenzip_cache_dir]}):
       yield
   else:
     yield
 
+
 def InstallOpenJDK(api):
   java_cache_dir = api.path['cache'].join('java')
-  api.cipd.ensure(java_cache_dir, api.cipd.EnsureFile()
-    .add_package(
-      'flutter_internal/java/openjdk/${platform}',
-      'version:1.8.0u202-b08')
-  )
+  api.cipd.ensure(
+      java_cache_dir,
+      api.cipd.EnsureFile().add_package(
+          'flutter_internal/java/openjdk/${platform}', 'version:1.8.0u202-b08'))
   return api.context(
-    env={'JAVA_HOME': java_cache_dir},
-    env_prefixes={'PATH': [java_cache_dir.join('bin')]}
-  )
+      env={'JAVA_HOME': java_cache_dir},
+      env_prefixes={'PATH': [java_cache_dir.join('bin')]})
+
 
 def EnsureCloudKMS(api, version=None):
   with api.step.nest('ensure_cloudkms'):
     with api.context(infra_steps=True):
       pkgs = api.cipd.EnsureFile()
-      pkgs.add_package(
-        'infra/tools/luci/cloudkms/${platform}', version or 'latest')
+      pkgs.add_package('infra/tools/luci/cloudkms/${platform}', version or
+                       'latest')
       cipd_dir = api.path['start_dir'].join('cipd', 'cloudkms')
       api.cipd.ensure(cipd_dir, pkgs)
       return cipd_dir.join('cloudkms')
 
+
 def DecryptKMS(api, step_name, crypto_key_path, ciphertext_file,
-            plaintext_file):
+               plaintext_file):
   kms_path = EnsureCloudKMS(api)
   return api.step(step_name, [
       kms_path,
       'decrypt',
-      '-input', ciphertext_file,
-      '-output', plaintext_file,
+      '-input',
+      ciphertext_file,
+      '-output',
+      plaintext_file,
       crypto_key_path,
   ])
+
 
 def GetCloudPath(api, git_hash, path):
   if api.runtime.is_experimental:
     return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
+
 
 def UploadFlutterCoverage(api):
   """Uploads the Flutter coverage output to cloud storage and Coveralls.
@@ -120,11 +125,14 @@ def UploadFlutterCoverage(api):
           api.resource('coveralls-token.enc'),
           token_path)
   pub_executable = 'pub' if not api.platform.is_win else 'pub.exe'
-  api.step('pub global activate coveralls', [pub_executable, 'global',
-           'activate', 'coveralls', '5.1.0', '--no-executables'])
+  api.step('pub global activate coveralls', [
+      pub_executable, 'global', 'activate', 'coveralls', '5.1.0',
+      '--no-executables'
+  ])
   with api.context(cwd=flutter_package_dir):
-    api.step('upload to coveralls', [pub_executable, 'global',
-             'run', 'coveralls:main', coverage_path])
+    api.step('upload to coveralls',
+             [pub_executable, 'global', 'run', 'coveralls:main', coverage_path])
+
 
 def CreateAndUploadFlutterPackage(api, git_hash, branch):
   """Prepares, builds, and uploads an all-inclusive archive package."""
@@ -151,8 +159,7 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
   with Install7za(api):
     with api.context(cwd=api.path['start_dir']):
       step_args = [
-          dart_executable,
-          prepare_script,
+          dart_executable, prepare_script,
           '--temp_dir=%s' % work_dir,
           '--revision=%s' % git_hash,
           '--branch=%s' % branch
@@ -161,29 +168,25 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
         step_args.append('--publish')
       api.step('prepare, create and publish a flutter archive', step_args)
 
+
 def RunSteps(api):
   git_url = \
     'https://chromium.googlesource.com/external/github.com/flutter/flutter'
   git_ref = api.buildbucket.gitiles_commit.ref
-  if ('git_url' in api.properties and
-      'git_ref' in api.properties):
+  if ('git_url' in api.properties and 'git_ref' in api.properties):
     git_url = api.properties['git_url']
     git_ref = api.properties['git_ref']
 
   git_hash = api.git.checkout(
-      git_url,
-      ref=git_ref,
-      recursive=True,
-      set_got_revision=True,
-      tags=True)
+      git_url, ref=git_ref, recursive=True, set_got_revision=True, tags=True)
   checkout = api.path['checkout']
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
 
   path_prefixes = [
-    flutter_bin,
-    dart_bin,
+      flutter_bin,
+      dart_bin,
   ]
 
   env_prefixes = {'PATH': path_prefixes}
@@ -225,7 +228,7 @@ def RunSteps(api):
       shard_env['SHARD'] = shard
       with api.context(env=shard_env):
         api.step('run test.dart for %s shard' % shard,
-                [dart_executable,
+                 [dart_executable,
                   checkout.join('dev', 'bots', 'test.dart')])
       if shard == 'coverage':
         UploadFlutterCoverage(api)
@@ -236,12 +239,15 @@ def RunSteps(api):
       # fine.
       # If it actually fails to kill the task, the job will just fail anyway.
       if api.platform.is_win:
+
         def KillAll(name, exe_name):
-          api.step(name, ['taskkill', '/f', '/im', exe_name, '/t'],
-                    ok_ret='any')
+          api.step(
+              name, ['taskkill', '/f', '/im', exe_name, '/t'], ok_ret='any')
+
         KillAll('stop gradle daemon', 'java.exe')
         KillAll('stop dart', 'dart.exe')
         KillAll('stop adb', 'adb.exe')
+
 
 def GenTests(api):
   for experimental in (True, False):
