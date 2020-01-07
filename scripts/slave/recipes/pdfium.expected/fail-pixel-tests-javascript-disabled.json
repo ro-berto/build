@@ -405,7 +405,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript enabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "javascript tests"
@@ -422,7 +422,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "debug true is_standalone true javascript disabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -484,7 +484,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript enabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests"
@@ -552,14 +552,11 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
-      "--disable-javascript"
+      "debug true is_standalone true javascript enabled os linux reverse_byte_order enabled skia false skia_paths false v8 true xfa false",
+      "--reverse-byte-order"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "pixel tests (javascript disabled)",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "pixel tests (reverse byte order)"
   },
   {
     "cmd": [
@@ -616,7 +613,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
       "out/debug_v8",
       "--gold_properties",
@@ -624,10 +621,14 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript disabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false",
+      "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "corpus tests"
+    "name": "pixel tests (javascript disabled)",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -675,7 +676,7 @@
       "-z",
       "json,log",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000007/corpus/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000007/pixel/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (3)"
@@ -692,11 +693,10 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
-      "--disable-javascript"
+      "debug true is_standalone true javascript enabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "corpus tests (javascript disabled)"
+    "name": "corpus tests"
   },
   {
     "cmd": [
@@ -748,6 +748,144 @@
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript enabled os linux reverse_byte_order enabled skia false skia_paths false v8 true xfa false",
+      "--reverse-byte-order"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "corpus tests (reverse byte order)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (5)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (5)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000013/corpus/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (5)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--gold_key",
+      "debug true is_standalone true javascript disabled os linux reverse_byte_order disabled skia false skia_paths false v8 true xfa false",
+      "--disable-javascript"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "name": "corpus tests (javascript disabled)"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (6)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (6)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000016/corpus/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (6)"
   },
   {
     "failure": {
