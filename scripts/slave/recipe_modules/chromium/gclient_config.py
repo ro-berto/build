@@ -269,12 +269,15 @@ def valgrind(c):  # pragma: no cover
 def ndk_next(c):
   c.revisions['src/third_party/android_ndk'] = 'origin/next'
 
+@CONFIG_CTX()
+def angle_internal(c):  # pragma: no cover
+  # ANGLE only pulls a few non-public test files, like
+  # GLES 1.0 conformance, and third party captures
+  c.solutions[0].custom_vars['checkout_angle_internal'] = 'True'
+
 @CONFIG_CTX(includes=['chromium'])
 def chrome_internal(c):
   c.solutions[0].custom_vars['checkout_src_internal'] = 'True'
-  # ANGLE uses a more isolated ACL for non-public test files, like
-  # GLES 1.0 conformance, and third party captures
-  c.solutions[0].custom_vars['checkout_angle_internal'] = 'True'
   # Remove some things which are generally not needed
   c.solutions[0].custom_deps = {
       "src/data/autodiscovery": None,
