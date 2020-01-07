@@ -384,7 +384,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     def _get_flakes_step_text(flake_info, suite):
       """Returns a formatted step text for known flaky tests."""
-      _, limited_flakes = self.limit_failures([
+      _, text_lines = self.limit_failures([
           '%s: crbug.com/%s' %
           (t,
            flake_info.get(
@@ -392,7 +392,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
                    'monorail_issue', 'N/A')) for t in suite.known_flaky_failures
       ])
 
-      return self.format_step_text([('Known to be flaky:', limited_flakes)])
+      text_lines.append(
+          '<br>If the results are incorrect, please file a bug at: '
+          'http://bit.ly/37I61c2')
+      return self.format_step_text([('Known to be flaky:', text_lines)])
 
     if not hasattr(caller_api, 'chromium_swarming'):
       self.m.python.failing_step(
