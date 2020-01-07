@@ -18,6 +18,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'chromium_tests',
+    'depot_tools/tryserver',
     'recipe_engine/assertions',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -36,6 +37,7 @@ PROPERTIES = {
 
 def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
              expected_jsonish_result):
+  assert api.tryserver.is_tryserver
   bot = api.chromium_tests._lookup_bot_metadata(builders={})
 
   api.chromium_tests.configure_build(bot.settings)

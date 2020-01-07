@@ -11,6 +11,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
+    'depot_tools/tryserver',
     'filter',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -79,12 +80,12 @@ _TEST_TRYBOTS = {
 
 
 def RunSteps(api):
+  assert api.tryserver.is_tryserver
   api.path.mock_add_paths(
       api.code_coverage.profdata_dir().join('merged.profdata'))
   raw_result = api.chromium_tests.trybot_steps(
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))
-  assert api.chromium_tests.is_precommit_mode()
   return raw_result
 
 def GenTests(api):

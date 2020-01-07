@@ -40,7 +40,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
 
   args = test_spec.get('args', [])
   extra_args = None
-  if chromium_tests_api.is_precommit_mode():
+  if chromium_tests_api.m.tryserver.is_tryserver:
     extra_args = test_spec.get('precommit_args', [])
   else:
     extra_args = test_spec.get('non_precommit_args', [])

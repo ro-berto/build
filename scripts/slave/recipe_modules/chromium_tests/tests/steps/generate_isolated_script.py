@@ -32,8 +32,6 @@ def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
 
-  api.chromium_tests.set_precommit_mode()
-
   update_step = api.bot_update.ensure_checkout()
 
   single_spec = api.properties.get('single_spec')
@@ -375,6 +373,10 @@ def GenTests(api):
 
   yield api.test(
       'precommit_args',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux',
+          builder='linux-rel',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',

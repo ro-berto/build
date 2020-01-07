@@ -71,7 +71,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     super(ChromiumTestsApi, self).__init__(**kwargs)
     self._builders = {}
     self.add_builders(builders_module.BUILDERS)
-    self._precommit_mode = False
     self._bucketed_triggers = input_properties.bucketed_triggers
 
   @property
@@ -114,21 +113,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def create_bot_db_object(self):
     return bdb_module.BotConfigAndTestDB()
-
-  def set_precommit_mode(self):
-    """Configures this module to indicate that tests are running before
-    the changes are committed. This must be called very early in the
-    recipe, certainly before prepare_checkout, and the action can not
-    be undone.
-    """
-    self._precommit_mode = True
-
-  def is_precommit_mode(self):
-    """Returns a Boolean indicating whether this module is running in
-    precommit mode; i.e., whether tests are running before the changes
-    are committed.
-    """
-    return self._precommit_mode
 
   def get_config_defaults(self):
     return {'CHECKOUT_PATH': self.m.path['checkout']}
@@ -1430,7 +1414,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot = self._lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
 
     self._report_builders(bot.settings)
-    self.set_precommit_mode()
 
     # Applies build/test configurations from bot.settings.
     self.configure_build(bot.settings, override_bot_type='builder_tester')
@@ -1445,7 +1428,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, timeout=3600, no_fetch_tags=True)
 
     self.m.chromium_swarming.configure_swarming(
-      'chromium', precommit=True)
+      'chromium', precommit=self.m.tryserver.is_tryserver)
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
