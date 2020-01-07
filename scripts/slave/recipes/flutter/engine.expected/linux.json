@@ -1142,7 +1142,9 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "RECIPE_REPO[depot_tools]/.vpython",
       "-u",
       "[CACHE]/builder/src/flutter/testing/run_tests.py",
       "--variant",
@@ -2748,7 +2750,9 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "RECIPE_REPO[depot_tools]/.vpython",
       "-u",
       "[CACHE]/builder/src/flutter/testing/run_tests.py",
       "--variant",
@@ -3207,7 +3211,9 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "RECIPE_REPO[depot_tools]/.vpython",
       "-u",
       "[CACHE]/builder/src/flutter/testing/run_tests.py",
       "--variant",

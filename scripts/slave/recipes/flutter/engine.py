@@ -84,10 +84,12 @@ def BuildNoGoma(api, config, *targets):
 
 def RunTests(api, out_dir, android_out_dir=None, types='all'):
   script_path = GetCheckoutPath(api).join('flutter', 'testing', 'run_tests.py')
+  # TODO(godofredoc): use .vpython from engine when file are available.
+  venv_path = api.depot_tools.root.join('.vpython')
   args = ['--variant', out_dir, '--type', types]
   if android_out_dir:
     args.extend(['--android-variant', android_out_dir])
-  api.python('Host Tests for %s' % out_dir, script_path, args)
+  api.python('Host Tests for %s' % out_dir, script_path, args, venv=venv_path)
 
 
 def ScheduleBuilds(api, builder_name, drone_props):
