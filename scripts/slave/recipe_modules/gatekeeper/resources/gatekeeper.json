@@ -16,6 +16,7 @@
           }
         },
         "excluded_builders": [
+          "chromeos-betty-cfi-thin-lto-chrome",
           "chromeos-betty-chrome",
           "chromeos-betty-pi-arc-chrome"
         ]
