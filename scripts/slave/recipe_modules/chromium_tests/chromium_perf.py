@@ -66,13 +66,8 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
 
 
-  # TODO(803137): remove setting 'swarming_service_account' once all perf
-  # builders are converted to LUCI.
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
-  spec['swarming_service_account'] = 'chrome-perf-buildbot'
-
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
-  spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
 

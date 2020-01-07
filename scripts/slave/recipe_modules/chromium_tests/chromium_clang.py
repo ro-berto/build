@@ -190,11 +190,7 @@ SPEC = {
             },
             'tests': [steps.SizesStep(RESULTS_URL, 'ToTWinOfficial')],
             'swarming_server': 'https://chrome-swarming.appspot.com',
-            # TODO(929099): check if 'swarming_service_account' is required, or
-            # can be removed
-            'swarming_service_account': 'chrome-ci-builder',
             'isolate_server': 'https://chrome-isolated.appspot.com',
-            'isolate_service_account': 'chrome-ci-builder',
             'swarming_dimensions': {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',
@@ -220,11 +216,7 @@ SPEC = {
             },
             'tests': [steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')],
             'swarming_server': 'https://chrome-swarming.appspot.com',
-            # TODO(929099): check if 'swarming_service_account' is required, or
-            # can be removed
-            'swarming_service_account': 'chrome-ci-builder',
             'isolate_server': 'https://chrome-isolated.appspot.com',
-            'isolate_service_account': 'chrome-ci-builder',
             'swarming_dimensions': {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',
@@ -439,11 +431,7 @@ SPEC = {
             },
             'tests': [steps.SizesStep(RESULTS_URL, 'ToTWin'),],
             'swarming_server': 'https://chrome-swarming.appspot.com',
-            # TODO(929099): check if 'swarming_service_account' is required, or
-            # can be removed
-            'swarming_service_account': 'chrome-ci-builder',
             'isolate_server': 'https://chrome-isolated.appspot.com',
-            'isolate_service_account': 'chrome-ci-builder',
             'swarming_dimensions': {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',
@@ -509,11 +497,7 @@ SPEC = {
             },
             'tests': [steps.SizesStep(RESULTS_URL, 'ToTWin64'),],
             'swarming_server': 'https://chrome-swarming.appspot.com',
-            # TODO(929099): check if 'swarming_service_account' is required, or
-            # can be removed
-            'swarming_service_account': 'chrome-ci-builder',
             'isolate_server': 'https://chrome-isolated.appspot.com',
-            'isolate_service_account': 'chrome-ci-builder',
             'swarming_dimensions': {
                 'pool': 'chrome.tests',
                 'os': 'Windows-10',

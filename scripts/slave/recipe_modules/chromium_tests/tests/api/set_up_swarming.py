@@ -39,12 +39,10 @@ def GenTests(api):
       api.properties(
           bot_config=api.chromium_tests.bot_config({
               'isolate_server': 'https://example/isolate',
-              'isolate_service_account': 'chromium_builder',
               'swarming_server': 'https://example/swarming',
               'swarming_dimensions': {
                   'os': 'Ubuntu-14.04'
               },
-              'swarming_service_account': 'chromium-builder'
           }),
           expected_swarming_server='https://example/swarming',
           expected_swarming_service_account=None,
