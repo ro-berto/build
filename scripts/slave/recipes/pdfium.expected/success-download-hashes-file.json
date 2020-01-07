@@ -451,7 +451,7 @@
       "--gold_ignore_hashes",
       "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os android reverse_byte_order disabled skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
+      "debug true is_standalone true javascript enabled os android skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests"
@@ -511,7 +511,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
       "out/debug",
       "--gold_properties",
@@ -521,11 +521,10 @@
       "--gold_ignore_hashes",
       "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os android reverse_byte_order enabled skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false",
-      "--reverse-byte-order"
+      "debug true is_standalone true javascript enabled os android skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
-    "name": "pixel tests (reverse byte order)"
+    "name": "corpus tests"
   },
   {
     "cmd": [
@@ -573,151 +572,10 @@
       "-z",
       "json,log",
       "[CACHE]/builder/pdfium/out/debug/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000004/pixel/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000004/corpus/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
-      "--build-dir",
-      "out/debug",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
-      "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "--gold_ignore_hashes",
-      "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
-      "--gold_key",
-      "debug true is_standalone true javascript enabled os android reverse_byte_order disabled skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false"
-    ],
-    "cwd": "[CACHE]/builder/pdfium",
-    "name": "corpus tests"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "*.png"
-    ],
-    "infra_step": true,
-    "name": "find images (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug/gold_output/someimage.png@@@",
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "-m",
-      "----",
-      "cp",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/*.png",
-      "gs://skia-pdfium-gm/dm-images-v1"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload images (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-z",
-      "json,log",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000007/corpus/dm.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload JSON (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
-      "--build-dir",
-      "out/debug",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
-      "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "--gold_ignore_hashes",
-      "[CACHE]/builder/pdfium/out/debug/ignore_hashes.txt",
-      "--gold_key",
-      "debug true is_standalone true javascript enabled os android reverse_byte_order enabled skia false skia_paths false target_os \"android\" use_cxx11 true v8 false xfa false",
-      "--reverse-byte-order"
-    ],
-    "cwd": "[CACHE]/builder/pdfium",
-    "name": "corpus tests (reverse byte order)"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder/pdfium/out/debug/gold_output",
-      "*.png"
-    ],
-    "infra_step": true,
-    "name": "find images (4)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/debug/gold_output/someimage.png@@@",
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "-m",
-      "----",
-      "cp",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/*.png",
-      "gs://skia-pdfium-gm/dm-images-v1"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload images (4)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-z",
-      "json,log",
-      "[CACHE]/builder/pdfium/out/debug/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/android/1337000010/corpus/dm.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload JSON (4)"
   },
   {
     "name": "$result"

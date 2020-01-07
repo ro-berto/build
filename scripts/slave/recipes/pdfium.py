@@ -261,10 +261,6 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
   # will still show up as failed, but processing will continue.
   test_exception = None
 
-  ##############################################################################
-  # JavaScript tests.
-  ##############################################################################
-
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
@@ -276,7 +272,6 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
       except api.step.StepFailure as e:
         test_exception = e
 
-      # Run again with --disable-javascript.
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
@@ -284,10 +279,6 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
                    script_args + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
-
-  ##############################################################################
-  # Pixel tests.
-  ##############################################################################
 
   # Setup uploading results to Gold after the javascript tests, since they do
   # not produce interesting result images
@@ -307,20 +298,7 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
   # Upload immediately, since tests below will overwrite the output directory
   _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
-  # Run again with --reverse-byte-order.
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(
-        api, build_config, reverse_byte_order=True)
-    try:
-      api.python('pixel tests (reverse byte order)', pixel_tests_path,
-                 script_args + additional_args)
-    except api.step.StepFailure as e:
-      test_exception = e
-  # Upload immediately, since tests below will overwrite the output directory
-  _upload_dm_results(api, gold_output_dir, revision, 'pixel')
-
   if v8:
-    # Run again with --disable-javascript.
     with api.context(cwd=api.path['checkout'], env=env):
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
@@ -331,10 +309,6 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
         test_exception = e
     # Upload immediately, since tests below will overwrite the output directory
     _upload_dm_results(api, gold_output_dir, revision, 'pixel')
-
-  ##############################################################################
-  # Corpus tests.
-  ##############################################################################
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
@@ -348,20 +322,7 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
   # Upload immediately, since tests below will overwrite the output directory
   _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
-  # Run again with --reverse-byte-order.
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(
-        api, build_config, reverse_byte_order=True)
-    try:
-      api.python('corpus tests (reverse byte order)', corpus_tests_path,
-                 script_args + additional_args)
-    except api.step.StepFailure as e:
-      test_exception = e
-  # Upload immediately, since tests below will overwrite the output directory
-  _upload_dm_results(api, gold_output_dir, revision, 'corpus')
-
   if v8:
-    # Run again with --disable-javascript.
     with api.context(cwd=api.path['checkout'], env=env):
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
@@ -411,13 +372,10 @@ def _get_gold_props(api, build_config, revision):
   return ' '.join(props)
 
 
-def _get_modifiable_script_args(api,
-                                build_config,
-                                javascript_disabled=False,
-                                reverse_byte_order=False):
-  """Construct and get the additional arguments for tests such as
+def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
+  """Construct and get the additional arguments for
   run_corpus_tests.py that can be modified based on whether
-  javascript is disabled, or whether to test with reverse byte order.
+  javascript is disabled.
   Returns a list that can be concatenated with the other script
   arguments.
   """
@@ -427,14 +385,11 @@ def _get_modifiable_script_args(api,
   builder_name = api.m.buildbucket.builder_name.strip()
   keys['os'] = builder_name.split('_')[0]
   keys['javascript'] = 'disabled' if javascript_disabled else 'enabled'
-  keys['reverse_byte_order'] = 'enabled' if reverse_byte_order else 'disabled'
   _dict_to_str(keys)
 
   additional_args = ['--gold_key', _dict_to_str(keys)]
   if javascript_disabled:
     additional_args.append('--disable-javascript')
-  if reverse_byte_order:
-    additional_args.append('--reverse-byte-order')
 
   return additional_args
 
@@ -1004,14 +959,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'fail-pixel-tests-reverse-byte-order',
-      api.platform('linux', 64),
-      api.properties(mastername='client.pdfium', bot_id='test_slave'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('pixel tests (reverse byte order)', retcode=1),
-  )
-
-  yield api.test(
       'fail-pixel-tests-javascript-disabled',
       api.platform('linux', 64),
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
@@ -1025,14 +972,6 @@ def GenTests(api):
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests', retcode=1),
-  )
-
-  yield api.test(
-      'fail-corpus-tests-reverse-byte-order',
-      api.platform('linux', 64),
-      api.properties(mastername='client.pdfium', bot_id='test_slave'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('corpus tests (reverse byte order)', retcode=1),
   )
 
   yield api.test(
