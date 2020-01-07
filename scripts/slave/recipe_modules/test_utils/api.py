@@ -291,9 +291,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     builder = self.m.buildbucket.build.builder
     flakes_input = {
-        'luci_project': builder.project,
-        'luci_bucket': builder.bucket,
-        'luci_builder': builder.builder,
+        'project': builder.project,
+        'bucket': builder.bucket,
+        'builder': builder.builder,
         'tests': tests_to_check,
     }
 
@@ -322,20 +322,28 @@ class TestUtilsApi(recipe_api.RecipeApi):
       result.presentation.step_text = 'Failed to get known flakes'
       return {}
 
+    if 'flakes' not in result.json.output:
+      result.presentation.step_text = 'Response is ill-formed'
+      return {}
+
     known_flakes = {}
-    for flake in result.json.output:
-      if ('step_ui_name' not in flake or 'test_name' not in flake or
-          'affected_gerrit_changes' not in flake or
-          'monorail_issue' not in flake):
+    for flake in result.json.output['flakes']:
+      if ('affected_gerrit_changes' not in flake or
+          'monorail_issue' not in flake or 'test' not in flake or
+          'step_ui_name' not in flake['test'] or
+          'test_name' not in flake['test']):
         # Response is ill-formed. Don't expect to ever happen, but have this
         # check in place just in case.
         result.presentation.step_text = 'Response is ill-formed'
         return {}
 
-      known_flakes[(flake['step_ui_name'], flake['test_name'])] = {
-          'affected_gerrit_changes': flake['affected_gerrit_changes'],
-          'monorail_issue': flake['monorail_issue'],
-      }
+      known_flakes[(flake['test']['step_ui_name'],
+                    flake['test']['test_name'])] = {
+                        'affected_gerrit_changes':
+                            flake['affected_gerrit_changes'],
+                        'monorail_issue':
+                            flake['monorail_issue'],
+                    }
 
     for test_suite in failed_test_suites:
       for t in set(test_suite.deterministic_failures('with patch')):

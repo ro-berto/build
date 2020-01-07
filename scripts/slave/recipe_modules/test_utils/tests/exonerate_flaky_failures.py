@@ -106,11 +106,36 @@ def GenTests(api):
           }),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([{
+          api.json.output({
               'step_ui_name': 'browser_tests (with patch)'
-          }])),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
+          })),
+      api.post_process(post_process.StepTextContains,
+                       'query known flaky failures on CQ',
+                       ['Response is ill-formed']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'immune to another ill-formed response',
+      api.properties(
+          mastername='m',
+          buildername='b',
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [{
+                  'step_ui_name': 'browser_tests (with patch)'
+              }]
+          })),
+      api.post_process(post_process.StepTextContains,
+                       'query known flaky failures on CQ',
+                       ['Response is ill-formed']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -167,12 +192,16 @@ def GenTests(api):
           }),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([{
-              'step_ui_name': 'failed_test (with patch)',
-              'test_name': 'testA',
-              'affected_gerrit_changes': ['123', '234'],
-              'monorail_issue': '999',
-          }])),
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'failed_test (with patch)',
+                      'test_name': 'testA',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.DoesNotRun,
@@ -196,20 +225,26 @@ def GenTests(api):
           }),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([
-              {
-                  'step_ui_name': 'failed_test (with patch)',
-                  'test_name': 'testA',
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              },
-              {
-                  'step_ui_name': 'failed_test (with patch)',
-                  'test_name': 'testB',
-                  'affected_gerrit_changes': ['567', '678'],
-                  'monorail_issue': '998',
-              },
-          ])),
+          api.json.output({
+              'flakes': [
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testA',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testB',
+                      },
+                      'affected_gerrit_changes': ['567', '678'],
+                      'monorail_issue': '998',
+                  },
+              ]
+          })),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.StepTextContains,

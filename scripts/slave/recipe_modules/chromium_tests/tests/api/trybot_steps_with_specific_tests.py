@@ -940,12 +940,16 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(False), failure=True)),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([{
-              'step_ui_name': 'base_unittests (with patch)',
-              'test_name': 'Test.Two',
-              'affected_gerrit_changes': ['123', '234'],
-              'monorail_issue': '999',
-          }])),
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'Test.Two',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.StepTextContains,
                        'ignoring failures of base_unittests (with patch)',
@@ -1073,12 +1077,16 @@ def GenTests(api):
               failure=True)),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([{
-              'step_ui_name': 'base_unittests (with patch)',
-              'test_name': 'Test.Two',
-              'affected_gerrit_changes': ['123', '234'],
-              'monorail_issue': '999',
-          }])),
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'Test.Two',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'ignoring failures of base_unittests (with patch)'),
@@ -1168,12 +1176,16 @@ def GenTests(api):
               failure=True)),
       api.step_data(
           'query known flaky failures on CQ',
-          api.json.output([{
-              'step_ui_name': 'base_unittests (with patch)',
-              'test_name': 'Test.Two',
-              'affected_gerrit_changes': ['123', '234'],
-              'monorail_issue': '999',
-          }])),
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'Test.Two',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
