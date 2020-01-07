@@ -1114,9 +1114,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     tests = test_config.tests_on(bot.mastername, bot.buildername)
     if not tests:
-      if bot_type in ['builder', 'builder_tester']:
-        # Remove old files from out directory
-        self.m.chromium.clean_outdir()
       return
 
     self.m.chromium_swarming.configure_swarming(
@@ -1139,10 +1136,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if test_failure_summary:
         return test_failure_summary
-
-    if bot_type in ['builder', 'builder_tester']:
-      # Remove old files from out directory
-      self.m.chromium.clean_outdir()
 
   def _contains_invalid_results(self, unrecoverable_test_suites):
     for test_suite in unrecoverable_test_suites:
