@@ -477,6 +477,71 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          }, {
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          }],
+      }]
+  }
+  retry_shards_with_patch_gtest_results = {
+      'per_iteration_data': [{
+          'Test.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          }, {
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'SUCCESS',
+          }],
+      }]
+  }
+  expected_findit_metadata = {
+      'Failing With Patch Tests That Caused Build Failure': {},
+      'Step Layer Flakiness': {
+          'base_unittests (with patch)': ['Test.One'],
+      },
+      'Step Layer Skipped Known Flakiness': {},
+  }
+  # This test tests the scenario when a test failed deterministically with patch
+  # (FAILURE, FAILURE), but then passed retry shards with patch in a flaky way
+  # (FAILURE, SUCCESS), the test is expected to be labeled as
+  # "Step Layer Flakiness".
+  yield api.test(
+      'findit_step_layer_flakiness_retry_shards_flaky_test',
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(retry_shards_with_patch_gtest_results), retcode=1),
+              failure=True)),
+      api.post_process(
+          post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
+          json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+
   expected_findit_metadata = {
       'Failing With Patch Tests That Caused Build Failure': {},
       'Step Layer Flakiness': {
