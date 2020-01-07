@@ -1272,6 +1272,21 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://dart-test-results-approved-results/epilogue.txt"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "gsutil check for firestore approvals"
+  },
+  {
     "cmd": [],
     "name": "download previous results"
   },
@@ -1350,59 +1365,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@flaky.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.ensure approved_results.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@approved_results.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-armsimdbc64/approved_results.json",
-      "LATEST/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.gsutil download approved results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/apply_preapprovals.dart",
-      "LATEST/approved_results.json",
-      "--upload",
-      "gs://dart-test-results-approved-results/builders/vm-kernel-precomp-android-release-armsimdbc64/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.apply pre-approvals",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1811,26 +1773,6 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "LATEST/approved_results.json",
-      "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/approved_results.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "upload new results.gsutil upload approved_results.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/0/approved_results.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
       "0",
       "gs://dart-test-results/builders/vm-kernel-precomp-android-release-armsimdbc64/latest"
     ],
@@ -1852,14 +1794,11 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
-      "--failing",
-      "--approved",
-      "--unapproved"
+      "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "find tests that began failing",
+    "name": "find new test failures",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1874,7 +1813,6 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
@@ -1882,7 +1820,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "find tests that began failing (logs)",
+    "name": "find new test failures (logs)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
@@ -1897,11 +1835,8 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
-      "--passing",
-      "--approved",
-      "--unapproved"
+      "--passing"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find tests that began passing",
@@ -1919,70 +1854,6 @@
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
       "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--unapproved",
-      "--failing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved failing tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--logs",
-      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
-      "--logs-only",
-      "--unapproved",
-      "--failing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved failing tests (logs)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--unapproved",
-      "--passing"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "find unapproved passing tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
       "{\"test\":\"log\"}\n{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
@@ -1991,43 +1862,12 @@
     "cwd": "[CACHE]/builder/sdk",
     "name": "find ignored flaky test failure logs",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "",
-      "--human",
-      "--verbose",
-      "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
-      "[CACHE]/builder/sdk/LATEST/approved_results.json",
-      "--failing",
-      "--unapproved"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "test results",
-    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@",
       "@@@STEP_LOG_LINE@results.json@@@@",
       "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LINK@Test Results@https://dart-ci.firebaseapp.com/#commit=2d72510e447ab60a9728aeea2362d8be2cbd7789@@@",
       "@@@STEP_LINK@Documentation@https://goto.google.com/dart-status-file-free-workflow@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/approve_results.dart",
-      "--automated-approver",
-      "-b",
-      "vm-kernel-precomp-android-release-armsimdbc64",
-      "--successes-only",
-      "-y"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "approve unapproved successes"
   },
   {
     "name": "$result"

@@ -344,7 +344,6 @@ def GenTests(api):
       'basic',
       api.properties(shard_timeout='600', new_workflow_enabled=True),
       api.buildbucket.try_build(
-          revision='3456abce78ef',
           build_number=1357,
           builder='dart2js-strong-linux-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
@@ -362,6 +361,7 @@ def GenTests(api):
                     api.raw_io.output_text('123', name='latest')),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
+      api.step_data('gsutil check for firestore approvals', retcode=1),
   )
 
   yield api.test(
@@ -443,6 +443,7 @@ def GenTests(api):
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
+      api.step_data('gsutil check for firestore approvals', retcode=1),
   )
 
   yield api.test(
@@ -462,6 +463,7 @@ def GenTests(api):
           parent_fileset_name='test'),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
+      api.step_data('gsutil check for firestore approvals', retcode=1),
   )
 
   yield api.test(

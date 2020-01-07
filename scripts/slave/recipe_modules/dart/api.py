@@ -309,7 +309,7 @@ class DartApi(recipe_api.RecipeApi):
     return str(builder)
 
 
-  def _download_results(self, latest):
+  def _download_results(self, latest, firestore_approvals):
     filenames = ['results.json', 'flaky.json']
     builder = self._get_builder_dir()
     results_path = self.m.path['checkout'].join('LATEST')
@@ -324,7 +324,7 @@ class DartApi(recipe_api.RecipeApi):
         results_path,
         name='download previous results',
         ok_ret='any' if self._report_new_results() else {0})
-    if self._require_manual_approvals():
+    if not firestore_approvals and self._require_manual_approvals():
       self.m.file.write_text(
         'ensure approved_results.json exists',
         results_path.join('approved_results.json'), '')
@@ -395,7 +395,8 @@ class DartApi(recipe_api.RecipeApi):
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
-  def _upload_results_to_cloud(self, flaky_json_str, logs_str, results_str):
+  def _upload_results_to_cloud(self, flaky_json_str, logs_str, results_str,
+                               firestore_approvals):
     builder = str(self.m.buildbucket.builder_name)
     build_revision = str(self.m.buildbucket.gitiles_commit.id)
     build_number = str(self.m.buildbucket.build.number)
@@ -406,7 +407,7 @@ class DartApi(recipe_api.RecipeApi):
     if not (builder.endswith('dev') or builder.endswith('stable')):
       self._upload_result('current_flakiness', 'single_directory',
                           'flaky_current_%s.json' % builder, flaky_json_str)
-    if self._require_manual_approvals():
+    if not firestore_approvals and self._require_manual_approvals():
       self.m.gsutil.upload(
           'LATEST/approved_results.json',
           'dart-test-results',
@@ -445,19 +446,19 @@ class DartApi(recipe_api.RecipeApi):
          ok_ret='any')
 
 
-  def _report_success(self, results_str):
+  def _report_success(self, results_str, firestore_approvals):
     if results_str:
       access_token = self.m.service_account.default().get_access_token(
           ['https://www.googleapis.com/auth/cloud-platform'])
       self.m.step(
-          'check for unapproved new failures', [
+          'test results' if firestore_approvals else 'new test results', [
               self.dart_executable(), self.m.path['checkout'].join(
                   'tools', 'bots', 'get_builder_status.dart'), '-b',
               self.m.buildbucket.builder_name, '-n',
               self.m.buildbucket.build.number, '-a',
               self.m.raw_io.input_text(access_token)
           ],
-          ok_ret='any')
+          ok_ret={0} if firestore_approvals else 'any')
 
 
   def _extend_results_records(self, results_str, prior_results_path,
@@ -474,7 +475,8 @@ class DartApi(recipe_api.RecipeApi):
     ]).raw_io.output_text
 
 
-  def _present_results(self, logs_str, results_str, flaky_json_str):
+  def _present_results(self, logs_str, results_str, flaky_json_str,
+                       firestore_approvals):
     # CQ with approvals:
     #   unapproved new test failures
     #   unapproved new test failures (logs)
@@ -505,7 +507,7 @@ class DartApi(recipe_api.RecipeApi):
             self.m.path['checkout'].join('LATEST', 'results.json'),
             self.m.raw_io.input_text(results_str),
     ]
-    if self._require_manual_approvals():
+    if not firestore_approvals and self._require_manual_approvals():
       args.append(self.m.path['checkout']
                   .join('LATEST', 'approved_results.json'))
     args_logs = ["--logs",
@@ -516,7 +518,7 @@ class DartApi(recipe_api.RecipeApi):
     if self._report_new_results():
       judgement_args.append('--judgement')
     builder_name = self.m.buildbucket.builder_name
-    if self._require_manual_approvals():
+    if not firestore_approvals and self._require_manual_approvals():
       if builder_name.endswith('-try'):
         links["unapproved new test failures"] = self.m.step(
             'find unapproved new test failures',
@@ -591,9 +593,19 @@ class DartApi(recipe_api.RecipeApi):
             'find ignored flaky test failure logs',
             args + args_logs + ["--flaky"],
             stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-    self._report_success(results_str)
     with self.m.step.defer_results():
-      self.m.step('test results', judgement_args)
+      # This call finishes with a step that the following links can be added to.
+      self._report_success(results_str, firestore_approvals)
+      if not firestore_approvals:
+        self.m.step('test results', judgement_args)
+      # Construct different results links for tryjobs and CI jobs
+      if builder_name.endswith('-try'):
+        patchset = self.commit_id().replace('refs/changes/', '')
+        log_url = 'https://dart-ci.firebaseapp.com/cl/%s' % patchset
+      else:
+        log_url = (
+            'https://dart-ci.firebaseapp.com/#commit=%s' % self.commit_id())
+      self.m.step.active_result.presentation.links['Test Results'] = log_url
       doc_url = 'https://goto.google.com/dart-status-file-free-workflow'
       self.m.step.active_result.presentation.links['Documentation'] = doc_url
       # Show only the links with non-empty output (something happened).
@@ -870,11 +882,15 @@ class DartApi(recipe_api.RecipeApi):
     # If there are no test steps, steps will be empty.
     if self._run_new_steps() and steps:
       with self.m.context(cwd=self.m.path['checkout']):
+        firestore_approvals = self.m.gsutil.list(
+            'gs://dart-test-results-approved-results/epilogue.txt',
+            name='check for firestore approvals',
+            ok_ret='any').retcode == 0
         # Note: The pre-approval script relies on this being a nested step named
         # download_previous_results that contains gsutil_find_latest_build.
         with self.m.step.nest('download previous results'):
           latest, _ = self._get_latest_tested_commit()
-          self._download_results(latest)
+          self._download_results(latest, firestore_approvals)
         with self.m.step.nest('deflaking'):
           for step in steps:
             if step.is_test_py_step:
@@ -896,17 +912,19 @@ class DartApi(recipe_api.RecipeApi):
           with self.m.step.nest('upload new results'):
             if not self.m.buildbucket.builder_name.endswith('try'):
               self._upload_results_to_cloud(flaky_json_str, logs_str,
-                                            results_str)
+                                            results_str, firestore_approvals)
               self._upload_results_to_bq(results_str)
             if results_str:
               self._publish_results(results_str)
         finally:
-          self._present_results(logs_str, results_str, flaky_json_str)
+          self._present_results(logs_str, results_str, flaky_json_str,
+                                firestore_approvals)
         # Approve unapproved successes if the build is green (an exception would
         # have been thrown above if it was red). If we approve successes when
         # the builder is red, then a commit that both fixes and breaks tests
         # would turn the builder red and leave the builder red when reverted.
-        self._approve_successes()
+        if not firestore_approvals:
+          self._approve_successes()
 
 
   def download_browser(self, runtime, version):
