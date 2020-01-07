@@ -783,6 +783,13 @@ TRYBOTS = freeze({
                     'buildername': 'GPU FYI Linux Builder',
                     'tester': 'Linux FYI Release (Intel HD 630)',
                 }),
+            'gpu-fyi-try-linux-intel-sk-dawn-rel':
+                simple_bot({
+                    'mastername':
+                        'chromium.gpu.fyi',
+                    'buildername':
+                        'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)',
+                }),
             'gpu-fyi-try-linux-intel-skv':
                 simple_bot({
                     'mastername': 'chromium.gpu.fyi',

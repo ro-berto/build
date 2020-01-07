@@ -739,6 +739,20 @@ SPEC = {
             },
             'serialize_tests': True,
         },
+        'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            'bot_type': 'builder_tester',
+            'testing': {
+                'platform': 'linux',
+            },
+            'serialize_tests': True,
+        },
         'GPU FYI Fuchsia Builder': {
             'chromium_config':
                 'chromium',
