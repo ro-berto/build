@@ -201,25 +201,21 @@ class GomaApi(recipe_api.RecipeApi):
         step_result.presentation.status = self.m.step.WARNING
 
       with self.m.context(infra_steps=True):
-        try:
-          if not self._use_luci_auth:
-            self.m.cipd.set_service_account_credentials(
-                self.service_account_json_path)
 
-          def Download(platform, output_dir):
-            goma_package = ('infra_internal/goma/client/%s' % platform)
-            self.m.cipd.ensure(output_dir, {goma_package: client_type})
+        def Download(platform, output_dir):
+          goma_package = ('infra_internal/goma/client/%s' % platform)
+          ensure_file = self.m.cipd.EnsureFile().add_package(
+              goma_package, client_type)
+          self.m.cipd.ensure(output_dir, ensure_file)
 
-          self._goma_dir = self.default_client_path
-          Download('${platform}', self._goma_dir)
-          if additional_platforms:
-            assert isinstance(additional_platforms, list) or isinstance(
-                additional_platforms, tuple)
-            self._additional_platforms = additional_platforms
-            for platform in self._additional_platforms:
-              Download(platform, self._extra_package_path.join(platform))
-        finally:
-          self.m.cipd.set_service_account_credentials(None)
+        self._goma_dir = self.default_client_path
+        Download('${platform}', self._goma_dir)
+        if additional_platforms:
+          assert isinstance(additional_platforms, list) or isinstance(
+              additional_platforms, tuple)
+          self._additional_platforms = additional_platforms
+          for platform in self._additional_platforms:
+            Download(platform, self._extra_package_path.join(platform))
         return self._goma_dir
 
   def additional_goma_dir(self, platform):
