@@ -392,13 +392,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     def _get_flakes_step_text(flake_info, suite):
       """Returns a formatted step text for known flaky tests."""
-      _, text_lines = self.limit_failures([
-          '%s: crbug.com/%s' %
-          (t,
-           flake_info.get(
-               (suite.name_of_step_for_suffix('with patch'), t), {}).get(
-                   'monorail_issue', 'N/A')) for t in suite.known_flaky_failures
-      ])
+      _, text_lines = self.limit_failures(
+          sorted([
+              '%s: crbug.com/%s' %
+              (t,
+               flake_info.get(
+                   (suite.name_of_step_for_suffix('with patch'), t), {}).get(
+                       'monorail_issue', 'N/A'))
+              for t in suite.known_flaky_failures
+          ]))
 
       text_lines.append(
           '<br>If the results are incorrect, please file a bug at: '
