@@ -3220,7 +3220,7 @@ deterministic errors.
 
 &emsp; **@property**<br>&mdash; **def [canonical](/scripts/slave/recipe_modules/test_utils/api.py#69)(self):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#800)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#802)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#100)(data):**
 
@@ -3235,7 +3235,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#813)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#815)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3314,7 +3314,7 @@ Returns:
   A tuple of (list of test suites with invalid results,
               list of test suites which failed including invalid results)
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#497)(self, caller_api, test_suites, retry_failed_shards=False):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#499)(self, caller_api, test_suites, retry_failed_shards=False):**
 
 Runs tests and returns failures.
 
@@ -3332,11 +3332,11 @@ Returns: A tuple (invalid_test_suites, all_failing_test_suites).
       otherwise unspecified reasons. This is a superset of
       invalid_test_suites.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#640)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#642)(self, caller_api, test_suite):**
 
 Summarizes a failing test suite that is not going to be retried.
 
-&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#701)(self, caller_api, test_suites):**
+&mdash; **def [summarize\_findit\_flakiness](/scripts/slave/recipe_modules/test_utils/api.py#703)(self, caller_api, test_suites):**
 
 Exports a summary of flakiness for post-processing by FindIt.
 
@@ -3360,7 +3360,7 @@ This function emits a step with a fixed name, and metadata for FindIt.
 Before making changes to this function, check with the FindIt team to ensure
 that their post-processing will still work correctly.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#600)(self, caller_api, test_suite):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#602)(self, caller_api, test_suite):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3375,7 +3375,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#803)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#805)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -5070,23 +5070,23 @@ task that:
 
 [DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#129)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#137)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
-&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#83)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
+&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#84)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
 
 &mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#73)(api, version=None):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#94)(api, git_hash, path):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#98)(api, git_hash, path):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [Install7za](/scripts/slave/recipes/flutter/flutter.py#47)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [Install7za](/scripts/slave/recipes/flutter/flutter.py#48)(api):**
 
-&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#61)(api):**
+&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#62)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#164)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#172)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#99)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#104)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   

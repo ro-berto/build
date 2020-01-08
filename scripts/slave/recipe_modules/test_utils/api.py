@@ -425,14 +425,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # perspective.
       flake_info = self._query_and_mark_flaky_failures(failed_test_suites)
       for t in failed_test_suites[:]:
-        if (set(t.deterministic_failures('with patch')) -
-            t.known_flaky_failures):
+        if not t.known_flaky_failures:
           continue
 
-        failed_test_suites.remove(t)
         self.m.python.succeeding_step(
             'ignoring failures of %s' % t.name_of_step_for_suffix(suffix),
             _get_flakes_step_text(flake_info, t))
+
+        if (set(
+            t.deterministic_failures('with patch')) == t.known_flaky_failures):
+          failed_test_suites.remove(t)
 
     failed_and_invalid_suites = list(
         set(failed_test_suites + invalid_test_suites))

@@ -1153,8 +1153,11 @@ def GenTests(api):
               }]
           })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
-      api.post_process(post_process.DoesNotRun,
+      api.post_process(post_process.MustRun,
                        'ignoring failures of base_unittests (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'ignoring failures of base_unittests (with patch)',
+                       ['Test.Two: crbug.com/999']),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(

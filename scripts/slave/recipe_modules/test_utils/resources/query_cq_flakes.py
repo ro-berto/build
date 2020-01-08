@@ -28,10 +28,10 @@ def query_and_write_flakes(input_path, output_path):
   with open(input_path, 'r') as f:
     input_json = json.load(f)
 
-  params = urllib.urlencode(input_json)
-  response = urllib2.urlopen(urllib2.Request(_FLAKE_SERVICE_ENDPOINT, params))
+  response = urllib2.urlopen(
+      urllib2.Request(url=_FLAKE_SERVICE_ENDPOINT, data=json.dumps(input_json)))
   with open(output_path, 'w') as f:
-    f.write(response)
+    f.write(response.read())
 
 
 def main():

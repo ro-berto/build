@@ -50,14 +50,14 @@ class QueryCQFlakesTest(unittest.TestCase):
 
     json.dump(input_json, input_file)
     input_file.flush()
-    mock_url_open.return_value = json.dumps(output_json)
+    mock_url_open.return_value.read.return_value = json.dumps(output_json)
 
     query_cq_flakes.query_and_write_flakes(input_file.name, output_file.name)
     output_file.flush()
 
     self.assertEqual(
         'https://findit-for-me.appspot.com/_ah/api/findit/v1/get_cq_flakes',
-        mock_url_request.call_args[0][0])
+        mock_url_request.call_args[1]['url'])
     self.assertDictEqual(output_json, json.load(output_file))
 
 
