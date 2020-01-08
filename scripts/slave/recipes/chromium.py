@@ -1425,12 +1425,7 @@ def GenTests(api):
           builder='Linux remote_run Builder',
           build_number=77457,
           path_config='generic'),
-      api.override_step_data(
-          'ensure_goma.ensure_installed',
-          api.json.output({
-              'result': None
-          }),
-          retcode=1),
+      api.override_step_data('ensure_goma.ensure_installed', retcode=1),
   )
 
 
