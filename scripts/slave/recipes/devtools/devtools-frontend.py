@@ -10,6 +10,7 @@ DEPS = [
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
+  'depot_tools/git',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/path',
@@ -32,6 +33,7 @@ def RunSteps(api):
   _configure(api)
   with _in_builder_cache_depot_on_path(api):
     api.bot_update.ensure_checkout()
+    _git_clean(api)
     api.gclient.runhooks()
     api.chromium.ensure_goma()
     api.chromium.run_gn(use_goma=True)
@@ -69,6 +71,13 @@ def run_script(api, step_name, script):
   with api.step.defer_results():
     sc_path = api.path['checkout'].join('scripts', 'test', script)
     api.python(step_name, sc_path)
+
+
+# TODO(liviurau): remove this temp hack after devtools refactorings that 
+# involve .gitignore are done
+def _git_clean(api):
+  with api.context(cwd=api.path['checkout']):
+    api.git('clean', '-xf', '--', 'front_end')
 
 
 @contextmanager

@@ -70,6 +70,23 @@
   },
   {
     "cmd": [
+      "git",
+      "clean",
+      "-xf",
+      "--",
+      "front_end"
+    ],
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
