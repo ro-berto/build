@@ -289,28 +289,6 @@ SPEC = {
         'source_side_spec_file': 'chromium.memory.json',
       },
     },
-    'Linux Snapshot Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': [
-        'v8_tot',
-        'chromium_lkgr',
-        'show_v8_revision',
-      ],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'archive_build': True,
-      'gs_bucket': 'chromium-v8-snapshots',
-      'testing': {
-        'platform': 'linux',
-        'source_side_spec_file': 'chromium.linux.json',
-      },
-    },
     # GPU bots.
     'Win V8 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
