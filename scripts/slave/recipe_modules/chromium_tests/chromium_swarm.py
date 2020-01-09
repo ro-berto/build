@@ -5,74 +5,82 @@
 from . import steps
 
 SPEC = {
-  'builders': {
-    'Android N5 Swarm': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-        'TARGET_ARCH': 'arm',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-      'bot_type': 'builder_tester',
+    'builders': {
+        'android-kitkat-arm-rel': {
+            'chromium_config': 'android',
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+            },
+            'android_config': 'main_builder_mb',
+            'testing': {
+                'platform': 'linux',
+            },
+            'bot_type': 'builder_tester',
+        },
+        'android-marshmallow-arm64-rel': {
+            'chromium_config': 'android',
+            'gclient_config': 'chromium',
+            'gclient_apply_config': ['android'],
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+            },
+            'android_config': 'main_builder_mb',
+            'testing': {
+                'platform': 'linux',
+            },
+            'bot_type': 'builder_tester',
+        },
+        'linux-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+            },
+            'testing': {
+                'platform': 'linux',
+            },
+            'bot_type': 'builder_tester',
+        },
+        'mac-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+            },
+            'testing': {
+                'platform': 'mac',
+            },
+            'bot_type': 'builder_tester',
+        },
+        'win-rel': {
+            'chromium_config': 'chromium',
+            'chromium_apply_config': ['mb'],
+            'gclient_config': 'chromium',
+            'chromium_config_kwargs': {
+                'BUILD_CONFIG': 'Release',
+            },
+            'testing': {
+                'platform': 'win',
+            },
+            'bot_type': 'builder_tester',
+        },
     },
-    'Android N5X Swarm': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-        'TARGET_ARCH': 'arm',
-      },
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-      'bot_type': 'builder_tester',
-    },
-    'Linux Swarm': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
-      'testing': {
-        'platform': 'linux',
-      },
-      'bot_type': 'builder_tester',
-    },
-    'Mac Swarm': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
-      'testing': {
-        'platform': 'mac',
-      },
-      'bot_type': 'builder_tester',
-    },
-    'Windows Swarm': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
-      'testing': {
-        'platform': 'win',
-      },
-      'bot_type': 'builder_tester',
-    },
-  },
 }
+
+# TODO(crbug.com/955013): remove this when rename finished.
+_builders = SPEC['builders']
+_builders['Android N5 Swarm'] = _builders['android-kitkat-arm-rel']
+_builders['Android N5X Swarm'] = _builders['android-marshmallow-arm64-rel']
+_builders['Linux Swarm'] = _builders['linux-rel']
+_builders['Windows Swarm'] = _builders['win-rel']
+_builders['Mac Swarm'] = _builders['mac-rel']
