@@ -5070,33 +5070,33 @@ task that:
 
 [DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#227)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#229)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
-&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#174)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
+&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#176)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
 
 &mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/flutter.py#77)(api, fuchsia_dir, target_dir):**
 
-&mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#163)(api, version=None):**
+&mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#165)(api, version=None):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#188)(api, git_hash, path):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#190)(api, git_hash, path):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [Install7za](/scripts/slave/recipes/flutter/flutter.py#54)(api):**
 
-&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#152)(api):**
+&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#154)(api):**
 
 &mdash; **def [IsolateFuchsiaCtlDeps](/scripts/slave/recipes/flutter/flutter.py#89)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/flutter.py#68)(api, label):**
 
-&mdash; **def [RunFuchsiaDriverTests](/scripts/slave/recipes/flutter/flutter.py#138)(api):**
+&mdash; **def [RunFuchsiaDriverTests](/scripts/slave/recipes/flutter/flutter.py#140)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#262)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#264)(api):**
 
-&mdash; **def [SwarmFuchsiaTests](/scripts/slave/recipes/flutter/flutter.py#108)(api):**
+&mdash; **def [SwarmFuchsiaTests](/scripts/slave/recipes/flutter/flutter.py#110)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#194)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#196)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   
@@ -5764,19 +5764,19 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-osx_sdk
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-tryserver
-[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/081c5b5979689733fe4bd1a7618943a061cc353f/recipes/README.recipes.md#recipe_modules-windows_sdk
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-osx_sdk
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/b92d20526b83edda0ccb9e79d00f916a61e16103/recipes/README.recipes.md#recipe_modules-windows_sdk
 [recipe_engine/recipe_modules/assertions]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/2438e081638a16b8de53752c5a78c807195ed186/README.recipes.md#recipe_modules-assertions
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/2438e081638a16b8de53752c5a78c807195ed186/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/cipd]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/2438e081638a16b8de53752c5a78c807195ed186/README.recipes.md#recipe_modules-cipd
