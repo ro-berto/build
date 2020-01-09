@@ -898,6 +898,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # If there are failures but we shouldn't deapply the patch, then we're
       # done.
       if not self._should_retry_with_patch_deapplied(task.affected_files):
+        self.m.python.succeeding_step(
+            'without patch steps are skipped',
+            '<br/>because this CL changed following recipe config paths:<br/>' +
+            '<br/>'.join(RECIPE_CONFIG_PATHS))
         for t in failing_tests:
           self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
         return None, failing_tests

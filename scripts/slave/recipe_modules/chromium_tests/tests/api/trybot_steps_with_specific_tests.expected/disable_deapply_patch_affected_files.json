@@ -638,6 +638,18 @@
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder",
+    "name": "without patch steps are skipped",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>because this CL changed following recipe config paths:<br/>testing/buildbot/.*json$<br/>testing/buildbot/.*pyl$@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
     "name": "base_unittests (with patch summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Tests failed, not being retried<br/>Test.Two<br/>@@@",
