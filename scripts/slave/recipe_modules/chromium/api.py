@@ -969,7 +969,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.file.rmtree('delete deprecated Xcode cache', old_cache)
 
   def ensure_mac_toolchain(self):
-    if (not self.c.mac_toolchain.enabled or self.c.HOST_PLATFORM is not 'mac'):
+    if not self.c.mac_toolchain.enabled:
       return
 
     if 'xcode_build_version' not in self.m.properties:

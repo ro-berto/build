@@ -665,7 +665,9 @@ def download_vr_test_apks(c):
 
 @config_ctx()
 def mac_toolchain(c):
-  # Check for c.HOST_PLATFORM = mac is done in recipe
+  if c.HOST_PLATFORM != 'mac':  # pragma: no cover
+    raise BadConf('Cannot setup Xcode on "%s"' % c.HOST_PLATFORM)
+
   c.mac_toolchain.enabled = True
   # TODO(crbug.com/797051): remove this when all builds switch to the new Xcode
   # flow.
