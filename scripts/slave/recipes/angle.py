@@ -23,9 +23,10 @@ DEPS = [
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
-  'target_cpu': Property(default=None, kind=str),
-  'debug': Property(default=False, kind=bool),
-  'clang': Property(default=None, kind=bool),
+    'target_cpu': Property(default=None, kind=str),
+    'debug': Property(default=False, kind=bool),
+    'clang': Property(default=None, kind=bool),
+    'uwp': Property(default=False, kind=bool),
 }
 
 
@@ -53,17 +54,20 @@ def _CheckoutSteps(api):
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
 
-def _OutPath(target_cpu, debug, clang):
+
+def _OutPath(target_cpu, debug, clang, uwp):
   out_dir = 'debug' if debug else 'release'
   if clang:
     out_dir += '_clang'
+  if uwp:
+    out_dir += '_uwp'
   if target_cpu:
     out_dir += '_' + target_cpu
   return out_dir
 
 
 # _GNGenBuilds calls 'gn gen'.
-def _GNGenBuilds(api, target_cpu, debug, clang, out_dir):
+def _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir):
   gn_bool = {True: 'true', False: 'false'}
 
   # Prepare the arguments to pass in.
@@ -90,6 +94,9 @@ def _GNGenBuilds(api, target_cpu, debug, clang, out_dir):
   if target_cpu:
     args.append('target_cpu="%s"' % target_cpu)
 
+  if uwp:
+    args.append('target_os=winuwp')
+
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,
                ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
@@ -111,7 +118,7 @@ def _BuildSteps(api, out_dir, clang):
     api.step('compile with ninja', ninja_cmd)
 
 
-def RunSteps(api, target_cpu, debug, clang):
+def RunSteps(api, target_cpu, debug, clang, uwp):
 
   env = {}
   if api.platform.is_win:
@@ -120,9 +127,9 @@ def RunSteps(api, target_cpu, debug, clang):
 
   with api.context(env=env):
     _CheckoutSteps(api)
-    out_dir = _OutPath(target_cpu, debug, clang)
+    out_dir = _OutPath(target_cpu, debug, clang, uwp)
     with api.osx_sdk('mac'):
-      _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
+      _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir)
       _BuildSteps(api, out_dir, clang)
 
 
@@ -172,6 +179,18 @@ def GenTests(api):
           clang=False,
           debug=False,
           target_cpu='x86',
+          mastername='client.angle',
+          buildername='windows',
+          buildnumber='1234',
+          bot_id='test_slave'),
+  )
+  yield api.test(
+      'winuwp_dbg_msvc_x64',
+      api.platform('win', 64),
+      api.properties(
+          clang=False,
+          debug=True,
+          uwp=True,
           mastername='client.angle',
           buildername='windows',
           buildnumber='1234',
