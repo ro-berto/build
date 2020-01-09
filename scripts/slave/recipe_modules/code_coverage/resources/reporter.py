@@ -6,6 +6,7 @@
 import json
 import logging
 import os
+import platform
 import subprocess
 
 
@@ -30,11 +31,19 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
 
   try:
     subprocess_cmd = [
-        cov_tool_path, 'show', '-format=html',
+        cov_tool_path,
+        'show',
+        '-format=html',
         '-output-dir=' + report_output_dir_path,
-        '-instr-profile=' + profile_input_file_path, '-Xdemangler', 'c++filt',
-        '-Xdemangler', '-n', binaries[0]
+        '-instr-profile=' + profile_input_file_path,
     ]
+
+    if platform.system() == 'Windows':
+      subprocess_cmd.extend(['-Xdemangler', 'llvm-undname.exe'])
+    else:
+      subprocess_cmd.extend(['-Xdemangler', 'c++filt', '-Xdemangler', '-n'])
+
+    subprocess_cmd.append(binaries[0])
     for binary in binaries[1:]:
       subprocess_cmd.extend(['-object', binary])
     if sources:

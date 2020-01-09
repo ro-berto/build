@@ -106,14 +106,27 @@ class MakeReportTest(unittest.TestCase):
       llvm_cov = '/usr/bin/llvm_cov'
       binaries = ['binary1', 'binary2']
       sources = ['base/file1.cc', 'base/file2.cc']
-      reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
-                               sources)
+
+      with mock.patch('platform.system', return_value='Linux'):
+        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
+                                 sources)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
               '-output-dir=out-dir', '-instr-profile=merge.profdata',
               '-Xdemangler', 'c++filt', '-Xdemangler', '-n', 'binary1',
               '-object', 'binary2', 'base/file1.cc', 'base/file2.cc'
+          ]), mock_run.call_args)
+
+      with mock.patch('platform.system', return_value='Windows'):
+        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
+                                 sources)
+      self.assertEqual(
+          mock.call([
+              '/usr/bin/llvm_cov', 'show', '-format=html',
+              '-output-dir=out-dir', '-instr-profile=merge.profdata',
+              '-Xdemangler', 'llvm-undname.exe', 'binary1', '-object',
+              'binary2', 'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
 
