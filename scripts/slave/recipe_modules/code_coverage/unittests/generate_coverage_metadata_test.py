@@ -3,7 +3,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
 import os
 import sys
 import unittest
@@ -346,10 +345,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
-  @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator, '_get_coverage_data_in_json')
-  def test_generate_metadata_for_per_cl_coverage(
-      self, mock_get_coverage_data, mock_get_per_target_coverage_summary):
+  def test_generate_metadata_for_per_cl_coverage(self, mock_get_coverage_data):
     mock_get_coverage_data.return_value = {
         'data': [{
             'files': [{
@@ -371,9 +368,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }]
     }
 
-    # We don't care about the summaries for this test.
-    mock_get_per_target_coverage_summary.return_value = {}
-
     diff_mapping = {
         'dir/file.cc': {
             '2': [10, 'A line added by the patch.'],
@@ -382,7 +376,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }
     }
 
-    compressed_data, _ = generator._generate_metadata(
+    compressed_data = generator._generate_metadata(
         src_path='/path/to/src',
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
@@ -437,12 +431,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
-  @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator.repository_util, 'GetFileRevisions')
   @mock.patch.object(generator, '_get_coverage_data_in_json')
   def test_generate_metadata_for_full_repo_coverage(
-      self, mock_get_coverage_data, mock_GetFileRevisions,
-      mock_get_per_target_coverage_summary):
+      self, mock_get_coverage_data, mock_GetFileRevisions):
     # Number of files should not exceed 1000; otherwise sharding will happen.
     mock_GetFileRevisions.return_value = {
         '//dir1/file1.cc': ('hash1', 1234),
@@ -490,12 +482,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }]
     }
 
-    # We don't care about the summaries for this test.
-    mock_get_per_target_coverage_summary.return_value = {}
-
     component_mapping = {'dir1': 'Test>Component', 'dir2': 'Test>Component'}
 
-    compressed_data, _ = generator._generate_metadata(
+    compressed_data = generator._generate_metadata(
         src_path='/path/to/src',
         output_dir='/path/to/output_dir',
         profdata_path='/path/to/coverage.profdata',
@@ -673,52 +662,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     ]
 
     self.assertListEqual(expected_compressed_files, compressed_data['files'])
-
-
-  @mock.patch('psutil.cpu_count')
-  @mock.patch('subprocess.check_output')
-  def test_per_target_summaries(self, call, cpu_count):
-    summary_data = {
-        'data': {
-            'totals': {
-                'functions': {
-                    'count': 1,
-                    'covered': 1,
-                    'percent': 100
-                },
-                'instantiations': {
-                    'count': 1,
-                    'covered': 1,
-                    'percent': 100
-                },
-                'lines': {
-                    'count': 3,
-                    'covered': 3,
-                    'percent': 100
-                },
-                'regions': {
-                    'count': 1,
-                    'covered': 1,
-                    'notcovered': 0,
-                    'percent': 100
-                }
-            }
-        }
-    }
-    call.return_value = json.dumps(summary_data)
-    # llvm-cov should use (cpu_count - 5) threads
-    cpu_count.return_value = 100
-
-    summaries = generator._get_per_target_coverage_summary(
-        '/foo/bar/baz.profdata', '/path/to/llvm-cov', ['binary1'])
-
-    call.assert_called_with([
-        '/path/to/llvm-cov', 'export', '-skip-expansions', '-skip-functions',
-        '-num-threads', '95', '-summary-only', '-instr-profile',
-        '/foo/bar/baz.profdata', 'binary1'
-    ])
-    self.assertIn('binary1', summaries)
-    self.assertEqual(summaries['binary1'], summary_data['data']['totals'])
 
 
 if __name__ == '__main__':

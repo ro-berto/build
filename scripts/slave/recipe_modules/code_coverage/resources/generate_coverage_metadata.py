@@ -15,7 +15,6 @@ import psutil
 import stat
 import subprocess
 import sys
-import tempfile
 import time
 import zlib
 
@@ -294,10 +293,9 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 def _compute_llvm_args(profdata_path,
                        llvm_cov_path,
                        binaries,
-                       sources=None,
+                       sources,
                        num_threads=None,
-                       exclusions=None,
-                       summary_only=False):
+                       exclusions=None):
   # Use as many cpu cores as possible for parallel processing of huge data.
   # Leave 5 cpu cores out for other processes in the bot.
   cpu_count = num_threads or max(10, psutil.cpu_count() - 5)
@@ -313,9 +311,6 @@ def _compute_llvm_args(profdata_path,
 
   if exclusions:
     args.extend(['-ignore-filename-regex', exclusions])
-
-  if summary_only:
-    args.append('-summary-only')
 
   args.extend(['-instr-profile', profdata_path, binaries[0]])
   for b in binaries[1:]:
@@ -501,28 +496,6 @@ def _split_metadata_in_shards_if_necessary(
   return compressed_data
 
 
-def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries):
-  logging.info('Generating per-target coverage summaries ...')
-  summaries = {}
-  for binary in binaries:
-    args = _compute_llvm_args(
-        profdata_path, llvm_cov_path, [binary], summary_only=True)
-    try:
-      output = subprocess.check_output(args)
-      summaries[binary] = json.loads(output)['data']['totals']
-    except subprocess.CalledProcessError as e:
-      logging.warn('Summary for binary %s failed with return code %d', binary,
-                   e.returncode)
-      logging.warn('%s', e.output)
-      continue
-    except ValueError:
-      logging.warn('Invalid JSON output for binary %s', binary)
-      logging.warn('%s', output)
-      continue
-  logging.info('Done generating per-target coverage summaries')
-  return summaries
-
-
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
                        binaries, component_mapping, sources, diff_mapping,
                        exclusions):
@@ -544,11 +517,8 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
     exclusions: A regex string to exclude matches from aggregation.
 
   Returns:
-    A tuple (compressed_data, summaries) where:
-    compressed_data: A data structure that can be serialized according to the
-                     coverage metadata format.
-    summaries: A dict that maps binary name to a summary of that binary's
-               coverage data.
+    None. This method doesn't return anything, instead, it writes the produced
+    metadata to the provided |output_dir|.
   """
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
@@ -574,9 +544,6 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
         aggregation_util.get_aggregated_coverage_data_from_files(
             files_coverage_data, component_mapping))
 
-  summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
-                                            binaries)
-
   if not diff_mapping:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
         files_coverage_data, src_path, 'DEPS')
@@ -595,7 +562,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       'Dumping aggregated data (without all.json.gz) took %.0f minutes',
       minutes)
 
-  return compressed_data, summaries
+  return compressed_data
 
 
 def _convert_clang_summary_to_metadata(clang_summary):
@@ -726,16 +693,13 @@ def main():
       'Either component_mapping (for full-repo coverage) or diff_mapping '
       '(for per-cl coverage) must be specified.')
 
-  compressed_data, summaries = _generate_metadata(
+  compressed_data = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
       params.binaries, component_mapping, abs_sources, diff_mapping,
       params.exclusion_pattern)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
-  with open(os.path.join(params.output_dir, 'per_target_summaries.json'),
-            'wb') as f:
-    json.dump(summaries, f)
   _create_index_html(params.output_dir)
 
 
