@@ -95,7 +95,7 @@ def _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir):
     args.append('target_cpu="%s"' % target_cpu)
 
   if uwp:
-    args.append('target_os=winuwp')
+    args.append('target_os="winuwp"')
 
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,

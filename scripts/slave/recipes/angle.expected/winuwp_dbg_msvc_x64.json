@@ -110,7 +110,7 @@
       "--root=[CACHE]\\builder\\angle",
       "gen",
       "//out/debug_uwp",
-      "--args=build_angle_gles1_conform_tests=true is_debug=true is_component_build=false symbol_level=1 is_clang=false target_os=winuwp",
+      "--args=build_angle_gles1_conform_tests=true is_debug=true is_component_build=false symbol_level=1 is_clang=false target_os=\"winuwp\"",
       "--check"
     ],
     "cwd": "[CACHE]\\builder\\angle",
