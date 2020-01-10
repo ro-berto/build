@@ -755,7 +755,7 @@ def GenTests(api):
                   FAILURE_THEN_SUCCESS_DATA, retcode=0),
               failure=False)),
       api.post_process(post_process.StepTextContains,
-                       'base_unittests (retry summary)',
+                       'base_unittests (test results summary)',
                        ['ignored', 'Test.Two']),
       api.post_process(post_process.DropExpectation),
   )
@@ -1263,8 +1263,11 @@ def GenTests(api):
           'test_pre_run (without patch).[trigger] base_unittests '
           '(without patch)', ['--gtest_filter=Test.One']),
       api.post_process(
-          post_process.StepTextContains, 'base_unittests (retry summary)',
-          ['Tests ignored as they are known to be flaky:', 'Test.Two']),
+          post_process.StepTextContains,
+          'base_unittests (test results summary)', [
+              'Tests failed with patch, but ignored as they are known to be '
+              'flaky:<br/>Test.Two<br/>'
+          ]),
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
           json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
