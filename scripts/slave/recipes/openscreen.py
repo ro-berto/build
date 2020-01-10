@@ -54,10 +54,6 @@ def RunSteps(api):
                            'bin', 'llvm-symbolizer'))
   with api.context(cwd=checkout_path, env=env):
     host_tool_label = _GetHostToolLabel(api.platform)
-    api.step('install build tools',
-             [checkout_path.join('tools', 'install-build-tools.sh'),
-              host_tool_label])
-
     is_debug = str(api.properties.get('debug', False)).lower()
     is_asan = str(api.properties.get('is_asan', False)).lower()
     is_tsan = str(api.properties.get('is_tsan', False)).lower()

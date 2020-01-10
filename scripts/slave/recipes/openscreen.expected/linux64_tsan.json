@@ -138,14 +138,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/tools/install-build-tools.sh",
-      "linux64"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "name": "install build tools"
-  },
-  {
-    "cmd": [
       "[START_DIR]/openscreen/buildtools/linux64/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",

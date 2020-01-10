@@ -138,14 +138,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/tools/install-build-tools.sh",
-      "mac"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "name": "install build tools"
-  },
-  {
-    "cmd": [
       "[START_DIR]/openscreen/buildtools/mac/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",
