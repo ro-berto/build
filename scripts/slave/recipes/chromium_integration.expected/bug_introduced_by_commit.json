@@ -2188,7 +2188,7 @@
       "--",
       "python",
       "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
-      "--retry-summary-json",
+      "--test-results-summary-json",
       "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",
       "--build-number",
       "0",
@@ -2197,7 +2197,7 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--dest-filename",
-      "retry_summary.json",
+      "test_results_summary.json",
       "--slave-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
@@ -2217,9 +2217,9 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "blink_web_tests (retry summary)",
+    "name": "blink_web_tests (test results summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
+      "@@@STEP_TEXT@<br/>Tests failed with patch, and caused build to fail:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
