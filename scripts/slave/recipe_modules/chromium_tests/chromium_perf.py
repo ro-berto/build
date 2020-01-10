@@ -64,6 +64,8 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
     spec['gclient_apply_config'] += ['android']
   elif platform == 'chromeos':
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
+  elif platform == 'mac':
+    spec['chromium_apply_config'] = ['mac_toolchain']
 
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
