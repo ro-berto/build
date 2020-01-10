@@ -57,8 +57,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       files = self.m.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(files):
       path = str(path)
-      assert path.startswith(relative_to), (path, relative_to)
-      files[i] = path[len(relative_to):]
+      files[i] = self.m.path.relpath(path, relative_to)
     return files
 
   def ensure_checkout(self, bot_config, **kwargs):

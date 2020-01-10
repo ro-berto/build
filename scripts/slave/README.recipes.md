@@ -1052,7 +1052,7 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#64)(self, bot_config, \*\*kwargs):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#63)(self, bot_config, \*\*kwargs):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
