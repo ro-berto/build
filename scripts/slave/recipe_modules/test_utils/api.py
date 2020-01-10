@@ -55,17 +55,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
 
-  # Header for test failures that caused the build to fail.
-  NEW_FAILURES_TEXT = 'Tests failed with patch, and caused build to fail:'
-
-  # Header for ignored failures due to without patch.
-  IGNORED_FAILURES_TEXT = (
-      'Tests failed with patch, but ignored as they also fail without patch:')
-
-  # Header for ignored failures due to that they're known to be flaky.
-  IGNORED_FLAKES_TEXT = (
-      'Tests failed with patch, but ignored as they are known to be flaky:')
-
   def __init__(self, properties, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
     self._max_reported_failures = properties.max_reported_failures or 30
@@ -555,7 +544,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(
-      self, test_suite, new_failures, ignored_failures, ignored_flakes,
+      self, test_suite, new_failures, ignored_failures, ignored_flakes, suffix,
       new_failures_text, ignored_failures_text, ignored_flakes_text):
     """Summarizes new and ignored failures and flakes in the test_suite.
 
@@ -564,6 +553,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       new_failures: Failures that are potentially caused by the patched CL.
       ignored_failures: Failures that are not caused by the patched CL.
       ignored_flakes: Failures due to known flakes unrelated to the patched CL.
+      suffix: Should be either 'retry with patch summary' or 'retry summary'.
       new_failures_text: A user-visible string describing new_failures.
       ignored_failures_text: A user-visible string describing ignored_failures.
       ignored_flakes_text: A user-visible string describing ignored_flakes.
@@ -584,7 +574,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         'new_failures': new_failures,
     })
 
-    suffix = 'test results summary'
     # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
     if (test_suite.name == 'webkit_layout_tests' or
         test_suite.name == 'blink_web_tests'):
@@ -631,7 +620,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not valid_results:
       self._invalid_test_results(test_suite)
       result = self.m.python.succeeding_step(
-          '%s (test results summary)' % test_suite.name,
+          '%s (retry summary)' % test_suite.name,
           ('\n%s (without patch) did not produce valid results, '
            'so no failures can safely be ignored') % test_suite.name)
       result.presentation.status = self.m.step.FAILURE
@@ -644,10 +633,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
         "point in running 'without patch'. This is a recipe bug.")
     new_failures = failures - ignored_failures
 
+    new_failures_text = ('Failed with patch, succeeded without patch:')
+    ignored_failures_text = ('Tests ignored as they also fail without patch:')
+    ignored_flakes_text = ('Tests ignored as they are known to be flaky:')
     return self._summarize_new_and_ignored_failures(
         test_suite, new_failures, ignored_failures,
-        test_suite.known_flaky_failures, self.NEW_FAILURES_TEXT,
-        self.IGNORED_FAILURES_TEXT, self.IGNORED_FLAKES_TEXT)
+        test_suite.known_flaky_failures, 'retry summary', new_failures_text,
+        ignored_failures_text, ignored_flakes_text)
 
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
@@ -661,14 +653,18 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'and is not going to be retried, then a failing step should have '
           'already been emitted.')
 
+    new_failures_text = ('Tests failed, not being retried')
+    ignored_failures_text = ('Tests ignored')
+    ignored_flakes_text = ('Tests ignored as they are known to be flaky:')
     return self._summarize_new_and_ignored_failures(
         test_suite,
         new_failures,
         set(),
         test_suite.known_flaky_failures,
-        new_failures_text=self.NEW_FAILURES_TEXT,
-        ignored_failures_text=self.IGNORED_FAILURES_TEXT,
-        ignored_flakes_text=self.IGNORED_FLAKES_TEXT)
+        'with patch summary',
+        new_failures_text=new_failures_text,
+        ignored_failures_text=ignored_failures_text,
+        ignored_flakes_text=ignored_flakes_text)
 
   def _findit_potential_test_flakes(self, caller_api, test_suite):
     """Returns test failures that FindIt views as potential flakes.
@@ -791,12 +787,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
           output, sort_keys=True, indent=2)).splitlines()
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
-    """Archives the test results summary as JSON, storing it alongside the
-    results from the first run."""
+    """Archives the retry summary as JSON, storing it alongside the results
+    from the first run."""
     script = self.m.chromium.repo_resource(
         'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
     args = [
-        '--test-results-summary-json',
+        '--retry-summary-json',
         self.m.json.input(retry_summary), '--build-number',
         self.m.buildbucket.build.number, '--builder-name',
         self.m.buildbucket.builder_name, '--gs-bucket',

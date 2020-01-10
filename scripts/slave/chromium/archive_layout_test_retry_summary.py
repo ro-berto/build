@@ -3,10 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""This script is intended to archive test results summary from try bot retries
-of layout tests.
+"""This script is intended to archive retry summary results from
+try bot retries of layout tests.
 
-By keeping these test results summary in the same place as the
+By keeping these retry summary results in the same place as the
 layout test results from the first try (with patch), the retry
 results can be easily fetched from the same location as the results.
 """
@@ -35,12 +35,8 @@ def ArchiveRetrySummary(args):
 
 def _ParseArgs():
   parser = argparse.ArgumentParser()
-  parser.add_argument(
-      '--test-results-summary-json',
-      type=str,
-      required=True,
-      help='path to test results summary JSON file'
-  )
+  parser.add_argument('--retry-summary-json', type=str, required=True,
+                      help='path to retry summary JSON file')
   parser.add_argument('--builder-name', type=str, required=True)
   parser.add_argument('--build-number', type=str, required=True)
   parser.add_argument('--gs-bucket', type=str, required=True)

@@ -1600,7 +1600,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "base_unittests (test results summary)",
+    "name": "base_unittests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>base_unittests (without patch) did not produce valid results, so no failures can safely be ignored@@@",
       "@@@STEP_FAILURE@@@"
