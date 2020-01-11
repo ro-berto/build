@@ -931,6 +931,25 @@ TRYBOTS = freeze({
                     'tester_mastername': 'chromium.fyi',
                     'tester': 'mac-osxbeta-rel',
                 }),
+            'mac-coverage-rel': {
+                'bot_ids': [
+                    {
+                        'mastername': 'chromium.mac',
+                        'buildername': 'Mac Builder Code Coverage',
+                        'tester': 'Mac10.13 Tests Code Coverage',
+                    },
+                    {
+                        'mastername': 'chromium.gpu',
+                        'buildername': 'GPU Mac Builder Code Coverage',
+                        'tester': 'Mac Release (Intel) Code Coverage',
+                    },
+                    {
+                        'mastername': 'chromium.gpu',
+                        'buildername': 'GPU Mac Builder Code Coverage',
+                        'tester': 'Mac Retina Release (AMD) Code Coverage',
+                    },
+                ],
+            },
             'mac-rel': {
                 'bot_ids': [
                     {

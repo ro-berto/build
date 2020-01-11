@@ -24,6 +24,22 @@ SPEC = {
         'platform': 'mac',
       },
     },
+    'Mac Builder Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Mac10.13 Tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -36,6 +52,23 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Mac10.13 Tests Code Coverage': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'Mac Builder Code Coverage',
       'testing': {
         'platform': 'mac',
       },
