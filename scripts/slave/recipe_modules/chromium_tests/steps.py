@@ -224,9 +224,11 @@ class Test(object):
     """
     super(Test, self).__init__()
 
-    # Contains a set of flaky failures that are known to be flaky, and the
-    # content is supposed to be a subset of the set of deterministic failures.
-    self._known_flaky_failures = set()
+    # Contains a set of flaky failures that are known to be flaky, along with
+    # the according id of the monorail bug filed for the flaky test.
+    # The set of flaky tests is supposed to be a subset of the deterministic
+    # failures.
+    self._known_flaky_failures_map = {}
 
     # Contains a record of deterministic failures, one for each suffix. Maps
     # suffix to a list of tests.
@@ -323,8 +325,19 @@ class Test(object):
 
   @property
   def known_flaky_failures(self):
-    """Return tests that failed but known to be flaky at ToT."""
-    return self._known_flaky_failures
+    """Return a set of tests that failed but known to be flaky at ToT."""
+    return set(self._known_flaky_failures_map.keys())
+
+  def get_summary_of_known_flaky_failures(self):
+    """Returns a set of text to use to display in the test results summary."""
+    return {
+        '%s: crbug.com/%s' % (test_name, issue_id)
+        for test_name, issue_id in self._known_flaky_failures_map.iteritems()
+    }
+
+  def add_known_flaky_failure(self, test_name, monorail_issue):
+    """Add a known flaky failure on ToT along with the monorail issue id."""
+    self._known_flaky_failures_map[test_name] = monorail_issue
 
   def compile_targets(self):
     """List of compile targets needed by this test."""
@@ -529,6 +542,16 @@ class Test(object):
       return True, set(retry_shards_failures) - self.known_flaky_failures
 
     return False, None
+
+  # TODO(crbug.com/1040596): Remove this method and update callers to use
+  # |deterministic_failures('with patch')| once the bug is fixed.
+  #
+  # Currently, the sematics of this method is only a subset of
+  # |deterministic_failures('with patch')| due to that it's missing tests that
+  # failed "with patch", but passed in "retry shards with patch".
+  def has_failures_to_summarize(self):
+    _, failures = self.failures_including_retry('with patch')
+    return failures or self.known_flaky_failures
 
   def findit_notrun(self, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
