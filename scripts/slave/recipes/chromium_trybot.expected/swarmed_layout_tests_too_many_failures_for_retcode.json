@@ -2399,8 +2399,8 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_results_summary.py",
-      "--test-results-summary-json",
+      "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
+      "--retry-summary-json",
       "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",
       "--build-number",
       "0",
@@ -2417,7 +2417,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive_test_results_summary"
+    "name": "archive_retry_summary"
   },
   {
     "cmd": [

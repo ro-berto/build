@@ -589,7 +589,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if (test_suite.name == 'webkit_layout_tests' or
         test_suite.name == 'blink_web_tests'):
       dest_file = '%s.json' % suffix.replace(' ', '_')
-      self._archive_test_results_summary({
+      self._archive_retry_summary({
           'failures': new_failures,
           'ignored': ignored_failures
       }, dest_file)
@@ -790,21 +790,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step.presentation.logs['step_metadata'] = (json.dumps(
           output, sort_keys=True, indent=2)).splitlines()
 
-  def _archive_test_results_summary(self, test_results_summary, dest_filename):
+  def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the test results summary as JSON, storing it alongside the
     results from the first run."""
     script = self.m.chromium.repo_resource(
-        'scripts', 'slave', 'chromium',
-        'archive_layout_test_results_summary.py')
+        'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
     args = [
-        '--test-results-summary-json',
-        self.m.json.input(test_results_summary), '--build-number',
+        '--retry-summary-json',
+        self.m.json.input(retry_summary), '--build-number',
         self.m.buildbucket.build.number, '--builder-name',
         self.m.buildbucket.builder_name, '--gs-bucket',
         'gs://chromium-layout-test-archives', '--dest-filename', dest_filename
     ]
     args += self.m.build.slave_utils_args
-    self.m.build.python('archive_test_results_summary', script, args)
+    self.m.build.python('archive_retry_summary', script, args)
 
   def create_results_from_json(self, data):
     return TestResults(data)
