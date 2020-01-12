@@ -43,8 +43,6 @@ class BotMetadata(object):
 class Task(object):
   """Represents the configuration for build/test tasks.
 
-  The fields in the task are immutable.
-
   Attributes:
     bot: BotMetadata of the task runner bot.
     bot_update_step: Holds state on build properties. Used to pass state
@@ -57,26 +55,10 @@ class Task(object):
   """
 
   def __init__(self, bot, test_suites, bot_update_step, affected_files):
-    self._bot = bot
-    self._test_suites = test_suites
-    self._bot_update_step = bot_update_step
-    self._affected_files = affected_files
-
-  @property
-  def bot(self):
-    return self._bot
-
-  @property
-  def test_suites(self):
-    return self._test_suites
-
-  @property
-  def bot_update_step(self):
-    return self._bot_update_step
-
-  @property
-  def affected_files(self):
-    return self._affected_files
+    self.bot = bot
+    self.test_suites = test_suites
+    self.bot_update_step = bot_update_step
+    self.affected_files = affected_files
 
   def should_retry_failures_with_changes(self):
     return self.bot.config.get('retry_failed_shards', True)
@@ -867,6 +849,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return True
 
+  def _find_unrecoverable_test_suites(self, failing_tests):
+    """Finds which failing tests were irrecoverable.
+
+    Returns:
+      An array of test suites which irrecoverably failed.
+    """
+    unrecoverable_test_suites = []
+    for t in failing_tests:
+      # Summarize results.
+      is_successful = (self.m.test_utils.
+        summarize_test_with_patch_deapplied(self.m, t))
+
+      if not is_successful:
+        unrecoverable_test_suites.append(t)
+
+    return unrecoverable_test_suites
+
   def _run_tests_with_retries(self, task, deapply_changes):
     """This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
@@ -880,26 +879,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     with self.wrap_chromium_tests(task.bot.settings, task.test_suites):
       # Run the test. The isolates have already been created.
-      invalid_test_suites, failing_test_suites = (
+      invalid_test_suites, failing_tests = (
           self.m.test_utils.run_tests_with_patch(
-              self.m,
-              task.test_suites,
+              self.m, task.test_suites,
               retry_failed_shards=task.should_retry_failures_with_changes()))
 
       if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(task.test_suites)
 
-      def summarize_all_test_failures_with_no_retries():
-        for t in task.test_suites:
-          if t.has_failures_to_summarize():
-            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-
+      # An invalid result is unrecoverable.
       if invalid_test_suites:
-        summarize_all_test_failures_with_no_retries()
         return None, invalid_test_suites
 
-      if not failing_test_suites:
-        summarize_all_test_failures_with_no_retries()
+      # If there are no failures, we're done.
+      if not failing_tests:
         return None, []
 
       # If there are failures but we shouldn't deapply the patch, then we're
@@ -909,28 +902,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'without patch steps are skipped',
             '<br/>because this CL changed following recipe config paths:<br/>' +
             '<br/>'.join(RECIPE_CONFIG_PATHS))
-
-        for t in task.test_suites:
-          if t.has_failures_to_summarize():
-            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
-        return None, failing_test_suites
+        for t in failing_tests:
+          self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+        return None, failing_tests
 
       deapply_changes(task.bot_update_step)
       raw_result = self._build_and_isolate_failing_tests(
-          failing_test_suites, task.bot_update_step, 'without patch')
+          failing_tests, task.bot_update_step, 'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result, []
 
-      self.m.test_utils.run_tests(
-          self.m, failing_test_suites, 'without patch', sort_by_shard=True)
+      self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
+                                  sort_by_shard=True)
 
-      unrecoverable_test_suites = []
-      for t in task.test_suites:
-        if t.has_failures_to_summarize():
-          if not self.m.test_utils.summarize_test_with_patch_deapplied(
-              self.m, t):
-            unrecoverable_test_suites.append(t)
-      return None, unrecoverable_test_suites
+      return None, self._find_unrecoverable_test_suites(failing_tests)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(

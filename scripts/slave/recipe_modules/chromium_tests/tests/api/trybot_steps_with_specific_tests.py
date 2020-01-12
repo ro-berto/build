@@ -1016,16 +1016,13 @@ def GenTests(api):
               }]
           })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'ignoring failures of base_unittests (with patch)',
+                       ['Test.Two: crbug.com/999']),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (without patch)'),
-      api.post_process(
-          post_process.StepTextContains,
-          'base_unittests (test results summary)', [
-              'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
-          ]),
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
           json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
@@ -1066,12 +1063,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
-      api.post_process(
-          post_process.StepTextContains,
-          'base_unittests (test results summary)', [
-              'Tests failed with patch, and caused build to fail:<br/>'
-              'Test.Two<br/>'
-          ]),
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
           json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
@@ -1163,15 +1154,18 @@ def GenTests(api):
           })),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
+                       'ignoring failures of base_unittests (with patch)'),
+      api.post_process(post_process.StepTextContains,
+                       'ignoring failures of base_unittests (with patch)',
+                       ['Test.Two: crbug.com/999']),
+      api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
-      api.post_process(post_process.DoesNotRun,
-                       'base_unittests (without patch)'),
       api.post_process(
           post_process.StepTextContains,
-          'base_unittests (test results summary)', [
-              'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
-          ]),
+          'ignoring failures of base_unittests (retry shards with patch)',
+          ['Test.Two: crbug.com/999']),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
           json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
@@ -1271,10 +1265,8 @@ def GenTests(api):
       api.post_process(
           post_process.StepTextContains,
           'base_unittests (test results summary)', [
-              'Tests failed with patch, and caused build to fail:'
-              '<br/>Test.One<br/>',
               'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
+              'flaky:<br/>Test.Two<br/>'
           ]),
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
