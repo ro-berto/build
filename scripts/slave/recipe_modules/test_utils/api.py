@@ -264,27 +264,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.
 
-    This method updates |failed_test_suites| in place by updating their
-    |known_flaky_failures| property, which will be used to skip retrying known
-    flaky failures. A considered alternative is to directly modify the set of
-    deterministic failures, but wasn't chosen because it's more desirable to be
-    able to distinguish a skipped/forgiven failure from a success so that they
-    can be properly surfaced.
+    This method updates |failed_test_suites| in place, which will be used to
+    skip retrying known flaky failures. A considered alternative is to directly
+    modify the set of deterministic failures, but wasn't chosen because it's
+    more desirable to be able to distinguish a skipped/forgiven failure from a
+    success so that they can be properly surfaced.
 
     This feature is controlled by the should_exonerate_flaky_failures property,
     which allows switch on/off with ease and flexibility.
 
     Args:
       failed_test_suites ([steps.Test]): A list of failed test suites to check.
-
-    Returns:
-      A dict that maps from a (step_ui_name, test_name) tuple to another dict
-      with properties: 'affected_gerrit_changes' and 'monorail_issue'. If for
-      any reason, this method fails to query the known flakes, an empty dict is
-      returned.
     """
     if not failed_test_suites:
-      return {}
+      return
 
     tests_to_check = []
     for test_suite in failed_test_suites:
@@ -298,7 +291,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Bail out if there are too many failed tests because:
       # 1. It's unlikely they're all legitimate flaky failures.
       # 2. Avoid overloading the service.
-      return {}
+      return
 
     builder = self.m.buildbucket.build.builder
     flakes_input = {
@@ -331,13 +324,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if not result.json.output:
       result.presentation.step_text = 'Failed to get known flakes'
-      return {}
+      return
 
     if 'flakes' not in result.json.output:
       result.presentation.step_text = 'Response is ill-formed'
-      return {}
+      return
 
-    known_flakes = {}
+    test_suite = None
     for flake in result.json.output['flakes']:
       if ('affected_gerrit_changes' not in flake or
           'monorail_issue' not in flake or 'test' not in flake or
@@ -346,23 +339,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # Response is ill-formed. Don't expect to ever happen, but have this
         # check in place just in case.
         result.presentation.step_text = 'Response is ill-formed'
-        return {}
+        return
 
-      known_flakes[(flake['test']['step_ui_name'],
-                    flake['test']['test_name'])] = {
-                        'affected_gerrit_changes':
-                            flake['affected_gerrit_changes'],
-                        'monorail_issue':
-                            flake['monorail_issue'],
-                    }
+      for t in failed_test_suites:
+        if (t.name_of_step_for_suffix('with patch') == flake['test']
+            ['step_ui_name']):
+          t.add_known_flaky_failure(flake['test']['test_name'],
+                                    flake['monorail_issue'])
+          break
 
-    for test_suite in failed_test_suites:
-      for t in set(test_suite.deterministic_failures('with patch')):
-        if (test_suite.name_of_step_for_suffix('with patch'),
-            t) in known_flakes:
-          test_suite.known_flaky_failures.add(t)
 
-    return known_flakes
+
 
   def run_tests(self,
                 caller_api,
@@ -400,24 +387,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       A tuple of (list of test suites with invalid results,
                   list of test suites which failed including invalid results)
     """
-
-    def _get_flakes_step_text(flake_info, suite):
-      """Returns a formatted step text for known flaky tests."""
-      _, text_lines = self.limit_failures(
-          sorted([
-              '%s: crbug.com/%s' %
-              (t,
-               flake_info.get(
-                   (suite.name_of_step_for_suffix('with patch'), t), {}).get(
-                       'monorail_issue', 'N/A'))
-              for t in suite.known_flaky_failures
-          ]))
-
-      text_lines.append(
-          '<br>If the results are incorrect, please file a bug at: '
-          'http://bit.ly/37I61c2')
-      return self.format_step_text([('Known to be flaky:', text_lines)])
-
     if not hasattr(caller_api, 'chromium_swarming'):
       self.m.python.failing_step(
           'invalid caller_api',
@@ -425,7 +394,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
 
-    flake_info = {}
     if self._should_exonerate_flaky_failures:
       # If *all* the deterministic failures are known flaky tests, a test suite
       # will not be considered failure anymore, and thus will not be retried.
@@ -436,14 +404,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # indices. One could implement such a connection, but the cost is high,
       # while return is very low from both the CQ cycle time and resource usage
       # perspective.
-      flake_info = self._query_and_mark_flaky_failures(failed_test_suites)
+      self._query_and_mark_flaky_failures(failed_test_suites)
       for t in failed_test_suites[:]:
         if not t.known_flaky_failures:
           continue
-
-        self.m.python.succeeding_step(
-            'ignoring failures of %s' % t.name_of_step_for_suffix(suffix),
-            _get_flakes_step_text(flake_info, t))
 
         if (set(
             t.deterministic_failures('with patch')) == t.known_flaky_failures):
@@ -490,18 +454,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # that both the original and retry runs fail due to the same flaky test.
         def _still_failing(suite):
           valid, failures = suite.failures_including_retry(suffix)
-          if not valid:
-            return True
-
-          if failures:
-            return True
-
-          if suite.known_flaky_failures:
-            self.m.python.succeeding_step(
-                ('ignoring failures of %s' %
-                 t.name_of_step_for_suffix(retry_suffix)),
-                _get_flakes_step_text(flake_info, suite))
-          return False
+          return (not valid) or failures
 
         failed_and_invalid_suites = [
             t for t in failed_and_invalid_suites if _still_failing(t)
@@ -603,6 +556,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
          [ignored_failures_text, ignored_failures],
          [ignored_flakes_text, ignored_flakes]])
 
+    if ignored_flakes:
+      step_text += ('<br/>If the mentioned known flaky tests are incorrect, '
+                    'please file a bug at: http://bit.ly/37I61c2<br/>')
+
     result = self.m.python.succeeding_step(step_name, step_text)
     if new_failures:
       result.presentation.status = self.m.step.FAILURE
@@ -646,8 +603,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return self._summarize_new_and_ignored_failures(
         test_suite, new_failures, ignored_failures,
-        test_suite.known_flaky_failures, self.NEW_FAILURES_TEXT,
-        self.IGNORED_FAILURES_TEXT, self.IGNORED_FLAKES_TEXT)
+        test_suite.get_summary_of_known_flaky_failures(),
+        self.NEW_FAILURES_TEXT, self.IGNORED_FAILURES_TEXT,
+        self.IGNORED_FLAKES_TEXT)
 
   def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
@@ -665,7 +623,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite,
         new_failures,
         set(),
-        test_suite.known_flaky_failures,
+        test_suite.get_summary_of_known_flaky_failures(),
         new_failures_text=self.NEW_FAILURES_TEXT,
         ignored_failures_text=self.IGNORED_FAILURES_TEXT,
         ignored_flakes_text=self.IGNORED_FLAKES_TEXT)
