@@ -8,6 +8,8 @@ import copy
 
 from recipe_engine.types import freeze
 
+from . import bot_spec
+
 
 MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
 
@@ -54,7 +56,7 @@ class BotConfig(object):
     return self._bot_ids
 
   def get_bot_type(self, bot_id):
-    return self._get(bot_id, 'bot_type', 'builder_tester')
+    return self._get(bot_id, 'bot_type', bot_spec.BUILDER_TESTER)
 
   def _consistent_get(self, getter, name, default=None):
     # This logic must be kept in sync with checkConsistentGet in

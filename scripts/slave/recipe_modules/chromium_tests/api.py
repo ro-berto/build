@@ -17,6 +17,7 @@ from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import bot_config_and_test_db as bdb_module
+from . import bot_spec
 from . import builders as builders_module
 from . import generators
 from . import trybots as trybots_module
@@ -171,7 +172,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.get('chromium_tests_apply_config', []):
       self.apply_config(c)
 
-    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
+    bot_type = override_bot_type or bot_config.get('bot_type',
+                                                   bot_spec.BUILDER_TESTER)
 
     if bot_config.get('set_component_rev'):
       # If this is a component build and the main revision is e.g. blink,
@@ -182,7 +184,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # (3) 'HEAD' for forced builds with unspecified gitiles commit.
       component_rev = self.m.buildbucket.gitiles_commit.id or 'HEAD'
 
-      if bot_type == 'tester':
+      if bot_type == bot_spec.TESTER:
         component_rev = self.m.properties.get(
             'parent_got_revision', component_rev)
       dep = bot_config.get('set_component_rev')
@@ -394,13 +396,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
-    bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
+    bot_type = override_bot_type or bot_config.get('bot_type',
+                                                   bot_spec.BUILDER_TESTER)
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
 
-    if bot_type in ['builder', 'builder_tester']:
+    if bot_type in bot_spec.BUILDER_TYPES:
       isolated_targets = [
           t.isolate_target
           for t in tests_including_triggered if t.uses_isolate
@@ -480,7 +483,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = bot_db.get_bot_config(mastername, buildername)
 
     bot_type = bot_config.get('bot_type')
-    assert bot_type in ('builder', 'builder_tester'), (
+    assert bot_type in bot_spec.BUILDER_TYPES, (
         'Called package_build for %s:%s, which is a "%s". '
         'package_build only supports "builder" and "builder_tester". '
         'This is a bug in your recipe.' % (mastername, buildername, bot_type))
@@ -659,7 +662,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # locally).
     bot_type = override_bot_type or bot_db.get_bot_config(
         mastername, buildername).get('bot_type')
-    if bot_type != 'tester':  # pragma: no cover
+    if bot_type != bot_spec.TESTER:  # pragma: no cover
       return
 
     # Protect against hard to debug mismatches between directory names
@@ -716,9 +719,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(
         cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
         env=self.m.chromium.get_env()):
-      bot_type = bot_config.get('bot_type', 'builder_tester')
+      bot_type = bot_config.get('bot_type', bot_spec.BUILDER_TESTER)
 
-      if bot_type in ('tester', 'builder_tester'):
+      if bot_type in bot_spec.TESTER_TYPES:
         isolated_targets = [
             t.isolate_target
             for t in tests if t.uses_isolate]
@@ -1029,7 +1032,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, timeout=3600)
 
     bot_type = bot.settings.get('bot_type')
-    if bot_type == 'tester':
+    if bot_type == bot_spec.TESTER:
       # Lookup GN args for the associated builder
       parent_mastername = bot.settings.get('parent_mastername', bot.mastername)
       parent_buildername = bot.settings.get('parent_buildername')
@@ -1048,7 +1051,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 name='lookup builder GN args')
 
     test_config = bot.settings.get_tests(bot_db)
-    if bot_type == 'tester':
+    if bot_type == bot_spec.TESTER:
       non_isolated_tests = [
           t for t in test_config.tests_on(bot.mastername, bot.buildername)
           if not t.uses_isolate]
@@ -1092,7 +1095,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
-    if package_transfer and bot_type in ('builder', 'builder_tester'):
+    if package_transfer and bot_type in bot_spec.BUILDER_TYPES:
       self.package_build(
           bot.mastername, bot.buildername, update_step, bot_db,
           reasons=package_transfer_reasons)
@@ -1102,11 +1105,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_properties=additional_trigger_properties)
     self.archive_build(bot.mastername, bot.buildername, update_step, bot_db)
 
-    if isolate_transfer and bot_type == 'tester':
+    if isolate_transfer and bot_type == bot_spec.TESTER:
       self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-    if package_transfer and bot_type == 'tester':
+    if package_transfer and bot_type == bot_spec.TESTER:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
           bot.mastername, bot.buildername, update_step, bot_db,
@@ -1413,7 +1416,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self._report_builders(bot.settings)
 
     # Applies build/test configurations from bot.settings.
-    self.configure_build(bot.settings, override_bot_type='builder_tester')
+    self.configure_build(
+        bot.settings, override_bot_type=bot_spec.BUILDER_TESTER)
 
     self.m.chromium.apply_config('trybot_flavor')
 
@@ -1469,7 +1473,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_db,
           compile_targets,
           tests_including_triggered,
-          override_bot_type='builder_tester')
+          override_bot_type=bot_spec.BUILDER_TESTER)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on
@@ -1490,7 +1494,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 % (bot_id.tester, bot_id.tester_mastername,
                    bot_id.buildername, bot_id.mastername))
       bot_type = bot_config.get_bot_type(bot_id)
-      if bot_type == 'builder_tester':
+      if bot_type == bot_spec.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return ('running %s \'%s\' on master %r'
               % (bot_type, bot_id.buildername, bot_id.mastername))
@@ -1507,10 +1511,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'buildername': bot_id.buildername,
             'tester_buildername': bot_id.tester,
             'tester_mastername': bot_id.tester_mastername,
-            'bot_type': 'tester',
+            'bot_type': bot_spec.TESTER,
         }
       bot_type = bot_config.get_bot_type(bot_id)
-      if bot_type == 'builder_tester':
+      if bot_type == bot_spec.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return {
           'mastername': bot_id.mastername,
