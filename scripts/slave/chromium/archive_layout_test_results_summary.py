@@ -3,10 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""This script is intended to archive retry summary results from
-try bot retries of layout tests.
+"""This script is intended to archive test results summary from try bot retries
+of layout tests.
 
-By keeping these retry summary results in the same place as the
+By keeping these test results summary in the same place as the
 layout test results from the first try (with patch), the retry
 results can be easily fetched from the same location as the results.
 """
@@ -27,16 +27,23 @@ def ArchiveRetrySummary(args):
   print 'Host name: %s' % socket.gethostname()
 
   gs_base = '/'.join([args.gs_bucket, args.builder_name, args.build_number])
-  slave_utils.GSUtilCopyFile(args.retry_summary_json, gs_base,
-                             cache_control='public, max-age=31556926',
-                             dest_filename=args.dest_filename)
+  slave_utils.GSUtilCopyFile(
+      args.test_results_summary_json,
+      gs_base,
+      cache_control='public, max-age=31556926',
+      dest_filename=args.dest_filename
+  )
   return 0
 
 
 def _ParseArgs():
   parser = argparse.ArgumentParser()
-  parser.add_argument('--retry-summary-json', type=str, required=True,
-                      help='path to retry summary JSON file')
+  parser.add_argument(
+      '--test-results-summary-json',
+      type=str,
+      required=True,
+      help='path to retry summary JSON file'
+  )
   parser.add_argument('--builder-name', type=str, required=True)
   parser.add_argument('--build-number', type=str, required=True)
   parser.add_argument('--gs-bucket', type=str, required=True)
@@ -49,10 +56,12 @@ def _ParseArgs():
 
 def main():
   args = _ParseArgs()
-  logging.basicConfig(level=logging.INFO,
-                      format='%(asctime)s %(filename)s:%(lineno)-3d'
-                             ' %(levelname)s %(message)s',
-                      datefmt='%y%m%d %H:%M:%S')
+  logging.basicConfig(
+      level=logging.INFO,
+      format='%(asctime)s %(filename)s:%(lineno)-3d'
+      ' %(levelname)s %(message)s',
+      datefmt='%y%m%d %H:%M:%S'
+  )
   return ArchiveRetrySummary(args)
 
 
