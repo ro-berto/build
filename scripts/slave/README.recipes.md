@@ -2142,7 +2142,7 @@ Returns:
   `end_revision` (included), ordered from older commits to newer commits.
 ### *recipe_modules* / [gae\_sdk](/scripts/slave/recipe_modules/gae_sdk)
 
-[DEPS](/scripts/slave/recipe_modules/gae_sdk/__init__.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
+[DEPS](/scripts/slave/recipe_modules/gae_sdk/__init__.py#5): [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
 
 #### **class [GaeSdkApi](/scripts/slave/recipe_modules/gae_sdk/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 

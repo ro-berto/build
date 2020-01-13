@@ -72,5 +72,7 @@ class GaeSdkApi(recipe_api.RecipeApi):
       plat (str): platform string, one of the PLAT_ local variables.
       dst (path.Path): The destination directory to extract it.
     """
-    pkg = self.package(plat)
-    self.m.cipd.ensure(dst, {pkg: self.latest_ref})
+    self.m.cipd.ensure(
+        dst,
+        self.m.cipd.EnsureFile().add_package(
+            self.package(plat), self.latest_ref))

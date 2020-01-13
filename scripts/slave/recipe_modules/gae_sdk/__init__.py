@@ -3,6 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'depot_tools/cipd',
+    'recipe_engine/cipd',
     'recipe_engine/platform',
 ]
