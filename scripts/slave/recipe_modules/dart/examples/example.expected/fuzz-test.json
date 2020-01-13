@@ -687,7 +687,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"make a fuzz\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/ReleaseX64/dart\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -832,11 +832,150 @@
     "name": "trigger shards for make a fuzz"
   },
   {
-    "cmd": [],
-    "name": "trigger shards for make a fuzz.ensure swarming",
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
+      "trigger",
+      "--shards",
+      "1",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
+      "--priority",
+      "25",
+      "--task-name",
+      "make a fuzz_shard_1/Linux/test_hash/fuzz-linux/-1",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "os",
+      "Linux",
+      "--dimension",
+      "pool",
+      "dart.tests",
+      "--named-cache",
+      "swarming_module_cache_vpython",
+      ".swarming_module_cache/vpython",
+      "--tag",
+      "bucket:ci",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "buildername:fuzz-linux",
+      "--tag",
+      "data:test_hash",
+      "--tag",
+      "name:make",
+      "--tag",
+      "spec_name:dart.ci:fuzz-linux",
+      "--tag",
+      "stepname:make a fuzz_shard_1",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module/cpython:infra/python/cpython/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module/cpython3:infra/python/cpython3/${platform}:TEST_VERSION",
+      "--cipd-package",
+      "tools/sdks:dart/dart-sdk/${platform}:",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/cpython/bin",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/cpython3/bin",
+      "--env-prefix",
+      "VPYTHON_VIRTUALENV_ROOT",
+      ".swarming_module_cache/vpython",
+      "--isolated",
+      "test_hash",
+      "--raw-cmd",
+      "--",
+      "out/ReleaseX64/dart",
+      "runtime/tools/dartfuzz/dartfuzz_test.dart",
+      "--isolates",
+      "8",
+      "--no-show-stats",
+      "--time",
+      "2700",
+      "--shards=2",
+      "--shard=1",
+      "--output-directory=${ISOLATED_OUTDIR}"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "fuzz-linux-be"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "trigger shards for make a fuzz.[trigger] make a fuzz_shard_1",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"make a fuzz_shard_1/Linux/test_hash/fuzz-linux/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"make a fuzz_shard_1/Linux/test_hash/fuzz-linux/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/out/ReleaseX64/dart",
+      "runtime/tools/dartfuzz/dartfuzz_test.dart",
+      "--isolates",
+      "8",
+      "--no-show-stats",
+      "--time",
+      "2700",
+      "--shards=2",
+      "--shard=2"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "fuzz-linux-be"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "make a fuzz_shard_2"
+  },
+  {
+    "cmd": [],
+    "name": "ensure swarming"
   },
   {
     "cmd": [
@@ -849,19 +988,10 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "fuzz-linux-be"
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
-    "name": "trigger shards for make a fuzz.ensure swarming.ensure_installed",
+    "name": "ensure swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -877,196 +1007,84 @@
   },
   {
     "cmd": [
-      "[CACHE]/swarming_client/swarming",
-      "spawn-tasks",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-json-input",
-      "{\"requests\": [{\"name\": \"make a fuzz_shard_1\", \"priority\": \"25\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"dart/dart-sdk/${platform}\", \"path\": \"tools/sdks\", \"version\": \"\"}]}, \"command\": [\"out/ReleaseX64/dart\", \"runtime/tools/dartfuzz/dartfuzz_test.dart\", \"--isolates\", \"8\", \"--no-show-stats\", \"--time\", \"2700\", \"--shards=3\", \"--shard=1\", \"--output-directory=${ISOLATED_OUTDIR}\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Linux\"}, {\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"pool\", \"value\": \"dart.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"inputs_ref\": {\"isolated\": \"test_hash\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": []}}]}, {\"name\": \"make a fuzz_shard_2\", \"priority\": \"25\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"dart/dart-sdk/${platform}\", \"path\": \"tools/sdks\", \"version\": \"\"}]}, \"command\": [\"out/ReleaseX64/dart\", \"runtime/tools/dartfuzz/dartfuzz_test.dart\", \"--isolates\", \"8\", \"--no-show-stats\", \"--time\", \"2700\", \"--shards=3\", \"--shard=2\", \"--output-directory=${ISOLATED_OUTDIR}\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Linux\"}, {\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"pool\", \"value\": \"dart.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"inputs_ref\": {\"isolated\": \"test_hash\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"1200\", \"outputs\": []}}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "fuzz-linux-be"
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "trigger shards for make a fuzz.trigger shards for make a fuzz",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"make a fuzz_shard_1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"make a fuzz_shard_2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@task UI: make a fuzz_shard_1@https://example.swarmingserver.appspot.com/task?id=0@@@",
-      "@@@STEP_LINK@task UI: make a fuzz_shard_2@https://example.swarmingserver.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/out/ReleaseX64/dart",
-      "runtime/tools/dartfuzz/dartfuzz_test.dart",
-      "--isolates",
-      "8",
-      "--no-show-stats",
-      "--time",
-      "2700",
-      "--shards=3",
-      "--shard=3"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "fuzz-linux-be"
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "name": "make a fuzz_shard_3"
-  },
-  {
-    "cmd": [
-      "[CACHE]/swarming_client/swarming",
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "/path/to/tmp/",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
       "collect",
       "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
       "-task-output-stdout",
-      "json",
-      "-output-dir",
-      "[CLEANUP]/tmp_tmp_1",
-      "0"
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
-    "infra_step": true,
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "make a fuzz_shard_1",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"0\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"make a fuzz_shard_1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: make a fuzz_shard_1@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: make a fuzz_shard_1@@@",
-      "@@@STEP_LINK@task isolated outputs: make a fuzz_shard_1@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
-    "cmd": [
-      "[CACHE]/swarming_client/swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
-      "-task-output-stdout",
-      "json",
-      "-output-dir",
-      "[CLEANUP]/tmp_tmp_2",
-      "1"
-    ],
-    "infra_step": true,
-    "name": "make a fuzz_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"make a fuzz_shard_2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"outputs_ref\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolated\": \"abc123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"namespace\": \"default-gzip\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: make a fuzz_shard_2@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: make a fuzz_shard_2@@@",
-      "@@@STEP_LINK@task isolated outputs: make a fuzz_shard_2@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/tmp_tmp_2/1/logs.json",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "read logs.json for make a fuzz_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@logs.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/tmp_tmp_2/1/results.json",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "read results.json for make a fuzz_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@results.json@@@"
-    ]
-  },
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "1 out of 3 aggregated steps failed: 1 out of 2 aggregated steps failed: Swarming task failed:\nhello world!"
-    },
     "name": "$result"
   }
 ]
