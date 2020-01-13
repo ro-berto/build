@@ -1548,15 +1548,6 @@ TRYBOTS = freeze({
                 }),
         },
     },
-    'tryserver.devtools-frontend': {
-        'builders': {
-            'devtools_frontend_linux_blink_rel':
-                simple_bot({
-                    'mastername': 'chromium.fyi',
-                    'buildername': 'linux-blink-rel-dummy',
-                }),
-        },
-    },
     'tryserver.v8': {
         'builders': {
             'v8_linux_blink_rel':
