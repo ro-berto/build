@@ -3,34 +3,39 @@
 # found in the LICENSE file.
 
 
-from recipe_engine.post_process import (DoesNotRun, DropExpectation, Filter,
-                                        StatusException, StatusSuccess)
-
+from recipe_engine.post_process import (
+    DoesNotRun,
+    DropExpectation,
+    Filter,
+    MustRun,
+    StatusException,
+    StatusFailure,
+    StatusSuccess,
+    StepFailure,
+)
 
 DEPS = [
-  'dart',
-  'recipe_engine/buildbucket',
-  'recipe_engine/json',
-  'recipe_engine/properties',
-  'recipe_engine/platform',
-  'recipe_engine/raw_io',
-  'recipe_engine/step'
+    'dart',
+    'recipe_engine/buildbucket',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/properties',
+    'recipe_engine/platform',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'recipe_engine/swarming',
 ]
 
 
 CANNED_OUTPUT_DIR = {
   'logs.json': '{"test":"log"}\n',
   'results.json': '{"name":"test1"}\n{"name":"test2"}\n',
-  'run.json': '{"build":123}\n',
-  'result.log': '{}\n'
 }
 
 
 CANNED_FLAKY_OUTPUT_DIR = {
   'logs.json': '{"Flaky/Test/1":"log"}\n{"Flaky/Test/2":"log"}',
   'results.json': '{"name":"Flaky/Test/1"}\n{"name":"Flaky/Test/2"}\n',
-  'run.json': '{"build":123}\n',
-  'result.log': '{}\n'
 }
 
 
@@ -268,7 +273,7 @@ TEST_MATRIX = {
                     "8", "--no-show-stats", "--time", "2700"
                 ],
                 "shards":
-                    2,
+                    3,
                 "fileset":
                     "test"
             }]
@@ -317,25 +322,32 @@ def RunSteps(api):
   if 'parent_fileset' in api.properties:
     api.dart.download_parent_isolate()
 
-def _canned_step(api, name, shards=0, local_shard=True, suffix='',
-      deflake=True):
-  step_name = '%s_shard_%s%s' % (name, 1, suffix) if shards > 0 else name
+
+def _canned_step(api, name, shards=0, local_shard=True, deflake=True):
+  step_name = '%s_shard_%s' % (name, 1) if shards > 0 else name
   data = None
   for i in range(1 if shards > 0 else 0, shards + 1):
     if not data:
-      data = api.step_data(step_name, api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+      data = _canned_output_dir(api, step_name)
     else:
-      data += api.step_data('%s_shard_%s%s' % (name, i, suffix),
-                            api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+      data += _canned_output_dir(api, '%s_shard_%s' % (name, i))
     if deflake:
-      deflaking_name = ('deflaking.%s' % name if local_shard
-                        else 'deflaking.%s_shard_1%s' % (name, suffix))
-      data += api.step_data(deflaking_name,
-                            api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
+      deflaking_name = name if local_shard else '%s_shard_1' % name
+      data += _canned_output_dir(
+          api, deflaking_name, CANNED_FLAKY_OUTPUT_DIR, prefix='deflaking.')
   if deflake:
     data += api.step_data('deflaking.list tests to deflake (%s)' % name,
                 stdout=api.raw_io.output('Flaky/Test/1\nFlaky/Test/2'))
 
+  return data
+
+
+def _canned_output_dir(api, step_name, content=None, prefix=''):
+  content = content or CANNED_OUTPUT_DIR
+  data = api.empty_test_data()
+  for filename in ('logs.json', 'results.json'):
+    data += api.step_data('%sread %s for %s' % (prefix, filename, step_name),
+                          api.file.read_text(text_content=content[filename]))
   return data
 
 
@@ -362,6 +374,7 @@ def GenTests(api):
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
       api.step_data('gsutil check for firestore approvals', retcode=1),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -384,6 +397,7 @@ def GenTests(api):
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -396,6 +410,7 @@ def GenTests(api):
           project='dart'),
       api.step_data('build', retcode=1),
       api.post_process(DoesNotRun, 'test1'),
+      api.post_process(StatusFailure),
       api.post_process(DropExpectation),
   )
 
@@ -405,6 +420,7 @@ def GenTests(api):
           builder='this-name-does-not-exist-in-test-matrix',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
+      api.post_process(StatusFailure),
   )
 
   yield api.test(
@@ -414,6 +430,7 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
       api.step_data('can_time_out', times_out_after=60 * 61 + 1),
+      api.post_process(StatusFailure),
   )
 
   yield api.test(
@@ -423,6 +440,7 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
       api.step_data('can_time_out', retcode=1),
+      api.post_process(StatusFailure),
   )
 
   yield api.test(
@@ -444,6 +462,7 @@ def GenTests(api):
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
       api.step_data('gsutil check for firestore approvals', retcode=1),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -464,6 +483,7 @@ def GenTests(api):
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
       api.step_data('gsutil check for firestore approvals', retcode=1),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -473,6 +493,7 @@ def GenTests(api):
           builder='vm-kernel-mac-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -482,9 +503,10 @@ def GenTests(api):
           builder='vm-kernel-precomp-android-release-armsimdbc64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
-      _canned_step(api, 'android', 2, False, ' on Android'),
+      _canned_step(api, 'android', 2, False),
       api.step_data(
           'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.post_process(StatusSuccess),
   )
 
   yield api.test(
@@ -495,6 +517,15 @@ def GenTests(api):
           builder='fuzz-linux',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
+      api.step_data(
+          'make a fuzz_shard_1',
+          api.swarming.collect([
+              api.swarming.task_result(
+                  id='0', name='make a fuzz_shard_1', failure=True)
+          ])),
+      api.post_process(MustRun, 'make a fuzz_shard_2'),
+      api.post_process(StepFailure, 'make a fuzz_shard_1'),
+      api.post_process(StatusFailure),
   )
 
   legacy_revinfo = {

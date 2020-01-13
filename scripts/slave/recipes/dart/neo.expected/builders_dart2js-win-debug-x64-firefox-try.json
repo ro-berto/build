@@ -799,7 +799,7 @@
       "-e co19",
       "language_2",
       "--output-directory",
-      "/path/to/tmp/"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -812,6 +812,60 @@
       ]
     },
     "name": "Test-step 1"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/tmp_tmp_1/logs.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
+      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read logs.json for Test-step 1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@logs.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/tmp_tmp_1/results.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
+      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results.json for Test-step 1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@results.json@@@"
+    ]
   },
   {
     "cmd": [
@@ -831,7 +885,7 @@
       "-nfirefox-foo-debug-x64-bar",
       "--firefox=browsers\\firefox\\firefox.exe",
       "--output-directory",
-      "/path/to/tmp/"
+      "[CLEANUP]/tmp_tmp_2"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -844,6 +898,60 @@
       ]
     },
     "name": "Test-step 2"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/tmp_tmp_2/logs.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
+      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read logs.json for Test-step 2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@logs.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/tmp_tmp_2/results.json",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache",
+      "BUILDBOT_BUILDERNAME": "dart2js-win-debug-x64-firefox-try"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results.json for Test-step 2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@results.json@@@"
+    ]
   },
   {
     "cmd": [
