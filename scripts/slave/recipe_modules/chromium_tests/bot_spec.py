@@ -23,7 +23,7 @@ TESTER_TYPES = (TESTER, BUILDER_TESTER)
 
 
 # TODO(gbeaty) Change accesses to use . access and remove the mapping
-@attrs(frozen=True)
+@attrs()
 class BotSpec(collections.Mapping):
   """An immutable specification for a bot.
 

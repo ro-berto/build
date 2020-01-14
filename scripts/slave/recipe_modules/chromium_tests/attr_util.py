@@ -154,12 +154,13 @@ def attrs(slots=True, **kwargs):
   * The attribute default values are validated when the class is defined, rather
     than validation errors occurring when attempting to create on object that
     uses the defaults.
+  * Classes are created frozen, which prevents changing attribute values.
   * Classes are created slotted by default, which prevents being able to assign
-     to undeclared attributes.
+    to undeclared attributes.
   """
 
   def inner(cls):
-    cls = attr.s(slots=slots, **kwargs)(cls)
+    cls = attr.s(frozen=True, slots=slots, **kwargs)(cls)
     for a in attr.fields(cls):
       if a.validator is not None and a.default is not attr.NOTHING:
         try:

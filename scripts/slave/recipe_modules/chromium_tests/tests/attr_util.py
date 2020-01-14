@@ -161,7 +161,7 @@ def RunSteps(api):
   # attrs **********************************************************************
   with api.assertions.assertRaises(TypeError) as caught:
 
-    @attrs(frozen=True)
+    @attrs()
     class AttrsTest(object):
       x = attrib(str, default=1)
 
@@ -169,7 +169,7 @@ def RunSteps(api):
              "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
-  @attrs(frozen=True)
+  @attrs()
   class AttrsTest(object):
     x = attrib(str, default='bar')
 
@@ -177,7 +177,7 @@ def RunSteps(api):
   api.assertions.assertEqual(x.x, 'bar')
 
   # string handling ************************************************************
-  @attrs(frozen=True)
+  @attrs()
   class StrTest(object):
     x = attrib(str)
 
