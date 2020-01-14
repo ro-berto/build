@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from . import steps
+from . import bot_spec
 
 
 def CreateStandardConfig(platform, apply_configs=None):
@@ -19,21 +19,19 @@ def CreateStandardConfig(platform, apply_configs=None):
   if apply_configs is None:
     apply_configs = []
 
-  return {
-      'chromium_config':
-          'chromium',
+  return bot_spec.BotSpec.create(
+      chromium_config='chromium',
       # Non-Android builder always uses regular mb.
-      'chromium_apply_config': ['mb', 'goma_failfast', 'use_autoninja'] +
-                               apply_configs,
-      'gclient_config':
-          'chromium',
-      'chromium_config_kwargs': {
+      chromium_apply_config=(
+          ['mb', 'goma_failfast', 'use_autoninja'] + apply_configs),
+      gclient_config='chromium',
+      chromium_config_kwargs={
           'TARGET_BITS': 64,
       },
-      'testing': {
+      testing={
           'platform': platform,
       },
-  }
+  )
 
 
 def CreateAndroidConfig(bits, apply_configs=None):
@@ -50,24 +48,20 @@ def CreateAndroidConfig(bits, apply_configs=None):
   if apply_configs is None:
     apply_configs = []
 
-  return {
-      'chromium_config':
-          'chromium',
-      'chromium_apply_config': ['goma_failfast', 'use_autoninja'] +
-                               apply_configs,
-      'gclient_config':
-          'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
+  return bot_spec.BotSpec.create(
+      chromium_config='chromium',
+      chromium_apply_config=['goma_failfast', 'use_autoninja'] + apply_configs,
+      gclient_config='chromium',
+      gclient_apply_config=['android'],
+      chromium_config_kwargs={
           'TARGET_BITS': bits,
           'TARGET_PLATFORM': 'android',
       },
-      'android_config':
-          'main_builder_mb',
-      'testing': {
+      android_config='main_builder_mb',
+      testing={
           'platform': 'linux',  # Android builder always uses Linux.
       },
-  }
+  )
 
 
 def CreateGenericConfig(chromium_config='chromium',
@@ -103,16 +97,16 @@ def CreateGenericConfig(chromium_config='chromium',
   if chromium_config_kwargs is None:
     chromium_config_kwargs = {}
 
-  return {
-      'chromium_config': chromium_config,
-      'chromium_apply_config': chromium_apply_config,
-      'gclient_config': gclient_config,
-      'gclient_apply_config': gclient_apply_config,
-      'chromium_config_kwargs': chromium_config_kwargs,
-      'testing': {
+  return bot_spec.BotSpec.create(
+      chromium_config=chromium_config,
+      chromium_apply_config=chromium_apply_config,
+      gclient_config=gclient_config,
+      gclient_apply_config=gclient_apply_config,
+      chromium_config_kwargs=chromium_config_kwargs,
+      testing={
           'platform': platform,
       },
-  }
+  )
 
 
 # Predefined builder configs:
@@ -235,7 +229,6 @@ _SPEC_BUILDERS = {
         CreateGenericConfig(
             chromium_apply_config=['mb'], gclient_apply_config=['fuchsia']),
 }
-
 
 SPEC = {
     'builders': _SPEC_BUILDERS,
