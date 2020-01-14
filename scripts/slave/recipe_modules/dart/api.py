@@ -167,29 +167,57 @@ class DartApi(recipe_api.RecipeApi):
         stdout=self.m.raw_io.output('out'))
 
 
-  def shard(self, name, isolate_hash, test_args, os, cpu='x86-64',
-            pool='dart.tests', num_shards=0, last_shard_is_local=False,
-            cipd_packages=None, ignore_failure=False):
+  def shard(self,
+            name,
+            isolate_hash,
+            test_args,
+            os,
+            cpu='x86-64',
+            pool='dart.tests',
+            num_shards=0,
+            last_shard_is_local=False,
+            cipd_ensure_file=None,
+            ignore_failure=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Returns the created tasks, which can be collected with collect_all().
     """
-    if not cipd_packages: # pragma: no cover
-      cipd_packages = []
     assert(num_shards > 0)
+    if not cipd_ensure_file:  # pragma: no cover
+      cipd_ensure_file = self.m.cipd.EnsureFile()
+    cipd_ensure_file.add_package(
+        'infra/tools/luci/vpython/${platform}',
+        'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
+        'cipd_bin_packages')
+    cipd_ensure_file.add_package(
+        'infra/tools/luci/vpython-native/${platform}',
+        'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
+        'cipd_bin_packages')
+    cipd_ensure_file.add_package('infra/3pp/tools/cpython/${platform}',
+                                 'version:2.7.17.chromium.24',
+                                 'cipd_bin_packages/cpython')
+    cipd_ensure_file.add_package('infra/3pp/tools/cpython3/${platform}',
+                                 'version:3.8.1rc1.chromium.10',
+                                 'cipd_bin_packages/cpython3')
+    path_prefixes = [
+        'cipd_bin_packages',
+        'cipd_bin_packages/bin',
+        'cipd_bin_packages/cpython',
+        'cipd_bin_packages/cpython/bin',
+        'cipd_bin_packages/cpython3',
+        'cipd_bin_packages/cpython3/bin',
+    ]
+
     tasks = []
     # TODO(athom) use built-in sharding to remove for loop
     for shard in range(num_shards):
       if last_shard_is_local and shard == num_shards - 1:
         break
-      task = self.m.chromium_swarming.task(
-                                  name='%s_shard_%s' % (name, (shard + 1)),
-                                  isolated=isolate_hash,
-                                  cipd_packages=cipd_packages,
-                                  raw_cmd= (test_args or []) +
-                                  ['--shards=%s' % num_shards,
-                                   '--shard=%s' % (shard + 1),
-                                   '--output-directory=${ISOLATED_OUTDIR}'],
-                                  ignore_task_failure=ignore_failure)
+
+      cmd = ((test_args or []) + [
+          '--shards=%s' % num_shards,
+          '--shard=%s' % (shard + 1), '--output-directory=${ISOLATED_OUTDIR}'
+      ])
+
       # TODO(crbug/1018836): Use distro specific name instead of Linux.
       os_names = {
         'android': 'Android',
@@ -198,24 +226,41 @@ class DartApi(recipe_api.RecipeApi):
         'win': 'Windows',
       }
 
-      task_request = task.request
-      task_slice = task_request[0]
-      task_dimensions = task_slice.dimensions
-      task_dimensions['os'] = os_names.get(os, os)
-      task_dimensions['cpu'] = cpu
-      task_dimensions['pool'] = pool
-      task_dimensions['gpu'] = None
-      task_slice = task_slice.with_dimensions(**task_dimensions)
+      dimensions = {
+          'os': os_names.get(os, os),
+          'cpu': cpu,
+          'pool': pool,
+          'gpu': None,
+      }
+
+      task_request = (
+          self.m.swarming.task_request().with_name(
+              '%s_shard_%s' % (name, (shard + 1))).
+          # Set a priority lower than any builder, to prioritize shards.
+          with_priority(25))
+      if ignore_failure:
+        task_request = task_request.with_tags({'optional': ['true']})
+
+      task_slice = task_request[0] \
+        .with_cipd_ensure_file(cipd_ensure_file) \
+        .with_command(cmd) \
+        .with_containment_type('AUTO') \
+        .with_dimensions(**dimensions) \
+        .with_env_prefixes(PATH=path_prefixes) \
+        .with_env_vars(VPYTHON_VIRTUALENV_ROOT='cache/vpython') \
+        .with_execution_timeout_secs(3600) \
+        .with_expiration_secs(3600) \
+        .with_isolated(isolate_hash) \
+        .with_io_timeout_secs(1200) \
+        .with_named_caches({ 'vpython' : 'cache/vpython' })
+
       if 'shard_timeout' in self.m.properties:
         task_slice = (task_slice.with_execution_timeout_secs(
           int(self.m.properties['shard_timeout'])))
-      # Set a priority lower than any builder, to prioritize shards.
-      task_request = (task_request.with_slice(0, task_slice).
-              with_priority(25))
-      task.request = task_request
-      self.m.chromium_swarming.trigger_task(task)
-      tasks.append(task)
-    return tasks
+
+      task_request = task_request.with_slice(0, task_slice)
+      tasks.append(task_request)
+    return self.m.swarming.trigger('trigger shards for %s' % name, tasks)
 
 
   def _report_new_results(self):
@@ -251,26 +296,33 @@ class DartApi(recipe_api.RecipeApi):
         tasks = step.tasks
         step.tasks = []
         for shard in tasks:
-          shard.task_output_dir = self.m.raw_io.output_dir()
-          self.m.chromium_swarming.collect_task(shard)
-          active_result = self.m.step.active_result
-          # Every shard is only a single task in swarming
-          bot_name = active_result.chromium_swarming.summary[
-              'shards'][0]['bot_id']
-          active_result.presentation.links['test stdout of shard #0'] = (
-            shard.get_shard_view_url(index=0))
-          self._add_results_and_links(bot_name, step.results)
+          self._collect(step, shard)
 
+  def _collect(self, step, task):
+    output_dir = self.m.path.mkdtemp()
+    # Every shard is only a single task in swarming
+    task_result = self.m.swarming.collect(task.name, [task], output_dir)[0]
+    # Swarming uses the task's id as a subdirectory name
+    output_dir = output_dir.join(task.id)
+    try:
+      task_result.analyze()
+    except self.m.step.StepFailure as failure:
+      # The active_result is the collect step, so this will turn it red.
+      self.m.step.active_result.presentation.status = 'FAILURE'
+      raise failure
 
-  def _add_results_and_links(self, bot_name, results):
-    output_dir = self.m.step.active_result.raw_io.output_dir
-    for filepath in output_dir:
-      filename = filepath.split('/')[-1]
-      filename = filename.split('\\')[-1]
-      if filename in ('logs.json', 'results.json'):
-        contents = output_dir[filepath]
-        self.m.step.active_result.presentation.logs[
-            filename] = [contents]
+    bot_name = task_result.bot_id
+    task_name = task_result.name
+    self._add_results_and_links(output_dir, bot_name, task_name, step.results)
+
+  def _add_results_and_links(self, output_dir, bot_name, task_name, results):
+    filenames = ('logs.json', 'results.json')
+    for filename in filenames:
+      file_path = output_dir.join(filename)
+      self.m.path.mock_add_paths(file_path)
+      if self.m.path.exists(file_path):
+        contents = self.m.file.read_text(
+            'read %s for %s' % (filename, task_name), file_path)
         if filename == 'results.json':
           results.add_results(bot_name, contents)
         if filename == 'logs.json':
@@ -847,8 +899,7 @@ class DartApi(recipe_api.RecipeApi):
         self._run_test_py(step, global_config)
       else:
         self._run_script(step)
-    if (not step.isolate_hash or step.local_shard) and step.is_test_step:
-      self._add_results_and_links(self.m.properties.get('bot_id'), step.results)
+
 
   @recipe_api.non_step
   def _run_gn(self, step):
@@ -1031,27 +1082,33 @@ class DartApi(recipe_api.RecipeApi):
     # here (perhaps checking if it is already done) so we catch
     # specific test steps with runtime chrome in a bot without that
     # global runtime.
-    cipd_packages = []
+    ensure_file = self.m.cipd.EnsureFile()
+
     if any('chrome' in arg for arg in args if isinstance(arg, basestring)):
       version_tag = 'version:%s' % global_config['chrome']
-      cipd_packages.append(('browsers',
-                            'dart/browsers/chrome/${platform}',
-                            version_tag))
+      ensure_file.add_package('dart/browsers/chrome/${platform}', version_tag,
+                              'browsers')
       args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
     if any('firefox' in arg for arg in args if isinstance(arg, basestring)):
       version_tag = 'version:%s' % global_config['firefox']
-      cipd_packages.append(('browsers',
-                            'dart/browsers/firefox/${platform}',
-                            version_tag))
+      ensure_file.add_package('dart/browsers/firefox/${platform}', version_tag,
+                              'browsers')
       args = args + [FIREFOX_PATH_ARGUMENT[environment['system']]]
 
     with self.m.step.defer_results():
-      self._run_script(step, args, cipd_packages=cipd_packages,
-          ignore_failure=step.deflake_list, shards=shards)
+      self._run_script(
+          step,
+          args,
+          cipd_ensure_file=ensure_file,
+          ignore_failure=step.deflake_list,
+          shards=shards)
 
-
-  def _run_script(self, step, args=None, cipd_packages=None,
-                  ignore_failure=False, shards=None):
+  def _run_script(self,
+                  step,
+                  args=None,
+                  cipd_ensure_file=None,
+                  ignore_failure=False,
+                  shards=None):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -1066,17 +1123,18 @@ class DartApi(recipe_api.RecipeApi):
     environment = step.environment
     if not args:
       args = step.args
-    if not cipd_packages: # pragma: no cover
-      cipd_packages = []
-    cipd_packages.append(('tools/sdks',
-        'dart/dart-sdk/${platform}',
-        environment['checked_in_sdk_version']))
+    if not cipd_ensure_file:  # pragma: no cover
+      cipd_ensure_file = self.m.cipd.EnsureFile()
+    cipd_ensure_file.add_package('dart/dart-sdk/${platform}',
+                                 environment['checked_in_sdk_version'],
+                                 'tools/sdks')
     if any(arg.startswith('co19_2') for arg in args):
-      cipd_packages.append(('tests/co19_2/src', environment['co19_2_package'],
-                            environment['co19_2_version']))
+      cipd_ensure_file.add_package(environment['co19_2_package'],
+                                   environment['co19_2_version'],
+                                   'tests/co19_2/src')
     if any(arg.startswith('co19/') or arg == 'co19' for arg in args):
-      cipd_packages.append(('tests/co19/src', CO19_PACKAGE,
-                            environment['co19_version']))
+      cipd_ensure_file.add_package(CO19_PACKAGE, environment['co19_version'],
+                                   'tests/co19/src')
 
     ok_ret = 'any' if ignore_failure else {0}
     runtime = environment.get('runtime', None)
@@ -1103,14 +1161,16 @@ class DartApi(recipe_api.RecipeApi):
         cpu = cpu.replace('simdbc', '')
         # arm_x64 -> arm (x64 gen_snapshot creating 32bit arm code).
         cpu = cpu.replace('_x64', '')
-        step.tasks += self.shard(step_name, step.isolate_hash,
-                                  xvfb_cmd + [script] + args,
-                                  num_shards=shards,
-                                  last_shard_is_local=step.local_shard,
-                                  cipd_packages=cipd_packages,
-                                  ignore_failure=ignore_failure,
-                                  cpu=cpu,
-                                  os=environment['system'])
+        step.tasks += self.shard(
+            step_name,
+            step.isolate_hash,
+            xvfb_cmd + [script] + args,
+            num_shards=shards,
+            last_shard_is_local=step.local_shard,
+            cipd_ensure_file=cipd_ensure_file,
+            ignore_failure=ignore_failure,
+            cpu=cpu,
+            os=environment['system'])
       if step.local_shard:
         args = args + [
           '--shards=%s' % shards,
@@ -1120,10 +1180,12 @@ class DartApi(recipe_api.RecipeApi):
       else:
         return # Shards have been triggered, no local shard to run.
 
+    output_dir = None
     if step.is_test_step:
+      output_dir = self.m.path.mkdtemp()
       args = args + [
           '--output-directory',
-          self.m.raw_io.output_dir(),
+          output_dir,
       ]
 
     cmd = self.m.path['checkout'].join(*script.split('/'))
@@ -1131,6 +1193,10 @@ class DartApi(recipe_api.RecipeApi):
       self.m.python(step_name, cmd, args=args, ok_ret=ok_ret)
     else:
       self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
+    if output_dir:
+      self._add_results_and_links(output_dir, self.m.properties.get('bot_id'),
+                                  step_name, step.results)
+
 
   def _canned_revinfo(self):
     revinfo = {
