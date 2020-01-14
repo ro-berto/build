@@ -342,12 +342,26 @@ _CompileCommand = collections.namedtuple(
 def _parse_compile_commands(stream):
   compile_commands = json.load(stream)
 
-  output_re = re.compile(r'-o\s+(\S+)')
   for action in compile_commands:
     command = action['command']
-    m = output_re.search(command)
+
+    # Skip all pnacl compile commands: crbug.com/1041079
+    pnacl = 'pnacl-'
+    if pnacl in command:
+      pieces = shlex.split(command)
+      if pieces:
+        first_piece = os.path.basename(pieces[0])
+        if pnacl in first_piece:
+          continue
+
+        if (len(pieces) > 1 and 'goma' in first_piece and
+            pnacl in os.path.basename(pieces[1])):
+          continue
+
+    m = re.search(r'-o\s+(\S+)', command)
     if not m:
-      raise ValueError('compile_commands action %r lacks an output' % command)
+      raise ValueError(
+          'compile_commands action %r lacks an output file' % command)
 
     yield _CompileCommand(
         target_name=m.group(1),

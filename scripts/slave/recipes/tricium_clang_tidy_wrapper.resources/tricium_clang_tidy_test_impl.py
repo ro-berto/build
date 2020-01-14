@@ -20,15 +20,19 @@ import unittest
 import tricium_clang_tidy as tidy
 
 
+def _to_stringio(contents):
+  if sys.version_info[0] == 2 and isinstance(contents, str):
+    contents = unicode(contents)
+  return io.StringIO(contents)
+
+
 def _parse_fixes_file_text(line_offsets,
                            contents_text,
                            tidy_invocation_dir='/tidy/dir'):
-  if sys.version_info[0] == 2 and isinstance(contents_text, str):
-    contents_text = unicode(contents_text)
   return list(
       tidy._parse_tidy_fixes_file(
           line_offsets,
-          io.StringIO(contents_text),
+          _to_stringio(contents_text),
           tidy_invocation_dir=tidy_invocation_dir))
 
 
@@ -48,6 +52,67 @@ class Tests(unittest.TestCase):
     filt = _SilencingFilter()
     root.addFilter(filt)
     self.addCleanup(root.removeFilter, filt)
+
+  def test_parse_compile_commands_raises_on_no_object(self):
+    input_json = json.dumps([
+        {
+            'command': '/path/to/not an object file.o',
+            'directory': '/dir/ect/ory',
+            'file': 'foo.cc',
+        },
+    ])
+
+    with self.assertRaises(ValueError) as ex:
+      list(tidy._parse_compile_commands(_to_stringio(input_json)))
+
+    self.assertIn('lacks an output file', str(ex.exception))
+
+  def test_parse_compile_commands_skips_pnacl(self):
+
+    def compile_command(command):
+      return {
+          'command': command,
+          'directory': '/dir/ect/ory',
+          'file': 'foo.cc',
+      }
+
+    input_json = json.dumps([
+        compile_command('/path/to/clang++ foo -o foo.o'),
+        compile_command('/path/to/pnacl-clang foo -o foo-1.o'),
+        compile_command('/path/to/pnacl-clang++ foo -o foo-2.o'),
+        compile_command('/path/to/gomacc /path/to/pnacl-clang foo -o foo-3.o'),
+        compile_command(
+            '/path/to/gomacc /path/to/pnacl-clang++ foo -o foo-4.o'),
+        compile_command('/some/clang /path/to/pnacl-helpers.c -o foo-5.o'),
+        compile_command(
+            '/path/to/gomacc /some/clang /path/to/pnacl-helpers.c -o foo-6.o'),
+    ])
+
+    results = list(tidy._parse_compile_commands(_to_stringio(input_json)))
+    self.assertEqual(results, [
+        tidy._CompileCommand(
+            target_name='foo.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/clang++ foo -o foo.o',
+        ),
+        tidy._CompileCommand(
+            target_name='foo-5.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/some/clang /path/to/pnacl-helpers.c -o foo-5.o',
+        ),
+        tidy._CompileCommand(
+            target_name='foo-6.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/gomacc /some/clang /path/to/pnacl-helpers.c -o '
+            'foo-6.o',
+        ),
+    ])
 
   def test_broken_yaml_is_parse_error(self):
     no_offsets = tidy._LineOffsetMap.for_text('')
