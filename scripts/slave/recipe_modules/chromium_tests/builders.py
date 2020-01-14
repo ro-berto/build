@@ -4,6 +4,7 @@
 
 from recipe_engine.types import freeze
 
+from . import bot_spec
 from . import chromium
 from . import chromium_android
 from . import chromium_android_fyi
@@ -50,8 +51,7 @@ BUILDERS = freeze({
         chromium_clang.SPEC,
     'chromium.dawn':
         chromium_dawn.SPEC,
-    'chromium.devtools-frontend': (
-        chromium_devtools_frontend.SPEC),
+    'chromium.devtools-frontend': (chromium_devtools_frontend.SPEC),
     'chromium.fuzz':
         chromium_fuzz.SPEC,
     'chromium.fyi':
@@ -111,16 +111,17 @@ BUILDERS = freeze({
     # this build configuration will never be used in production.
     'bot_update.always_on': {
         'builders': {
-            'coverage_clobber': {
-                'chromium_config': 'chromium',
-                'gclient_config': 'chromium',
-                'clobber': True,
-                'archive_build': True,
-                'testing': {
-                    'platform': 'linux',
-                },
-                'gs_bucket': 'invalid',
-            },
+            'coverage_clobber':
+                bot_spec.BotSpec.create(
+                    chromium_config='chromium',
+                    gclient_config='chromium',
+                    clobber=True,
+                    archive_build=True,
+                    testing={
+                        'platform': 'linux',
+                    },
+                    gs_bucket='invalid',
+                ),
         },
     },
 })

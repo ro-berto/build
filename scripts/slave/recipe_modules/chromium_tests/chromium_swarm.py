@@ -2,78 +2,83 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from . import steps
+from . import bot_spec
 
 SPEC = {
     'builders': {
-        'android-kitkat-arm-rel': {
-            'chromium_config': 'android',
-            'gclient_config': 'chromium',
-            'gclient_apply_config': ['android'],
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            'android_config': 'main_builder_mb',
-            'testing': {
-                'platform': 'linux',
-            },
-            'bot_type': 'builder_tester',
-        },
-        'android-marshmallow-arm64-rel': {
-            'chromium_config': 'android',
-            'gclient_config': 'chromium',
-            'gclient_apply_config': ['android'],
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            'android_config': 'main_builder_mb',
-            'testing': {
-                'platform': 'linux',
-            },
-            'bot_type': 'builder_tester',
-        },
-        'linux-rel': {
-            'chromium_config': 'chromium',
-            'chromium_apply_config': ['mb'],
-            'gclient_config': 'chromium',
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-            },
-            'testing': {
-                'platform': 'linux',
-            },
-            'bot_type': 'builder_tester',
-        },
-        'mac-rel': {
-            'chromium_config': 'chromium',
-            'chromium_apply_config': ['mb'],
-            'gclient_config': 'chromium',
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-            },
-            'testing': {
-                'platform': 'mac',
-            },
-            'bot_type': 'builder_tester',
-        },
-        'win-rel': {
-            'chromium_config': 'chromium',
-            'chromium_apply_config': ['mb'],
-            'gclient_config': 'chromium',
-            'chromium_config_kwargs': {
-                'BUILD_CONFIG': 'Release',
-            },
-            'testing': {
-                'platform': 'win',
-            },
-            'bot_type': 'builder_tester',
-        },
+        'android-kitkat-arm-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='android',
+                gclient_config='chromium',
+                gclient_apply_config=['android'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                },
+                android_config='main_builder_mb',
+                testing={
+                    'platform': 'linux',
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+            ),
+        'android-marshmallow-arm64-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='android',
+                gclient_config='chromium',
+                gclient_apply_config=['android'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                },
+                android_config='main_builder_mb',
+                testing={
+                    'platform': 'linux',
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+            ),
+        'linux-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                },
+                testing={
+                    'platform': 'linux',
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+            ),
+        'mac-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+            ),
+        'win-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                },
+                testing={
+                    'platform': 'win',
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+            ),
     },
 }
 
