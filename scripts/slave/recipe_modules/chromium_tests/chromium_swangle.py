@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from . import steps
+from . import bot_spec
 
 
 def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
@@ -11,21 +11,23 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
     configs.append('angle_top_of_tree')
   if swiftshader_tot:
     configs.append('swiftshader_top_of_tree')
-  return {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb',],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': configs,
-      'chromium_config_kwargs': {
+  return bot_spec.BotSpec.create(
+      chromium_config='chromium',
+      chromium_apply_config=[
+          'mb',
+      ],
+      gclient_config='chromium',
+      gclient_apply_config=configs,
+      chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': bits,
       },
-      'bot_type': 'builder_tester',
-      'testing': {
+      bot_type=bot_spec.BUILDER_TESTER,
+      testing={
           'platform': os,
       },
-      'serialize_tests': True,
-  }
+      serialize_tests=True,
+  )
 
 
 SPEC = {
