@@ -4,9 +4,6 @@
 
 DEPS = [
     'dart',
-    'depot_tools/bot_update',
-    'depot_tools/depot_tools',
-    'depot_tools/gclient',
     'depot_tools/osx_sdk',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
@@ -14,7 +11,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
-    'test_utils',
     'swarming_client',
 ]
 
