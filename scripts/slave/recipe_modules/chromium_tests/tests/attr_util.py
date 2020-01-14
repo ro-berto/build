@@ -32,7 +32,8 @@ def RunSteps(api):
   # test validation of attribute type
   with api.assertions.assertRaises(TypeError) as caught:
     AttribTest(required=1)
-  message = "'required' must be <type 'str'> (got 1 that is a <type 'int'>)."
+  message = (
+      "'required' must be <type 'basestring'> (got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
   # test value and defaults
@@ -108,8 +109,8 @@ def RunSteps(api):
   # test validation of element types
   with api.assertions.assertRaises(TypeError) as caught:
     SequenceAttribTest(required=[1, 2, 3], typed=[4, 5, 6])
-  message = (
-      "'typed' members must be <type 'str'> (got 4 that is a <type 'int'>).")
+  message = ("'typed' members must be <type 'basestring'> "
+             "(got 4 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
   # mapping_attrib *************************************************************
@@ -146,7 +147,8 @@ def RunSteps(api):
   # test validation of key types
   with api.assertions.assertRaises(TypeError) as caught:
     MappingAttribTest(required={1: 1, 2: 2, 3: 3}, typed={1: 1})
-  message = "'typed' keys must be <type 'str'> (got 1 that is a <type 'int'>)."
+  message = ("'typed' keys must be <type 'basestring'> "
+             "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
   # test validation of value types
@@ -163,8 +165,8 @@ def RunSteps(api):
     class AttrsTest(object):
       x = attrib(str, default=1)
 
-  message = (
-      "default for 'x' must be <type 'str'> (got 1 that is a <type 'int'>).")
+  message = ("default for 'x' must be <type 'basestring'> "
+             "(got 1 that is a <type 'int'>).")
   api.assertions.assertEqual(caught.exception.message, message)
 
   @attrs(frozen=True)
@@ -173,6 +175,15 @@ def RunSteps(api):
 
   x = AttrsTest()
   api.assertions.assertEqual(x.x, 'bar')
+
+  # string handling ************************************************************
+  @attrs(frozen=True)
+  class StrTest(object):
+    x = attrib(str)
+
+  # make sure a unicode can be asigned
+  x = StrTest(x=u'foo')
+  api.assertions.assertEqual(x.x, u'foo')
 
 
 def GenTests(api):

@@ -5,6 +5,7 @@
 
 import attr
 from attr import converters, validators
+import six
 import sys
 
 from recipe_engine import util
@@ -19,6 +20,8 @@ def _instance_of(type_, name_qualifier=''):
   This allows for more helpful error messages when referring to subsidiary
   portions of values (e.g. keys of a dict).
   """
+  if type_ == str:
+    type_ = six.string_types[0]
 
   def inner(obj, attribute, value):
     if not isinstance(value, type_):
