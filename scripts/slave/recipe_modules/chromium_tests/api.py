@@ -88,8 +88,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
-    self._builders = {}
-    self.add_builders(builders_module.BUILDERS)
+    self._builders = builders_module.BUILDERS
     self._bucketed_triggers = input_properties.bucketed_triggers
 
   @property
@@ -103,10 +102,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
-
-  def add_builders(self, builders):
-    """Adds builders to our builder map"""
-    self._builders.update(builders)
 
   def create_bot_id(self, mastername, buildername, testername=None):
     bot_id = {
