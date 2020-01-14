@@ -44,6 +44,50 @@ class FilterApi(recipe_api.RecipeApi):
     return self._paths
 
   def _load_analyze_config(self, file_name):
+    """Load the given analyze config.
+
+    Analyze config files are expected to be JSONs in the following format:
+
+    ```
+      {
+        "<analyze-config-name>": {
+          "exclusions": ["<regex-exclusion>", ...],
+        },
+        ...
+      }
+    ```
+
+    e.g.
+
+    ```
+      {
+        "base": {
+          "exclusions": [
+            "base-regex-exclusion-1",
+            "base-regex-exclusion-2",
+            "base-regex-exclusion-.*",
+            ...
+          ]
+        },
+        "chromium": {
+          "exclusions": [
+            "chromium-regex-exclusion-1",
+            "chromium-regex-exclusion-2",
+            "chromium-regex-exclusion-.*",
+            ...
+          ]
+        },
+        ...
+      }
+    ```
+
+    Files changed by a patch will be matched against all regex patterns in all
+    applicable analyze configs.
+
+    An analyze config file is *required* to have an analyze config named
+    "base". Some clients may require additional analyze configs (e.g.
+    chromium_tests requires "chromium" in addition to "base").
+    """
     config_path = self.m.chromium.c.source_side_spec_dir.join(file_name)
     step_result = self.m.json.read(
       'read filter exclusion spec',
@@ -88,7 +132,7 @@ class FilterApi(recipe_api.RecipeApi):
                                   the test_targets.
       additional_names: additional top level keys to look up exclusions in,
                         see |config_file_name|.
-      conconfig_file_name: the config file to look up exclusions in.
+      config_file_name: the config file to look up exclusions in.
       mb_mastername: the mastername to pass over to run MB.
       mb_buildername: the buildername to pass over to run MB.
       mb_config_path: the path to the MB config file.
