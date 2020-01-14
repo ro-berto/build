@@ -1048,33 +1048,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/adb_logcat_printer.py",
-      "--output-path",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "[START_DIR]/src/out/Release/full_log",
+      "--",
+      "[START_DIR]/src/build/android/adb_logcat_printer.py",
       "[START_DIR]/src/out/logcat"
     ],
     "infra_step": true,
     "name": "logcat_dump (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "-o",
-      "GSUtil:parallel_composite_upload_threshold=50M",
-      "----",
-      "cp",
-      "[START_DIR]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/stackwalker/571"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/stackwalker/571@@@"
-    ]
   },
   {
     "cmd": [

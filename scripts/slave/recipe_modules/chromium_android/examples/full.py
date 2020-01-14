@@ -106,6 +106,7 @@ def RunSteps(api, buildername):
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.coverage = config.get('coverage', False)
   api.chromium_android.c.asan_symbolize = True
+  api.chromium_android.c.logcat_bucket = None
 
   for c in config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)

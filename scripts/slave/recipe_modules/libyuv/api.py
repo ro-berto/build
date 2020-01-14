@@ -147,8 +147,7 @@ class LibyuvApi(recipe_api.RecipeApi):
           self.m.chromium_android.common_tests_setup_steps()
           self.m.chromium_android.run_test_suite('libyuv_unittest')
           self.m.chromium_android.shutdown_device_monitor()
-          self.m.chromium_android.logcat_dump(
-              gs_bucket=self.master_config.get('build_gs_bucket'))
+          self.m.chromium_android.logcat_dump()
           self.m.chromium_android.stack_tool_steps(force_latest_version=True)
           self.m.chromium_android.test_report()
         else:

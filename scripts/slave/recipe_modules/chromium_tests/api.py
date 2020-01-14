@@ -769,7 +769,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(
-                logcat_gs_bucket='chromium-android',
                 checkout_dir=checkout_dir)
           else:
             self.m.chromium_android.test_report()

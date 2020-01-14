@@ -777,8 +777,8 @@ class AndroidApi(recipe_api.RecipeApi):
       return ('https://storage.googleapis.com/chromium-result-details/'
               'UploadQuietFailure.txt')
 
-  def logcat_dump(self, gs_bucket=None):
-    if gs_bucket:
+  def logcat_dump(self):
+    if self.c.logcat_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')
       self.m.python(
           'logcat_dump',
@@ -793,7 +793,7 @@ class AndroidApi(recipe_api.RecipeApi):
         args = []
       self.m.gsutil.upload(
           log_path,
-          gs_bucket,
+          self.c.logcat_bucket,
           'logcat_dumps/%s/%s' % (self.m.buildbucket.builder_name,
                                   self.m.buildbucket.build.number),
           args=args,
@@ -967,11 +967,12 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.m.chromium.c.runtests.enable_asan:
       self.asan_device_setup()
 
-  def common_tests_final_steps(self, logcat_gs_bucket='chromium-android',
-                               force_latest_version=False, checkout_dir=None):
+  def common_tests_final_steps(self,
+                               force_latest_version=False,
+                               checkout_dir=None):
     try:
       self.shutdown_device_monitor()
-      self.logcat_dump(gs_bucket=logcat_gs_bucket)
+      self.logcat_dump()
       self.stack_tool_steps(force_latest_version)
     finally:
       if self.m.chromium.c.runtests.enable_asan:
@@ -988,7 +989,8 @@ class AndroidApi(recipe_api.RecipeApi):
           root_chromium_dir=checkout_dir,
           binary_paths=breakpad_binaries)
 
-  def android_build_wrapper(self, logcat_gs_bucket='chromium-android'):
+  def android_build_wrapper(self):
+
     @contextlib.contextmanager
     def wrapper(api):
       """A context manager for use as auto_bisect's build_context_mgr.
@@ -1002,10 +1004,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
         yield
       finally:
-        self.common_tests_final_steps(logcat_gs_bucket=logcat_gs_bucket)
+        self.common_tests_final_steps()
+
     return wrapper
 
-  def android_test_wrapper(self, _logcat_gs_bucket='chromium-android'):
+  def android_test_wrapper(self):
+
     @contextlib.contextmanager
     def wrapper(_api):
       """A context manager for running android test steps."""
