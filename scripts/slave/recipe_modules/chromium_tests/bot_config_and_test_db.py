@@ -110,7 +110,7 @@ class BotConfig(object):
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
-  def initialize_bot_db(self, chromium_tests_api, bot_db, bot_update_step):
+  def create_bot_db(self, chromium_tests_api, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       scripts_compile_targets = {}
@@ -136,6 +136,8 @@ class BotConfig(object):
         if any(is_child_of(b, bot_master_name, bot_builder_name)
                for b in master_config.get('builders', {}).itervalues()):
           masternames.add(master_name)
+
+    bot_db = BotConfigAndTestDB()
 
     for mastername in sorted(self._bots_dict):
       # We manually thaw the path to the elements we are modifying, since the
@@ -163,6 +165,8 @@ class BotConfig(object):
 
       bot_db._add_master_dict_and_source_side_spec(
           mastername, freeze(master_dict), freeze(source_side_spec))
+
+    return bot_db
 
   def get_tests(self, bot_db):
     return _TestConfig(self._bot_ids, bot_db)

@@ -78,8 +78,7 @@ def RunSteps(api, buildername, mastername):
   # Ensure swarming_client version is fresh enough.
   api.chromium_swarming.check_client_version()
 
-  bot_db = api.chromium_tests.create_bot_db_object()
-  bot_config.initialize_bot_db(api.chromium_tests, bot_db, update_step)
+  bot_db = bot_config.create_bot_db(api.chromium_tests, update_step)
   test_config = api.chromium_tests.get_tests(bot_config, bot_db)
   compile_targets = api.chromium_tests.get_compile_targets(
       bot_config, bot_db, test_config.all_tests())

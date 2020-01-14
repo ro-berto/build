@@ -125,9 +125,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           [traceback.format_exc()],
           as_log='details')
 
-  def create_bot_db_object(self):
-    return bdb_module.BotConfigAndTestDB()
-
   def get_config_defaults(self):
     return {'CHECKOUT_PATH': self.m.path['checkout']}
 
@@ -228,14 +225,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  # TODO(phajdan.jr): remove create_bot_db_from_master_dict. It adds another
-  # entry point to _add_master_dict_and_test_spec which can really complicate
-  # things.
-  def create_bot_db_from_master_dict(self, mastername, master_dict):
-    bot_db = self.create_bot_db_object()
-    bot_db._add_master_dict_and_source_side_spec(mastername, master_dict, {})
-    return bot_db
-
   def prepare_checkout(self, bot_config, **kwargs):
     update_step = self.m.chromium_checkout.ensure_checkout(bot_config, **kwargs)
 
@@ -250,8 +239,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.set_up_swarming(bot_config)
     self.runhooks(update_step)
 
-    bot_db = bdb_module.BotConfigAndTestDB()
-    bot_config.initialize_bot_db(self, bot_db, update_step)
+    bot_db = bot_config.create_bot_db(self, update_step)
 
     return update_step, bot_db
 
