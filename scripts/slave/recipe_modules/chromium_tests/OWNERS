@@ -4,13 +4,7 @@
 # chromium/src. Talk to one of the owners for more context.
 
 set noparent
-dpranke@chromium.org
-erikchen@chromium.org
-gbeaty@chromium.org
-jbudorick@chromium.org
-martiniss@chromium.org
-tikuta@chromium.org
-tmrts@chromium.org
+file://scripts/slave/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
 
 per-file chromium_android*=bpastene@chromium.org
 per-file chromium_clang.py=hans@chromium.org
