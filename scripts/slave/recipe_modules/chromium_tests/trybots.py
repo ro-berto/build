@@ -64,6 +64,11 @@ TRYBOTS = freeze({
     },
     'tryserver.chromium.android': {
         'builders': {
+            'android-10-arm64-rel':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'android-10-arm64-rel',
+                }),
             'android-asan':
                 simple_bot({
                     'mastername': 'chromium.memory',
