@@ -12,6 +12,7 @@ https://gerrit-review.googlesource.com/Documentation/rest-api.html.
 import base64
 import json
 import logging
+import os
 import time
 import urllib2
 
@@ -78,6 +79,7 @@ def _fetch_file_content(host, change_id, revision, file_path):
   """
   # Uses the Get Content API to get the file content from Gerrit.
   # https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-content
+  file_path = file_path.replace(os.sep, '/')
   quoted_file_path = urllib2.quote(file_path, safe='')
   url = 'https://%s/changes/%s/revisions/%s/files/%s/content' % (
       host, change_id, revision, quoted_file_path)
