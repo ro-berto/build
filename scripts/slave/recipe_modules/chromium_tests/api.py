@@ -1018,7 +1018,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         and a failure message if a failure occurred.
       - None if no failures
     """
-    bot = self._lookup_bot_metadata(builders)
+    bot = self.lookup_bot_metadata(builders)
     self._report_builders(bot.settings)
     self.configure_build(bot.settings)
     # TODO(crbug.com/1019824): We fetch tags here because |no_fetch_tags|
@@ -1386,7 +1386,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return '\n\n'.join(test_summary_lines)
 
-  def _lookup_bot_metadata(self, builders, mirrored_bots=None):
+  def lookup_bot_metadata(self, builders, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
     # This logic takes the <mastername, buildername> of the triggering trybot,
@@ -1482,7 +1482,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           and the failure message if it failed
         Configuration of the build/test.
     """
-    bot = self._lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
+    bot = self.lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
 
     self._report_builders(bot.settings)
 

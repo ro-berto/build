@@ -38,7 +38,7 @@ PROPERTIES = {
 def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
              expected_jsonish_result):
   assert api.tryserver.is_tryserver
-  bot = api.chromium_tests._lookup_bot_metadata(builders={})
+  bot = api.chromium_tests.lookup_bot_metadata(builders={})
 
   api.chromium_tests.configure_build(bot.settings)
   api.chromium_swarming.configure_swarming(

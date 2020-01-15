@@ -137,6 +137,7 @@
   * [chromium_tests:tests/api/get_common_args_for_scripts](#recipes-chromium_tests_tests_api_get_common_args_for_scripts)
   * [chromium_tests:tests/api/get_scheduler_jobs_to_trigger](#recipes-chromium_tests_tests_api_get_scheduler_jobs_to_trigger)
   * [chromium_tests:tests/api/integration_steps](#recipes-chromium_tests_tests_api_integration_steps)
+  * [chromium_tests:tests/api/lookup_bot_metadata](#recipes-chromium_tests_tests_api_lookup_bot_metadata)
   * [chromium_tests:tests/api/main_waterfall_steps](#recipes-chromium_tests_tests_api_main_waterfall_steps)
   * [chromium_tests:tests/api/package_build](#recipes-chromium_tests_tests_api_package_build)
   * [chromium_tests:tests/api/prepare_checkout](#recipes-chromium_tests_tests_api_prepare_checkout)
@@ -1544,6 +1545,8 @@ Args:
 &mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1255)(self, builders=None, bots=None):**
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#102)(self, message):**
+
+&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1389)(self, builders, mirrored_bots=None):**
 
 &mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1013)(self, mb_config_path=None, builders=None):**
 
@@ -4405,6 +4408,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/integration_steps.py#7): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/integration_steps.py#19)(api):**
+### *recipes* / [chromium\_tests:tests/api/lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/tests/api/lookup_bot_metadata.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/lookup_bot_metadata.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/lookup_bot_metadata.py#16)(api):**
 ### *recipes* / [chromium\_tests:tests/api/main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#14): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

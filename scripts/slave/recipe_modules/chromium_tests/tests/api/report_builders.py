@@ -32,7 +32,7 @@ TRYBOTS = {
 
 
 def RunSteps(api):
-  bot = api.chromium_tests._lookup_bot_metadata(
+  bot = api.chromium_tests.lookup_bot_metadata(
       builders=BUILDERS, mirrored_bots=TRYBOTS)
   api.chromium_tests._report_builders(bot.settings)
 
