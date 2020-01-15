@@ -1048,35 +1048,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 name='lookup builder GN args')
 
     test_config = bot.settings.get_tests(bot_db)
-    if bot_type == bot_spec.TESTER:
-      non_isolated_tests = [
-          t for t in test_config.tests_on(bot.mastername, bot.buildername)
-          if not t.uses_isolate]
-      isolate_transfer = not non_isolated_tests
-      package_transfer = not isolate_transfer
-
-    else:
-      isolate_transfer = any(
-          t.uses_isolate for t in test_config.tests_triggered_by(
-              bot.mastername, bot.buildername))
-      non_isolated_tests = [
-          t for t in test_config.tests_triggered_by(
-              bot.mastername, bot.buildername)
-          if not t.uses_isolate]
-      package_transfer = (
-          bool(non_isolated_tests) or
-          bot.settings.get('enable_package_transfer'))
-
-    if package_transfer:
-      package_transfer_reasons = [
-          'This builder is doing the full package transfer because:'
-      ]
-      for t in non_isolated_tests:
-        package_transfer_reasons.append(
-            " - %s doesn't use isolate" % t.name)
-      if bot.settings.get('enable_package_transfer'):
-        package_transfer_reasons.append(
-            " - package transfer is explicitly enabled")
 
     compile_targets = self.get_compile_targets(
         bot.settings, bot_db, test_config.all_tests())
@@ -1088,33 +1059,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if compile_result and compile_result.status != common_pb.SUCCESS:
       return compile_result
 
-    additional_trigger_properties = {}
-    if isolate_transfer:
-      additional_trigger_properties['swarm_hashes'] = (
-          self.m.isolate.isolated_tests)
-    if package_transfer and bot_type in bot_spec.BUILDER_TYPES:
-      self.package_build(
-          bot.mastername, bot.buildername, update_step, bot_db,
-          reasons=package_transfer_reasons)
+    additional_trigger_properties = self.outbound_transfer(
+        bot, update_step, bot_db)
 
     self.trigger_child_builds(
         bot.mastername, bot.buildername, update_step, bot_db,
         additional_properties=additional_trigger_properties)
     self.archive_build(bot.mastername, bot.buildername, update_step, bot_db)
 
-    if isolate_transfer and bot_type == bot_spec.TESTER:
-      self.m.file.rmtree(
-        'build directory',
-        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-    if package_transfer and bot_type == bot_spec.TESTER:
-      # No need to read the GN args since we looked them up for testers already
-      self.download_and_unzip_build(
-          bot.mastername, bot.buildername, update_step, bot_db,
-          read_gn_args=False)
-      self.m.python.succeeding_step(
-          'explain extract build',
-          package_transfer_reasons,
-          as_log='why is this running?')
+    self.inbound_transfer(bot, update_step, bot_db)
 
     tests = test_config.tests_on(bot.mastername, bot.buildername)
     if not tests:
@@ -1140,6 +1093,127 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if test_failure_summary:
         return test_failure_summary
+
+  def outbound_transfer(self, bot, bot_update_step, bot_db):
+    """Handles the builder half of the builder->tester transfer flow.
+
+    We support two different transfer mechanisms:
+     - Isolate transfer: builders upload tests + any required runtime
+       dependencies to isolate, then pass the isolate hashes to testers via
+       properties. Testers use those hashes to trigger swarming tasks but do
+       not directly download the isolates.
+     - Package transfer: builders package and upload some of the output
+       directory (see package_build for details). Testers download the zip
+       and proceed to run tests.
+
+    These can be used concurrently -- e.g., a builder that triggers two
+    different testers, one that supports isolate transfer and one that
+    doesn't, would run both the isolate transfer flow *and* the package
+    transfer flow.
+
+    For isolate-based transfers, this function just sets a trigger property,
+    as tests get isolated immediately after compilation (see
+    compile_specific_targets).
+
+    For package-based transfers, this uploads some of the output directory
+    to GS. (See package_build for more details.)
+
+    Args:
+      bot: a BotMetadata object for the currently executing builder.
+      bot_update_step: the result of a previously executed bot_update step.
+      bot_db: a BotConfigAndTestDB object.
+    Returns:
+      A dict containing additional properties that should be added to any
+      triggered child builds.
+    """
+    bot_type = bot.settings.get('bot_type')
+    test_config = bot.settings.get_tests(bot_db)
+
+    isolate_transfer = any(
+        t.uses_isolate for t in test_config.tests_triggered_by(
+            bot.mastername, bot.buildername))
+    non_isolated_tests = [
+        t
+        for t in test_config.tests_triggered_by(bot.mastername, bot.buildername)
+        if not t.uses_isolate
+    ]
+    package_transfer = (
+        bool(non_isolated_tests) or bot.settings.get('enable_package_transfer'))
+
+    additional_trigger_properties = {}
+    if isolate_transfer:
+      additional_trigger_properties['swarm_hashes'] = (
+          self.m.isolate.isolated_tests)
+    if package_transfer and bot_type in bot_spec.BUILDER_TYPES:
+      self.package_build(
+          bot.mastername,
+          bot.buildername,
+          bot_update_step,
+          bot_db,
+          reasons=self._explain_package_transfer(bot, non_isolated_tests))
+    return additional_trigger_properties
+
+  def inbound_transfer(self, bot, bot_update_step, bot_db):
+    """Handles the tester half of the builder->tester transfer flow.
+
+    See outbound_transfer for a discussion of transfer mechanisms.
+
+    For isolate-based transfers, this merely clears out the output directory.
+    For package-based transfer, this downloads the build from GS.
+
+    Args:
+      bot: a BotMetadata object for the currently executing tester.
+      bot_update_step: the result of a previously executed bot_update step.
+      bot_db: a BotConfigAndTestDB object.
+    """
+    bot_type = bot.settings.get('bot_type')
+    test_config = bot.settings.get_tests(bot_db)
+
+    if not bot_type == bot_spec.TESTER:
+      return
+
+    non_isolated_tests = [
+        t for t in test_config.tests_on(bot.mastername, bot.buildername)
+        if not t.uses_isolate
+    ]
+    isolate_transfer = not non_isolated_tests
+    # The inbound portion of the isolate transfer is a strict subset of the
+    # inbound portion of the package transfer. A builder that has to handle
+    # the package transfer logic does not need to do the isolate logic under
+    # any circumstance, as it'd just be deleting the output directory twice.
+    package_transfer = not isolate_transfer
+
+    if isolate_transfer:
+      # This was lifted from download_and_unzip_build out of an abundance of
+      # caution during the initial implementation of isolate transfer. It may
+      # be possible to remove it, though there likely isn't a significant
+      # benefit to doing so.
+      self.m.file.rmtree(
+          'build directory',
+          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+    if package_transfer:
+      # No need to read the GN args since we looked them up for testers already
+      self.download_and_unzip_build(
+          bot.mastername,
+          bot.buildername,
+          bot_update_step,
+          bot_db,
+          read_gn_args=False)
+      self.m.python.succeeding_step(
+          'explain extract build',
+          self._explain_package_transfer(bot, non_isolated_tests),
+          as_log='why is this running?')
+
+  def _explain_package_transfer(self, bot, non_isolated_tests):
+    package_transfer_reasons = [
+        'This builder is doing the full package transfer because:'
+    ]
+    for t in non_isolated_tests:
+      package_transfer_reasons.append(" - %s doesn't use isolate" % t.name)
+    if bot.settings.get('enable_package_transfer'):
+      package_transfer_reasons.append(
+          " - package transfer is explicitly enabled")
+    return package_transfer_reasons
 
   def _contains_invalid_results(self, unrecoverable_test_suites):
     for test_suite in unrecoverable_test_suites:

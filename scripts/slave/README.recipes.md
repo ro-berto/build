@@ -1484,7 +1484,7 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1158)(self, bot_update_step):**
+&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1232)(self, bot_update_step):**
 
 &mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#776)(self, bot_update_step):**
 
@@ -1527,7 +1527,21 @@ TODO:
 Returns a tuple: list of tests, and list of tests on the triggered
 testers.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1181)(self, builders=None, bots=None):**
+&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1156)(self, bot, bot_update_step, bot_db):**
+
+Handles the tester half of the builder->tester transfer flow.
+
+See outbound_transfer for a discussion of transfer mechanisms.
+
+For isolate-based transfers, this merely clears out the output directory.
+For package-based transfer, this downloads the build from GS.
+
+Args:
+  bot: a BotMetadata object for the currently executing tester.
+  bot_update_step: the result of a previously executed bot_update step.
+  bot_db: a BotConfigAndTestDB object.
+
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1255)(self, builders=None, bots=None):**
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#102)(self, message):**
 
@@ -1539,6 +1553,39 @@ Returns:
   - A RawResult object with the status of the build
     and a failure message if a failure occurred.
   - None if no failures
+
+&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1097)(self, bot, bot_update_step, bot_db):**
+
+Handles the builder half of the builder->tester transfer flow.
+
+We support two different transfer mechanisms:
+ - Isolate transfer: builders upload tests + any required runtime
+   dependencies to isolate, then pass the isolate hashes to testers via
+   properties. Testers use those hashes to trigger swarming tasks but do
+   not directly download the isolates.
+ - Package transfer: builders package and upload some of the output
+   directory (see package_build for details). Testers download the zip
+   and proceed to run tests.
+
+These can be used concurrently -- e.g., a builder that triggers two
+different testers, one that supports isolate transfer and one that
+doesn't, would run both the isolate transfer flow *and* the package
+transfer flow.
+
+For isolate-based transfers, this function just sets a trigger property,
+as tests get isolated immediately after compilation (see
+compile_specific_targets).
+
+For package-based transfers, this uploads some of the output directory
+to GS. (See package_build for more details.)
+
+Args:
+  bot: a BotMetadata object for the currently executing builder.
+  bot_update_step: the result of a previously executed bot_update step.
+  bot_db: a BotConfigAndTestDB object.
+Returns:
+  A dict containing additional properties that should be added to any
+  triggered child builds.
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#470)(self, mastername, buildername, update_step, bot_db, reasons=None):**
 
@@ -1560,7 +1607,7 @@ Note that:
 
 &mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#629)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1203)(self, builders, mirrored_bots, deapply_changes, tests=None):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1277)(self, builders, mirrored_bots, deapply_changes, tests=None):**
 
 Compile and run tests for chromium_trybot recipe.
 
@@ -1583,9 +1630,9 @@ Returns:
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#600)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1186)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1260)(self, builders=None, trybots=None):**
 
-&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1192)(self, builders=None, trybots=None, tests=None):**
+&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1266)(self, builders=None, trybots=None, tests=None):**
 
 Similar to trybot_steps, but only runs certain tests.
 
