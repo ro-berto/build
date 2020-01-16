@@ -842,11 +842,28 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/apks/MonochromePublic.aab.mapping",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.minimal.apks.mapping"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Extracting Proguard Mapping (MonochromePublic.aab.mapping) (with patch)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/build/android/resource_sizes.py",
       "[CACHE]/builder/src/out/Release/apks/MonochromePublic.minimal.apks",
-      "--chartjson",
+      "--output-format=chartjson",
       "--output-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--chromium-output-directory",
@@ -1482,11 +1499,29 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/apks/MonochromePublic.aab.mapping",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.minimal.apks.mapping"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Extracting Proguard Mapping (MonochromePublic.aab.mapping) (without patch)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/build/android/resource_sizes.py",
       "[CACHE]/builder/src/out/Release/apks/MonochromePublic.minimal.apks",
-      "--chartjson",
+      "--output-format=chartjson",
       "--output-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--chromium-output-directory",

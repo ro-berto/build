@@ -39,6 +39,7 @@ _DEFAULT_COMPILE_TARGETS = [
     'monochrome_static_initializers',
 ]
 _DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
+_DEFAULT_MAPPING_FILE_NAME = 'MonochromePublic.aab.mapping'
 
 _EXPECTATIONS_STEP_NAME = 'Checking for expectation failures'
 _BUILD_VARS_PATH = 'build_vars.txt'
@@ -67,11 +68,14 @@ PROPERTIES = {
         help='Unqualified targets to compile.'),
     'apk_name': recipe_api.Property(
         kind=str, default=_DEFAULT_APK_NAME,
-        help='Filename of the built apk or .minimal.apks to measure'),
+        help='Filename of the built apk or .minimal.apks to measure.'),
+    'mapping_name': recipe_api.Property(
+        kind=str, default=_DEFAULT_MAPPING_FILE_NAME,
+        help='Filename of the progaurd mapping file.'),
 }
 
 
-def RunSteps(api, analyze_targets, compile_targets, apk_name):
+def RunSteps(api, analyze_targets, compile_targets, apk_name, mapping_name):
   assert api.tryserver.is_tryserver
 
   with api.chromium.chromium_layout():
@@ -115,7 +119,7 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
     api.chromium.ensure_goma()
     staging_dir = api.path.mkdtemp('binary-size-trybot')
     with_results_dir, raw_result = _BuildAndMeasure(
-        api, True, compile_targets, apk_name, staging_dir)
+        api, True, compile_targets, apk_name, mapping_name, staging_dir)
 
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
@@ -133,7 +137,7 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
 
       api.chromium.runhooks(name='runhooks' + suffix)
       without_results_dir, raw_result = _BuildAndMeasure(
-          api, False, compile_targets, apk_name, staging_dir)
+          api, False, compile_targets, apk_name, mapping_name, staging_dir)
 
       if raw_result and raw_result.status != common_pb.SUCCESS:
         api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
@@ -161,7 +165,8 @@ def RunSteps(api, analyze_targets, compile_targets, apk_name):
             'Failed Checks. See Failing steps for details')
 
 
-def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
+def _BuildAndMeasure(
+    api, with_patch, compile_targets, apk_name, mapping_name, staging_dir):
   suffix = ' (with patch)' if with_patch else ' (without patch)'
   results_basename = 'with_patch' if with_patch else 'without_patch'
 
@@ -175,13 +180,20 @@ def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
   apk_path = api.chromium_android.apk_path(apk_name)
+  mapping_path = api.chromium_android.apk_path(mapping_name)
+
+  api.file.copy(
+      'Extracting Proguard Mapping ({}){}'.format(
+          mapping_name, suffix),
+      mapping_path,
+      results_dir.join(apk_name + '.mapping'))
   # Can't use api.chromium_android.resource_sizes() without it trying to upload
   # the results.
   api.python(
       'resource_sizes ({}){}'.format(api.path.basename(apk_path), suffix),
       api.chromium_android.c.resource_sizes, [
           str(apk_path),
-          '--chartjson',
+          '--output-format=chartjson',
           '--output-dir', results_dir,
           '--chromium-output-directory', api.chromium.output_dir,
       ])
