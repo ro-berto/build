@@ -1,6 +1,5 @@
 DEPS = [
   'depot_tools/bot_update',
-  'depot_tools/cipd',
   'depot_tools/depot_tools',
   # in order to have set_config automatically populate gclient
   'depot_tools/gclient',
@@ -14,6 +13,7 @@ DEPS = [
   'goma',
 
   'recipe_engine/buildbucket',
+  'recipe_engine/cipd',
   'recipe_engine/commit_position',
   'recipe_engine/context',
   'recipe_engine/file',

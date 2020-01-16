@@ -954,7 +954,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     cipd_pkg = self.c.mac_toolchain.installer_cipd_package
     pkg_version = self.c.mac_toolchain.installer_version
     cmd = self.c.mac_toolchain.installer_cmd
-    self.m.cipd.ensure(cipd_root, {cipd_pkg: pkg_version})
+    self.m.cipd.ensure(
+        cipd_root,
+        self.m.cipd.EnsureFile().add_package(cipd_pkg, pkg_version))
     return cipd_root.join(cmd)
 
   # TODO(crbug.com/797051): remove this when the old "hermetic" flow is
