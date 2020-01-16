@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import json
 
 from recipe_engine import post_process
@@ -31,8 +32,51 @@ _chromium_tidy_path = ('third_party', 'llvm-build', 'Release+Asserts', 'bin',
                        'clang-tidy')
 
 
-def _add_clang_tidy_comments(api, file_paths):
+class _SourceFileComments(object):
+
+  def __init__(self):
+    self._file_comments = []
+    self._source_comments = []
+    self._force_emission = False
+    # Specifically, _has_tidy_lints is True if there are any warnings excluding
+    # clang-diagnostic-warning and clang-diagnostic-error.
+    self._has_tidy_lints = False
+
+  def is_emission_useful(self):
+    return self._force_emission or self._has_tidy_lints
+
+  def force_emission(self):
+    self._force_emission = True
+
+  def add_file_comment(self, message):
+    self._file_comments.append(message)
+
+  def add_tidy_diagnostic(self, message, line_number, check_name, suggestions):
+    if check_name in ('clang-diagnostic-error', 'clang-diagnostic-warning'):
+      suffix = 'compile-time ' + check_name.split('-')[-1]
+    else:
+      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
+          check_name)
+      self._has_tidy_lints = True
+
+    comment_body = ' '.join([message, '(' + suffix + ')'])
+    self._source_comments.append((comment_body, line_number, check_name,
+                                  suggestions))
+
+  def __iter__(self):
+    """Yields comments as (category, message, line_num, suggestions) tuples."""
+    category = 'ClangTidy'
+    for message in self._file_comments:
+      yield category, message, 0, ()
+
+    for message, line_number, check_name, suggestions in self._source_comments:
+      subcategory = '/'.join([category, check_name])
+      yield subcategory, message, line_number, suggestions
+
+
+def _generate_clang_tidy_comments(api, file_paths):
   clang_tidy_location = api.context.cwd.join(*_chromium_tidy_path)
+  per_file_comments = collections.defaultdict(_SourceFileComments)
 
   # CLs based before Chromium's src@a55e6bed3d40262fad227ae7fb68ee1fea0e32af
   # won't sync clang-tidy, and so will show up as red if we try to run
@@ -44,78 +88,54 @@ def _add_clang_tidy_comments(api, file_paths):
     api.step.active_result.presentation.logs['skipped'] = [
         'No clang-tidy binary found; skipping linting (crbug.com/1035217)'
     ]
-    return
+    return per_file_comments
 
-  def add_comment(message, file_path, line, category, suggestions):
-    api.tricium.add_comment(
-        category,
-        message,
-        file_path,
-        # Clang-tidy only gives us one file offset, so we use line comments.
-        start_line=line,
-        suggestions=suggestions,
-    )
+  warnings_file = api.path['cleanup'].join('clang_tidy_complaints.yaml')
 
-  def add_file_warning(file_path, message):
+  tricium_clang_tidy_args = [
+      '--out_dir=%s' % api.chromium.output_dir,
+      '--findings_file=%s' % warnings_file,
+      '--clang_tidy_binary=%s' % clang_tidy_location,
+      '--base_path=%s' % api.context.cwd,
+      '--ninja_jobs=%s' % api.goma.recommended_goma_jobs,
+      '--verbose',
+      '--',
+  ]
+  tricium_clang_tidy_args += file_paths
+
+  ninja_path = {'PATH': [api.path.dirname(api.depot_tools.ninja_path)]}
+  with api.context(env_suffixes=ninja_path):
+    api.python(
+        name='tricium_clang_tidy.py',
+        script=api.resource('tricium_clang_tidy.py'),
+        args=tricium_clang_tidy_args)
+
+  # Please see tricium_clang_tidy.py for full docs on what this contains.
+  clang_tidy_output = api.file.read_json('read tidy output', warnings_file)
+
+  if clang_tidy_output.get('failed_cc_files') or clang_tidy_output.get(
+      'timed_out_cc_files'):
     api.step.active_result.presentation.status = 'WARNING'
-    add_comment(
-        'warning: ' + message,
-        file_path,
-        line=0,
-        category='ClangTidy',
-        suggestions=(),
-    )
 
-  with api.step.nest('generate-warnings'):
-    warnings_file = api.path['cleanup'].join('clang_tidy_complaints.yaml')
+  for failed in clang_tidy_output.get('failed_cc_files', []):
+    per_file_comments[failed].add_file_comment(
+        'warning: building this file '
+        'or its dependencies failed; clang-tidy comments may be incorrect or '
+        'incomplete.')
 
-    tricium_clang_tidy_args = [
-        '--out_dir=%s' % api.chromium.output_dir,
-        '--findings_file=%s' % warnings_file,
-        '--clang_tidy_binary=%s' % clang_tidy_location,
-        '--base_path=%s' % api.context.cwd,
-        '--ninja_jobs=%s' % api.goma.recommended_goma_jobs,
-        '--verbose',
-        '--',
-    ]
-    tricium_clang_tidy_args += file_paths
-
-    ninja_path = {'PATH': [api.path.dirname(api.depot_tools.ninja_path)]}
-    with api.context(env_suffixes=ninja_path):
-      api.python(
-          name='tricium_clang_tidy.py',
-          script=api.resource('tricium_clang_tidy.py'),
-          args=tricium_clang_tidy_args)
-
-    # Please see tricium_clang_tidy.py for full docs on what this contains.
-    clang_tidy_output = api.file.read_json('read tidy output', warnings_file)
-
-    for failed in clang_tidy_output.get('failed_cc_files', []):
-      add_file_warning(
-          failed, 'building this file or its dependencies failed; '
-          'clang-tidy comments may be incorrect or incomplete.')
-
-    for timed_out in clang_tidy_output.get('timed_out_cc_files', []):
-      add_file_warning(
-          timed_out, 'clang-tidy timed out on this file; issuing'
-          'diagnostics is impossible.')
+  for timed_out in clang_tidy_output.get('timed_out_cc_files', []):
+    file_comments = per_file_comments[timed_out]
+    file_comments.add_file_comment('warning: clang-tidy timed out on this '
+                                   'file; issuing diagnostics is impossible.')
+    # If files time out, it's likely that _someone_ should know that. Maybe a
+    # better approach is to remain quiet if our metrics are robust enough, but
+    # for now, loud breakages haven't generated a bug report yet. :)
+    file_comments.force_emission()
 
   for diagnostic in clang_tidy_output.get('diagnostics', []):
-    assert diagnostic['file_path'], ("Empty paths should've been filtered "
-                                     "by tricium_clang_tidy: %s" % diagnostic)
-    diag_name = diagnostic['diag_name']
-    if diag_name in ('clang-diagnostic-error', 'clang-diagnostic-warning'):
-      suffix = 'compile-time ' + diag_name.split('-')[-1]
-    else:
-      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
-          diagnostic['diag_name'])
-
-    comment_body = ' '.join([
-        diagnostic['message'],
-        '(' + suffix + ')',
-    ])
-
     file_path = diagnostic['file_path']
+    assert file_path, ("Empty paths should've been filtered "
+                       "by tricium_clang_tidy: %s" % diagnostic)
     tidy_replacements = diagnostic['replacements']
     if tidy_replacements:
       suggestions = [{
@@ -130,14 +150,11 @@ def _add_clang_tidy_comments(api, file_paths):
       }]
     else:
       suggestions = ()
+    per_file_comments[file_path].add_tidy_diagnostic(
+        diagnostic['message'], diagnostic['line_number'],
+        diagnostic['diag_name'], suggestions)
 
-    add_comment(
-        comment_body,
-        file_path,
-        diagnostic['line_number'],
-        'ClangTidy/' + diagnostic['diag_name'],
-        suggestions,
-    )
+  return per_file_comments
 
 
 def _should_skip_linting(api):
@@ -199,24 +216,45 @@ def RunSteps(api):
         api.chromium.mb_gen(mastername, buildername)
 
         with api.step.nest('clang-tidy'):
-          _add_clang_tidy_comments(api, affected)
+          with api.step.nest('generate-warnings'):
+            per_file_comments = _generate_clang_tidy_comments(api, affected)
+
+          for file_path, comments in per_file_comments.items():
+            if comments.is_emission_useful():
+              for category, message, line_number, suggestions in comments:
+                # Clang-tidy only gives us one file offset, so we use line
+                # comments.
+                api.tricium.add_comment(
+                    category,
+                    message,
+                    file_path,
+                    start_line=line_number,
+                    suggestions=suggestions)
 
       api.tricium.write_comments()
 
 
+def _get_tricium_comments(steps):
+  write_results = steps['write results']
+  tricium_json = write_results.output_properties['tricium']
+  return json.loads(tricium_json).get('comments')
+
+
+def tricium_has_no_messages(check, steps):
+  comments = _get_tricium_comments(steps)
+  check(not comments)
+
+
 def tricium_has_message(check, steps, message):
-  output_properties = steps['write results'].output_properties
-  tricium = json.loads(output_properties['tricium'])
-  messages = [c['message'] for c in tricium['comments']]
-  check(message in messages)
+  comments = _get_tricium_comments(steps)
+  check(comments)
+  if comments:
+    check(message in [x['message'] for x in comments])
 
 
 def tricium_has_replacements(check, steps, *expected_replacements):
-  output_properties = steps['write results'].output_properties
-  tricium = json.loads(output_properties['tricium'])
-
   replacement_messages = set()
-  for comment in tricium['comments']:
+  for comment in _get_tricium_comments(steps):
     for suggestion in comment.get('suggestions', ()):
       for replacement in suggestion['replacements']:
         replacement_messages.add(replacement['replacement'])
@@ -291,10 +329,11 @@ def GenTests(api):
   yield (test_with_patch(
       'removed_file',
       affected_files=['path/to/some/cc/file.cpp'],
-      auto_exist_files=False) + api.post_process(
-          post_process.DoesNotRun, 'clang-tidy') + api.post_process(
-              post_process.StatusSuccess) + api.post_process(
-                  post_process.DropExpectation))
+      auto_exist_files=False) + api.post_process(post_process.DoesNotRun,
+                                                 'clang-tidy') +
+         api.post_process(tricium_has_no_messages) + api.post_process(
+             post_process.StatusSuccess) + api.post_process(
+                 post_process.DropExpectation))
 
   yield (test_with_patch(
       'analyze_cpp_timed_out_files',
@@ -304,8 +343,11 @@ def GenTests(api):
               'timed_out_cc_files': ['oh/no.cpp']
           })) + api.post_process(post_process.StepWarning,
                                  'clang-tidy.generate-warnings') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             post_process.DropExpectation))
+         api.post_process(
+             tricium_has_message, 'warning: clang-tidy timed out on this '
+             'file; issuing diagnostics is impossible.') + api.post_process(
+                 post_process.StatusSuccess) + api.post_process(
+                     post_process.DropExpectation))
 
   yield (test_with_patch(
       'analyze_cpp_failed_files',
@@ -347,17 +389,54 @@ def GenTests(api):
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
+      'only_warnings_and_errors_are_silenced',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'failed_cc_files': ['path/to/some/cc/file.cpp'],
+              'diagnostics': [
+                  {
+                      'file_path': 'path/to/some/cc/file.cpp',
+                      'line_number': 2,
+                      'diag_name': 'clang-diagnostic-warning',
+                      'message': 'hello, world',
+                      'replacements': [],
+                  },
+                  {
+                      'file_path': 'path/to/some/cc/file.cpp',
+                      'line_number': 2,
+                      'diag_name': 'clang-diagnostic-error',
+                      'message': 'hello, world',
+                      'replacements': [],
+                  },
+              ],
+          })) + api.post_process(post_process.StepWarning,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) +
+         api.post_process(tricium_has_no_messages) + api.post_process(
+             post_process.DropExpectation))
+
+  yield (test_with_patch(
       'diagnostic_warning',
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
           api.file.read_json({
-              'diagnostics': [{
-                  'file_path': 'path/to/some/cc/file.cpp',
-                  'line_number': 2,
-                  'diag_name': 'clang-diagnostic-warning',
-                  'message': 'hello, world',
-                  'replacements': [],
-              },]
+              'diagnostics': [
+                  {
+                      'file_path': 'path/to/some/cc/file.cpp',
+                      'line_number': 2,
+                      'diag_name': 'clang-diagnostic-warning',
+                      'message': 'hello, world',
+                      'replacements': [],
+                  },
+                  {
+                      'file_path': 'path/to/some/cc/file.cpp',
+                      'line_number': 2,
+                      'diag_name': 'some-cool-check',
+                      'message': 'hello, world',
+                      'replacements': [],
+                  },
+              ]
           })) + api.post_process(post_process.StepSuccess,
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
@@ -375,7 +454,7 @@ def GenTests(api):
                   'line_number':
                       2,
                   'diag_name':
-                      'clang-diagnostic-warning',
+                      'tidy-is-angry',
                   'message':
                       'hello, world',
                   'replacements': [
