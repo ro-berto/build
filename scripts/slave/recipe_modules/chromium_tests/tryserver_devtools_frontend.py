@@ -2,20 +2,22 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-COMMON_BOT_CONFIG = {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
+from . import bot_spec
+
+COMMON_BOT_CONFIG = bot_spec.BotSpec.create(
+    chromium_config='chromium',
+    chromium_apply_config=['mb'],
+    gclient_config='chromium',
+    chromium_config_kwargs={
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
     },
-    'tests': [],
-    'test_results_config': 'public_server',
-    'testing': {
+    tests=[],
+    test_results_config='public_server',
+    testing={
         'platform': 'linux',
     },
-}
+)
 
 SPEC = {
     'builders': {
