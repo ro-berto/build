@@ -2220,6 +2220,11 @@
     "name": "blink_web_tests (test results summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Tests failed with patch, and caused build to fail:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@[@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@  \"test1.Test1\", @@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@  \"test2.Test2\"@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@]@@@",
+      "@@@STEP_LOG_END@failures caused build to fail@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

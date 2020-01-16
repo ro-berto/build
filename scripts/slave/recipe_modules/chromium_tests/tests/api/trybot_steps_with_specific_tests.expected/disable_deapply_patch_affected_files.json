@@ -653,6 +653,10 @@
     "name": "base_unittests (test results summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Tests failed with patch, and caused build to fail:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@[@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@  \"Test.Two\"@@@",
+      "@@@STEP_LOG_LINE@failures caused build to fail@]@@@",
+      "@@@STEP_LOG_END@failures caused build to fail@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

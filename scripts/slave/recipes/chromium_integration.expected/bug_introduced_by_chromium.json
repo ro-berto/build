@@ -2221,6 +2221,11 @@
     "name": "blink_web_tests (test results summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Tests failed with patch, but ignored as they also fail without patch:<br/>test1.Test1<br/>test2.Test2<br/>@@@",
+      "@@@STEP_LOG_LINE@failures ignored as they also fail without patch@[@@@",
+      "@@@STEP_LOG_LINE@failures ignored as they also fail without patch@  \"test1.Test1\", @@@",
+      "@@@STEP_LOG_LINE@failures ignored as they also fail without patch@  \"test2.Test2\"@@@",
+      "@@@STEP_LOG_LINE@failures ignored as they also fail without patch@]@@@",
+      "@@@STEP_LOG_END@failures ignored as they also fail without patch@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

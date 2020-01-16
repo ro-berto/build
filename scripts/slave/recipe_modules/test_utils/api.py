@@ -548,19 +548,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
       }, dest_file)
 
     step_name = '%s (%s)' % (test_suite.name, suffix)
-    _, new_failures = self.limit_failures(new_failures)
-    _, ignored_failures = self.limit_failures(ignored_failures)
-    _, ignored_flakes = self.limit_failures(ignored_flakes)
+    _, truncated_new_failures = self.limit_failures(new_failures)
+    _, truncated_ignored_failures = self.limit_failures(ignored_failures)
+    _, truncated_ignored_flakes = self.limit_failures(ignored_flakes)
     step_text = self.format_step_text(
-        [[new_failures_text, new_failures],
-         [ignored_failures_text, ignored_failures],
-         [ignored_flakes_text, ignored_flakes]])
+        [[new_failures_text, truncated_new_failures],
+         [ignored_failures_text, truncated_ignored_failures],
+         [ignored_flakes_text, truncated_ignored_flakes]])
 
     if ignored_flakes:
       step_text += ('<br/>If the mentioned known flaky tests are incorrect, '
                     'please file a bug at: http://bit.ly/37I61c2<br/>')
 
     result = self.m.python.succeeding_step(step_name, step_text)
+    if new_failures:
+      result.presentation.logs[
+          'failures caused build to fail'] = self.m.json.dumps(
+              new_failures, indent=2).split('/n')
+    if ignored_failures:
+      result.presentation.logs[
+          'failures ignored as they also fail without patch'] = (
+              self.m.json.dumps(ignored_failures, indent=2).split('/n'))
+    if ignored_flakes:
+      result.presentation.logs[
+          'failures ignored as they are known to be flaky'] = self.m.json.dumps(
+              ignored_flakes, indent=2).split('/n')
+
     if new_failures:
       result.presentation.status = self.m.step.FAILURE
       self.m.tryserver.set_test_failure_tryjob_result()
