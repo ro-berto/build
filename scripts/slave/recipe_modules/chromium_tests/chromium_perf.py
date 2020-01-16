@@ -203,8 +203,6 @@ _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True)
 
 
 # Android: Clank, Webview, WebLayer
-_AddIsolatedTestSpec('android-nexus5x-perf', 'android',
-                     'android-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
                      'android-builder-perf', target_bits=32)
 
