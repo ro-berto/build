@@ -90,16 +90,18 @@ def BuildLinuxAndroidArm(api, checkout_dir):
   RunGN(api, checkout_dir, '--android', '--no-lto')
   Build(api, checkout_dir, 'android_debug')
   Build(api, checkout_dir, 'android_debug', ':dist')
-  RunGN(api, checkout_dir, '--android', '--runtime-mode=release',
-        '--android-cpu=arm')
-  Build(api, checkout_dir, 'android_release', 'gen_snapshot')
 
-  # Build and upload engines for the runtime modes that use AOT compilation.
-  for runtime_mode in ['profile', 'release']:
-    build_output_dir = 'android_' + runtime_mode
+  # Build engines for the runtime modes that use AOT compilation.
+  for arch in ['arm', 'arm64']:
+    for mode in ['profile', 'release']:
+      build_dir = 'android_%s%s' % (mode, '_arm64' if arch == 'arm64' else '')
 
-    RunGN(api, checkout_dir, '--android', '--runtime-mode=' + runtime_mode)
-    Build(api, checkout_dir, build_output_dir)
+      RunGN(api, checkout_dir, '--android', '--runtime-mode=' + mode,
+            '--android-cpu=' + arch)
+      # Build the default set of targets.
+      Build(api, checkout_dir, build_dir)
+      # Ensure "gen_snapshot" is always built.
+      Build(api, checkout_dir, build_dir, 'gen_snapshot')
 
 
 def BuildLinux(api, checkout_dir):
@@ -199,10 +201,15 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     ]
   )
 
-  CopyArtifacts(api, engine_src,
-    flutter.join('bin', 'cache', 'artifacts', 'engine', 'android-arm-release',
-                 'linux-x64'),
-    ['out/android_release/clang_x64/gen_snapshot'])
+  # Copy over new versions of gen_snapshot for profile/release arm/arm64
+  for arch in ['arm', 'arm64']:
+    for mode in ['profile', 'release']:
+      build_dir = 'android_%s%s' % (mode, '_arm64' if arch == 'arm64' else '')
+      CopyArtifacts(
+          api, engine_src,
+          flutter.join('bin', 'cache', 'artifacts', 'engine',
+                       'android-%s-%s' % (arch, mode), 'linux-x64'),
+          ['out/%s/clang_x64/gen_snapshot' % build_dir])
 
   flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine',
                                      'common', 'flutter_patched_sdk')
