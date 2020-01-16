@@ -98,7 +98,9 @@ def main(argv):
 
   args = parser.parse_args(argv[1:])
 
-  logging.basicConfig(level=logging.DEBUG if args.verbose else logging.ERROR)
+  logging.basicConfig(
+      level=logging.DEBUG if args.verbose else logging.ERROR,
+      format='%(asctime)s - %(name)s: [%(levelname)s] %(message)s')
 
   tasks = TasksToCollect.read_from_file(args.input_json)
 
