@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -7,11 +7,6 @@ import json
 import os
 import sys
 import unittest
-
-sys.path.insert(0, os.path.join(
-    os.path.dirname(__file__), '..', '..', '..', '..'))
-import common.env
-common.env.Install()
 
 import mock
 import requests
@@ -32,7 +27,6 @@ class CrrevClientTest(unittest.TestCase):
     mock_get.return_value = mock_response
     output = crrev_client.main([
         'get_numbering',
-        '--params-file=test_params_file.json',
     ])
     self.assertEqual(json.dumps(response_data, indent=2), output)
     self.assertEqual(mock_get.call_count, 1)

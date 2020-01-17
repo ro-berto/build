@@ -572,9 +572,13 @@ def main(argv):
     popen.kill()
 
     # Debugging info for help diagnosing the timeout
-    print('Showing ps auxwwf to help debug why ninja timed out')
-    subprocess.call(['ps', 'auxwwf'])
-    print('End of ps auxwwf')
+    if sys.platform != 'win32':
+      print('Showing ps auxwwf to help debug why ninja timed out')
+      if sys.platform == 'darwin':
+        subprocess.call(['ps', 'auxww'])
+      else:
+        subprocess.call(['ps', 'auxwwf'])
+      print('End of ps auxwwf')
   else:
     return_code = popen.wait()
 

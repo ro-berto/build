@@ -7,6 +7,7 @@ from __future__ import print_function
 import textwrap
 import unittest
 import mock
+import sys
 import time
 
 import ninja_wrapper
@@ -110,6 +111,15 @@ _DEPS_ERROR_RETURN = """ninja: error: unknown target 'obj/e.o'"""
 
 
 class NinjaWrapperTestCase(unittest.TestCase):
+
+  def setUp(self):
+    # Monkey patch sys.platform to trigger the unix-only debug printing, even
+    # on windows.
+    self.actual_platform = sys.platform
+    sys.platform = 'linux2'
+
+  def tearDown(self):
+    sys.platform = self.actual_platform
 
   def testParseNinjaStdoutCXX(self):
     warning_collector = ninja_wrapper.WarningCollector()
@@ -427,7 +437,8 @@ class NinjaWrapperTestCase(unittest.TestCase):
 
   @mock.patch('ninja_wrapper.print')
   @mock.patch('ninja_wrapper.subprocess.Popen')
-  def testMainWithTimeoutNotOk(self, mock_Popen, mock_print):
+  @mock.patch('ninja_wrapper.subprocess.call')
+  def testMainWithTimeoutNotOk(self, mock_call, mock_Popen, mock_print):
     """Test main() with a timeout that is raised"""
 
     def faulty_readline_sequence():
@@ -447,8 +458,10 @@ class NinjaWrapperTestCase(unittest.TestCase):
     retval = ninja_wrapper.main(
         ['-t', '.1', '--', 'ninja', 'build/path', 'target1', 'target2'])
 
-    # Only two of these are from readline; one should be the io_timeout print
-    self.assertEqual(mock_print.call_count, 3)
+    # Only two of these are from readline; one should be the io_timeout print,
+    # and two for the header and footer prints in the process-list debugging.
+    self.assertEqual(mock_print.call_count, 5)
+    self.assertEqual(mock_call.call_count, 1)
     self.assertEqual(retval, 124)
     mock_popen_instance.stdout.close.assert_called()
 
