@@ -220,8 +220,6 @@ _AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
 
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
                      'android_arm64-builder-perf')
-_AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android',
-                     'android-builder-perf', target_bits=32)
 
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
