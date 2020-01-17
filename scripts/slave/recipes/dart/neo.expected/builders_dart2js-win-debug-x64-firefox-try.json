@@ -1201,10 +1201,12 @@
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "[CACHE]/builder/sdk/tools/bots/post_results_to_pubsub.dart",
-      "-f",
+      "--result_file",
       "{\"data\":\"result data\"}\n",
-      "-a",
-      "extra.secret.token.should.not.be.logged"
+      "--auth_token",
+      "extra.secret.token.should.not.be.logged",
+      "--id",
+      "8945511751514863184"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

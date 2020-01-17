@@ -489,13 +489,15 @@ class DartApi(recipe_api.RecipeApi):
     access_token = self.m.service_account.default().get_access_token(
       ['https://www.googleapis.com/auth/cloud-platform'])
     self.m.step(
-        'publish results to pub/sub',
-        [self.dart_executable(),
-         self.m.path['checkout'].join('tools', 'bots',
-                                      'post_results_to_pubsub.dart'),
-         '-f', self.m.raw_io.input_text(results_str),
-         '-a', self.m.raw_io.input_text(access_token)],
-         ok_ret='any')
+        'publish results to pub/sub', [
+            self.dart_executable(), self.m.path['checkout'].join(
+                'tools', 'bots',
+                'post_results_to_pubsub.dart'), '--result_file',
+            self.m.raw_io.input_text(results_str), '--auth_token',
+            self.m.raw_io.input_text(access_token), '--id',
+            self.m.buildbucket.build.id
+        ],
+        ok_ret='any')
 
 
   def _report_success(self, results_str, firestore_approvals):
