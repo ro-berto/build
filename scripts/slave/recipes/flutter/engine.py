@@ -1049,6 +1049,8 @@ def BuildWindows(api):
     RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
     Build(api, 'host_debug')
     RunTests(api, 'host_debug', types='engine')
+    RunGN(api, '--runtime-mode', 'release', '--no-lto')
+    Build(api, 'host_release', 'font-subset', 'const_finder')
     UploadArtifacts(api, 'windows-x64', [
       ICU_DATA_PATH,
       'out/host_debug/flutter_tester.exe',
