@@ -562,6 +562,13 @@ def BuildLinux(api):
     'cpp_client_wrapper_glfw',
     'flutter-cpp-client-wrapper-glfw.zip',
     'linux-x64')
+  UploadArtifacts(
+      api,
+      'linux-x64', [
+          'out/host_release/font-subset',
+          'out/host_release/gen/const_finder.dart.snapshot',
+      ],
+      archive_name='font-subset.zip')
 
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
@@ -847,6 +854,13 @@ def BuildMac(api):
             flutter_podspec,
         ],
         archive_name='FlutterMacOS.framework.zip')
+    UploadArtifacts(
+        api,
+        'darwin-x64', [
+            'out/host_release/font-subset',
+            'out/host_release/gen/const_finder.dart.snapshot',
+        ],
+        archive_name='font-subset.zip')
 
     UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
     UploadWebSdk(api, archive_name='flutter-web-sdk-darwin-x64.zip')
@@ -1086,6 +1100,13 @@ def BuildWindows(api):
       'cpp_client_wrapper_glfw',
       'flutter-cpp-client-wrapper-glfw.zip',
       'windows-x64')
+    UploadArtifacts(
+        api,
+        'windows-x64', [
+            'out/host_release/font-subset.exe',
+            'out/host_release/gen/const_finder.dart.snapshot',
+        ],
+        archive_name='font-subset.zip')
 
     UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')
     UploadWebSdk(api, archive_name='flutter-web-sdk-windows-x64.zip')
