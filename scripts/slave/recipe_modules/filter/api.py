@@ -204,7 +204,6 @@ class FilterApi(recipe_api.RecipeApi):
     if ignored:
       analyze_result = 'No compile necessary (all files ignored)'
       self.m.python.succeeding_step('analyze', analyze_result)
-      self._report_analyze_result(analyze_input, {'status': analyze_result})
       return
 
     test_output = {
@@ -257,46 +256,42 @@ class FilterApi(recipe_api.RecipeApi):
                 test_output),
               **kwargs)
 
-    try:
-      if 'error' in step_result.json.output:
-        step_result.presentation.step_text = ('Error: ' +
-            step_result.json.output['error'])
-        step_result.presentation.status = self.m.step.FAILURE
-        raise self.m.step.StepFailure(
-            'Error: ' + step_result.json.output['error'])
+    if 'error' in step_result.json.output:
+      step_result.presentation.step_text = (
+          'Error: ' + step_result.json.output['error'])
+      step_result.presentation.status = self.m.step.FAILURE
+      raise self.m.step.StepFailure('Error: ' +
+                                    step_result.json.output['error'])
 
-      if 'invalid_targets' in step_result.json.output:
-        raise self.m.step.StepFailure('Error, following targets were not '
-            'found: ' + ', '.join(step_result.json.output['invalid_targets']))
+    if 'invalid_targets' in step_result.json.output:
+      raise self.m.step.StepFailure(
+          'Error, following targets were not '
+          'found: ' + ', '.join(step_result.json.output['invalid_targets']))
 
-      if matched_exclusion:
-        analyze_result = 'Analyze disabled: matched exclusion'
-        # TODO(phajdan.jr): consider using plain api.step here, not python.
-        step_result = self.m.python.succeeding_step('analyze_matched_exclusion',
-            analyze_result)
-        step_result.presentation.logs.setdefault('excluded_files', []).append(
-            '%s (regex = \'%s\')' % (first_found_path, first_match))
-        self._compile_targets = sorted(all_targets)
-        self._test_targets = sorted(test_targets)
-        self._report_analyze_result(analyze_input, {'status': analyze_result})
-      elif (step_result.json.output['status'] in (
-          'Found dependency', 'Found dependency (all)')):
-        self._compile_targets = step_result.json.output['compile_targets']
-        self._test_targets = step_result.json.output['test_targets']
+    if matched_exclusion:
+      analyze_result = 'Analyze disabled: matched exclusion'
+      # TODO(phajdan.jr): consider using plain api.step here, not python.
+      step_result = self.m.python.succeeding_step('analyze_matched_exclusion',
+                                                  analyze_result)
+      step_result.presentation.logs.setdefault('excluded_files', []).append(
+          '%s (regex = \'%s\')' % (first_found_path, first_match))
+      self._compile_targets = sorted(all_targets)
+      self._test_targets = sorted(test_targets)
+    elif (step_result.json.output['status'] in ('Found dependency',
+                                                'Found dependency (all)')):
+      self._compile_targets = step_result.json.output['compile_targets']
+      self._test_targets = step_result.json.output['test_targets']
 
-        # TODO(dpranke) crbug.com/557505 - we need to not prune meta
-        # targets that are part of 'test_targets', because otherwise
-        # we might not actually build all of the binaries needed for
-        # a given test, even if they aren't affected by the patch.
-        # Until the GYP code is updated, we will merge the returned
-        # test_targets into compile_targets to be safe.
-        self._compile_targets = sorted(set(self._compile_targets +
-                                           self._test_targets))
-      else:
-        step_result.presentation.step_text = 'No compile necessary'
-    finally:
-      if not matched_exclusion:
-        self._report_analyze_result(analyze_input, step_result.json.output)
+      # TODO(dpranke) crbug.com/557505 - we need to not prune meta
+      # targets that are part of 'test_targets', because otherwise
+      # we might not actually build all of the binaries needed for
+      # a given test, even if they aren't affected by the patch.
+      # Until the GYP code is updated, we will merge the returned
+      # test_targets into compile_targets to be safe.
+      self._compile_targets = sorted(
+          set(self._compile_targets + self._test_targets))
+    else:
+      step_result.presentation.step_text = 'No compile necessary'
 
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
   def analyze(self, affected_files, test_targets, additional_compile_targets,
@@ -342,7 +337,3 @@ class FilterApi(recipe_api.RecipeApi):
     step_result.presentation.logs['analyze_details'] = listio.lines
 
     return self.test_targets, compile_targets
-
-  def _report_analyze_result(self, _, __):
-    # TODO(phajdan.jr): send data to event_mon.
-    return
