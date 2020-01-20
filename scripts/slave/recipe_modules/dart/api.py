@@ -504,15 +504,25 @@ class DartApi(recipe_api.RecipeApi):
     if results_str:
       access_token = self.m.service_account.default().get_access_token(
           ['https://www.googleapis.com/auth/cloud-platform'])
-      self.m.step(
+      step_result = self.m.step(
           'test results' if firestore_approvals else 'new test results', [
-              self.dart_executable(), self.m.path['checkout'].join(
-                  'tools', 'bots', 'get_builder_status.dart'), '-b',
-              self.m.buildbucket.builder_name, '-n',
-              self.m.buildbucket.build.number, '-a',
-              self.m.raw_io.input_text(access_token)
+              self.dart_executable(),
+              self.m.path['checkout'].join('tools', 'bots',
+                                           'get_builder_status.dart'),
+              '-b',
+              self.m.buildbucket.builder_name,
+              '-n',
+              self.m.buildbucket.build.number,
+              '-a',
+              self.m.raw_io.input_text(access_token),
           ],
+          stdout=self.m.raw_io.output_text(),
           ok_ret={0} if firestore_approvals else 'any')
+      step_result.presentation.logs['build status'] = step_result.stdout
+      match = re.search(r'Failures link: (.*)', step_result.stdout)
+      if (match):
+        step_result.presentation.links[
+            'Unapproved Failing Tests'] = match.group(1)
 
 
   def _extend_results_records(self, results_str, prior_results_path,

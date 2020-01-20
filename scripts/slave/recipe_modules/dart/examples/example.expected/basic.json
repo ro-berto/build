@@ -2079,7 +2079,11 @@
       "extra.secret.token.should.not.be.logged"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "new test results"
+    "name": "new test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@build status@@@@",
+      "@@@STEP_LOG_END@build status@@@"
+    ]
   },
   {
     "cmd": [
