@@ -64,51 +64,6 @@ def CreateAndroidConfig(bits, apply_configs=None):
   )
 
 
-def CreateGenericConfig(chromium_config='chromium',
-                        chromium_apply_config=None,
-                        gclient_config='chromium',
-                        gclient_apply_config=None,
-                        chromium_config_kwargs=None,
-                        platform='linux'):
-  """
-    Generates a builder recipe config that differs from the standard config or
-    Android config.
-
-    Args:
-        chromium_config: base chromium config.
-        chromium_apply_configs: list of chromium configs to apply.
-        gclient_config: base gclient config.
-        gclient_apply_config: list of gclient config to apply.
-        chromium_config_kwargs: dict of misc config args.
-        platform: one of linux, mac, win
-
-    Returns:
-        A dict mapping string keys to field values in the build config format.
-    """
-  # Specify default values here to avoid mutable object default values in
-  # method definition.
-  # TODO(crbug.com/947436): |chromium_apply_config| defaults to None but is
-  # always specified in current use. If we specify a non-None default value
-  # here, the recipes test will complain that it is not covered. Once we need
-  # to call this function without explicitly specifying
-  # |chromium_apply_config|, then we should provide a proper default value.
-  if gclient_apply_config is None:
-    gclient_apply_config = []
-  if chromium_config_kwargs is None:
-    chromium_config_kwargs = {}
-
-  return bot_spec.BotSpec.create(
-      chromium_config=chromium_config,
-      chromium_apply_config=chromium_apply_config,
-      gclient_config=gclient_config,
-      gclient_apply_config=gclient_apply_config,
-      chromium_config_kwargs=chromium_config_kwargs,
-      testing={
-          'platform': platform,
-      },
-  )
-
-
 # Predefined builder configs:
 _LINUX_CONFIG = CreateStandardConfig('linux')
 _LINUX_CLOBBER_CONFIG = CreateStandardConfig('linux', ['clobber'])
@@ -202,32 +157,6 @@ _SPEC_BUILDERS = {
         _WIN_CONFIG,
     'Chromium Win Goma RBE Prod (dbg) (clobber)':
         _WIN_CLOBBER_CONFIG,
-
-    # FYI builders of various config flavors.
-    'Cast Linux (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_config='chromium_clang', chromium_apply_config=['mb']),
-    'chromeos-amd64-generic-rel (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_apply_config=['mb'],
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'TARGET_CROS_BOARD': 'amd64-generic',
-                'TARGET_PLATFORM': 'chromeos',
-            }),
-    'Linux ASan LSan Builder (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_config='chromium_asan',
-            chromium_apply_config=['lsan', 'mb']),
-    'Linux MSan Builder (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_config='chromium_msan', chromium_apply_config=['mb']),
-    'fuchsia-fyi-arm64-rel (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_apply_config=['mb'], gclient_apply_config=['fuchsia']),
-    'fuchsia-fyi-x64-rel (Goma RBE FYI)':
-        CreateGenericConfig(
-            chromium_apply_config=['mb'], gclient_apply_config=['fuchsia']),
 }
 
 SPEC = {
