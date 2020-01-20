@@ -307,12 +307,6 @@ RESULT_DATA = (
     '"previous_commit_time":1551185312,"previous_build_number":2403,'
     '"changed":false}\n')
 
-BUILD_STATUS = (
-    'No unapproved new failures\n'
-    'There are unapproved failures from previous builds\n'
-    'Failures link: https://dart-ci.firebaseapp.com/#showLatestFailures=true&'
-    'showUnapprovedOnly=true&configurationGroups=analyzer\n')
-
 
 def RunSteps(api):
   api.dart.checkout('clobber' in api.properties)
@@ -403,8 +397,6 @@ def GenTests(api):
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
-      api.step_data(
-          'test results', stdout=api.raw_io.output_text(BUILD_STATUS)),
       api.post_process(StatusSuccess),
   )
 
