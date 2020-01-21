@@ -12,6 +12,7 @@ without error.
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
+from RECIPE_MODULES.build.chromium_tests import bot_spec
 from RECIPE_MODULES.build.chromium_tests import builders
 
 DEPS = [
@@ -82,7 +83,7 @@ def RunSteps(api, mastername, buildername):
       [api.chromium_tests.create_bot_id(mastername, buildername)])
 
   # For testers, check that various configs are equal to the builder's
-  if bot_config.get('bot_type', 'builder_tester') == 'tester':
+  if bot_config.get('bot_type', bot_spec.BUILDER_TESTER) == 'tester':
     validate_tester_config(api, mastername, buildername, bot_config)
 
   # Make sure that the configuration is valid

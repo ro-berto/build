@@ -53,29 +53,26 @@ _TEST_BUILDERS = {
 }
 
 _TEST_TRYBOTS = {
-  'tryserver.chromium.test': {
-    'builders': {
-      'retry-shards': {
-        'retry_failed_shards': True,
-        'bot_ids': [
-          {
-            'mastername': 'chromium.test',
-            'buildername': 'retry-shards',
-            'tester': 'retry-shards-test',
-          },
-        ],
-      },
-      'staging-chromium-rel': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.test',
-            'buildername': 'staging-chromium-rel',
-            'tester': 'staging-chromium-test-rel',
-          },
-        ],
-      },
+    'tryserver.chromium.test': {
+        'builders': {
+            'retry-shards': {
+                'retry_failed_shards':
+                    True,
+                'bot_ids': [{
+                    'mastername': 'chromium.test',
+                    'buildername': 'retry-shards',
+                    'tester': 'retry-shards-test',
+                },],
+            },
+            'staging-chromium-rel': {
+                'bot_ids': [{
+                    'mastername': 'chromium.test',
+                    'buildername': 'staging-chromium-rel',
+                    'tester': 'staging-chromium-test-rel',
+                },],
+            },
+        },
     },
-  },
 }
 
 
@@ -87,6 +84,7 @@ def RunSteps(api):
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))
   return raw_result
+
 
 def GenTests(api):
   yield api.test(
@@ -492,13 +490,10 @@ def GenTests(api):
         'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
-                  'base_unittests1',
-                  'base_unittests2',
-                  'base_unittests3'
+                    'base_unittests1', 'base_unittests2', 'base_unittests3'
                 ],
             },
-        }
-    )
+        })
 
   yield api.test(
       'many_invalid_results',
