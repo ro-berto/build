@@ -1064,7 +1064,7 @@ def GenTests(api):
               'host': 'fake host',
               'device type': 'Real device',
               'os': '13.1.2',
-              'shard size': 7
+              'swarming tasks': 3
           }, {
               'app': 'EG1_test2',
               'device type': 'Real device',

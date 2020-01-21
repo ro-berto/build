@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import copy
 import re
 
@@ -696,7 +697,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     return task
 
-  def isolate_earlgrey_test(self, test, shard_size, tmp_dir, isolate_template,
+  def isolate_earlgrey_test(self, test, shard_size, swarming_tasks,
+                            tmp_dir, isolate_template,
                             bot=None):
     """Isolate earlgrey test into small shards"""
     if 'host' in test:
@@ -744,17 +746,42 @@ class iOSApi(recipe_api.RecipeApi):
       'imp (?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
       '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
     test_names = test_pattern.findall(step_result.stdout)
-    tests_set = set()
     # 'ChromeTestCase' and 'BaseEarlGreyTestCase' are parent classes
     # of all EarlGrey/EarlGrey2 test classes. They have no real tests.
     parent_test_classes = {'BaseEarlGreyTestCase', 'ChromeTestCase'}
-    for test_name in test_names:
-      if test_name[0] not in parent_test_classes:
-        tests_set.add('%s' % test_name[0])
-    testcases = sorted(tests_set)
 
-    sublists = [testcases[i : i + shard_size]
+    if swarming_tasks:
+      # Calculates number of test methods for each test suite
+      test_counts = collections.Counter(
+          test_class for test_class, _ in test_names
+          if test_class not in parent_test_classes)
+
+      # Stores list of test classes and number of all tests
+      class Shard(object):
+        def __init__(self):
+          self.test_classes = []
+          self.size = 0
+
+      shards = [Shard() for i in range(swarming_tasks)]
+      # Balances test classes between shards to have
+      # approximately equal number of tests per shard.
+      for test_class, number_of_test_methods in test_counts.most_common():
+        min_shard = min(shards, key=lambda shard: shard.size)
+        min_shard.test_classes.append(test_class)
+        min_shard.size += number_of_test_methods
+
+      sublists = [shard.test_classes for shard in shards]
+    else:
+      # TODO(monufriienko): Remove the code when all tests use `swarming_tasks`
+      tests_set = set()
+      for test_name in test_names:
+        if test_name[0] not in parent_test_classes:
+          tests_set.add('%s' % test_name[0])
+      testcases = sorted(tests_set)
+
+      sublists = [testcases[i: i + shard_size]
                   for i in range(0, len(testcases), shard_size)]
+
     tasks = []
     bot = bot or self.m.buildbucket.builder_name
     for i, sublist in enumerate(sublists):
@@ -829,8 +856,10 @@ class iOSApi(recipe_api.RecipeApi):
     bots_and_tests.extend(self.__config['triggered tests'].items())
     for bot, tests in bots_and_tests:
       for test in tests:
-        if test.get('shard size') and 'skip' not in test:
-          tasks += self.isolate_earlgrey_test(test, test['shard size'],
+        if ((test.get('shard size') or test.get('swarming tasks'))
+                and 'skip' not in test):
+          tasks += self.isolate_earlgrey_test(test, test.get('shard size', 0),
+                                              test.get('swarming tasks', 0),
                                               tmp_dir, isolate_template,
                                               bot=bot)
         else:
