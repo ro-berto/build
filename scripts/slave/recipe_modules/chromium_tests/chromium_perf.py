@@ -9,21 +9,20 @@ from . import steps
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
-
 SPEC = {
-  'builders': {},
-  'settings': {
-    # Bucket for storing builds for manual bisect
-    'bisect_build_gs_bucket': 'chrome-test-builds',
-    'bisect_build_gs_extra': 'official-by-commit',
-    'bisect_builders': [],
-    'luci_project': 'chrome',
-  },
+    'builders': {},
+    'settings': {
+        # Bucket for storing builds for manual bisect
+        'bisect_build_gs_bucket': 'chrome-test-builds',
+        'bisect_build_gs_extra': 'official-by-commit',
+        'bisect_builders': [],
+        'luci_project': 'chrome',
+    },
 }
 
 
-@CHROMIUM_CONFIG_CTX(includes=['chromium', 'official', 'mb',
-                               'goma_hermetic_fallback'])
+@CHROMIUM_CONFIG_CTX(
+    includes=['chromium', 'official', 'mb', 'goma_hermetic_fallback'])
 def chromium_perf(c):
   # Bisects may build using old toolchains, so goma_hermetic_fallback is
   # required. See https://codereview.chromium.org/1015633002
@@ -40,19 +39,20 @@ def chromium_perf(c):
 
 def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   spec = {
-    'bot_type': bot_type,
-    'chromium_config': config_name,
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': target_bits,
-    },
-    'enable_package_transfer': True,
-    'gclient_config': config_name,
-    'gclient_apply_config': [],
-    'testing': {
-      'platform': 'linux' if platform in ('android', 'chromeos') else platform,
-    },
-    'tests': tests,
+      'bot_type': bot_type,
+      'chromium_config': config_name,
+      'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': target_bits,
+      },
+      'enable_package_transfer': True,
+      'gclient_config': config_name,
+      'gclient_apply_config': [],
+      'testing': {
+          'platform':
+              'linux' if platform in ('android', 'chromeos') else platform,
+      },
+      'tests': tests,
   }
 
   if platform == 'android':
@@ -66,7 +66,6 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
   elif platform == 'mac':
     spec['chromium_apply_config'] = ['mac_toolchain']
-
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
@@ -117,9 +116,13 @@ def BuildSpec(config_name,
   return spec
 
 
-def TestSpec(config_name, platform, target_bits,
-             parent_buildername, tests=None,
-             cros_board=None, target_arch=None):
+def TestSpec(config_name,
+             platform,
+             target_bits,
+             parent_buildername,
+             tests=None,
+             cros_board=None,
+             target_arch=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
@@ -141,8 +144,11 @@ def TestSpec(config_name, platform, target_bits,
 
 
 def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
-  spec = TestSpec('chromium_perf', platform, target_bits,
-                  parent_buildername=parent_buildername)
+  spec = TestSpec(
+      'chromium_perf',
+      platform,
+      target_bits,
+      parent_buildername=parent_buildername)
   SPEC['builders'][name] = spec
 
 
@@ -166,17 +172,22 @@ _AddBuildSpec('Android Builder Perf', 'android', target_bits=32)
 _AddBuildSpec('Android arm64 Builder Perf', 'android')
 
 # LUCI builder
-_AddBuildSpec('android-builder-perf', 'android', target_bits=32,
-              add_to_bisect=True,
-              extra_compile_targets=['android_tools',
-                                     'cc_perftests',
-                                     'chrome_public_apk',
-                                     'dump_syms',
-                                     'gpu_perftests',
-                                     'microdump_stackwalk',
-                                     'push_apps_to_background_apk',
-                                     'system_webview_apk',
-                                     'system_webview_shell_apk',])
+_AddBuildSpec(
+    'android-builder-perf',
+    'android',
+    target_bits=32,
+    add_to_bisect=True,
+    extra_compile_targets=[
+        'android_tools',
+        'cc_perftests',
+        'chrome_public_apk',
+        'dump_syms',
+        'gpu_perftests',
+        'microdump_stackwalk',
+        'push_apps_to_background_apk',
+        'system_webview_apk',
+        'system_webview_shell_apk',
+    ])
 
 # LUCI builder
 _AddBuildSpec(
@@ -201,15 +212,17 @@ _AddBuildSpec('mac-builder-perf', 'mac', add_to_bisect=True)
 
 _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True)
 
-
 # Android: Clank, Webview, WebLayer
-_AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
-                     'android-builder-perf', target_bits=32)
+_AddIsolatedTestSpec(
+    'Android Nexus5 Perf', 'android', 'android-builder-perf', target_bits=32)
 
-_AddIsolatedTestSpec('android-go-perf', 'android',
-                     'android-builder-perf', target_bits=32)
-_AddIsolatedTestSpec('android-go_webview-perf', 'android',
-                     'android-builder-perf', target_bits=32)
+_AddIsolatedTestSpec(
+    'android-go-perf', 'android', 'android-builder-perf', target_bits=32)
+_AddIsolatedTestSpec(
+    'android-go_webview-perf',
+    'android',
+    'android-builder-perf',
+    target_bits=32)
 
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      'android_arm64-builder-perf')
@@ -221,16 +234,13 @@ _AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
                      'android_arm64-builder-perf')
 
-
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('Win 7 Perf', 'win', 'win32-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
-
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'mac-builder-perf')
-
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
