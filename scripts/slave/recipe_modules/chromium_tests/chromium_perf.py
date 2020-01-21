@@ -4,6 +4,7 @@
 
 import collections
 
+from . import bot_spec
 from . import steps
 
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
@@ -37,7 +38,7 @@ def chromium_perf(c):
   c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
-def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
+def _common_kwargs(bot_type, config_name, platform, target_bits, tests):
   spec = {
       'bot_type': bot_type,
       'chromium_config': config_name,
@@ -90,30 +91,30 @@ def BuildSpec(config_name,
   if run_sizes and not platform in ('android', 'chromeos'):
     tests = [steps.SizesStep('https://chromeperf.appspot.com', config_name)]
 
-  spec = _BaseSpec(
-      bot_type='builder',
+  kwargs = _common_kwargs(
+      bot_type=bot_spec.BUILDER,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
       tests=tests,
   )
 
-  spec['perf_isolate_lookup'] = True
+  kwargs['perf_isolate_lookup'] = True
 
-  spec['compile_targets'] = compile_targets
+  kwargs['compile_targets'] = compile_targets
   if extra_compile_targets:
-    spec['compile_targets'] += extra_compile_targets
+    kwargs['compile_targets'] += extra_compile_targets
 
   if cros_board:
-    spec['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
 
   if target_arch:
-    spec['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
+    kwargs['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
 
   if extra_gclient_apply_config:
-    spec['gclient_apply_config'] += list(extra_gclient_apply_config)
+    kwargs['gclient_apply_config'] += list(extra_gclient_apply_config)
 
-  return spec
+  return bot_spec.BotSpec.create(**kwargs)
 
 
 def TestSpec(config_name,
@@ -123,24 +124,24 @@ def TestSpec(config_name,
              tests=None,
              cros_board=None,
              target_arch=None):
-  spec = _BaseSpec(
-      bot_type='tester',
+  kwargs = _common_kwargs(
+      bot_type=bot_spec.TESTER,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
       tests=tests or [],
   )
 
-  spec['parent_buildername'] = parent_buildername
-  spec['gclient_apply_config'].append('no_checkout_flash')
+  kwargs['parent_buildername'] = parent_buildername
+  kwargs['gclient_apply_config'].append('no_checkout_flash')
 
   if cros_board:
-    spec['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
+    kwargs['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
 
   if target_arch:
-    spec['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
+    kwargs['chromium_config_kwargs']['TARGET_ARCH'] = target_arch
 
-  return spec
+  return bot_spec.BotSpec.create(**kwargs)
 
 
 def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):

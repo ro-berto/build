@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from . import bot_spec
 from . import chromium_perf
-from . import steps
 
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
@@ -46,7 +46,7 @@ def _AddIsolatedTestSpec(name,
       parent_buildername=parent_buildername,
       **kwargs)
   if parent_mastername:
-    spec['parent_mastername'] = parent_mastername
+    spec = spec.evolve(parent_mastername=parent_mastername)
 
   SPEC['builders'][name] = spec
 
