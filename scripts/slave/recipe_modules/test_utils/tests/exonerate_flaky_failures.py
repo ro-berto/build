@@ -90,6 +90,9 @@ def GenTests(api):
       api.step_data('query known flaky failures on CQ', retcode=1),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.StepTextContains,
+                       'query known flaky failures on CQ',
+                       ['Failed to get known flakes']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

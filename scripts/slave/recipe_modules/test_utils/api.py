@@ -322,8 +322,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     result.presentation.logs['output'] = json.dumps(
         result.json.output, indent=4)
 
-    if not result.json.output:
+    if result.exc_result.retcode != 0:
       result.presentation.step_text = 'Failed to get known flakes'
+      return
+
+    if not result.json.output:
       return
 
     if 'flakes' not in result.json.output:
