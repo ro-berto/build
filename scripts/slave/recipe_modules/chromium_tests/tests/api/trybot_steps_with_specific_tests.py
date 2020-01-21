@@ -64,10 +64,19 @@ def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
 
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
 
+  # Allows testing the scenario where there are multiple test suites.
+  with_url_unittests = api.properties.get('with_url_unittests', False)
+  url_unittests = (
+      steps.SwarmingGTestTest('url_unittests', **kwargs)
+      if with_url_unittests else None)
+
   # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
-    task = api.chromium_tests.Task(bot, [test], update_step, affected_files)
+    tests = [test]
+    if url_unittests:
+      tests.append(url_unittests)
+    task = api.chromium_tests.Task(bot, tests, update_step, affected_files)
     task.should_retry_failures_with_changes = lambda: retry_failed_shards
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if fail_calculate_tests:
@@ -1279,5 +1288,102 @@ def GenTests(api):
       api.post_process(
           post_process.LogEquals, 'FindIt Flakiness', 'step_metadata',
           json.dumps(expected_findit_metadata, sort_keys=True, indent=2)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  base_unittests_results = {
+      'per_iteration_data': [{
+          'TestBase.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  url_unittests_results = {
+      'per_iteration_data': [{
+          'UrlTest.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  url_unittests_retry_shards_results = {
+      'per_iteration_data': [{
+          'UrlTest.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  # This test tests that scenrio that after the "without patch" steps, there
+  # could be two different kinds test suites need to summarize their results:
+  # 1. Those ran "without patch" steps because there are non-forgivable failures
+  #    after "with patch" steps.
+  # 2. Those didn't run "without patch" steps because their failures are known
+  #    flaky tests and are forgiven.
+  # These two cases should be handled differently and correctly.
+  yield api.test(
+      'summarize_both_retried_and_not_retried_test_suites',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
+          retry_failed_shards=True,
+          with_url_unittests=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'url_unittests': 'dddddddddddddddddddddddddddddddddddddddd',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(base_unittests_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'url_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(url_unittests_results), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'url_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(url_unittests_retry_shards_results), retcode=1),
+              failure=True)),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'BaseTest.One',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
+      api.post_process(
+          post_process.StepTextContains,
+          'base_unittests (test results summary)', [
+              'Tests failed with patch, but ignored as they are known to be '
+              'flaky:<br/>BaseTest.One: crbug.com/999<br/>'
+          ]),
+      api.post_process(post_process.StepTextContains,
+                       'url_unittests (test results summary)', [
+                           'Tests failed with patch, and caused build to fail:'
+                           '<br/>UrlTest.One<br/>'
+                       ]),
       api.post_process(post_process.DropExpectation),
   )

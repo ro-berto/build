@@ -911,10 +911,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       unrecoverable_test_suites = []
       for t in task.test_suites:
-        if t.has_failures_to_summarize():
-          if not self.m.test_utils.summarize_test_with_patch_deapplied(
-              self.m, t):
-            unrecoverable_test_suites.append(t)
+        if not t.has_failures_to_summarize:  # pragma: nocover
+          continue
+
+        if t not in failing_test_suites:
+          # 'Without patch' steps only apply to failed test suites, so when a
+          # test suite didn't fail, but still has failures to summarize
+          # (known flaky failures), it is summarized in a way that
+          # "without patch" step didn't happen.
+          self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+          continue
+
+        if not self.m.test_utils.summarize_test_with_patch_deapplied(self.m, t):
+          unrecoverable_test_suites.append(t)
+
       return None, unrecoverable_test_suites
 
   def _build_bisect_gs_archive_url(self, master_config):
