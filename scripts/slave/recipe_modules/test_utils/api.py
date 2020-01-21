@@ -281,16 +281,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     tests_to_check = []
     for test_suite in failed_test_suites:
+      tests = []
       for t in set(test_suite.deterministic_failures('with patch')):
-        tests_to_check.append({
+        tests.append({
             'step_ui_name': test_suite.name_of_step_for_suffix('with patch'),
             'test_name': t,
         })
 
-    if len(tests_to_check) > 100:
-      # Bail out if there are too many failed tests because:
-      # 1. It's unlikely they're all legitimate flaky failures.
-      # 2. Avoid overloading the service.
+      if len(tests) > 100:
+        # Bail out if there are too many failed tests because:
+        # 1. It's unlikely they're all legitimate flaky failures.
+        # 2. Avoid overloading the service.
+        continue
+
+      tests_to_check.extend(tests)
+
+    if not tests_to_check:
       return
 
     builder = self.m.buildbucket.build.builder

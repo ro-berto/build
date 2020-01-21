@@ -255,6 +255,7 @@ def GenTests(api):
       api.properties(
           mastername='m',
           buildername='b',
+          exclude_failed_test=True,
           has_too_many_failures=True,
           **{
               '$build/test_utils': {
@@ -263,6 +264,29 @@ def GenTests(api):
           }),
       api.post_process(post_process.DoesNotRun,
                        'query known flaky failures on CQ'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  # The difference between this test and the immediate above one is that this
+  # test doesn't exclude the test suite with limited number of failures, and
+  # this test tests that even though there are tests with too many failures, the
+  # recipe should still query known flaky failures for other test suites with
+  # limited number of failures.
+  yield api.test(
+      'keep querying if at least one test suite has limited failures',
+      api.properties(
+          mastername='m',
+          buildername='b',
+          has_too_many_failures=True,
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.post_process(post_process.LogContains,
+                       'query known flaky failures on CQ', 'input',
+                       ['failed_test (with patch)']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
