@@ -134,7 +134,8 @@ def generate_tests(api, phase, bot):
         AndroidTest('video_engine_tests', shards=4),
         AndroidTest('webrtc_nonparallel_tests'),
 
-        AndroidJunitTest('android_junit_tests'),
+        AndroidJunitTest('android_examples_junit_tests'),
+        AndroidJunitTest('android_sdk_junit_tests'),
     ]
 
     if bot.should_test_android_studio_project_generation:

@@ -7123,7 +7123,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/out/android_arm64_rel/bin/run_android_junit_tests",
+      "[CACHE]/builder/src/out/android_arm64_rel/bin/run_android_examples_junit_tests",
       "--verbose",
       "--release"
     ],
@@ -7131,7 +7131,19 @@
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "name": "android_junit_tests"
+    "name": "android_examples_junit_tests"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/src/out/android_arm64_rel/bin/run_android_sdk_junit_tests",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "name": "android_sdk_junit_tests"
   },
   {
     "allow_subannotations": true,
