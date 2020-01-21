@@ -566,7 +566,7 @@ def BuildLinux(api):
       api,
       'linux-x64', [
           'out/host_release/font-subset',
-          'out/host_release/gen/const_finder.dart.snapshot',
+          'out/host_debug/gen/const_finder.dart.snapshot',
       ],
       archive_name='font-subset.zip')
 
@@ -858,7 +858,7 @@ def BuildMac(api):
         api,
         'darwin-x64', [
             'out/host_release/font-subset',
-            'out/host_release/gen/const_finder.dart.snapshot',
+            'out/host_debug/gen/const_finder.dart.snapshot',
         ],
         archive_name='font-subset.zip')
 
@@ -1050,7 +1050,7 @@ def BuildWindows(api):
     Build(api, 'host_debug')
     RunTests(api, 'host_debug', types='engine')
     RunGN(api, '--runtime-mode', 'release', '--no-lto')
-    Build(api, 'host_release', 'font-subset', 'const_finder')
+    Build(api, 'host_release', 'font-subset')
     UploadArtifacts(api, 'windows-x64', [
       ICU_DATA_PATH,
       'out/host_debug/flutter_tester.exe',
@@ -1106,7 +1106,7 @@ def BuildWindows(api):
         api,
         'windows-x64', [
             'out/host_release/font-subset.exe',
-            'out/host_release/gen/const_finder.dart.snapshot',
+            'out/host_debug/gen/const_finder.dart.snapshot',
         ],
         archive_name='font-subset.zip')
 

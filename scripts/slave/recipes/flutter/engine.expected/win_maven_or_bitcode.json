@@ -868,8 +868,7 @@
       "1024",
       "-C",
       "[CACHE]\\builder\\src\\out/host_release",
-      "font-subset",
-      "const_finder"
+      "font-subset"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
@@ -886,7 +885,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
-    "name": "build host_release font-subset const_finder"
+    "name": "build host_release font-subset"
   },
   {
     "cmd": [],
@@ -1028,7 +1027,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build host_release font-subset const_finder",
+      "build host_release font-subset",
       "--goma-stats-file",
       "[TMP_BASE]\\goma_stats",
       "--goma-counterz-file",
@@ -1437,7 +1436,7 @@
       ]
     },
     "name": "Zip windows-x64 font-subset.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"font-subset.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_release/font-subset.exe\", \"type\": \"file\"}, {\"archive_name\": \"const_finder.dart.snapshot\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_release/gen/const_finder.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"font-subset.exe\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_release/font-subset.exe\", \"type\": \"file\"}, {\"archive_name\": \"const_finder.dart.snapshot\", \"path\": \"[CACHE]\\\\builder\\\\src\\\\out/host_debug/gen/const_finder.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\artifacts.zip\", \"root\": \"[CACHE]\\\\builder\\\\src\"}"
   },
   {
     "cmd": [

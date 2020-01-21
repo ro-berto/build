@@ -2433,7 +2433,7 @@
       ]
     },
     "name": "Zip darwin-x64 font-subset.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"font-subset\", \"path\": \"[CACHE]/builder/src/out/host_release/font-subset\", \"type\": \"file\"}, {\"archive_name\": \"const_finder.dart.snapshot\", \"path\": \"[CACHE]/builder/src/out/host_release/gen/const_finder.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_8/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"font-subset\", \"path\": \"[CACHE]/builder/src/out/host_release/font-subset\", \"type\": \"file\"}, {\"archive_name\": \"const_finder.dart.snapshot\", \"path\": \"[CACHE]/builder/src/out/host_debug/gen/const_finder.dart.snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_8/artifacts.zip\", \"root\": \"[CACHE]/builder/src\"}"
   },
   {
     "cmd": [
