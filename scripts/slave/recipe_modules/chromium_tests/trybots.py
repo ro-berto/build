@@ -89,6 +89,11 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.android',
                     'buildername': 'android-kitkat-arm-rel',
                 }),
+            'android-lollipop-arm-rel':
+                simple_bot({
+                    'mastername': 'chromium.android',
+                    'buildername': 'android-lollipop-arm-rel',
+                }),
             'android-marshmallow-arm64-rel': {
                 'bot_ids': [
                     {

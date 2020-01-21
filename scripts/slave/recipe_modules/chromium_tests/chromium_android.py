@@ -458,6 +458,10 @@ SPEC['builders'].update([
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 32}),
     stock_config(
+        'android-lollipop-arm-rel',
+        chromium_apply_config=['download_vr_test_apks'],
+        chromium_config_kwargs={'TARGET_BITS': 32}),
+    stock_config(
         'android-marshmallow-arm64-rel',
         chromium_apply_config=[
             'download_vr_test_apks',

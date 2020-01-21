@@ -117,6 +117,7 @@
         },
         "excluded_builders": [
           "android-incremental-dbg",
+          "android-lollipop-arm-rel",
           "Oreo Phone Tester"
         ]
       }
