@@ -397,7 +397,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
 
-    if self._should_exonerate_flaky_failures:
+    if suffix == 'with patch' and self._should_exonerate_flaky_failures:
       # If *all* the deterministic failures are known flaky tests, a test suite
       # will not be considered failure anymore, and thus will not be retried.
       #
