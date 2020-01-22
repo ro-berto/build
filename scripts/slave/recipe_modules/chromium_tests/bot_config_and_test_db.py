@@ -11,11 +11,16 @@ from recipe_engine.types import freeze
 from . import bot_spec
 
 
-MB_CONFIG_FILENAME = ['tools', 'mb', 'mb_config.pyl']
-
-
 class BotConfig(object):
-  """Wrapper that allows combining several compatible bot configs."""
+  """"Static" configuration for a bot.
+
+  BotConfig provides access to information defined entirely in recipes; for a
+  given recipe version BotConfig information will be the same for all builds of
+  a given builder.
+
+  BotConfig wraps multiple bot specs and provides the means for getting values
+  in a manner that ensures they are compatible between all of the wrapped specs.
+  """
 
   def __init__(self, bots_dict, bot_ids):
     self._bots_dict = bots_dict
@@ -74,7 +79,7 @@ class BotConfig(object):
 
   def _get_builder_bot_config(self, bot_id):
     # WARNING: This doesn't take into account dynamic
-    # tests from test spec etc. If you need that, please use bot_db.
+    # tests from test spec etc. If you need that, please use build_config.
     return self._bots_dict.get(bot_id.mastername, {}).get(
         'builders', {}).get(bot_id.buildername, {})
 
@@ -110,6 +115,10 @@ class BotConfig(object):
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
+  # TODO(gbeaty) Remove create_bot_db
+  def create_build_config(self, chromium_tests_api, bot_update_step):
+    return self.create_bot_db(chromium_tests_api, bot_update_step)
+
   def create_bot_db(self, chromium_tests_api, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
@@ -137,7 +146,7 @@ class BotConfig(object):
                for b in master_config.get('builders', {}).itervalues()):
           masternames.add(master_name)
 
-    bot_db = BotConfigAndTestDB()
+    db = {}
 
     for mastername in sorted(self._bots_dict):
       # We manually thaw the path to the elements we are modifying, since the
@@ -163,23 +172,29 @@ class BotConfig(object):
       else:
         source_side_spec = None
 
-      bot_db._add_master_dict_and_source_side_spec(
-          mastername, freeze(master_dict), freeze(source_side_spec))
+      db[mastername] = {
+          'master_dict': freeze(master_dict),
+          'source_side_spec': source_side_spec,
+      }
 
-    return bot_db
+    return BuildConfig(self.bot_ids, db)
 
-  def get_tests(self, bot_db):
-    return _TestConfig(self._bot_ids, bot_db)
+  # TODO(gbeaty) Remove this method, build_config provides access to tests
+  def get_tests(self, build_config):
+    return build_config
 
-  def get_compile_targets(self, chromium_tests_api, bot_db, tests):
+  # TODO(gbeaty) Move to BuildConfig
+  # TODO(gbeaty) Remove unnecessary chromium_tests_api parameter
+  def get_compile_targets(self, chromium_tests_api, build_config, tests):
     compile_targets = set()
     for bot_id in self._bot_ids:
-      bot_config = bot_db.get_bot_config(
-          bot_id.mastername, bot_id.buildername)
+      bot_config = build_config.get_bot_config(bot_id.mastername,
+                                               bot_id.buildername)
       compile_targets.update(bot_config.get('compile_targets', []))
-      compile_targets.update(bot_db.get_source_side_spec(
-          bot_id.mastername, bot_id.buildername).get(
-              'additional_compile_targets', []))
+      compile_targets.update(
+          build_config.get_source_side_spec(
+              bot_id.mastername, bot_id.buildername).get(
+                  'additional_compile_targets', []))
 
     if self.get('add_tests_as_compile_targets', True):
       for t in tests:
@@ -191,8 +206,20 @@ class BotConfig(object):
     return any(fun(bot_id) for bot_id in self._bot_ids)
 
 
-class _TestConfig(object):
-  """Determines and stores tests for a given group of bots."""
+class BuildConfig(object):
+  """"Dynamic" configuration for a bot.
+
+  BuildConfig provides access to information obtained from src-side files; for a
+  given recipe version BuildConfig information can change on a per-src-revision
+  basis. There could potentially be multiple BuildConfigs for the same build
+  that contain different information (e.g. a trybot running against a change
+  that modifies the src-side spec information).
+
+  This creates a directed acyclic builder graph, with the builders
+  described by the provided bot IDs as the root nodes and the builders
+  they trigger as their children. Nodes keep track of whether they're
+  referenced by a bot ID (and would thus be mirrored by trybots).
+  """
 
   class _ConfigNode(object):
     """A node in the builder graph.
@@ -210,19 +237,15 @@ class _TestConfig(object):
       # This builder's tests.
       self.tests = tests
 
-  def __init__(self, bot_ids, bot_db):
-    """Creates a _TestConfig instance.
-
-    This creates a directed acyclic builder graph, with the builders
-    described by the provided bot IDs as the root nodes and the builders
-    they trigger as their children. Nodes keep track of whether they're
-    referenced by a bot ID (and would thus be mirrored by trybots).
-    """
+  def __init__(self, bot_ids, db):
+    # Indexed by mastername. Each entry contains a master_dict and a
+    # source_side_spec.
+    self._db = freeze(db)
     self._config = self._ConfigNode(None, False, None)
 
     for bot_id in bot_ids:
-      builder_bot_config = bot_db.get_bot_config(
-          bot_id.mastername, bot_id.buildername)
+      builder_bot_config = self.get_bot_config(bot_id.mastername,
+                                               bot_id.buildername)
       key = bot_id.mastername, bot_id.buildername
       if key not in self._config.children:
         self._config.children[key] = self._ConfigNode(
@@ -230,23 +253,52 @@ class _TestConfig(object):
       builder_config = self._config.children[key]
 
       if bot_id.tester:
-        tester_bot_config = bot_db.get_bot_config(
-            bot_id.tester_mastername, bot_id.tester)
+        tester_bot_config = self.get_bot_config(bot_id.tester_mastername,
+                                                bot_id.tester)
         tester_key = bot_id.tester_mastername, bot_id.tester
         builder_config.children[tester_key] = self._ConfigNode(
             tester_key, True, tester_bot_config.get('tests', []))
 
       for (
-            _luci_project,
-            triggered_mastername,
-            triggered_buildername,
-            triggered_bot_config
-          ) in bot_db.bot_configs_matching_parent_buildername(
+          _luci_project, triggered_mastername, triggered_buildername,
+          triggered_bot_config) in self.bot_configs_matching_parent_buildername(
               bot_id.mastername, bot_id.buildername):
         triggered_key = (triggered_mastername, triggered_buildername)
         if triggered_key not in builder_config.children:
           builder_config.children[triggered_key] = self._ConfigNode(
               triggered_key, False, triggered_bot_config.get('tests', []))
+
+  # TODO(gbeaty) Move this method, it's not rev-specific information
+  def get_bot_config(self, mastername, buildername):
+    return self._db[mastername]['master_dict'].get('builders',
+                                                   {}).get(buildername)
+
+  # TODO(gbeaty) Move this method, it's not rev-specific information
+  def get_master_settings(self, mastername):
+    return self._db[mastername]['master_dict'].get('settings', {})
+
+  # TODO(gbeaty) Move this method, it's not rev-specific information
+  def bot_configs_matching_parent_buildername(self, parent_mastername,
+                                              parent_buildername):
+    """A generator of all the (buildername, bot_config) tuples whose
+    parent_buildername is the passed one on the given master.
+    """
+    for mastername, master_config in self._db.iteritems():
+      master_dict = master_config['master_dict']
+      for buildername, bot_config in master_dict.get('builders',
+                                                     {}).iteritems():
+        master_matches = (
+            bot_config.get('parent_mastername',
+                           mastername) == parent_mastername)
+        builder_matches = (
+            bot_config.get('parent_buildername') == parent_buildername)
+        if master_matches and builder_matches:
+          master_settings = self.get_master_settings(mastername)
+          luci_project = master_settings.get('luci_project', 'chromium')
+          yield luci_project, mastername, buildername, bot_config
+
+  def get_source_side_spec(self, mastername, buildername):
+    return self._db[mastername]['source_side_spec'].get(buildername, {})
 
   def all_tests(self):
     """Returns all tests."""
@@ -295,59 +347,3 @@ class _TestConfig(object):
     for node in nodes:
       for test in node.tests or []:
         yield test
-
-
-class BotConfigAndTestDB(object):
-  """An immutable database of bot configurations and test specifications.
-  Holds the data for potentially multiple waterfalls (masternames). Most
-  queries against this database are made with (mastername, buildername)
-  pairs.
-  """
-
-  def __init__(self):
-    # Indexed by mastername. Each entry contains a master_dict and a
-    # source_side_spec.
-    self._db = {}
-
-  def _add_master_dict_and_source_side_spec(
-      self, mastername, master_dict, source_side_spec):
-    """Only used during construction in chromium_tests.prepare_checkout. Do not
-    call this externally.
-    """
-    # TODO(kbr): currently the master_dicts that are created by
-    # get_master_dict_with_dynamic_tests are over-specialized to a
-    # particular builder. This needs to be fixed so that there's exactly
-    # one master_dict per waterfall.
-    assert mastername not in self._db, (
-        'Illegal attempt to add multiple master dictionaries for waterfall %s' %
-        (mastername))
-    self._db[mastername] = { 'master_dict': master_dict,
-                             'source_side_spec': source_side_spec }
-
-  def get_bot_config(self, mastername, buildername):
-    return self._db[mastername]['master_dict'].get('builders', {}).get(
-        buildername)
-
-  def get_master_settings(self, mastername):
-    return self._db[mastername]['master_dict'].get('settings', {})
-
-  def bot_configs_matching_parent_buildername(
-      self, parent_mastername, parent_buildername):
-    """A generator of all the (buildername, bot_config) tuples whose
-    parent_buildername is the passed one on the given master.
-    """
-    for mastername, master_config in self._db.iteritems():
-      master_dict = master_config['master_dict']
-      for buildername, bot_config in master_dict.get(
-          'builders', {}).iteritems():
-        master_matches = (bot_config.get('parent_mastername', mastername) ==
-                          parent_mastername)
-        builder_matches = (bot_config.get('parent_buildername') ==
-                           parent_buildername)
-        if master_matches and builder_matches:
-          master_settings = self.get_master_settings(mastername)
-          luci_project = master_settings.get('luci_project', 'chromium')
-          yield luci_project, mastername, buildername, bot_config
-
-  def get_source_side_spec(self, mastername, buildername):
-    return self._db[mastername]['source_side_spec'].get(buildername, {})
