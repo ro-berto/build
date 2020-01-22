@@ -278,13 +278,24 @@ class DartApi(recipe_api.RecipeApi):
        the buildbot status."""
     return 'no_approvals' not in self.m.properties
 
+  def _release_builder(self):
+    """Boolean that reports whether the builder is on the
+       dev or stable channel. Some steps are only run on the
+       master and try builders."""
+    return (self.m.buildbucket.builder_name.endswith('-dev') or
+            self.m.buildbucket.builder_name.endswith('-stable'))
+
+  def _try_builder(self):
+    """Boolean that reports whether this a try builder.
+       Some steps are not run on the try builders."""
+    return self.m.buildbucket.builder_name.endswith('-try')
+
 
   def _run_new_steps(self):
     """Boolean that controls whether to run the new
        workflow that uploads test results to cloud
        storage and deflakes changed tests."""
-    return (self._report_new_results or
-        not self.m.buildbucket.builder_name.endswith('-try'))
+    return self._report_new_results or not self._try_builder()
 
 
   def collect_all(self, steps):
@@ -393,7 +404,7 @@ class DartApi(recipe_api.RecipeApi):
     apply_preapproval_arguments = [self.dart_executable(),
                                    'tools/bots/apply_preapprovals.dart',
                                    'LATEST/approved_results.json']
-    if self.m.buildbucket.builder_name.endswith('-try'):
+    if self._try_builder():
       info = self.m.gerrit.get_changes(
           'https://%s' % self.m.tryserver.gerrit_change.host,
           query_params=[('change', str(self.m.tryserver.gerrit_change.change))],
@@ -486,6 +497,8 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _publish_results(self, results_str):
+    if self._release_builder():
+      return
     access_token = self.m.service_account.default().get_access_token(
       ['https://www.googleapis.com/auth/cloud-platform'])
     self.m.step(
@@ -571,9 +584,8 @@ class DartApi(recipe_api.RecipeApi):
     judgement_args = list(args)
     if self._report_new_results():
       judgement_args.append('--judgement')
-    builder_name = self.m.buildbucket.builder_name
     if not firestore_approvals and self._require_manual_approvals():
-      if builder_name.endswith('-try'):
+      if self._try_builder():
         links["unapproved new test failures"] = self.m.step(
             'find unapproved new test failures',
             args + ["--changed", "--failing", "--unapproved"],
@@ -640,7 +652,7 @@ class DartApi(recipe_api.RecipeApi):
           args + ["--changed", "--passing"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
       judgement_args += ["--changed", "--failing"]
-      if builder_name.endswith('-try'): # pragma: no cover
+      if self._try_builder():  # pragma: no cover
         judgement_args += ["--passing"]
       else:
         links["ignored flaky test failure logs"] = self.m.step(
@@ -648,12 +660,17 @@ class DartApi(recipe_api.RecipeApi):
             args + args_logs + ["--flaky"],
             stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     with self.m.step.defer_results():
-      # This call finishes with a step that the following links can be added to.
-      self._report_success(results_str, firestore_approvals)
-      if not firestore_approvals:
+      if self._release_builder():
         self.m.step('test results', judgement_args)
-      # Construct different results links for tryjobs and CI jobs
-      if builder_name.endswith('-try'):
+      else:
+        # This call runs a step that the following links get added to.
+        self._report_success(results_str, firestore_approvals)
+        if not firestore_approvals:
+          self.m.step('test results', judgement_args)
+
+      # Add more links and logs to the 'test results' step
+      if self._try_builder():
+        # Construct different results links for tryjobs and CI jobs
         patchset = self.commit_id().replace('refs/changes/', '')
         log_url = 'https://dart-ci.firebaseapp.com/cl/%s' % patchset
       else:
@@ -670,19 +687,15 @@ class DartApi(recipe_api.RecipeApi):
           results_str]
 
   def _approve_successes(self):
+    if self._try_builder() or self._release_builder():
+      return
     if not self._require_manual_approvals():
       return
-    builder_name = self.m.buildbucket.builder_name
-    if (builder_name.endswith('-try') or
-        builder_name.endswith('-dev') or
-        builder_name.endswith('-stable')):
-      return
-    args = [self.dart_executable(),
-            "tools/approve_results.dart",
-            "--automated-approver",
-            "-b", builder_name,
-            "--successes-only",
-            "-y"]
+    args = [
+        self.dart_executable(), "tools/approve_results.dart",
+        "--automated-approver", "-b", self.m.buildbucket.builder_name,
+        "--successes-only", "-y"
+    ]
     self.m.step('approve unapproved successes', args)
 
 

@@ -473,6 +473,28 @@ def GenTests(api):
       api.buildbucket.ci_build(
           revision='a' * 40,
           build_number=1357,
+          builder='dart2js-strong-mac-x64-chrome-dev',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.properties(
+          clobber='True',
+          parent_fileset='isolate_hash_123',
+          parent_fileset_name='test'),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.post_process(StatusSuccess),
+  )
+
+  # Remove when the firestore_approvals flag and the old approvals code
+  # are removed.
+  yield api.test(
+      'basic-mac-old-approvals',
+      api.platform('mac', 64),
+      api.properties(
+          bot_id='mac-dart-123', new_workflow_enabled=True, no_approvals=True),
+      api.buildbucket.ci_build(
+          revision='a' * 40,
+          build_number=1357,
           builder='dart2js-strong-mac-x64-chrome',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
