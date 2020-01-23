@@ -1427,7 +1427,7 @@ Uses the 'get_states' endpoint on the swarming server.
 
 #### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#85)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#557)(self, mastername, buildername, update_step, build_config):**
+&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#548)(self, mastername, buildername, update_step, build_config):**
 
 Archive the build if the bot is configured to do so.
 
@@ -1439,7 +1439,7 @@ to clusterfuzz.
 
 &emsp; **@property**<br>&mdash; **def [builders](/scripts/slave/recipe_modules/chromium_tests/api.py#94)(self):**
 
-&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#372)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, override_bot_type=None):**
+&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#363)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, override_bot_type=None):**
 
 Runs compile and related steps for given builder.
 
@@ -1485,21 +1485,21 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1269)(self, bot_update_step):**
+&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1255)(self, bot_update_step):**
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#796)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#787)(self, bot_update_step):**
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#671)(self, mastername, buildername, update_step, build_config, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#662)(self, mastername, buildername, update_step, build_config, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
 
 &mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#246)(self, source_side_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, bot_update_step):**
 
-&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#342)(self, bot_config, log_details=False):**
+&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#333)(self, bot_config, log_details=False):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#977)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#968)(self, bot_config=None):**
 
-&mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#327)(self, bot_config, build_config, tests):**
+&mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#318)(self, bot_config, build_config, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1011)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1002)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1523,12 +1523,7 @@ TODO:
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#128)(self):**
 
-&mdash; **def [get\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#318)(self, bot_config, build_config):**
-
-Returns a tuple: list of tests, and list of tests on the triggered
-testers.
-
-&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1193)(self, bot, bot_update_step, build_config):**
+&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1180)(self, bot, bot_update_step, build_config):**
 
 Handles the tester half of the builder->tester transfer flow.
 
@@ -1542,13 +1537,13 @@ Args:
   bot_update_step: the result of a previously executed bot_update step.
   build_config: a BuildConfig object.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1292)(self, builders=None, bots=None):**
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1278)(self, builders=None, bots=None):**
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#102)(self, message):**
 
-&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1426)(self, builders, mirrored_bots=None):**
+&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1412)(self, builders, mirrored_bots=None):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1043)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1034)(self, mb_config_path=None, builders=None):**
 
 Compiles and runs tests for chromium recipe.
 
@@ -1557,7 +1552,7 @@ Returns:
     and a failure message if a failure occurred.
   - None if no failures
 
-&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1134)(self, bot, bot_update_step, build_config):**
+&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1123)(self, bot, bot_update_step, build_config):**
 
 Handles the builder half of the builder->tester transfer flow.
 
@@ -1590,7 +1585,7 @@ Returns:
   A dict containing additional properties that should be added to any
   triggered child builds.
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#476)(self, mastername, buildername, update_step, build_config, reasons=None):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#467)(self, mastername, buildername, update_step, build_config, reasons=None):**
 
 Zip and upload the build to google storage.
 
@@ -1608,9 +1603,9 @@ Note that:
 
 &mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#261)(self, source_side_spec_file):**
 
-&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#644)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
+&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#635)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1314)(self, builders, mirrored_bots, deapply_changes, tests=None):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1300)(self, builders, mirrored_bots, deapply_changes, tests=None):**
 
 Compile and run tests for chromium_trybot recipe.
 
@@ -1631,11 +1626,11 @@ Returns:
 
 &mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/chromium_tests/api.py#204)(self, bot_config):**
 
-&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#611)(self, mastername, buildername, update_step, build_config, additional_properties=None):**
+&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#602)(self, mastername, buildername, update_step, build_config, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1297)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1283)(self, builders=None, trybots=None):**
 
-&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1303)(self, builders=None, trybots=None, tests=None):**
+&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1289)(self, builders=None, trybots=None, tests=None):**
 
 Similar to trybot_steps, but only runs certain tests.
 
@@ -1644,7 +1639,7 @@ use this.
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#98)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#738)(self, bot_config, tests=None):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#729)(self, bot_config, tests=None):**
 ### *recipe_modules* / [code\_coverage](/scripts/slave/recipe_modules/code_coverage)
 
 [DEPS](/scripts/slave/recipe_modules/code_coverage/__init__.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [swarming\_client](#recipe_modules-swarming_client), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -3964,7 +3959,7 @@ Packages Android AVDs as CIPD packages.
 
 [DEPS](/scripts/slave/recipes/android/builder.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/android/builder.py#173)(api, mastername, buildername, revision):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/android/builder.py#174)(api, mastername, buildername, revision):**
 ### *recipes* / [android/sdk\_packager](/scripts/slave/recipes/android/sdk_packager.py)
 
 [DEPS](/scripts/slave/recipes/android/sdk_packager.py#14): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4900,7 +4895,7 @@ A generic recipe that runs a given docker container and exits.
 
 [DEPS](/scripts/slave/recipes/findit/chromium/compile.py#14): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#133)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#132)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
 ### *recipes* / [findit/chromium/compile\_isolate](/scripts/slave/recipes/findit/chromium/compile_isolate.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/compile_isolate.py#22): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4979,66 +4974,66 @@ Steps to checkout cocoon, dependencies and execute tests.
 
 [DEPS](/scripts/slave/recipes/flutter/engine.py#14): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
 
-&mdash; **def [AddFiles](/scripts/slave/recipes/flutter/engine.py#189)(api, pkg, relative_paths):**
+&mdash; **def [AddFiles](/scripts/slave/recipes/flutter/engine.py#190)(api, pkg, relative_paths):**
 
-&mdash; **def [AnalyzeDartUI](/scripts/slave/recipes/flutter/engine.py#350)(api):**
+&mdash; **def [AnalyzeDartUI](/scripts/slave/recipes/flutter/engine.py#351)(api):**
 
-&mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#65)(api, config, \*targets):**
+&mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#66)(api, config, \*targets):**
 
-&mdash; **def [BuildAndTestFuchsia](/scripts/slave/recipes/flutter/engine.py#144)(api, build_script, git_rev):**
+&mdash; **def [BuildAndTestFuchsia](/scripts/slave/recipes/flutter/engine.py#145)(api, build_script, git_rev):**
 
-&mdash; **def [BuildFontSubset](/scripts/slave/recipes/flutter/engine.py#48)(api):**
+&mdash; **def [BuildFontSubset](/scripts/slave/recipes/flutter/engine.py#49)(api):**
 
-&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#706)(api):**
+&mdash; **def [BuildFuchsia](/scripts/slave/recipes/flutter/engine.py#707)(api):**
 
 This schedules release and profile builds for x64 and arm64 on other bots,
 and then builds the x64 and arm64 runners (which do not require LTO and thus
 are faster to build). On Linux, we also run tests for the runner against x64,
 and if they fail we cancel the scheduled builds.
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#1002)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#1003)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1162)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1163)(api):**
 
-&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#536)(api):**
+&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#537)(api):**
 
-&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#397)(api, swarming_task_id):**
+&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#398)(api, swarming_task_id):**
 
-&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#790)(api):**
+&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#791)(api):**
 
-&mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#77)(api, config, \*targets):**
+&mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#78)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1224)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1225)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#1053)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#1054)(api):**
 
-&mdash; **def [CancelBuilds](/scripts/slave/recipes/flutter/engine.py#106)(api, builds):**
+&mdash; **def [CancelBuilds](/scripts/slave/recipes/flutter/engine.py#107)(api, builds):**
 
-&mdash; **def [CollectBuilds](/scripts/slave/recipes/flutter/engine.py#111)(api, builds):**
+&mdash; **def [CollectBuilds](/scripts/slave/recipes/flutter/engine.py#112)(api, builds):**
 
-&mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#592)(api, target_dir, bucket_name, build_id, image_name):**
+&mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#593)(api, target_dir, bucket_name, build_id, image_name):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1241)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1242)(api):**
 
-&mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#52)(api):**
+&mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#53)(api):**
 
-&mdash; **def [GetCloudMavenPath](/scripts/slave/recipes/flutter/engine.py#212)(api, artifact_filename, swarming_task_id):**
+&mdash; **def [GetCloudMavenPath](/scripts/slave/recipes/flutter/engine.py#213)(api, artifact_filename, swarming_task_id):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#58)(api, path):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#59)(api, path):**
 
-&mdash; **def [GetFlutterFuchsiaBuildTargets](/scripts/slave/recipes/flutter/engine.py#115)(product, include_test_targets=False):**
+&mdash; **def [GetFlutterFuchsiaBuildTargets](/scripts/slave/recipes/flutter/engine.py#116)(product, include_test_targets=False):**
 
-&mdash; **def [GetFuchsiaBuildId](/scripts/slave/recipes/flutter/engine.py#583)(api):**
+&mdash; **def [GetFuchsiaBuildId](/scripts/slave/recipes/flutter/engine.py#584)(api):**
 
-&mdash; **def [GetFuchsiaOutputDirs](/scripts/slave/recipes/flutter/engine.py#131)(product, build_mode, target_arch):**
+&mdash; **def [GetFuchsiaOutputDirs](/scripts/slave/recipes/flutter/engine.py#132)(product, build_mode, target_arch):**
 
-&mdash; **def [GetFuchsiaOutputFiles](/scripts/slave/recipes/flutter/engine.py#122)(product):**
+&mdash; **def [GetFuchsiaOutputFiles](/scripts/slave/recipes/flutter/engine.py#123)(product):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1204)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1205)(api):**
 
-&mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#599)(api, checkout, fuchsia_tools, image_name, fuchsia_test_script):**
+&mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#600)(api, checkout, fuchsia_tools, image_name, fuchsia_test_script):**
 
 Gets the system image for the current Fuchsia SDK from cloud storage, adds it
 to an isolated along with the `pm` and `dev_finder` utilities, as well as the
@@ -5046,29 +5041,29 @@ flutter_runner_tests and the required flutter unittest FARs (listed in
 engine/testing/fuchsia/test_fars), and a bash script (in
 engine/testing/fuchsia/run_tests.sh) to drive the flutter_ctl.
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#341)(api, label):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#342)(api, label):**
 
-&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#919)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
+&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#920)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
 
-&mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#163)(api, \*args):**
+&mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#164)(api, \*args):**
 
-&mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#170)(api, \*args):**
+&mdash; **def [RunGNBitcode](/scripts/slave/recipes/flutter/engine.py#171)(api, \*args):**
 
-&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#991)(api):**
+&mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#992)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1262)(api, properties, env_properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1263)(api, properties, env_properties):**
 
-&mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#89)(api, out_dir, android_out_dir=None, types='all'):**
+&mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#90)(api, out_dir, android_out_dir=None, types='all'):**
 
-&mdash; **def [ScheduleBuilds](/scripts/slave/recipes/flutter/engine.py#99)(api, builder_name, drone_props):**
+&mdash; **def [ScheduleBuilds](/scripts/slave/recipes/flutter/engine.py#100)(api, builder_name, drone_props):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupMacOSSDK](/scripts/slave/recipes/flutter/engine.py#1184)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupMacOSSDK](/scripts/slave/recipes/flutter/engine.py#1185)(api):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#783)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#784)(api):**
 
-&mdash; **def [ShouldUploadPackages](/scripts/slave/recipes/flutter/engine.py#55)(api):**
+&mdash; **def [ShouldUploadPackages](/scripts/slave/recipes/flutter/engine.py#56)(api):**
 
-&mdash; **def [TestFuchsia](/scripts/slave/recipes/flutter/engine.py#635)(api):**
+&mdash; **def [TestFuchsia](/scripts/slave/recipes/flutter/engine.py#636)(api):**
 
 Packages the flutter_runner build artifacts into a FAR, and then sends them
 and related artifacts to isolated. The isolated is used to create a swarming
@@ -5077,31 +5072,31 @@ task that:
   - Gets fuchsia_ctl from CIPD
   - Runs the script to pave, test, and reboot the Fuchsia device
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#773)(api):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#774)(api):**
 
-&mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#194)(api, platform, file_paths, archive_name='artifacts.zip'):**
+&mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#195)(api, platform, file_paths, archive_name='artifacts.zip'):**
 
-&mdash; **def [UploadDartPackage](/scripts/slave/recipes/flutter/engine.py#272)(api, package_name):**
+&mdash; **def [UploadDartPackage](/scripts/slave/recipes/flutter/engine.py#273)(api, package_name):**
 
-&mdash; **def [UploadDartSdk](/scripts/slave/recipes/flutter/engine.py#326)(api, archive_name):**
+&mdash; **def [UploadDartSdk](/scripts/slave/recipes/flutter/engine.py#327)(api, archive_name):**
 
-&mdash; **def [UploadFlutterPatchedSdk](/scripts/slave/recipes/flutter/engine.py#304)(api):**
+&mdash; **def [UploadFlutterPatchedSdk](/scripts/slave/recipes/flutter/engine.py#305)(api):**
 
-&mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#254)(api, dir_label, parent_dir, folder_name, zip_name, platform=None):**
+&mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#255)(api, dir_label, parent_dir, folder_name, zip_name, platform=None):**
 
-&mdash; **def [UploadFuchsiaDebugSymbols](/scripts/slave/recipes/flutter/engine.py#682)(api):**
+&mdash; **def [UploadFuchsiaDebugSymbols](/scripts/slave/recipes/flutter/engine.py#683)(api):**
 
-&mdash; **def [UploadMavenArtifacts](/scripts/slave/recipes/flutter/engine.py#237)(api, artifacts, swarming_task_id):**
+&mdash; **def [UploadMavenArtifacts](/scripts/slave/recipes/flutter/engine.py#238)(api, artifacts, swarming_task_id):**
 
-&mdash; **def [UploadSkyEngineDartPackage](/scripts/slave/recipes/flutter/engine.py#299)(api):**
+&mdash; **def [UploadSkyEngineDartPackage](/scripts/slave/recipes/flutter/engine.py#300)(api):**
 
-&mdash; **def [UploadSkyEngineToCIPD](/scripts/slave/recipes/flutter/engine.py#281)(api, package_name):**
+&mdash; **def [UploadSkyEngineToCIPD](/scripts/slave/recipes/flutter/engine.py#282)(api, package_name):**
 
-&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#370)(api, upload_dir, lib_flutter_path, android_triple):**
+&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#371)(api, upload_dir, lib_flutter_path, android_triple):**
 
-&mdash; **def [UploadWebSdk](/scripts/slave/recipes/flutter/engine.py#333)(api, archive_name):**
+&mdash; **def [UploadWebSdk](/scripts/slave/recipes/flutter/engine.py#334)(api, archive_name):**
 
-&mdash; **def [VerifyExportedSymbols](/scripts/slave/recipes/flutter/engine.py#359)(api):**
+&mdash; **def [VerifyExportedSymbols](/scripts/slave/recipes/flutter/engine.py#360)(api):**
 ### *recipes* / [flutter/engine\_builder](/scripts/slave/recipes/flutter/engine_builder.py)
 
 [DEPS](/scripts/slave/recipes/flutter/engine_builder.py#10): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]

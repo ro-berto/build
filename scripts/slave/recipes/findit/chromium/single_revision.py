@@ -60,14 +60,15 @@ def RunSteps(api, properties):
       api, properties.target_builder, properties.test_override_builders)
 
   # 2. Check out the code.
-  bot_update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  bot_update_step, build_config = api.chromium_tests.prepare_checkout(
+      bot_config)
 
   # 3. Configure swarming
   api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
   # 4. Determine what to build and what to test.
   compile_targets, test_objects = _compute_targets_and_tests(
-      api, bot_config, bot_db, bot_id, properties.tests,
+      api, bot_config, build_config, bot_id, properties.tests,
       properties.compile_targets, properties.skip_analyze)
 
   # 5. Build what's needed.
@@ -75,7 +76,7 @@ def RunSteps(api, properties):
     compile_result = api.chromium_tests.compile_specific_targets(
         bot_config,
         bot_update_step,
-        bot_db,
+        build_config,
         compile_targets,
         tests_including_triggered=test_objects,
         **compile_kwargs)
@@ -127,13 +128,12 @@ def _configure_builder(api, target_builder, test_override_builders):
   return bot_id, bot_config, compile_kwargs
 
 
-def _compute_targets_and_tests(api, bot_config, bot_db, bot_id, requested_tests,
-                               compile_targets, skip_analyze):
-  test_config = api.chromium_tests.get_tests(bot_config, bot_db)
+def _compute_targets_and_tests(api, bot_config, build_config, bot_id,
+                               requested_tests, compile_targets, skip_analyze):
   if requested_tests:
     # Figure out which test steps to run.
     requested_tests_to_run = [
-        test for test in test_config.all_tests()
+        test for test in build_config.all_tests()
         if test.canonical_name in requested_tests
     ]
 
@@ -172,7 +172,7 @@ def _compute_targets_and_tests(api, bot_config, bot_db, bot_id, requested_tests,
 
   # No tests, only compile targets
   default_compile_targets = api.chromium_tests.get_compile_targets(
-      bot_config, bot_db, test_config.all_tests())
+      bot_config, build_config, build_config.all_tests())
   # If no targets were specifically requested, compile every target in the spec.
   if not compile_targets:
     return default_compile_targets, []

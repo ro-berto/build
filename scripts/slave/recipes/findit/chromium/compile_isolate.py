@@ -72,14 +72,14 @@ def RunSteps(api, target_mastername, target_testername,
       target_mastername, target_buildername, target_testername)
   bot_config = api.m.chromium_tests.create_bot_config_object(
       [bot_id], builders=api.properties.get('builders'))
-  bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
+  bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
       bot_config, root_solution_revision=revision)
 
   # Find the matching test targets.
-  test_config = api.m.chromium_tests.get_tests(bot_config, bot_db)
   tests = [
-      test for test in test_config.all_tests()
-      if test.isolate_target in isolated_targets]
+      test for test in build_config.all_tests()
+      if test.isolate_target in isolated_targets
+  ]
 
   report = {
       'metadata': {},
@@ -104,7 +104,7 @@ def RunSteps(api, target_mastername, target_testername,
       raw_result = api.m.chromium_tests.compile_specific_targets(
           bot_config,
           bot_update_step,
-          bot_db,
+          build_config,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
           mb_mastername=target_mastername,

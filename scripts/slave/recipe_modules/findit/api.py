@@ -183,14 +183,14 @@ class FinditApi(recipe_api.RecipeApi):
       bot_id = api.chromium_tests.create_bot_id(
           target_mastername, target_buildername, target_testername)
       bot_config = api.m.chromium_tests.create_bot_config_object([bot_id])
-      bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
+      bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
           bot_config, root_solution_revision=revision)
 
       # Figure out which test steps to run.
-      test_config = api.m.chromium_tests.get_tests(bot_config, bot_db)
       requested_tests_to_run = [
-          test for test in test_config.all_tests()
-          if test.canonical_name in requested_tests]
+          test for test in build_config.all_tests()
+          if test.canonical_name in requested_tests
+      ]
 
       # Figure out the test targets to be compiled.
       requested_test_targets = []
@@ -232,7 +232,7 @@ class FinditApi(recipe_api.RecipeApi):
         raw_result = api.m.chromium_tests.compile_specific_targets(
             bot_config,
             bot_update_step,
-            bot_db,
+            build_config,
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
             mb_mastername=target_mastername,

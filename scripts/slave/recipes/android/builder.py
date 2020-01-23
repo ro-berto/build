@@ -111,10 +111,11 @@ def _GetChromiumTestsCompileTargets(api, mastername, buildername, update_step):
   # solely use src/-side test specifications before switching.
   ct_bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium_tests.create_bot_id(mastername, buildername)])
-  ct_bot_db = ct_bot_config.create_bot_db(api.chromium_tests, update_step)
-  test_config = api.chromium_tests.get_tests(ct_bot_config, ct_bot_db)
-  return api.chromium_tests.get_compile_targets(
-      ct_bot_config, ct_bot_db, test_config.all_tests())
+  ct_build_config = ct_bot_config.create_build_config(api.chromium_tests,
+                                                      update_step)
+  return api.chromium_tests.get_compile_targets(ct_bot_config, ct_build_config,
+                                                ct_build_config.all_tests())
+
 
 def _RunStepsInternal(api, mastername, buildername, revision):
   bot_config = BUILDERS[mastername][buildername]

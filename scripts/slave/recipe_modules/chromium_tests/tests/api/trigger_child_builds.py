@@ -77,9 +77,9 @@ def RunSteps(api):
       ],
       builders=CUSTOM_BUILDERS)
   api.chromium_tests.configure_build(bot_config)
-  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.trigger_child_builds(api.properties['mastername'],
-                                          builder_name, update_step, bot_db)
+  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
+  api.chromium_tests.trigger_child_builds(
+      api.properties['mastername'], builder_name, update_step, build_config)
 
 
 def GenTests(api):

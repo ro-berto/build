@@ -19,9 +19,9 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium_tests.create_bot_id(mastername, buildername)])
   api.chromium_tests.configure_build(bot_config)
-  _, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  _, build_config = api.chromium_tests.prepare_checkout(bot_config)
   actual = api.chromium_tests._get_scheduler_jobs_to_trigger(
-      mastername, buildername, bot_db)
+      mastername, buildername, build_config)
 
   # Convert the mappings to comparable types
   actual = {k: set(v) for k, v in actual.iteritems()}

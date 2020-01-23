@@ -20,9 +20,9 @@ def RunSteps(api):
                                        builder_name)
   ])
   api.chromium_tests.configure_build(bot_config)
-  update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
+  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.archive_build(api.properties['mastername'], builder_name,
-                                   update_step, bot_db)
+                                   update_step, build_config)
 
 
 def GenTests(api):

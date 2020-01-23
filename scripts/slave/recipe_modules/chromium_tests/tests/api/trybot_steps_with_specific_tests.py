@@ -46,7 +46,7 @@ def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
       # Fake path to make tests pass.
       path_to_testing_dir=api.path['start_dir'].join('checkout'))
 
-  update_step, _bot_db = api.chromium_tests.prepare_checkout(bot.settings)
+  update_step, _build_config = api.chromium_tests.prepare_checkout(bot.settings)
 
   if api.properties.get('use_gtest', True):
     kwargs = {}

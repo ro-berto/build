@@ -315,15 +315,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_runner
 
-  def get_tests(self, bot_config, build_config):
-    """Returns a tuple: list of tests, and list of tests on the triggered
-       testers."""
-
-    assert isinstance(build_config, bdb_module.BuildConfig), \
-        "build_config argument %r was not a BuildConfig" % (build_config)
-
-    return bot_config.get_tests(build_config)
-
   def get_compile_targets(self, bot_config, build_config, tests):
     assert isinstance(build_config, bdb_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
@@ -1077,16 +1068,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 android_version_code=android_version_code,
                                 name='lookup builder GN args')
 
-    test_config = bot.settings.get_tests(build_config)
-
     compile_targets = self.get_compile_targets(bot.settings, build_config,
-                                               test_config.all_tests())
+                                               build_config.all_tests())
     compile_result = self.compile_specific_targets(
         bot.settings,
         update_step,
         build_config,
         compile_targets,
-        test_config.all_tests(),
+        build_config.all_tests(),
         mb_config_path=mb_config_path)
 
     if compile_result and compile_result.status != common_pb.SUCCESS:
@@ -1106,7 +1095,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.inbound_transfer(bot, update_step, build_config)
 
-    tests = test_config.tests_on(bot.mastername, bot.buildername)
+    tests = build_config.tests_on(bot.mastername, bot.buildername)
     if not tests:
       return
 
@@ -1164,15 +1153,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       triggered child builds.
     """
     bot_type = bot.settings.get('bot_type')
-    test_config = bot.settings.get_tests(build_config)
 
     isolate_transfer = any(
-        t.uses_isolate for t in test_config.tests_triggered_by(
+        t.uses_isolate for t in build_config.tests_triggered_by(
             bot.mastername, bot.buildername))
     non_isolated_tests = [
-        t
-        for t in test_config.tests_triggered_by(bot.mastername, bot.buildername)
-        if not t.uses_isolate
+        t for t in build_config.tests_triggered_by(
+            bot.mastername, bot.buildername) if not t.uses_isolate
     ]
     package_transfer = (
         bool(non_isolated_tests) or bot.settings.get('enable_package_transfer'))
@@ -1204,13 +1191,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_config: a BuildConfig object.
     """
     bot_type = bot.settings.get('bot_type')
-    test_config = bot.settings.get_tests(build_config)
 
     if not bot_type == bot_spec.TESTER:
       return
 
     non_isolated_tests = [
-        t for t in test_config.tests_on(bot.mastername, bot.buildername)
+        t for t in build_config.tests_on(bot.mastername, bot.buildername)
         if not t.uses_isolate
     ]
     isolate_transfer = not non_isolated_tests
@@ -1458,12 +1444,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return BotMetadata(mastername, buildername, config, settings)
 
   def _determine_compilation_targets(self, bot, affected_files, build_config):
-    test_config = self.get_tests(bot.settings, build_config)
-
     compile_targets = self.get_compile_targets(bot.settings, build_config,
-                                               test_config.all_tests())
-    test_targets = sorted(set(
-        self._all_compile_targets(test_config.all_tests())))
+                                               build_config.all_tests())
+    test_targets = sorted(
+        set(self._all_compile_targets(build_config.all_tests())))
 
     # Use analyze to determine the compile targets that are affected by the CL.
     # Use this to prune the relevant compile targets and test targets.
@@ -1493,8 +1477,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Tests are instances of class(Test) from chromium_tests/steps.py. These
     # objects know how to dispatch isolate tasks, parse results, and keep
     # state on the results of previous test runs.
-    config = self.get_tests(bot.settings, build_config)
-    return config.tests_in_scope(), config.all_tests()
+    return build_config.tests_in_scope(), build_config.all_tests()
 
   def _calculate_tests_to_run(self,
                               builders=None,

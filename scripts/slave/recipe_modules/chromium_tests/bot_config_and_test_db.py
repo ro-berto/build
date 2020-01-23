@@ -9,6 +9,7 @@ import copy
 from recipe_engine.types import freeze
 
 from . import bot_spec
+from .attr_util import attrs
 
 
 class BotConfig(object):
@@ -115,11 +116,7 @@ class BotConfig(object):
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
-  # TODO(gbeaty) Remove create_bot_db
   def create_build_config(self, chromium_tests_api, bot_update_step):
-    return self.create_bot_db(chromium_tests_api, bot_update_step)
-
-  def create_bot_db(self, chromium_tests_api, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       scripts_compile_targets = {}
@@ -178,10 +175,6 @@ class BotConfig(object):
       }
 
     return BuildConfig(self.bot_ids, db)
-
-  # TODO(gbeaty) Remove this method, build_config provides access to tests
-  def get_tests(self, build_config):
-    return build_config
 
   # TODO(gbeaty) Move to BuildConfig
   # TODO(gbeaty) Remove unnecessary chromium_tests_api parameter

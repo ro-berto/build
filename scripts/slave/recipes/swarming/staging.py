@@ -78,16 +78,16 @@ def RunSteps(api, buildername, mastername):
   # Ensure swarming_client version is fresh enough.
   api.chromium_swarming.check_client_version()
 
-  bot_db = bot_config.create_bot_db(api.chromium_tests, update_step)
-  test_config = api.chromium_tests.get_tests(bot_config, bot_db)
+  build_config = bot_config.create_build_config(api.chromium_tests, update_step)
   compile_targets = api.chromium_tests.get_compile_targets(
-      bot_config, bot_db, test_config.all_tests())
+      bot_config, build_config, build_config.all_tests())
 
   # Build all supported tests.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   raw_result = api.chromium_tests.compile_specific_targets(
-      bot_config, update_step, bot_db, compile_targets, test_config.all_tests())
+      bot_config, update_step, build_config, compile_targets,
+      build_config.all_tests())
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -101,9 +101,9 @@ def RunSteps(api, buildername, mastername):
     api.chromium_swarming.set_default_dimension('gpu', None)
     api.chromium_swarming.set_default_dimension('cpu', None)
 
-  test_runner = api.chromium_tests.create_test_runner(test_config.all_tests())
-  with api.chromium_tests.wrap_chromium_tests(
-      bot_config, test_config.all_tests()):
+  test_runner = api.chromium_tests.create_test_runner(build_config.all_tests())
+  with api.chromium_tests.wrap_chromium_tests(bot_config,
+                                              build_config.all_tests()):
     return test_runner()
 
 
