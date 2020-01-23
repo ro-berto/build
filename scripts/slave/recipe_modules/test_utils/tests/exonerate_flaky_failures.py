@@ -144,6 +144,21 @@ def GenTests(api):
   )
 
   yield api.test(
+      'empty response',
+      api.properties(
+          mastername='m',
+          buildername='b',
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.step_data('query known flaky failures on CQ', api.json.output({})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'no failed tests',
       api.properties(
           mastername='m',
