@@ -87,10 +87,12 @@ _SPEC_BUILDERS = {
         CreateStandardConfig('win', ['goma_staging', 'clobber']),
 
     # Linux RBE
+    # TODO(crbug.com/1040754): ToT builders have temporarily been made 'clobber'
+    # to test ATS performance.
     'Chromium Linux Goma RBE ToT':
-        CreateStandardConfig('linux', ['goma_client_candidate']),
+        CreateStandardConfig('linux', ['goma_client_candidate', 'clobber']),
     'Chromium Linux Goma RBE ToT (ATS)':
-        CreateStandardConfig('linux', ['goma_client_candidate']),
+        CreateStandardConfig('linux', ['goma_client_candidate', 'clobber']),
     'Chromium Linux Goma RBE Staging':
         _LINUX_CONFIG,
     'Chromium Linux Goma RBE Staging (clobber)':
@@ -127,10 +129,12 @@ _SPEC_BUILDERS = {
         _MAC_CLOBBER_CONFIG,
 
     # Android ARM 32-bit RBE
+    # TODO(crbug.com/1040754): ToT builders have temporarily been made 'clobber'
+    # to test ATS performance.
     'Chromium Android ARM 32-bit Goma RBE ToT':
-        CreateAndroidConfig(32, ['goma_client_candidate']),
+        CreateAndroidConfig(32, ['goma_client_candidate', 'clobber']),
     'Chromium Android ARM 32-bit Goma RBE ToT (ATS)':
-        CreateAndroidConfig(32, ['goma_client_candidate']),
+        CreateAndroidConfig(32, ['goma_client_candidate', 'clobber']),
     'Chromium Android ARM 32-bit Goma RBE Staging':
         _ANDROID32_CONFIG,
     'Chromium Android ARM 32-bit Goma RBE Prod':
