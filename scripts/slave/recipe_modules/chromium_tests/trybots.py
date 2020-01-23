@@ -1280,12 +1280,6 @@ TRYBOTS = freeze({
                 ],
             },
             # Manually triggered GPU trybots.
-            'gpu-fyi-try-win-xr-builder-64':
-                simple_bot({
-                    'mastername': 'chromium.gpu.fyi',
-                    'buildername': 'GPU FYI XR Win x64 Builder',
-                },
-                           analyze_mode='compile'),
             'gpu-fyi-try-win7-amd-dbg-32':
                 simple_bot({
                     'mastername': 'chromium.gpu.fyi',
