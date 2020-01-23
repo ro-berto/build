@@ -3,12 +3,13 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium_tests',
-  'depot_tools/tryserver',
-  'recipe_engine/buildbucket',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
+    'chromium',
+    'chromium_tests',
+    'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 from recipe_engine import post_process
@@ -48,14 +49,11 @@ def GenTests(api):
 
   yield api.test(
       'experiment_on',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100'),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)'),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
@@ -65,14 +63,11 @@ def GenTests(api):
 
   yield api.test(
       'experiment_off',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='0'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='0'),
       api.post_process(post_process.DoesNotRun,
                        'pre_run inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun, 'inner_test (experimental)'),
@@ -82,15 +77,11 @@ def GenTests(api):
 
   yield api.test(
       'experiment_on_invalid_results',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100',
-          has_valid_results=False),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100', has_valid_results=False),
       api.post_process(post_process.MustRun,
                        'has_valid_results inner_test (experimental)'),
       api.post_process(post_process.DoesNotRun,
@@ -100,56 +91,41 @@ def GenTests(api):
 
   yield api.test(
       'experiment_off_invalid_results',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='0',
-          has_valid_results=False),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='0', has_valid_results=False),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'experiment_on_valid_failures',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100',
-          failures=['foo']),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100', failures=['foo']),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'experiment_off_valid_failures',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='0',
-          failures=['foo']),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='0', failures=['foo']),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'failure_in_pre_run',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100'),
       api.override_step_data('pre_run inner_test (experimental)', retcode=1),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)'),
@@ -159,14 +135,11 @@ def GenTests(api):
 
   yield api.test(
       'failure_in_run',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100'),
       api.override_step_data('inner_test (experimental)', retcode=1),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
       api.post_process(post_process.StatusSuccess),
@@ -175,16 +148,12 @@ def GenTests(api):
 
   yield api.test(
       'abort_on_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100',
-          failures=['foo'],
-          abort_on_failure=True),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(
+          experiment_percentage='100', failures=['foo'], abort_on_failure=True),
       api.post_process(post_process.MustRun, 'inner_test (experimental)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -192,15 +161,11 @@ def GenTests(api):
 
   yield api.test(
       'with_patch',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          patch_issue='456',
-          experiment_percentage='100',
-          suffix='with patch'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(experiment_percentage='100', suffix='with patch'),
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (with patch, experimental)'),
       api.post_process(post_process.MustRun,

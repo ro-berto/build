@@ -127,42 +127,27 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
+          },),
   )
 
   yield api.test(
       'isolate_coverage_data',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           isolate_coverage_data=True,
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
       ),
       api.post_process(verify_isolate_flag),
       api.post_process(post_process.DropExpectation),
@@ -170,22 +155,14 @@ def GenTests(api):
 
   yield api.test(
       'fail',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
+          },),
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
           retcode=1),
@@ -195,23 +172,16 @@ def GenTests(api):
 
   yield api.test(
       'fail_many_failures',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
           shards=20,
           run_without_patch=True,
-          got_revision_cp='refs/heads/master@{#123456}'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
       ),
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
@@ -226,18 +196,9 @@ def GenTests(api):
 
   yield api.test(
       'fail_to_trigger',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='Linux Tests',
-          build_number=123,
       ),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
@@ -249,23 +210,15 @@ def GenTests(api):
       shards=4, use_json_test_format=True)
   yield api.test(
       'without_patch_filter',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           run_without_patch='a'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -310,26 +263,19 @@ def GenTests(api):
           }
         },
       })
+
   yield api.test(
       'expected_failures',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -360,24 +306,16 @@ def GenTests(api):
 
   yield api.test(
       'customized_test_options',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.post_process(
           verify_log_fields, {
               'pass_fail_counts': {
@@ -404,45 +342,29 @@ def GenTests(api):
 
   yield api.test(
       'override_compile_targets',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           override_compile_targets=['base_unittests_run']),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'chartjson',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -460,25 +382,17 @@ def GenTests(api):
   # https://crbug.com/704066
   yield api.test(
       'chartjson_simplified_ignore_task_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -494,25 +408,17 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_ignore_task_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url',
           ignore_task_failure=True),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -530,24 +436,16 @@ def GenTests(api):
   # https://crbug.com/704066
   yield api.test(
       'chartjson_invalid',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -564,24 +462,16 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_max_failures',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -598,46 +488,30 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_no_results',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'chartjson_no_results_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -646,22 +520,17 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_not_uploading',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
           got_revision_cp='refs/heads/master@{#123456}'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -677,24 +546,16 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_disabled',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -714,24 +575,16 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_simplified_disabled',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -754,27 +607,19 @@ def GenTests(api):
       api.chromium_swarming.merge_script_log_file('Merge succesfully'))
   yield api.test(
       'histograms',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
           perf_id='test-perf-id',
           perf_dashboard_machine_group='ChromePerf',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -784,26 +629,18 @@ def GenTests(api):
 
   yield api.test(
       'histograms_LUCI_missing_perf_dashboard_machine_group_property',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           got_webrtc_revision='ffffffffffffffffffffffffffffffffffffffff',
           got_v8_revision='ffffffffffffffffffffffffffffffffffffffff',
           perf_id='test-perf-id',
           results_url='https://example/url'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -822,99 +659,67 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_windows',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'gpu': '8086',
               'os': 'Windows'
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'dimensions_mac',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'gpu': '8086',
               'os': 'Mac'
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'dimensions_mac_hidpi',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'gpu': '8086',
               'os': 'Mac',
               'hidpi': '1'
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'dimensions_mac_intel_stable',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'gpu': '8086',
               'os': 'mac-intel-stable'
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests on Intel GPU on Mac (with patch) '
           'on mac-intel-stable',
@@ -952,49 +757,33 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_android',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Lollipop Phone Tester',
+      ),
+      api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           dimensions={
               'device_type': 'hammerhead',
               'device_os': 'LOL123',
               'os': 'Android'
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Lollipop Phone Tester',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'invalid_test_results',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          buildnumber=123,
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -1005,23 +794,16 @@ def GenTests(api):
 
   yield api.test(
       'unreliable_results',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          bot_id='test_bot_id',
+          builder='Linux Tests',
+      ),
+      api.properties(
           swarm_hashes={
               'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          git_revision='test_sha',
-          version='test-version',
-          got_revision_cp='refs/heads/master@{#123456}',
           test_filter=['test1', 'test2'],
           repeat_count=20),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='Linux Tests',
-          build_number=123,
-      ),
       api.override_step_data(
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(

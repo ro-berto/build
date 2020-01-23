@@ -15,7 +15,7 @@
       "--master-name",
       "test_mastername",
       "--build-number",
-      "123",
+      "571",
       "--builder-name",
       "test_buildername",
       "--step-name",
@@ -49,7 +49,7 @@
       "--builder-name",
       "test_buildername",
       "--build-number",
-      "123",
+      "571",
       "--test-type",
       "blink_web_tests (with patch)",
       "--chrome-revision",
@@ -76,7 +76,7 @@
       "--build-dir",
       "None/out",
       "--build-number",
-      "123",
+      "571",
       "--builder-name",
       "test_buildername",
       "--gs-bucket",
@@ -91,8 +91,8 @@
     ],
     "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -121,7 +121,7 @@
       "--master-name",
       "test_mastername",
       "--build-number",
-      "123",
+      "571",
       "--builder-name",
       "test_buildername",
       "--step-name",
@@ -154,7 +154,7 @@
       "--builder-name",
       "test_buildername",
       "--build-number",
-      "123",
+      "571",
       "--test-type",
       "blink_web_tests (without patch)",
       "--chrome-revision",
@@ -181,7 +181,7 @@
       "--build-dir",
       "None/out",
       "--build-number",
-      "123",
+      "571",
       "--builder-name",
       "test_buildername",
       "--gs-bucket",
@@ -196,8 +196,8 @@
     ],
     "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {

@@ -11,7 +11,7 @@
       "--builder-name",
       "test_buildername",
       "--build-number",
-      "1",
+      "571",
       "--test-type",
       "blink_web_tests on Intel GPU on Mac",
       "--chrome-revision",
@@ -38,7 +38,7 @@
       "--build-dir",
       "[START_DIR]/src/out",
       "--build-number",
-      "1",
+      "571",
       "--builder-name",
       "test_buildername",
       "--gs-bucket",
@@ -53,8 +53,8 @@
     ],
     "name": "archive results for blink_web_tests",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/1/blink_web_tests/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/1/blink_web_tests/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/571/blink_web_tests/layout-test-results.zip@@@"
     ]
   },
   {

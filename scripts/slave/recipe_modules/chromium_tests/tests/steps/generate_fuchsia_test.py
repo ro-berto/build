@@ -44,17 +44,11 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
-          single_spec={
-              'test': 'gtest_test',
-          },
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(single_spec={
+          'test': 'gtest_test',
+      },),
   )

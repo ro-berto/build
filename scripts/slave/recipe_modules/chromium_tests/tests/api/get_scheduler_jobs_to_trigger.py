@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
@@ -32,31 +33,24 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.buildbucket.ci_build(
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          project='chromium',
-          builder='Linux Builder'),
-      api.properties(
-          bot_id='test_bot_id',
+      api.chromium.ci_build(
           mastername='chromium.linux',
-          expected={
-              'chromium': ['Linux Tests'],
-          },
+          builder='Linux Builder',
       ),
+      api.properties(expected={
+          'chromium': ['Linux Tests'],
+      },),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'bucketed-triggers',
-      api.buildbucket.ci_build(project='chromium', builder='Linux Builder'),
-      api.buildbucket.ci_build(
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          project='chromium',
-          builder='Linux Builder'),
-      api.properties(
-          bot_id='test_bot_id',
+      api.chromium.ci_build(
           mastername='chromium.linux',
+          builder='Linux Builder',
+      ),
+      api.properties(
           expected={
               'chromium': ['ci-Linux Tests'],
           },

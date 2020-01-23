@@ -68,17 +68,13 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -87,18 +83,15 @@ def GenTests(api):
 
   yield api.test(
       'basic_ignore_task_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
+          builder='test_buildername',
+      ),
+      api.properties(
           ignore_task_failure=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -110,49 +103,37 @@ def GenTests(api):
 
   yield api.test(
       'android',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
+          builder='test_buildername',
+      ),
+      api.properties(
           target_platform='android',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'overrides',
+      api.chromium.ci_build(builder='test_buildername',),
       api.properties(
           override_compile_targets=['base_unittests_run'],
           mastername='test_mastername',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'no_result_json',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -161,17 +142,13 @@ def GenTests(api):
 
   yield api.test(
       'invalid_test_result',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
       api.override_step_data(
           'base_unittests',
           api.chromium_swarming.canned_summary_output(
@@ -182,18 +159,15 @@ def GenTests(api):
 
   yield api.test(
       'isolate_coverage_data',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
+          builder='test_buildername',
+      ),
+      api.properties(
           isolate_coverage_data=True,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
       api.post_process(post_process.StepCommandContains,
                        '[trigger] base_unittests', [
                            '--env', 'LLVM_PROFILE_FILE',

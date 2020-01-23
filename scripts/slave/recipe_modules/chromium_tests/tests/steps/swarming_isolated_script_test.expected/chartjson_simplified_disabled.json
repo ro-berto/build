@@ -5,11 +5,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -186,7 +186,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-json-output",
@@ -231,7 +231,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -253,7 +253,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"Linux Tests\", \"buildnumber\": 123, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot_id\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -293,7 +293,7 @@
       "--priority",
       "200",
       "--task-name",
-      "base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/123",
+      "base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -321,7 +321,7 @@
       "--tag",
       "buildername:Linux Tests",
       "--tag",
-      "buildnumber:123",
+      "buildnumber:571",
       "--tag",
       "data:ffffffffffffffffffffffffffffffffffffffff",
       "--tag",
@@ -331,7 +331,7 @@
       "--tag",
       "ninja_target:",
       "--tag",
-      "slavename:test_bot_id",
+      "slavename:test_bot",
       "--tag",
       "spec_name:chromium.ci:Linux Tests",
       "--tag",
@@ -371,9 +371,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/123\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/123\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests on Intel GPU on Linux (with patch)/Ubuntu-16.04/ffffffffff/Linux Tests/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -438,7 +438,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildnumber\": 123, \"git_revision\": \"test_sha\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#123456}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"perf_id\": \"test-perf-id\", \"recipe\": \"chromium_tests:tests/steps/swarming_isolated_script_test\", \"results_url\": \"https://example/url\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"version\": \"test-version\"}",
+      "{\"bot_id\": \"test_bot\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/master@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"chromium.linux\", \"path_config\": \"generic\", \"perf_id\": \"test-perf-id\", \"recipe\": \"chromium_tests:tests/steps/swarming_isolated_script_test\", \"results_url\": \"https://example/url\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",

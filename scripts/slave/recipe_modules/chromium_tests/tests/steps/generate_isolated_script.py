@@ -107,6 +107,10 @@ def GenTests(api):
 
   yield api.test(
       'swarming',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name':
@@ -133,18 +137,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
           buildnumber=1),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
   )
 
   yield api.test(
       'service_account',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -157,13 +158,6 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
       api.post_process(
           post_process.StepCommandContains, '[trigger] base_unittests',
@@ -173,6 +167,10 @@ def GenTests(api):
 
   yield api.test(
       'bad set up',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name':
@@ -194,18 +192,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'bad tear down',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name':
@@ -227,18 +222,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'swarming_trigger_script',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -253,18 +245,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'swarming_trigger_script_invalid',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -279,18 +268,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'swarming_dimension_sets',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -305,18 +291,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'swarming_dimension_sets_plus_optional',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -336,18 +319,15 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'spec_error',
+      api.chromium.ci_build(
+          mastername='tryserver.chromium.linux',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -374,7 +354,6 @@ def GenTests(api):
   yield api.test(
       'precommit_args',
       api.chromium.try_build(
-          mastername='tryserver.chromium.linux',
           builder='linux-rel',
       ),
       api.properties(
@@ -391,6 +370,10 @@ def GenTests(api):
 
   yield api.test(
       'blink_web_tests_with_suffixes',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'blink_web_tests',
@@ -407,13 +390,6 @@ def GenTests(api):
           swarm_hashes={
               'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
       api.post_process(
           post_process.Filter(
@@ -426,6 +402,10 @@ def GenTests(api):
 
   yield api.test(
       'custom_webkit_tests_step_name',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'custom_webkit_tests',
@@ -438,18 +418,15 @@ def GenTests(api):
           swarm_hashes={
               'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
   )
 
   yield api.test(
       'swarming_cipd_packages',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'name': 'base_unittests',
@@ -470,13 +447,6 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests_run': 'deadbeef',
           },
-          mastername='test_mastername',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=1,
       ),
       api.post_process(
           post_process.StepCommandContains, '[trigger] base_unittests', [

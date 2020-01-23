@@ -41,18 +41,16 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'buildbucket_string',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
               'test': 'base_unittests',
           },
-          mastername='test_mastername',
           expected_args=[u'8945511751514863184'],
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -60,18 +58,16 @@ def GenTests(api):
 
   yield api.test(
       'buildbucket_unicode',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
               'test': 'base_unittests',
           },
-          mastername='test_mastername',
           expected_args=[u'8945511751514863184'],
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -79,18 +75,16 @@ def GenTests(api):
 
   yield api.test(
       'buildbucket_dictionary',
+      api.chromium.ci_build(
+          mastername='test_mastername',
+          builder='test_buildername',
+      ),
       api.properties(
           single_spec={
               'args': ['${buildbucket_build_id}'],
               'test': 'base_unittests',
           },
-          mastername='test_mastername',
           expected_args=[u'8945511751514863184'],
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

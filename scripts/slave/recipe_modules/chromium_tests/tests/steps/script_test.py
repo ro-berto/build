@@ -39,35 +39,26 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123,
       ),
   )
 
   yield api.test(
       'invalid_results',
-      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123,
       ),
       api.override_step_data('script_test', api.json.output({})),
   )
 
   yield api.test(
       'failure',
-      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123,
       ),
       api.override_step_data(
           'script_test',

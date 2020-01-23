@@ -45,36 +45,28 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'android',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-          target_platform='android'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(target_platform='android'),
   )
 
   yield api.test(
       'win',
       api.platform.name('win'),
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-          target_platform='win',
-          gs_acl='public'),
-      api.buildbucket.ci_build(
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(target_platform='win', gs_acl='public'),
   )
 
   yield api.test(
       'unexpected_flakes',
-      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
-      api.buildbucket.ci_build(
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123,
       ),
       api.override_step_data(
           'blink_web_tests (with patch)',
@@ -85,10 +77,9 @@ def GenTests(api):
 
   yield api.test(
       'big',
-      api.properties(mastername='test_mastername', bot_id='test_bot_id'),
-      api.buildbucket.ci_build(
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123,
       ),
       api.override_step_data(
           'blink_web_tests (with patch)',

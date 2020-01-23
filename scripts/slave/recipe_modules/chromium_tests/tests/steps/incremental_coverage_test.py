@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium',
     'chromium_android',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
@@ -31,13 +32,8 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
+      api.chromium.ci_build(builder='test_buildername'),
       api.properties(
           # Used by IncrementalCoverageTest.
           buildbotURL='https://example/url',),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
-          builder='test_buildername',
-          build_number=123,
-      ),
   )

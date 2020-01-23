@@ -202,7 +202,7 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"https://example/url/builders/test_buildername/builds/123/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
+      "@@@SET_BUILD_PROPERTY@moreInfoURL@\"https://example/url/builders/test_buildername/builds/571/steps/Incremental%20coverage%20report/logs/json.output\"@@@",
       "@@@SET_BUILD_PROPERTY@summary@\"Test coverage for this patch: 80/100 lines (80%).\"@@@"
     ]
   },

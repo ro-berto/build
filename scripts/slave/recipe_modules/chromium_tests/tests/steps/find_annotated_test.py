@@ -32,6 +32,6 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
+      api.chromium.ci_build(builder='test_buildername'),
       api.properties(current_time='20170425T203027'),
-      api.buildbucket.ci_build(builder='test_buildername'),
   )

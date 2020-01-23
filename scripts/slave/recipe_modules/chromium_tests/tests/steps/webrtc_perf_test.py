@@ -65,15 +65,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  typical_properties = api.properties(
+  typical_properties = api.properties(parent_got_revision='a' * 40)
+  typical_ci_build = api.chromium.ci_build(
       mastername='chromium.webrtc',
-      bot_id='test_bot_id',
-      parent_got_revision='a' * 40)
-  typical_ci_build = api.buildbucket.ci_build(
-      project='chromium',
-      git_repo='https://chromium.googlesource.com/chromium/src',
       builder='WebRTC Chromium Linux Tester',
-      build_number=123,
   )
 
   yield api.test(
@@ -94,15 +89,12 @@ def GenTests(api):
 
   yield api.test(
       'webrtc_fyi_tester',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.webrtc.fyi',
-          bot_id='test_bot_id',
-          parent_got_revision='a' * 40,
-          parent_got_cr_revision='builder-chromium-tot'),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='WebRTC Chromium FYI Linux Tester',
-          build_number=123,
+      ),
+      api.properties(
+          parent_got_revision='a' * 40,
+          parent_got_cr_revision='builder-chromium-tot',
       ),
   )

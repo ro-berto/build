@@ -54,27 +54,27 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123), api.properties(mastername='test_mastername'),
+      ),
       api.post_process(post_process.MustRun, 'test_name'),
       api.post_process(calls_runner_script, 'test_name', 'run_test_name'),
       api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'different-target-name',
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
+      api.chromium.ci_build(
+          mastername='test_mastername',
           builder='test_buildername',
-          build_number=123),
-      api.properties(mastername='test_mastername', target_name='target_name'),
+      ),
+      api.properties(target_name='target_name'),
       api.post_process(post_process.StepCommandContains, 'compile',
                        ['target_name']),
       api.post_process(post_process.MustRun, 'test_name'),
       api.post_process(calls_runner_script, 'test_name', 'run_target_name'),
       api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )

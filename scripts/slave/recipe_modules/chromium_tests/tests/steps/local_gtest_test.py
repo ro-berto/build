@@ -48,30 +48,20 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(),
   )
 
   yield api.test(
       'retry',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(),
       api.override_step_data('base_unittests (with patch)',
                              api.test_utils.canned_gtest_output(passing=False)),
       api.override_step_data('base_unittests (without patch)',
@@ -80,15 +70,9 @@ def GenTests(api):
 
   yield api.test(
       'android',
-      api.properties(
+      api.chromium.ci_build(
           mastername='test_mastername',
-          bot_id='test_bot_id',
-          target_platform='android',
-      ),
-      api.buildbucket.ci_build(
-          project='chromium',
-          git_repo='https://chromium.googlesource.com/chromium/src',
           builder='test_buildername',
-          build_number=123,
       ),
+      api.properties(target_platform='android',),
   )
