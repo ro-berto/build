@@ -931,7 +931,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       unrecoverable_test_suites = []
       for t in task.test_suites:
-        if not t.has_failures_to_summarize:  # pragma: nocover
+        if not t.has_failures_to_summarize():
           continue
 
         if t not in failing_test_suites:

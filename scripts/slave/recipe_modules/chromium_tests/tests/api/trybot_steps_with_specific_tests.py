@@ -53,9 +53,9 @@ def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
     if api.properties.get('shards'):
       kwargs['shards'] = api.properties['shards']
 
-    test = steps.SwarmingGTestTest('base_unittests', **kwargs)
+    tests = [steps.SwarmingGTestTest('base_unittests', **kwargs)]
   else:
-    test = steps.BlinkTest()
+    tests = [steps.BlinkTest()]
 
   if api.properties.get('use_custom_dimensions', False):
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')
@@ -65,17 +65,12 @@ def RunSteps(api, mastername, fail_calculate_tests, fail_mb_and_compile,
   retry_failed_shards = api.properties.get('retry_failed_shards', False)
 
   # Allows testing the scenario where there are multiple test suites.
-  with_url_unittests = api.properties.get('with_url_unittests', False)
-  url_unittests = (
-      steps.SwarmingGTestTest('url_unittests', **kwargs)
-      if with_url_unittests else None)
+  for t in api.properties.get('additional_gtest_targets', []):
+    tests.append(steps.SwarmingGTestTest(t))
 
   # Override _calculate_tests_to_run to run the desired test, in the desired
   # configuration.
   def config_override(**kwargs):
-    tests = [test]
-    if url_unittests:
-      tests.append(url_unittests)
     task = api.chromium_tests.Task(bot, tests, update_step, affected_files)
     task.should_retry_failures_with_changes = lambda: retry_failed_shards
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
@@ -1293,7 +1288,7 @@ def GenTests(api):
 
   base_unittests_results = {
       'per_iteration_data': [{
-          'TestBase.One': [{
+          'BaseTest.One': [{
               'elapsed_time_ms': 0,
               'output_snippet': '',
               'status': 'FAILURE',
@@ -1321,23 +1316,28 @@ def GenTests(api):
       }]
   }
 
-  # This test tests that scenrio that after the "without patch" steps, there
-  # could be two different kinds test suites need to summarize their results:
+  # This test tests the scenrio when there are multiple test suites with
+  # failures and that after the "without patch" steps, there are two different
+  # kinds test suites need to summarize their results:
   # 1. Those ran "without patch" steps because there are non-forgivable failures
   #    after "with patch" steps.
   # 2. Those didn't run "without patch" steps because their failures are known
   #    flaky tests and are forgiven.
-  # These two cases should be handled differently and correctly.
+  # The test results of these two kinds should both be summarized correctly.
   yield api.test(
       'summarize_both_retried_and_not_retried_test_suites',
       api.chromium.try_build(
           mastername='tryserver.chromium.linux', builder='linux-rel'),
       api.properties(
           retry_failed_shards=True,
-          with_url_unittests=True,
+          additional_gtest_targets=['component_unittests', 'url_unittests'],
           swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-              'url_unittests': 'dddddddddddddddddddddddddddddddddddddddd',
+              'base_unittests':
+                  'ffffffffffffffffffffffffffffffffffffffff',
+              'component_unittests':
+                  'cccccccccccccccccccccccccccccccccccccccc',
+              'url_unittests':
+                  'dddddddddddddddddddddddddddddddddddddddd',
           },
           **{
               '$build/test_utils': {
