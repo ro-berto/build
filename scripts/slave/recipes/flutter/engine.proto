@@ -41,6 +41,7 @@ message InputProperties {
   bool clobber=21;
 
   string fuchsia_ctl_version=22;
+  bool build_font_subset=23;
 }
 
 message EnvProperties {
