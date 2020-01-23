@@ -67,44 +67,6 @@ SPEC = {
                     'source_side_spec_file': 'chromium.linux.json',
                 },
             ),
-        'Android Builder':
-            bot_spec.BotSpec.create(
-                chromium_config='main_builder_rel_mb',
-                chromium_apply_config=['android'],
-                gclient_config='chromium',
-                gclient_apply_config=[
-                    'android',
-                    'chromium_lkgr',
-                    'perf',
-                    'show_v8_revision',
-                    'v8_tot',
-                ],
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'android',
-                    'TARGET_ARCH': 'arm',
-                },
-                android_config='main_builder_rel_mb',
-                android_apply_config=['use_devil_adb'],
-                bot_type=bot_spec.BUILDER,
-                compile_targets=[
-                    'android_tools',
-                    'cc_perftests',
-                    'chrome_public_apk',
-                    'gpu_perftests',
-                    'push_apps_to_background_apk',
-                    'system_webview_apk',
-                    'system_webview_shell_apk',
-                ],
-                set_component_rev={
-                    'name': 'src/v8',
-                    'rev_str': '%s'
-                },
-                testing={
-                    'platform': 'linux',
-                    'source_side_spec_file': 'chromium.linux.json',
-                },
-            ),
         'V8 Android GN (dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='android',

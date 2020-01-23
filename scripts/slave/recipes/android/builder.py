@@ -96,37 +96,6 @@ BUILDERS = freeze({
       ],
     }
   },
-  'client.v8.fyi': {
-    'Android Builder': {
-      'recipe_config': 'main_builder_rel_mb',
-      'gclient_apply_config': [
-        'android',
-        'perf',
-        'v8_tot',
-        'chromium_lkgr',
-        'show_v8_revision',
-      ],
-      'kwargs': {
-        'BUILD_CONFIG': 'Release',
-      },
-      'upload': {
-        'bucket': 'v8-android',
-        'path': lambda api: ('v8_android_perf_rel/full-build-linux_%s.zip'
-                             % api.buildbucket.gitiles_commit.id),
-      },
-      'run_mb': True,
-      'targets': [
-        'android_tools',
-        'cc_perftests',
-        'chrome_public_apk',
-        'gpu_perftests',
-        'push_apps_to_background_apk',
-        'system_webview_apk',
-        'system_webview_shell_apk',
-      ],
-      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-    }
-  },
 })
 
 from recipe_engine.recipe_api import Property
@@ -166,16 +135,6 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.gclient.set_config('chromium')
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
-
-  if bot_config.get('set_component_rev'):
-    # If this is a component build and the main revision is e.g. blink,
-    # webrtc, or v8, the custom deps revision of this component must be
-    # dynamically set to either:
-    # (1) 'revision' from the waterfall, or
-    # (2) 'HEAD' for forced builds with unspecified 'revision'.
-    component_rev = revision
-    dep = bot_config.get('set_component_rev')
-    api.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
   api.chromium.ensure_goma()
   update_step = api.bot_update.ensure_checkout()
