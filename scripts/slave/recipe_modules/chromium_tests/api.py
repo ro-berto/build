@@ -16,7 +16,7 @@ from recipe_engine import recipe_api
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-from . import bot_config_and_test_db as bdb_module
+from . import bot_config as bot_config_module
 from . import bot_spec
 from . import builders as builders_module
 from . import generators
@@ -115,7 +115,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def create_bot_config_object(self, bot_ids, builders=None):
     try:
-      return bdb_module.BotConfig(builders or self.builders, bot_ids)
+      return bot_config_module.BotConfig(builders or self.builders, bot_ids)
     except Exception:
       if (self._test_data.enabled and
           not self._test_data.get('handle_bot_config_errors', True)):
@@ -316,7 +316,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return test_runner
 
   def get_compile_targets(self, bot_config, build_config, tests):
-    assert isinstance(build_config, bdb_module.BuildConfig), \
+    assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
 
     compile_targets = bot_config.get_compile_targets(self, build_config, tests)
@@ -392,7 +392,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       RawResult object with compile step status and failure message
     """
 
-    assert isinstance(build_config, bdb_module.BuildConfig), \
+    assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
     bot_type = override_bot_type or bot_config.get('bot_type',
                                                    bot_spec.BUILDER_TESTER)
@@ -668,7 +668,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                build_revision=None,
                                override_bot_type=None,
                                read_gn_args=True):
-    assert isinstance(build_config, bdb_module.BuildConfig), \
+    assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).

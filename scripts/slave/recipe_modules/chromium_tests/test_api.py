@@ -4,7 +4,7 @@
 
 from recipe_engine import recipe_test_api
 
-from . import bot_config_and_test_db as bdb_module
+from . import bot_config as bot_config_module
 from . import builders
 
 
@@ -32,7 +32,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return size_limit
 
   def platform(self, bot_ids):
-    bot_config = bdb_module.BotConfig(builders.BUILDERS, bot_ids)
+    bot_config = bot_config_module.BotConfig(builders.BUILDERS, bot_ids)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
         bot_config.get('testing', {}).get('platform'),
@@ -49,9 +49,16 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     This makes it possible to test APIs taking a bot config without
     referencing production data.
     """
-    return bdb_module.BotConfig(
-        {mastername: {'builders': {buildername: builder_dict}}},
-        [{'mastername': mastername, 'buildername': buildername}])
+    return bot_config_module.BotConfig({
+        mastername: {
+            'builders': {
+                buildername: builder_dict
+            }
+        }
+    }, [{
+        'mastername': mastername,
+        'buildername': buildername
+    }])
 
   def read_source_side_spec(self, mastername, contents, step_prefix=None,
                             step_suffix=None):
