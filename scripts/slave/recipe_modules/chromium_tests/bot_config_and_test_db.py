@@ -45,17 +45,21 @@ class BotConfig(object):
         raise Exception(
             'No configuration present for builder %s in master %s' % (b, m))
 
-  class BotId(collections.namedtuple('BotId',
-                                     ('mastername', 'buildername', 'tester',
-                                      'tester_mastername'))):
+  class BotId(
+      collections.namedtuple(
+          'BotId',
+          ('mastername', 'buildername', 'tester', 'tester_mastername'))):
 
     __slots__ = ()
 
-    def __new__(cls, mastername, buildername, tester=None,
+    def __new__(cls,
+                mastername,
+                buildername,
+                tester=None,
                 tester_mastername=None):
       tester_mastername = tester_mastername or mastername if tester else None
-      return super(BotConfig.BotId, cls).__new__(
-          cls, mastername, buildername, tester, tester_mastername)
+      return super(BotConfig.BotId, cls).__new__(cls, mastername, buildername,
+                                                 tester, tester_mastername)
 
   @property
   def bot_ids(self):
@@ -74,15 +78,15 @@ class BotConfig(object):
       other_result = getter(bot_id, name, default)
       assert result == other_result, (
           'Inconsistent value for %r: bot %r has %r, '
-          'but bot %r has %r' % (
-              name, self._bot_ids[0], result, bot_id, other_result))
+          'but bot %r has %r' % (name, self._bot_ids[0], result, bot_id,
+                                 other_result))
     return result
 
   def _get_builder_bot_config(self, bot_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use build_config.
-    return self._bots_dict.get(bot_id.mastername, {}).get(
-        'builders', {}).get(bot_id.buildername, {})
+    return self._bots_dict.get(bot_id.mastername, {}).get('builders', {}).get(
+        bot_id.buildername, {})
 
   def _get(self, bot_id, name, default=None):
     return self._get_builder_bot_config(bot_id).get(name, default)
@@ -96,23 +100,23 @@ class BotConfig(object):
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
-      if 'source_side_spec' in bot_config: # pragma: no cover
-        return { self._bot_ids[0].buildername: bot_config['source_side_spec'] }
+      if 'source_side_spec' in bot_config:  # pragma: no cover
+        return {self._bot_ids[0].buildername: bot_config['source_side_spec']}
 
       # Similar to the source_side_spec special case above, but expected to
       # contain the spec for every builder on the waterfall. This is necessary
       # because only having one builder like in the source_side_spec approach
       # breaks parent/child builder relationships due to the parent not knowing
       # which targets to build and isolate for its children.
-      elif 'downstream_spec' in bot_config: # pragma: no cover
+      elif 'downstream_spec' in bot_config:  # pragma: no cover
         return bot_config['downstream_spec']
 
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
 
-    source_side_spec_file = self.get('testing', {}).get(
-        'source_side_spec_file', '%s.json' % mastername)
+    source_side_spec_file = self.get('testing', {}).get('source_side_spec_file',
+                                                        '%s.json' % mastername)
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
@@ -125,9 +129,8 @@ class BotConfig(object):
           chromium_tests_api.get_compile_targets_for_scripts(self)
 
     def is_child_of(builder_config, parent_mastername, parent_buildername):
-      return (
-          parent_mastername == builder_config.get('parent_mastername')
-          and parent_buildername == builder_config.get('parent_buildername'))
+      return (parent_mastername == builder_config.get('parent_mastername') and
+              parent_buildername == builder_config.get('parent_buildername'))
 
     masternames = set()
     for bot_id in self._bot_ids:
@@ -139,8 +142,9 @@ class BotConfig(object):
         if master_name == bot_master_name:
           continue
 
-        if any(is_child_of(b, bot_master_name, bot_builder_name)
-               for b in master_config.get('builders', {}).itervalues()):
+        if any(
+            is_child_of(b, bot_master_name, bot_builder_name)
+            for b in master_config.get('builders', {}).itervalues()):
           masternames.add(master_name)
 
     db = {}
@@ -151,8 +155,8 @@ class BotConfig(object):
       master_dict = dict(self._bots_dict[mastername])
 
       if mastername in masternames:
-        source_side_spec = self._get_source_side_spec(
-            chromium_tests_api, mastername)
+        source_side_spec = self._get_source_side_spec(chromium_tests_api,
+                                                      mastername)
 
         builders = master_dict['builders'] = dict(master_dict['builders'])
         for loop_buildername in builders:
@@ -160,8 +164,10 @@ class BotConfig(object):
               dict(builders[loop_buildername]))
           builders[loop_buildername]['tests'] = (
               chromium_tests_api.generate_tests_from_source_side_spec(
-                  source_side_spec, builder_dict,
-                  loop_buildername, mastername,
+                  source_side_spec,
+                  builder_dict,
+                  loop_buildername,
+                  mastername,
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
                   bot_update_step,
@@ -219,6 +225,7 @@ class BuildConfig(object):
 
     Corresponds to an individual builder.
     """
+
     def __init__(self, key, mirrored, tests):
       self.children = {}
       # A key that uniquely identifies this builder.
@@ -295,32 +302,32 @@ class BuildConfig(object):
 
   def all_tests(self):
     """Returns all tests."""
-    return list(self._iter_tests(
-        node for node, _ in self._iter_nodes()))
+    return list(self._iter_tests(node for node, _ in self._iter_nodes()))
 
   def tests_in_scope(self):
     """Returns all tests for the provided bot IDs."""
-    return list(self._iter_tests(
-        node for node, _ in self._iter_nodes()
-        if node.mirrored))
+    return list(
+        self._iter_tests(
+            node for node, _ in self._iter_nodes() if node.mirrored))
 
   def tests_on(self, mastername, buildername):
     """Returns all tests for the specified builder."""
-    return list(self._iter_tests(
-        node for node, _ in self._iter_nodes()
-        if (mastername, buildername) == node.key))
+    return list(
+        self._iter_tests(node for node, _ in self._iter_nodes()
+                         if (mastername, buildername) == node.key))
 
   def tests_triggered_by(self, mastername, buildername):
     """Returns all tests for builders triggered by the specified builder."""
-    return list(self._iter_tests(
-        node for node, parent in self._iter_nodes()
-        if parent and (mastername, buildername) == parent.key))
+    return list(
+        self._iter_tests(node for node, parent in self._iter_nodes()
+                         if parent and (mastername, buildername) == parent.key))
 
   def _iter_nodes(self):
     """Generates a sequence of node pairs from the builder graph.
 
     Each pair is (node, parent).
     """
+
     def _iter_nodes_impl(node, parent_node):
       yield (node, parent_node)
 
