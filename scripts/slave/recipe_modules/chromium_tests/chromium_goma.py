@@ -96,9 +96,9 @@ _SPEC_BUILDERS = {
     'Chromium Linux Goma RBE Staging (clobber)':
         _LINUX_CLOBBER_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg)':
-        _LINUX_CLOBBER_CONFIG,
-    'Chromium Linux Goma RBE Staging (dbg) (clobber)':
         _LINUX_CONFIG,
+    'Chromium Linux Goma RBE Staging (dbg) (clobber)':
+        _LINUX_CLOBBER_CONFIG,
     'Chromium Linux Goma RBE Prod':
         _LINUX_CONFIG,
     'Chromium Linux Goma RBE Prod (clobber)':
