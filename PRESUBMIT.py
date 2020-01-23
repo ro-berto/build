@@ -76,11 +76,6 @@ def CommitChecks(input_api, output_api):
       output_api,
       input_api.os_path.join('scripts', 'common', 'unittests'),
       whitelist))
-  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api,
-      output_api,
-      input_api.os_path.join('scripts', 'tools', 'unittests'),
-      whitelist))
 
   recipe_modules_tests = (
       input_api.glob(
