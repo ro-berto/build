@@ -2,7 +2,6 @@
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Checks for expectation failures stamp files created by enabling the gn arg
 check_android_configuration. This is used by the size trybot to monitor
 expectation file regressions."""
@@ -62,16 +61,14 @@ def main():
       action='store_true',
       help='Check for the existance of failed expecation files after a build.')
   parser.add_argument(
-      '--build-vars-path',
-      required=True,
-      help='Path to build_vars.txt.')
+      '--build-vars-path', required=True, help='Path to build_vars.txt.')
   parser.add_argument(
       '--results-path', help='Output path for the trybot result .json file.')
   args = parser.parse_args()
 
   expectations_dir = _GetExpectationsDir(args.build_vars_path)
-  expectations_dir = _RebasePath(
-      expectations_dir, os.getcwd(), os.path.dirname(args.build_vars_path))
+  expectations_dir = _RebasePath(expectations_dir, os.getcwd(),
+                                 os.path.dirname(args.build_vars_path))
 
   if args.clear_expectations:
     _ClearExpectationsDir(expectations_dir)

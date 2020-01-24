@@ -5,6 +5,7 @@
 **[Recipe Modules](#Recipe-Modules)**
   * [adb](#recipe_modules-adb)
   * [archive](#recipe_modules-archive)
+  * [binary_size](#recipe_modules-binary_size) &mdash; Binary size analysis for patchsets.
   * [build](#recipe_modules-build)
   * [chromite](#recipe_modules-chromite)
   * [chromium](#recipe_modules-chromium)
@@ -61,6 +62,7 @@
   * [archive:tests/download_and_unzip_build](#recipes-archive_tests_download_and_unzip_build)
   * [archive:tests/zip_and_upload_build](#recipes-archive_tests_zip_and_upload_build)
   * [art](#recipes-art)
+  * [binary_size:tests/android_binary_size](#recipes-binary_size_tests_android_binary_size)
   * [binary_size_trybot](#recipes-binary_size_trybot)
   * [boringssl](#recipes-boringssl)
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
@@ -441,6 +443,43 @@ inserted into the URL.
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
+### *recipe_modules* / [binary\_size](/scripts/slave/recipe_modules/binary_size)
+
+[DEPS](/scripts/slave/recipe_modules/binary_size/__init__.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+
+Binary size analysis for patchsets.
+
+#### **class [BinarySizeApi](/scripts/slave/recipe_modules/binary_size/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&mdash; **def [android\_binary\_size](/scripts/slave/recipe_modules/binary_size/api.py#24)(self, chromium_config, gclient_config, chromium_apply_configs=None, gclient_apply_configs=None):**
+
+Determines the increase in binary size caused by the patch under test.
+
+To do so, this function:
+ - syncs with the patch
+ - exits early if none of the configured analyze targets were affected.
+ - builds the configured compile targets with the patch
+ - measures the size of the configured APK with the patch
+ - syncs without the patch
+ - builds the same targets without the patch
+ - measures the size of the configured APK without the patch
+ - reapplies the patch and compares the results
+
+In general, this recipe is responsible only for driving the execution of
+these steps and failing when necessary. The analysis and measurement logic
+is largely in //tools/binary_size in chromium/src.
+
+See http://bit.ly/2up0mcA for more information.
+
+Args:
+  chromium_config: A string containing the name of the chromium
+    recipe_module config to use.
+  gclient_config: A string containing the name of the gclient
+    recipe_module config to use.
+  chromium_apply_configs: An optional list of strings containing the names
+    of additional chromium recipe_module configs to apply.
+  gclient_apply_configs: An optional list of strings containing the names
+    of additional gclient recipe_module configs to apply.
 ### *recipe_modules* / [build](/scripts/slave/recipe_modules/build)
 
 [DEPS](/scripts/slave/recipe_modules/build/__init__.py#4): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4004,11 +4043,16 @@ Packages Android SDK packages as CIPD packages.
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#101)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
 &mdash; **def [setup\_target](/scripts/slave/recipes/art.py#253)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+### *recipes* / [binary\_size:tests/android\_binary\_size](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py)
+
+[DEPS](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py#11): [binary\_size](#recipe_modules-binary_size), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py#20)(api):**
 ### *recipes* / [binary\_size\_trybot](/scripts/slave/recipes/binary_size_trybot.py)
 
-[DEPS](/scripts/slave/recipes/binary_size_trybot.py#10): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipes/binary_size_trybot.py#7): [binary\_size](#recipe_modules-binary_size), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_trybot.py#78)(api, analyze_targets, compile_targets, apk_name, mapping_name):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_trybot.py#13)(api):**
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
 [DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

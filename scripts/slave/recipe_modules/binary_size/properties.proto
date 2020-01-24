@@ -1,0 +1,31 @@
+// Copyright 2020 The Chromium Authors. All Rights Reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipe_modules.build.binary_size;
+
+
+message InputProperties {
+  // Fully qualified GN targets to analyze.
+  // Default values depend on OS.
+  repeated string analyze_targets = 1;
+
+  // Unqualified targets to compile.
+  // Default values depend on OS.
+  repeated string compile_targets = 2;
+
+  // Android-specific properties.
+  AndroidProperties android = 3;
+}
+
+message AndroidProperties {
+  // Filename of the built apk or .minimal.apks to measure.
+  // Defaults to MonochromePublic.minimal.apks.
+  string apk_name = 1;
+
+  // Filename of the proguard mapping file.
+  // Defaults to MonochromePublic.aab.maaping.
+  string mapping_name = 2;
+}
