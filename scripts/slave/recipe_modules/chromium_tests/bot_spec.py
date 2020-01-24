@@ -121,6 +121,9 @@ class BotSpec(collections.Mapping):
   gclient_config = attrib(str, default=None)
   # The names of additional configs to apply for the gclient recipe module
   gclient_apply_config = sequence_attrib(str, default=None)
+  # The keyword arguments used when setting the config for the gclient recipe
+  # module
+  gclient_config_kwargs = mapping_attrib(str, default=None)
   # Used in branch official continuous specs to control where a buildspec is
   # retrieved from
   # TODO(gbeaty) Clean this up if possible, the use of this field is circuitous:
