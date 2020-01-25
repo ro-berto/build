@@ -155,6 +155,7 @@
       ]
     },
     "name": "presubmit",
+    "timeout": 480,
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
