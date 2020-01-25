@@ -108,6 +108,9 @@ def GenTests(api):
             buildername='%s_presubmit' % repo_name,
             repo_name=repo_name,
             gerrit_project=repo_name),
+        api.properties(**{'$depot_tools/presubmit': {
+            'timeout_s': 654
+        }}),
         api.step_data(
             'presubmit',
             api.json.output({
@@ -125,6 +128,9 @@ def GenTests(api):
           repository_url='https://skia.googlesource.com/skia.git',
           gerrit_project='skia',
           solution_name='skia'),
+      api.properties(**{'$depot_tools/presubmit': {
+          'timeout_s': 654
+      }}),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -143,6 +149,9 @@ def GenTests(api):
           gerrit_project='v8/v8',
           runhooks=True,
           path_config='generic'),
+      api.properties(**{'$depot_tools/presubmit': {
+          'timeout_s': 654
+      }}),
   )
 
   yield api.test(
@@ -154,5 +163,8 @@ def GenTests(api):
           gerrit_project='v8/v8',
           runhooks=True,
           path_config='generic'),
+      api.properties(**{'$depot_tools/presubmit': {
+          'timeout_s': 654
+      }}),
       api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
   )
