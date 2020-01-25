@@ -5,7 +5,7 @@
 from recipe_engine import post_process
 from recipe_engine import recipe_api
 
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_modules.build.binary_size import properties as properties_pb
 from RECIPE_MODULES.build.binary_size import constants
 
 DEPS = [
@@ -89,6 +89,17 @@ def GenTests(api):
       api.post_check(has_expected_binary_size_url),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess))
+
+  nondefault_properties = properties_pb.InputProperties(
+      analyze_targets=['//foo:bar_binary'], compile_targets=['bar_binary'])
+  yield api.test(
+      'normal_nondefault_targets',
+      api.binary_size.props('nondefault_targets'),
+      api.properties(**{'$build/binary_size': nondefault_properties}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'unexpected_increase', api.binary_size.props(), override_analyze(),
       override_expectation(),

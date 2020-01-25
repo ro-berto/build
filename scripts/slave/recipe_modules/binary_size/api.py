@@ -13,10 +13,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
     super(BinarySizeApi, self).__init__(**kwargs)
-    self._analyze_targets = (
-        properties.analyze_targets or constants.DEFAULT_ANALYZE_TARGETS)
-    self._compile_targets = (
-        properties.compile_targets or constants.DEFAULT_COMPILE_TARGETS)
+    self._analyze_targets = list(properties.analyze_targets or
+                                 constants.DEFAULT_ANALYZE_TARGETS)
+    self._compile_targets = list(properties.compile_targets or
+                                 constants.DEFAULT_COMPILE_TARGETS)
     self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
     self._mapping_name = (
         properties.android.mapping_name or constants.DEFAULT_MAPPING_FILE_NAME)
