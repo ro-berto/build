@@ -1286,21 +1286,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "ls",
-      "gs://dart-test-results-approved-results/epilogue.txt"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "gsutil check for firestore approvals"
-  },
-  {
     "cmd": [],
     "name": "download previous results"
   },

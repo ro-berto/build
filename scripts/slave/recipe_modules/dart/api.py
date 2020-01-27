@@ -271,13 +271,6 @@ class DartApi(recipe_api.RecipeApi):
     return 'new_workflow_enabled' in self.m.properties
 
 
-  def _require_manual_approvals(self):
-    """Boolean that controls whether to compare results
-       only against previous results, or whether to also
-       use an 'approved_results.json' file to control
-       the buildbot status."""
-    return 'no_approvals' not in self.m.properties
-
   def _release_builder(self):
     """Boolean that reports whether the builder is on the
        dev or stable channel. Some steps are only run on the
@@ -372,7 +365,7 @@ class DartApi(recipe_api.RecipeApi):
     return str(builder)
 
 
-  def _download_results(self, latest, firestore_approvals):
+  def _download_results(self, latest):
     filenames = ['results.json', 'flaky.json']
     builder = self._get_builder_dir()
     results_path = self.m.path['checkout'].join('LATEST')
@@ -387,39 +380,6 @@ class DartApi(recipe_api.RecipeApi):
         results_path,
         name='download previous results',
         ok_ret='any' if self._report_new_results() else {0})
-    if not firestore_approvals and self._require_manual_approvals():
-      self.m.file.write_text(
-        'ensure approved_results.json exists',
-        results_path.join('approved_results.json'), '')
-      self.m.gsutil.download(
-        'dart-test-results-approved-results',
-        'builders/%s/approved_results.json' % builder,
-        'LATEST/approved_results.json',
-        name='download approved results',
-        ok_ret='any')
-      self._apply_preapprovals()
-
-
-  def _apply_preapprovals(self):
-    apply_preapproval_arguments = [self.dart_executable(),
-                                   'tools/bots/apply_preapprovals.dart',
-                                   'LATEST/approved_results.json']
-    if self._try_builder():
-      info = self.m.gerrit.get_changes(
-          'https://%s' % self.m.tryserver.gerrit_change.host,
-          query_params=[('change', str(self.m.tryserver.gerrit_change.change))],
-          limit=1)
-      change_id = info[0]['change_id']
-      apply_preapproval_arguments.append('--apply-changelist')
-      apply_preapproval_arguments.append(change_id)
-    else:
-      apply_preapproval_arguments.append('--upload')
-      apply_preapproval_arguments.append(
-          'gs://dart-test-results-approved-results/' +
-          'builders/%s/approved_results.json' % self._get_builder_dir())
-    self.m.step('apply pre-approvals',
-                apply_preapproval_arguments,
-                infra_step=True)
 
 
   def _deflake_results(self, step, global_config):
@@ -458,8 +418,7 @@ class DartApi(recipe_api.RecipeApi):
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
-  def _upload_results_to_cloud(self, flaky_json_str, logs_str, results_str,
-                               firestore_approvals):
+  def _upload_results_to_cloud(self, flaky_json_str, logs_str, results_str):
     builder = str(self.m.buildbucket.builder_name)
     build_revision = str(self.m.buildbucket.gitiles_commit.id)
     build_number = str(self.m.buildbucket.build.number)
@@ -470,13 +429,6 @@ class DartApi(recipe_api.RecipeApi):
     if not (builder.endswith('dev') or builder.endswith('stable')):
       self._upload_result('current_flakiness', 'single_directory',
                           'flaky_current_%s.json' % builder, flaky_json_str)
-    if not firestore_approvals and self._require_manual_approvals():
-      self.m.gsutil.upload(
-          'LATEST/approved_results.json',
-          'dart-test-results',
-          'builders/%s/%s/approved_results.json' % (builder, build_number),
-          name='upload approved_results.json',
-          ok_ret='any' if self._report_new_results() else {0})
     # Update "latest" file
     new_latest = self.m.raw_io.input_text(build_number, name='latest')
     self.m.gsutil.upload(
@@ -513,19 +465,19 @@ class DartApi(recipe_api.RecipeApi):
         ok_ret='any')
 
 
-  def _report_success(self, results_str, firestore_approvals):
+  def _report_success(self, results_str):
     if results_str:
       access_token = self.m.service_account.default().get_access_token(
           ['https://www.googleapis.com/auth/cloud-platform'])
       self.m.step(
-          'test results' if firestore_approvals else 'new test results', [
+          'test results', [
               self.dart_executable(), self.m.path['checkout'].join(
                   'tools', 'bots', 'get_builder_status.dart'), '-b',
               self.m.buildbucket.builder_name, '-n',
               self.m.buildbucket.build.number, '-a',
               self.m.raw_io.input_text(access_token)
           ],
-          ok_ret={0} if firestore_approvals else 'any')
+          ok_ret={0})
 
 
   def _extend_results_records(self, results_str, prior_results_path,
@@ -542,29 +494,7 @@ class DartApi(recipe_api.RecipeApi):
     ]).raw_io.output_text
 
 
-  def _present_results(self, logs_str, results_str, flaky_json_str,
-                       firestore_approvals):
-    # CQ with approvals:
-    #   unapproved new test failures
-    #   unapproved new test failures (logs)
-    #   approved new test failures
-    #   approved new test failures (logs)
-    #   tests that began passing
-    # CQ without approvals:
-    #   new test failures
-    #   new test failures (logs)
-    #   tests that began passing
-    # CI with approvals:
-    #   tests that began failing
-    #   tests that began failing (logs)
-    #   tests that began passing
-    #   unapproved failing tests
-    #   unapproved failing tests (logs)
-    #   unapproved passing tests
-    # CI without approvals:
-    #   tests that began failing
-    #   tests that began failing (logs)
-    #   tests that began passing
+  def _present_results(self, logs_str, results_str, flaky_json_str):
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
@@ -574,9 +504,6 @@ class DartApi(recipe_api.RecipeApi):
             self.m.path['checkout'].join('LATEST', 'results.json'),
             self.m.raw_io.input_text(results_str),
     ]
-    if not firestore_approvals and self._require_manual_approvals():
-      args.append(self.m.path['checkout']
-                  .join('LATEST', 'approved_results.json'))
     args_logs = ["--logs",
                  self.m.raw_io.input_text(logs_str, name='logs.json'),
                  "--logs-only"]
@@ -584,89 +511,32 @@ class DartApi(recipe_api.RecipeApi):
     judgement_args = list(args)
     if self._report_new_results():
       judgement_args.append('--judgement')
-    if not firestore_approvals and self._require_manual_approvals():
-      if self._try_builder():
-        links["unapproved new test failures"] = self.m.step(
-            'find unapproved new test failures',
-            args + ["--changed", "--failing", "--unapproved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["unapproved new test failures (logs)"] = self.m.step(
-            'find unapproved new test failures (logs)',
-            args + args_logs + ["--changed", "--failing", "--unapproved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["approved new test failures"] = self.m.step(
-            'find approved new test failures',
-            args + ["--changed", "--failing", "--approved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["approved new test failures (logs)"] = self.m.step(
-            'find approved new test failures (logs)',
-            args + args_logs + ["--changed", "--failing", "--approved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["tests that began passing"] = self.m.step(
-            'find tests that began passing',
-            args + ["--changed", "--passing", "--approved", "--unapproved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        judgement_args += ["--changed", "--passing", "--failing", "--approved",
-                           "--unapproved"]
-      else:
-        links["tests that began failing"] = self.m.step(
-            'find tests that began failing',
-            args + ["--changed", "--failing", "--approved", "--unapproved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["tests that began failing (logs)"] = self.m.step(
-            'find tests that began failing (logs)',
-            args + args_logs + ["--changed", "--failing"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["tests that began passing"] = self.m.step(
-            'find tests that began passing',
-            args + ["--changed", "--passing", "--approved", "--unapproved"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["unapproved failing tests"] = self.m.step(
-            'find unapproved failing tests',
-            args + ["--unapproved", "--failing"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["unapproved failing tests (logs)"] = self.m.step(
-            'find unapproved failing tests (logs)',
-            args + args_logs + ["--unapproved", "--failing"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["unapproved passing tests"] = self.m.step(
-            'find unapproved passing tests',
-            args + ["--unapproved", "--passing"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        links["ignored flaky test failure logs"] = self.m.step(
-            'find ignored flaky test failure logs',
-            args + args_logs + ["--flaky"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-        judgement_args += ["--failing", "--unapproved"]
-    else:  # No approvals needed or used.
-      links["new test failures"] = self.m.step(
-          'find new test failures',
-          args + ["--changed", "--failing"],
+    links["new test failures"] = self.m.step(
+        'find new test failures',
+        args + ["--changed", "--failing"],
+        stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+    links["new test failures (logs)"] = self.m.step(
+        'find new test failures (logs)',
+        args + args_logs + ["--changed", "--failing"],
+        stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+    links["tests that began passing"] = self.m.step(
+        'find tests that began passing',
+        args + ["--changed", "--passing"],
+        stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+    judgement_args += ["--changed", "--failing"]
+    if self._try_builder():  # pragma: no cover
+      judgement_args += ["--passing"]
+    else:
+      links["ignored flaky test failure logs"] = self.m.step(
+          'find ignored flaky test failure logs',
+          args + args_logs + ["--flaky"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["new test failures (logs)"] = self.m.step(
-          'find new test failures (logs)',
-          args + args_logs + ["--changed", "--failing"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      links["tests that began passing"] = self.m.step(
-          'find tests that began passing',
-          args + ["--changed", "--passing"],
-          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
-      judgement_args += ["--changed", "--failing"]
-      if self._try_builder():  # pragma: no cover
-        judgement_args += ["--passing"]
-      else:
-        links["ignored flaky test failure logs"] = self.m.step(
-            'find ignored flaky test failure logs',
-            args + args_logs + ["--flaky"],
-            stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     with self.m.step.defer_results():
       if self._release_builder():
         self.m.step('test results', judgement_args)
       else:
         # This call runs a step that the following links get added to.
-        self._report_success(results_str, firestore_approvals)
-        if not firestore_approvals:
-          self.m.step('test results', judgement_args)
+        self._report_success(results_str)
 
       # Add more links and logs to the 'test results' step
       if self._try_builder():
@@ -685,19 +555,6 @@ class DartApi(recipe_api.RecipeApi):
           self.m.step.active_result.presentation.logs[link] = [contents]
       self.m.step.active_result.presentation.logs['results.json'] = [
           results_str]
-
-  def _approve_successes(self):
-    if self._try_builder() or self._release_builder():
-      return
-    if not self._require_manual_approvals():
-      return
-    args = [
-        self.dart_executable(), "tools/approve_results.dart",
-        "--automated-approver", "-b", self.m.buildbucket.builder_name,
-        "--successes-only", "-y"
-    ]
-    self.m.step('approve unapproved successes', args)
-
 
   def read_debug_log(self):
     """Reads the debug log file"""
@@ -948,15 +805,11 @@ class DartApi(recipe_api.RecipeApi):
     # If there are no test steps, steps will be empty.
     if self._run_new_steps() and steps:
       with self.m.context(cwd=self.m.path['checkout']):
-        firestore_approvals = self.m.gsutil.list(
-            'gs://dart-test-results-approved-results/epilogue.txt',
-            name='check for firestore approvals',
-            ok_ret='any').retcode == 0
         # Note: The pre-approval script relies on this being a nested step named
         # download_previous_results that contains gsutil_find_latest_build.
         with self.m.step.nest('download previous results'):
           latest, _ = self._get_latest_tested_commit()
-          self._download_results(latest, firestore_approvals)
+          self._download_results(latest)
         with self.m.step.nest('deflaking'):
           for step in steps:
             if step.is_test_py_step:
@@ -978,19 +831,12 @@ class DartApi(recipe_api.RecipeApi):
           with self.m.step.nest('upload new results'):
             if not self.m.buildbucket.builder_name.endswith('try'):
               self._upload_results_to_cloud(flaky_json_str, logs_str,
-                                            results_str, firestore_approvals)
+                                            results_str)
               self._upload_results_to_bq(results_str)
             if results_str:
               self._publish_results(results_str)
         finally:
-          self._present_results(logs_str, results_str, flaky_json_str,
-                                firestore_approvals)
-        # Approve unapproved successes if the build is green (an exception would
-        # have been thrown above if it was red). If we approve successes when
-        # the builder is red, then a commit that both fixes and breaks tests
-        # would turn the builder red and leave the builder red when reverted.
-        if not firestore_approvals:
-          self._approve_successes()
+          self._present_results(logs_str, results_str, flaky_json_str)
 
 
   def download_browser(self, runtime, version):

@@ -360,10 +360,6 @@ def GenTests(api):
           builder='dart2js-strong-linux-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
-      api.override_step_data('download previous results.gerrit changes',
-                             api.json.output([{
-                                 'change_id': 'Ideadbeef'
-                             }])),
       _canned_step(api, 'test1', 2, False),
       _canned_step(api, 'test2'),
       _canned_step(api, 'custom_runner', deflake=False),
@@ -373,7 +369,6 @@ def GenTests(api):
                     api.raw_io.output_text('123', name='latest')),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
-      api.step_data('gsutil check for firestore approvals', retcode=1),
       api.post_process(StatusSuccess),
   )
 
@@ -461,7 +456,6 @@ def GenTests(api):
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
-      api.step_data('gsutil check for firestore approvals', retcode=1),
       api.post_process(StatusSuccess),
   )
 
@@ -482,29 +476,6 @@ def GenTests(api):
           parent_fileset_name='test'),
       api.step_data('add fields to result records',
                     api.raw_io.output_text(RESULT_DATA)),
-      api.post_process(StatusSuccess),
-  )
-
-  # Remove when the firestore_approvals flag and the old approvals code
-  # are removed.
-  yield api.test(
-      'basic-mac-old-approvals',
-      api.platform('mac', 64),
-      api.properties(
-          bot_id='mac-dart-123', new_workflow_enabled=True, no_approvals=True),
-      api.buildbucket.ci_build(
-          revision='a' * 40,
-          build_number=1357,
-          builder='dart2js-strong-mac-x64-chrome',
-          git_repo='https://dart.googlesource.com/sdk',
-          project='dart'),
-      api.properties(
-          clobber='True',
-          parent_fileset='isolate_hash_123',
-          parent_fileset_name='test'),
-      api.step_data('add fields to result records',
-                    api.raw_io.output_text(RESULT_DATA)),
-      api.step_data('gsutil check for firestore approvals', retcode=1),
       api.post_process(StatusSuccess),
   )
 
