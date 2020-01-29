@@ -237,6 +237,7 @@
   * [flutter/engine_builder](#recipes-flutter_engine_builder)
   * [flutter/flutter](#recipes-flutter_flutter)
   * [flutter/ios-usb-dependencies](#recipes-flutter_ios-usb-dependencies)
+  * [flutter/web_engine](#recipes-flutter_web_engine) &mdash; Recipe for engine repository tests.
   * [gae_sdk:examples/full](#recipes-gae_sdk_examples_full)
   * [gatekeeper](#recipes-gatekeeper) &mdash; Launches the gatekeeper.
   * [gatekeeper-failure](#recipes-gatekeeper-failure) &mdash; Repeatedly fails as a way to ensure the gatekeeper is alive and well.
@@ -5213,6 +5214,25 @@ Location of cloud bucket for unsigned binaries
 &mdash; **def [TapCustomBrews](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#105)(api):**
 
 &mdash; **def [ZipAndUploadDeliverables](/scripts/slave/recipes/flutter/ios-usb-dependencies.py#143)(api, package_name, input_path, zip_out_dir):**
+### *recipes* / [flutter/web\_engine](/scripts/slave/recipes/flutter/web_engine.py)
+
+[DEPS](/scripts/slave/recipes/flutter/web_engine.py#14): [build](#recipe_modules-build), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Recipe for engine repository tests.
+
+&mdash; **def [Build](/scripts/slave/recipes/flutter/web_engine.py#68)(api, config, \*targets):**
+
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/web_engine.py#46)(api):**
+
+&mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/web_engine.py#86)(api):**
+
+&mdash; **def [RunGN](/scripts/slave/recipes/flutter/web_engine.py#79)(api, \*args):**
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/web_engine.py#90)(api, properties, env_properties):**
+
+Steps to checkout flutter engine and execute web tests.
+
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/web_engine.py#38)(api):**
 ### *recipes* / [gae\_sdk:examples/full](/scripts/slave/recipe_modules/gae_sdk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/gae_sdk/examples/full.py#5): [gae\_sdk](#recipe_modules-gae_sdk), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

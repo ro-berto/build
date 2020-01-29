@@ -97,6 +97,13 @@ def RunSteps(api, config, target_os, target_cpu):
     # also the setting of clang_path below.
     api.gclient.c.solutions[0].custom_vars['pull_linux_clang'] = True
 
+  if is_ios:
+    # Chrome on iOS checkout runs crashpad/build/ios/setup-ios-gn.py script
+    # as part of "gclient runhooks". This script is not designed to run
+    # on bots as its output is overwritten by the bots. Set a custom_vars
+    # to disable the script.
+    api.gclient.c.solutions[0].custom_vars['run_setup_ios_gn'] = False
+
   # Place the checkout inside the "builder" cache on iOS, to avoid conflicting
   # with existing Mac checkouts on the same machine.
   # TODO(crbug.com/crashpad/319): Use the builder cache on all platforms.
