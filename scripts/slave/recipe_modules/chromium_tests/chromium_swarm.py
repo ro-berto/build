@@ -6,7 +6,7 @@ from . import bot_spec
 
 SPEC = {
     'builders': {
-        'android-kitkat-arm-rel':
+        'android-kitkat-arm-rel-swarming':
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
@@ -23,7 +23,7 @@ SPEC = {
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
             ),
-        'android-marshmallow-arm64-rel':
+        'android-marshmallow-arm64-rel-swarming':
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
@@ -40,7 +40,7 @@ SPEC = {
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
             ),
-        'linux-rel':
+        'linux-rel-swarming':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
@@ -53,7 +53,7 @@ SPEC = {
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
             ),
-        'mac-rel':
+        'mac-rel-swarming':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
@@ -66,7 +66,7 @@ SPEC = {
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
             ),
-        'win-rel':
+        'win-rel-swarming':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
@@ -81,11 +81,3 @@ SPEC = {
             ),
     },
 }
-
-# TODO(crbug.com/955013): remove this when rename finished.
-_builders = SPEC['builders']
-_builders['Android N5 Swarm'] = _builders['android-kitkat-arm-rel']
-_builders['Android N5X Swarm'] = _builders['android-marshmallow-arm64-rel']
-_builders['Linux Swarm'] = _builders['linux-rel']
-_builders['Windows Swarm'] = _builders['win-rel']
-_builders['Mac Swarm'] = _builders['mac-rel']

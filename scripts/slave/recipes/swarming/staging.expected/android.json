@@ -203,7 +203,7 @@
       "--paths",
       "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"TestSlave\", \"buildername\": \"Android N5 Swarm\", \"buildnumber\": 123, \"mastername\": \"chromium.swarm\", \"slavename\": \"TestSlave\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"TestSlave\", \"buildername\": \"android-kitkat-arm-rel-swarming\", \"buildnumber\": 123, \"mastername\": \"chromium.swarm\", \"slavename\": \"TestSlave\", \"target_platform\": \"android\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -323,7 +323,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Android N5 Swarm",
+      "android-kitkat-arm-rel-swarming",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -350,7 +350,7 @@
       "-m",
       "chromium.swarm",
       "-b",
-      "Android N5 Swarm",
+      "android-kitkat-arm-rel-swarming",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -385,7 +385,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/Android_N5_Swarm"
+      "[GOMA_CACHE]/data/android_kitkat_arm_rel_swarming"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -409,7 +409,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android_N5_Swarm",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/android_kitkat_arm_rel_swarming",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -619,10 +619,10 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"Android N5 Swarm\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.swarm\", \"builder\": \"android-kitkat-arm-rel-swarming\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "Android N5 Swarm",
+      "android-kitkat-arm-rel-swarming",
       "--buildbot-mastername",
       "chromium.swarm",
       "--buildbot-slavename",

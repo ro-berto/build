@@ -111,7 +111,7 @@ def GenTests(api):
   yield api.test(
       'android',
       api.properties(
-          buildername='Android N5 Swarm',
+          buildername='android-kitkat-arm-rel-swarming',
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
@@ -123,14 +123,14 @@ def GenTests(api):
   yield api.test(
       'one_fails',
       api.properties(
-          buildername='Linux Swarm',
+          buildername='linux-rel-swarming',
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
-              'Linux Swarm': {
+              'linux-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'swarming': {
@@ -157,7 +157,7 @@ def GenTests(api):
   yield api.test(
       'windows',
       api.properties(
-          buildername='Windows Swarm',
+          buildername='win-rel-swarming',
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
@@ -165,7 +165,7 @@ def GenTests(api):
       api.platform('win', 64),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
-              'Windows Swarm': {
+              'win-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'swarming': {
@@ -184,14 +184,14 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.properties(
-          buildername='Linux Swarm',
+          buildername='linux-rel-swarming',
           mastername='chromium.swarm',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
       api.chromium_tests.read_source_side_spec(
           'chromium.swarm', {
-              'Linux Swarm': {
+              'linux-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'swarming': {
