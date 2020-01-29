@@ -15,6 +15,17 @@ from recipe_engine import util as recipe_util
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+
+_CR_COMPILE_GUARD_NAME = 'CR_COMPILE_GUARD.txt'
+_CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
+    This file exists while a build compiles and is removed at the end of
+    compilation. If the next build finds that the file exists prior to
+    compilation, it will wipe the output dierctory.
+
+    See https://crbug.com/959436 for more context.
+    """)
+
+
 class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
   def __init__(self, api, tests):
     self.raw = api.m.raw_io.input_text('\n'.join(tests))
@@ -467,6 +478,33 @@ class ChromiumApi(recipe_api.RecipeApi):
                      build_exit_status=build_exit_status,
                      build_step_name=name)
     return ninja_result
+
+  @contextlib.contextmanager
+  def guard_compile(self, suffix=''):
+    """Ensure that the output directory gets cleaned if compile is interrupted.
+
+    On entry, this context manager checks for the existence of a sentinel file
+    inside the output directory, cleaning the output directory if it's present.
+    It then creates the sentinel file.
+
+    On orderly, non-exception exit, this context manager removes the sentinel
+    file.
+
+    The result of using this context manager will be that, if something
+    untoward happens while in scope -- build cancellation, unexpected infra
+    failure, etc -- the output directory will be clobbered during the next
+    build.
+    """
+    guard_path = self.m.chromium.output_dir.join(_CR_COMPILE_GUARD_NAME)
+    if self.m.path.exists(guard_path):
+      self.m.file.rmtree('remove unreliable output dir' + suffix,
+                         self.m.chromium.output_dir)
+    self.m.file.ensure_directory('ensure output directory' + suffix,
+                                 self.m.chromium.output_dir)
+    self.m.file.write_text('create compile guard' + suffix, guard_path,
+                           _CR_COMPILE_GUARD_CONTENTS)
+    yield
+    self.m.file.remove('remove compile guard' + suffix, guard_path)
 
   # TODO(tikuta): Remove use_goma_module.
   # Decrease the number of ways configuring with or without goma.

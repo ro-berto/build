@@ -24,32 +24,34 @@ DEPS = [
 ]
 
 _TEST_BUILDERS = {
-  'chromium.test': {
-    'builders': {
-      'staging-chromium-rel': {
-        'gclient_config': 'chromium',
-        'chromium_tests_apply_config': ['staging'],
-      },
-      'staging-chromium-test-rel': {
-        'gclient_config': 'chromium',
-        'chromium_tests_apply_config': ['staging'],
-      },
-      'retry-shards': {
-        'chromium_config': 'chromium',
-        'gclient_config': 'chromium',
-      },
-      'retry-shards-test': {
-        'bot_type': 'tester',
-      },
+    'chromium.test': {
+        'builders': {
+            'staging-chromium-rel': {
+                'chromium_config': 'chromium',
+                'chromium_tests_apply_config': ['staging'],
+                'gclient_config': 'chromium',
+            },
+            'staging-chromium-test-rel': {
+                'gclient_config': 'chromium',
+                'chromium_tests_apply_config': ['staging'],
+            },
+            'retry-shards': {
+                'chromium_config': 'chromium',
+                'gclient_config': 'chromium',
+            },
+            'retry-shards-test': {
+                'bot_type': 'tester',
+            },
+        },
     },
-  },
-  'tryserver.chromium.unmirrored': {
-    'builders': {
-      'unmirrored-chromium-rel': {
-        'gclient_config': 'chromium',
-      },
+    'tryserver.chromium.unmirrored': {
+        'builders': {
+            'unmirrored-chromium-rel': {
+                'chromium_config': 'chromium',
+                'gclient_config': 'chromium',
+            },
+        },
     },
-  },
 }
 
 _TEST_TRYBOTS = {
@@ -80,6 +82,7 @@ def RunSteps(api):
   assert api.tryserver.is_tryserver
   api.path.mock_add_paths(
       api.code_coverage.profdata_dir().join('merged.profdata'))
+
   raw_result = api.chromium_tests.trybot_steps(
       builders=api.properties.get('builders'),
       trybots=api.properties.get('trybots'))
