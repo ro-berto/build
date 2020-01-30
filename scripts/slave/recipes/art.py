@@ -339,11 +339,11 @@ def setup_target(api,
 
   with api.step.defer_results():
     with api.context(env=test_env):
-      api.step('device pre-run cleanup', [
-          art_tools.join('cleanup-buildbot-device.sh')])
+      api.step('device pre-run cleanup',
+               [art_tools.join('buildbot-cleanup-device.sh')])
 
-      api.step('setup device', [art_tools.join('setup-buildbot-device.sh'),
-                                '--verbose'])
+      api.step('setup device',
+               [art_tools.join('buildbot-setup-device.sh'), '--verbose'])
 
     with api.context(env=env):
       api.step('sync target', [art_tools.join('buildbot-sync.sh')])
@@ -353,7 +353,7 @@ def setup_target(api,
         api.step(test_name + ': adb logcat',
                  ['adb', 'logcat', '-d', '-v', 'threadtime'])
         api.step(test_name + ': crashes',
-                 [art_tools.join('symbolize-buildbot-crashes.sh')])
+                 [art_tools.join('buildbot-symbolize-crashes.sh')])
         api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'])
 
 
@@ -464,11 +464,12 @@ def setup_target(api,
       test_logging(api, 'test libjdwp interpreter')
 
     with api.context(env=test_env):
-      api.step('tear down device', [
-          art_tools.join('teardown-buildbot-device.sh')])
+      api.step('tear down device',
+               [art_tools.join('buildbot-teardown-device.sh')])
 
-      api.step('device post-run cleanup', [
-          art_tools.join('cleanup-buildbot-device.sh')])
+      api.step('device post-run cleanup',
+               [art_tools.join('buildbot-cleanup-device.sh')])
+
 
 def setup_aosp_builder(api, read_barrier):
   full_checkout(api)

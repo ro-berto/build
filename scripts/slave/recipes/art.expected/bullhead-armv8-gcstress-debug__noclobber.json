@@ -64,7 +64,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
+      "[START_DIR]/art/tools/buildbot-cleanup-device.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -91,7 +91,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/setup-buildbot-device.sh",
+      "[START_DIR]/art/tools/buildbot-setup-device.sh",
       "--verbose"
     ],
     "env": {
@@ -204,7 +204,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -324,7 +324,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -445,7 +445,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -566,7 +566,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -686,7 +686,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -806,7 +806,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -926,7 +926,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -1046,7 +1046,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+      "[START_DIR]/art/tools/buildbot-symbolize-crashes.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -1102,7 +1102,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/teardown-buildbot-device.sh"
+      "[START_DIR]/art/tools/buildbot-teardown-device.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
@@ -1129,7 +1129,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
+      "[START_DIR]/art/tools/buildbot-cleanup-device.sh"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
