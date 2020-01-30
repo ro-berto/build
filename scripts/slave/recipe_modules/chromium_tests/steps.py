@@ -2930,6 +2930,7 @@ class SwarmingIosTest(SwarmingTest):
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
       task['task'])
+    self._suffix_step_name_map[suffix] = step_result.step['name']
 
     # Add any iOS test runner results to the display.
     shard_output_dir = task['task'].get_task_shard_output_dirs()[0]
