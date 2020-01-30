@@ -4799,11 +4799,11 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/cros/swarming.py#13): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [DoRunSteps](/scripts/slave/recipes/cros/swarming.py#45)(api):**
+&mdash; **def [DoRunSteps](/scripts/slave/recipes/cros/swarming.py#42)(api):**
 
-&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#79)(api, failure):**
+&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#68)(api, failure):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#23)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#20)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -16,9 +16,6 @@ DEPS = [
   'recipe_engine/properties',
 ]
 
-_CHROMEOS_GOMA_CIPD_PLATFORM = 'chromeos-amd64'
-_LINUX_GOMA_CIPD_PLATFORM = 'linux-amd64'
-
 
 def RunSteps(api):
   result = result_pb2.RawResult(
@@ -61,20 +58,13 @@ def DoRunSteps(api):
 
   # Update or install goma client via cipd.
   api.chromite.m.goma.ensure_goma(
-      client_type = api.properties.get('cbb_goma_client_type'),
-      additional_platforms=[
-          _LINUX_GOMA_CIPD_PLATFORM,
-          _CHROMEOS_GOMA_CIPD_PLATFORM],
-      # TODO(crbug.com/997733): remove ephemeral when we find the way to
-      #                         avoid use of GLIBC 2.27 in legacy bots.
-      ephemeral=True)
+      client_type=api.properties.get('cbb_goma_client_type'))
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.
   with api.chromite.with_system_python():
-    api.chromite.run(
-        goma_dir=api.chromite.m.goma.additional_goma_dir(
-            _LINUX_GOMA_CIPD_PLATFORM))
+    api.chromite.run()
+
 
 def MakeSummaryMarkdown(api, failure):
   lines = []
