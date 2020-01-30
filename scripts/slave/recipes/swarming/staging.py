@@ -112,7 +112,7 @@ def GenTests(api):
       'android',
       api.properties(
           buildername='android-kitkat-arm-rel-swarming',
-          mastername='chromium.swarm',
+          mastername='chromium.dev',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
@@ -124,12 +124,12 @@ def GenTests(api):
       'one_fails',
       api.properties(
           buildername='linux-rel-swarming',
-          mastername='chromium.swarm',
+          mastername='chromium.dev',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
       api.chromium_tests.read_source_side_spec(
-          'chromium.swarm', {
+          'chromium.dev', {
               'linux-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
@@ -158,13 +158,13 @@ def GenTests(api):
       'windows',
       api.properties(
           buildername='win-rel-swarming',
-          mastername='chromium.swarm',
+          mastername='chromium.dev',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
       api.platform('win', 64),
       api.chromium_tests.read_source_side_spec(
-          'chromium.swarm', {
+          'chromium.dev', {
               'win-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
@@ -185,12 +185,12 @@ def GenTests(api):
       'compile_failure',
       api.properties(
           buildername='linux-rel-swarming',
-          mastername='chromium.swarm',
+          mastername='chromium.dev',
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
       api.chromium_tests.read_source_side_spec(
-          'chromium.swarm', {
+          'chromium.dev', {
               'linux-rel-swarming': {
                   'gtest_tests': [{
                       'test': 'browser_tests',

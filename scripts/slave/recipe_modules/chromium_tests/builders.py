@@ -76,10 +76,6 @@ BUILDERS = freeze({
         chromium_perf_fyi.SPEC,
     'chromium.swangle':
         chromium_swangle.SPEC,
-
-    # TODO(crbug.com/955013): remove this.
-    'chromium.swarm':
-        chromium_swarm.SPEC,
     'chromium.staging':
         chromium_swarm.SPEC,
     'chromium.dev':
