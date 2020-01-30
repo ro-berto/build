@@ -263,14 +263,6 @@ class DartApi(recipe_api.RecipeApi):
     return self.m.swarming.trigger('trigger shards for %s' % name, tasks)
 
 
-  def _report_new_results(self):
-    """Boolean that controls whether to report status of
-       deflaked tests measured against
-       latest or approved results as buildbot status,
-       instead of the status-file based exit code of test.py."""
-    return 'new_workflow_enabled' in self.m.properties
-
-
   def _release_builder(self):
     """Boolean that reports whether the builder is on the
        dev or stable channel. Some steps are only run on the
@@ -282,13 +274,6 @@ class DartApi(recipe_api.RecipeApi):
     """Boolean that reports whether this a try builder.
        Some steps are not run on the try builders."""
     return self.m.buildbucket.builder_name.endswith('-try')
-
-
-  def _run_new_steps(self):
-    """Boolean that controls whether to run the new
-       workflow that uploads test results to cloud
-       storage and deflakes changed tests."""
-    return self._report_new_results or not self._try_builder()
 
 
   def collect_all(self, steps):
@@ -375,46 +360,38 @@ class DartApi(recipe_api.RecipeApi):
         'ensure %s exists' % filename, results_path.join(filename), '')
     if latest:
       self.m.gsutil.download(
-        'dart-test-results',
-        'builders/%s/%s/*.json' % (builder, latest),
-        results_path,
-        name='download previous results',
-        ok_ret='any' if self._report_new_results() else {0})
+          'dart-test-results',
+          'builders/%s/%s/*.json' % (builder, latest),
+          results_path,
+          name='download previous results',
+          ok_ret='any')
 
 
   def _deflake_results(self, step, global_config):
-    step.deflake_list = self.m.step('list tests to deflake (%s)' % step.name,
-                [self.dart_executable(),
-                'tools/bots/compare_results.dart',
-                '--flakiness-data',
-                'LATEST/flaky.json',
-                '--changed',
-                '--passing',
-                '--failing',
-                '--count',
-                '50',
-                'LATEST/results.json',
-                self.m.raw_io.input_text(step.results.results)],
-                stdout=self.m.raw_io.output_text(add_output_log=True),
-                ok_ret='any' if self._report_new_results() else {0}).stdout
+    step.deflake_list = self.m.step(
+        'list tests to deflake (%s)' % step.name, [
+            self.dart_executable(), 'tools/bots/compare_results.dart',
+            '--flakiness-data', 'LATEST/flaky.json', '--changed', '--passing',
+            '--failing', '--count', '50', 'LATEST/results.json',
+            self.m.raw_io.input_text(step.results.results)
+        ],
+        stdout=self.m.raw_io.output_text(add_output_log=True),
+        ok_ret='any').stdout
     if step.deflake_list:
       self._run_step(step, global_config)
 
 
   def _update_flakiness_information(self, results_str):
-    flaky_json = self.m.step('update flakiness information',
-           [self.dart_executable(),
-            'tools/bots/update_flakiness.dart',
-            '-i',
-            'LATEST/flaky.json',
-            '-o',
+    flaky_json = self.m.step(
+        'update flakiness information', [
+            self.dart_executable(), 'tools/bots/update_flakiness.dart', '-i',
+            'LATEST/flaky.json', '-o',
             self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
-            '--build-id',
-            self.m.buildbucket.build.id,
-            '--commit',
+            '--build-id', self.m.buildbucket.build.id, '--commit',
             self.m.buildbucket.gitiles_commit.id,
-            self.m.raw_io.input_text(results_str, name='results.json')],
-            ok_ret='any' if self._report_new_results() else {0})
+            self.m.raw_io.input_text(results_str, name='results.json')
+        ],
+        ok_ret='any')
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
@@ -436,16 +413,16 @@ class DartApi(recipe_api.RecipeApi):
         'dart-test-results',
         'builders/%s/%s' % (builder, 'latest'),
         name='update "latest" reference',
-        ok_ret='any' if self._report_new_results() else {0})
+        ok_ret='any')
 
 
   def _upload_result(self, builder, build_number, filename, result_str):
     self.m.gsutil.upload(
-      self.m.raw_io.input_text(str(result_str), name=filename),
-      'dart-test-results',
-      'builders/%s/%s/%s' % (builder, build_number, filename),
-      name='upload %s' % filename, ok_ret='any'
-      if self._report_new_results() else {0})
+        self.m.raw_io.input_text(str(result_str), name=filename),
+        'dart-test-results',
+        'builders/%s/%s/%s' % (builder, build_number, filename),
+        name='upload %s' % filename,
+        ok_ret='any')
 
 
   def _publish_results(self, results_str):
@@ -509,8 +486,7 @@ class DartApi(recipe_api.RecipeApi):
                  "--logs-only"]
     links = OrderedDict()
     judgement_args = list(args)
-    if self._report_new_results():
-      judgement_args.append('--judgement')
+    judgement_args.append('--judgement')
     links["new test failures"] = self.m.step(
         'find new test failures',
         args + ["--changed", "--failing"],
@@ -747,13 +723,7 @@ class DartApi(recipe_api.RecipeApi):
           sharded_steps.append(step)
         self._run_step(step, global_config)
       self.collect_all(sharded_steps)
-      # TODO(athom): remove this when the new workflow is fully rolled out.
-      # Old workflow test.py steps throw on failing tests and results need to
-      # be processed in the defer_results block.
-      if not self._report_new_results():
-        self._process_test_results(test_steps, global_config)
-    if self._report_new_results():
-      self._process_test_results(test_steps, global_config)
+    self._process_test_results(test_steps, global_config)
 
 
   @recipe_api.non_step
@@ -803,7 +773,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def _process_test_results(self, steps, global_config):
     # If there are no test steps, steps will be empty.
-    if self._run_new_steps() and steps:
+    if steps:
       with self.m.context(cwd=self.m.path['checkout']):
         # Note: The pre-approval script relies on this being a nested step named
         # download_previous_results that contains gsutil_find_latest_build.
@@ -829,7 +799,7 @@ class DartApi(recipe_api.RecipeApi):
         try:
           # Try builders do not upload results, only publish to pub/sub
           with self.m.step.nest('upload new results'):
-            if not self.m.buildbucket.builder_name.endswith('try'):
+            if not self._try_builder():
               self._upload_results_to_cloud(flaky_json_str, logs_str,
                                             results_str)
               self._upload_results_to_bq(results_str)
@@ -871,9 +841,12 @@ class DartApi(recipe_api.RecipeApi):
       # Upload at most 1000 lines at once
       for match in re.finditer(r'(?:.*\n){1,1000}', results_str):
         chunk = match.group(0)
-        self.m.step('upload results chunk to big query', cmd,
-            stdin=self.m.raw_io.input_text(chunk), infra_step=True,
-            ok_ret='any' if self._report_new_results() else {0})
+        self.m.step(
+            'upload results chunk to big query',
+            cmd,
+            stdin=self.m.raw_io.input_text(chunk),
+            infra_step=True,
+            ok_ret='any')
 
 
   def _run_trigger(self, step):
@@ -930,8 +903,7 @@ class DartApi(recipe_api.RecipeApi):
         '--progress=status', '--report', '--time', '--silent-failures',
         '--write-results', '--write-logs'
     ]
-    if self._report_new_results() or step.deflake_list:
-      test_args.append('--clean-exit')
+    test_args.append('--clean-exit')
     args = test_args + args
     if environment['copy-coredumps']:
       args = args + ['--copy-coredumps']

@@ -114,7 +114,6 @@ def GenTests(api):
           builder='dart2js-win-debug-x64-firefox-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
-      api.properties.generic(new_workflow_enabled='true'),
       api.step_data('add fields to result records',
                     api.raw_io.output_text('{"data":"result data"}\n')),
   )

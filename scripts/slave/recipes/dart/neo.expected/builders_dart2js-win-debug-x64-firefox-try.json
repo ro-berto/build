@@ -722,11 +722,7 @@
       "{\"bucket\": \"try\", \"builder\": \"dart2js-win-debug-x64-firefox-try\", \"project\": \"dart\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "dart2js-win-debug-x64-firefox-try",
-      "--buildbot-mastername",
-      "chromium.testing.master",
-      "--buildbot-slavename",
-      "test_bot"
+      "dart2js-win-debug-x64-firefox-try"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {

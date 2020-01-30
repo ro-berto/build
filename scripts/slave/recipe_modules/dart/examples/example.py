@@ -354,7 +354,7 @@ def _canned_output_dir(api, step_name, content=None, prefix=''):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.properties(shard_timeout='600', new_workflow_enabled=True),
+      api.properties(shard_timeout='600'),
       api.buildbucket.try_build(
           build_number=1357,
           builder='dart2js-strong-linux-x64-firefox-try',
@@ -374,7 +374,7 @@ def GenTests(api):
 
   yield api.test(
       'analyzer-linux-release',
-      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.properties(bot_id='trusty-dart-123'),
       api.buildbucket.ci_build(
           revision='3456abce78ef',
           build_number=1357,
@@ -441,7 +441,7 @@ def GenTests(api):
   yield api.test(
       'vm-win',
       api.platform('win', 64),
-      api.properties(bot_id='win-dart-123', new_workflow_enabled=True),
+      api.properties(bot_id='win-dart-123'),
       api.buildbucket.ci_build(
           revision='3456abce78ef',
           build_number=1357,
@@ -462,8 +462,7 @@ def GenTests(api):
   yield api.test(
       'basic-mac',
       api.platform('mac', 64),
-      api.properties(
-          bot_id='mac-dart-123', new_workflow_enabled=True, no_approvals=True),
+      api.properties(bot_id='mac-dart-123'),
       api.buildbucket.ci_build(
           revision='a' * 40,
           build_number=1357,
@@ -531,7 +530,7 @@ def GenTests(api):
   }
   yield api.test(
       'co19_2-legacy',
-      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.properties(bot_id='trusty-dart-123'),
       api.buildbucket.ci_build(
           revision='3456abce78ef',
           build_number=1357,
@@ -551,7 +550,7 @@ def GenTests(api):
 
   yield api.test(
       'co19',
-      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.properties(bot_id='trusty-dart-123'),
       api.buildbucket.ci_build(
           revision='3456abce78ef',
           build_number=1357,
@@ -569,7 +568,7 @@ def GenTests(api):
 
   yield api.test(
       'co19-no-revinfo',
-      api.properties(bot_id='trusty-dart-123', new_workflow_enabled=True),
+      api.properties(bot_id='trusty-dart-123'),
       api.buildbucket.ci_build(
           revision='3456abce78ef',
           build_number=1357,
