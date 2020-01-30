@@ -456,7 +456,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript enabled os mac skia false skia_paths false v8 true xfa true"
+      "debug false is_standalone true javascript_runtime enabled os mac skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "javascript tests"
@@ -473,7 +473,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript disabled os mac skia false skia_paths false v8 true xfa true",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -535,7 +535,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript enabled os mac skia false skia_paths false v8 true xfa true"
+      "debug false is_standalone true javascript_runtime enabled os mac skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests"
@@ -603,7 +603,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript disabled os mac skia false skia_paths false v8 true xfa true",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -672,7 +672,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript enabled os mac skia false skia_paths false v8 true xfa true"
+      "debug false is_standalone true javascript_runtime enabled os mac skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "corpus tests"
@@ -740,7 +740,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8/gold_output",
       "--gold_key",
-      "debug false is_standalone true javascript disabled os mac skia false skia_paths false v8 true xfa true",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",

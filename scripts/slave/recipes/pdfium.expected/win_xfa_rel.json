@@ -405,7 +405,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
+      "clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "name": "javascript tests"
@@ -422,7 +422,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
+      "clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
@@ -484,7 +484,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
+      "clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "name": "pixel tests"
@@ -552,7 +552,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
+      "clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
@@ -621,7 +621,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
+      "clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "name": "corpus tests"
@@ -689,7 +689,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_xfa_v8\\gold_output",
       "--gold_key",
-      "clang true debug false is_standalone true javascript disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
+      "clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",

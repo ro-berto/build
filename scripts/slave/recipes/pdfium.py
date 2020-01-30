@@ -384,8 +384,8 @@ def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
   keys = build_config.copy()
   builder_name = api.m.buildbucket.builder_name.strip()
   keys['os'] = builder_name.split('_')[0]
-  keys['javascript'] = 'disabled' if javascript_disabled else 'enabled'
-  _dict_to_str(keys)
+  keys['javascript_runtime'] = 'disabled' if (
+      build_config['v8'] == 'false' or javascript_disabled) else 'enabled'
 
   additional_args = ['--gold_key', _dict_to_str(keys)]
   if javascript_disabled:

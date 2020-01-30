@@ -452,7 +452,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript enabled lsan true os linux skia false skia_paths false v8 true xfa true"
+      "asan true debug true is_standalone true javascript_runtime enabled lsan true os linux skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -472,7 +472,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript disabled lsan true os linux skia false skia_paths false v8 true xfa true",
+      "asan true debug true is_standalone true javascript_runtime disabled lsan true os linux skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -537,7 +537,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript enabled lsan true os linux skia false skia_paths false v8 true xfa true"
+      "asan true debug true is_standalone true javascript_runtime enabled lsan true os linux skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -608,7 +608,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript disabled lsan true os linux skia false skia_paths false v8 true xfa true",
+      "asan true debug true is_standalone true javascript_runtime disabled lsan true os linux skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -680,7 +680,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript enabled lsan true os linux skia false skia_paths false v8 true xfa true"
+      "asan true debug true is_standalone true javascript_runtime enabled lsan true os linux skia false skia_paths false v8 true xfa true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -751,7 +751,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/gold_output",
       "--gold_key",
-      "asan true debug true is_standalone true javascript disabled lsan true os linux skia false skia_paths false v8 true xfa true",
+      "asan true debug true is_standalone true javascript_runtime disabled lsan true os linux skia false skia_paths false v8 true xfa true",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",

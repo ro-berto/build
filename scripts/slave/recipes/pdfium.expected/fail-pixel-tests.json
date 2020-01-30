@@ -405,7 +405,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "javascript tests"
@@ -422,7 +422,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -484,7 +484,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "pixel tests",
@@ -555,7 +555,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -624,7 +624,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript enabled os linux skia false skia_paths false v8 true xfa false"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "name": "corpus tests"
@@ -692,7 +692,7 @@
       "--gold_output_dir",
       "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--gold_key",
-      "debug true is_standalone true javascript disabled os linux skia false skia_paths false v8 true xfa false",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
