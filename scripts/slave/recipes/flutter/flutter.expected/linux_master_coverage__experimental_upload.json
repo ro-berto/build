@@ -131,28 +131,6 @@
     "cmd": [
       "flutter",
       "precache",
-      "--flutter_runner"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/flutter/bin",
-        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
-      ]
-    },
-    "name": "Run Fuchsia Driver Tests.precache flutter runners",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "flutter",
-      "precache",
       "--fuchsia"
     ],
     "cwd": "[START_DIR]/flutter",
@@ -173,9 +151,16 @@
   },
   {
     "cmd": [],
-    "name": "Run Fuchsia Driver Tests.Download Fuchsia System Image",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Download Fuchsia Archives",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -201,9 +186,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Download Fuchsia System Image.Read fuchsia build manifest",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Download Fuchsia Archives.Read fuchsia build manifest",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_LINE@manifest.json@{\"id\": 123}@@@",
       "@@@STEP_LOG_END@manifest.json@@@"
     ]
@@ -232,16 +217,45 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Download Fuchsia System Image.gsutil download",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Download Fuchsia Archives.gsutil download fuchsia system image",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://fuchsia/development/123/packages/generic-x64.tar.gz",
+      "[CLEANUP]/tmp_tmp_1"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Download Fuchsia Archives.gsutil download fuchsia companion packages",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Run Fuchsia Driver Tests.Copy Fuchsia CTL Deps",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Copy Fuchsia CTL Deps",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -267,9 +281,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Copy Fuchsia CTL Deps.Copy test script",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Copy Fuchsia CTL Deps.Copy test script",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@3@@@"
     ]
   },
   {
@@ -295,9 +309,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Copy Fuchsia CTL Deps.Copy dev_finder",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Copy Fuchsia CTL Deps.Copy dev_finder",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@3@@@"
     ]
   },
   {
@@ -323,16 +337,44 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Copy Fuchsia CTL Deps.Copy pm",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Copy Fuchsia CTL Deps.Copy pm",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[START_DIR]/flutter",
+      "[CLEANUP]/tmp_tmp_1/flutter"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Copy flutter framework",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Run Fuchsia Driver Tests.ensure isolated",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.ensure isolated",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -358,9 +400,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.ensure isolated.ensure_installed",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.ensure isolated.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -400,9 +442,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.Archive Fuchsia Test Isolate",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.Archive Fuchsia Test Isolate",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LINK@isolated UI@https://example.isolateserver.appspot.com/browse?namespace=default-gzip&hash=%5Bdummy+hash%5D@@@"
     ]
   },
@@ -428,9 +470,9 @@
       ]
     },
     "infra_step": true,
-    "name": "Run Fuchsia Driver Tests.temp dir for fuchsia_ctl_wd",
+    "name": "Run Fuchsia Driver Tests.Create Isolate Archive.temp dir for isolate_dir",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

@@ -35,6 +35,7 @@ PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
 
 # Fuchsia globals.
 FUCHSIA_IMAGE_NAME = 'generic-x64.tgz'
+FUCHSIA_PACKAGES_ARCHIVE_NAME = 'generic-x64.tar.gz'
 FUCHSIA_TEST_SCRIPT_NAME = 'run_fuchsia_tests.sh'
 
 
@@ -74,8 +75,8 @@ def MakeTempDir(api, label):
     api.file.rmtree('temp dir for %s' % label, temp_dir)
 
 
-def DownloadFuchsiaSystemImage(api, fuchsia_dir, target_dir):
-  with api.step.nest('Download Fuchsia System Image'):
+def DownloadFuchsiaSystemImageAndPackages(api, fuchsia_dir, target_dir):
+  with api.step.nest('Download Fuchsia Archives'):
     manifest_path = fuchsia_dir.join('meta', 'manifest.json')
     manifest_data = api.file.read_json(
         'Read fuchsia build manifest', manifest_path, test_data={'id': 123})
@@ -83,33 +84,46 @@ def DownloadFuchsiaSystemImage(api, fuchsia_dir, target_dir):
     bucket_name = 'fuchsia'
     api.gsutil.download(
         bucket_name,
-        'development/%s/images/%s' % (build_id, FUCHSIA_IMAGE_NAME), target_dir)
+        'development/%s/images/%s' % (build_id, FUCHSIA_IMAGE_NAME),
+        target_dir,
+        name="download fuchsia system image")
+    api.gsutil.download(
+        bucket_name,
+        'development/%s/packages/%s' % (build_id,
+                                        FUCHSIA_PACKAGES_ARCHIVE_NAME),
+        target_dir,
+        name="download fuchsia companion packages")
 
 
-def IsolateFuchsiaCtlDeps(api):
+def IsolateFuchsiaCtlDeps(api, fuchsia_ctl_wd):
   checkout = api.path['checkout']
   flutter_bin = checkout.join('bin')
   fuchsia_dir = flutter_bin.join('cache', 'artifacts', 'fuchsia')
   fuchsia_tools = fuchsia_dir.join('tools')
-  with MakeTempDir(api, 'fuchsia_ctl_wd') as fuchsia_ctl_wd:
-    DownloadFuchsiaSystemImage(api, fuchsia_dir, fuchsia_ctl_wd)
-    with api.step.nest('Copy Fuchsia CTL Deps'):
-      api.file.copy('Copy test script',
-                    checkout.join('dev', 'bots', FUCHSIA_TEST_SCRIPT_NAME),
-                    fuchsia_ctl_wd)
-      api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
-                    fuchsia_ctl_wd)
-      api.file.copy('Copy pm', fuchsia_tools.join('pm'), fuchsia_ctl_wd)
-    isolated = api.isolated.isolated(fuchsia_ctl_wd)
-    isolated.add_dir(fuchsia_ctl_wd)
-    return isolated.archive('Archive Fuchsia Test Isolate')
+  DownloadFuchsiaSystemImageAndPackages(api, fuchsia_dir, fuchsia_ctl_wd)
+  with api.step.nest('Copy Fuchsia CTL Deps'):
+    api.file.copy('Copy test script',
+                  checkout.join('dev', 'bots', FUCHSIA_TEST_SCRIPT_NAME),
+                  fuchsia_ctl_wd)
+    api.file.copy('Copy dev_finder', fuchsia_tools.join('dev_finder'),
+                  fuchsia_ctl_wd)
+    api.file.copy('Copy pm', fuchsia_tools.join('pm'), fuchsia_ctl_wd)
 
 
-# TODO(kaushikiska): Some of these methods are shared with engine.py
-# and can be refactored.
+def IsolateDriverDeps(api):
+  checkout = api.path['checkout']
+  with api.step.nest('Create Isolate Archive'):
+    with MakeTempDir(api, 'isolate_dir') as isolate_dir:
+      IsolateFuchsiaCtlDeps(api, isolate_dir)
+      isolated_flutter = isolate_dir.join('flutter')
+      api.file.copytree('Copy flutter framework', checkout, isolated_flutter)
+      isolated = api.isolated.isolated(isolate_dir)
+      isolated.add_dir(isolate_dir)
+      return isolated.archive('Archive Fuchsia Test Isolate')
+
+
 def SwarmFuchsiaTests(api):
-  isolated_hash = IsolateFuchsiaCtlDeps(api)
-
+  isolated_hash = IsolateDriverDeps(api)
   fuchsia_ctl_package = api.cipd.EnsureFile()
   fuchsia_ctl_package.add_package('flutter/fuchsia_ctl/${platform}',
                                   api.properties.get('fuchsia_ctl_version'))
@@ -143,8 +157,6 @@ def RunFuchsiaDriverTests(api):
     return
   with api.step.nest('Run Fuchsia Driver Tests'):
     flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
-    api.step('precache flutter runners',
-             [flutter_executable, 'precache', '--flutter_runner'])
     api.step('precache fuchsia artifacts',
              [flutter_executable, 'precache', '--fuchsia'])
     SwarmFuchsiaTests(api)
