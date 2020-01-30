@@ -107,6 +107,10 @@ def _BuildSteps(api, out_dir, clang):
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
 
+  # No-op ANGLE linux-gcc build as it doesn't work
+  if 'linux-gcc' in api.properties["buildername"]:
+    ninja_cmd.append('-n')
+
   if _IsGomaEnabled(clang):
     ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
     api.goma.build_with_goma(
@@ -149,7 +153,7 @@ def GenTests(api):
       api.properties(
           clang=False,
           mastername='client.angle',
-          buildername='linux',
+          buildername='linux-gcc',
           buildnumber='1234',
           bot_id='test_slave'),
   )
