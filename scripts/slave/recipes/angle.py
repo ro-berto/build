@@ -107,7 +107,7 @@ def _BuildSteps(api, out_dir, clang):
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
 
-  # No-op ANGLE linux-gcc build as it doesn't work
+  # TODO: Fix ANGLE linux-gcc build http://crbug.com/842146
   if 'linux-gcc' in api.properties["buildername"]:
     ninja_cmd.append('-n')
 

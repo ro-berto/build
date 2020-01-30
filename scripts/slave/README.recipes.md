@@ -4801,7 +4801,7 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [DoRunSteps](/scripts/slave/recipes/cros/swarming.py#42)(api):**
 
-&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#68)(api, failure):**
+&mdash; **def [MakeSummaryMarkdown](/scripts/slave/recipes/cros/swarming.py#69)(api, failure):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#20)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
