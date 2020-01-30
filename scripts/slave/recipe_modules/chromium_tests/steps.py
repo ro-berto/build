@@ -551,7 +551,7 @@ class Test(object):
   # failed "with patch", but passed in "retry shards with patch".
   def has_failures_to_summarize(self):
     _, failures = self.failures_including_retry('with patch')
-    return failures or self.known_flaky_failures
+    return bool(failures or self.known_flaky_failures)
 
   def findit_notrun(self, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
