@@ -229,19 +229,29 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision):
     options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
     env.update({'UBSAN_OPTIONS': ' '.join(options)})
 
+  # This variable swallows the exception raised by a failed step. The step
+  # will still show up as failed, but processing will continue.
+  test_exception = None
+
   unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
   if api.platform.is_win:
     unittests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
-    api.step('unittests', [unittests_path])
+    try:
+      api.step('unittests', [unittests_path])
+    except api.step.StepFailure as e:
+      test_exception = e
 
   embeddertests_path = str(api.path['checkout'].join('out', out_dir,
                                                      'pdfium_embeddertests'))
   if api.platform.is_win:
     embeddertests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
-    api.step('embeddertests', [embeddertests_path])
+    try:
+      api.step('embeddertests', [embeddertests_path])
+    except api.step.StepFailure as e:
+      test_exception = e
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
 
@@ -254,12 +264,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision):
       '--gold_output_dir',
       gold_output_dir,
   ])
-
-  # Cannot use the standard deferred result mechanism, since some of the
-  # operations related to uploading to Gold depend on non-deferred results.
-  # This variable swallows the exception raised by a failed step. The step
-  # will still show up as failed, but processing will continue.
-  test_exception = None
 
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
@@ -973,6 +977,22 @@ def GenTests(api):
           mastername='client.pdfium', bot_id='test_slave', target_os='android'),
       _gen_ci_build(api, 'android'),
       api.step_data('get uninteresting hashes', retcode=1),
+  )
+
+  yield api.test(
+      'fail-unittests',
+      api.platform('linux', 64),
+      api.properties(mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('unittests', retcode=1),
+  )
+
+  yield api.test(
+      'fail-embeddertests',
+      api.platform('linux', 64),
+      api.properties(mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('embeddertests', retcode=1),
   )
 
   yield api.test(
