@@ -184,10 +184,6 @@ def RunSteps(api, config, target_os, target_cpu):
       # https://bugs.chromium.org/p/crashpad/issues/detail?id=219.
       return
 
-    if is_ios:
-      # TODO(crbug.com/crashpad/317): Run tests on iOS.
-      return
-
     with api.context(env=env):
       api.python('run tests',
                 api.path['checkout'].join('build', 'run_tests.py'),
@@ -205,7 +201,9 @@ def RunSteps(api, config, target_os, target_cpu):
   else:
     with sdk(target_os):
       api.step('compile with ninja', [ninja, '-C', path])
-    run_tests(path)
+      # On iOS, the tests need to be run before resetting the current SDK,
+      # as they use tools from the installed version of Xcode.
+      run_tests(path)
 
   test_spec_path = api.path['checkout'].join(
     'build', 'swarming_test_spec.pyl')

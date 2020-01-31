@@ -83,6 +83,16 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/crashpad/build/run_tests.py",
+      "[CACHE]/builder/crashpad/out/Debug"
+    ],
+    "name": "run tests",
+    "timeout": 300
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
