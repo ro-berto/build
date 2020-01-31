@@ -537,10 +537,13 @@ def BuildLinuxAndroid(api, swarming_task_id):
 def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'profile', '--no-lto')
   RunGN(api, '--runtime-mode', 'release')
   Build(api, 'host_debug_unopt')
   RunTests(api, 'host_debug_unopt', types='dart,engine')
   Build(api, 'host_debug')
+  Build(api, 'host_profile')
+  RunTests(api, 'host_profile', types='engine')
   Build(api, 'host_release')
   UploadArtifacts(api, 'linux-x64', [
       ICU_DATA_PATH,
@@ -799,6 +802,7 @@ def BuildMac(api):
     RunTests(api, 'host_debug_unopt', types='dart,engine')
     Build(api, 'host_debug')
     Build(api, 'host_profile')
+    RunTests(api, 'host_profile', types='engine')
     Build(api, 'host_release')
     host_debug_path = GetCheckoutPath(api).join('out', 'host_debug')
     host_profile_path = GetCheckoutPath(api).join('out', 'host_profile')
