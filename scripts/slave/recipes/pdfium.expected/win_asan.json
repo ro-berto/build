@@ -411,7 +411,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false"
+      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "env": {
@@ -431,7 +431,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
@@ -496,7 +496,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false"
+      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "env": {
@@ -567,7 +567,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
@@ -639,7 +639,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false"
+      "asan true clang true debug false is_standalone true javascript_runtime enabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "env": {
@@ -710,7 +710,7 @@
       "--gold_output_dir",
       "[CACHE]\\builder\\pdfium\\out\\release_v8_clang_asan\\gold_output",
       "--gold_key",
-      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false",
+      "asan true clang true debug false is_standalone true javascript_runtime disabled os windows skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",

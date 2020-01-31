@@ -200,7 +200,7 @@ def _build_steps(api, clang, msvc, out_dir):
 
 
 # _run_tests() runs the tests and uploads the results to Gold.
-def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
+def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision):
   env = {}
   COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
   COMMON_UNIX_SANITIZER_OPTIONS = [
@@ -280,6 +280,15 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
       except api.step.StepFailure as e:
         test_exception = e
 
+      if xfa:
+        additional_args = _get_modifiable_script_args(
+            api, build_config, xfa_disabled=True)
+        try:
+          api.python('javascript tests (xfa disabled)', javascript_path,
+                     script_args + additional_args)
+        except api.step.StepFailure as e:
+          test_exception = e
+
   # Setup uploading results to Gold after the javascript tests, since they do
   # not produce interesting result images
   ignore_hashes_file = _get_gold_ignore_hashes(api, out_dir)
@@ -310,6 +319,19 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
     # Upload immediately, since tests below will overwrite the output directory
     _upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
+    if xfa:
+      with api.context(cwd=api.path['checkout'], env=env):
+        additional_args = _get_modifiable_script_args(
+            api, build_config, xfa_disabled=True)
+        try:
+          api.python('pixel tests (xfa disabled)', pixel_tests_path,
+                     script_args + additional_args)
+        except api.step.StepFailure as e:
+          test_exception = e
+      # Upload immediately, since tests below will overwrite the output
+      # directory
+      _upload_dm_results(api, gold_output_dir, revision, 'pixel')
+
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
@@ -333,6 +355,17 @@ def _run_tests(api, memory_tool, v8, out_dir, build_config, revision):
         test_exception = e
     # Upload immediately, since tests below will overwrite the output directory
     _upload_dm_results(api, gold_output_dir, revision, 'corpus')
+
+    if xfa:
+      with api.context(cwd=api.path['checkout'], env=env):
+        additional_args = _get_modifiable_script_args(
+            api, build_config, xfa_disabled=True)
+        try:
+          api.python('corpus tests (xfa disabled)', corpus_tests_path,
+                     script_args + additional_args)
+        except api.step.StepFailure as e:
+          test_exception = e
+      _upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
@@ -372,7 +405,10 @@ def _get_gold_props(api, build_config, revision):
   return ' '.join(props)
 
 
-def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
+def _get_modifiable_script_args(api,
+                                build_config,
+                                javascript_disabled=False,
+                                xfa_disabled=False):
   """Construct and get the additional arguments for
   run_corpus_tests.py that can be modified based on whether
   javascript is disabled.
@@ -386,10 +422,15 @@ def _get_modifiable_script_args(api, build_config, javascript_disabled=False):
   keys['os'] = builder_name.split('_')[0]
   keys['javascript_runtime'] = 'disabled' if (
       build_config['v8'] == 'false' or javascript_disabled) else 'enabled'
+  keys['xfa_runtime'] = 'disabled' if (build_config['xfa'] == 'false' or
+                                       javascript_disabled or
+                                       xfa_disabled) else 'enabled'
 
   additional_args = ['--gold_key', _dict_to_str(keys)]
   if javascript_disabled:
     additional_args.append('--disable-javascript')
+  if xfa_disabled:
+    additional_args.append('--disable-xfa')
 
   return additional_args
 
@@ -576,7 +617,7 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     if skip_test:
       return
 
-    _run_tests(api, memory_tool, v8, out_dir, build_config, revision)
+    _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision)
 
 
 def GenTests(api):
@@ -951,6 +992,14 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fail-javascript-tests-xfa-disabled',
+      api.platform('linux', 64),
+      api.properties(xfa=True, mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('javascript tests (xfa disabled)', retcode=1),
+  )
+
+  yield api.test(
       'fail-pixel-tests',
       api.platform('linux', 64),
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
@@ -967,6 +1016,14 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fail-pixel-tests-xfa-disabled',
+      api.platform('linux', 64),
+      api.properties(xfa=True, mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('pixel tests (xfa disabled)', retcode=1),
+  )
+
+  yield api.test(
       'fail-corpus-tests',
       api.platform('linux', 64),
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
@@ -980,4 +1037,12 @@ def GenTests(api):
       api.properties(mastername='client.pdfium', bot_id='test_slave'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests (javascript disabled)', retcode=1),
+  )
+
+  yield api.test(
+      'fail-corpus-tests-xfa-disabled',
+      api.platform('linux', 64),
+      api.properties(xfa=True, mastername='client.pdfium', bot_id='test_slave'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('corpus tests (xfa disabled)', retcode=1),
   )
