@@ -450,9 +450,9 @@ If build_url is specified, also uploads the build.
 
 Binary size analysis for patchsets.
 
-#### **class [BinarySizeApi](/scripts/slave/recipe_modules/binary_size/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [BinarySizeApi](/scripts/slave/recipe_modules/binary_size/api.py#21)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [android\_binary\_size](/scripts/slave/recipe_modules/binary_size/api.py#26)(self, chromium_config, gclient_config, chromium_apply_configs=None, gclient_apply_configs=None):**
+&mdash; **def [android\_binary\_size](/scripts/slave/recipe_modules/binary_size/api.py#35)(self, chromium_config, gclient_config, chromium_apply_configs=None, gclient_apply_configs=None):**
 
 Determines the increase in binary size caused by the patch under test.
 

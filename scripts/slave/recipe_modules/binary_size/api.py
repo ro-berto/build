@@ -3,10 +3,19 @@
 # found in the LICENSE file.
 """Binary size analysis for patchsets."""
 
+import re
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import constants
+
+
+def _normalize_name(v):
+  # The real normalization function is in the infra/infra repo in
+  # //luci/client/libs/logdog/streamname.py. This is a not so close
+  # approximation that only works if you don't look too hard (eg: does not
+  # handle case where first character is illegal).
+  return re.sub(r'[^0-9A-Za-z:\-\./]', '_', v)
 
 
 class BinarySizeApi(recipe_api.RecipeApi):
@@ -198,12 +207,14 @@ class BinarySizeApi(recipe_api.RecipeApi):
               {
                   'name': 'Resource Sizes Diff (high-level metrics)',
                   'lines': ['!resource_sizes!'],
+                  'log_name': 'resource_sizes_log',
               }, {
                   'name': 'SuperSize Text Diff',
                   'lines': [u'!supersize text with \u0394!'],
               }, {
                   'name': 'Dex Method Diff',
                   'lines': ['!dex_methods!'],
+                  'log_name': 'dex_methods_log',
               }, {
                   'name': 'Supersize HTML Diff',
                   'url': 'https://foo.com/{{result.ndjson}}',
@@ -215,6 +226,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
                     'name': 'Normalised APK size',
                     'delta': '500 bytes',
                     'allowed': True,
+                    'log_name': 'resource_sizes_log',
                 },
             ],
             'extras': [
@@ -237,15 +249,22 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
     step_result = self.m.python.succeeding_step(constants.RESULTS_STEP_NAME,
                                                 result_json['summary'])
+    logname_map = {}
     for link in result_json['links']:
       if 'lines' in link:
         step_result.presentation.logs[link['name']] = link['lines']
+        if 'log_name' in link:
+          logname_map[link['log_name']] = self._synthesize_log_link(
+              constants.RESULTS_STEP_NAME, link['name'])
       else:
         url = self._linkify_filenames(link['url'], filename_map)
         step_result.presentation.links[link['name']] = url
 
     gerrit_plugin_details = result_json.get('gerrit_plugin_details')
     if gerrit_plugin_details:
+      for listing in gerrit_plugin_details['listings']:
+        if 'log_name' in listing and listing['log_name'] in logname_map:
+          listing['url'] = logname_map[listing['log_name']]
       for extra in gerrit_plugin_details['extras']:
         if 'url' in extra:
           url = extra['url']
@@ -262,6 +281,15 @@ class BinarySizeApi(recipe_api.RecipeApi):
   def _linkify_filenames(self, url, filename_map):
     for filename, archived_url in filename_map.iteritems():
       url = url.replace('{{' + filename + '}}', archived_url)
+    return url
+
+  def _synthesize_log_link(self, step_name, log_name):
+    normalized_log_name = _normalize_name(log_name)
+    normalized_step_name = _normalize_name(step_name)
+    logdog = self.m.buildbucket.build.infra.logdog
+    url = 'https://{}/logs/{}/{}/+/steps/{}/0/logs/{}/0'.format(
+        logdog.hostname, logdog.project, logdog.prefix, normalized_step_name,
+        normalized_log_name)
     return url
 
   def _create_diffs(self, author, before_dir, after_dir, results_path,

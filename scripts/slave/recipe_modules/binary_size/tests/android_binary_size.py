@@ -83,10 +83,26 @@ def GenTests(api):
     actual_url = binary_size_prop['extras'][-1]['url']
     check(actual_url == expected_url)
 
+  def final_step_is_not_nested(check, steps):
+    # This test is to make sure that binary_size._synthesize_log_link logs
+    # linking logic is correct. If this fails, please make sure to fix the
+    # format string in _synthesize_log_link alongside this test.
+
+    # checks that step name constant is not already nested
+    check('.' not in constants.RESULTS_STEP_NAME)
+    # checks that step name actually exists (i.e. not nested in another step).
+    check(steps.has_key(constants.RESULTS_STEP_NAME))
+    # checks that first character of step name is not illegal.
+    check(constants.RESULTS_STEP_NAME[0].isalnum())
+    # checks that this is actually the final/relevant step.
+    check(steps[constants.RESULTS_STEP_NAME].output_properties.has_key(
+        'binary_size_plugin'))
+
   yield api.test(
       'normal_build', api.binary_size.props('normal_build'), override_analyze(),
       override_expectation(), api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
+      api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess))
 
