@@ -10,6 +10,16 @@ from recipe_engine import recipe_api
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
+TEST_NAMES_DEBUG_APP_PATTERN = re.compile(
+    'imp (?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
+    '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
+
+TEST_CLASS_RELEASE_APP_PATTERN = re.compile(
+    r'name 0[xX]\w+ '
+    '(?P<testSuite>[A-Za-z_][A-Za-z0-9_]*Test(?:Case|))\n')
+TEST_NAME_RELEASE_APP_PATTERN = re.compile(
+    r'name 0[xX]\w+ (?P<testCase>test[A-Za-z0-9_]+)\n')
+
 
 class iOSApi(recipe_api.RecipeApi):
 
@@ -697,6 +707,132 @@ class iOSApi(recipe_api.RecipeApi):
 
     return task
 
+  def _get_test_counts_debug_app(self, test_app, ignored_classes):
+    """Gets test counts from Debug app using `otool -ov` command.
+
+      Args:
+        test_app: A path to test app.
+        ignored_classes: A list of classes to be ignored.
+
+      Returns:
+        A dictionary {"test_class": number_of_test_case_methods}
+    """
+    debug_app_test_output = '\n'.join([
+        'Meta Class',
+        'name 0x1064b8438 CacheTestCase',
+        'baseMethods 0x1068586d8 (struct method_list_t *)',
+        'imp 0x1075e6887 -[CacheTestCase testA]',
+        'types 0x1064cc3e1',
+        'imp 0x1075e6887 -[CacheTestCase testB]',
+        'imp 0x1075e6887 -[CacheTestCase testc]',
+        'name 0x1064b8438 TabUITestCase',
+        'baseMethods 0x1068586d8 (struct method_list_t *)',
+        'imp 0x1075e6887 -[TabUITestCase testD]',
+        'types 0x1064cc3e1 v16@0:8',
+        'imp 0x1075e6887 -[TabUITestCase testE]',
+        'name 0x1064b8438 KeyboardTestCase',
+        'imp 0x1075e6887 -[KeyboardTestCase testF]',
+        'name 0x1064b8438 PasswordsTestCase',
+        'imp 0x1075e6887 -[PasswordsTestCase testG]',
+        'name 0x1064b8438 ToolBarTestCase',
+        'imp 0x1075e6887 -[ToolBarTestCase testH]',
+        'version 0'])
+    cmd = ['otool', '-ov', test_app]
+    step_result = self.m.step(
+        'shard EarlGrey test',
+        cmd,
+        stdout=self.m.raw_io.output(),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(debug_app_test_output)
+        ))
+    test_names = TEST_NAMES_DEBUG_APP_PATTERN.findall(step_result.stdout)
+    test_counts = collections.Counter(
+      test_class for test_class, _ in test_names
+      if test_class not in ignored_classes)
+    return collections.Counter(test_counts)
+
+  def _get_test_counts_release_app(self, test_app, ignored_classes):
+    """Gets test counts from Release app using `otool -ov` command.
+
+    Args:
+      test_app: A path to test app.
+      ignored_classes: A list of classes to be ignored.
+
+    Returns:
+      A dictionary {"test_class": number_of_test_case_methods}
+    """
+    release_app_test_output = '\n'.join([
+        'Meta Class',
+        'name 0x1064b8438 CacheTestCase',
+        'baseMethods 0x1068586d8 (struct method_list_t *)',
+        'name 0x1075e6887 testA',
+        'types 0x1064cc3e1',
+        'name 0x1075e6887 testB',
+        'name 0x1075e6887 testc',
+        'baseProtocols 0x0',
+        'Meta Class',
+        'name 0x1064b8438 TabUITestCase',
+        'baseMethods 0x1068586d8 (struct method_list_t *)',
+        'name 0x1064b8438 KeyboardTest',
+        'name 0x1075e6887 testD',
+        'types 0x1064cc3e1 v16@0:8',
+        'name 0x1075e6887 testE',
+        'name 0x1075e6887 testF',
+        'baseProtocols 0x0',
+        'name 0x1064b8438 ChromeTestCase',
+        'name 0x1064b8438 setUp',
+        'baseProtocols 0x0',
+        'name 0x1064b8438 ToolBarTestCase',
+        'name 0x1075e6887 testG',
+        'name 0x1075e6887 testH',
+        'baseProtocols 0x0',
+        'version 0'])
+    cmd = ['otool', '-ov', test_app]
+    step_result = self.m.step(
+        'shard EarlGrey test',
+        cmd,
+        stdout=self.m.raw_io.output(),
+        step_test_data=(
+            lambda: self.m.raw_io.test_api.stream_output(
+                release_app_test_output)
+        ))
+    # For Release builds `otool -ov` command generates output that is
+    # different from Debug builds.
+    # Parsing implemented in such a way:
+    # 1. Parse test class names.
+    # 2. If they are not in ignored list, parse test method names.
+    # 3. Calculate test count per test class.
+    test_counts = {}
+    res = re.split(TEST_CLASS_RELEASE_APP_PATTERN, step_result.stdout)
+    # Ignore 1st element in split since it does not have any test class data
+    test_classes_output = res[1:]
+    for test_class, class_output in zip(test_classes_output[0::2],
+                                        test_classes_output[1::2]):
+      if test_class in ignored_classes:
+        continue
+      names = TEST_NAME_RELEASE_APP_PATTERN.findall(class_output)
+      test_counts[test_class] = test_counts.get(
+          test_class, 0) + len(set(names))
+    return collections.Counter(test_counts)
+
+  def _get_test_counts(self, test_app):
+    """Gets test names from test app using `otool -ov` command.
+
+    Args:
+      test_app: A path to test app.
+
+    Returns:
+      A dictionary {"test_class": number_of_test_case_methods}
+    """
+    # 'ChromeTestCase' and 'BaseEarlGreyTestCase' are parent classes
+    # of all EarlGrey/EarlGrey2 test classes. They have no real tests.
+    ignored_classes = {'BaseEarlGreyTestCase', 'ChromeTestCase'}
+
+    # Requires to test release app output and have 100% coverage
+    if 'Release' in test_app:
+      return self._get_test_counts_release_app(test_app, ignored_classes)
+    return self._get_test_counts_debug_app(test_app, ignored_classes)
+
   def isolate_earlgrey_test(self, test, shard_size, swarming_tasks,
                             tmp_dir, isolate_template,
                             bot=None):
@@ -712,50 +848,11 @@ class iOSApi(recipe_api.RecipeApi):
       test_app = '%s/%s' % (
           self.m.path.join(self.most_recent_app_path, '%s.app' % test['app']),
           test['app'])
-    cmd = ['otool', '-ov', test_app]
-    step_result = self.m.step(
-      'shard EarlGrey test',
-      cmd,
-      stdout=self.m.raw_io.output(),
-      step_test_data=(
-        lambda: self.m.raw_io.test_api.stream_output(
-          'name 0x1064b8438 CacheTestCase' \
-          'baseMethods 0x1068586d8 (struct method_list_t *)' \
-          'imp 0x1075e6887 -[CacheTestCase testA]' \
-          'types 0x1064cc3e1' \
-          'imp 0x1075e6887 -[CacheTestCase testB]' \
-          'imp 0x1075e6887 -[CacheTestCase testc]' \
-          'name 0x1064b8438 TabUITestCase' \
-          'baseMethods 0x1068586d8 (struct method_list_t *)' \
-          'imp 0x1075e6887 -[TabUITestCase testD]' \
-          'types 0x1064cc3e1 v16@0:8' \
-          'imp 0x1075e6887 -[TabUITestCase testE]' \
-          'name 0x1064b8438 KeyboardTestCase' \
-          'imp 0x1075e6887 -[KeyboardTestCase testF]' \
-          'name 0x1064b8438 PasswordsTestCase' \
-          'imp 0x1075e6887 -[PasswordsTestCase testG]' \
-          'name 0x1064b8438 ToolBarTestCase' \
-          'imp 0x1075e6887 -[ToolBarTestCase testH]' \
-        )
-      )
-    )
-
     # Shard tests by testSuites first.  Get the information of testMethods
     # as well in case we want to shard tests more evenly.
-    test_pattern = re.compile(
-      'imp (?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
-      '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
-    test_names = test_pattern.findall(step_result.stdout)
-    # 'ChromeTestCase' and 'BaseEarlGreyTestCase' are parent classes
-    # of all EarlGrey/EarlGrey2 test classes. They have no real tests.
-    parent_test_classes = {'BaseEarlGreyTestCase', 'ChromeTestCase'}
+    test_counts = self._get_test_counts(test_app)
 
     if swarming_tasks:
-      # Calculates number of test methods for each test suite
-      test_counts = collections.Counter(
-          test_class for test_class, _ in test_names
-          if test_class not in parent_test_classes)
-
       # Stores list of test classes and number of all tests
       class Shard(object):
         def __init__(self):
@@ -772,13 +869,8 @@ class iOSApi(recipe_api.RecipeApi):
 
       sublists = [shard.test_classes for shard in shards]
     else:
-      # TODO(monufriienko): Remove the code when all tests use `swarming_tasks`
-      tests_set = set()
-      for test_name in test_names:
-        if test_name[0] not in parent_test_classes:
-          tests_set.add('%s' % test_name[0])
-      testcases = sorted(tests_set)
-
+      # TODO(crbug/1033656): Remove code when all tests use `swarming_tasks`
+      testcases = sorted(test_counts.keys())
       sublists = [testcases[i: i + shard_size]
                   for i in range(0, len(testcases), shard_size)]
 

@@ -1076,3 +1076,38 @@ def GenTests(api):
           stdout=api.raw_io.output_text('1.2.3'),
       ),
   )
+
+  yield api.test(
+      'swarming_shards_for_EG_release_app',
+      api.platform('mac', 64),
+      api.properties(
+          mastername='chromium.fyi',
+          bot_id='fake-vm',
+      ),
+      api.buildbucket.ci_build(
+          project='chromium',
+          builder='ios',
+          build_number=1,
+          revision='HEAD',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+      ),
+      api.ios.make_test_build_config({
+          'xcode build version':
+              '11M336w',
+          'gn_args': [
+              'is_debug=false',
+              'target_cpu="x86"',
+          ],
+          'tests': [{
+              'app': 'EG2_test',
+              'host': 'fake host',
+              'device type': 'Real device',
+              'os': '13.1.2',
+              'swarming tasks': 2
+          }],
+      }),
+      api.step_data(
+          'bootstrap swarming.swarming.py --version',
+          stdout=api.raw_io.output_text('1.2.3'),
+      ),
+  )
