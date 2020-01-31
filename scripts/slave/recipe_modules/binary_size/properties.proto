@@ -18,6 +18,9 @@ message InputProperties {
 
   // Android-specific properties.
   AndroidProperties android = 3;
+
+  // Name of the GS bucket in which results should be saved.
+  string results_bucket = 4;
 }
 
 message AndroidProperties {

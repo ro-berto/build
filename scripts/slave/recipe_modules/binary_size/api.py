@@ -17,6 +17,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                  constants.DEFAULT_ANALYZE_TARGETS)
     self._compile_targets = list(properties.compile_targets or
                                  constants.DEFAULT_COMPILE_TARGETS)
+    self._results_bucket = (
+        properties.results_bucket or constants.NDJSON_GS_BUCKET)
     self._apk_name = properties.android.apk_name or constants.DEFAULT_APK_NAME
     self._mapping_name = (
         properties.android.mapping_name or constants.DEFAULT_MAPPING_FILE_NAME)
@@ -289,7 +291,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                    self.m.buildbucket.build.number, filename)
     self.m.gsutil.upload(
         source=staging_dir.join(filename),
-        bucket=constants.NDJSON_GS_BUCKET,
+        bucket=self._results_bucket,
         dest=gs_dest,
         name='archive ' + filename,
         unauthenticated_url=True)
