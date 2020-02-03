@@ -221,7 +221,6 @@
   * [emulator:examples/full](#recipes-emulator_examples_full)
   * [filter:examples/full](#recipes-filter_examples_full)
   * [filter:tests/analyze](#recipes-filter_tests_analyze)
-  * [filter:tests/analyze_mac](#recipes-filter_tests_analyze_mac)
   * [filter:tests/suppress_analyze](#recipes-filter_tests_suppress_analyze)
   * [findit/chromium/compile](#recipes-findit_chromium_compile)
   * [findit/chromium/compile_isolate](#recipes-findit_chromium_compile_isolate) &mdash; This recipe is to compile and isolate the given isolated targets.
@@ -2045,9 +2044,9 @@ Args:
 
 [DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromite](#recipe_modules-chromite), [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#297)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, mb_config_path=None, build_output_dir=None, additional_names=None):**
+&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#315)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, mb_config_path=None, build_output_dir=None, additional_names=None):**
 
 Runs "analyze" step to determine targets affected by the patch.
 
@@ -2055,12 +2054,12 @@ Returns a tuple of:
   - list of targets that are needed to run tests (see filter recipe module)
   - list of targets that need to be compiled (see filter recipe module)
 
-&emsp; **@property**<br>&mdash; **def [compile\_targets](/scripts/slave/recipe_modules/filter/api.py#35)(self):**
+&emsp; **@property**<br>&mdash; **def [compile\_targets](/scripts/slave/recipe_modules/filter/api.py#36)(self):**
 
 Returns the set of targets that need to be compiled based on the set of
 files that have changed.
 
-&mdash; **def [does\_patch\_require\_compile](/scripts/slave/recipe_modules/filter/api.py#110)(self, affected_files, test_targets=None, additional_compile_targets=None, additional_names=None, config_file_name='trybot_analyze_config.json', use_mb=False, mb_mastername=None, mb_buildername=None, mb_config_path=None, build_output_dir=None, cros_board=None, \*\*kwargs):**
+&mdash; **def [does\_patch\_require\_compile](/scripts/slave/recipe_modules/filter/api.py#117)(self, affected_files, test_targets=None, additional_compile_targets=None, additional_names=None, config_file_name='trybot_analyze_config.json', use_mb=False, mb_mastername=None, mb_buildername=None, mb_config_path=None, build_output_dir=None, cros_board=None, \*\*kwargs):**
 
 Check to see if the affected files require a compile or tests.
 
@@ -2100,11 +2099,14 @@ However, recipes used by Findit for culprit finding may override the
 defaults with `mb_mastername` and `mb_buildername` to exactly match a given
 continuous builder.
 
-&emsp; **@property**<br>&mdash; **def [paths](/scripts/slave/recipe_modules/filter/api.py#41)(self):**
+&emsp; **@property**<br>&mdash; **def [paths](/scripts/slave/recipe_modules/filter/api.py#42)(self):**
 
 Returns the paths that have changed in this patch.
 
-&emsp; **@property**<br>&mdash; **def [test\_targets](/scripts/slave/recipe_modules/filter/api.py#29)(self):**
+Paths are *always* posix-style paths, even on windows. This allows analyze
+configs to only include posix-style paths.
+
+&emsp; **@property**<br>&mdash; **def [test\_targets](/scripts/slave/recipe_modules/filter/api.py#30)(self):**
 
 Returns the set of targets passed to does_patch_require_compile() that
 are affected by the set of files that have changed.
@@ -4939,14 +4941,9 @@ A generic recipe that runs a given docker container and exits.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/examples/full.py#16)(api):**
 ### *recipes* / [filter:tests/analyze](/scripts/slave/recipe_modules/filter/tests/analyze.py)
 
-[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#7): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#7): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#15)(api):**
-### *recipes* / [filter:tests/analyze\_mac](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py)
-
-[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#16)(api):**
 ### *recipes* / [filter:tests/suppress\_analyze](/scripts/slave/recipe_modules/filter/tests/suppress_analyze.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/tests/suppress_analyze.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

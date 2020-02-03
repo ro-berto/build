@@ -5,6 +5,7 @@
 import contextlib
 import json
 import os
+import posixpath
 import re
 
 from recipe_engine import recipe_api
@@ -40,7 +41,11 @@ class FilterApi(recipe_api.RecipeApi):
 
   @property
   def paths(self):
-    """Returns the paths that have changed in this patch."""
+    """Returns the paths that have changed in this patch.
+
+    Paths are *always* posix-style paths, even on windows. This allows analyze
+    configs to only include posix-style paths.
+    """
     return self._paths
 
   def _load_analyze_config(self, file_name):
@@ -80,6 +85,8 @@ class FilterApi(recipe_api.RecipeApi):
         ...
       }
     ```
+
+    Regex patterns are expected to be posix-style paths.
 
     Files changed by a patch will be matched against all regex patterns in all
     applicable analyze configs.
@@ -175,7 +182,20 @@ class FilterApi(recipe_api.RecipeApi):
     all_targets = sorted(set(test_targets) | set(additional_compile_targets))
     self._test_targets = []
     self._compile_targets = []
-    self._paths = affected_files
+
+    def rewrite_as_posix(path):
+      components = []
+      while path:
+        path, tail = self.m.path.split(path)
+        if tail:
+          components = [tail] + components
+      if components:
+        return posixpath.join(components[0], *components[1:])
+      return None
+
+    self._paths = [
+        p for p in (rewrite_as_posix(f) for f in affected_files) if p
+    ]
 
     analyze_input = {
         'files': self.paths,
