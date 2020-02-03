@@ -18,11 +18,6 @@
       "devtools-frontend@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]",
-    "env_prefixes": {
-      "PATH": [
-        "None/third_party/depot_tools"
-      ]
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -77,11 +72,6 @@
       "front_end"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",
-    "env_prefixes": {
-      "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
-      ]
-    },
     "infra_step": true,
     "name": "git clean"
   },
@@ -93,11 +83,6 @@
       "runhooks"
     ],
     "cwd": "[BUILDER_CACHE]",
-    "env_prefixes": {
-      "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
-      ]
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -120,10 +105,9 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -160,7 +144,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "gn"
@@ -181,13 +165,13 @@
       "0777",
       "[GOMA_CACHE]/data"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -203,7 +187,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -218,7 +202,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -246,13 +230,13 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,
@@ -280,14 +264,14 @@
       "-j",
       "80"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "compile",
@@ -325,7 +309,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -337,7 +321,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
@@ -363,7 +347,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -375,7 +359,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.goma_stat",
@@ -390,7 +374,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -402,7 +386,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.stop_goma",
@@ -449,13 +433,13 @@
       "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}",
       "--is-luci"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "name": "postprocess_for_goma.upload_log",
@@ -484,13 +468,13 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]",
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/devtools-frontend/third_party/depot_tools"
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
     "infra_step": true,

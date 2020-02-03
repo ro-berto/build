@@ -31,10 +31,13 @@ REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
 def RunSteps(api):
   _configure(api)
-  with _in_builder_cache_depot_on_path(api):
+
+  with _in_builder_cache(api):
     api.bot_update.ensure_checkout()
     _git_clean(api)
     api.gclient.runhooks()
+
+  with _depot_on_path(api):
     api.chromium.ensure_goma()
     api.chromium.run_gn(use_goma=True)
     compilation_result = api.chromium.compile(use_goma_module=True)
@@ -73,7 +76,7 @@ def run_script(api, step_name, script):
     api.python(step_name, sc_path)
 
 
-# TODO(liviurau): remove this temp hack after devtools refactorings that 
+# TODO(liviurau): remove this temp hack after devtools refactorings that
 # involve .gitignore are done
 def _git_clean(api):
   with api.context(cwd=api.path['checkout']):
@@ -81,10 +84,16 @@ def _git_clean(api):
 
 
 @contextmanager
-def _in_builder_cache_depot_on_path(api):
+def _in_builder_cache(api):
   cache_dir = api.path['builder_cache']
-  depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
-  with api.context(cwd=cache_dir, env_prefixes={'PATH': [depot_tools_path]}):
+  with api.context(cwd=cache_dir):
+    yield
+
+
+@contextmanager
+def _depot_on_path(api):
+  depot_tools_path = api.path['checkout'].join('third_party')
+  with api.context(env_prefixes={'PATH': [depot_tools_path]}):
     yield
 
 
