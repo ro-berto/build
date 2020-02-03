@@ -45,24 +45,6 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "-mdebug",
                       "-n${runtime}-foo-${mode}-${arch}-bar"],
       }]
-    },
-    {
-      "builders": [
-        "dart2js-linux-release-chrome"
-      ],
-      "meta": {},
-      "steps": [{
-        "name": "Test-step 1",
-        "script": "tools/test.py",
-        "arguments": ["foo", "--bar", "-e co19", "language_2"],
-      }, {
-        "name": "Test-step custom",
-        "script": "tools/custom_thing.py",
-        "arguments": ["foo", "--bar"]
-      }, {
-        "name": "Test-step 2",
-        "arguments": ["foo", "--bar", "co19"],
-      }]
     }
   ]
 }
@@ -85,29 +67,18 @@ def _run_steps_impl(api):
     api.swarming_client.checkout('master')
     api.dart.download_parent_isolate()
   else:
-    builder_name = api.buildbucket.builder_name
-    builder_fragments = builder_name.split('-')
-    channel = builder_fragments[-1]
-    if channel not in ['be', 'dev', 'stable', 'try']:
-      channel = 'be'
     clobber = 'clobber' in api.properties
     api.dart.checkout(clobber)
 
   api.dart.kill_tasks()
 
-  with api.step.defer_results():
+  try:
     api.dart.test(test_data=TEST_MATRIX)
+  finally:
     api.dart.kill_tasks()
 
 
 def GenTests(api):
-  yield api.test(
-      'builders/vm-linux-release-x64',
-      api.buildbucket.ci_build(
-          builder='builders/vm-linux-release-x64',
-          git_repo='https://dart.googlesource.com/sdk',
-          project='dart'),
-  )
   yield api.test(
       'builders/dart2js-win-debug-x64-firefox-try',
       api.buildbucket.try_build(
@@ -120,7 +91,7 @@ def GenTests(api):
   yield api.test(
       'builders/analyzer-triggered',
       api.buildbucket.ci_build(
-          builder='builders/analyzer-triggered',
+          builder='analyzer-triggered',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
       api.properties.generic(

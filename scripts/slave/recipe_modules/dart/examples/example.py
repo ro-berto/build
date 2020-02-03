@@ -11,6 +11,7 @@ from recipe_engine.post_process import (
     StatusException,
     StatusFailure,
     StatusSuccess,
+    StepException,
     StepFailure,
 )
 
@@ -439,6 +440,44 @@ def GenTests(api):
   )
 
   yield api.test(
+      'failed-tests',
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      _canned_step(api, 'co19', 1, False),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.step_data('test results', retcode=1),
+      api.post_process(StepFailure, 'test results'),
+      api.post_process(StatusFailure),
+      api.post_process(Filter('test results')),
+  )
+
+  yield api.test(
+      'failed-to-get-test-results',
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      _canned_step(api, 'co19', 1, False),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.step_data('test results', retcode=2),
+      api.post_process(StepException, 'test results'),
+      api.post_process(StatusException),
+      api.post_process(Filter('test results')),
+  )
+
+  yield api.test(
       'vm-win',
       api.platform('win', 64),
       api.properties(bot_id='win-dart-123'),
@@ -517,6 +556,7 @@ def GenTests(api):
           ])),
       api.post_process(MustRun, 'make a fuzz_shard_2'),
       api.post_process(StepFailure, 'make a fuzz_shard_1'),
+      # TODO(athom): This should be StatusException
       api.post_process(StatusFailure),
   )
 

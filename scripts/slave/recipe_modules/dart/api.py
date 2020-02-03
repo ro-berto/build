@@ -295,10 +295,10 @@ class DartApi(recipe_api.RecipeApi):
     output_dir = output_dir.join(task.id)
     try:
       task_result.analyze()
-    except self.m.step.StepFailure as failure:
+    except self.m.step.StepFailure:
       # The active_result is the collect step, so this will turn it red.
       self.m.step.active_result.presentation.status = 'FAILURE'
-      raise failure
+      raise
 
     bot_name = task_result.bot_id
     task_name = task_result.name
@@ -446,15 +446,21 @@ class DartApi(recipe_api.RecipeApi):
     if results_str:
       access_token = self.m.service_account.default().get_access_token(
           ['https://www.googleapis.com/auth/cloud-platform'])
-      self.m.step(
-          'test results', [
-              self.dart_executable(), self.m.path['checkout'].join(
-                  'tools', 'bots', 'get_builder_status.dart'), '-b',
-              self.m.buildbucket.builder_name, '-n',
-              self.m.buildbucket.build.number, '-a',
-              self.m.raw_io.input_text(access_token)
-          ],
-          ok_ret={0})
+      try:
+        self.m.step('test results', [
+            self.dart_executable(), self.m.path['checkout'].join(
+                'tools', 'bots', 'get_builder_status.dart'), '-b',
+            self.m.buildbucket.builder_name, '-n',
+            self.m.buildbucket.build.number, '-a',
+            self.m.raw_io.input_text(access_token)
+        ])
+      except self.m.step.StepFailure:
+        result = self.m.step.active_result
+        if result.retcode > 1:
+          # Returns codes other than 1 are infra failures
+          self.m.step.active_result.presentation.status = 'EXCEPTION'
+          raise self.m.step.InfraFailure('failed to get test results')
+        raise
 
 
   def _extend_results_records(self, results_str, prior_results_path,
