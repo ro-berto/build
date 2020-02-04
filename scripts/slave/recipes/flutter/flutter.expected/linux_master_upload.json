@@ -131,7 +131,9 @@
     "cmd": [
       "flutter",
       "precache",
-      "--fuchsia"
+      "--fuchsia",
+      "--no-android",
+      "--no-ios"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -145,6 +147,30 @@
       ]
     },
     "name": "Run Fuchsia Driver Tests.precache fuchsia artifacts",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "flutter",
+      "precache",
+      "--flutter_runner",
+      "--no-android",
+      "--no-ios"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/flutter/bin",
+        "[START_DIR]/flutter/bin/cache/dart-sdk/bin"
+      ]
+    },
+    "name": "Run Fuchsia Driver Tests.precache flutter runners",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

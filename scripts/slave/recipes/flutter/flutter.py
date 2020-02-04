@@ -157,8 +157,13 @@ def RunFuchsiaDriverTests(api):
     return
   with api.step.nest('Run Fuchsia Driver Tests'):
     flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
-    api.step('precache fuchsia artifacts',
-             [flutter_executable, 'precache', '--fuchsia'])
+    api.step('precache fuchsia artifacts', [
+        flutter_executable, 'precache', '--fuchsia', '--no-android', '--no-ios'
+    ])
+    api.step('precache flutter runners', [
+        flutter_executable, 'precache', '--flutter_runner', '--no-android',
+        '--no-ios'
+    ])
     SwarmFuchsiaTests(api)
     return
 
