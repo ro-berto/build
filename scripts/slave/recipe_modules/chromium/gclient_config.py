@@ -144,7 +144,6 @@ def fuchsia_x64(c):  # pragma: no cover
   """Downloads boot images for running x64 binaries on QEMU."""
 
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.x64'
-  c.solutions[0].custom_vars['checkout_aemu'] = 'True'
 
 @CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_arm64_host(c):  #pragma: no cover
