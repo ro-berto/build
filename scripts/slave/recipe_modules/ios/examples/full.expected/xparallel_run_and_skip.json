@@ -308,6 +308,43 @@
       "ensure-directory",
       "--mode",
       "0777",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "infra_step": true,
+    "name": "ensure output directory"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output dierctory.\n\nSee https://crbug.com/959436 for more context.\n",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "infra_step": true,
+    "name": "create compile guard",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output dierctory.@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
+      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
       "[CACHE]/builder/src/out/Debug-iphonesimulator"
     ],
     "infra_step": true,
@@ -363,6 +400,19 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "infra_step": true,
+    "name": "remove compile guard"
+  },
+  {
     "cmd": [],
     "name": "bootstrap swarming"
   },
@@ -392,7 +442,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython', 'fake/file/path1/', 'fake/file/path2/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode_parallelization\": <(xcode_parallelization),         \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
+      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', '<(additional_app_path)/', 'src/ios/build/bots/scripts/', 'src/.vpython', 'fake/file/path1/', 'fake/file/path2/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--host-app', '<(host_app_path)', '--args-json', '{\"test_args\": <(test_args), \"xctest\": <(xctest), \"test_cases\": <(test_cases), \"restart\": <(restart), \"xcode_parallelization\": <(xcode_parallelization), \"xcodebuild_device_runner\": <(xcodebuild_device_runner)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
       "[CACHE]/builder/template.isolate"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -413,7 +463,7 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"--host-app\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(host_app_path)\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args),         \\\"xctest\\\": <(xctest),         \\\"test_cases\\\": <(test_cases),         \\\"restart\\\": <(restart),         \\\"xcode_parallelization\\\": <(xcode_parallelization),         \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",

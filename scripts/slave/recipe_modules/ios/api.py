@@ -283,11 +283,11 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.chromium.c = cfg
 
     self.m.chromium.apply_config('BASE')
+    self.m.chromium.apply_config('ninja')
     if self.use_goma:
       # Make sure these chromium configs are applied consistently for the
       # rest of the recipe; they are needed in order for m.chromium.compile()
       # to work correctly.
-      self.m.chromium.apply_config('ninja')
       self.m.chromium.apply_config('default_compiler')
       self.m.chromium.apply_config('goma')
 
@@ -372,114 +372,116 @@ class iOSApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout'], env=env):
       self.m.gclient.runhooks(name='runhooks' + suffix)
 
-    if use_mb:
-      with self.m.context(env=env):
-        self.m.chromium.mb_gen(
-            self.__config['mastername'],
-            self.m.buildbucket.builder_name,
-            build_dir='//out/%s' % build_sub_path,
-            mb_path=mb_path,
-            name='generate build files (mb)' + suffix,
-            use_goma=self.use_goma,
-        )
-    else:
-      # Ensure the directory containing args.gn exists before creating the file.
-      self.m.file.ensure_directory(
-          'ensure_directory //out/%s' % build_sub_path,
-          self.m.path['checkout'].join('out', build_sub_path))
+    with self.m.chromium.guard_compile(suffix=suffix or ''):
 
-      # If mb is not being used, set goma_dir before generating build files.
-      if self.use_goma:
-        self.__config['gn_args'].append('goma_dir="%s"' % self.m.goma.goma_dir)
-
-      self.m.file.write_text(
-        'write args.gn' + suffix,
-        self.m.path['checkout'].join('out', build_sub_path, 'args.gn'),
-        '%s\n' % '\n'.join(self.__config['gn_args']),
-      )
-      self.m.step.active_result.presentation.step_text = (
-        '<br />%s' % '<br />'.join(self.__config['gn_args']))
-      with self.m.context(
-          cwd=self.m.path['checkout'].join('out', build_sub_path),
-          env=env):
-        gn_path = self.m.path['checkout'].join('third_party', 'gn', 'gn')
-
-        # TODO(jbudorick): Remove this once the gn move has fully rolled
-        # downstream.
-        if not self.m.path.exists(gn_path):
-          gn_path = self.m.path['checkout'].join('buildtools', 'mac', 'gn')
-
-        self.m.step('generate build files (gn)' + suffix, [
-          gn_path,
-          'gen',
-          '--check',
-          '//out/%s' % build_sub_path,
-        ])
-
-    # The same test may be configured to run on multiple platforms.
-    tests = sorted(set(test['app'] for test in self.__config['tests']))
-
-    if self.compilation_targets is None:
-      if analyze:
-        with self.m.context(cwd=self.m.path['checkout']):
-          affected_files = (
-            self.m.chromium_checkout.get_files_affected_by_patch())
-
-        test_targets, self.compilation_targets = (
-          self.m.filter.analyze(
-            affected_files,
-            tests,
-            self.__config['additional_compile_targets'],
-            'trybot_analyze_config.json',
-            additional_names=['chromium', 'ios'],
-            mb_mastername=self.__config['mastername'],
-            mb_buildername=self.m.buildbucket.builder_name,
-            # Don't re-use the build directory: filter.analyze ignores goma and
-            # it calls 'mb analyze' which results in the args.gn file having
-            # incorrect values for the goma variables
-            build_output_dir='//out/%s-analysis' % build_sub_path,
+      if use_mb:
+        with self.m.context(env=env):
+          self.m.chromium.mb_gen(
+              self.__config['mastername'],
+              self.m.buildbucket.builder_name,
+              build_dir='//out/%s' % build_sub_path,
+              mb_path=mb_path,
+              name='generate build files (mb)' + suffix,
+              use_goma=self.use_goma,
           )
-        )
-
-        test_targets = set(test_targets)
-
-        for test in self.__config['tests']:
-          if test['app'] not in test_targets:
-            test['skip'] = True
-
-        if not self.compilation_targets:
-          return
       else:
-        self.compilation_targets = []
-        self.compilation_targets.extend(tests)
-        self.compilation_targets.extend(
-          self.__config['additional_compile_targets'])
+        # Ensure the directory containing args.gn exists before creating
+        # the file.
+        self.m.file.ensure_directory(
+            'ensure_directory //out/%s' % build_sub_path,
+            self.m.path['checkout'].join('out', build_sub_path))
 
-      self.compilation_targets.sort()
+        # If mb is not being used, set goma_dir before generating build files.
+        if self.use_goma:
+          self.__config['gn_args'].append(
+              'goma_dir="%s"' % self.m.goma.goma_dir)
 
-    cmd = [str(self.m.depot_tools.ninja_path), '-C', cwd]
-    cmd.extend(self.__config['compiler flags'])
+        self.m.file.write_text(
+            'write args.gn' + suffix,
+            self.m.path['checkout'].join('out', build_sub_path, 'args.gn'),
+            '%s\n' % '\n'.join(self.__config['gn_args']),
+        )
+        self.m.step.active_result.presentation.step_text = (
+            '<br />%s' % '<br />'.join(self.__config['gn_args']))
+        with self.m.context(
+            cwd=self.m.path['checkout'].join('out', build_sub_path), env=env):
+          gn_path = self.m.path['checkout'].join('third_party', 'gn', 'gn')
 
-    if self.use_goma:
-      cmd.extend(['-j', '50'])
-      self.m.goma.start()
+          # TODO(jbudorick): Remove this once the gn move has fully rolled
+          # downstream.
+          if not self.m.path.exists(gn_path):
+            gn_path = self.m.path['checkout'].join('buildtools', 'mac', 'gn')
 
-    cmd.extend(self.compilation_targets)
-    exit_status = -1
-    try:
-      with self.m.context(cwd=cwd, env=env):
-        self.m.step('compile' + suffix, cmd)
-      exit_status = 0
-    except self.m.step.StepFailure as e:
-      exit_status = e.retcode
-      raise e
-    finally:
+          self.m.step('generate build files (gn)' + suffix, [
+              gn_path,
+              'gen',
+              '--check',
+              '//out/%s' % build_sub_path,
+          ])
+
+      # The same test may be configured to run on multiple platforms.
+      tests = sorted(set(test['app'] for test in self.__config['tests']))
+
+      if self.compilation_targets is None:
+        if analyze:
+          with self.m.context(cwd=self.m.path['checkout']):
+            affected_files = (
+                self.m.chromium_checkout.get_files_affected_by_patch())
+
+          test_targets, self.compilation_targets = (
+              self.m.filter.analyze(
+                  affected_files,
+                  tests,
+                  self.__config['additional_compile_targets'],
+                  'trybot_analyze_config.json',
+                  additional_names=['chromium', 'ios'],
+                  mb_mastername=self.__config['mastername'],
+                  mb_buildername=self.m.buildbucket.builder_name,
+                  # Don't re-use the build directory: filter.analyze ignores
+                  # goma and it calls 'mb analyze' which results in the args.gn
+                  # file having incorrect values for the goma variables
+                  build_output_dir='//out/%s-analysis' % build_sub_path,
+              ))
+
+          test_targets = set(test_targets)
+
+          for test in self.__config['tests']:
+            if test['app'] not in test_targets:
+              test['skip'] = True
+
+          if not self.compilation_targets:
+            return
+        else:
+          self.compilation_targets = []
+          self.compilation_targets.extend(tests)
+          self.compilation_targets.extend(
+              self.__config['additional_compile_targets'])
+
+        self.compilation_targets.sort()
+
+      cmd = [str(self.m.depot_tools.ninja_path), '-C', cwd]
+      cmd.extend(self.__config['compiler flags'])
+
       if self.use_goma:
-        self.m.goma.stop(
-            ninja_log_outdir=cwd,
-            ninja_log_compiler='goma',
-            ninja_log_command=cmd,
-            build_exit_status=exit_status)
+        cmd.extend(['-j', '50'])
+        self.m.goma.start()
+
+      cmd.extend(self.compilation_targets)
+      exit_status = -1
+      try:
+        with self.m.context(cwd=cwd, env=env):
+          self.m.step('compile' + suffix, cmd)
+        exit_status = 0
+      except self.m.step.StepFailure as e:
+        exit_status = e.retcode
+        raise e
+      finally:
+        if self.use_goma:
+          self.m.goma.stop(
+              ninja_log_outdir=cwd,
+              ninja_log_compiler='goma',
+              ninja_log_command=cmd,
+              build_exit_status=exit_status)
 
   def symupload(self, artifact, url):
     """Uploads the given symbols file.
@@ -888,14 +890,14 @@ class iOSApi(recipe_api.RecipeApi):
 
     tasks = []
 
+    args_json = ('{"test_args": <(test_args), "xctest": <(xctest), ' +
+                 '"test_cases": <(test_cases), "restart": <(restart), ' +
+                 '"xcode_parallelization": <(xcode_parallelization), ' +
+                 '"xcodebuild_device_runner": <(xcodebuild_device_runner)}')
+
     cmd = [
         '%s/run.py' % scripts_dir, '--app', '<(app_path)', '--host-app',
-        '<(host_app_path)', '--args-json', '{"test_args": <(test_args), \
-        "xctest": <(xctest), \
-        "test_cases": <(test_cases), \
-        "restart": <(restart), \
-        "xcode_parallelization": <(xcode_parallelization), \
-        "xcodebuild_device_runner": <(xcodebuild_device_runner)}', '--out-dir',
+        '<(host_app_path)', '--args-json', args_json, '--out-dir',
         '${ISOLATED_OUTDIR}', '--retries',
         self.__config.get('retries', '3'), '--shards', '<(shards)',
         '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd',
