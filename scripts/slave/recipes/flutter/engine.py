@@ -36,6 +36,9 @@ DEPS = [
     'zip',
 ]
 
+# Account for ~1 hour queue time when there is a high number of commits.
+DRONE_TIMEOUT_SECS = 7200
+
 BUCKET_NAME = 'flutter_infra'
 MAVEN_BUCKET_NAME = 'download.flutter.io'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
@@ -110,7 +113,8 @@ def CancelBuilds(api, builds):
 
 
 def CollectBuilds(api, builds):
-  return api.buildbucket.collect_builds([build.id for build in builds])
+  return api.buildbucket.collect_builds([build.id for build in builds],
+                                        timeout=DRONE_TIMEOUT_SECS)
 
 
 def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
