@@ -67,12 +67,6 @@ def GetCloudPath(api, path):
 
 
 def Build(api, config, *targets):
-  if api.platform.is_win:
-    # TODO(https://github.com/flutter/flutter/issues/50130): Re-enable GOMA on
-    # Windows once flakiness has been addressed.
-    BuildNoGoma(api, config, *targets)
-    return
-
   checkout = GetCheckoutPath(api)
   build_dir = checkout.join('out/%s' % config)
   goma_jobs = api.properties['goma_jobs']
