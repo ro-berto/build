@@ -540,6 +540,30 @@
     "name": "Localization Check"
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/devtools-frontend/karma-coverage/coverage-summary.json",
+      "/path/to/tmp/"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "name": "Coverage summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Statement coverage 11.12%@@@",
+      "@@@STEP_LOG_LINE@coverage-summary.json@{\"total\": {\"statements\": {\"pct\": 11.12}, \"functions\": {\"pct\": 11.13}, \"lines\": {\"pct\": 11.11}, \"branches\": {\"pct\": 11.14}}}@@@",
+      "@@@STEP_LOG_END@coverage-summary.json@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

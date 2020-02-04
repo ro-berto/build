@@ -5,18 +5,20 @@
 from contextlib import contextmanager
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from recipe_engine.post_process import (DropExpectation, StatusFailure)
+import json
 
 DEPS = [
-  'chromium',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/git',
-  'depot_tools/gclient',
-  'recipe_engine/context',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/step',
+    'chromium',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/git',
+    'depot_tools/gclient',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 STEPS_N_SCRIPTS = [
@@ -27,7 +29,6 @@ STEPS_N_SCRIPTS = [
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
-
 
 def RunSteps(api):
   _configure(api)
@@ -45,6 +46,15 @@ def RunSteps(api):
       return compilation_result
     for step, script in STEPS_N_SCRIPTS:
       run_script(api, step, script)
+
+    report_file = api.path['checkout'].join('karma-coverage',
+                                            'coverage-summary.json')
+    summary = api.file.read_json(
+        'Coverage summary', report_file, test_data=test_cov_data())
+
+    s = api.step.active_result
+    s.presentation.step_text = "Statement coverage %s%%" % summary['total'][
+        'statements']['pct']
 
 
 def _configure(api):
@@ -95,6 +105,25 @@ def _depot_on_path(api):
   depot_tools_path = api.path['checkout'].join('third_party')
   with api.context(env_prefixes={'PATH': [depot_tools_path]}):
     yield
+
+
+def test_cov_data():
+  return {
+      "total": {
+          "lines": {
+              "pct": 11.11
+          },
+          "statements": {
+              "pct": 11.12
+          },
+          "functions": {
+              "pct": 11.13
+          },
+          "branches": {
+              "pct": 11.14
+          },
+      }
+  }
 
 
 def GenTests(api):
