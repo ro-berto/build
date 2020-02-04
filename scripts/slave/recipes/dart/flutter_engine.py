@@ -92,9 +92,9 @@ def BuildLinuxAndroidArm(api, checkout_dir):
   Build(api, checkout_dir, 'android_debug', ':dist')
 
   # Build engines for the runtime modes that use AOT compilation.
-  for arch in ['arm', 'arm64']:
+  for arch in ['arm', 'arm64', 'x64']:
     for mode in ['profile', 'release']:
-      build_dir = 'android_%s%s' % (mode, '_arm64' if arch == 'arm64' else '')
+      build_dir = 'android_%s%s' % (mode, '' if arch == 'arm' else '_' + arch)
 
       RunGN(api, checkout_dir, '--android', '--runtime-mode=' + mode,
             '--android-cpu=' + arch)
@@ -202,9 +202,9 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   )
 
   # Copy over new versions of gen_snapshot for profile/release arm/arm64
-  for arch in ['arm', 'arm64']:
+  for arch in ['arm', 'arm64', 'x64']:
     for mode in ['profile', 'release']:
-      build_dir = 'android_%s%s' % (mode, '_arm64' if arch == 'arm64' else '')
+      build_dir = 'android_%s%s' % (mode, '' if arch == 'arm' else '_' + arch)
       CopyArtifacts(
           api, engine_src,
           flutter.join('bin', 'cache', 'artifacts', 'engine',
