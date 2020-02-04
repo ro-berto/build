@@ -61,9 +61,17 @@ def RunSteps(api):
     # TODO(machenbach): Remove this case when all builders using this recipe
     # migrated to LUCI.
     cwd = api.path['start_dir']
+
+  skip_owners = False
+  # TODO(crbug.com/1046950): Make this check stricter.
+  if (api.tryserver.gerrit_change.host == 'chromium-review.googlesource.com' and
+      api.tryserver.gerrit_change.project == 'chromium/src' and
+      api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/')):
+    skip_owners = True
+
   with api.context(cwd=cwd):
     bot_update_step = api.presubmit.prepare()
-    return api.presubmit.execute(bot_update_step)
+    return api.presubmit.execute(bot_update_step, skip_owners)
 
 
 def GenTests(api):
@@ -167,4 +175,16 @@ def GenTests(api):
           'timeout_s': 654
       }}),
       api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
+  )
+
+  yield api.test(
+      'branch_presubmit',
+      api.runtime(is_luci=True, is_experimental=False),
+      api.buildbucket.try_build(
+          project='chromium',
+          bucket='try',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.step_data('presubmit', api.json.output({})),
+      api.tryserver.gerrit_change_target_ref('refs/branch-heads/3987'),
   )
