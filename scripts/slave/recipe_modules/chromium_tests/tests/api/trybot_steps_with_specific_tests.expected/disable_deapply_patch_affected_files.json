@@ -635,6 +635,39 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
+      "--input-path",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.Two\"}]}",
+      "--output-path",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "query known flaky failures on CQ",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_LINE@input@{@@@",
+      "@@@STEP_LOG_LINE@input@    \"project\": \"chromium\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@input@    \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@input@        {@@@",
+      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"base_unittests (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@input@            \"test_name\": \"Test.Two\"@@@",
+      "@@@STEP_LOG_LINE@input@        }@@@",
+      "@@@STEP_LOG_LINE@input@    ]@@@",
+      "@@@STEP_LOG_LINE@input@}@@@",
+      "@@@STEP_LOG_END@input@@@",
+      "@@@STEP_LOG_LINE@output@null@@@",
+      "@@@STEP_LOG_END@output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder",

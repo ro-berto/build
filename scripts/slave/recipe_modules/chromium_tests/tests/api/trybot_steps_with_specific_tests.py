@@ -1387,3 +1387,28 @@ def GenTests(api):
                        ]),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'A/B testing disable the feature of exonerating flaky failures',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux',
+          builder='linux-rel',
+          change_number=456780),
+      api.properties(
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.post_process(post_process.DoesNotRun,
+                       'query known flaky failures on CQ'),
+      api.post_process(post_process.DropExpectation),
+  )

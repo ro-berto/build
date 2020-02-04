@@ -70,12 +70,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
     self._max_reported_failures = properties.max_reported_failures or 30
 
-    # The main use case is to provide a escape-hatch to disable the feature
-    # and make everything fall back to original behaviors when there is a bug
-    # or outage. When landing the CL that flips the switch, it should be TBRed
-    # and No-tried to minimize the negative impact of an outage.
-    self._should_exonerate_flaky_failures = (
-        properties.should_exonerate_flaky_failures or False)
+    # This flag provides a escape-hatch to disable the feature of exonerating
+    # flaky failures and make everything fall back to original behaviors when
+    # there is a bug or outage. When landing the CL that flips the switch, it
+    # should be TBRed and No-tried to minimize the negative impact of an outage.
+    self._should_exonerate_flaky_failures = True
 
   @property
   def canonical(self):
@@ -402,6 +401,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'caller_api must include the chromium_swarming recipe module')
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
+
+    # TODO(crbug.com/838735): A/B testing to measure the impact of the feature.
+    # This is a short-term experiment that expires on 03/04/2020, clean this up
+    # once it expires.
+    gerrit_changes = self.m.buildbucket.build.input.gerrit_changes
+    if gerrit_changes and gerrit_changes[0].change % 10 == 0:
+      self._should_exonerate_flaky_failures = False
 
     if suffix == 'with patch' and self._should_exonerate_flaky_failures:
       # If *all* the deterministic failures are known flaky tests, a test suite
