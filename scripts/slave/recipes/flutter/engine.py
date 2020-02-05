@@ -731,16 +731,20 @@ def BuildFuchsia(api):
     ]
     product = build_mode == 'release'
     fuchsia_output_dirs = GetFuchsiaOutputDirs(product, build_mode, arch)
-    builds += ScheduleBuilds(
-        api, 'Linux Engine Drone', {
-            'builds': [{
-                'gn_args': gn_args,
-                'dir': 'fuchsia_%s_%s' % (build_mode, arch),
-                'targets': GetFlutterFuchsiaBuildTargets(product),
-                'output_files': GetFuchsiaOutputFiles(product),
-                'output_dirs': fuchsia_output_dirs,
-            }]
-        })
+    props = {
+        'builds': [{
+            'gn_args': gn_args,
+            'dir': 'fuchsia_%s_%s' % (build_mode, arch),
+            'targets': GetFlutterFuchsiaBuildTargets(product),
+            'output_files': GetFuchsiaOutputFiles(product),
+            'output_dirs': fuchsia_output_dirs,
+        }],
+    }
+    if 'git_url' in api.properties and 'git_ref' in api.properties:
+      props['git_url'] = api.properties['git_url']
+      props['git_ref'] = api.properties['git_ref']
+
+    builds += ScheduleBuilds(api, 'Linux Engine Drone', props)
 
   checkout = GetCheckoutPath(api)
   build_script = str(
