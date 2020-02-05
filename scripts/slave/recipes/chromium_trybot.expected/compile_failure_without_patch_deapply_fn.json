@@ -1019,42 +1019,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
-      "--input-path",
-      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.Two\"}]}",
-      "--output-path",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "query known flaky failures on CQ",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LOG_LINE@input@{@@@",
-      "@@@STEP_LOG_LINE@input@    \"project\": \"chromium\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"builder\": \"linux-rel\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"bucket\": \"try\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@input@        {@@@",
-      "@@@STEP_LOG_LINE@input@            \"step_ui_name\": \"base_unittests (with patch)\", @@@",
-      "@@@STEP_LOG_LINE@input@            \"test_name\": \"Test.Two\"@@@",
-      "@@@STEP_LOG_LINE@input@        }@@@",
-      "@@@STEP_LOG_LINE@input@    ]@@@",
-      "@@@STEP_LOG_LINE@input@}@@@",
-      "@@@STEP_LOG_END@input@@@",
-      "@@@STEP_LOG_LINE@output@null@@@",
-      "@@@STEP_LOG_END@output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",

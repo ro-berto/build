@@ -406,7 +406,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # This is a short-term experiment that expires on 03/04/2020, clean this up
     # once it expires.
     gerrit_changes = self.m.buildbucket.build.input.gerrit_changes
-    if gerrit_changes and gerrit_changes[0].change % 10 == 0:
+    if gerrit_changes and gerrit_changes[0].change % 2 == 0:
       self._should_exonerate_flaky_failures = False
 
     if suffix == 'with patch' and self._should_exonerate_flaky_failures:
