@@ -88,36 +88,6 @@ SPEC = {
                     'platform': 'linux',
                 },
             ),
-        'Linux Ozone Tester (X11)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=['mb'],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='linux-ozone-rel',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
-        'Linux Ozone Tester (Wayland)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=['mb'],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='linux-ozone-rel',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
         'Linux Builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
