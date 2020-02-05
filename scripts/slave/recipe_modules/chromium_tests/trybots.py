@@ -1001,7 +1001,6 @@ TRYBOTS = freeze({
                 simple_bot({
                     'mastername': 'chromium.fyi',
                     'buildername': 'Mac Builder Next',
-                    'tester': 'Mac10.14 Tests',
                 }),
             'mac_chromium_compile_dbg_ng':
                 simple_bot({
