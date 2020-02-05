@@ -611,6 +611,20 @@ TRYBOTS = freeze({
                     'mastername': 'chromium.linux',
                     'buildername': 'linux-ozone-rel',
                 }),
+            'linux-ozone-x11-and-wayland-rel': {
+                'bot_ids': [
+                    {
+                        'mastername': 'chromium.linux',
+                        'buildername': 'linux-ozone-rel',
+                        'tester': 'Linux Ozone Tester (X11)',
+                    },
+                    {
+                        'mastername': 'chromium.linux',
+                        'buildername': 'linux-ozone-rel',
+                        'tester': 'Linux Ozone Tester (Wayland)',
+                    },
+                ],
+            },
             'linux-webkit-msan-rel':
                 simple_bot({
                     'mastername': 'chromium.memory',
