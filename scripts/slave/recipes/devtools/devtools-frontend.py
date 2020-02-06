@@ -22,11 +22,10 @@ DEPS = [
 ]
 
 STEPS_N_SCRIPTS = [
-    ('Unit Tests', 'run_unittests.py'),
-    ('Type Check', 'run_type_check.py'),
-    ('Lint Check', 'run_lint_check.py'),
-    ('Localization Check', 'run_localization_check.py'),
-    ('E2E Tests', 'run_e2e.py'),
+  ('Unit Tests', 'run_unittests.py'),
+  ('Type Check', 'run_type_check.py'),
+  ('Lint Check', 'run_lint_check.py'),
+  ('Localization Check', 'run_localization_check.py'),
 ]
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
