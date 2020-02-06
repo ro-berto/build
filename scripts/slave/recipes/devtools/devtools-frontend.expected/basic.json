@@ -541,6 +541,19 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_e2e.py"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "name": "E2E Tests"
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",

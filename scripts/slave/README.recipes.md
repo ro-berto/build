@@ -4906,11 +4906,11 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipes/devtools/devtools-frontend.py#10): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/devtools/devtools-frontend.py#33)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/devtools/devtools-frontend.py#34)(api):**
 
-&mdash; **def [run\_script](/scripts/slave/recipes/devtools/devtools-frontend.py#83)(api, step_name, script):**
+&mdash; **def [run\_script](/scripts/slave/recipes/devtools/devtools-frontend.py#84)(api, step_name, script):**
 
-&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#110)():**
+&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#111)():**
 ### *recipes* / [disk:examples/full](/scripts/slave/recipe_modules/disk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/disk/examples/full.py#5): [disk](#recipe_modules-disk), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
