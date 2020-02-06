@@ -545,13 +545,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ignored_failures = sorted(ignored_failures)
     ignored_flakes = sorted(ignored_flakes)
 
-    # We add a failure_reason even if we don't mark the build as a failure. This
-    # will contribute to the failure hash if the build eventually fails.
-    self.m.tryserver.add_failure_reason({
-        'test_name': test_suite.name,
-        'new_failures': new_failures,
-    })
-
     suffix = 'test results summary'
     # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
     if (test_suite.name == 'webkit_layout_tests' or
