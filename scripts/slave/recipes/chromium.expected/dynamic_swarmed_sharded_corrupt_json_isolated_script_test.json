@@ -917,7 +917,7 @@
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/110100@@@",
       "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/120200@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {

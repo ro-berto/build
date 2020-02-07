@@ -811,7 +811,7 @@ def GenTests(api):
                   'global_tags': ['UNRELIABLE_RESULTS']
               }, 0),
               shards=2)),
-      api.post_process(post_process.StepFailure,
+      api.post_process(post_process.StepException,
                        'blink_web_tests on Intel GPU on Linux (with patch)'),
       api.post_process(post_process.DropExpectation),
   )

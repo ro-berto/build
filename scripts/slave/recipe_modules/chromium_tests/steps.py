@@ -1267,8 +1267,7 @@ class JSONResultsHandler(ResultsHandler):
         api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
 
     if not results.valid:
-      # TODO(tansell): Change this to api.step.EXCEPTION after discussion.
-      presentation.status = failure_status
+      presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
       return
 
