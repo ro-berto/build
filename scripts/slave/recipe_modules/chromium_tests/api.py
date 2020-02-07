@@ -1340,7 +1340,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if (self.m.tryserver.is_tryserver and
           not self._contains_invalid_results(unrecoverable_test_suites)):
-        self.m.tryserver.set_do_not_retry_build()
+        self.m.cq.set_do_not_retry_build()
 
       return result_pb2.RawResult(
           summary_markdown=self._format_unrecoverable_failures(
