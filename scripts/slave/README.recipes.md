@@ -1908,7 +1908,7 @@ Returns the path to the checked-in SDK dart executable.
 
 Deletes the debug log file
 
-&mdash; **def [download\_browser](/scripts/slave/recipe_modules/dart/api.py#815)(self, runtime, version):**
+&mdash; **def [download\_browser](/scripts/slave/recipe_modules/dart/api.py#813)(self, runtime, version):**
 
 &mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#155)(self):**
 
@@ -1933,8 +1933,6 @@ Returns the created tasks, which can be collected with collect_all().
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.
-
-Raises StepFailure.
 
 &mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#132)(self, isolate_fileset):**
 

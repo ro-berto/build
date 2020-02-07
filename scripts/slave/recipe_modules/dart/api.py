@@ -554,8 +554,6 @@ class DartApi(recipe_api.RecipeApi):
   def test(self, test_data):
     """Reads the test-matrix.json file in checkout and runs each step listed
     in the file.
-
-    Raises StepFailure.
     """
     with self.m.context(infra_steps=True):
       test_matrix_path = self.m.path['checkout'].join('tools', 'bots',
@@ -733,7 +731,7 @@ class DartApi(recipe_api.RecipeApi):
         cwd=self.m.path['checkout'],
         env=step.environment_variables):
       if step.is_gn_step:
-        with self.m.context(infra_steps=True):
+        with self.m.context(infra_steps=False):
           self._run_gn(step)
       elif step.is_build_step:
         self._run_build(step)
