@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/update_flakiness.dart",
+      "-i",
+      "LATEST/flaky.json",
+      "-o",
+      "/path/to/tmp/",
+      "--build-id",
+      "8945511751514863184",
+      "--commit",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      ""
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "update flakiness information",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@",
+      "@@@STEP_EXCEPTION@@@"
+    ]
+  }
+]

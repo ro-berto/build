@@ -406,6 +406,7 @@ def GenTests(api):
           project='dart'),
       api.step_data('build', retcode=1),
       api.post_process(DoesNotRun, 'test1'),
+      api.post_process(StepFailure, 'build'),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
   )
@@ -416,7 +417,7 @@ def GenTests(api):
           builder='this-name-does-not-exist-in-test-matrix',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart'),
-      api.post_process(StatusFailure),
+      api.post_process(StatusException),
   )
 
   yield api.test(
@@ -538,6 +539,114 @@ def GenTests(api):
       api.step_data(
           'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
       api.post_process(StatusSuccess),
+  )
+
+  yield api.test(
+      'non-test-step-error-is-step-failure',
+      api.buildbucket.ci_build(
+          builder='vm-kernel-win-release-simarm_x64',
+          git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
+      api.step_data('dart', retcode=1),
+      api.post_process(StepFailure, 'dart'),
+      api.post_process(Filter('dart')),
+  )
+
+  chunk_upload_step = ('upload new results.'
+                       'upload test results to big query.'
+                       'upload results chunk to big query')
+  yield api.test(
+      'upload-error-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.step_data(chunk_upload_step, retcode=1),
+      api.post_process(StepException, chunk_upload_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(chunk_upload_step)),
+  )
+
+  download_step = 'download previous results.gsutil download previous results'
+  yield api.test(
+      'download-results-error-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data('download previous results.gsutil find latest build',
+                    api.raw_io.output_text("1234", name="latest")),
+      api.step_data(download_step, retcode=1),
+      api.post_process(StepException, download_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(download_step)),
+  )
+
+  deflake_step = 'deflaking.list tests to deflake (co19)'
+  yield api.test(
+      'failed-to-get-tests-to-deflake-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(deflake_step, retcode=1),
+      api.post_process(StepException, deflake_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(deflake_step)),
+  )
+
+  update_flaky_step = 'update flakiness information'
+  yield api.test(
+      'failed-to-update-flaky-data-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(update_flaky_step, retcode=1),
+      api.post_process(StepException, update_flaky_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(update_flaky_step)),
+  )
+
+  update_latest_step = 'upload new results.gsutil update "latest" reference'
+  yield api.test(
+      'failed-to-update-latest-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.step_data(update_latest_step, retcode=1),
+      api.post_process(StepException, update_latest_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(update_latest_step)),
+  )
+
+  upload_step = 'upload new results.gsutil upload revision'
+  yield api.test(
+      'failed-to-upload-is-infra-failure',
+      api.buildbucket.ci_build(
+          builder='co19', git_repo='https://dart.googlesource.com/sdk'),
+      api.step_data(upload_step, retcode=1),
+      api.post_process(StepException, upload_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(upload_step)),
+  )
+
+  publish_step = 'upload new results.publish results to pub/sub'
+  yield api.test(
+      'failed-to-publish-is-infra-failure',
+      api.buildbucket.ci_build(
+          revision='3456abce78ef',
+          build_number=1357,
+          builder='co19',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data('add fields to result records',
+                    api.raw_io.output_text(RESULT_DATA)),
+      api.step_data(publish_step, retcode=1),
+      api.post_process(StepException, publish_step),
+      api.post_process(StatusException),
+      api.post_process(Filter(publish_step)),
   )
 
   yield api.test(

@@ -443,6 +443,7 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -706,7 +707,6 @@
   },
   {
     "failure": {
-      "failure": {},
       "humanReason": "Error, could not find builder by name this-name-does-not-exist-in-test-matrix in test-matrix"
     },
     "name": "$result"

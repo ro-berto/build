@@ -117,10 +117,12 @@ class DartApi(recipe_api.RecipeApi):
       try:
         self.m.goma.start()
         try:
-          self.m.python(name,
-                        self.m.path['checkout'].join('tools', 'build.py'),
-                        args=build_args,
-                        timeout=50 * 60)
+          with self.m.context(infra_steps=False):
+            self.m.python(
+                name,
+                self.m.path['checkout'].join('tools', 'build.py'),
+                args=build_args,
+                timeout=50 * 60)
         finally:
           build_exit_status = self.m.step.active_result.retcode
       finally:
@@ -363,8 +365,7 @@ class DartApi(recipe_api.RecipeApi):
           'dart-test-results',
           'builders/%s/%s/*.json' % (builder, latest),
           results_path,
-          name='download previous results',
-          ok_ret='any')
+          name='download previous results')
 
 
   def _deflake_results(self, step, global_config):
@@ -375,23 +376,20 @@ class DartApi(recipe_api.RecipeApi):
             '--failing', '--count', '50', 'LATEST/results.json',
             self.m.raw_io.input_text(step.results.results)
         ],
-        stdout=self.m.raw_io.output_text(add_output_log=True),
-        ok_ret='any').stdout
+        stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     if step.deflake_list:
       self._run_step(step, global_config)
 
 
   def _update_flakiness_information(self, results_str):
-    flaky_json = self.m.step(
-        'update flakiness information', [
-            self.dart_executable(), 'tools/bots/update_flakiness.dart', '-i',
-            'LATEST/flaky.json', '-o',
-            self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
-            '--build-id', self.m.buildbucket.build.id, '--commit',
-            self.m.buildbucket.gitiles_commit.id,
-            self.m.raw_io.input_text(results_str, name='results.json')
-        ],
-        ok_ret='any')
+    flaky_json = self.m.step('update flakiness information', [
+        self.dart_executable(), 'tools/bots/update_flakiness.dart', '-i',
+        'LATEST/flaky.json', '-o',
+        self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
+        '--build-id', self.m.buildbucket.build.id, '--commit',
+        self.m.buildbucket.gitiles_commit.id,
+        self.m.raw_io.input_text(results_str, name='results.json')
+    ])
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
@@ -412,8 +410,7 @@ class DartApi(recipe_api.RecipeApi):
         new_latest,
         'dart-test-results',
         'builders/%s/%s' % (builder, 'latest'),
-        name='update "latest" reference',
-        ok_ret='any')
+        name='update "latest" reference')
 
 
   def _upload_result(self, builder, build_number, filename, result_str):
@@ -421,8 +418,7 @@ class DartApi(recipe_api.RecipeApi):
         self.m.raw_io.input_text(str(result_str), name=filename),
         'dart-test-results',
         'builders/%s/%s/%s' % (builder, build_number, filename),
-        name='upload %s' % filename,
-        ok_ret='any')
+        name='upload %s' % filename)
 
 
   def _publish_results(self, results_str):
@@ -430,16 +426,13 @@ class DartApi(recipe_api.RecipeApi):
       return
     access_token = self.m.service_account.default().get_access_token(
       ['https://www.googleapis.com/auth/cloud-platform'])
-    self.m.step(
-        'publish results to pub/sub', [
-            self.dart_executable(), self.m.path['checkout'].join(
-                'tools', 'bots',
-                'post_results_to_pubsub.dart'), '--result_file',
-            self.m.raw_io.input_text(results_str), '--auth_token',
-            self.m.raw_io.input_text(access_token), '--id',
-            self.m.buildbucket.build.id
-        ],
-        ok_ret='any')
+    self.m.step('publish results to pub/sub', [
+        self.dart_executable(), self.m.path['checkout'].join(
+            'tools', 'bots', 'post_results_to_pubsub.dart'), '--result_file',
+        self.m.raw_io.input_text(results_str), '--auth_token',
+        self.m.raw_io.input_text(access_token), '--id',
+        self.m.buildbucket.build.id
+    ])
 
 
   def _report_success(self, results_str):
@@ -447,13 +440,14 @@ class DartApi(recipe_api.RecipeApi):
       access_token = self.m.service_account.default().get_access_token(
           ['https://www.googleapis.com/auth/cloud-platform'])
       try:
-        self.m.step('test results', [
-            self.dart_executable(), self.m.path['checkout'].join(
-                'tools', 'bots', 'get_builder_status.dart'), '-b',
-            self.m.buildbucket.builder_name, '-n',
-            self.m.buildbucket.build.number, '-a',
-            self.m.raw_io.input_text(access_token)
-        ])
+        with self.m.context(infra_steps=False):
+          self.m.step('test results', [
+              self.dart_executable(), self.m.path['checkout'].join(
+                  'tools', 'bots', 'get_builder_status.dart'), '-b',
+              self.m.buildbucket.builder_name, '-n',
+              self.m.buildbucket.build.number, '-a',
+              self.m.raw_io.input_text(access_token)
+          ])
       except self.m.step.StepFailure:
         result = self.m.step.active_result
         if result.retcode > 1:
@@ -515,7 +509,8 @@ class DartApi(recipe_api.RecipeApi):
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     with self.m.step.defer_results():
       if self._release_builder():
-        self.m.step('test results', judgement_args)
+        with self.m.context(infra_steps=False):
+          self.m.step('test results', judgement_args)
       else:
         # This call runs a step that the following links get added to.
         self._report_success(results_str)
@@ -562,30 +557,30 @@ class DartApi(recipe_api.RecipeApi):
 
     Raises StepFailure.
     """
-    test_matrix_path = self.m.path['checkout'].join('tools',
-                                                    'bots',
-                                                    'test_matrix.json')
-    read_json = self.m.json.read(
-      'read test-matrix.json',
-      test_matrix_path,
-      step_test_data=lambda: self.m.json.test_api.output(test_data))
-    test_matrix = read_json.json.output
-    builder = str(self.m.buildbucket.builder_name)
-    if builder.endswith(('-be', '-try', '-stable', '-dev')):
-      builder = builder[0:builder.rfind('-')]
-    isolate_hashes = {}
-    global_config = test_matrix['global']
-    config = None
-    for c in test_matrix['builder_configurations']:
-      if builder in c['builders']:
-        config = c
-        break
-    if config is None:
-      raise self.m.step.StepFailure(
-          'Error, could not find builder by name %s in test-matrix' % builder)
-    self.delete_debug_log()
-    self._write_file_sets(test_matrix['filesets'])
-    self._run_steps(config, isolate_hashes, builder, global_config)
+    with self.m.context(infra_steps=True):
+      test_matrix_path = self.m.path['checkout'].join('tools', 'bots',
+                                                      'test_matrix.json')
+      read_json = self.m.json.read(
+          'read test-matrix.json',
+          test_matrix_path,
+          step_test_data=lambda: self.m.json.test_api.output(test_data))
+      test_matrix = read_json.json.output
+      builder = str(self.m.buildbucket.builder_name)
+      if builder.endswith(('-be', '-try', '-stable', '-dev')):
+        builder = builder[0:builder.rfind('-')]
+      isolate_hashes = {}
+      global_config = test_matrix['global']
+      config = None
+      for c in test_matrix['builder_configurations']:
+        if builder in c['builders']:
+          config = c
+          break
+      if config is None:
+        raise self.m.step.InfraFailure(
+            'Error, could not find builder by name %s in test-matrix' % builder)
+      self.delete_debug_log()
+      self._write_file_sets(test_matrix['filesets'])
+      self._run_steps(config, isolate_hashes, builder, global_config)
 
 
   def _write_file_sets(self, filesets):
@@ -714,7 +709,7 @@ class DartApi(recipe_api.RecipeApi):
     test_steps = []
     sharded_steps = []
     with self.m.step.defer_results():
-      for index,step_json in enumerate(config['steps']):
+      for index, step_json in enumerate(config['steps']):
         step = self.TestMatrixStep(self.m, builder_name, config, step_json,
                                    environment, index)
         if step.fileset:
@@ -738,7 +733,8 @@ class DartApi(recipe_api.RecipeApi):
         cwd=self.m.path['checkout'],
         env=step.environment_variables):
       if step.is_gn_step:
-        self._run_gn(step)
+        with self.m.context(infra_steps=True):
+          self._run_gn(step)
       elif step.is_build_step:
         self._run_build(step)
       elif step.is_trigger:
@@ -746,7 +742,8 @@ class DartApi(recipe_api.RecipeApi):
       elif step.is_test_py_step:
         self._run_test_py(step, global_config)
       else:
-        self._run_script(step)
+        with self.m.context(infra_steps=False):
+          self._run_script(step)
 
 
   @recipe_api.non_step
@@ -850,9 +847,7 @@ class DartApi(recipe_api.RecipeApi):
         self.m.step(
             'upload results chunk to big query',
             cmd,
-            stdin=self.m.raw_io.input_text(chunk),
-            infra_step=True,
-            ok_ret='any')
+            stdin=self.m.raw_io.input_text(chunk))
 
 
   def _run_trigger(self, step):

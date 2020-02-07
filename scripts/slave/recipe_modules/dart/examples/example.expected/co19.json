@@ -212,6 +212,7 @@
       "{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (co19)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

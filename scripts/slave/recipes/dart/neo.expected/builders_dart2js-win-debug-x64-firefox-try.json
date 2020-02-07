@@ -175,6 +175,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -379,6 +380,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -414,6 +416,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "kill processes (2)"
   },
   {
@@ -577,6 +580,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -619,6 +623,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -650,6 +655,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -702,6 +708,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -773,6 +780,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "Test-step 1"
   },
   {
@@ -859,6 +867,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "Test-step 2"
   },
   {
@@ -1030,6 +1039,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (Test-step 1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1054,6 +1064,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (Test-step 2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1078,6 +1089,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "update flakiness information",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
@@ -1116,6 +1128,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "add fields to result records"
   },
   {
@@ -1156,6 +1169,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "upload new results.publish results to pub/sub",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1178,6 +1192,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "find new test failures",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1203,6 +1218,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "find new test failures (logs)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1225,6 +1241,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "find tests that began passing",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

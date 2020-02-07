@@ -457,6 +457,7 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -847,6 +848,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "ensure_installed",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1079,6 +1081,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "test2"
   },
   {
@@ -1385,6 +1388,7 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (test1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1406,6 +1410,7 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (test2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1427,6 +1432,7 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "update flakiness information",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
@@ -1459,6 +1465,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "add fields to result records"
   },
   {
@@ -1577,6 +1584,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "upload new results.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1627,6 +1635,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find new test failures",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1649,6 +1658,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find new test failures (logs)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1668,6 +1678,7 @@
       "--passing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find tests that began passing",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1689,6 +1700,7 @@
       "--flaky"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find ignored flaky test failure logs",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

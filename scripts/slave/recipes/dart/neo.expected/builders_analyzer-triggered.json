@@ -146,6 +146,7 @@
     "env": {
       "ANALYZER_STATE_LOCATION_OVERRIDE": "[CLEANUP]/analysis-cache"
     },
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -215,7 +216,6 @@
   },
   {
     "failure": {
-      "failure": {},
       "humanReason": "Error, could not find builder by name analyzer-triggered in test-matrix"
     },
     "name": "$result"

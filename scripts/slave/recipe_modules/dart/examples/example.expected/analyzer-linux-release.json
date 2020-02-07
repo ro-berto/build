@@ -445,6 +445,7 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -828,6 +829,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "kill processes (3)"
   },
   {
@@ -984,6 +986,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1025,6 +1028,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1055,6 +1059,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1108,6 +1113,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1164,6 +1170,7 @@
       "-i[CACHE]/builder/sdk/test",
       "-s[CACHE]/builder/sdk/test.isolated"
     ],
+    "infra_step": true,
     "name": "upload testing fileset test",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming fileset hash: test_hash@@@"
@@ -1184,6 +1191,7 @@
       "-i[CACHE]/builder/sdk/trigger",
       "-s[CACHE]/builder/sdk/trigger.isolated"
     ],
+    "infra_step": true,
     "name": "upload testing fileset trigger",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming fileset hash: trigger_hash@@@"
@@ -1310,6 +1318,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "test2"
   },
   {
@@ -1501,6 +1510,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "test3_shard_2"
   },
   {
@@ -1895,6 +1905,7 @@
       "{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (test1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1963,6 +1974,7 @@
       "{\"name\":\"test1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"bot_name\":\"trusty-dart-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (test2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2002,6 +2014,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "deflaking.test2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2080,6 +2093,7 @@
       "{\"name\":\"test1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "deflaking.list tests to deflake (test3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2119,6 +2133,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "deflaking.test3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2283,6 +2298,7 @@
       "{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test1\",\"bot_name\":\"vm-123\"}\n{\"name\":\"test2\",\"bot_name\":\"vm-123\"}\n{\"name\":\"Flaky/Test/1\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"Flaky/Test/2\",\"bot_name\":\"trusty-dart-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "update flakiness information",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
@@ -2315,6 +2331,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "add fields to result records"
   },
   {
@@ -2453,6 +2470,7 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "upload new results.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2517,6 +2535,7 @@
       "8945511751514863184"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "upload new results.publish results to pub/sub",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -2536,6 +2555,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find new test failures",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -2558,6 +2578,7 @@
       "--failing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find new test failures (logs)",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -2577,6 +2598,7 @@
       "--passing"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find tests that began passing",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -2598,6 +2620,7 @@
       "--flaky"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
     "name": "find ignored flaky test failure logs",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

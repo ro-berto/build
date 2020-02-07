@@ -443,6 +443,7 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -826,6 +827,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "kill processes (3)"
   },
   {
@@ -982,6 +984,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).goma_jsonstatus",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1023,6 +1026,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1053,6 +1057,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).stop_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -1104,6 +1109,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "postprocess_for_goma (2).upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

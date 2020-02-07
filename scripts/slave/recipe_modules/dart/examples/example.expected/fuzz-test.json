@@ -443,6 +443,7 @@
       "[CACHE]/builder/sdk/tools/bots/test_matrix.json",
       "/path/to/tmp/json"
     ],
+    "infra_step": true,
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -822,6 +823,7 @@
       "-i[CACHE]/builder/sdk/test",
       "-s[CACHE]/builder/sdk/test.isolated"
     ],
+    "infra_step": true,
     "name": "upload testing fileset test",
     "~followup_annotations": [
       "@@@STEP_TEXT@swarming fileset hash: test_hash@@@"
