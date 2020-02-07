@@ -40,7 +40,6 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--gerrit",
       "--send-mail"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",

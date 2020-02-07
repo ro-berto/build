@@ -277,7 +277,6 @@
       "git",
       "cl",
       "set-commit",
-      "--gerrit",
       "-i",
       "123"
     ],

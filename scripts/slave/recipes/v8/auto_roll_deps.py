@@ -101,7 +101,7 @@ def RunSteps(api):
           if api.runtime.is_experimental:
             api.step('fake resubmit to CQ', cmd=None)
           else:
-            api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
+            api.git('cl', 'set-commit', '-i', commits[0]['_number'])
           api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
           monitoring_state = 'stale_roll'
