@@ -658,7 +658,8 @@
 
     "chromium_android": {
       "excluded_steps": [
-        "slave_steps"
+        "slave_steps",
+        "Run Clank Test Annotator"
       ],
       "forgiving_optional": [
         "compile"
