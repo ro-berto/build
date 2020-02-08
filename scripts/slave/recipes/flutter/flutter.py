@@ -66,6 +66,16 @@ def Install7za(api):
     yield
 
 
+def EnsureGoldctl(api):
+  with api.step.nest('Download goldctl'):
+    goldctl_cache_dir = api.path['cache'].join('gold')
+    api.cipd.ensure(
+        goldctl_cache_dir,
+        api.cipd.EnsureFile().add_package('skia/tools/goldctl/${platform}',
+                                          'latest'))
+    return goldctl_cache_dir.join('goldctl')
+
+
 @contextmanager
 def MakeTempDir(api, label):
   temp_dir = api.path.mkdtemp('tmp')
@@ -310,6 +320,8 @@ def RunSteps(api):
       'PUB_CACHE': pub_cache,
       # Windows Packaging script assumes this is set.
       'DEPOT_TOOLS': str(api.depot_tools.root),
+      # Goldctl binary for Flutter Gold, used by framework and driver tests.
+      'GOLDCTL': EnsureGoldctl(api),
   }
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
@@ -365,7 +377,7 @@ def RunSteps(api):
 def GenTests(api):
   for experimental in (True, False):
     for should_upload in (True, False):
-      yield api.test(
+      yield (api.test(
           'linux_master_coverage_%s%s' %
           ('_experimental' if experimental else '',
            '_upload' if should_upload else ''),
@@ -374,7 +386,8 @@ def GenTests(api):
               shard='coverage',
               coveralls_lcov_version='5.1.0',
               upload_packages=should_upload),
-      )
+      ) + api.post_check(
+          lambda check, steps: check('Download goldctl' in steps)))
       for platform in ('mac', 'linux', 'win'):
         for branch in ('master', 'dev', 'beta', 'stable'):
           git_ref = 'refs/heads/' + branch
@@ -389,9 +402,10 @@ def GenTests(api):
                   upload_packages=should_upload),
               api.runtime(is_luci=True, is_experimental=experimental),
           )
-          yield test
+          yield test + api.post_check(
+              lambda check, steps: check('Download goldctl' in steps))
 
-  yield api.test(
+  yield (api.test(
       'pull_request',
       api.runtime(is_luci=True, is_experimental=True),
       api.properties(
@@ -400,4 +414,4 @@ def GenTests(api):
           shard='tests',
           fuchsia_ctl_version='version:0.0.2',
           should_upload=False),
-  )
+  ) + api.post_check(lambda check, steps: check('Download goldctl' in steps)))

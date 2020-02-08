@@ -88,6 +88,37 @@
     "name": "submodule update"
   },
   {
+    "cmd": [],
+    "name": "Download goldctl"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\gold",
+      "-ensure-file",
+      "skia/tools/goldctl/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Download goldctl.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"skia/tools/goldctl/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "flutter.bat",
       "doctor"
@@ -95,6 +126,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -113,6 +145,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -224,6 +257,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "SHARD": "tests",
@@ -250,6 +284,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -275,6 +310,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -300,6 +336,7 @@
     "cwd": "[START_DIR]\\flutter",
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
+      "GOLDCTL": "[CACHE]\\gold\\goldctl",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
