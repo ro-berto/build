@@ -113,17 +113,17 @@ def _generate_clang_tidy_comments(api, file_paths):
   # Please see tricium_clang_tidy.py for full docs on what this contains.
   clang_tidy_output = api.file.read_json('read tidy output', warnings_file)
 
-  if clang_tidy_output.get('failed_cc_files') or clang_tidy_output.get(
-      'timed_out_cc_files'):
+  if clang_tidy_output.get('failed_src_files') or clang_tidy_output.get(
+      'timed_out_src_files'):
     api.step.active_result.presentation.status = 'WARNING'
 
-  for failed in clang_tidy_output.get('failed_cc_files', []):
+  for failed in clang_tidy_output.get('failed_src_files', []):
     per_file_comments[failed].add_file_comment(
         'warning: building this file '
         'or its dependencies failed; clang-tidy comments may be incorrect or '
         'incomplete.')
 
-  for timed_out in clang_tidy_output.get('timed_out_cc_files', []):
+  for timed_out in clang_tidy_output.get('timed_out_src_files', []):
     file_comments = per_file_comments[timed_out]
     file_comments.add_file_comment('warning: clang-tidy timed out on this '
                                    'file; issuing diagnostics is impossible.')
@@ -203,8 +203,7 @@ def RunSteps(api):
           if api.path.exists(src_dir.join(f))
       ]
 
-      # FIXME(gbiv): Header support would be nice, but would likely require
-      # tighter gn integration.
+      # TODO(crbug.com/1035017): add headers here
       cc_file_suffixes = {'.cc', '.cpp', '.cxx', '.c'}
       tidyable_paths = [
           p for p in affected if api.path.splitext(p)[1] in cc_file_suffixes
@@ -340,7 +339,7 @@ def GenTests(api):
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
           api.file.read_json({
-              'timed_out_cc_files': ['oh/no.cpp']
+              'timed_out_src_files': ['oh/no.cpp']
           })) + api.post_process(post_process.StepWarning,
                                  'clang-tidy.generate-warnings') +
          api.post_process(
@@ -354,7 +353,7 @@ def GenTests(api):
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
           api.file.read_json({
-              'failed_cc_files': ['path/to/some/cc/file.cpp']
+              'failed_src_files': ['path/to/some/cc/file.cpp']
           })) + api.post_process(post_process.StepWarning,
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
@@ -393,7 +392,7 @@ def GenTests(api):
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
           api.file.read_json({
-              'failed_cc_files': ['path/to/some/cc/file.cpp'],
+              'failed_src_files': ['path/to/some/cc/file.cpp'],
               'diagnostics': [
                   {
                       'file_path': 'path/to/some/cc/file.cpp',

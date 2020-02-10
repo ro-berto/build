@@ -287,7 +287,6 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
 
     return return_code, stdout, findings
 
-
 _TidyAction = collections.namedtuple('_TidyAction',
                                      ['in_dir', 'cc_file', 'flags', 'target'])
 
@@ -387,16 +386,17 @@ def _chunk_iterable(iterable, chunk_size):
 
 
 def _generate_tidy_actions(out_dir,
-                           only_cc_files,
+                           only_src_files,
                            build_targets,
                            compile_commands,
                            build_chunk_size=500):
-  """Figures out hot to lint `only_cc_files` and builds their dependencies.
+  """Figures out how to lint `only_src_files` and builds their dependencies.
 
   Args:
     - out_dir: the out/ directory for us to interrogate
-    - only_cc_files: a set of C++ files to look at. If None, we return
-      information for all of Chrome
+    - only_src_files: a set of C++ files to look at. If None, we pretend you
+      passed in every C/C++ file in compile_commands, ignoring generated
+      targets.
     - build_targets: a function that takes a list of build targets, builds
       them, and returns a list of ones that failed to build.
     - compile_commands: a list of `_CompileCommand`s
@@ -404,13 +404,17 @@ def _generate_tidy_actions(out_dir,
       overflow argv limits.
 
   Returns:
-    A list of `_TidyAction`s, and a list of the CC files we failed to build
-    objects for.
+    A tuple of:
+      - A map of _TidyActions to the list of the file(s) in `only_src_files`
+        that the given _TidyAction lints.
+      - A list of _TidyActions that we failed to build the corresponding
+        `cc_file` for.
   """
-  if only_cc_files is None:
-    all_cc_files = set(x.file_abspath for x in compile_commands)
+  if only_src_files is None:
+    all_src_files = set(x.file_abspath for x in compile_commands)
     # Tricium can't display comments about generated files; ignore them.
-    only_cc_files = sorted(x for x in all_cc_files if not x.startswith(out_dir))
+    only_src_files = sorted(
+        x for x in all_src_files if not x.startswith(out_dir))
 
   cc_to_target_map = collections.defaultdict(list)
   for action in compile_commands:
@@ -422,45 +426,42 @@ def _generate_tidy_actions(out_dir,
         'Multiple actions for %s in compile_commands?' % action.target_name
     target_to_command_map[action.target_name] = action
 
-  actions = []
-  for cc_file in only_cc_files:
-    targets = cc_to_target_map[cc_file]
+  actions = collections.defaultdict(list)
+  for src_file in only_src_files:
+    targets = cc_to_target_map[src_file]
     if not targets:
-      logging.error('No targets found for %r', cc_file)
+      logging.error('No targets found for %r', src_file)
       continue
 
     for target in targets:
       command = target_to_command_map[target]
-      actions.append(
-          _TidyAction(
-              cc_file=cc_file,
-              target=target,
-              in_dir=command.directory,
-              flags=command.command,
-          ))
+      action = _TidyAction(
+          cc_file=src_file,
+          target=target,
+          in_dir=command.directory,
+          flags=command.command,
+      )
+      actions[action].append(src_file)
 
   logging.info('Loaded %d targets', len(actions))
 
-  failing_targets = set()
+  failing_targets = []
   targets_built = 0
   # 500 is arbitrary. If too high, we'll start getting into argv size limits.
-  for targets in _chunk_iterable((x.target for x in actions), build_chunk_size):
+  for actions_subslice in _chunk_iterable(actions, build_chunk_size):
     logging.info('Building target(s) %d-%d / %d', targets_built,
-                 targets_built + len(targets), len(actions))
-    failing_targets |= set(build_targets(targets))
-    targets_built += len(targets)
+                 targets_built + len(actions_subslice), len(actions))
+
+    failed_targets = set(build_targets([x.target for x in actions_subslice]))
+    failing_targets.extend(
+        x for x in actions_subslice if x.target in failed_targets)
+    targets_built += len(actions_subslice)
 
   if failing_targets:
     logging.error('Some targets failed: %r; soldiering on anyway...',
-                  sorted(failing_targets))
+                  sorted(x.target for x in failing_targets))
 
-  failing_cc_files = []
-  for cc_file in only_cc_files:
-    targets = cc_to_target_map[cc_file]
-    if any(target in failing_targets for target in targets):
-      failing_cc_files.append(cc_file)
-
-  return actions, failing_cc_files
+  return actions, failing_targets
 
 
 def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
@@ -481,8 +482,8 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
       otherwise.
 
   Returns:
-    - A set of CC files tidy died with a non-zero exit code on
-    - A set of CC files tidy timed out on
+    - A set of _TidyActions where tidy died with a non-zero exit code
+    - A set of _TidyActions that tidy timed out on
     - A set of all diags emitted by tidy throughout the run.
   """
   # Threads make sharing for testing _way_ easier. Unfortunately, YAML parsing
@@ -504,18 +505,18 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   pool.close()
 
   all_findings = set()
-  timed_out_cc_files = set()
-  failed_cc_files = set()
+  timed_out_actions = set()
+  failed_actions = set()
   for action, result in results:
-    cc_file, flags = action.cc_file, action.flags
+    src_file, flags = action.cc_file, action.flags
 
     invocation_result = result.get(2**30)
     if not invocation_result:
       # Assume that we logged the exception from another thread.
       logging.error(
           'Clang-tidy on %r with flags %r died with an unexpected exception',
-          cc_file, flags)
-      failed_cc_files.add(cc_file)
+          src_file, flags)
+      failed_actions.add(action)
       continue
 
     # Without a timeout here, signals like KeyboardInterrupt won't be
@@ -523,15 +524,15 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
     # https://bugs.python.org/issue21913
     exit_code, stdout, findings = invocation_result
     if exit_code is None:
-      logging.error('Clang-tidy timed out on %r with flags %r', cc_file, flags)
-      timed_out_cc_files.add(cc_file)
+      logging.error('Clang-tidy timed out on %r with flags %r', src_file, flags)
+      timed_out_actions.add(action)
       continue
 
     if exit_code:
       logging.error(
           'Clang-tidy on %r with flags %r exited with '
-          'code %d; stdout/stderr: %r', cc_file, flags, exit_code, stdout)
-      failed_cc_files.add(cc_file)
+          'code %d; stdout/stderr: %r', src_file, flags, exit_code, stdout)
+      failed_actions.add(action)
 
     # (If memory use becomes important, there's _a ton_ of duplicated
     # strings in these. Would probably be pretty trivial to intern them.)
@@ -539,7 +540,7 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
 
   pool.join()
 
-  return failed_cc_files, timed_out_cc_files, all_findings
+  return failed_actions, timed_out_actions, all_findings
 
 
 def _filter_invalid_findings(diags):
@@ -582,16 +583,86 @@ def _normalize_path_to_base(path, base):
   return None
 
 
-def _normalize_paths_to_base(paths, base):
-  return [_normalize_path_to_base(p, base) for p in paths]
+def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
+                                  failed_tidy_actions, timed_out_actions,
+                                  findings):
+  """Converts the results of this run into a JSON-serializable object.
 
+  Args:
+    base_path: The base path to the Chromium checkout. All output paths will
+      be made relative to this. Any paths outside of it will be discarded.
+    tidy_actions: The mapping of {_TidyAction: source_files_it_covers}.
+    failed_actions: _TidyActions for which we failed to build one or more
+      source files that the tidy action covers.
+    failed_tidy_actions: _TidyActions for which tidy exited with an error.
+    timed_out_actions: _TidyActions that we timed out while executing.
+    findings: A collection of all clang-tidy diagnostics we observed.
 
-def _normalize_diags_to_base(diags, base):
-  normalized = (_normalize_path_to_base(d.file_path, base) for d in diags)
-  return [
-      None if n is None else diag._replace(file_path=n)
-      for diag, n in zip(diags, normalized)
-  ]
+  Returns:
+    A JSON object that represents the entire result of this script.
+  """
+  if failed_tidy_actions:
+    logging.warning(
+        'clang-tidy failed for some reason on the following file(s): %s',
+        sorted(x.cc_file for x in failed_tidy_actions))
+
+  findings = _filter_invalid_findings(findings)
+
+  def normalized_src_files_for_actions(tidy_actions_subset):
+    seen = set()
+    for action in tidy_actions_subset:
+      for src_file in tidy_actions[action]:
+        if src_file in seen:
+          continue
+
+        seen.add(src_file)
+        normalized = _normalize_path_to_base(src_file, base_path)
+        yield src_file, normalized
+
+  failed_src_files = []
+  for src_file, normalized in normalized_src_files_for_actions(failed_actions):
+    if normalized is None:
+      logging.info('Dropping failed src file %s in normalization', src_file)
+    else:
+      failed_src_files.append(normalized)
+
+  timed_out_src_files = []
+  for src_file, normalized in normalized_src_files_for_actions(
+      timed_out_actions):
+    if normalized is None:
+      logging.info('Dropping timed out src file %s in normalization', src_file)
+    else:
+      timed_out_src_files.append(normalized)
+
+  all_diagnostics = []
+  for diag in findings:
+    normalized = _normalize_path_to_base(diag.file_path, base_path)
+    if normalized is None:
+      logging.info('Dropping out-of-base diagnostic from %s', diag.file_path)
+    else:
+      all_diagnostics.append(diag._replace(file_path=normalized))
+
+  # This is the object that we ship to Tricium. Comments are overdescriptive
+  # so that people don't have to reason about code above in order to
+  # understand what each piece of this is.
+  #
+  # Since the recipe is expected to normalize stuff for us, all paths returned
+  # here should be absolute.
+  return {
+      # A list of .cc files that we failed to build one or more targets for.
+      # This could indicate that we're going to provide incomplete or incorrect
+      # diagnostics, since e.g. generated headers may be missing.
+      'failed_src_files': sorted(set(failed_src_files)),
+
+      # A list of .cc files that we failed to tidy due to internal timeouts.
+      # This should hopefully never happen, but it's *probably* good to know
+      # when it's the case.
+      'timed_out_src_files': sorted(set(timed_out_src_files)),
+
+      # A list of all of the diagnostics we've seen in this run. They're
+      # instances of `_TidyDiagnostic`.
+      'diagnostics': [x.to_dict() for x in all_diagnostics],
+  }
 
 
 def main():
@@ -611,10 +682,15 @@ def main():
   parser.add_argument(
       '--ninja_jobs', type=int, help='Number of jobs to run `ninja` with')
   parser.add_argument(
+      '--no_clean',
+      dest='clean',
+      action='store_false',
+      help='Don\'t clean the build directory before running clang-tidy. ')
+  parser.add_argument(
       '--out_dir', required=True, help='Chromium out/ directory')
   parser.add_argument(
       '--findings_file', required=True, help='Where to dump findings as JSON')
-  parser.add_argument('cc_file', nargs='*', help='C/C++ files to lint')
+  parser.add_argument('src_file', nargs='*', help='C/C++ files to lint')
   parser.add_argument(
       '--all',
       action='store_true',
@@ -627,7 +703,7 @@ def main():
 
   # Mututally exclusive arg groups apparently don't like positional args, so
   # emulate that here.
-  if bool(args.cc_file) == args.all:
+  if bool(args.src_file) == args.all:
     parser.error('Please either specify files to lint, or pass --all')
 
   if args.debug:
@@ -641,85 +717,52 @@ def main():
   clang_tidy_binary = args.clang_tidy_binary
 
   if args.all:
-    only_cc_files = None
+    only_src_files = None
   else:
-    only_cc_files = [os.path.realpath(f) for f in args.cc_file]
+    only_src_files = [os.path.realpath(f) for f in args.src_file]
 
-    if len(set(only_cc_files)) != len(only_cc_files):
-      sys.exit('Multiple identical cc_files given. This is unsupported.')
+    if len(set(only_src_files)) != len(only_src_files):
+      sys.exit('Multiple identical src_files given. This is unsupported.')
 
-    for cc_file in only_cc_files:
-      if not os.path.isfile(cc_file):
-        sys.exit('Provided cc_file at %r does not exist' % cc_file)
+    for src_file in only_src_files:
+      if not os.path.isfile(src_file):
+        sys.exit('Provided src_file at %r does not exist' % src_file)
 
   compile_commands_location = _generate_compile_commands(out_dir)
+  if args.clean:
+    subprocess.check_call(['ninja', '-t', 'clean'], cwd=out_dir)
+
+
   with open(compile_commands_location) as f:
-    tidy_actions, failed_cc_files = _generate_tidy_actions(
+    tidy_actions, failed_actions = _generate_tidy_actions(
         out_dir,
-        only_cc_files,
+        only_src_files,
         build_targets=
         lambda targets: _try_build_targets(out_dir, targets, args.ninja_jobs),
         compile_commands=list(_parse_compile_commands(f)))
 
   if logging.getLogger().isEnabledFor(logging.DEBUG):
     logging.debug('Plan to tidy %s.', [x.target for x in tidy_actions])
+    logging.debug('File mappings are: %s',
+                  {x.target: y for x, y in tidy_actions.items()})
   else:
     logging.info('Plan to tidy %d targets.', len(tidy_actions))
 
-  # FIXME(gbiv): We might want to do something with failed_tidy_cc_files some
+  # FIXME(gbiv): We might want to do something with failed_tidy_src_files some
   # day. The issue is that a clang-tidy death can indicate all sorts of things:
   # it could be as simple as a clang -Werror diag being tripped, or clang-tidy
   # crashing on the given file outright. Teasing things like these apart so
   # they can be surfaced to the user is likely valuable.
-  failed_tidy_cc_files, timed_out_cc_files, findings = _run_all_tidy_actions(
+  failed_tidy_actions, timed_out_actions, findings = _run_all_tidy_actions(
       tidy_actions,
       _run_tidy_action,
       args.tidy_jobs,
       clang_tidy_binary,
       use_threads=False)
 
-  if failed_tidy_cc_files:
-    logging.warning(
-        'clang-tidy failed for some reason on the following file(s): %s',
-        failed_tidy_cc_files)
-
-  findings = _filter_invalid_findings(findings)
-
-  def logged_normalize(normalize_fn, thing, thing_name):
-    after = normalize_fn(thing, base_path)
-    removed = [old for old, new in zip(thing, after) if new is None]
-    logging.info('Dropped %d elements from %r during path normalization: %s',
-                 len(removed), thing_name, removed)
-    return sorted(x for x in after if x is not None)
-
-  # This is the object that we ship to Tricium. Comments are overdescriptive
-  # so that people don't have to reason about code above in order to
-  # understand what each piece of this is.
-  #
-  # Since the recipe is expected to normalize stuff for us, all paths returned
-  # here should be absolute.
-  results = {
-      # A list of .cc files that we failed to build one or more targets for.
-      # This could indicate that we're going to provide incomplete or incorrect
-      # diagnostics, since e.g. generated headers may be missing.
-      'failed_cc_files':
-          logged_normalize(_normalize_paths_to_base, failed_cc_files,
-                           'failed_cc_files'),
-
-      # A list of .cc files that we failed to tidy due to internal timeouts.
-      # This should hopefully never happen, but it's *probably* good to know
-      # when it's the case.
-      'timed_out_cc_files':
-          logged_normalize(_normalize_paths_to_base, timed_out_cc_files,
-                           'timed_out_cc_files'),
-
-      # A list of all of the diagnostics we've seen in this run. They're
-      # instances of `_TidyDiagnostic`.
-      'diagnostics': [
-          x.to_dict() for x in logged_normalize(_normalize_diags_to_base,
-                                                findings, 'findings')
-      ],
-  }
+  results = _convert_tidy_output_json_obj(base_path, tidy_actions,
+                                          failed_actions, failed_tidy_actions,
+                                          timed_out_actions, findings)
 
   # Do a two-step write, so the user can't see partial results.
   tempfile_name = findings_file + '.new'
