@@ -586,31 +586,6 @@ SPEC = {
                 # our compile line. We want to build everything.
                 add_tests_as_compile_targets=False,
             ),
-        'ToTWinLibcxx64':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium_win_clang_official_tot',
-                chromium_apply_config=['mb'],
-                gclient_config='chromium',
-                gclient_apply_config=['clang_tot'],
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                compile_targets=[
-                    'all',
-                ],
-                bot_type=bot_spec.BUILDER_TESTER,
-                test_results_config='staging_server',
-                testing={
-                    'platform': 'win',
-                },
-                tests=[
-                    steps.SizesStep(RESULTS_URL, 'ToTWinLibcxx64'),
-                ],
-                # Workaround so that recipes doesn't add random build targets to
-                # our compile line. We want to build everything.
-                add_tests_as_compile_targets=False,
-            ),
         'ToTWin64(dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium_win_clang_tot',
