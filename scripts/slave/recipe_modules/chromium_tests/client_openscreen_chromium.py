@@ -4,6 +4,20 @@
 
 from . import bot_spec
 
+COMPILE_TARGETS = [
+  'chrome/browser/media/router',
+  'chrome/browser/media/router:unittests',
+  'components/cast_certificate',
+  'components/cast_certificate:unit_tests',
+  'components/cast_channel',
+  'components/cast_channel:unit_tests',
+  'components/mirroring/browser',
+  'components/mirroring/service:mirroring_service',
+  'components/mirroring:mirroring_tests',
+  'components/mirroring:mirroring_unittests',
+  'components/openscreen_platform',
+]
+
 SPEC = {
     'settings': {
         'luci_project': 'openscreen',
@@ -20,9 +34,7 @@ SPEC = {
                     'TARGET_BITS': 64,
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
-                compile_targets=[
-                    'chrome/browser/media/router',
-                ],
+                compile_targets=COMPILE_TARGETS,
                 testing={
                     'platform': 'linux',
                 },
@@ -38,9 +50,7 @@ SPEC = {
                     'TARGET_BITS': 64,
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
-                compile_targets=[
-                    'chrome/browser/media/router',
-                ],
+                compile_targets=COMPILE_TARGETS,
                 testing={
                     'platform': 'mac',
                 },
