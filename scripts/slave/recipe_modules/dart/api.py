@@ -800,12 +800,12 @@ class DartApi(recipe_api.RecipeApi):
         try:
           # Try builders do not upload results, only publish to pub/sub
           with self.m.step.nest('upload new results'):
+            if results_str:
+              self._publish_results(results_str)
             if not self._try_builder():
               self._upload_results_to_cloud(flaky_json_str, logs_str,
                                             results_str)
               self._upload_results_to_bq(results_str)
-            if results_str:
-              self._publish_results(results_str)
         finally:
           self._present_results(logs_str, results_str, flaky_json_str)
 
