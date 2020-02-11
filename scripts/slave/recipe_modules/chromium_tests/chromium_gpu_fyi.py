@@ -20,6 +20,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -41,6 +42,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -62,6 +64,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -161,6 +164,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -182,6 +186,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -199,7 +204,11 @@ SPEC = {
                     'mb',
                 ],
                 gclient_config='chromium',
-                gclient_apply_config=['chrome_internal', 'angle_internal'],
+                gclient_apply_config=[
+                    'chrome_internal',
+                    'angle_internal',
+                    'no_kaleidoscope',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -220,6 +229,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -247,6 +257,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -268,6 +279,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -577,6 +589,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -623,6 +636,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -640,7 +654,11 @@ SPEC = {
                     'mb',
                 ],
                 gclient_config='chromium',
-                gclient_apply_config=['chrome_internal', 'angle_internal'],
+                gclient_apply_config=[
+                    'chrome_internal',
+                    'angle_internal',
+                    'no_kaleidoscope',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -661,6 +679,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -682,6 +701,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -703,6 +723,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -906,6 +927,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -962,6 +984,7 @@ SPEC = {
                     'angle_internal',
                     'angle_top_of_tree',
                     'fuchsia',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -984,6 +1007,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -1001,7 +1025,11 @@ SPEC = {
                     'mb',
                 ],
                 gclient_config='chromium',
-                gclient_apply_config=['chrome_internal', 'angle_internal'],
+                gclient_apply_config=[
+                    'chrome_internal',
+                    'angle_internal',
+                    'no_kaleidoscope',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -1022,6 +1050,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -1041,6 +1070,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -1246,6 +1276,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -1265,6 +1296,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -1286,6 +1318,7 @@ SPEC = {
                     'chrome_internal',
                     'angle_internal',
                     'angle_top_of_tree',
+                    'no_kaleidoscope',
                 ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import DropExpectation
+from recipe_engine import post_process
 
 DEPS = [
   'depot_tools/gclient',
@@ -46,30 +46,36 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.properties(apply_gclient_config='checkout_instrumented_libraries'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'clang_coverage',
       api.properties(apply_gclient_config='use_clang_coverage'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'clang_tidy',
       api.properties(apply_gclient_config='use_clang_tidy'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'tot_clang',
       api.properties(apply_gclient_config='clang_tot'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'ios_webkit_tot',
       api.properties(apply_gclient_config='ios_webkit_tot'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'no_checkout_flash',
       api.properties(apply_gclient_config='no_checkout_flash'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'no_kaleidoscope',
+      api.properties(apply_gclient_config='no_kaleidoscope'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
