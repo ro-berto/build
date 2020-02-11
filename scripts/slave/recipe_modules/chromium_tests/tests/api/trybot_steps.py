@@ -28,8 +28,8 @@ _TEST_BUILDERS = {
         'builders': {
             'staging-chromium-rel': {
                 'chromium_config': 'chromium',
-                'chromium_tests_apply_config': ['staging'],
                 'gclient_config': 'chromium',
+                'chromium_tests_apply_config': ['staging'],
             },
             'staging-chromium-test-rel': {
                 'gclient_config': 'chromium',
@@ -41,6 +41,7 @@ _TEST_BUILDERS = {
             },
             'retry-shards-test': {
                 'bot_type': 'tester',
+                'parent_buildername': 'retry-shards',
             },
         },
     },

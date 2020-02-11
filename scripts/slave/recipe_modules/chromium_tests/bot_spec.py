@@ -6,7 +6,6 @@ import attr
 from attr import converters, validators
 import collections
 import itertools
-import sys
 
 from recipe_engine.types import FrozenDict, freeze
 
@@ -44,6 +43,12 @@ class BotSpec(collections.Mapping):
   acts as a mapping with an item for each field whose value is not None, with
   the name of the field as the key.
   """
+
+  @classmethod
+  def normalize(cls, spec):
+    if isinstance(spec, cls):
+      return spec
+    return cls.create(**spec)
 
   @classmethod
   def create(cls, **kwargs):

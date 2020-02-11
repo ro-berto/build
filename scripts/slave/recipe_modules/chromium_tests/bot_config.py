@@ -5,11 +5,12 @@
 import ast
 import collections
 import copy
+import sys
 
 from recipe_engine.types import freeze
 
 from . import bot_spec
-from .attr_util import attrs
+from . import attr_util
 
 
 class BotConfig(object):
@@ -24,6 +25,33 @@ class BotConfig(object):
   """
 
   def __init__(self, bots_dict, bot_ids):
+    updated_masters = {}
+    for master_name, master_config in bots_dict.iteritems():
+      updated_builders = {}
+      builders = master_config.get('builders', {})
+      for builder_name, spec in builders.iteritems():
+        try:
+          new_spec = bot_spec.BotSpec.normalize(spec)
+        except Exception as e:
+          # Re-raise the exception with information that identifies the builder
+          # dict that is problematic
+          message = '{} while creating spec for ({!r}, {!r}): {}'.format(
+              e.message, master_name, builder_name, spec)
+          raise type(e)(message), None, sys.exc_info()[2]
+        if new_spec is not spec:
+          updated_builders[builder_name] = new_spec
+      if updated_builders:
+        builders = dict(master_config['builders'])
+        builders.update(updated_builders)
+        master_config = dict(master_config)
+        master_config['builders'] = builders
+        updated_masters[master_name] = master_config
+
+    if updated_masters:
+      bots_dict = dict(bots_dict)
+      bots_dict.update(updated_masters)
+      bots_dict = freeze(bots_dict)
+
     self._bots_dict = bots_dict
 
     assert len(bot_ids) >= 1

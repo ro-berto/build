@@ -153,6 +153,7 @@
   * [chromium_tests:tests/api/trybot_steps_with_specific_tests](#recipes-chromium_tests_tests_api_trybot_steps_with_specific_tests)
   * [chromium_tests:tests/api/wrap_chromium_tests](#recipes-chromium_tests_tests_api_wrap_chromium_tests)
   * [chromium_tests:tests/attr_util](#recipes-chromium_tests_tests_attr_util)
+  * [chromium_tests:tests/bot_config](#recipes-chromium_tests_tests_bot_config)
   * [chromium_tests:tests/bot_spec](#recipes-chromium_tests_tests_bot_spec)
   * [chromium_tests:tests/builders](#recipes-chromium_tests_tests_builders) &mdash; Test to ensure the validity of the entries within BUILDERS.
   * [chromium_tests:tests/configs](#recipes-chromium_tests_tests_configs)
@@ -4520,7 +4521,7 @@ linked by commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#9): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#81)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#82)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_for_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_for_tests.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -4541,6 +4542,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/attr_util.py#13): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/attr_util.py#18)(api):**
+### *recipes* / [chromium\_tests:tests/bot\_config](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#10): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/bot\_spec](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#12): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
