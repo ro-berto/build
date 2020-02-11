@@ -4912,9 +4912,9 @@ Kills leftover tasks from previous runs or steps.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/devtools/devtools-frontend.py#33)(api):**
 
-&mdash; **def [run\_script](/scripts/slave/recipes/devtools/devtools-frontend.py#83)(api, step_name, script):**
+&mdash; **def [run\_script](/scripts/slave/recipes/devtools/devtools-frontend.py#84)(api, step_name, script):**
 
-&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#110)():**
+&mdash; **def [test\_cov\_data](/scripts/slave/recipes/devtools/devtools-frontend.py#111)():**
 ### *recipes* / [disk:examples/full](/scripts/slave/recipe_modules/disk/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/disk/examples/full.py#5): [disk](#recipe_modules-disk), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

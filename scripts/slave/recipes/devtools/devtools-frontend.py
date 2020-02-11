@@ -49,12 +49,13 @@ def RunSteps(api):
 
     report_file = api.path['checkout'].join('karma-coverage',
                                             'coverage-summary.json')
-    summary = api.file.read_json(
-        'Coverage summary', report_file, test_data=test_cov_data())
+    if api.path.exists(report_file):
+      summary = api.file.read_json(
+          'Coverage summary', report_file, test_data=test_cov_data())
 
-    s = api.step.active_result
-    s.presentation.step_text = "Statement coverage %s%%" % summary['total'][
-        'statements']['pct']
+      s = api.step.active_result
+      s.presentation.step_text = "Statement coverage %s%%" % summary['total'][
+          'statements']['pct']
 
 
 def _configure(api):
@@ -128,8 +129,14 @@ def test_cov_data():
 
 def GenTests(api):
   yield api.test(
-      'basic',
+      'basic no cov',
       api.properties(path_config='generic'),
+  )
+  yield api.test(
+      'basic with cov',
+      api.properties(path_config='generic'),
+      api.path.exists(api.path['checkout'].join('karma-coverage',
+                                                'coverage-summary.json')),
   )
   yield api.test(
       'compile failure',
