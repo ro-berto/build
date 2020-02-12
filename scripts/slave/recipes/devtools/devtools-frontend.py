@@ -52,6 +52,9 @@ def RunSteps(api):
 
     publish_coverage_points(api)
 
+    if on_cq_experiment(api):
+      run_script(api, 'E2E tests', 'run_e2e.py')
+
 
 def _configure(api):
   _configure_source(api)
@@ -103,6 +106,14 @@ def _depot_on_path(api):
     yield
 
 
+def on_cq_experiment(api):
+  for tag in api.buildbucket.build.tags:
+    if tag.key == 'cq_experimental':
+      return tag.value == 'true'
+
+  return False
+
+
 def test_cov_data():
   return {
       "total": {
@@ -120,7 +131,6 @@ def test_cov_data():
           },
       }
   }
-
 
 def publish_coverage_points(api):
   if api.tryserver.is_tryserver:
@@ -157,7 +167,7 @@ def _point(api, dimension, totals):
 
 
 def GenTests(api):
-  yield (api.test('basic try') + api.properties(
+  yield api.test('basic try') + api.properties(
       path_config='generic',
       mastername='tryserver.devtools-frontend',
   ) + api.buildbucket.try_build(
@@ -165,16 +175,22 @@ def GenTests(api):
       'linux',
       git_repo='https://chromium.googlesource.com/chromium/src',
       change_number=91827,
-      patch_set=1))
-  yield (api.test('basic no cov') + api.properties(
+      patch_set=1)
+  yield api.test('basic no cov') + api.properties(
       path_config='generic',
       mastername='tryserver.devtools-frontend',
-  ))
-  yield (api.test('basic with cov') + api.properties(
-      path_config='generic', mastername='tryserver.devtools-frontend') +
-         api.path.exists(api.path['checkout'].join('karma-coverage',
-                                                   'coverage-summary.json')))
-  yield (api.test('compile failure') + api.properties(
+  )
+  yield api.test('basic with cov') + api.properties(
+      path_config='generic',
+      mastername='tryserver.devtools-frontend') + api.path.exists(
+          api.path['checkout'].join('karma-coverage', 'coverage-summary.json'))
+  yield api.test(
+      'experimental',
+      api.properties(path_config='generic'),
+  ) + api.buildbucket.try_build(
+      tags=api.buildbucket.tags(cq_experimental='true'))
+  yield api.test('compile failure') + api.properties(
       path_config='generic',
       mastername='tryserver.devtools-frontend',
-  ) + api.step_data('compile', retcode=1) + api.post_process(StatusFailure))
+  ) + api.step_data(
+      'compile', retcode=1) + api.post_process(StatusFailure)
