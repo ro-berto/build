@@ -13,6 +13,9 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/git',
     'depot_tools/gclient',
+    'depot_tools/tryserver',
+    'perf_dashboard',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
@@ -47,15 +50,7 @@ def RunSteps(api):
     for step, script in STEPS_N_SCRIPTS:
       run_script(api, step, script)
 
-    report_file = api.path['checkout'].join('karma-coverage',
-                                            'coverage-summary.json')
-    if api.path.exists(report_file):
-      summary = api.file.read_json(
-          'Coverage summary', report_file, test_data=test_cov_data())
-
-      s = api.step.active_result
-      s.presentation.step_text = "Statement coverage %s%%" % summary['total'][
-          'statements']['pct']
+    publish_coverage_points(api)
 
 
 def _configure(api):
@@ -127,20 +122,59 @@ def test_cov_data():
   }
 
 
+def publish_coverage_points(api):
+  if api.tryserver.is_tryserver:
+    return
+
+  dimensions = ["lines", "statements", "functions", "branches"]
+
+  report_file = api.path['checkout'].join('karma-coverage',
+                                          'coverage-summary.json')
+  if api.path.exists(report_file):
+    summary = api.file.read_json(
+        'Coverage summary', report_file, test_data=test_cov_data())
+    totals = summary['total']
+    api.step.active_result.presentation.step_text = "".join([
+        "\n%s: %s%%" % (dim.capitalize(), totals[dim]['pct'])
+        for dim in dimensions
+    ])
+
+    points = [_point(api, dim, summary['total']) for dim in dimensions]
+    api.perf_dashboard.add_point(points, halt_on_failure=True)
+
+
+def _point(api, dimension, totals):
+  p = api.perf_dashboard.get_skeleton_point(
+      '/'.join(['devtools.infra', 'coverage', dimension]),
+      api.buildbucket.build.number,
+      totals[dimension]['pct'],
+  )
+  p['supplemental_columns'] = {
+      'a_default_rev': 'r_devtools_git',
+      'r_devtools_git': api.bot_update.last_returned_properties['got_revision'],
+  }
+  return p
+
+
 def GenTests(api):
-  yield api.test(
-      'basic no cov',
-      api.properties(path_config='generic'),
-  )
-  yield api.test(
-      'basic with cov',
-      api.properties(path_config='generic'),
-      api.path.exists(api.path['checkout'].join('karma-coverage',
-                                                'coverage-summary.json')),
-  )
-  yield api.test(
-      'compile failure',
-      api.properties(path_config='generic'),
-      api.step_data('compile', retcode=1),
-      api.post_process(StatusFailure),
-  )
+  yield (api.test('basic try') + api.properties(
+      path_config='generic',
+      mastername='tryserver.devtools-frontend',
+  ) + api.buildbucket.try_build(
+      'devtools',
+      'linux',
+      git_repo='https://chromium.googlesource.com/chromium/src',
+      change_number=91827,
+      patch_set=1))
+  yield (api.test('basic no cov') + api.properties(
+      path_config='generic',
+      mastername='tryserver.devtools-frontend',
+  ))
+  yield (api.test('basic with cov') + api.properties(
+      path_config='generic', mastername='tryserver.devtools-frontend') +
+         api.path.exists(api.path['checkout'].join('karma-coverage',
+                                                   'coverage-summary.json')))
+  yield (api.test('compile failure') + api.properties(
+      path_config='generic',
+      mastername='tryserver.devtools-frontend',
+  ) + api.step_data('compile', retcode=1) + api.post_process(StatusFailure))

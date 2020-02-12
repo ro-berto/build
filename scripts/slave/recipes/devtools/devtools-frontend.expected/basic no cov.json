@@ -434,8 +434,10 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}",
-      "--is-luci"
+      "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
+      "--is-luci",
+      "--buildbot-mastername",
+      "tryserver.devtools-frontend"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {

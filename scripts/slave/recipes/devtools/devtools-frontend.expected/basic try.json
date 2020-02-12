@@ -1,11 +1,54 @@
 [
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=91827",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "cwd": "[BUILDER_CACHE]",
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit fetch current CL info",
+    "timeout": 600,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/27/91827/1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'devtools-frontend', 'url': 'https://chromium.googlesource.com/devtools/devtools-frontend.git'}]",
+      "--patch_root",
+      "devtools-frontend",
       "--revision_mapping_file",
       "{\"got_revision\": \"devtools-frontend\"}",
       "--git-cache-dir",
@@ -14,6 +57,8 @@
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
+      "--patch_ref",
+      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/27/91827/1",
       "--revision",
       "devtools-frontend@HEAD"
     ],
@@ -163,7 +208,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data"
+      "[GOMA_CACHE]/data/builder"
     ],
     "cwd": "[BUILDER_CACHE]/devtools-frontend",
     "env": {
@@ -191,12 +236,12 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -274,28 +319,32 @@
         "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@{@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@  \"failures\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@    {@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"dependencies\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"b/a.cc\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output\": \"        filename:row:col: error: error info\", @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"output_nodes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@        \"a.o\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@      \"rule\": \"CXX\"@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@    }@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output[ninja_info]@}@@@",
-      "@@@STEP_LOG_END@json.output[ninja_info]@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@[1/1] CXX a.o@@@",
-      "@@@STEP_LOG_LINE@raw_io.output[failure_summary]@filename:row:col: error: error info@@@",
-      "@@@STEP_LOG_END@raw_io.output[failure_summary]@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/autoninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/devtools-frontend/out/Release",
+      "-j",
+      "80",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/devtools-frontend",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -418,7 +467,7 @@
       "--ninja-log-command-file",
       "[\"RECIPE_REPO[depot_tools]/autoninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/devtools-frontend/out/Release\", \"-j\", 80]",
       "--build-exit-status",
-      "1",
+      "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
@@ -429,9 +478,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.devtools-frontend\", \"builder\": \"\", \"project\": \"\"}",
+      "{\"bucket\": \"linux\", \"builder\": \"builder\", \"project\": \"devtools\"}",
       "--is-luci",
+      "--buildbot-buildername",
+      "builder",
       "--buildbot-mastername",
       "tryserver.devtools-frontend"
     ],
@@ -486,10 +539,58 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "#### Step _compile_ failed. Error logs are shown below:\n```\n[1/1] CXX a.o\nfilename:row:col: error: error info\n```\n#### More information in raw_io.output[failure_summary]"
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_unittests.py"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
     },
+    "name": "Unit Tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_type_check.py"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "name": "Type Check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_lint_check.py"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "name": "Lint Check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/devtools-frontend/scripts/test/run_localization_check.py"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/devtools-frontend/third_party"
+      ]
+    },
+    "name": "Localization Check"
+  },
+  {
     "name": "$result"
   }
 ]
