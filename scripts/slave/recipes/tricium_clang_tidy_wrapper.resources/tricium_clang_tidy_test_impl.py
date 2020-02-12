@@ -32,7 +32,7 @@ def _parse_fixes_file_text(line_offsets,
                            tidy_invocation_dir='/tidy/dir'):
   return list(
       tidy._parse_tidy_fixes_file(
-          line_offsets=line_offsets,
+          read_line_offsets=lambda _file_path: line_offsets,
           stream=_to_stringio(contents_text),
           tidy_invocation_dir=tidy_invocation_dir))
 
@@ -179,6 +179,99 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         _parse_fixes_file_text(input_file, diag_yaml, tidy_invocation_dir),
         tidy_diags)
+
+  def test_fix_parsing_handles_multiple_files_gracefully(self):
+    tidy_diags = [
+        tidy._TidyDiagnostic(
+            file_path='/foo1',
+            line_number=1,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+        tidy._TidyDiagnostic(
+            file_path='/foo1',
+            line_number=1,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+        tidy._TidyDiagnostic(
+            file_path='/foo1',
+            line_number=2,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+        tidy._TidyDiagnostic(
+            file_path='/foo2',
+            line_number=1,
+            diag_name='-Wfoo2',
+            message='foo2',
+            replacements=()),
+    ]
+    diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
+
+    def read_file_offsets(file_path):
+      if file_path == '/foo1':
+        return tidy._LineOffsetMap.for_text('_\n')
+      if file_path == '/foo2':
+        return tidy._LineOffsetMap.for_text('')
+      self.fail('Unknown file path %s' % file_path)
+
+    fixes = list(
+        tidy._parse_tidy_fixes_file(
+            read_file_offsets,
+            _to_stringio(diag_yaml),
+            tidy_invocation_dir='/tidy'))
+    self.assertEqual(fixes, tidy_diags)
+
+  def test_fix_parsing_doesnt_read_the_same_offsets_twice(self):
+    tidy_diags = [
+        tidy._TidyDiagnostic(
+            file_path='/foo1',
+            line_number=1,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+        tidy._TidyDiagnostic(
+            file_path='/foo1',
+            line_number=1,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+        tidy._TidyDiagnostic(
+            file_path='/foo2',
+            line_number=2,
+            diag_name='-Wfoo2',
+            message='foo2',
+            replacements=()),
+    ]
+    diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
+    retrievals = collections.defaultdict(int)
+
+    def read_file_offsets(file_path):
+      retrievals[file_path] += 1
+      return tidy._LineOffsetMap.for_text('')
+
+    list(
+        tidy._parse_tidy_fixes_file(
+            read_file_offsets,
+            _to_stringio(diag_yaml),
+            tidy_invocation_dir='/tidy'))
+    self.assertEqual(retrievals, {'/foo1': 1, '/foo2': 1})
+
+  def test_fix_parsing_handles_empty_file_paths_gracefully(self):
+    tidy_diags = [
+        tidy._TidyDiagnostic(
+            file_path='',
+            line_number=1,
+            diag_name='-Wfoo1',
+            message='foo1',
+            replacements=()),
+    ]
+    self.assertEqual(
+        _parse_fixes_file_text(
+            line_offsets=None,
+            contents_text=_convert_tidy_diags_to_yaml(tidy_diags),
+            tidy_invocation_dir='/tidy'), tidy_diags)
 
   def test_generate_tidy_actions_actually_builds_everything(self):
     chunk_size = 2

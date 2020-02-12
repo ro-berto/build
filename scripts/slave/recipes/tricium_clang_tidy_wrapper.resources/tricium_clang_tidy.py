@@ -153,7 +153,18 @@ class _LineOffsetMap(object):
     return _LineOffsetMap([m.start() for m in re.finditer(r'\n', data)])
 
 
-def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
+def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
+  """Parses a clang-tidy YAML file.
+
+  Args:
+    read_line_offsets: A function that, given a file name, returns a
+      _LineOffsetMap for the file.
+    stream: A file containing the clang-tidy nits we want to parse.
+    tidy_invocation_dir: The directory clang-tidy was run in.
+
+  Returns:
+    A generator of `_TidyDiagnostic`s.
+  """
   assert os.path.isabs(tidy_invocation_dir)
 
   try:
@@ -164,10 +175,32 @@ def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
   if findings is None:
     return
 
+  cached_line_offsets = {}
+
   try:
     for diag in findings['Diagnostics']:
       message = diag['DiagnosticMessage']
       file_path = message['FilePath']
+
+      # Rarely (e.g., in the case of missing `#include`s, clang will emit
+      # relative file paths for diagnostics. Fix those here.
+      if not file_path or os.path.isabs(file_path):
+        absolute_file_path = file_path
+      else:
+        absolute_file_path = os.path.abspath(
+            os.path.join(tidy_invocation_dir, file_path))
+
+      if absolute_file_path not in cached_line_offsets:
+        # Sometimes tidy will give us empty file names; they don't map to any
+        # file, and are generally issues it has with CFLAGS, etc. File offsets
+        # don't matter in those, so use an empty map.
+        if absolute_file_path:
+          offsets = read_line_offsets(absolute_file_path)
+        else:
+          offsets = _LineOffsetMap([])
+        cached_line_offsets[absolute_file_path] = offsets
+
+      line_offsets = cached_line_offsets[absolute_file_path]
 
       replacements = []
       for replacement in message.get('Replacements', ()):
@@ -187,16 +220,10 @@ def _parse_tidy_fixes_file(line_offsets, stream, tidy_invocation_dir):
                 end_char=line_offsets.get_line_offset(end_offset),
             ))
 
-      # Rarely (e.g., in the case of missing `#include`s, clang will emit
-      # relative file paths for diagnostics. Fix those here.
-      if not os.path.isabs(file_path):
-        file_path = os.path.abspath(
-            os.path.join(tidy_invocation_dir, file_path))
-
       yield _TidyDiagnostic(
           diag_name=diag['DiagnosticName'],
           message=message['Message'],
-          file_path=file_path,
+          file_path=absolute_file_path,
           line_number=line_offsets.get_line_number(message['FileOffset']),
           replacements=tuple(replacements),
       )
@@ -268,13 +295,14 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
     if was_killed:
       return_code = None
 
-    with open(cc_file) as f:
-      line_offsets = _LineOffsetMap.for_text(f.read())
+    def read_line_offsets(file_path):
+      with open(file_path) as f:
+        return _LineOffsetMap.for_text(f.read())
 
     tidy_exited_regularly = return_code == 0
     try:
       with io.open(findings_file, encoding='utf-8', errors='replace') as f:
-        findings = list(_parse_tidy_fixes_file(line_offsets, f, in_dir))
+        findings = list(_parse_tidy_fixes_file(read_line_offsets, f, in_dir))
     except IOError as e:
       # If tidy died (crashed), it might not have created a file for us.
       if e.errno != errno.ENOENT or tidy_exited_regularly:
@@ -287,6 +315,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
 
     return return_code, stdout, findings
 
+
 _TidyAction = collections.namedtuple('_TidyAction',
                                      ['in_dir', 'cc_file', 'flags', 'target'])
 
@@ -295,7 +324,7 @@ def _run_tidy_action(tidy_binary, action):
   """Runs clang-tidy, given a _TidyAction.
 
   The return value here is a bit complicated:
-    - None: an unexpected Exception happened, and was logged
+    - None: an unexpected Exception happened, and was logged.
     - (exit_code, stdout, findings):
       - if exit_code is None, clang-tidy timed out; stdout has contents, but
         findings is probably senseless.
@@ -393,14 +422,14 @@ def _generate_tidy_actions(out_dir,
   """Figures out how to lint `only_src_files` and builds their dependencies.
 
   Args:
-    - out_dir: the out/ directory for us to interrogate
-    - only_src_files: a set of C++ files to look at. If None, we pretend you
+    out_dir: the out/ directory for us to interrogate.
+    only_src_files: a set of C++ files to look at. If None, we pretend you
       passed in every C/C++ file in compile_commands, ignoring generated
       targets.
-    - build_targets: a function that takes a list of build targets, builds
+    build_targets: a function that takes a list of build targets, builds
       them, and returns a list of ones that failed to build.
-    - compile_commands: a list of `_CompileCommand`s
-    - build_chunk_size: how many targets to build at once. 500 is likely to not
+    compile_commands: a list of `_CompileCommand`s.
+    build_chunk_size: how many targets to build at once. 500 is likely to not
       overflow argv limits.
 
   Returns:
@@ -469,15 +498,15 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   """Runs a series of tidy actions, returning the status of all of that.
 
   Args:
-    tidy_actions: a list of clang-tidy actions to perform
+    tidy_actions: a list of clang-tidy actions to perform.
     run_tidy_action: the function to call when running a tidy action. Takes a
       clang-tidy binary and a _TidyAction; returns a tuple of (exit_code,
-      stdout, findings)
+      stdout, findings):
         - exit_code is the exit code of tidy. None if it timed out.
-        - stdout is tidy's raw stdout
-        - findings is a list of _TidyDiagnostic from the invocation
-    tidy_jobs: how many jobs should be run in parallel
-    clang_tidy_binary: the clang-tidy binary to pass into run_tidy_action
+        - stdout is tidy's raw stdout.
+        - findings is a list of _TidyDiagnostic from the invocation.
+    tidy_jobs: how many jobs should be run in parallel.
+    clang_tidy_binary: the clang-tidy binary to pass into run_tidy_action.
     use_threads: if True, we'll use a threadpool. Opts for a process pool
       otherwise.
 
