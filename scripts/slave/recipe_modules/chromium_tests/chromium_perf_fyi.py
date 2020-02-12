@@ -151,3 +151,9 @@ _AddIsolatedTestSpec(
     target_bits=32,
     target_arch='arm',
     cros_board='kevin')
+
+_AddIsolatedTestSpec(
+    'linux-processor-perf-fyi',
+    'linux',
+    parent_buildername='linux-perf-fyi',
+    parent_mastername='chromium.perf.fyi')
