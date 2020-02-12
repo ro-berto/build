@@ -123,19 +123,19 @@ def collect_task(
       f for f in shard_json_files if os.path.exists(f)]
 
   if shard_json_files != extant_shard_json_files:
-    logging.warn(
+    collect_result = 1
+    logging.error(
         'Expected output.json file missing: %r\nFound: %r\nExpected: %r\n',
         set(shard_json_files) - set(extant_shard_json_files),
-        extant_shard_json_files,
-        shard_json_files)
+        extant_shard_json_files, shard_json_files)
 
   empty_shard_json_files = set(
       f for f in extant_shard_json_files if os.path.getsize(f) == 0)
 
   if empty_shard_json_files:
-    logging.warn(
-        'One or more empty output.json files exist: %r',
-        empty_shard_json_files)
+    collect_result = 1
+    logging.error('One or more empty output.json files exist: %r',
+                  empty_shard_json_files)
     extant_shard_json_files = [
         f for f in extant_shard_json_files if f not in empty_shard_json_files]
 
