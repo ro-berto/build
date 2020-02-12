@@ -366,10 +366,6 @@
           "ios-device": {
             "sheriff_classes": ["sheriff_ios"]
           },
-          "ios-device-xcode-clang": {
-            "close_tree": false,
-            "sheriff_classes": ["sheriff_ios"]
-          },
           "ios-simulator": {
             "sheriff_classes": ["sheriff_ios"],
             "closing_optional": [],
@@ -378,10 +374,6 @@
           "ios-simulator-full-configs": {
             "sheriff_classes": ["sheriff_ios"],
             "closing_optional": []
-          },
-          "ios-simulator-xcode-clang": {
-            "close_tree": false,
-            "sheriff_classes": ["sheriff_ios"]
           },
           "*": {}
         }
