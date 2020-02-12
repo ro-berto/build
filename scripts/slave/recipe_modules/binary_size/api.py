@@ -323,7 +323,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
         dest=gs_dest,
         name='archive ' + filename,
         unauthenticated_url=True)
-    return constants.ARCHIVED_URL_PREFIX + gs_dest
+    return constants.ARCHIVED_URL_FMT.format(
+        bucket=self._results_bucket, dest=gs_dest)
 
   def _check_for_failed_expectation_files(self, results_path):
     checker_script = self.resource('trybot_failed_expectations_checker.py')

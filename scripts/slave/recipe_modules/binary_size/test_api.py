@@ -9,7 +9,10 @@ from . import constants
 
 class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
 
-  def props(self, commit_message='message', size_footer=False, **kwargs):
+  def properties(self, **kwargs):
+    return self.m.properties(**{'$build/binary_size': kwargs})
+
+  def build(self, commit_message='message', size_footer=False, **kwargs):
     kwargs.setdefault('path_config', 'generic')
     kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     revision_info = {

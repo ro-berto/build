@@ -51,33 +51,42 @@ def GenTests(api):
   def has_binary_size_property(check, steps):
     check(steps['analyze'].output_properties['binary_size_plugin'] is not None)
 
-  yield api.test('noop_because_of_analyze', api.binary_size.props(),
+  yield api.test('noop_because_of_analyze', api.binary_size.build(),
                  api.post_check(has_binary_size_property),
                  api.post_process(post_process.MustRun, 'analyze'),
                  api.post_process(post_process.DoesNotRunRE, r'.*build'),
                  api.post_process(post_process.DropExpectation))
-  yield api.test('compile_failure', api.binary_size.props(), override_analyze(),
+  yield api.test('compile_failure', api.binary_size.build(), override_analyze(),
                  api.override_step_data('compile (with patch)', retcode=1),
                  api.post_process(post_process.StatusFailure),
                  api.post_process(post_process.DropExpectation))
   yield api.test(
-      'patch_fixes_build', api.binary_size.props(), override_analyze(),
+      'patch_fixes_build', api.binary_size.build(), override_analyze(),
       api.override_step_data('compile (without patch)', retcode=1),
       api.post_process(post_process.MustRun,
                        constants.PATCH_FIXED_BUILD_STEP_NAME),
       api.post_process(post_process.DropExpectation))
 
-  def has_expected_supersize_link(check, steps):
-    expected_url = 'https://foo.com/{}{}/{}/{}/result.ndjson'.format(
-        constants.ARCHIVED_URL_PREFIX, constants.TEST_BUILDER,
-        constants.TEST_TIME_FMT, constants.TEST_BUILDNUMBER)
+  def has_expected_supersize_link(check,
+                                  steps,
+                                  bucket=constants.NDJSON_GS_BUCKET):
+    expected_url = 'https://foo.com/{}'.format(
+        constants.ARCHIVED_URL_FMT.format(
+            bucket=bucket,
+            dest='{}/{}/{}/result.ndjson'.format(constants.TEST_BUILDER,
+                                                 constants.TEST_TIME_FMT,
+                                                 constants.TEST_BUILDNUMBER)))
     check(steps[constants.RESULTS_STEP_NAME].links['Supersize HTML Diff'] ==
           expected_url)
 
-  def has_expected_binary_size_url(check, steps):
-    expected_url = '{}{}/{}/{}/result.txt'.format(
-        constants.ARCHIVED_URL_PREFIX, constants.TEST_BUILDER,
-        constants.TEST_TIME_FMT, constants.TEST_BUILDNUMBER)
+  def has_expected_binary_size_url(check,
+                                   steps,
+                                   bucket=constants.NDJSON_GS_BUCKET):
+    expected_url = constants.ARCHIVED_URL_FMT.format(
+        bucket=bucket,
+        dest='{}/{}/{}/result.txt'.format(constants.TEST_BUILDER,
+                                          constants.TEST_TIME_FMT,
+                                          constants.TEST_BUILDNUMBER))
     results_step = steps[constants.RESULTS_STEP_NAME]
     binary_size_prop = results_step.output_properties['binary_size_plugin']
     actual_url = binary_size_prop['extras'][-1]['url']
@@ -99,7 +108,7 @@ def GenTests(api):
         'binary_size_plugin'))
 
   yield api.test(
-      'normal_build', api.binary_size.props('normal_build'), override_analyze(),
+      'normal_build', api.binary_size.build('normal_build'), override_analyze(),
       override_expectation(), api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
@@ -110,14 +119,14 @@ def GenTests(api):
       analyze_targets=['//foo:bar_binary'], compile_targets=['bar_binary'])
   yield api.test(
       'normal_nondefault_targets',
-      api.binary_size.props('nondefault_targets'),
+      api.binary_size.build('nondefault_targets'),
       api.properties(**{'$build/binary_size': nondefault_properties}),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'unexpected_increase', api.binary_size.props(), override_analyze(),
+      'unexpected_increase', api.binary_size.build(), override_analyze(),
       override_expectation(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
@@ -136,7 +145,7 @@ def GenTests(api):
 
   yield api.test(
       'expectations_file_failure',
-      api.binary_size.props('expectations_file_failure'), override_analyze(),
+      api.binary_size.build('expectations_file_failure'), override_analyze(),
       api.override_step_data(
           'Run Expectations Script',
           api.json.output({
@@ -154,14 +163,14 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation))
   yield api.test(
-      'clear_expectation_files_ignores_failure', api.binary_size.props(),
+      'clear_expectation_files_ignores_failure', api.binary_size.build(),
       override_analyze(), override_expectation(),
       api.override_step_data('Clear Expectation Files', retcode=1),
       api.post_process(post_process.StepSuccess, 'Clear Expectation Files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
   yield api.test(
-      'pass_because_of_size_footer', api.binary_size.props(size_footer=True),
+      'pass_because_of_size_footer', api.binary_size.build(size_footer=True),
       override_analyze(), override_expectation(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
@@ -175,7 +184,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation))
   yield api.test(
       'pass_because_of_revert',
-      api.binary_size.props(commit_message='Revert some change'),
+      api.binary_size.build(commit_message='Revert some change'),
       override_analyze(), override_expectation(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
@@ -186,4 +195,14 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
+      'nondefault_results_bucket', api.binary_size.build(),
+      api.binary_size.properties(results_bucket='fake-results-bucket'),
+      override_analyze(), override_expectation(),
+      api.post_check(has_expected_supersize_link, bucket='fake-results-bucket'),
+      api.post_check(
+          has_expected_binary_size_url, bucket='fake-results-bucket'),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
