@@ -674,7 +674,7 @@ class V8GenericSwarmingTest(BaseTest):
 
   def run(self, **kwargs):
     assert self.task
-    self.api.chromium_swarming.collect_task(self.task)
+    self.api.chromium_swarming.collect_task(self.task, allow_missing_json=True)
     return TestResults.empty()
 
 

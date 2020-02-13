@@ -1284,6 +1284,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Need to tell the location of summary file to collect_task.py.
     task_args.extend(['--summary-json-file', self.summary()])
 
+    if kwargs.get('allow_missing_json', False):
+      task_args.append('--allow-missing-json')
+      kwargs.pop('allow_missing_json')
+
     collect_cmd.extend(self.get_collect_cmd_args(task))
 
     task_args.append('--')

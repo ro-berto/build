@@ -173,6 +173,7 @@
       "[]",
       "--summary-json-file",
       "/path/to/tmp/json",
+      "--allow-missing-json",
       "--",
       "swarming",
       "collect",
