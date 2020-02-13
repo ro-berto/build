@@ -33,7 +33,6 @@
   * [halt](#recipe_modules-halt)
   * [ios](#recipe_modules-ios)
   * [isolate](#recipe_modules-isolate)
-  * [legion](#recipe_modules-legion)
   * [libyuv](#recipe_modules-libyuv)
   * [math_utils](#recipe_modules-math_utils) &mdash; General statistical or mathematical functions.
   * [ndk](#recipe_modules-ndk)
@@ -276,8 +275,6 @@
   * [isolate:tests/isolated_tests](#recipes-isolate_tests_isolated_tests)
   * [isolate:tests/run_isolated](#recipes-isolate_tests_run_isolated)
   * [led_recipes_tester](#recipes-led_recipes_tester) &mdash; Tests a recipe CL by running a chromium builder.
-  * [legion/legion](#recipes-legion_legion) &mdash; Launches Legion tests.
-  * [legion:examples/full](#recipes-legion_examples_full) &mdash; Specifies how to launch chromoting integration test on build_internal.
   * [libyuv/libyuv](#recipes-libyuv_libyuv) &mdash; Recipe for building and running tests for Libyuv stand-alone.
   * [libyuv/roll_deps](#recipes-libyuv_roll_deps)
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
@@ -2843,50 +2840,6 @@ Runs an isolated test.
 &emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#55)(self, value):**
 
 Service account json to use.
-### *recipe_modules* / [legion](/scripts/slave/recipe_modules/legion)
-
-[DEPS](/scripts/slave/recipe_modules/legion/__init__.py#5): [chromium\_swarming](#recipe_modules-chromium_swarming), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
-
-#### **class [LegionApi](/scripts/slave/recipe_modules/legion/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-Provides a recipes interface for the Legion framework.
-
-&mdash; **def [add\_task\_to\_controller](/scripts/slave/recipe_modules/legion/api.py#42)(self, controller, name, path, config_vars=None):**
-
-Adds a task config to a controller config.
-
-Args:
-  controller: A controller config returnd by create_controller.
-  name: The name of the task. This corresponds to the command line flag
-      defined in the controller code.
-  path: The path to the .isolate or .isolated file for the task.
-  config_vars: Config variables passed when isolating a task .isolate file.
-      This is ignored if passing a .isolated file.
-
-&mdash; **def [create\_controller](/scripts/slave/recipe_modules/legion/api.py#17)(self, name, path, os, config_vars=None, controller_vars=None, dimensions=None):**
-
-Returns a controller config dictionary.
-
-Args:
-  name: The name of the controller.
-  path: The path to the .isolate or .isolated file for the controller.
-  os: The os to run the controller on.
-  config_vars: A dictionary of config vars to pass when isolating the
-      controller .isolate file. This is ignored if passing a .isolated file.
-  controller_vars: A dictionary of command line vars passed to the
-      controller.
-  dimensions: A dictionary of dimensions to pass when isolating the
-      controller .isolate file. This is ignored if passing a .isolated file.
-
-&mdash; **def [execute](/scripts/slave/recipe_modules/legion/api.py#84)(self, config):**
-
-Executes a Legion-based swarming test.
-
-config: The configuration returned by create_controller.
-
-&emsp; **@property**<br>&mdash; **def [legion\_path](/scripts/slave/recipe_modules/legion/api.py#11)(self):**
-
-Returns the path to legion.py.
 ### *recipe_modules* / [libyuv](/scripts/slave/recipe_modules/libyuv)
 
 [DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5604,20 +5557,6 @@ Calculates the chromium testing CL for the current CL.
 
 Returns None if we shouldn't trigger anything.
 Returns a key in the CHROMIUM_SRC_TEST_CLS dictionary.
-### *recipes* / [legion/legion](/scripts/slave/recipes/legion/legion.py)
-
-[DEPS](/scripts/slave/recipes/legion/legion.py#9): [chromium\_swarming](#recipe_modules-chromium_swarming), [isolate](#recipe_modules-isolate), [legion](#recipe_modules-legion), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Launches Legion tests.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/legion/legion.py#55)(api):**
-### *recipes* / [legion:examples/full](/scripts/slave/recipe_modules/legion/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/legion/examples/full.py#7): [legion](#recipe_modules-legion), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Specifies how to launch chromoting integration test on build_internal.
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/legion/examples/full.py#15)(api):**
 ### *recipes* / [libyuv/libyuv](/scripts/slave/recipes/libyuv/libyuv.py)
 
 [DEPS](/scripts/slave/recipes/libyuv/libyuv.py#13): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [libyuv](#recipe_modules-libyuv), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
