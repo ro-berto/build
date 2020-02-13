@@ -5,6 +5,7 @@
 **[Recipe Modules](#Recipe-Modules)**
   * [adb](#recipe_modules-adb)
   * [archive](#recipe_modules-archive)
+  * [attr_utils](#recipe_modules-attr_utils)
   * [binary_size](#recipe_modules-binary_size) &mdash; Binary size analysis for patchsets.
   * [build](#recipe_modules-build)
   * [chromite](#recipe_modules-chromite)
@@ -61,6 +62,7 @@
   * [archive:tests/download_and_unzip_build](#recipes-archive_tests_download_and_unzip_build)
   * [archive:tests/zip_and_upload_build](#recipes-archive_tests_zip_and_upload_build)
   * [art](#recipes-art)
+  * [attr_utils:tests/full](#recipes-attr_utils_tests_full)
   * [binary_size:tests/android_binary_size](#recipes-binary_size_tests_android_binary_size)
   * [binary_size_trybot](#recipes-binary_size_trybot)
   * [boringssl](#recipes-boringssl)
@@ -444,6 +446,9 @@ inserted into the URL.
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
+### *recipe_modules* / [attr\_utils](/scripts/slave/recipe_modules/attr_utils)
+
+#### **class [AttrUtilsApi](/scripts/slave/recipe_modules/attr_utils/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 ### *recipe_modules* / [binary\_size](/scripts/slave/recipe_modules/binary_size)
 
 [DEPS](/scripts/slave/recipe_modules/binary_size/__init__.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
@@ -4017,6 +4022,11 @@ Packages Android SDK packages as CIPD packages.
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#101)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
 &mdash; **def [setup\_target](/scripts/slave/recipes/art.py#253)(api, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+### *recipes* / [attr\_utils:tests/full](/scripts/slave/recipe_modules/attr_utils/tests/full.py)
+
+[DEPS](/scripts/slave/recipe_modules/attr_utils/tests/full.py#13): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/attr_utils/tests/full.py#18)(api):**
 ### *recipes* / [binary\_size:tests/android\_binary\_size](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py)
 
 [DEPS](/scripts/slave/recipe_modules/binary_size/tests/android_binary_size.py#11): [binary\_size](#recipe_modules-binary_size), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/time][recipe_engine/recipe_modules/time]

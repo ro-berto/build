@@ -10,7 +10,6 @@ import sys
 from recipe_engine.types import freeze
 
 from . import bot_spec
-from . import attr_util
 
 
 class BotConfig(object):

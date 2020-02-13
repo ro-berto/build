@@ -10,8 +10,9 @@ import itertools
 from recipe_engine.types import FrozenDict, freeze
 
 from . import steps
-from .attr_util import (attrib, attrs, enum_attrib, mapping_attrib,
-                        sequence_attrib)
+
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
+                                             mapping_attrib, sequence_attrib)
 
 BUILDER = 'builder'
 TESTER = 'tester'
