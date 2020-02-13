@@ -97,22 +97,24 @@ _TidyReplacement = collections.namedtuple(
     '_TidyReplacement',
     ['new_text', 'start_line', 'end_line', 'start_char', 'end_char'])
 
+_ExpandedFrom = collections.namedtuple('_ExpandedFrom',
+                                       ['file_path', 'line_number'])
+
 
 # Note that we shove these in a set for cheap deduplication, and we sort based
 # on the natural element order here. Sorting is mostly just for
 # deterministic/pretty output.
-#
-# FIXME(gbiv): Tidy also notes. Probably want to parse those out and surface
-# them at some point.
 class _TidyDiagnostic(
-    collections.namedtuple(
-        '_TidyDiagnostic',
-        ['file_path', 'line_number', 'diag_name', 'message', 'replacements'])):
+    collections.namedtuple('_TidyDiagnostic', [
+        'file_path', 'line_number', 'diag_name', 'message', 'replacements',
+        'expansion_locs'
+    ])):
   """A diagnostic emitted by clang-tidy"""
 
   def to_dict(self):
     my_dict = self._asdict()
     my_dict['replacements'] = [x._asdict() for x in my_dict['replacements']]
+    my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
     return my_dict
 
 
@@ -177,29 +179,36 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
 
   cached_line_offsets = {}
 
+  def get_line_offsets(file_path):
+    assert not file_path or os.path.isabs(file_path), file_path
+
+    if file_path in cached_line_offsets:
+      return cached_line_offsets[file_path]
+
+    # Sometimes tidy will give us empty file names; they don't map to any file,
+    # and are generally issues it has with CFLAGS, etc. File offsets don't
+    # matter in those, so use an empty map.
+    if file_path:
+      offsets = read_line_offsets(file_path)
+    else:
+      offsets = _LineOffsetMap([])
+    cached_line_offsets[file_path] = offsets
+    return offsets
+
+  # Rarely (e.g., in the case of missing `#include`s, clang will emit relative
+  # file paths for diagnostics. This fixes those.
+  def makeabs(file_path):
+    if not file_path or os.path.isabs(file_path):
+      return file_path
+    return os.path.abspath(os.path.join(tidy_invocation_dir, file_path))
+
   try:
     for diag in findings['Diagnostics']:
       message = diag['DiagnosticMessage']
       file_path = message['FilePath']
 
-      # Rarely (e.g., in the case of missing `#include`s, clang will emit
-      # relative file paths for diagnostics. Fix those here.
-      if not file_path or os.path.isabs(file_path):
-        absolute_file_path = file_path
-      else:
-        absolute_file_path = os.path.abspath(
-            os.path.join(tidy_invocation_dir, file_path))
-
-      if absolute_file_path not in cached_line_offsets:
-        # Sometimes tidy will give us empty file names; they don't map to any
-        # file, and are generally issues it has with CFLAGS, etc. File offsets
-        # don't matter in those, so use an empty map.
-        if absolute_file_path:
-          offsets = read_line_offsets(absolute_file_path)
-        else:
-          offsets = _LineOffsetMap([])
-        cached_line_offsets[absolute_file_path] = offsets
-
+      absolute_file_path = makeabs(file_path)
+      line_offsets = get_line_offsets(absolute_file_path)
       line_offsets = cached_line_offsets[absolute_file_path]
 
       replacements = []
@@ -220,12 +229,26 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
                 end_char=line_offsets.get_line_offset(end_offset),
             ))
 
+      expansion_locs = []
+      for note in diag.get('Notes', ()):
+        if not note['Message'].startswith('expanded from macro '):
+          continue
+
+        absolute_note_path = makeabs(note['FilePath'])
+        note_offsets = get_line_offsets(absolute_note_path)
+        expansion_locs.append(
+            _ExpandedFrom(
+                file_path=absolute_note_path,
+                line_number=note_offsets.get_line_number(note['FileOffset']),
+            ))
+
       yield _TidyDiagnostic(
           diag_name=diag['DiagnosticName'],
           message=message['Message'],
           file_path=absolute_file_path,
           line_number=line_offsets.get_line_number(message['FileOffset']),
           replacements=tuple(replacements),
+          expansion_locs=tuple(expansion_locs),
       )
   except KeyError as k:
     key_name = k.args[0]
@@ -760,7 +783,6 @@ def main():
   compile_commands_location = _generate_compile_commands(out_dir)
   if args.clean:
     subprocess.check_call(['ninja', '-t', 'clean'], cwd=out_dir)
-
 
   with open(compile_commands_location) as f:
     tidy_actions, failed_actions = _generate_tidy_actions(

@@ -37,6 +37,10 @@ class _SourceFileComments(object):
   def __init__(self):
     self._file_comments = []
     self._source_comments = []
+    # _source_comments which have notes that map them back to macros. We have
+    # to group these, since a single CL might have multiple diagnostics that
+    # ultimately point to this same macro.
+    self._macro_comments = collections.defaultdict(set)
     self._force_emission = False
     # Specifically, _has_tidy_lints is True if there are any warnings excluding
     # clang-diagnostic-warning and clang-diagnostic-error.
@@ -51,7 +55,8 @@ class _SourceFileComments(object):
   def add_file_comment(self, message):
     self._file_comments.append(message)
 
-  def add_tidy_diagnostic(self, message, line_number, check_name, suggestions):
+  def _note_and_fix_new_diag(self, message, check_name):
+    """Adds context to `message`, potentially updating _has_tidy_lints."""
     if check_name in ('clang-diagnostic-error', 'clang-diagnostic-warning'):
       suffix = 'compile-time ' + check_name.split('-')[-1]
     else:
@@ -59,8 +64,20 @@ class _SourceFileComments(object):
           check_name)
       self._has_tidy_lints = True
 
-    comment_body = ' '.join([message, '(' + suffix + ')'])
-    self._source_comments.append((comment_body, line_number, check_name,
+    return message + ' (' + suffix + ')'
+
+  def add_macro_expanded_tidy_diagnostic(self, message, line_number, check_name,
+                                         suggestions, file_of_expansion,
+                                         line_of_expansion):
+    message = self._note_and_fix_new_diag(message, check_name)
+    key = (message, line_number, check_name)
+    # FIXME(gbiv): Macro suggestions may be tricky. Don't mind them for now.
+    _ = suggestions
+    self._macro_comments[key].add((file_of_expansion, line_of_expansion))
+
+  def add_tidy_diagnostic(self, message, line_number, check_name, suggestions):
+    message = self._note_and_fix_new_diag(message, check_name)
+    self._source_comments.append((message, line_number, check_name,
                                   suggestions))
 
   def __iter__(self):
@@ -72,6 +89,25 @@ class _SourceFileComments(object):
     for message, line_number, check_name, suggestions in self._source_comments:
       subcategory = '/'.join([category, check_name])
       yield subcategory, message, line_number, suggestions
+
+    macro_comments = sorted(self._macro_comments.items())
+    for (message, line_number, check_name), expansions in macro_comments:
+      assert len(expansions) > 0, message
+
+      expansions = sorted(expansions)
+      expansion_file, expansion_line = expansions[0]
+      suffix = '\n\nExpanded from %s:%d' % (expansion_file, expansion_line)
+
+      # Listing one expansion location should be enough for now.
+      if len(expansions) == 1:
+        suffix += '.'
+      elif len(expansions) == 2:
+        suffix += ', and 1 other place.'
+      else:
+        suffix += ', and %d other places.' % (len(expansions) - 1)
+
+      subcategory = '/'.join([category, check_name])
+      yield subcategory, message + suffix, line_number, ()
 
 
 def _generate_clang_tidy_comments(api, file_paths):
@@ -150,9 +186,24 @@ def _generate_clang_tidy_comments(api, file_paths):
       }]
     else:
       suggestions = ()
-    per_file_comments[file_path].add_tidy_diagnostic(
-        diagnostic['message'], diagnostic['line_number'],
-        diagnostic['diag_name'], suggestions)
+
+    message = diagnostic['message']
+    report_line = diagnostic['line_number']
+    report_file = file_path
+    diag_name = diagnostic['diag_name']
+
+    expansions = diagnostic['expansion_locs']
+    if expansions:
+      # Expansions are emitted by clang-tidy (thus tricium_clang_tidy) such
+      # that item [i] "invokes" the expansion of [i+1]. So the last item in
+      # this list should tell us where the original macro definition is.
+      e = expansions[-1]
+      per_file_comments[e['file_path']].add_macro_expanded_tidy_diagnostic(
+          message, e['line_number'], diag_name, suggestions, report_file,
+          report_line)
+    else:
+      per_file_comments[report_file].add_tidy_diagnostic(
+          message, report_line, diag_name, suggestions)
 
   return per_file_comments
 
@@ -259,6 +310,11 @@ def tricium_has_replacements(check, steps, *expected_replacements):
         replacement_messages.add(replacement['replacement'])
 
   check(set(expected_replacements) == replacement_messages)
+
+
+def tricium_outputs_json(check, steps, json_obj):
+  comments = _get_tricium_comments(steps)
+  check(comments == json_obj)
 
 
 def GenTests(api):
@@ -371,6 +427,7 @@ def GenTests(api):
                       'diag_name': 'super-cool-diag',
                       'message': 'hello, world 1',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
@@ -378,6 +435,7 @@ def GenTests(api):
                       'diag_name': 'moderately-cool-diag',
                       'message': 'hello, world',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
               ]
           })) + api.post_process(post_process.StepSuccess,
@@ -400,6 +458,7 @@ def GenTests(api):
                       'diag_name': 'clang-diagnostic-warning',
                       'message': 'hello, world',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
@@ -407,6 +466,7 @@ def GenTests(api):
                       'diag_name': 'clang-diagnostic-error',
                       'message': 'hello, world',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
               ],
           })) + api.post_process(post_process.StepWarning,
@@ -427,6 +487,7 @@ def GenTests(api):
                       'diag_name': 'clang-diagnostic-warning',
                       'message': 'hello, world',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
                   {
                       'file_path': 'path/to/some/cc/file.cpp',
@@ -434,6 +495,7 @@ def GenTests(api):
                       'diag_name': 'some-cool-check',
                       'message': 'hello, world',
                       'replacements': [],
+                      'expansion_locs': [],
                   },
               ]
           })) + api.post_process(post_process.StepSuccess,
@@ -472,12 +534,67 @@ def GenTests(api):
                           'end_char': 5,
                       },
                   ],
+                  'expansion_locs': [],
               },]
           })) + api.post_process(post_process.StepSuccess,
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              tricium_has_replacements, 'foo', 'bar') + api.post_process(
                  post_process.DropExpectation))
+
+  expansions_tests = [
+      (1, 1, '.'),
+      (2, 1, ', and 1 other place.'),
+      (3, 1, ', and 2 other places.'),
+      (4, 2, ', and 3 other places.'),
+  ]
+
+  for num_expansions, expansion_duplication, suffix in expansions_tests:
+    diags = []
+    for i in range(num_expansions):
+      for _ in range(expansion_duplication):
+        diags.append({
+            'file_path':
+                'path/to/some/cc/file%d.cpp' % i,
+            'line_number':
+                2,
+            'diag_name':
+                'tidy-is-angry',
+            'message':
+                'grrr',
+            'replacements': [],
+            'expansion_locs': [
+                {
+                    'file_path': 'path/to/some/cc/file%d.cpp' % i,
+                    'line_number': 1,
+                },
+                {
+                    'file_path': 'path/to/some/cc/file.h',
+                    'line_number': 3,
+                },
+            ],
+        })
+
+    yield (
+        test_with_patch(
+            'expansion_%d' % num_expansions,
+            affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+                'clang-tidy.generate-warnings.read tidy output',
+                api.file.read_json({
+                    'diagnostics': diags
+                })) + api.post_process(post_process.StepSuccess,
+                                       'clang-tidy.generate-warnings') +
+        api.post_process(post_process.StatusSuccess) +
+        api.post_process(tricium_outputs_json, [{
+            'category': 'ClangTidy/tidy-is-angry',
+            'path': 'path/to/some/cc/file.h',
+            'message':
+                'grrr '
+                '(https://clang.llvm.org/extra/clang-tidy/checks/tidy-is-angry'
+                '.html)'
+                '\n\nExpanded from path/to/some/cc/file0.cpp:2' + suffix,
+            'startLine': 3,
+        }]) + api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'skip_if_no_clang_tidy',

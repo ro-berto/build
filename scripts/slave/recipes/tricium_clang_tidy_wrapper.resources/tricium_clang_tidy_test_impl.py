@@ -158,19 +158,22 @@ class Tests(unittest.TestCase):
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo2',
             line_number=1,
             diag_name='-Wfoo2',
             message='foo2',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='foo3',
             line_number=2,
             diag_name='-Wfoo3',
             message='foo3',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
     ]
 
     diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
@@ -180,6 +183,53 @@ class Tests(unittest.TestCase):
         _parse_fixes_file_text(input_file, diag_yaml, tidy_invocation_dir),
         tidy_diags)
 
+  def test_expansion_locs_are_parsed_from_notes(self):
+    yaml = '\n'.join([
+        'MainSourceFile:  "/tmp/x.c"',
+        'Diagnostics:',
+        ' - DiagnosticName:  google-explicit-constructor',
+        '   DiagnosticMessage:',
+        '     Message:         foo',
+        '     FilePath:        "/tmp/x.c"',
+        '     FileOffset:      3',
+        '     Replacements:    []',
+        '   Notes:',
+        '     - Message:         "expanded from macro \'\'a\'\'"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      2',
+        '     - Message:         "expanded from macro \'\'b\'\'"',
+        '       FilePath:        "/tmp/x.h"',
+        '       FileOffset:      1',
+        '',
+    ])
+
+    def read_line_offsets(file_path):
+      if file_path == '/tmp/x.c':
+        return tidy._LineOffsetMap([0, 1])
+      if file_path == '/tmp/x.h':
+        return tidy._LineOffsetMap([1])
+      self.fail('Unknown parsed file path: %r' % file_path)
+
+    diags = list(
+        tidy._parse_tidy_fixes_file(
+            read_line_offsets=read_line_offsets,
+            stream=_to_stringio(yaml),
+            tidy_invocation_dir='/tidy'))
+
+    self.assertEqual(diags, [
+        tidy._TidyDiagnostic(
+            file_path='/tmp/x.c',
+            line_number=3,
+            diag_name='google-explicit-constructor',
+            message='foo',
+            replacements=(),
+            expansion_locs=(
+                tidy._ExpandedFrom(file_path='/tmp/x.h', line_number=2),
+                tidy._ExpandedFrom(file_path='/tmp/x.h', line_number=1),
+            ),
+        )
+    ])
+
   def test_fix_parsing_handles_multiple_files_gracefully(self):
     tidy_diags = [
         tidy._TidyDiagnostic(
@@ -187,25 +237,29 @@ class Tests(unittest.TestCase):
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo1',
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo1',
             line_number=2,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo2',
             line_number=1,
             diag_name='-Wfoo2',
             message='foo2',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
     ]
     diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
 
@@ -230,19 +284,22 @@ class Tests(unittest.TestCase):
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo1',
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
         tidy._TidyDiagnostic(
             file_path='/foo2',
             line_number=2,
             diag_name='-Wfoo2',
             message='foo2',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
     ]
     diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
     retrievals = collections.defaultdict(int)
@@ -265,7 +322,8 @@ class Tests(unittest.TestCase):
             line_number=1,
             diag_name='-Wfoo1',
             message='foo1',
-            replacements=()),
+            replacements=(),
+            expansion_locs=()),
     ]
     self.assertEqual(
         _parse_fixes_file_text(
@@ -417,13 +475,15 @@ class Tests(unittest.TestCase):
         line_number=1,
         diag_name='-Whee',
         message='whee',
-        replacements=())
+        replacements=(),
+        expansion_locs=())
     bad_diag = tidy._TidyDiagnostic(
         file_path='oh_no',
         line_number=1,
         diag_name='-Whee',
         message='oh no',
-        replacements=())
+        replacements=(),
+        expansion_locs=())
 
     def runner(arg_binary, action):
       self.assertIs(arg_binary, binary)
@@ -507,13 +567,15 @@ class Tests(unittest.TestCase):
                 line_number=1,
                 diag_name='bar',
                 message='baz',
-                replacements=()),
+                replacements=(),
+                expansion_locs=()),
             tidy._TidyDiagnostic(
                 file_path='/not_in_base/bar.cc',
                 line_number=1,
                 diag_name='bar',
                 message='baz',
-                replacements=())
+                replacements=(),
+                expansion_locs=())
         ],
     )
 
@@ -548,13 +610,15 @@ class Tests(unittest.TestCase):
                 line_number=1,
                 diag_name='bar',
                 message='baz',
-                replacements=()),
+                replacements=(),
+                expansion_locs=()),
             tidy._TidyDiagnostic(
                 file_path='/foo/src_file.cc',
                 line_number=1,
                 diag_name='bar',
                 message='baz',
-                replacements=()),
+                replacements=(),
+                expansion_locs=()),
         ],
     )
 
@@ -566,13 +630,15 @@ class Tests(unittest.TestCase):
                     line_number=1,
                     diag_name='bar',
                     message='baz',
-                    replacements=()).to_dict(),
+                    replacements=(),
+                    expansion_locs=()).to_dict(),
                 tidy._TidyDiagnostic(
                     file_path='src_file.cc',
                     line_number=1,
                     diag_name='bar',
                     message='baz',
-                    replacements=()).to_dict(),
+                    replacements=(),
+                    expansion_locs=()).to_dict(),
             ],
             'failed_src_files': ['src_file.cc', 'src_file.h'],
             'timed_out_src_files': ['secondary_file.cc', 'src_file.h'],
