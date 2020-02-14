@@ -758,10 +758,10 @@ def main():
   if bool(args.src_file) == args.all:
     parser.error('Please either specify files to lint, or pass --all')
 
-  if args.debug:
-    logging.getLogger().setLevel(logging.DEBUG)
-  elif args.verbose:
-    logging.getLogger().setLevel(logging.INFO)
+  logging.basicConfig(
+      format='%(asctime)s: %(levelname)s: %(filename)s@%(lineno)d: %(message)s',
+      level=logging.DEBUG if args.debug else logging.INFO,
+  )
 
   out_dir = os.path.abspath(args.out_dir)
   findings_file = os.path.abspath(args.findings_file)
