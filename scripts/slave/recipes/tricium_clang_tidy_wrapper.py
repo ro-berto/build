@@ -32,6 +32,27 @@ _chromium_tidy_path = ('third_party', 'llvm-build', 'Release+Asserts', 'bin',
                        'clang-tidy')
 
 
+def _canonicalize_check_name(name):
+  """Fixes `name` up for the user, and returns whether it's a clang diag."""
+  if not name.startswith('clang-diagnostic-'):
+    return name, False
+
+  # Either we get:
+  # - clang-diagnostic-warning
+  # - clang-diagnostic-error
+  # - clang-diagnostic-`${foo}`
+  #
+  # where `${foo}` is a -W flag; -Woverflow == clang-diagnostic-overflow, etc.
+  # so anything that isn't "error" is a warning.
+  if name == 'clang-diagnostic-error':
+    return 'compile-time error', True
+  return 'compile-time warning', True
+
+
+_TidyDiagnosticID = collections.namedtuple(
+    '_TidyDiagnosticID', ['message', 'line_number', 'check_name'])
+
+
 class _SourceFileComments(object):
 
   def __init__(self):
@@ -42,12 +63,14 @@ class _SourceFileComments(object):
     # ultimately point to this same macro.
     self._macro_comments = collections.defaultdict(set)
     self._force_emission = False
-    # Specifically, _has_tidy_lints is True if there are any warnings excluding
-    # clang-diagnostic-warning and clang-diagnostic-error.
-    self._has_tidy_lints = False
 
   def is_emission_useful(self):
-    return self._force_emission or self._has_tidy_lints
+    if self._force_emission:
+      return True
+
+    is_tidy_nit = lambda check_name: not _canonicalize_check_name(check_name)[1]
+    return (any(is_tidy_nit(x.check_name) for x in self._macro_comments) or
+            any(is_tidy_nit(x.check_name) for x, _ in self._source_comments))
 
   def force_emission(self):
     self._force_emission = True
@@ -55,30 +78,17 @@ class _SourceFileComments(object):
   def add_file_comment(self, message):
     self._file_comments.append(message)
 
-  def _note_and_fix_new_diag(self, message, check_name):
-    """Adds context to `message`, potentially updating _has_tidy_lints."""
-    if check_name in ('clang-diagnostic-error', 'clang-diagnostic-warning'):
-      suffix = 'compile-time ' + check_name.split('-')[-1]
-    else:
-      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
-          check_name)
-      self._has_tidy_lints = True
-
-    return message + ' (' + suffix + ')'
-
   def add_macro_expanded_tidy_diagnostic(self, message, line_number, check_name,
                                          suggestions, file_of_expansion,
                                          line_of_expansion):
-    message = self._note_and_fix_new_diag(message, check_name)
-    key = (message, line_number, check_name)
+    key = _TidyDiagnosticID(message, line_number, check_name)
     # FIXME(gbiv): Macro suggestions may be tricky. Don't mind them for now.
     _ = suggestions
     self._macro_comments[key].add((file_of_expansion, line_of_expansion))
 
   def add_tidy_diagnostic(self, message, line_number, check_name, suggestions):
-    message = self._note_and_fix_new_diag(message, check_name)
-    self._source_comments.append((message, line_number, check_name,
-                                  suggestions))
+    self._source_comments.append((_TidyDiagnosticID(message, line_number,
+                                                    check_name), suggestions))
 
   def __iter__(self):
     """Yields comments as (category, message, line_num, suggestions) tuples."""
@@ -86,14 +96,26 @@ class _SourceFileComments(object):
     for message in self._file_comments:
       yield category, message, 0, ()
 
-    for message, line_number, check_name, suggestions in self._source_comments:
+    def fix_message(message, check_name):
+      name, is_diagnostic = _canonicalize_check_name(check_name)
+      if is_diagnostic:
+        suffix = name
+      else:
+        suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
+            name)
+      return message + ' (' + suffix + ')'
+
+    for (message, line_number,
+         check_name), suggestions in self._source_comments:
       subcategory = '/'.join([category, check_name])
+      message = fix_message(message, check_name)
       yield subcategory, message, line_number, suggestions
 
     macro_comments = sorted(self._macro_comments.items())
     for (message, line_number, check_name), expansions in macro_comments:
       assert len(expansions) > 0, message
 
+      message = fix_message(message, check_name)
       expansions = sorted(expansions)
       expansion_file, expansion_line = expansions[0]
       suffix = '\n\nExpanded from %s:%d' % (expansion_file, expansion_line)
