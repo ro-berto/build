@@ -15,6 +15,7 @@ from . import chromium_devtools_frontend
 from . import chromium_fuzz
 from . import chromium_fyi
 from . import chromium_goma
+from . import chromium_goma_fyi
 from . import chromium_gpu
 from . import chromium_gpu_fyi
 from . import chromium_linux
@@ -56,6 +57,8 @@ BUILDERS = freeze({
         chromium_fuzz.SPEC,
     'chromium.fyi':
         chromium_fyi.SPEC,
+    'chromium.goma.fyi':
+        chromium_goma_fyi.SPEC,
     'chromium.goma':
         chromium_goma.SPEC,
     'chromium.gpu':

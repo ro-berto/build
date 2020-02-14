@@ -60,6 +60,7 @@
     'chromium.chromedriver': {},
     'chromium.clang': {},
     'chromium.fyi': {},
+    'chromium.goma.fyi': {},
     'chromium.webkit': {},
 
     'chromium.memory': {},
