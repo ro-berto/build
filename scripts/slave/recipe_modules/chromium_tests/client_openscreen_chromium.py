@@ -6,6 +6,7 @@ from . import bot_spec
 
 COMPILE_TARGETS = [
   'chrome/browser/media/router',
+  'chrome/browser/media/router:openscreen_unittests',
   'chrome/browser/media/router:unittests',
   'components/cast_certificate',
   'components/cast_certificate:unit_tests',
