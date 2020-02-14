@@ -52,10 +52,21 @@ TARGET_CONFIG_V8 = {
 }
 
 BOT_CONFIGS = {
+  'Auto-roll - devtools chromium': {
+    'target_config': TARGET_CONFIG_DEVTOOLS,
+    'subject': 'Update DevTools Chromium DEPS.',
+    # Don't roll any of the other dependencies.
+    'whitelist': [],
+    'reviewers': [
+      'machenbach@chromium.org',
+      'liviurau@chromium.org',
+    ],
+    'show_commit_log': False,
+    'roll_chromium_pin': True,
+  },
   'Auto-roll - devtools deps': {
     'target_config': TARGET_CONFIG_DEVTOOLS,
     'subject': 'Update DevTools DEPS.',
-    'blacklist': [],
     'reviewers': [
       'machenbach@chromium.org',
       'liviurau@chromium.org',
@@ -111,6 +122,16 @@ BOT_CONFIGS = {
     'show_commit_log': True,
   },
 }
+
+# DEPS configuration of pinned Devtools-Frontend Chromium versions.
+STORAGE_URL = ('https://commondatastorage.googleapis.com/'
+               'chromium-browser-snapshots/%s/LAST_CHANGE')
+CHROMIUM_PINS = {
+  'chromium_linux': STORAGE_URL % 'Linux_x64',
+  'chromium_win': STORAGE_URL % 'Win_x64',
+  'chromium_mac': STORAGE_URL % 'Mac',
+}
+
 
 def GetDEPS(api, name, project_name):
   # Make a fake spec. Gclient is not nice to us when having two solutions
@@ -192,6 +213,28 @@ def commit_messages_log_entries(api, repo, from_commit, to_commit):
   return [commit_log(c) for c in commits[:MAX_COMMIT_LOG_ENTRIES]] + ellipse
 
 
+def roll_chromium_pin(api):
+  """Updates the values of gclient variables chromium_(win|mac|linux) with the
+  latest prebuilt versions.
+  """
+  with api.context(cwd=api.path['checkout']):
+    for var_name, url in sorted(CHROMIUM_PINS.iteritems()):
+      step_result = api.gclient(
+          'get %s deps' % var_name,
+          ['getdep', '--var=%s' % var_name],
+          stdout=api.raw_io.output_text())
+      # The first line contains the commit position number. Strip the rest.
+      current_number = int(step_result.stdout.strip().splitlines()[0].strip())
+      new_number = int(api.url.get_text(
+          url,
+          step_name='check latest %s' % var_name,
+          default_test_data='123').output)
+      if new_number > current_number:
+        api.gclient(
+            'set %s deps' % var_name,
+            ['setdep', '--var=%s=%d' % (var_name, new_number)])
+
+
 def create_gclient_config(api, target_config):
   src_cfg = api.gclient.make_config()
   soln = src_cfg.solutions.add()
@@ -264,15 +307,15 @@ def RunSteps(api):
   commit_message = []
 
   # White/blacklist certain deps keys.
-  blacklist = bot_config.get('blacklist', [])
-  whitelist = bot_config.get('whitelist', [])
+  blacklist = bot_config.get('blacklist')
+  whitelist = bot_config.get('whitelist')
 
-  # Iterate over all v8 deps.
+  # Iterate over all target deps.
   failed_deps = []
   for name in sorted(target_deps.keys()):
-    if blacklist and name in blacklist:
+    if blacklist is not None and name in blacklist:
       continue
-    if whitelist and name not in whitelist:
+    if whitelist is not None and name not in whitelist:
       continue
     def SplitValue(solution_name, value):
       assert '@' in value, (
@@ -343,6 +386,10 @@ def RunSteps(api):
                 api, repo, target_ver, new_ver))
       else:
         step_result.presentation.status = api.step.WARNING
+
+  # Roll pinned Chromium binaries.
+  if bot_config.get('roll_chromium_pin', False):
+    roll_chromium_pin(api)
 
   # Check for a difference. If no deps changed, the diff is empty.
   with api.context(cwd=api.path['checkout']):
@@ -443,6 +490,31 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
   yield (
       template('devtools', 'Auto-roll - devtools deps', 'devtools-frontend') +
       api.post_process(Filter('git commit', 'git cl'))
+  )
+
+  # Test updating chromium pins in devtools DEPS file. The test data for
+  # checking the latest number returns 123 by default. Hence only linux should
+  # be updated here.
+  important_steps = Filter().include_re(
+      r'.*(?:chromium_linux|chromium_win|chromium_mac).*')
+  yield (
+      template('devtools_chromium', 'Auto-roll - devtools chromium', 'devtools-frontend') +
+      api.override_step_data(
+          'gclient get chromium_linux deps',
+          api.raw_io.stream_output('122', stream='stdout'),
+      ) +
+      api.override_step_data(
+          'gclient get chromium_win deps',
+          api.raw_io.stream_output('123', stream='stdout'),
+      ) +
+      api.override_step_data(
+          'gclient get chromium_mac deps',
+          api.raw_io.stream_output('124', stream='stdout'),
+      ) +
+      api.post_process(important_steps) +
+      api.post_process(MustRun, 'gclient set chromium_linux deps') +
+      api.post_process(DoesNotRun, 'gclient set chromium_win deps') +
+      api.post_process(DoesNotRun, 'gclient set chromium_mac deps')
   )
 
   yield api.test(
