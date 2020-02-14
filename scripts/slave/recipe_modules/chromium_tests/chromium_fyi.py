@@ -83,18 +83,6 @@ def no_archive(base_config):
       archive_build=None, gs_bucket=None, gs_acl=None, gs_build_name=None)
 
 
-def no_compile_targets(base_config):
-  """no_compile_targets returns new config from base config without
-  compile_targets.
-
-  Args:
-    base_config: config obj in SPEC['builders'][x].
-  Returns:
-    new config obj.
-  """
-  return base_config
-
-
 def override_compile_targets(base_config, compile_targets):
   """Overrides compile_targets.
 
@@ -349,32 +337,6 @@ SPEC = {
                 no_archive(chromium.SPEC['builders']['win-archive-rel']),
                 ['goma_canary', 'goma_localoutputcache']),
 
-        # TODO(b/78251210) remove after removal of cl.exe builders.
-        'Win cl.exe Goma Canary LocalOutputCache':
-            chromium_apply_configs(
-                no_compile_targets(
-                    no_archive(chromium.SPEC['builders']['win-archive-rel'])),
-                ['goma_canary', 'goma_localoutputcache']),
-        'WinMSVC64 Goma Canary':
-            chromium_apply_configs(
-                bot_spec.BotSpec.create(
-                    chromium_config='chromium',
-                    chromium_apply_config=['mb'],
-                    gclient_config='chromium',
-                    chromium_config_kwargs={
-                        'BUILD_CONFIG': 'Release',
-                        'TARGET_PLATFORM': 'win',
-                        'TARGET_BITS': 64,
-                    },
-                    bot_type=bot_spec.BUILDER,
-                    testing={
-                        'platform': 'win',
-                    },
-                    # Workaround so that recipes doesn't add random build
-                    # targets to our compile line. We want to build everything.
-                    add_tests_as_compile_targets=False,
-                ),
-                ['goma_canary']),
         # TODO(b/139556893): remove after win7 builders removal.
         'Win7 Builder Goma Canary':
             chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
@@ -471,32 +433,6 @@ SPEC = {
                 chromium_win.SPEC['builders']['Win Builder (dbg)'],
                 ['goma_latest_client']),
 
-        # TODO(b/78251210): remove after removal of cl.exe
-        'Win cl.exe Goma Latest Client LocalOutputCache':
-            chromium_apply_configs(
-                no_compile_targets(
-                    no_archive(chromium.SPEC['builders']['win-archive-rel'])),
-                ['goma_latest_client', 'goma_localoutputcache']),
-        'WinMSVC64 Goma Latest Client':
-            chromium_apply_configs(
-                bot_spec.BotSpec.create(
-                    chromium_config='chromium',
-                    chromium_apply_config=['mb'],
-                    gclient_config='chromium',
-                    chromium_config_kwargs={
-                        'BUILD_CONFIG': 'Release',
-                        'TARGET_PLATFORM': 'win',
-                        'TARGET_BITS': 64,
-                    },
-                    bot_type=bot_spec.BUILDER,
-                    testing={
-                        'platform': 'win',
-                    },
-                    # Workaround so that recipes doesn't add random build
-                    # targets to our compile line. We want to build everything.
-                    add_tests_as_compile_targets=False,
-                ),
-                ['goma_latest_client']),
         # TODO(b/139556893): remove after removal of win7.
         'Win7 Builder Goma Latest Client':
             chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
