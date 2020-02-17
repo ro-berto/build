@@ -126,14 +126,6 @@ def generate_tests(api, phase, bot):
     ]
 
   if test_suite == 'android_perf_swarming':
-    tests.append(SwarmingAndroidPerfTest('low_bandwidth_audio_perf_test', args=[
-        '--android',
-        '--adb-path', ADB_PATH,
-    ]))
-    tests.append(SwarmingAndroidPerfTest('webrtc_perf_tests', args=[
-        '--save_worst_frame',
-        '--nologs',
-    ]))
     # TODO(http://crbug.com/1029452): Remove this after prototyping the
     # new perf upload flow.
     gtest_filter = ':'.join([
@@ -148,6 +140,20 @@ def generate_tests(api, phase, bot):
                 '--gtest_filter="%s"' % gtest_filter,
                 '--save_worst_frame',
                 '--write_histogram_proto_json',
+                '--nologs',
+            ]))
+    tests.append(
+        SwarmingAndroidPerfTest(
+            'low_bandwidth_audio_perf_test',
+            args=[
+                '--android',
+                '--adb-path',
+                ADB_PATH,
+            ]))
+    tests.append(
+        SwarmingAndroidPerfTest(
+            'webrtc_perf_tests', args=[
+                '--save_worst_frame',
                 '--nologs',
             ]))
 
