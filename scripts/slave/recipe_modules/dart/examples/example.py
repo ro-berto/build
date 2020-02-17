@@ -665,8 +665,75 @@ def GenTests(api):
           ])),
       api.post_process(MustRun, 'make a fuzz_shard_2'),
       api.post_process(StepFailure, 'make a fuzz_shard_1'),
-      # TODO(athom): This should be StatusException
       api.post_process(StatusFailure),
+  )
+
+  yield api.test(
+      'fuzz-shard-timeout',
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.buildbucket.ci_build(
+          builder='fuzz-linux',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data(
+          'make a fuzz_shard_1',
+          api.swarming.collect([
+              api.swarming.task_result(
+                  id='0',
+                  name='make a fuzz_shard_1',
+                  state=api.swarming.TaskState.TIMED_OUT)
+          ])),
+      api.post_process(MustRun, 'make a fuzz_shard_2'),
+      api.post_process(StepException, 'make a fuzz_shard_1'),
+      # TODO(karlklose): this should be StatusException
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'test-shard-failure',
+      api.properties(bot_id='trusty-dart-123'),
+      api.buildbucket.ci_build(
+          builder='analyzer-linux-release',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data(
+          'test1_shard_1',
+          api.swarming.collect([
+              api.swarming.task_result(
+                  id='0', name='test1_shard_1', failure=True)
+          ])),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(
+          'upload testing fileset trigger',
+          stdout=api.raw_io.output('trigger_hash')),
+      api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
+      api.post_process(StepException, 'test1_shard_1'),
+      # TODO(karlklose): this should be StatusException
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'local-test-shard-failure',
+      api.properties(bot_id='trusty-dart-123'),
+      api.buildbucket.ci_build(
+          builder='analyzer-linux-release',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data('test3_shard_2', retcode=1),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.step_data(
+          'upload testing fileset trigger',
+          stdout=api.raw_io.output('trigger_hash')),
+      api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
+      api.post_process(StepException, 'test3_shard_2'),
+      # TODO(karlklose): this should be StatusException
+      api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
   )
 
   legacy_revinfo = {

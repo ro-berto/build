@@ -297,10 +297,18 @@ class DartApi(recipe_api.RecipeApi):
     output_dir = output_dir.join(task.id)
     try:
       task_result.analyze()
-    except self.m.step.StepFailure:
-      # The active_result is the collect step, so this will turn it red.
-      self.m.step.active_result.presentation.status = 'FAILURE'
-      raise
+    except self.m.step.InfraFailure as failure:
+      if (task_result.state == self.m.swarming.TaskState.COMPLETED and
+          not step.is_test_step):
+        self.m.step.active_result.presentation.status = 'FAILURE'
+        raise self.m.step.StepFailure(failure.reason)
+      else:
+        self.m.step.active_result.presentation.status = 'EXCEPTION'
+        raise
+    except self.m.step.StepFailure as failure:
+      assert (task_result.state == self.m.swarming.TaskState.TIMED_OUT)
+      self.m.step.active_result.presentation.status = 'EXCEPTION'
+      raise self.m.step.InfraFailure(failure.reason)
 
     bot_name = task_result.bot_id
     task_name = task_result.name
