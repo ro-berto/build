@@ -95,34 +95,14 @@ def generate_tests(api, phase, bot):
         ]))
 
   if test_suite == 'desktop_perf_swarming':
-    gtest_filter = ':'.join([
-        'FullStackTest.ForemanCifLink150kbpsWithoutPacketLoss',
-        'CallPerfTest.NoPadWithoutMinTransmitBitrate'
-    ])
     tests += [
         SwarmingPerfTest('isac_fix_test'),
         SwarmingPerfTest('low_bandwidth_audio_perf_test'),
-        SwarmingPerfTest(
-            'webrtc_perf_tests',
-            args=[
-                '--test_artifacts_dir',
-                '${ISOLATED_OUTDIR}',
-                '--save_worst_frame',
-                '--nologs',
-            ]),
-        # TODO(http://crbug.com/1029452): Remove this after prototyping the
-        # new perf upload flow.
-        SwarmingPerfTest(
-            'webrtc_perf_tests_experimental_hist',
-            target_name='webrtc_perf_tests',
-            args=[
-                '--test_artifacts_dir',
-                '${ISOLATED_OUTDIR}',
-                '--gtest_filter=%s' % gtest_filter,
-                '--save_worst_frame',
-                '--nologs',
-                '--write_histogram_proto_json',
-            ]),
+        SwarmingPerfTest('webrtc_perf_tests', args=[
+            '--test_artifacts_dir', '${ISOLATED_OUTDIR}',
+            '--save_worst_frame',
+            '--nologs',
+        ]),
     ]
 
   if test_suite == 'android_perf_swarming':
@@ -134,22 +114,6 @@ def generate_tests(api, phase, bot):
         '--save_worst_frame',
         '--nologs',
     ]))
-    # TODO(http://crbug.com/1029452): Remove this after prototyping the
-    # new perf upload flow.
-    gtest_filter = ':'.join([
-        'FullStackTest.ForemanCifLink150kbpsWithoutPacketLoss',
-        'CallPerfTest.NoPadWithoutMinTransmitBitrate'
-    ])
-    tests.append(
-        SwarmingPerfTest(
-            'webrtc_perf_tests_experimental_hist',
-            target_name='webrtc_perf_tests',
-            args=[
-                '--gtest_filter="%s"' % gtest_filter,
-                '--save_worst_frame',
-                '--write_histogram_proto_json',
-                '--nologs',
-            ]))
 
   if test_suite == 'android':
     tests += [
@@ -226,8 +190,6 @@ def generate_tests(api, phase, bot):
     ]
 
   if test_suite == 'ios_perf':
-    # TODO(http://crbug.com/1029452): Try iOS tests later (no way to duplicate
-    # test steps in the iOS recipes).
     tests += [
         IosTest('webrtc_perf_tests', args=[
             '--save_chartjson_result',
@@ -335,13 +297,12 @@ class SwarmingAndroidPerfTest(SwarmingTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedTest):
-
-  def __init__(self, name, *args, **kwargs):
+  def __init__(self, *args, **kwargs):
     # Perf tests are not idempotent, because for almost all tests the binary
     # will not return the exact same perf result each time. We want to get those
     # results so the dashboard can properly determine the variance of the test.
     kwargs.setdefault('idempotent', False)
-    super(SwarmingPerfTest, self).__init__(name, *args, **kwargs)
+    super(SwarmingPerfTest, self).__init__(*args, **kwargs)
 
   def validate_task_results(self, api, step_result):
     valid = super(SwarmingPerfTest, self).validate_task_results(

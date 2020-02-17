@@ -62,11 +62,7 @@ def RunSteps(api):
 
   if webrtc.bot.should_build:
     webrtc.run_mb()
-    if webrtc.bot.should_upload_perf_results:
-      # Perf testers are a special case; they only need the catapult protos.
-      raw_result = webrtc.compile(override_targets=['webrtc_dashboard_upload'])
-    else:
-      raw_result = webrtc.compile()
+    raw_result = webrtc.compile()
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 

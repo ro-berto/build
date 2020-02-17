@@ -63,8 +63,7 @@ class Bot(object):
 
   @property
   def should_build(self):
-    is_perf_tester = self.should_upload_perf_results and self.should_test
-    return (self.bot_type in ('builder', 'builder_tester')) or is_perf_tester
+    return self.bot_type in ('builder', 'builder_tester')
 
   @property
   def should_test(self):
@@ -261,10 +260,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     for bot in self.related_bots():
       if bot.should_test:
         for test in steps.generate_tests(self.m, phase, bot):
-          if isinstance(test, SwarmingTest):
-            isolated_targets.add(test.target_name)
-          elif isinstance(test, steps.IosTest):
-            # TODO(http://crbug.com/1029452): add iOS support for target names.
+          if isinstance(test, (SwarmingTest, steps.IosTest)):
             isolated_targets.add(test._name)
 
     self._isolated_targets = sorted(isolated_targets)
@@ -413,14 +409,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         # module does isolation itself, it basically just includes the .app file
         isolated_targets=None)
 
-  def compile(self, phase=None, override_targets=None):
+  def compile(self, phase=None):
     del phase
-    if override_targets is None:
-      targets = self._isolated_targets
-      if targets:
-        targets = ['default'] + targets
-    else:
-      targets = override_targets
+    targets = self._isolated_targets
+    if targets:
+      targets = ['default'] + targets
 
     return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
@@ -545,6 +538,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
   def upload_to_perf_dashboard(self, name, step_result):
+    token = self.m.service_account.default().get_access_token()
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
     if self._test_data.enabled and test_succeeded:
@@ -555,90 +549,43 @@ class WebRTCApi(recipe_api.RecipeApi):
     else:
       task_output_dir = step_result.raw_io.output_dir
 
-    # TODO(http://crbug.com/1029452): Make use_histograms default after
-    # trying out this new flow.
-    use_histograms = name == 'webrtc_perf_tests_experimental_hist'
-
     results_to_upload = []
     for filepath in sorted(task_output_dir):
-      if use_histograms:
-        # TODO(http://crbug.com/1029452): Rename test outputs json -> proto.
-        # The extension is currently hard-coded in isolated_script_task().
-        # In histogram mode, the tests output protos rather than JSON.
-        if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
-          results_to_upload.append(task_output_dir[filepath])
-      else:
-        if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
-          perf_results = self.m.json.loads(task_output_dir[filepath])
-          if perf_results:
-            results_to_upload.append(perf_results)
+      # File names are 'perftest-output.json', 'perftest-output_1.json', ...
+      # And 'perf_result.json' for iOS.
+      if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
+        perf_results = self.m.json.loads(task_output_dir[filepath])
+        if perf_results:
+          results_to_upload.append(perf_results)
 
     if not results_to_upload and test_succeeded: # pragma: no cover
       raise self.m.step.InfraFailure(
-          'Missing perf output from the test; expected either '
-          'perftest-output(_x).json or perf_result.json on iOS.')
+          'Cannot find JSON performance data for a test that succeeded.')
 
     perf_bot_group = 'WebRTCPerf'
     if self.m.runtime.is_experimental:
       perf_bot_group = 'Experimental' + perf_bot_group
 
-    if use_histograms:
-      for perf_results in results_to_upload:
-        perf_bot_group = 'ZZExperimentalHistograms' + perf_bot_group
-        args = [
-            '--build-page-url', self.build_url, '--test-suite',
-            'webrtc_perf_tests', '--bot', self.c.PERF_ID, '--output-json-file',
-            self.m.json.output(), '--input-results-file',
-            self.m.raw_io.input(perf_results), '--dashboard-url',
-            DASHBOARD_UPLOAD_URL, '--commit-position', self.revision_number,
-            '--webrtc-git-hash', self.revision,
-            '--perf-dashboard-machine-group', perf_bot_group, '--outdir',
-            self.m.chromium.output_dir
-        ]
+    for perf_results in results_to_upload:
+      args = [
+          '--oauth-token-file', self.m.raw_io.input_text(token),
+          '--build-url', self.build_url,
+          '--name', name,
+          '--perf-id', self.c.PERF_ID,
+          '--output-json-file', self.m.json.output(),
+          '--results-file', self.m.json.input(perf_results),
+          '--results-url', DASHBOARD_UPLOAD_URL,
+          '--commit-position', self.revision_number,
+          '--got-webrtc-revision', self.revision,
+          '--perf-dashboard-machine-group', perf_bot_group,
+      ]
 
-        upload_script = self.m.path['checkout'].join(
-            'tools_webrtc', 'perf', 'webrtc_dashboard_upload.py')
-        self.m.python(
-            '%s Dashboard Upload' % name,
-            upload_script,
-            args,
-            step_test_data=lambda: self.m.json.test_api.output({}),
-            # TODO(http://crbug.com/1029452): Ignore failures in this step while
-            # experimenting. Don't make the bots red or purple.
-            infra_step=True,
-            ok_ret='all')
-    else:
-      token = self.m.service_account.default().get_access_token()
-      for perf_results in results_to_upload:
-        args = [
-            '--oauth-token-file',
-            self.m.raw_io.input_text(token),
-            '--build-url',
-            self.build_url,
-            '--name',
-            name,
-            '--perf-id',
-            self.c.PERF_ID,
-            '--output-json-file',
-            self.m.json.output(),
-            '--results-file',
-            self.m.json.input(perf_results),
-            '--results-url',
-            DASHBOARD_UPLOAD_URL,
-            '--commit-position',
-            self.revision_number,
-            '--got-webrtc-revision',
-            self.revision,
-            '--perf-dashboard-machine-group',
-            perf_bot_group,
-        ]
-
-        self.m.build.python(
-            '%s Dashboard Upload' % name,
-            self.resource('upload_perf_dashboard_results.py'),
-            args,
-            step_test_data=lambda: self.m.json.test_api.output({}),
-            infra_step=True)
+      self.m.build.python(
+          '%s Dashboard Upload' % name,
+          self.resource('upload_perf_dashboard_results.py'),
+          args,
+          step_test_data=lambda: self.m.json.test_api.output({}),
+          infra_step=True)
 
 
 def sanitize_file_name(name):
