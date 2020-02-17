@@ -76,6 +76,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # should be TBRed and No-tried to minimize the negative impact of an outage.
     self._should_exonerate_flaky_failures = True
 
+    # Skip retrying if there are >= N test suites with test failures. This most
+    # likely indicates a problem with the CL itself instead of being caused by
+    # flaky tests when N is large.
+    # 5 is chosen because it's a conscious tradeoff between CQ cycle time and
+    # false rejection rate, and a study conducted in http://bit.ly/37CSyBA shows
+    # that 90th percentile cycle time can be improved by 2.2% with a loss of
+    # 0.15% false rejection rate.
+    self._min_failed_suites_to_skip_retry = (
+        properties.min_failed_suites_to_skip_retry or 5)
+
   @property
   def canonical(self):
     return canonical
@@ -356,9 +366,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
                                     flake['monorail_issue'])
           break
 
-
-
-
   def run_tests(self,
                 caller_api,
                 test_suites,
@@ -408,6 +415,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
     gerrit_changes = self.m.buildbucket.build.input.gerrit_changes
     if gerrit_changes and gerrit_changes[0].change % 2 == 0:
       self._should_exonerate_flaky_failures = False
+
+    if len(failed_test_suites) >= self._min_failed_suites_to_skip_retry:
+      result = self.m.python.succeeding_step(
+          'skip retrying because there are >= %d test suites with test '
+          'failures and it most likely indicate a problem with the CL' %
+          self._min_failed_suites_to_skip_retry, '')
+      result.presentation.status = self.m.step.FAILURE
+      return invalid_test_suites, invalid_test_suites + failed_test_suites
 
     if suffix == 'with patch' and self._should_exonerate_flaky_failures:
       # If *all* the deterministic failures are known flaky tests, a test suite

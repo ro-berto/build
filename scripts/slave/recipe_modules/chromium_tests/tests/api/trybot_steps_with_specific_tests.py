@@ -1412,3 +1412,54 @@ def GenTests(api):
                        'query known flaky failures on CQ'),
       api.post_process(post_process.DropExpectation),
   )
+
+  results_with_failure = {
+      'per_iteration_data': [{
+          'BaseTest.One': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+
+  yield api.test(
+      'skip_retrying_if_there_are_too_many_failed_test_suites',
+      api.chromium.try_build(
+          mastername='tryserver.chromium.linux', builder='linux-rel'),
+      api.properties(
+          retry_failed_shards=True,
+          additional_gtest_targets=['target1', 'target2', 'target3'],
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+              'target1': '1111111111111111111111111111111111111111',
+              'target2': '2222222222222222222222222222222222222222',
+              'target3': '3333333333333333333333333333333333333333',
+          },
+          **{
+              '$build/test_utils': {
+                  'min_failed_suites_to_skip_retry': 3,
+              },
+          }),
+      api.override_step_data(
+          'target1 (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'target2 (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'target3 (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.post_process(post_process.DoesNotRunRE,
+                       'target\d \(retry shards with patch\)'),
+      api.post_process(post_process.DropExpectation),
+  )

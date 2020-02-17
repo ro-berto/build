@@ -14,4 +14,7 @@ message InputProperties {
   // Used to control whether to skip retrying flaky tests if they're already
   // known to be flaky on ToT.
   bool should_exonerate_flaky_failures = 2;
+  // Used to control the behavior to skip retrying when there are too many test
+  // suites with test failures.
+  int32 min_failed_suites_to_skip_retry = 3;
 }
