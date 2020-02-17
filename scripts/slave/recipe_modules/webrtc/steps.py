@@ -100,16 +100,6 @@ def generate_tests(api, phase, bot):
         'CallPerfTest.NoPadWithoutMinTransmitBitrate'
     ])
     tests += [
-        SwarmingPerfTest('isac_fix_test'),
-        SwarmingPerfTest('low_bandwidth_audio_perf_test'),
-        SwarmingPerfTest(
-            'webrtc_perf_tests',
-            args=[
-                '--test_artifacts_dir',
-                '${ISOLATED_OUTDIR}',
-                '--save_worst_frame',
-                '--nologs',
-            ]),
         # TODO(http://crbug.com/1029452): Remove this after prototyping the
         # new perf upload flow.
         SwarmingPerfTest(
@@ -122,6 +112,16 @@ def generate_tests(api, phase, bot):
                 '--save_worst_frame',
                 '--nologs',
                 '--write_histogram_proto_json',
+            ]),
+        SwarmingPerfTest('isac_fix_test'),
+        SwarmingPerfTest('low_bandwidth_audio_perf_test'),
+        SwarmingPerfTest(
+            'webrtc_perf_tests',
+            args=[
+                '--test_artifacts_dir',
+                '${ISOLATED_OUTDIR}',
+                '--save_worst_frame',
+                '--nologs',
             ]),
     ]
 
