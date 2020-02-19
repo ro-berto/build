@@ -212,10 +212,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['grit_python_unittests', None],
           ['metrics_python_tests', None],
           ['telemetry_gpu_unittests', None],
-          ['devtools_closure_compile', None],
-          ['devtools_eslint', None],
-          ['devtools_lint_check', None],
-          ['devtools_type_check', None],
           ['python3_smoketest', None],
 
           # Following are mappings from isolate target names to binary names.
