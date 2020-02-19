@@ -277,8 +277,6 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
   api.step('disable flutter analytics', [
       flutter_cmd, 'config', '--no-analytics'])
   with api.context(cwd=flutter):
-    api.step('flutter update-packages',
-             [flutter_cmd, 'update-packages'] + test_args)
 
     # Precache so that later flutter won't overwrite
     # updated artifacts.
@@ -289,6 +287,9 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
     # tightly-coupled frontend_server.dart.snapshot with links that point to
     # corresponding entries from binaries generated into [engine_src]
     UpdateCachedEngineArtifacts(api, flutter, engine_src)
+
+    api.step('flutter update-packages',
+             [flutter_cmd, 'update-packages'] + test_args)
 
     # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
