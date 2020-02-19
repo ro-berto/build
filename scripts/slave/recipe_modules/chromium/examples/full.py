@@ -5,21 +5,21 @@
 from recipe_engine.post_process import Filter
 
 DEPS = [
-  'chromium',
-  'chromium_tests',
-  'recipe_engine/json',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
+    'chromium',
+    'chromium_tests',
+    'recipe_engine/buildbucket',
+    'recipe_engine/json',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 from recipe_engine import post_process
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
+  buildername = api.buildbucket.builder_name
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False)
@@ -53,22 +53,24 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic_out_dir',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
-          out_dir='/tmp',
+          build_number=77457,
       ),
+      api.properties(out_dir='/tmp'),
   )
 
   yield api.test(
       'basic_out_dir_with_custom_mb_config',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           mb_config_path='/custom/config.pyl',
       ),
@@ -76,22 +78,24 @@ def GenTests(api):
 
   yield api.test(
       'basic_out_dir_without_compile_py',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
-          out_dir='/tmp',
+          build_number=77457,
       ),
+      api.properties(out_dir='/tmp'),
   )
 
   yield api.test(
       'basic_out_dir_with_goma_module',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           use_goma_module=True,
           out_dir='/tmp',
       ),
@@ -99,22 +103,24 @@ def GenTests(api):
 
   yield api.test(
       'basic_no_out_dir_with_goma_module',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
-          use_goma_module=True,
+          build_number=77457,
       ),
+      api.properties(use_goma_module=True),
   )
 
   yield api.test(
       'basic_out_dir_goma_module_build_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           use_goma_module=True,
           failfast=True,
@@ -135,11 +141,13 @@ def GenTests(api):
 
   yield api.test(
       'basic_out_dir_ninja_build_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           use_goma_module=False,
       ),
@@ -148,11 +156,13 @@ def GenTests(api):
 
   yield api.test(
       'basic_out_dir_ninja_no_op_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           use_goma_module=True,
       ),
@@ -163,11 +173,13 @@ def GenTests(api):
 
   yield api.test(
       'basic_out_dir_goma_module_start_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           use_goma_module=True,
           failfast=True,
@@ -184,11 +196,13 @@ def GenTests(api):
 
   yield api.test(
       'basic_out_dir_goma_module_ping_failure',
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.android',
-          buildername='Android arm Builder (dbg)',
+          builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           use_goma_module=True,
           failfast=True,
@@ -208,39 +222,28 @@ def GenTests(api):
   yield api.test(
       'mac_basic',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.mac',
-          buildername='Mac Builder',
+          builder='Mac Builder',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           target_platform='mac',
       ),
-  )
-
-  yield api.test(
-      'mac_basic_luci',
-      api.platform('mac', 64),
-      api.properties(
-          mastername='chromium.mac',
-          buildername='Mac Builder',
-          bot_id='build1-a1',
-          buildnumber='77457',
-          out_dir='/tmp',
-          target_platform='mac',
-      ),
-      api.runtime(is_luci=True, is_experimental=False),
-      api.post_process(Filter('gclient runhooks')),
   )
 
   yield api.test(
       'mac_toolchain',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.mac',
-          buildername='Mac Builder',
+          builder='Mac Builder',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           target_platform='mac',
           configs=['mac_toolchain'],
@@ -250,11 +253,13 @@ def GenTests(api):
   yield api.test(
       'mac_toolchain_properties',
       api.platform('mac', 64),
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.mac',
-          buildername='Mac Builder',
+          builder='Mac Builder',
           bot_id='build1-a1',
-          buildnumber='77457',
+          build_number=77457,
+      ),
+      api.properties(
           out_dir='/tmp',
           target_platform='mac',
           configs=['mac_toolchain'],
@@ -265,11 +270,11 @@ def GenTests(api):
   yield api.test(
       'chromeos_simplechrome',
       api.platform('linux', 64),
-      api.properties(
+      api.chromium.ci_build(
           mastername='chromium.chromiumos',
-          buildername='chromeos-amd64-generic-rel',
+          builder='chromeos-amd64-generic-rel',
           bot_id='build1-a1',
-          buildnumber='77457',
-          out_dir='/tmp',
+          build_number=77457,
       ),
+      api.properties(out_dir='/tmp'),
   )
