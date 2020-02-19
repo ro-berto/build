@@ -20,5 +20,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  yield api.test('mac_pre_catalina') + api.platform(
+      'mac', 64, mac_release='10.14.0')
+  yield api.test('mac_post_catalina') + api.platform(
+      'mac', 64, mac_release='10.15.0')
   yield api.test('linux') + api.platform('linux', 64)
   yield api.test('win') + api.platform('win', 64)

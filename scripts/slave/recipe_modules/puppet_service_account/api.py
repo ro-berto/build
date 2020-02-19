@@ -20,6 +20,13 @@ class PuppetServiceAccountApi(recipe_api.RecipeApi):
     """Path to a directory where ChromeOps Puppet drops service account keys."""
     if self.m.platform.is_win:
       return 'C:\\creds\\service_accounts'
+
+    if self.m.platform.is_mac:
+      # Starting with macOS 10.15 (Catalina), Puppet stores the service
+      # accounts in /opt/creds instead of /creds.
+      if self.m.platform.mac_release >= self.m.version.parse('10.15'):
+        return '/opt/creds/service_accounts'
+
     return '/creds/service_accounts'
 
   def get(self, account):

@@ -3013,7 +3013,7 @@ Args:
 &mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#146)(self, step_result, reason):**
 ### *recipe_modules* / [puppet\_service\_account](/scripts/slave/recipe_modules/puppet_service_account)
 
-[DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
+[DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/version][recipe_engine/recipe_modules/version]
 
 **[DEPRECATED]** API for generating OAuth2 access tokens from service account
 keys predeployed to Chrome Ops bots via Puppet.
@@ -3025,7 +3025,7 @@ exposed through 'recipe_engine/service_account' module.
 
 #### **class [PuppetServiceAccountApi](/scripts/slave/recipe_modules/puppet_service_account/api.py#17)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get](/scripts/slave/recipe_modules/puppet_service_account/api.py#25)(self, account):**
+&mdash; **def [get](/scripts/slave/recipe_modules/puppet_service_account/api.py#32)(self, account):**
 
 Returns a recipe_module.service_account.ServiceAccount for the account.
 
@@ -3037,7 +3037,7 @@ Args:
 Returns
   A recipe_module.service_account.ServiceAccount instance.
 
-&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#43)(self, account, scopes=None):**
+&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#50)(self, account, scopes=None):**
 
 Returns an access token for a service account.
 
@@ -3047,7 +3047,7 @@ Args:
   account: a name of the service account, as defined in Puppet config.
   scopes: list of OAuth scopes for new token, default is [userinfo.email].
 
-&mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#39)(self, account):**
+&mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#46)(self, account):**
 
 Path to a particular JSON key (as str).
 
@@ -6043,5 +6043,6 @@ The changes are:
 [recipe_engine/recipe_modules/time]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/README.recipes.md#recipe_modules-time
 [recipe_engine/recipe_modules/tricium]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/README.recipes.md#recipe_modules-tricium
 [recipe_engine/recipe_modules/url]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/README.recipes.md#recipe_modules-url
+[recipe_engine/recipe_modules/version]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/README.recipes.md#recipe_modules-version
 [recipe_engine/wkt/RecipeApi]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/recipe_engine/recipe_api.py#871
 [recipe_engine/wkt/returns_placeholder]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/33fed4343ba9723f8d4e16dd04978f27490f0a57/recipe_engine/util.py#135
