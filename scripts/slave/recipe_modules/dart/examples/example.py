@@ -686,8 +686,7 @@ def GenTests(api):
           ])),
       api.post_process(MustRun, 'make a fuzz_shard_2'),
       api.post_process(StepException, 'make a fuzz_shard_1'),
-      # TODO(karlklose): this should be StatusException
-      api.post_process(StatusFailure),
+      api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
 
@@ -711,8 +710,7 @@ def GenTests(api):
           stdout=api.raw_io.output('trigger_hash')),
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.post_process(StepException, 'test1_shard_1'),
-      # TODO(karlklose): this should be StatusException
-      api.post_process(StatusFailure),
+      api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
 
@@ -731,8 +729,7 @@ def GenTests(api):
           stdout=api.raw_io.output('trigger_hash')),
       api.step_data('buildbucket.put', stdout=api.json.output(TRIGGER_RESULT)),
       api.post_process(StepException, 'test3_shard_2'),
-      # TODO(karlklose): this should be StatusException
-      api.post_process(StatusFailure),
+      api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
 

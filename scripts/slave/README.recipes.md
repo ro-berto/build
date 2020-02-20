@@ -1911,7 +1911,7 @@ Returns the path to the checked-in SDK dart executable.
 
 Deletes the debug log file
 
-&mdash; **def [download\_browser](/scripts/slave/recipe_modules/dart/api.py#821)(self, runtime, version):**
+&mdash; **def [download\_browser](/scripts/slave/recipe_modules/dart/api.py#827)(self, runtime, version):**
 
 &mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#155)(self):**
 

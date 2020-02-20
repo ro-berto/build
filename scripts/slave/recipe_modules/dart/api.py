@@ -714,22 +714,28 @@ class DartApi(recipe_api.RecipeApi):
         self.download_browser(runtime, global_config[runtime])
     test_steps = []
     sharded_steps = []
-    with self.m.step.defer_results():
-      for index, step_json in enumerate(config['steps']):
-        step = self.TestMatrixStep(self.m, builder_name, config, step_json,
-                                   environment, index)
-        if step.fileset:
-          # We build isolates here, every time we see fileset, to wait for the
-          # building of Dart, which may be included in the fileset.
-          self._build_isolates(config, isolate_hashes)
-          step.isolate_hash = isolate_hashes[step.fileset]
+    try:
+      with self.m.step.defer_results():
+        for index, step_json in enumerate(config['steps']):
+          step = self.TestMatrixStep(self.m, builder_name, config, step_json,
+                                     environment, index)
+          if step.fileset:
+            # We build isolates here, every time we see fileset, to wait for the
+            # building of Dart, which may be included in the fileset.
+            self._build_isolates(config, isolate_hashes)
+            step.isolate_hash = isolate_hashes[step.fileset]
 
-        if not step.is_trigger and step.is_test_step:
-          test_steps.append(step)
-        if step.isolate_hash and not (step.local_shard and step.shards < 2):
-          sharded_steps.append(step)
-        self._run_step(step, global_config)
-      self.collect_all(sharded_steps)
+          if not step.is_trigger and step.is_test_step:
+            test_steps.append(step)
+          if step.isolate_hash and not (step.local_shard and step.shards < 2):
+            sharded_steps.append(step)
+          self._run_step(step, global_config)
+        self.collect_all(sharded_steps)
+    except recipe_api.AggregatedStepFailure as failure:
+      if _has_infra_failure(failure):
+        raise recipe_api.InfraFailure(failure.reason)
+      else:
+        raise
     self._process_test_results(test_steps, global_config)
 
 
@@ -1121,3 +1127,17 @@ class StepResults:
     all_chunks = (chunk for match in all_matches for chunk in (
         match.group(1), extra))
     self.results += ''.join(all_chunks)
+
+
+def _has_infra_failure(failure):
+  """ Returns whether failure is an aggregated failure that directly or
+      indirectly contains an InfraFailure."""
+  if not isinstance(failure, recipe_api.AggregatedStepFailure):
+    return False
+  elif failure.result.contains_infra_failure:
+    return True
+  else:
+    for f in failure.result.failures:
+      if _has_infra_failure(f):
+        return True
+    return False
