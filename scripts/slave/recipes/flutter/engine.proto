@@ -42,6 +42,7 @@ message InputProperties {
 
   string fuchsia_ctl_version=22;
   bool build_font_subset=23;
+  bool test_fuchsia=24;
 }
 
 message EnvProperties {

@@ -156,7 +156,7 @@ def BuildAndTestFuchsia(api, build_script, git_rev):
       '--archs', 'x64', '--runtime-mode', 'debug'
   ]
 
-  if api.platform.is_linux:
+  if api.platform.is_linux and api.properties.get('test_fuchsia', True):
     api.step('Package Fuchsia Artifacts', fuchsia_package_cmd)
     TestFuchsia(api)
 
@@ -1368,6 +1368,7 @@ def GenTests(api):
                     fuchsia_ctl_version='version:0.0.2',
                     build_host=True,
                     build_fuchsia=True,
+                    test_fuchsia=True,
                     build_android_aot=True,
                     build_android_debug=True,
                     build_android_vulkan=True,
@@ -1429,6 +1430,7 @@ def GenTests(api):
               fuchsia_ctl_version='version:0.0.2',
               build_host=True,
               build_fuchsia=True,
+              test_fuchsia=True,
               build_android_aot=True,
               build_android_debug=True,
               build_android_vulkan=True,
@@ -1452,6 +1454,7 @@ def GenTests(api):
               fuchsia_ctl_version='version:0.0.2',
               build_host=True,
               build_fuchsia=True,
+              test_fuchsia=True,
               build_android_aot=True,
               build_android_debug=True,
               build_android_vulkan=True,
@@ -1473,6 +1476,7 @@ def GenTests(api):
               fuchsia_ctl_version='version:0.0.2',
               build_host=False,
               build_fuchsia=True,
+              test_fuchsia=True,
               build_android_aot=False,
               build_android_debug=False,
               build_android_vulkan=False,
