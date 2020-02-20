@@ -219,7 +219,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"sdk\": \"iphoneos10.3\",\n  \"tests\": [],\n  \"xcode build version\": \"10l232m\"\n}",
+      "{\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"sdk\": \"iphoneos10.3\",\n  \"tests\": [],\n  \"xcode build version\": \"11c29\"\n}",
       "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm64_rel.json"
     ],
     "infra_step": true,
@@ -235,7 +235,7 @@
       "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@  ],@@@",
       "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@  \"sdk\": \"iphoneos10.3\",@@@",
       "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@  \"tests\": [],@@@",
-      "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@  \"xcode build version\": \"11c29\"@@@",
       "@@@STEP_LOG_LINE@ios_compile_arm64_rel.json@}@@@",
       "@@@STEP_LOG_END@ios_compile_arm64_rel.json@@@"
     ]
@@ -260,7 +260,7 @@
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos10.3\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"11c29\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
