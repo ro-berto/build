@@ -517,7 +517,8 @@ TRYBOTS = freeze({
                 simple_bot({
                     'mastername': 'chromium.linux',
                     'buildername': 'Fuchsia ARM64',
-                }),
+                },
+                           analyze_mode='compile'),
             'fuchsia-arm64-cast':
                 simple_bot({
                     'mastername': 'chromium.linux',
