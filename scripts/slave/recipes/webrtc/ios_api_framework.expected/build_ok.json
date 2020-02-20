@@ -183,7 +183,7 @@
     "cmd": [],
     "name": "ensure xcode",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 10b61 in [CACHE]/xcode_ios_10b61.app@@@"
+      "@@@STEP_TEXT@Ensuring Xcode version 11c29 in [CACHE]/xcode_ios_11c29.app@@@"
     ]
   },
   {
@@ -220,9 +220,9 @@
       "-kind",
       "ios",
       "-xcode-version",
-      "10b61",
+      "11c29",
       "-output-dir",
-      "[CACHE]/xcode_ios_10b61.app"
+      "[CACHE]/xcode_ios_11c29.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.install xcode",
@@ -235,7 +235,7 @@
       "sudo",
       "xcode-select",
       "-switch",
-      "[CACHE]/xcode_ios_10b61.app"
+      "[CACHE]/xcode_ios_11c29.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.select xcode",

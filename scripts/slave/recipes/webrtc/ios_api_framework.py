@@ -33,7 +33,7 @@ def RunSteps(api):
   api.goma.start()
   build_exit_status = 1
 
-  api.ios.ensure_xcode("10b61")
+  api.ios.ensure_xcode("11c29")
 
   try:
     build_script = api.path['checkout'].join('tools_webrtc', 'ios',
