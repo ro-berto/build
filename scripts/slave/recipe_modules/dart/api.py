@@ -748,7 +748,7 @@ class DartApi(recipe_api.RecipeApi):
       elif step.is_test_py_step:
         self._run_test_py(step, global_config)
       else:
-        with self.m.context(infra_steps=False):
+        with self.m.context(infra_steps=step.is_test_step):
           self._run_script(step)
 
 

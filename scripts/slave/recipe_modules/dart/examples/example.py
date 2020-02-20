@@ -796,3 +796,19 @@ def GenTests(api):
       api.post_process(StatusException),
       api.post_process(Filter().include_re(r'.*co19.*')),
   )
+
+  yield api.test(
+      'custom-test-runner-failure-is-infra-failure',
+      api.properties(shard_timeout='600'),
+      api.buildbucket.try_build(
+          build_number=1357,
+          builder='dart2js-strong-linux-x64-firefox-try',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'),
+      api.step_data('custom_runner', retcode=1),
+      api.step_data(
+          'upload testing fileset test', stdout=api.raw_io.output('test_hash')),
+      api.post_process(StepException, 'custom_runner'),
+      api.post_process(StatusException),
+      api.post_process(DropExpectation),
+  )

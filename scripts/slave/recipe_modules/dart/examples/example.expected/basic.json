@@ -1054,6 +1054,7 @@
         "RECIPE_REPO[depot_tools]"
       ]
     },
+    "infra_step": true,
     "name": "custom_runner"
   },
   {
