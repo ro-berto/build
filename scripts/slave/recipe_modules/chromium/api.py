@@ -20,7 +20,7 @@ _CR_COMPILE_GUARD_NAME = 'CR_COMPILE_GUARD.txt'
 _CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
     This file exists while a build compiles and is removed at the end of
     compilation. If the next build finds that the file exists prior to
-    compilation, it will wipe the output dierctory.
+    compilation, it will wipe the output directory.
 
     See https://crbug.com/959436 for more context.
     """)
