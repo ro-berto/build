@@ -189,6 +189,8 @@
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-gn-targets",
       "[START_DIR]/src/out/Debug/gn_targets.json",
+      "--path-to-java-kzips",
+      "[START_DIR]/src/out/Debug/kzip",
       "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",

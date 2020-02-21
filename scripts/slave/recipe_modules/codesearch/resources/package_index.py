@@ -25,8 +25,9 @@ import zipfile
 
 from contextlib import closing
 
-from kythe.proto import analysis_pb2
-from kythe.proto import buildinfo_pb2
+from google.protobuf import json_format
+
+from kythe.proto import analysis_pb2, buildinfo_pb2, java_pb2
 
 from windows_shell_split import WindowsShellSplit
 
@@ -57,8 +58,8 @@ class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
   def __init__(self, output_file, root_dir, compdb_path, gn_targets_path,
-               corpus=None, build_config=None, out_dir='src/out/Debug',
-               verbose=False):
+               existing_java_kzips, corpus=None, build_config=None,
+               out_dir='src/out/Debug', verbose=False):
     """Initializes IndexPack.
 
     Args:
@@ -69,6 +70,8 @@ class IndexPack(object):
       compdb_path: path to the compilation database.
       gn_targets_path: path to a json file contains gn target information, as
         produced by 'gn desc --format=json'. See 'gn help desc' for more info.
+      existing_java_kzips: path to java kzips produced by javac_extractor. Units
+        are in json format.
       corpus: the corpus to use for the generated Kythe VNames, e.g. 'chromium'.
         A VName identifies a node in the Kythe index. For more details, see:
         https://kythe.io/docs/kythe-storage.html
@@ -79,11 +82,16 @@ class IndexPack(object):
     if corpus is None:
       raise Exception('ERROR: --corpus required')
 
+    if not os.path.isdir(existing_java_kzips):
+      raise Exception('ERROR: --existing_java_kzips is not a directory')
+
     self.root_dir = root_dir
     self.corpus = corpus
+    self.existing_java_kzips = existing_java_kzips
     self.build_config = build_config
     self.out_dir = out_dir
     self.verbose = verbose
+
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
     # Maps back from SHA256 hash to source file name. Used to debug cases where
@@ -243,6 +251,65 @@ class IndexPack(object):
     self.kzip.writestr(unit_file_path, unit_file_content)
     if self.verbose:
       print('Wrote compilation unit file %s' % unit_file_path)
+
+
+  def _MergeExistingKzips(self):
+    for f in os.listdir(self.existing_java_kzips):
+      if not f.endswith('.kzip'):
+        continue
+      try:
+        with zipfile.ZipFile(os.path.join(self.existing_java_kzips, f), 'r',
+                             zipfile.ZIP_DEFLATED, allowZip64=True) as kzip:
+          self._MergeExistingKzip(kzip)
+      except zipfile.BadZipfile as e:
+        # Should there be issue with kzip, skip this unit
+        print('Error reading generated zip file %s: %s' % (f, e))
+        continue
+
+  def _MergeExistingKzip(self, kzip):
+    for zip_info in kzip.infolist():
+      # kzip should contain following structure:
+      # foo/
+      # foo/files
+      # foo/files/bar
+      # foo/units
+      # foo/units/bar
+      # We only care for foo/files/* and foo/units/*
+      segments = zip_info.filename.split('/')
+      if len(segments) != 3:
+        continue
+
+      try:
+        content = kzip.open(zip_info, 'rU').read()
+      except zipfile.BadZipfile as e:
+        # Should there be issue with extracting kzip, skip this unit
+        print('Error reading generated zip file %s: %s' % (kzip.filename, e))
+        continue
+
+      if segments[1] == 'units':
+        # Units in Java zip archive are json encoded
+
+        # convert json into a protobuf
+        indexed_compilation_proto = json_format.Parse(
+            content,
+            analysis_pb2.IndexedCompilation())
+        self.kzip.writestr(self.units_directory + '/' + segments[2],
+                           indexed_compilation_proto.SerializeToString())
+
+        if self.verbose:
+          print("Added unit %s from java kzip" % zip_info.filename)
+      elif segments[1] == 'files':
+        if not self._SetFileHashEntry(segments[2], segments[2]):
+          # File already added
+          continue
+
+        self.kzip.writestr(self.files_directory + '/' + segments[2],
+                           content)
+        if self.verbose:
+          print("Added file %s from java kzip" % zip_info.filename)
+      else:
+        print('WARNING: Unexpected file %s in kzip %s' % (
+            zip_info.filename, f))
 
   def _ConvertGnPath(self, gn_path):
     """Converts gn paths into output-directory-relative paths.
@@ -528,6 +595,7 @@ class IndexPack(object):
     An index pack consists of data files (the source and header files) and unit
     files (describing one compilation unit each).
     """
+    self._MergeExistingKzips()
 
     # Generate the source files.
     # This needs to be called first before calling _GenerateUnitFiles()
@@ -642,6 +710,9 @@ def main():
   parser.add_argument('--corpus',
                       required=True,
                       help='the kythe corpus to use for the vname')
+  parser.add_argument('--path-to-java-kzips',
+                      help='path to already generated java kzips which will be '
+                      'included in the final index pack')
   parser.add_argument('--build-config',
                       help='the build config to use in the unit file')
   parser.add_argument('--checkout-dir',
@@ -671,7 +742,8 @@ def main():
   with closing(
       IndexPack(options.path_to_archive_output, root_dir,
                 options.path_to_compdb, options.path_to_gn_targets,
-                options.corpus, options.build_config, options.out_dir,
+                options.path_to_java_kzips, options.corpus,
+                options.build_config, options.out_dir,
                 options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
 

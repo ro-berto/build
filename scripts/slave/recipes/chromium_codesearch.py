@@ -194,6 +194,8 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
     gclient_config.target_os = ['fuchsia']
   api.gclient.c = gclient_config
 
+  api.gclient.apply_config('android_prebuilts_build_tools')
+
   checkout_dir = api.path['cache'].join('builder')
   with api.context(cwd=checkout_dir):
     update_step = api.bot_update.ensure_checkout(
@@ -224,12 +226,19 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
       buildername=api.buildbucket.builder_name)
   api.codesearch.generate_gn_target_list()
 
+  # Prepare Java Kythe output directory
+  kzip_dir = api.codesearch.c.javac_extractor_output_dir
+  api.file.ensure_directory('java kzip', kzip_dir)
+  api.file.rmcontents('java kzip', kzip_dir)
+
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
-  raw_result = api.chromium.compile(targets, use_goma_module=True,
-                       out_dir='out', target=gen_repo_out_dir or 'Debug')
+  with api.context(env={'KYTHE_ROOT_DIRECTORY': api.path['checkout'],
+                        'KYTHE_OUTPUT_DIRECTORY': kzip_dir}):
+    raw_result = api.chromium.compile(targets, use_goma_module=True,
+                         out_dir='out', target=gen_repo_out_dir or 'Debug')
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 

@@ -184,6 +184,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     args = ['--checkout-dir', self.m.path['checkout'],
             '--path-to-compdb', self.c.compile_commands_json_file,
             '--path-to-gn-targets', self.c.gn_targets_json_file,
+            '--path-to-java-kzips',
+            self.c.javac_extractor_output_dir,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
             '--corpus', self.c.CORPUS]

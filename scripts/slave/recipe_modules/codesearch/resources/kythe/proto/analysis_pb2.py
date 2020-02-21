@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='kythe.proto',
   syntax='proto3',
   serialized_options=_b('\n\037com.google.devtools.kythe.protoZ\021analysis_go_proto\370\001\001'),
-  serialized_pb=_b('\n\x1akythe/proto/analysis.proto\x12\x0bkythe.proto\x1a\x19google/protobuf/any.proto\x1a\x19kythe/proto/storage.proto\"\x83\x01\n\x0f\x41nalysisRequest\x12\x31\n\x0b\x63ompilation\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12\x19\n\x11\x66ile_data_service\x18\x02 \x01(\t\x12\x10\n\x08revision\x18\x03 \x01(\t\x12\x10\n\x08\x62uild_id\x18\x04 \x01(\t\"R\n\x0e\x41nalysisOutput\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\x31\n\x0c\x66inal_result\x18\n \x01(\x0b\x32\x1b.kythe.proto.AnalysisResult\"\x92\x01\n\x0e\x41nalysisResult\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".kythe.proto.AnalysisResult.Status\x12\x0f\n\x07summary\x18\x02 \x01(\t\";\n\x06Status\x12\x0c\n\x08\x43OMPLETE\x10\x00\x12\x0e\n\nINCOMPLETE\x10\x01\x12\x13\n\x0fINVALID_REQUEST\x10\x02\"\x8a\x04\n\x0f\x43ompilationUnit\x12\"\n\x06v_name\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12>\n\x0erequired_input\x18\x03 \x03(\x0b\x32&.kythe.proto.CompilationUnit.FileInput\x12\x1a\n\x12has_compile_errors\x18\x04 \x01(\x08\x12\x10\n\x08\x61rgument\x18\x05 \x03(\t\x12\x13\n\x0bsource_file\x18\x06 \x03(\t\x12\x12\n\noutput_key\x18\x07 \x01(\t\x12\x19\n\x11working_directory\x18\x08 \x01(\t\x12\x15\n\rentry_context\x18\t \x01(\t\x12\x35\n\x0b\x65nvironment\x18\n \x03(\x0b\x32 .kythe.proto.CompilationUnit.Env\x12%\n\x07\x64\x65tails\x18\x0b \x03(\x0b\x32\x14.google.protobuf.Any\x1a\x81\x01\n\tFileInput\x12\"\n\x06v_name\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12#\n\x04info\x18\x02 \x01(\x0b\x32\x15.kythe.proto.FileInfo\x12%\n\x07\x64\x65tails\x18\x04 \x03(\x0b\x32\x14.google.protobuf.AnyJ\x04\x08\x03\x10\x04\x1a\"\n\x03\x45nv\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tJ\x04\x08\x02\x10\x03\"\xc8\x03\n\x08KzipInfo\x12\x33\n\x07\x63orpora\x18\x01 \x03(\x0b\x32\".kythe.proto.KzipInfo.CorporaEntry\x12\x13\n\x0btotal_files\x18\x02 \x01(\x05\x12\x13\n\x0btotal_units\x18\x03 \x01(\x05\x1a(\n\x05\x43ount\x12\x10\n\x08language\x18\x01 \x01(\t\x12\r\n\x05\x63ount\x18\x02 \x01(\x05\x1a\xe0\x01\n\nCorpusInfo\x12:\n\x05\x66iles\x18\x01 \x03(\x0b\x32+.kythe.proto.KzipInfo.CorpusInfo.FilesEntry\x12:\n\x05units\x18\x02 \x03(\x0b\x32+.kythe.proto.KzipInfo.CorpusInfo.UnitsEntry\x1a,\n\nFilesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1a,\n\nUnitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05:\x02\x38\x01\x1aP\n\x0c\x43orporaEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .kythe.proto.KzipInfo.CorpusInfo:\x02\x38\x01\"4\n\x0c\x46ilesRequest\x12$\n\x05\x66iles\x18\x01 \x03(\x0b\x32\x15.kythe.proto.FileInfo\"(\n\x08\x46ileInfo\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0e\n\x06\x64igest\x18\x02 \x01(\t\"Q\n\x08\x46ileData\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\x0c\x12#\n\x04info\x18\x02 \x01(\x0b\x32\x15.kythe.proto.FileInfo\x12\x0f\n\x07missing\x18\x03 \x01(\x08\"e\n\x11\x43ompilationBundle\x12*\n\x04unit\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12$\n\x05\x66iles\x18\x02 \x03(\x0b\x32\x15.kythe.proto.FileData\"\x92\x01\n\x12IndexedCompilation\x12*\n\x04unit\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12\x34\n\x05index\x18\x02 \x01(\x0b\x32%.kythe.proto.IndexedCompilation.Index\x1a\x1a\n\x05Index\x12\x11\n\trevisions\x18\x01 \x03(\tB7\n\x1f\x63om.google.devtools.kythe.protoZ\x11\x61nalysis_go_proto\xf8\x01\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1akythe/proto/analysis.proto\x12\x0bkythe.proto\x1a\x19google/protobuf/any.proto\x1a\x19kythe/proto/storage.proto\"\x83\x01\n\x0f\x41nalysisRequest\x12\x31\n\x0b\x63ompilation\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12\x19\n\x11\x66ile_data_service\x18\x02 \x01(\t\x12\x10\n\x08revision\x18\x03 \x01(\t\x12\x10\n\x08\x62uild_id\x18\x04 \x01(\t\"R\n\x0e\x41nalysisOutput\x12\r\n\x05value\x18\x01 \x01(\x0c\x12\x31\n\x0c\x66inal_result\x18\n \x01(\x0b\x32\x1b.kythe.proto.AnalysisResult\"\x92\x01\n\x0e\x41nalysisResult\x12\x32\n\x06status\x18\x01 \x01(\x0e\x32\".kythe.proto.AnalysisResult.Status\x12\x0f\n\x07summary\x18\x02 \x01(\t\";\n\x06Status\x12\x0c\n\x08\x43OMPLETE\x10\x00\x12\x0e\n\nINCOMPLETE\x10\x01\x12\x13\n\x0fINVALID_REQUEST\x10\x02\"\x8a\x04\n\x0f\x43ompilationUnit\x12\"\n\x06v_name\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12>\n\x0erequired_input\x18\x03 \x03(\x0b\x32&.kythe.proto.CompilationUnit.FileInput\x12\x1a\n\x12has_compile_errors\x18\x04 \x01(\x08\x12\x10\n\x08\x61rgument\x18\x05 \x03(\t\x12\x13\n\x0bsource_file\x18\x06 \x03(\t\x12\x12\n\noutput_key\x18\x07 \x01(\t\x12\x19\n\x11working_directory\x18\x08 \x01(\t\x12\x15\n\rentry_context\x18\t \x01(\t\x12\x35\n\x0b\x65nvironment\x18\n \x03(\x0b\x32 .kythe.proto.CompilationUnit.Env\x12%\n\x07\x64\x65tails\x18\x0b \x03(\x0b\x32\x14.google.protobuf.Any\x1a\x81\x01\n\tFileInput\x12\"\n\x06v_name\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12#\n\x04info\x18\x02 \x01(\x0b\x32\x15.kythe.proto.FileInfo\x12%\n\x07\x64\x65tails\x18\x04 \x03(\x0b\x32\x14.google.protobuf.AnyJ\x04\x08\x03\x10\x04\x1a\"\n\x03\x45nv\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\tJ\x04\x08\x02\x10\x03\"\x95\x05\n\x08KzipInfo\x12\x33\n\x07\x63orpora\x18\x01 \x03(\x0b\x32\".kythe.proto.KzipInfo.CorporaEntry\x12\x0c\n\x04size\x18\x04 \x01(\x03\x12\x1c\n\x14\x63ritical_kzip_errors\x18\x05 \x03(\t\x1a\xc9\x03\n\nCorpusInfo\x12^\n\x18language_required_inputs\x18\x04 \x03(\x0b\x32<.kythe.proto.KzipInfo.CorpusInfo.LanguageRequiredInputsEntry\x12O\n\x10language_sources\x18\x05 \x03(\x0b\x32\x35.kythe.proto.KzipInfo.CorpusInfo.LanguageSourcesEntry\x1a\x1f\n\x0eRequiredInputs\x12\r\n\x05\x63ount\x18\x01 \x01(\x05\x1an\n\x1bLanguageRequiredInputsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.kythe.proto.KzipInfo.CorpusInfo.RequiredInputs:\x02\x38\x01\x1ag\n\x14LanguageSourcesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.kythe.proto.KzipInfo.CorpusInfo.RequiredInputs:\x02\x38\x01J\x04\x08\x01\x10\x02J\x04\x08\x02\x10\x03J\x04\x08\x03\x10\x04\x1aP\n\x0c\x43orporaEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .kythe.proto.KzipInfo.CorpusInfo:\x02\x38\x01J\x04\x08\x02\x10\x03J\x04\x08\x03\x10\x04\"4\n\x0c\x46ilesRequest\x12$\n\x05\x66iles\x18\x01 \x03(\x0b\x32\x15.kythe.proto.FileInfo\"(\n\x08\x46ileInfo\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0e\n\x06\x64igest\x18\x02 \x01(\t\"Q\n\x08\x46ileData\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\x0c\x12#\n\x04info\x18\x02 \x01(\x0b\x32\x15.kythe.proto.FileInfo\x12\x0f\n\x07missing\x18\x03 \x01(\x08\"e\n\x11\x43ompilationBundle\x12*\n\x04unit\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12$\n\x05\x66iles\x18\x02 \x03(\x0b\x32\x15.kythe.proto.FileData\"\x92\x01\n\x12IndexedCompilation\x12*\n\x04unit\x18\x01 \x01(\x0b\x32\x1c.kythe.proto.CompilationUnit\x12\x34\n\x05index\x18\x02 \x01(\x0b\x32%.kythe.proto.IndexedCompilation.Index\x1a\x1a\n\x05Index\x12\x11\n\trevisions\x18\x01 \x03(\tB7\n\x1f\x63om.google.devtools.kythe.protoZ\x11\x61nalysis_go_proto\xf8\x01\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,kythe_dot_proto_dot_storage__pb2.DESCRIPTOR,])
 
@@ -359,23 +359,16 @@ _COMPILATIONUNIT = _descriptor.Descriptor(
 )
 
 
-_KZIPINFO_COUNT = _descriptor.Descriptor(
-  name='Count',
-  full_name='kythe.proto.KzipInfo.Count',
+_KZIPINFO_CORPUSINFO_REQUIREDINPUTS = _descriptor.Descriptor(
+  name='RequiredInputs',
+  full_name='kythe.proto.KzipInfo.CorpusInfo.RequiredInputs',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='language', full_name='kythe.proto.KzipInfo.Count.language', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='count', full_name='kythe.proto.KzipInfo.Count.count', index=1,
-      number=2, type=5, cpp_type=1, label=1,
+      name='count', full_name='kythe.proto.KzipInfo.CorpusInfo.RequiredInputs.count', index=0,
+      number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -392,28 +385,28 @@ _KZIPINFO_COUNT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1097,
-  serialized_end=1137,
+  serialized_start=1291,
+  serialized_end=1322,
 )
 
-_KZIPINFO_CORPUSINFO_FILESENTRY = _descriptor.Descriptor(
-  name='FilesEntry',
-  full_name='kythe.proto.KzipInfo.CorpusInfo.FilesEntry',
+_KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY = _descriptor.Descriptor(
+  name='LanguageRequiredInputsEntry',
+  full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageRequiredInputsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='kythe.proto.KzipInfo.CorpusInfo.FilesEntry.key', index=0,
+      name='key', full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageRequiredInputsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='kythe.proto.KzipInfo.CorpusInfo.FilesEntry.value', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='value', full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageRequiredInputsEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -429,28 +422,28 @@ _KZIPINFO_CORPUSINFO_FILESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1274,
-  serialized_end=1318,
+  serialized_start=1324,
+  serialized_end=1434,
 )
 
-_KZIPINFO_CORPUSINFO_UNITSENTRY = _descriptor.Descriptor(
-  name='UnitsEntry',
-  full_name='kythe.proto.KzipInfo.CorpusInfo.UnitsEntry',
+_KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY = _descriptor.Descriptor(
+  name='LanguageSourcesEntry',
+  full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageSourcesEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='kythe.proto.KzipInfo.CorpusInfo.UnitsEntry.key', index=0,
+      name='key', full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageSourcesEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='kythe.proto.KzipInfo.CorpusInfo.UnitsEntry.value', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='value', full_name='kythe.proto.KzipInfo.CorpusInfo.LanguageSourcesEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -466,8 +459,8 @@ _KZIPINFO_CORPUSINFO_UNITSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1320,
-  serialized_end=1364,
+  serialized_start=1436,
+  serialized_end=1539,
 )
 
 _KZIPINFO_CORPUSINFO = _descriptor.Descriptor(
@@ -478,15 +471,15 @@ _KZIPINFO_CORPUSINFO = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='files', full_name='kythe.proto.KzipInfo.CorpusInfo.files', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      name='language_required_inputs', full_name='kythe.proto.KzipInfo.CorpusInfo.language_required_inputs', index=0,
+      number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='units', full_name='kythe.proto.KzipInfo.CorpusInfo.units', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='language_sources', full_name='kythe.proto.KzipInfo.CorpusInfo.language_sources', index=1,
+      number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -494,7 +487,7 @@ _KZIPINFO_CORPUSINFO = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_KZIPINFO_CORPUSINFO_FILESENTRY, _KZIPINFO_CORPUSINFO_UNITSENTRY, ],
+  nested_types=[_KZIPINFO_CORPUSINFO_REQUIREDINPUTS, _KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY, _KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -503,8 +496,8 @@ _KZIPINFO_CORPUSINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1140,
-  serialized_end=1364,
+  serialized_start=1100,
+  serialized_end=1557,
 )
 
 _KZIPINFO_CORPORAENTRY = _descriptor.Descriptor(
@@ -540,8 +533,8 @@ _KZIPINFO_CORPORAENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1366,
-  serialized_end=1446,
+  serialized_start=1559,
+  serialized_end=1639,
 )
 
 _KZIPINFO = _descriptor.Descriptor(
@@ -559,23 +552,23 @@ _KZIPINFO = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='total_files', full_name='kythe.proto.KzipInfo.total_files', index=1,
-      number=2, type=5, cpp_type=1, label=1,
+      name='size', full_name='kythe.proto.KzipInfo.size', index=1,
+      number=4, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='total_units', full_name='kythe.proto.KzipInfo.total_units', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='critical_kzip_errors', full_name='kythe.proto.KzipInfo.critical_kzip_errors', index=2,
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_KZIPINFO_COUNT, _KZIPINFO_CORPUSINFO, _KZIPINFO_CORPORAENTRY, ],
+  nested_types=[_KZIPINFO_CORPUSINFO, _KZIPINFO_CORPORAENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -585,7 +578,7 @@ _KZIPINFO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=990,
-  serialized_end=1446,
+  serialized_end=1651,
 )
 
 
@@ -615,8 +608,8 @@ _FILESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1448,
-  serialized_end=1500,
+  serialized_start=1653,
+  serialized_end=1705,
 )
 
 
@@ -653,8 +646,8 @@ _FILEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1502,
-  serialized_end=1542,
+  serialized_start=1707,
+  serialized_end=1747,
 )
 
 
@@ -698,8 +691,8 @@ _FILEDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1544,
-  serialized_end=1625,
+  serialized_start=1749,
+  serialized_end=1830,
 )
 
 
@@ -736,8 +729,8 @@ _COMPILATIONBUNDLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1627,
-  serialized_end=1728,
+  serialized_start=1832,
+  serialized_end=1933,
 )
 
 
@@ -767,8 +760,8 @@ _INDEXEDCOMPILATION_INDEX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1851,
-  serialized_end=1877,
+  serialized_start=2056,
+  serialized_end=2082,
 )
 
 _INDEXEDCOMPILATION = _descriptor.Descriptor(
@@ -804,8 +797,8 @@ _INDEXEDCOMPILATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1731,
-  serialized_end=1877,
+  serialized_start=1936,
+  serialized_end=2082,
 )
 
 _ANALYSISREQUEST.fields_by_name['compilation'].message_type = _COMPILATIONUNIT
@@ -821,11 +814,13 @@ _COMPILATIONUNIT.fields_by_name['v_name'].message_type = kythe_dot_proto_dot_sto
 _COMPILATIONUNIT.fields_by_name['required_input'].message_type = _COMPILATIONUNIT_FILEINPUT
 _COMPILATIONUNIT.fields_by_name['environment'].message_type = _COMPILATIONUNIT_ENV
 _COMPILATIONUNIT.fields_by_name['details'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_KZIPINFO_COUNT.containing_type = _KZIPINFO
-_KZIPINFO_CORPUSINFO_FILESENTRY.containing_type = _KZIPINFO_CORPUSINFO
-_KZIPINFO_CORPUSINFO_UNITSENTRY.containing_type = _KZIPINFO_CORPUSINFO
-_KZIPINFO_CORPUSINFO.fields_by_name['files'].message_type = _KZIPINFO_CORPUSINFO_FILESENTRY
-_KZIPINFO_CORPUSINFO.fields_by_name['units'].message_type = _KZIPINFO_CORPUSINFO_UNITSENTRY
+_KZIPINFO_CORPUSINFO_REQUIREDINPUTS.containing_type = _KZIPINFO_CORPUSINFO
+_KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY.fields_by_name['value'].message_type = _KZIPINFO_CORPUSINFO_REQUIREDINPUTS
+_KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY.containing_type = _KZIPINFO_CORPUSINFO
+_KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY.fields_by_name['value'].message_type = _KZIPINFO_CORPUSINFO_REQUIREDINPUTS
+_KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY.containing_type = _KZIPINFO_CORPUSINFO
+_KZIPINFO_CORPUSINFO.fields_by_name['language_required_inputs'].message_type = _KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY
+_KZIPINFO_CORPUSINFO.fields_by_name['language_sources'].message_type = _KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY
 _KZIPINFO_CORPUSINFO.containing_type = _KZIPINFO
 _KZIPINFO_CORPORAENTRY.fields_by_name['value'].message_type = _KZIPINFO_CORPUSINFO
 _KZIPINFO_CORPORAENTRY.containing_type = _KZIPINFO
@@ -895,26 +890,26 @@ _sym_db.RegisterMessage(CompilationUnit.Env)
 
 KzipInfo = _reflection.GeneratedProtocolMessageType('KzipInfo', (_message.Message,), dict(
 
-  Count = _reflection.GeneratedProtocolMessageType('Count', (_message.Message,), dict(
-    DESCRIPTOR = _KZIPINFO_COUNT,
-    __module__ = 'kythe.proto.analysis_pb2'
-    # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.Count)
-    ))
-  ,
-
   CorpusInfo = _reflection.GeneratedProtocolMessageType('CorpusInfo', (_message.Message,), dict(
 
-    FilesEntry = _reflection.GeneratedProtocolMessageType('FilesEntry', (_message.Message,), dict(
-      DESCRIPTOR = _KZIPINFO_CORPUSINFO_FILESENTRY,
+    RequiredInputs = _reflection.GeneratedProtocolMessageType('RequiredInputs', (_message.Message,), dict(
+      DESCRIPTOR = _KZIPINFO_CORPUSINFO_REQUIREDINPUTS,
       __module__ = 'kythe.proto.analysis_pb2'
-      # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.CorpusInfo.FilesEntry)
+      # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.CorpusInfo.RequiredInputs)
       ))
     ,
 
-    UnitsEntry = _reflection.GeneratedProtocolMessageType('UnitsEntry', (_message.Message,), dict(
-      DESCRIPTOR = _KZIPINFO_CORPUSINFO_UNITSENTRY,
+    LanguageRequiredInputsEntry = _reflection.GeneratedProtocolMessageType('LanguageRequiredInputsEntry', (_message.Message,), dict(
+      DESCRIPTOR = _KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY,
       __module__ = 'kythe.proto.analysis_pb2'
-      # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.CorpusInfo.UnitsEntry)
+      # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.CorpusInfo.LanguageRequiredInputsEntry)
+      ))
+    ,
+
+    LanguageSourcesEntry = _reflection.GeneratedProtocolMessageType('LanguageSourcesEntry', (_message.Message,), dict(
+      DESCRIPTOR = _KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY,
+      __module__ = 'kythe.proto.analysis_pb2'
+      # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo.CorpusInfo.LanguageSourcesEntry)
       ))
     ,
     DESCRIPTOR = _KZIPINFO_CORPUSINFO,
@@ -934,10 +929,10 @@ KzipInfo = _reflection.GeneratedProtocolMessageType('KzipInfo', (_message.Messag
   # @@protoc_insertion_point(class_scope:kythe.proto.KzipInfo)
   ))
 _sym_db.RegisterMessage(KzipInfo)
-_sym_db.RegisterMessage(KzipInfo.Count)
 _sym_db.RegisterMessage(KzipInfo.CorpusInfo)
-_sym_db.RegisterMessage(KzipInfo.CorpusInfo.FilesEntry)
-_sym_db.RegisterMessage(KzipInfo.CorpusInfo.UnitsEntry)
+_sym_db.RegisterMessage(KzipInfo.CorpusInfo.RequiredInputs)
+_sym_db.RegisterMessage(KzipInfo.CorpusInfo.LanguageRequiredInputsEntry)
+_sym_db.RegisterMessage(KzipInfo.CorpusInfo.LanguageSourcesEntry)
 _sym_db.RegisterMessage(KzipInfo.CorporaEntry)
 
 FilesRequest = _reflection.GeneratedProtocolMessageType('FilesRequest', (_message.Message,), dict(
@@ -985,7 +980,7 @@ _sym_db.RegisterMessage(IndexedCompilation.Index)
 
 
 DESCRIPTOR._options = None
-_KZIPINFO_CORPUSINFO_FILESENTRY._options = None
-_KZIPINFO_CORPUSINFO_UNITSENTRY._options = None
+_KZIPINFO_CORPUSINFO_LANGUAGEREQUIREDINPUTSENTRY._options = None
+_KZIPINFO_CORPUSINFO_LANGUAGESOURCESENTRY._options = None
 _KZIPINFO_CORPORAENTRY._options = None
 # @@protoc_insertion_point(module_scope)

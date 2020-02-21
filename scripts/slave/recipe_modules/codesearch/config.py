@@ -41,6 +41,7 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
     debug_path = Single(Path),
     compile_commands_json_file = Single(Path),
     gn_targets_json_file = Single(Path),
+    javac_extractor_output_dir = Single(Path),
     bucket_name = Single(basestring, required=False),
     chromium_git_url = Single(basestring, required=False,
                               empty_val='https://chromium.googlesource.com'),
@@ -59,6 +60,7 @@ def base(c):
   c.debug_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR or 'Debug')
   c.compile_commands_json_file = c.debug_path.join('compile_commands.json')
   c.gn_targets_json_file = c.debug_path.join('gn_targets.json')
+  c.javac_extractor_output_dir = c.debug_path.join('kzip')
 
 @config_ctx(includes=['generate_file', 'chromium_gs'])
 def chromium(_):

@@ -29,8 +29,7 @@ SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 TEST_DATA_DIR = os.path.join(SCRIPT_DIR, 'package_index_testdata')
 TEST_DATA_INPUT_DIR = os.path.join(TEST_DATA_DIR, 'input')
 
-class PackageIndexTest(unittest.TestCase):
-
+class PackageIndexBootstrap(unittest.TestCase):
   def setUp(self):
     self.maxDiff = None
 
@@ -51,11 +50,32 @@ class PackageIndexTest(unittest.TestCase):
         suffix='.kzip', delete=False) as archive_file:
       self.archive_path = archive_file.name
 
+
+class PackageIndexInvalidParametersTest(PackageIndexBootstrap):
+  def testInvalidKzips(self):
+    with self.assertRaises(Exception):
+      package_index.IndexPack(
+          self.archive_path,
+          TEST_DATA_INPUT_DIR,
+          os.path.join(self.build_dir, 'compile_commands.json'),
+          os.path.join(self.build_dir, 'gn_targets.json'),
+          os.path.join(self.build_dir, 'invalid_kzip_path'),
+          corpus=CORPUS,
+          build_config=BUILD_CONFIG,
+          out_dir=OUT_DIR,
+          verbose=True)
+
+
+class PackageIndexTest(PackageIndexBootstrap):
+  def setUp(self):
+    super(PackageIndexTest, self).setUp()
+
     self.index_pack = package_index.IndexPack(
         self.archive_path,
         TEST_DATA_INPUT_DIR,
         os.path.join(self.build_dir, 'compile_commands.json'),
         os.path.join(self.build_dir, 'gn_targets.json'),
+        os.path.join(self.build_dir, 'kzip'),
         corpus=CORPUS,
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,
@@ -177,6 +197,7 @@ class PackageIndexTest(unittest.TestCase):
         TEST_DATA_INPUT_DIR,
         compile_commands_file,
         os.path.join(self.build_dir, 'gn_targets.json'),
+        os.path.join(self.build_dir, 'kzip'),
         corpus=CORPUS,
         build_config=BUILD_CONFIG,
         out_dir=OUT_DIR,

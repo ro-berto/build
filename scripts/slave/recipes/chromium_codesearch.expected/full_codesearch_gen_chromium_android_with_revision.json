@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'False'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_android_prebuilts_build_tools': 'True', 'checkout_telemetry_dependencies': 'False'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -366,6 +366,34 @@
     ]
   },
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/out/android-Debug/kzip"
+    ],
+    "infra_step": true,
+    "name": "java kzip"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmcontents",
+      "[CACHE]/builder/src/out/android-Debug/kzip"
+    ],
+    "infra_step": true,
+    "name": "java kzip (2)"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -382,7 +410,9 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -410,7 +440,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -436,7 +468,9 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -465,7 +499,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -498,7 +534,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "compile"
   },
@@ -521,7 +559,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "compile confirm no-op"
   },
@@ -545,7 +585,9 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -578,7 +620,9 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -600,7 +644,9 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -654,7 +700,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -684,7 +732,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/android-Debug/kzip",
+      "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
@@ -745,6 +795,8 @@
       "[CACHE]/builder/src/out/android-Debug/compile_commands.json",
       "--path-to-gn-targets",
       "[CACHE]/builder/src/out/android-Debug/gn_targets.json",
+      "--path-to-java-kzips",
+      "[CACHE]/builder/src/out/android-Debug/kzip",
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/android-Debug/chromium_android.kzip",
       "--corpus",

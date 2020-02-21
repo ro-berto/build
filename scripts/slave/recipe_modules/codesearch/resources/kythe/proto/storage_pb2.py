@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='kythe.proto',
   syntax='proto3',
   serialized_options=_b('\n\037com.google.devtools.kythe.protoZ\020storage_go_proto'),
-  serialized_pb=_b('\n\x19kythe/proto/storage.proto\x12\x0bkythe.proto\"X\n\x05VName\x12\x11\n\tsignature\x18\x01 \x01(\t\x12\x0e\n\x06\x63orpus\x18\x02 \x01(\t\x12\x0c\n\x04root\x18\x03 \x01(\t\x12\x0c\n\x04path\x18\x04 \x01(\t\x12\x10\n\x08language\x18\x05 \x01(\t\"\\\n\tVNameMask\x12\x11\n\tsignature\x18\x01 \x01(\x08\x12\x0e\n\x06\x63orpus\x18\x02 \x01(\x08\x12\x0c\n\x04root\x18\x03 \x01(\x08\x12\x0c\n\x04path\x18\x04 \x01(\x08\x12\x10\n\x08language\x18\x05 \x01(\x08\"\x89\x01\n\x05\x45ntry\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\x12\"\n\x06target\x18\x03 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tfact_name\x18\x04 \x01(\t\x12\x12\n\nfact_value\x18\x05 \x01(\x0c\".\n\x07\x45ntries\x12#\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x12.kythe.proto.Entry\"D\n\x0bReadRequest\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\"\xcc\x01\n\x0cWriteRequest\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x30\n\x06update\x18\x02 \x03(\x0b\x32 .kythe.proto.WriteRequest.Update\x1a\x66\n\x06Update\x12\x11\n\tedge_kind\x18\x01 \x01(\t\x12\"\n\x06target\x18\x02 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tfact_name\x18\x03 \x01(\t\x12\x12\n\nfact_value\x18\x04 \x01(\x0c\"\x0c\n\nWriteReply\"Y\n\x0bScanRequest\x12\"\n\x06target\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\x12\x13\n\x0b\x66\x61\x63t_prefix\x18\x03 \x01(\t\"-\n\x0c\x43ountRequest\x12\r\n\x05index\x18\x01 \x01(\x03\x12\x0e\n\x06shards\x18\x02 \x01(\x03\"\x1d\n\nCountReply\x12\x0f\n\x07\x65ntries\x18\x01 \x01(\x03\"-\n\x0cShardRequest\x12\r\n\x05index\x18\x01 \x01(\x03\x12\x0e\n\x06shards\x18\x02 \x01(\x03\"N\n\x10VNameRewriteRule\x12\x0f\n\x07pattern\x18\x01 \x01(\t\x12)\n\x06v_name\x18\x02 \x01(\x0b\x32\x12.kythe.proto.VNameR\x05vnameB3\n\x1f\x63om.google.devtools.kythe.protoZ\x10storage_go_protob\x06proto3')
+  serialized_pb=_b('\n\x19kythe/proto/storage.proto\x12\x0bkythe.proto\"X\n\x05VName\x12\x11\n\tsignature\x18\x01 \x01(\t\x12\x0e\n\x06\x63orpus\x18\x02 \x01(\t\x12\x0c\n\x04root\x18\x03 \x01(\t\x12\x0c\n\x04path\x18\x04 \x01(\t\x12\x10\n\x08language\x18\x05 \x01(\t\"\\\n\tVNameMask\x12\x11\n\tsignature\x18\x01 \x01(\x08\x12\x0e\n\x06\x63orpus\x18\x02 \x01(\x08\x12\x0c\n\x04root\x18\x03 \x01(\x08\x12\x0c\n\x04path\x18\x04 \x01(\x08\x12\x10\n\x08language\x18\x05 \x01(\x08\"\x89\x01\n\x05\x45ntry\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\x12\"\n\x06target\x18\x03 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tfact_name\x18\x04 \x01(\t\x12\x12\n\nfact_value\x18\x05 \x01(\x0c\".\n\x07\x45ntries\x12#\n\x07\x65ntries\x18\x01 \x03(\x0b\x32\x12.kythe.proto.Entry\"D\n\x0bReadRequest\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\"\xcc\x01\n\x0cWriteRequest\x12\"\n\x06source\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x30\n\x06update\x18\x02 \x03(\x0b\x32 .kythe.proto.WriteRequest.Update\x1a\x66\n\x06Update\x12\x11\n\tedge_kind\x18\x01 \x01(\t\x12\"\n\x06target\x18\x02 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tfact_name\x18\x03 \x01(\t\x12\x12\n\nfact_value\x18\x04 \x01(\x0c\"\x0c\n\nWriteReply\"Y\n\x0bScanRequest\x12\"\n\x06target\x18\x01 \x01(\x0b\x32\x12.kythe.proto.VName\x12\x11\n\tedge_kind\x18\x02 \x01(\t\x12\x13\n\x0b\x66\x61\x63t_prefix\x18\x03 \x01(\t\"-\n\x0c\x43ountRequest\x12\r\n\x05index\x18\x01 \x01(\x03\x12\x0e\n\x06shards\x18\x02 \x01(\x03\"\x1d\n\nCountReply\x12\x0f\n\x07\x65ntries\x18\x01 \x01(\x03\"-\n\x0cShardRequest\x12\r\n\x05index\x18\x01 \x01(\x03\x12\x0e\n\x06shards\x18\x02 \x01(\x03\"N\n\x10VNameRewriteRule\x12\x0f\n\x07pattern\x18\x01 \x01(\t\x12)\n\x06v_name\x18\x02 \x01(\x0b\x32\x12.kythe.proto.VNameR\x05vname\"@\n\x11VNameRewriteRules\x12+\n\x04rule\x18\x01 \x03(\x0b\x32\x1d.kythe.proto.VNameRewriteRuleB3\n\x1f\x63om.google.devtools.kythe.protoZ\x10storage_go_protob\x06proto3')
 )
 
 
@@ -574,6 +574,37 @@ _VNAMEREWRITERULE = _descriptor.Descriptor(
   serialized_end=999,
 )
 
+
+_VNAMEREWRITERULES = _descriptor.Descriptor(
+  name='VNameRewriteRules',
+  full_name='kythe.proto.VNameRewriteRules',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='rule', full_name='kythe.proto.VNameRewriteRules.rule', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1001,
+  serialized_end=1065,
+)
+
 _ENTRY.fields_by_name['source'].message_type = _VNAME
 _ENTRY.fields_by_name['target'].message_type = _VNAME
 _ENTRIES.fields_by_name['entries'].message_type = _ENTRY
@@ -584,6 +615,7 @@ _WRITEREQUEST.fields_by_name['source'].message_type = _VNAME
 _WRITEREQUEST.fields_by_name['update'].message_type = _WRITEREQUEST_UPDATE
 _SCANREQUEST.fields_by_name['target'].message_type = _VNAME
 _VNAMEREWRITERULE.fields_by_name['v_name'].message_type = _VNAME
+_VNAMEREWRITERULES.fields_by_name['rule'].message_type = _VNAMEREWRITERULE
 DESCRIPTOR.message_types_by_name['VName'] = _VNAME
 DESCRIPTOR.message_types_by_name['VNameMask'] = _VNAMEMASK
 DESCRIPTOR.message_types_by_name['Entry'] = _ENTRY
@@ -596,6 +628,7 @@ DESCRIPTOR.message_types_by_name['CountRequest'] = _COUNTREQUEST
 DESCRIPTOR.message_types_by_name['CountReply'] = _COUNTREPLY
 DESCRIPTOR.message_types_by_name['ShardRequest'] = _SHARDREQUEST
 DESCRIPTOR.message_types_by_name['VNameRewriteRule'] = _VNAMEREWRITERULE
+DESCRIPTOR.message_types_by_name['VNameRewriteRules'] = _VNAMEREWRITERULES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 VName = _reflection.GeneratedProtocolMessageType('VName', (_message.Message,), dict(
@@ -689,6 +722,13 @@ VNameRewriteRule = _reflection.GeneratedProtocolMessageType('VNameRewriteRule', 
   # @@protoc_insertion_point(class_scope:kythe.proto.VNameRewriteRule)
   ))
 _sym_db.RegisterMessage(VNameRewriteRule)
+
+VNameRewriteRules = _reflection.GeneratedProtocolMessageType('VNameRewriteRules', (_message.Message,), dict(
+  DESCRIPTOR = _VNAMEREWRITERULES,
+  __module__ = 'kythe.proto.storage_pb2'
+  # @@protoc_insertion_point(class_scope:kythe.proto.VNameRewriteRules)
+  ))
+_sym_db.RegisterMessage(VNameRewriteRules)
 
 
 DESCRIPTOR._options = None

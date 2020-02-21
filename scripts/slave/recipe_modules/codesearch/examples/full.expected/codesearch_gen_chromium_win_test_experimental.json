@@ -732,6 +732,8 @@
       "[START_DIR]/src/out/win-Debug/compile_commands.json",
       "--path-to-gn-targets",
       "[START_DIR]/src/out/win-Debug/gn_targets.json",
+      "--path-to-java-kzips",
+      "[START_DIR]/src/out/win-Debug/kzip",
       "--path-to-archive-output",
       "[START_DIR]/src/out/win-Debug/chromium_win.kzip",
       "--corpus",
