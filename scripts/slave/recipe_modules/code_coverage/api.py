@@ -636,6 +636,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           '--merged-jacoco-filename',
           self._dir_name_for_step(step_name),
       ])
+    if self._is_per_cl_coverage:
+      new_merge['args'].append('--per-cl-coverage')
     if additional_merge:
       new_merge['args'].extend([
           '--additional-merge-script',
