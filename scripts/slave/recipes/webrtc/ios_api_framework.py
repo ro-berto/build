@@ -9,7 +9,6 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
-  'goma',
   'ios',
   'recipe_engine/commit_position',
   'recipe_engine/context',
@@ -29,35 +28,23 @@ def RunSteps(api):
   api.webrtc.checkout()
   api.gclient.runhooks()
 
-  goma_dir = api.goma.ensure_goma()
-  api.goma.start()
-  build_exit_status = 1
-
   api.ios.ensure_xcode("11c29")
 
-  try:
-    build_script = api.path['checkout'].join('tools_webrtc', 'ios',
-                                             'build_ios_libs.py')
-    if api.tryserver.is_tryserver:
-      build_revision_number_args = []
-    else:
-      api.step('cleanup', [build_script, '-c'])
-      build_revision_number_args = ['-r', api.webrtc.revision_number]
+  build_script = api.path['checkout'].join('tools_webrtc', 'ios',
+                                           'build_ios_libs.py')
+  if api.tryserver.is_tryserver:
+    build_revision_number_args = []
+  else:
+    api.step('cleanup', [build_script, '-c'])
+    build_revision_number_args = ['-r', api.webrtc.revision_number]
 
-    step_result = api.python(
-        'build',
-        build_script,
-        args=['--use-goma',
-              '--extra-gn-args=goma_dir=\"%s\"' % goma_dir,
-              '--verbose'] + build_revision_number_args,
-    )
-    build_exit_status = step_result.retcode
-  except api.step.StepFailure as e:
-    build_exit_status = e.retcode
-    raise e
-  finally:
-    api.goma.stop(ninja_log_compiler='goma',
-                  build_exit_status=build_exit_status)
+  api.python(
+      'build',
+      build_script,
+      # TODO(https://bugs.webrtc.org/11349): re-enable Goma once we figure out
+      # why it's failing to find clang-1100.0.33.16 in the Goma backend.
+      args=['--verbose'] + build_revision_number_args,
+  )
 
   output_dir = api.path['checkout'].join('out_ios_libs')
 
