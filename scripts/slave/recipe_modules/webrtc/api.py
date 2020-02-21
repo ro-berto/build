@@ -22,16 +22,12 @@ from chromium_tests.steps import SwarmingTest
 
 
 CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
-# WebRTC dependencies on Chromium's subtree mirrors like
+# WebRTC's dependencies on Chromium's subtree mirrors like
 # https://chromium.googlesource.com/chromium/src/build.git
 CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
 
 PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
 DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
-
-# Note: when updating this, ensure all macs support this version of XCode.
-# See https://en.wikipedia.org/wiki/Xcode#11.x_series.
-XCODE_VERSION = '11c29'
 
 
 class Bot(object):
@@ -153,6 +149,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # It is possible to see the actual JSON files that it generates in
     # ios.expected/*.json step "read build config". They are the direct
     # replacement of the src-side config.
+
     ios_config = {}
 
     ios_config['configuration'] = self.m.chromium.c.BUILD_CONFIG
@@ -166,7 +163,13 @@ class WebRTCApi(recipe_api.RecipeApi):
                            else 'x64'),
       'use_goma=true',
     ]
-    ios_config['xcode build version'] = XCODE_VERSION
+
+    # Note: 'xcode build version' property in the json is only informative.
+    # It's the depot_tools/osx_sdk recipe module that decides which xcode
+    # actually gets installed, and it does so based off $depot_tools/osx_sdk.
+    # $depot_tools/osx_sdk is set by our cr-buildbucket.cfg (i.e. config.star).
+    xcode_version = self.m.properties['$depot_tools/osx_sdk']['sdk_version']
+    ios_config['xcode build version'] = xcode_version
 
     if 'ios_config' in self.bot.config:
       ios_config.update(self.bot.config['ios_config'])
