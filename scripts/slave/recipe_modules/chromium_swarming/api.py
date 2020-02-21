@@ -861,8 +861,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     task_request = task.request
     task_slice = task_request[0].with_named_caches(task.named_caches)
-    task_slice = self.slice_with_implied_cipd_packages(task_slice)
-    task_slice = self.slice_with_implied_named_caches(task_slice)
+    # TODO(crbug.com/812428): Remove this check (and the methods it gates)
+    # after every pool has migrated to task templates.
+    if not task_slice.dimensions.get('pool', '').endswith('.template'):
+      task_slice = self.slice_with_implied_cipd_packages(task_slice)
+      task_slice = self.slice_with_implied_named_caches(task_slice)
 
     # update $PATH
     env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
