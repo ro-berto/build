@@ -1229,22 +1229,16 @@ def GenTests(api):
         })
   )
 
-  yield (
-    api.test('dynamic_gtest_fuchsia') +
-    props(mastername='chromium.fyi',
-          builder='Fuchsia') +
-    api.platform('linux', 64) +
-    api.chromium_tests.read_source_side_spec(
-        'chromium.fyi', {
-            'Fuchsia': {
-                'gtest_tests': [
-                    {
-                      'test': 'base_unittests',
-                    }
-                ],
-            },
-        })
-  )
+  yield (api.test('dynamic_gtest_fuchsia') + props(
+      mastername='chromium.fyi', builder='fuchsia-fyi-x64-rel') + api.platform(
+          'linux', 64) + api.chromium_tests.read_source_side_spec(
+              'chromium.fyi', {
+                  'Fuchsia': {
+                      'gtest_tests': [{
+                          'test': 'base_unittests',
+                      }],
+                  },
+              }))
 
   # Tests switching on asan and swiching off lsan for sandbox tester.
   yield (
