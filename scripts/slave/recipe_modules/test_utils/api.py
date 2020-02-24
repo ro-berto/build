@@ -409,13 +409,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
 
-    # TODO(crbug.com/838735): A/B testing to measure the impact of the feature.
-    # This is a short-term experiment that expires on 03/04/2020, clean this up
-    # once it expires.
-    gerrit_changes = self.m.buildbucket.build.input.gerrit_changes
-    if gerrit_changes and gerrit_changes[0].change % 2 == 0:
-      self._should_exonerate_flaky_failures = False
-
     if len(failed_test_suites) >= self._min_failed_suites_to_skip_retry:
       result = self.m.python.succeeding_step(
           'skip retrying because there are >= %d test suites with test '
