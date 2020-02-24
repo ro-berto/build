@@ -267,13 +267,17 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
-                gclient_apply_config=['fuchsia_arm64'],
+                gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'fuchsia',
                 },
-                bot_type=bot_spec.BUILDER,
+                bot_type=bot_spec.BUILDER_TESTER,
+                # TODO(crbug.com/1031210): use parallel test after bots added.
+                # Swarming bots will be added to the arm64 servers after the
+                # SSD upgrades.
+                serialize_tests=True,
                 testing={
                     'platform': 'linux',
                 },
