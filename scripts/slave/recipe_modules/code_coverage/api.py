@@ -636,6 +636,18 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           '--merged-jacoco-filename',
           self._dir_name_for_step(step_name),
       ])
+    # TODO(crbug.com/1050858) Remove the check against refs/heads/master once
+    # the corresponding change in the merge script has been propagated to beta
+    # and stable branches. Also remove the `pragma: no cover` at that time.
+    if self._is_per_cl_coverage:  # pragma: no cover
+      if self.m.buildbucket.build.input.gerrit_changes:
+        target_ref = self.m.tryserver.gerrit_change_target_ref
+      else:
+        # The safe default is to assume the merge script cannot use the new
+        # flag.
+        target_ref = None
+      if target_ref == 'refs/heads/master':
+        new_merge['args'].append('--per-cl-coverage')
     if additional_merge:
       new_merge['args'].extend([
           '--additional-merge-script',
