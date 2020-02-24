@@ -1063,12 +1063,33 @@ def BuildIOS(api):
           'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
                         'ios-release-nobitcode', True)
 
+
+def PackageWindowsDesktopVariant(api, label, bucket_name):
+  artifacts = [
+      'out/%s/flutter_export.h' % label,
+      'out/%s/flutter_windows.h' % label,
+      'out/%s/flutter_messenger.h' % label,
+      'out/%s/flutter_plugin_registrar.h' % label,
+      'out/%s/flutter_windows.dll' % label,
+      'out/%s/flutter_windows.dll.exp' % label,
+      'out/%s/flutter_windows.dll.lib' % label,
+      'out/%s/flutter_windows.dll.pdb' % label,
+  ]
+  if bucket_name.endswith('profile') or bucket_name.endswith('release'):
+    artifacts.append('out/%s/gen_snapshot.exe' % label)
+  UploadArtifacts(
+      api, bucket_name, artifacts, archive_name='windows-x64-flutter.zip')
+
+
 def BuildWindows(api):
   if api.properties.get('build_host', True):
     RunGN(api, '--runtime-mode', 'debug', '--full-dart-sdk', '--no-lto')
     Build(api, 'host_debug')
     RunTests(api, 'host_debug', types='engine')
+    RunGN(api, '--runtime-mode', 'profile', '--no-lto')
+    Build(api, 'host_profile', 'windows', 'gen_snapshot')
     RunGN(api, '--runtime-mode', 'release', '--no-lto')
+    Build(api, 'host_release', 'windows', 'gen_snapshot')
     if BuildFontSubset(api):
       Build(api, 'host_release', 'font-subset')
 
@@ -1088,16 +1109,9 @@ def BuildWindows(api):
       'out/host_debug/flutter_engine.dll.pdb',
     ], archive_name='windows-x64-embedder.zip')
 
-    UploadArtifacts(api, 'windows-x64', [
-      'out/host_debug/flutter_export.h',
-      'out/host_debug/flutter_windows.h',
-      'out/host_debug/flutter_messenger.h',
-      'out/host_debug/flutter_plugin_registrar.h',
-      'out/host_debug/flutter_windows.dll',
-      'out/host_debug/flutter_windows.dll.exp',
-      'out/host_debug/flutter_windows.dll.lib',
-      'out/host_debug/flutter_windows.dll.pdb',
-    ], archive_name='windows-x64-flutter.zip')
+    PackageWindowsDesktopVariant(api, 'host_debug', 'windows-x64')
+    PackageWindowsDesktopVariant(api, 'host_profile', 'windows-x64-profile')
+    PackageWindowsDesktopVariant(api, 'host_release', 'windows-x64-release')
     UploadFolder(api,
       'Upload windows-x64 Flutter library C++ wrapper',
       'src/out/host_debug',
@@ -1105,24 +1119,6 @@ def BuildWindows(api):
       'flutter-cpp-client-wrapper.zip',
       'windows-x64')
 
-    # TODO: Remove this once the switch to the non-GLFW version above is
-    # complete. See https://github.com/flutter/flutter/issues/38590.
-    UploadArtifacts(api, 'windows-x64', [
-      'out/host_debug/flutter_export.h',
-      'out/host_debug/flutter_glfw.h',
-      'out/host_debug/flutter_messenger.h',
-      'out/host_debug/flutter_plugin_registrar.h',
-      'out/host_debug/flutter_windows_glfw.dll',
-      'out/host_debug/flutter_windows_glfw.dll.exp',
-      'out/host_debug/flutter_windows_glfw.dll.lib',
-      'out/host_debug/flutter_windows_glfw.dll.pdb',
-    ], archive_name='windows-x64-flutter-glfw.zip')
-    UploadFolder(api,
-      'Upload windows-x64 Flutter GLFW library C++ wrapper',
-      'src/out/host_debug',
-      'cpp_client_wrapper_glfw',
-      'flutter-cpp-client-wrapper-glfw.zip',
-      'windows-x64')
     if BuildFontSubset(api):
       UploadArtifacts(
           api,
