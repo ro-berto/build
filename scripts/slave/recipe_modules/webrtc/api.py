@@ -266,11 +266,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     for bot in self.related_bots():
       if bot.should_test:
         for test in steps.generate_tests(self.m, phase, bot):
-          if isinstance(test, SwarmingTest):
-            isolated_targets.add(test.target_name)
-          elif isinstance(test, steps.IosTest):
-            # TODO(http://crbug.com/1029452): add iOS support for target names.
-            isolated_targets.add(test._name)
+          if isinstance(test, (SwarmingTest, steps.IosTest)):
+            isolated_targets.add(test.name)
 
     self._isolated_targets = sorted(isolated_targets)
 
@@ -566,7 +563,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):
-      if use_histograms:
+      if use_histograms:  # pragma: no cover
         # TODO(http://crbug.com/1029452): Rename test outputs json -> proto.
         # The extension is currently hard-coded in isolated_script_task().
         # In histogram mode, the tests output protos rather than JSON.
@@ -587,7 +584,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.runtime.is_experimental:
       perf_bot_group = 'Experimental' + perf_bot_group
 
-    if use_histograms:
+    if use_histograms:  # pragma: no cover
       for perf_results in results_to_upload:
         perf_bot_group = 'ZZExperimentalHistograms' + perf_bot_group
         args = [

@@ -95,24 +95,7 @@ def generate_tests(api, phase, bot):
         ]))
 
   if test_suite == 'desktop_perf_swarming':
-    gtest_filter = ':'.join([
-        'FullStackTest.ForemanCifLink150kbpsWithoutPacketLoss',
-        'CallPerfTest.NoPadWithoutMinTransmitBitrate'
-    ])
     tests += [
-        # TODO(http://crbug.com/1029452): Remove this after prototyping the
-        # new perf upload flow.
-        SwarmingPerfTest(
-            'webrtc_perf_tests_experimental_hist',
-            target_name='webrtc_perf_tests',
-            args=[
-                '--test_artifacts_dir',
-                '${ISOLATED_OUTDIR}',
-                '--gtest_filter=%s' % gtest_filter,
-                '--save_worst_frame',
-                '--nologs',
-                '--write_histogram_proto_json',
-            ]),
         SwarmingPerfTest('isac_fix_test'),
         SwarmingPerfTest('low_bandwidth_audio_perf_test'),
         SwarmingPerfTest(
@@ -126,22 +109,6 @@ def generate_tests(api, phase, bot):
     ]
 
   if test_suite == 'android_perf_swarming':
-    # TODO(http://crbug.com/1029452): Remove this after prototyping the
-    # new perf upload flow.
-    gtest_filter = ':'.join([
-        'FullStackTest.ForemanCifLink150kbpsWithoutPacketLoss',
-        'CallPerfTest.NoPadWithoutMinTransmitBitrate'
-    ])
-    tests.append(
-        SwarmingAndroidPerfTest(
-            'webrtc_perf_tests_experimental_hist',
-            target_name='webrtc_perf_tests',
-            args=[
-                '--gtest_filter="%s"' % gtest_filter,
-                '--save_worst_frame',
-                '--write_histogram_proto_json',
-                '--nologs',
-            ]))
     tests.append(
         SwarmingAndroidPerfTest(
             'low_bandwidth_audio_perf_test',
@@ -236,8 +203,6 @@ def generate_tests(api, phase, bot):
     ]
 
   if test_suite == 'ios_perf':
-    # TODO(http://crbug.com/1029452): Try iOS tests later (no way to duplicate
-    # test steps in the iOS recipes).
     tests += [
         IosTest('webrtc_perf_tests', args=[
             '--save_chartjson_result',
@@ -396,3 +361,7 @@ class IosTest(object):
       self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True
+
+  @property
+  def name(self):
+    return self._name
