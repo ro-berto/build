@@ -4,8 +4,8 @@
 
 """Tests a recipe CL by running a chromium builder."""
 
+from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
-from recipe_engine.post_process import Filter
 
 DEPS = [
   'recipe_engine/context',
@@ -36,30 +36,54 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
 DEFAULT_BUILDERS = [
-  'luci.chromium.try:linux-rel',
-  'luci.chromium.try:win10_chromium_x64_rel_ng',
+    'luci.chromium.try:linux-rel',
+    'luci.chromium.try:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-beta:linux-rel',
+    'luci.chromium.try-beta:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-stable:linux-rel',
+    'luci.chromium.try-stable:win10_chromium_x64_rel_ng',
 ]
 
 
 # We run the fast CL on Windows to speed up cycle time. Most of the
 # recipe functionality is tested by the slow CL on Linux.
 FAST_BUILDERS = [
-  'luci.chromium.try:win10_chromium_x64_rel_ng',
+    'luci.chromium.try:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-beta:win10_chromium_x64_rel_ng',
+    'luci.chromium.try-stable:win10_chromium_x64_rel_ng',
 ]
 
-
 # CL to use when testing a recipe which touches chromium source.
+# The first level of keys is the bucket of the builder. The second level of keys
+# is the type of CL: 'fast' or 'slow', with the value being the CL to use.
 CHROMIUM_SRC_TEST_CLS = {
-  # This slow CL touches `DEPS` which causes analyze to compile and test all
-  # targets.
-  'slow': 'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
-  # This fast CL touches `chrome/test/base/interactive_test_utils.cc`, resulting
-  # in just interactive_ui_tests being built and run. This is a relatively fast,
-  # but still swarmed w/ multiple shards, test suite. This fast verification is
-  # used for "upstream-only-changes" on the assumption that no upstream code
-  # would (should) have variable effects based on WHICH test suite is executed,
-  # so we just need to pick SOME test suite.
-  'fast': 'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
+    # The slow CLs touch `DEPS` which causes analyze to compile and test all
+    # targets.
+
+    # The fast CLs touch `chrome/test/base/interactive_test_utils.cc`, resulting
+    # in just interactive_ui_tests being built and run. This is a relatively
+    # fast, but still swarmed w/ multiple shards, test suite. This fast
+    # verification is used for "upstream-only-changes" on the assumption that no
+    # upstream code would (should) have variable effects based on WHICH test
+    # suite is executed, so we just need to pick SOME test suite.
+    'luci.chromium.try': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
+    },
+    'luci.chromium.try-beta': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2067090',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2066664',
+    },
+    'luci.chromium.try-stable': {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2068245',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/2068246',
+    },
 }
 
 
@@ -132,15 +156,36 @@ def RunSteps(api, repo_name):
   cl_config = api.gclient.make_config(repo_name)
   _checkout_project(api, cl_workdir, cl_config, True)
 
-  triggered_jobs = {}
-
   cl_footers = api.tryserver.get_footers() or {}
-  builders = cl_footers.get(BUILDER_FOOTER, DEFAULT_BUILDERS)
+  builders = cl_footers.get(BUILDER_FOOTER)
+  if builders is None:
+    builders = DEFAULT_BUILDERS
+  else:
+    bad_builders = sorted(b for b in builders if ':' not in b)
+    if bad_builders:
+      step_name = 'bad builders'
+      result = api.step(step_name, [])
+      result.presentation.status = api.step.FAILURE
+      result.presentation.step_text = ''.join(
+          ['\n  ' + b for b in bad_builders])
+      raise api.step.StepFailure(step_name, result)
+    buckets = set(b.split(':', 1)[0] for b in builders)
+    unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
+    if unknown_buckets:
+      step_name = 'unknown buckets'
+      result = api.step(step_name, [])
+      result.presentation.status = api.step.FAILURE
+      result.presentation.step_text = ''.join(
+          ['\n  ' + b for b in unknown_buckets])
+      raise api.step.StepFailure(step_name, result)
+
+
   # We don't currently check anything about the list of builders to trigger.
   # This is because the only existing builder which runs this recipe uses a
   # service account which is only allowed to trigger jobs in the
   # luci.chromium.try bucket. That builder is not in that bucket, so there's no
   # possibility for running a tryjob on itself.
+  triggered_jobs = {}
 
   for builder in builders:
     with api.step.nest('analyze+launch '+builder):
@@ -156,10 +201,9 @@ def RunSteps(api, repo_name):
 
         # FIXME: If we collect all the recipes-to-run up front, we can do
         # a single analysis pass, instead of one per builder.
-        cl = trigger_cl(
-            api, recipe, cl_workdir.join(repo_name),
-            recipes_dir.join('recipes.py'), builder)
-        if not cl:
+        cl_key = trigger_cl(api, recipe, cl_workdir.join(repo_name),
+                            recipes_dir.join('recipes.py'), builder)
+        if not cl_key:
           result = api.python.succeeding_step(
               'not running a tryjob for %s' % recipe,
               '`recipes.py analyze` indicates this recipe is not affected by '
@@ -169,10 +213,12 @@ def RunSteps(api, repo_name):
 
         # FIXME: We should check if the recipe we're testing tests patches to
         # chromium/src. For now just assume this works.
-        ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CLS[cl])
+        bucket = builder.split(':', 1)[0]
+        cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
+        ir = ir.then('edit-cr-cl', cl)
         preso = api.step.active_result.presentation
-        preso.step_text += 'Using %s testing CL' % cl
-        preso.links['Test CL'] = CHROMIUM_SRC_TEST_CLS[cl]
+        preso.step_text += 'Using %s testing CL' % cl_key
+        preso.links['Test CL'] = cl
 
         result = (
           ir.then('edit-recipe-bundle').
@@ -305,7 +351,7 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
       default_builders(recipe_affected=False),
-      api.post_process(Filter('exiting')),
+      api.post_process(post_process.Filter('exiting')),
   )
 
   yield api.test(
@@ -343,13 +389,45 @@ def GenTests(api):
           }),
           retcode=1),
       api.post_process(
-          Filter(prefix('luci.chromium.try:linux-rel') + 'recipe invalid')),
+          post_process.Filter(
+              prefix('luci.chromium.try:linux-rel') + 'recipe invalid')),
+  )
+
+  def step_text_lines(step):
+    return [l.strip() for l in step.step_text.split('<br/>')]
+
+  yield api.test(
+      'footer_builder_with_invalid_format',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(footer_builder='bad-builder'),
+      api.post_check(post_process.StepFailure, 'bad builders'),
+      api.post_check(
+          lambda check, steps: \
+          check('bad-builder' in step_text_lines(steps['bad builders']))
+      ),
+      api.post_check(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'custom_builder',
+      'footer_builder_with_unknown_bucket',
       api.properties.tryserver(repo_name='build'),
-      gerrit_change(footer_builder='arbitrary.blah'),
-      test_builder('arbitrary.blah'),
-      api.post_process(Filter(prefix('arbitrary.blah') + 'led get-builder')),
+      gerrit_change(footer_builder='arbitrary-bucket:arbitrary-builder'),
+      api.post_check(post_process.StepFailure, 'unknown buckets'),
+      api.post_check(
+          lambda check, steps: \
+          check('arbitrary-bucket' in step_text_lines(steps['unknown buckets']))
+      ),
+      api.post_check(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'footer_builder',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
+      test_builder('luci.chromium.try:arbitrary-builder'),
+      api.post_check(post_process.DoesNotRun,
+                     *[prefix(b) for b in DEFAULT_BUILDERS]),
+      api.post_process(post_process.DropExpectation),
   )
