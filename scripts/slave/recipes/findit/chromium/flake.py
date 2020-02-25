@@ -11,30 +11,16 @@ from recipe_engine import post_process
 
 
 DEPS = [
-    'adb',
-    'chromium',
-    'chromium_android',
-    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'depot_tools/git',
-    'filter',
     'findit',
     'isolate',
     'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
-    'recipe_engine/context',
     'recipe_engine/json',
-    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
-    'test_results',
     'test_utils',
 ]
 
@@ -69,8 +55,8 @@ def RunSteps(api, target_mastername, target_testername,
              test_revision, tests, test_repeat_count, skip_tests):
   assert tests, 'No failed tests were specified.'
 
-  target_buildername, checked_out_revision, cached_revision  = (
-      api.findit.configure_and_sync(api, target_mastername, target_testername,
+  target_buildername, checked_out_revision, cached_revision = (
+      api.findit.configure_and_sync(target_mastername, target_testername,
                                     test_revision))
 
   test_results = {}
@@ -84,8 +70,8 @@ def RunSteps(api, target_mastername, target_testername,
   try:
     test_results[test_revision], _, compile_failure = (
         api.findit.compile_and_test_at_revision(
-          api, target_mastername, target_buildername, target_testername,
-          test_revision, tests, False, test_repeat_count, skip_tests))
+            target_mastername, target_buildername, target_testername,
+            test_revision, tests, False, test_repeat_count, skip_tests))
     if compile_failure:
       return compile_failure
   except api.step.InfraFailure:
@@ -115,15 +101,14 @@ def GenTests(api):
     }
     if tests:
       properties['tests'] = tests
-    return (
-        api.properties(**properties) +
+    return sum([
+        api.properties(**properties),
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
-        ) +
-        api.platform.name(platform_name) +
-        api.runtime(True, False)
-    )
+        ),
+        api.platform.name(platform_name),
+    ], api.empty_test_data())
 
   yield api.test(
       'flakiness_isolate_only',

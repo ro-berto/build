@@ -21,29 +21,15 @@ from RECIPE_MODULES.build import chromium
 
 
 DEPS = [
-    'chromium',
-    'chromium_android',
-    'chromium_checkout',
-    'chromium_swarming',
     'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'depot_tools/git',
     'findit',
     'isolate',
     'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
-    'recipe_engine/context',
     'recipe_engine/json',
-    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
-    'test_results',
-    'test_utils',
 ]
 
 
@@ -66,7 +52,9 @@ def RunSteps(api, target_mastername, target_testername,
              revision, isolated_targets):
   target_buildername, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(
-          api, target_mastername, target_testername, revision,
+          target_mastername,
+          target_testername,
+          revision,
           builders=api.properties.get('builders')))
 
   bot_id = api.chromium_tests.create_bot_id(
@@ -195,15 +183,14 @@ def GenTests(api):
             }
         },
     }
-    return (
-        api.properties(**properties) +
+    return sum([
+        api.properties(**properties),
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
-        ) +
-        api.platform.name('linux') +
-        api.runtime(True, False)
-    )
+        ),
+        api.platform.name('linux'),
+    ], api.empty_test_data())
 
   def verify_report(check, step_odict, expected_isolated_tests):
     step = step_odict['report']

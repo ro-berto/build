@@ -21,7 +21,6 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
     'chromium',
-    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
     'depot_tools/tryserver',

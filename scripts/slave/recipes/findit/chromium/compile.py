@@ -14,21 +14,16 @@ from RECIPE_MODULES.build import chromium
 
 DEPS = [
     'chromium',
-    'chromium_checkout',
     'chromium_tests',
     'filter',
     'findit',
-    'depot_tools/gclient',
-    'depot_tools/git',
     'recipe_engine/buildbucket',
-    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -143,8 +138,8 @@ def RunSteps(api, target_mastername, target_buildername,
 
   api.chromium.apply_config('goma_failfast')
 
-  (checked_out_revision, cached_revision) = api.findit.record_previous_revision(
-      api, bot_config)
+  checked_out_revision, cached_revision = api.findit.record_previous_revision(
+      bot_config)
   # Sync to bad revision, and retrieve revisions in the regression range.
   api.chromium_tests.prepare_checkout(
       bot_config,
@@ -363,15 +358,14 @@ def GenTests(api):
       properties['compile_targets'] = compile_targets
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
-    return (
-        api.properties(**properties) +
+    return sum([
+        api.properties(**properties),
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
-        ) +
-        api.platform.name('linux') +
-        api.runtime(True, False)
-    )
+        ),
+        api.platform.name('linux'),
+    ], api.empty_test_data())
 
   def base_unittests_additional_compile_target():
     return api.chromium_tests.read_source_side_spec(

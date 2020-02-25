@@ -12,30 +12,16 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
-    'adb',
-    'depot_tools/bot_update',
-    'chromium',
-    'chromium_android',
-    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
-    'depot_tools/gclient',
-    'depot_tools/git',
-    'filter',
     'findit',
-    'isolate',
     'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
-    'recipe_engine/context',
     'recipe_engine/json',
-    'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
-    'test_results',
     'test_utils',
 ]
 
@@ -119,7 +105,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
   assert tests, 'No failed tests were specified.'
 
   target_buildername, checked_out_revision, cached_revision = (
-      api.findit.configure_and_sync(api, target_mastername, target_testername,
+      api.findit.configure_and_sync(target_mastername, target_testername,
                                     bad_revision))
 
   # retrieve revisions in the regression range.
@@ -193,12 +179,15 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
         # Should not use "analyze" to skip tests at the first revision, because
         # if a skipped test fails at the second revision in the sub range, the
         # second revision is not necessarily the culprit.
-        (test_results[first_revision],
-            tests_failed_in_potential_green, compile_failure) = (
-            api.findit.compile_and_test_at_revision(
-                api, target_mastername, target_buildername, target_testername,
-                first_revision, tests_have_not_found_culprit,
-                use_analyze=False, test_repeat_count=test_repeat_count))
+        (test_results[first_revision], tests_failed_in_potential_green,
+         compile_failure) = api.findit.compile_and_test_at_revision(
+             target_mastername,
+             target_buildername,
+             target_testername,
+             first_revision,
+             tests_have_not_found_culprit,
+             use_analyze=False,
+             test_repeat_count=test_repeat_count)
         if compile_failure:
           return compile_failure
       else:
@@ -223,7 +212,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           # culprit.
           test_results[revision], tests_failed_in_revision, compile_failure = (
               api.findit.compile_and_test_at_revision(
-                  api, target_mastername, target_buildername, target_testername,
+                  target_mastername, target_buildername, target_testername,
                   revision, tests_to_run, use_analyze, test_repeat_count))
           if compile_failure:
             return compile_failure
@@ -258,13 +247,11 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
             tests_run_on_good_revision[step].append(test)
 
       if tests_run_on_good_revision:
-        (test_results[good_revision],
-            tests_failed_in_revision, compile_failure) = (
-                api.findit.compile_and_test_at_revision(
-                    api, target_mastername, target_buildername,
-                    target_testername, good_revision,
-                    tests_run_on_good_revision, use_analyze, test_repeat_count)
-            )
+        (test_results[good_revision], tests_failed_in_revision,
+         compile_failure) = api.findit.compile_and_test_at_revision(
+             target_mastername, target_buildername, target_testername,
+             good_revision, tests_run_on_good_revision, use_analyze,
+             test_repeat_count)
         if compile_failure:
           return compile_failure
         if tests_failed_in_revision:
@@ -319,15 +306,14 @@ def GenTests(api):
       properties['tests'] = tests
     if suspected_revisions:
       properties['suspected_revisions'] = suspected_revisions
-    return (
-        api.properties(**properties) +
+    return sum([
+        api.properties(**properties),
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
-        ) +
-        api.platform.name(platform_name) +
-        api.runtime(True, False)
-    )
+        ),
+        api.platform.name(platform_name),
+    ], api.empty_test_data())
 
   def verify_report_fields(check, step_odict, expected_report_fields):
     """Verifies fields in report are with expected values."""

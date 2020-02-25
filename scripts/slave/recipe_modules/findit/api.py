@@ -129,14 +129,18 @@ class FinditApi(recipe_api.RecipeApi):
         'check_targets', self.resource('check_target_existence.py'), args=args)
     return step.json.output['found']
 
-  def compile_and_test_at_revision(self, api, target_mastername,
-                                   target_buildername, target_testername,
-                                   revision, requested_tests, use_analyze,
-                                   test_repeat_count=None, skip_tests=False):
+  def compile_and_test_at_revision(self,
+                                   target_mastername,
+                                   target_buildername,
+                                   target_testername,
+                                   revision,
+                                   requested_tests,
+                                   use_analyze,
+                                   test_repeat_count=None,
+                                   skip_tests=False):
     """Compile the targets needed to execute the specified tests and run them.
 
     Args:
-      api (RecipeApi): With the dependencies injected by the calling recipe.
       target_mastername (str): Which master to derive the configuration off of.
       target_buildername (str): likewise
       target_testername (str): likewise
@@ -179,13 +183,13 @@ class FinditApi(recipe_api.RecipeApi):
 
     results = {}
     abbreviated_revision = revision[:7]
-    with api.m.step.nest('test %s' % str(abbreviated_revision)):
+    with self.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
       # TODO(stgao): refactor this out.
-      bot_id = api.chromium_tests.create_bot_id(
+      bot_id = self.m.chromium_tests.create_bot_id(
           target_mastername, target_buildername, target_testername)
-      bot_config = api.m.chromium_tests.create_bot_config_object([bot_id])
-      bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
+      bot_config = self.m.chromium_tests.create_bot_config_object([bot_id])
+      bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
           bot_config, root_solution_revision=revision)
 
       # Figure out which test steps to run.
@@ -207,7 +211,7 @@ class FinditApi(recipe_api.RecipeApi):
         changed_files = self.files_changed_by_revision(revision)
 
         affected_test_targets, actual_compile_targets = (
-            api.m.filter.analyze(
+            self.m.filter.analyze(
                 changed_files,
                 test_targets=requested_test_targets,
                 additional_compile_targets=[],
@@ -231,7 +235,7 @@ class FinditApi(recipe_api.RecipeApi):
               break
 
       if actual_compile_targets:
-        raw_result = api.m.chromium_tests.compile_specific_targets(
+        raw_result = self.m.chromium_tests.compile_specific_targets(
             bot_config,
             bot_update_step,
             build_config,
@@ -255,8 +259,8 @@ class FinditApi(recipe_api.RecipeApi):
           pass
 
       # Run the tests.
-      with api.m.chromium_tests.wrap_chromium_tests(
-          bot_config, actual_tests_to_run):
+      with self.m.chromium_tests.wrap_chromium_tests(bot_config,
+                                                     actual_tests_to_run):
         if skip_tests:
           # Not actually running any tests.
           return {
@@ -266,8 +270,9 @@ class FinditApi(recipe_api.RecipeApi):
               } for x in requested_tests.keys()
           }, defaultdict(list), None
 
-        _, failed_tests = api.m.test_utils.run_tests(
-            api.chromium_tests.m, actual_tests_to_run,
+        _, failed_tests = self.m.test_utils.run_tests(
+            self.m.chromium_tests.m,
+            actual_tests_to_run,
             suffix=abbreviated_revision)
 
       # Process failed tests.
@@ -312,8 +317,11 @@ class FinditApi(recipe_api.RecipeApi):
 
       return results, failed_tests_dict, None
 
-  def configure_and_sync(self, api, target_mastername, target_testername,
-                         revision, builders=None):
+  def configure_and_sync(self,
+                         target_mastername,
+                         target_testername,
+                         revision,
+                         builders=None):
     """Applies compile/test configs & syncs code.
 
     These are common tasks done in preparation ahead of building and testing
@@ -321,7 +329,6 @@ class FinditApi(recipe_api.RecipeApi):
     recipes.
 
     Args:
-      api (RecipeApi): With the dependencies injected by the calling recipe.
       target_mastername (str): Which master to derive the configuration off of.
       target_testername (str): likewise
       revision (str): A string representing the commit hash of the revision to
@@ -333,49 +340,50 @@ class FinditApi(recipe_api.RecipeApi):
     # Sometimes, the builder itself runs the tests and there is no tester. In
     # such cases, just treat the builder as a "tester". Thus, we default to
     # the target tester.
-    builders = builders or api.chromium_tests.builders
+    builders = builders or self.m.chromium_tests.builders
     tester_config = builders.get(
         target_mastername).get('builders', {}).get(target_testername)
     target_buildername = (tester_config.get('parent_buildername') or
                           target_testername)
 
     # Configure to match the compile config on the builder.
-    bot_config = api.chromium_tests.create_bot_config_object([
-        api.chromium_tests.create_bot_id(
-            target_mastername, target_buildername)],
+    bot_config = self.m.chromium_tests.create_bot_config_object(
+        [
+            self.m.chromium_tests.create_bot_id(target_mastername,
+                                                target_buildername)
+        ],
         builders=builders)
-    api.chromium_tests.configure_build(
+    self.m.chromium_tests.configure_build(
         bot_config, override_bot_type='builder_tester')
 
     # We rely on goma for fast compile. It's better to fail early if goma can't
     # start.
-    api.chromium.apply_config('goma_failfast')
+    self.m.chromium.apply_config('goma_failfast')
 
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
     if target_buildername != target_testername:
       for key, value in tester_config.get('swarming_dimensions', {}
                                           ).iteritems():
-        api.chromium_swarming.set_default_dimension(key, value)
+        self.m.chromium_swarming.set_default_dimension(key, value)
 
     # Record the current revision of the checkout and HEAD of the git cache.
     checked_out_revision, cached_revision = self.record_previous_revision(
-        api, bot_config)
+        bot_config)
 
     # Sync code.
-    api.chromium_tests.prepare_checkout(
-        bot_config,
-        root_solution_revision=revision)
+    self.m.chromium_tests.prepare_checkout(
+        bot_config, root_solution_revision=revision)
 
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
-    api.chromium_swarming.configure_swarming('chromium', precommit=False)
+    self.m.chromium_swarming.configure_swarming('chromium', precommit=False)
 
-    api.step.active_result.presentation.properties['target_buildername'] = (
+    self.m.step.active_result.presentation.properties['target_buildername'] = (
         target_buildername)
 
     return target_buildername, checked_out_revision, cached_revision
 
-  def record_previous_revision(self, api, bot_config):
+  def record_previous_revision(self, bot_config):
     """Records the latest checked out and cached revisions.
 
     Examines the checkout and records the latest available revision for the
@@ -383,35 +391,36 @@ class FinditApi(recipe_api.RecipeApi):
 
     This also records the latest revision available in the local git cache.
 
-    Args:
-      api (RecipeApi): With the dependencies injected by the calling recipe
     Returns:
       A pair of revisions (checked_out_revision, cached_revision), or None, None
       if the checkout directory does not exist.
     """
-    src_root = api.gclient.c.src_root
-    first_solution = (api.gclient.c.solutions[0].name
-                      if api.gclient.c.solutions else None)
+    src_root = self.m.gclient.c.src_root
+    first_solution = (
+        self.m.gclient.c.solutions[0].name
+        if self.m.gclient.c.solutions else None)
 
     src_root = src_root or first_solution
     if not src_root:  # pragma: no cover.
       # We don't know where to look for the revisions
       return None, None
 
-    # api.path['checkout'] is not set yet, so we get it from chromium_checkout.
-    checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
+    # self.m.path['checkout'] is not set yet, so we get it from
+    # chromium_checkout.
+    checkout_dir = self.m.chromium_checkout.get_checkout_dir(bot_config)
     full_checkout_path = checkout_dir.join(src_root)
-    if not api.path.exists(full_checkout_path):
+    if not self.m.path.exists(full_checkout_path):
       return None, None
-    with api.context(cwd=full_checkout_path):
+    with self.m.context(cwd=full_checkout_path):
       checked_out_revision = None
       try:
-        previously_checked_out_revision_step = api.git(
-            'rev-parse', 'HEAD',
-            stdout=api.raw_io.output(),
+        previously_checked_out_revision_step = self.m.git(
+            'rev-parse',
+            'HEAD',
+            stdout=self.m.raw_io.output(),
             name='record previously checked-out revision',
-            step_test_data=lambda: api.raw_io.test_api.stream_output(
-                _GIT_REV_PARSE_OUTPUT))
+            step_test_data=
+            lambda: self.m.raw_io.test_api.stream_output(_GIT_REV_PARSE_OUTPUT))
 
         # Sample output:
         # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a`
@@ -422,18 +431,20 @@ class FinditApi(recipe_api.RecipeApi):
           checked_out_revision = matches.group('revision')
           previously_checked_out_revision_step.presentation.properties[
               'previously_checked_out_revision'] = checked_out_revision
-      except (api.step.StepFailure, OSError):
+      except (self.m.step.StepFailure, OSError):
         # This is expected if the directory or the git repo do not exist.
         pass
 
       cached_revision = None
       try:
-        previously_cached_revision_step = api.git(
-            'ls-remote', 'origin', 'refs/heads/master',
-            stdout=api.raw_io.output(),
+        previously_cached_revision_step = self.m.git(
+            'ls-remote',
+            'origin',
+            'refs/heads/master',
+            stdout=self.m.raw_io.output(),
             name='record previously cached revision',
-            step_test_data=lambda: api.raw_io.test_api.stream_output(
-                _GIT_LS_REMOTE_OUTPUT))
+            step_test_data=
+            lambda: self.m.raw_io.test_api.stream_output(_GIT_LS_REMOTE_OUTPUT))
 
         # Sample output:
         # `d4316eba6ba2b9e88eba8d805babcdfdbbc6e74a  refs/heads/master`
@@ -443,7 +454,7 @@ class FinditApi(recipe_api.RecipeApi):
           cached_revision = matches.group('revision')
           previously_cached_revision_step.presentation.properties[
           'previously_cached_revision'] = cached_revision
-      except (api.step.StepFailure, OSError):
+      except (self.m.step.StepFailure, OSError):
         # This is expected if the directory or the git repo do not exist.
         pass
       return checked_out_revision, cached_revision
