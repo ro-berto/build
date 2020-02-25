@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
     'chromium',
@@ -96,8 +97,8 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
             test_targets=[],
             additional_compile_targets=compile_targets,
             config_file_name='trybot_analyze_config.json',
-            mb_mastername=target_mastername,
-            mb_buildername=target_buildername,
+            builder_id=chromium.BuilderId.create_for_master(
+                target_mastername, target_buildername),
             additional_names=None)
     else:
       # Use ninja to filter out none-existing targets.
@@ -108,14 +109,15 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
       # No compile target exists, or is impacted by the given revision.
       return CompileResult.SKIPPED
 
+    builder_id = chromium.BuilderId.create_for_master(target_mastername,
+                                                      target_buildername)
     failure = api.chromium_tests.compile_specific_targets(
         bot_config,
         bot_update_step,
         build_config,
         compile_targets,
         tests_including_triggered=[],
-        mb_mastername=target_mastername,
-        mb_buildername=target_buildername,
+        builder_id=builder_id,
         override_bot_type='builder_tester')
     if failure and failure.status == common_pb.FAILURE:
       return CompileResult.FAILED

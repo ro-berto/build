@@ -8,11 +8,7 @@ from recipe_engine import recipe_api
 DEPS = [
     'chromium',
     'chromium_tests',
-    'recipe_engine/buildbucket',
-    'recipe_engine/path',
-    'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
 ]
 
 
@@ -22,19 +18,13 @@ PROPERTIES = {
 
 
 def RunSteps(api, builders):
-  builder_name = api.buildbucket.builder_name
-  bot_id = api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                            builder_name)
-  bot_config = api.chromium_tests.create_bot_config_object([bot_id],
+  builder_id = api.chromium.get_builder_id()
+  bot_config = api.chromium_tests.create_bot_config_object([builder_id],
                                                            builders=builders)
   api.chromium_tests.configure_build(bot_config)
   update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.package_build(
-      api.properties['mastername'],
-      builder_name,
-      update_step,
-      build_config,
-      reasons=['for test coverage'])
+      builder_id, update_step, build_config, reasons=['for test coverage'])
 
 
 def GenTests(api):

@@ -218,7 +218,7 @@
       "    commit_hash=kythe_commit_hash, commit_timestamp=1337000000)",
       "  File \"RECIPE_REPO[recipe_engine]/recipe_engine/recipe_api.py\", in _inner",
       "    return func(*a, **kw)",
-      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/api.py\", line 168, in create_and_upload_kythe_index_pack",
+      "  File \"RECIPE_REPO[build]/scripts/slave/recipe_modules/codesearch/api.py\", line 170, in create_and_upload_kythe_index_pack",
       "    'Trying to upload Kythe index pack but no google storage bucket name')",
       "AssertionError: Trying to upload Kythe index pack but no google storage bucket name"
     ]

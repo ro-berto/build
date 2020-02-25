@@ -12,6 +12,8 @@ import json
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
+from . import types as chromium
+
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
@@ -181,6 +183,11 @@ class ChromiumApi(recipe_api.RecipeApi):
   def set_build_properties(self, props):
     self._build_properties = props
 
+  def get_builder_id(self):
+    mastername = self.m.properties.get('mastername')
+    buildername = self.m.buildbucket.builder_name
+    return chromium.BuilderId.create_for_master(mastername, buildername)
+
   def configure_bot(self, builders_dict, additional_configs=None):
     """Sets up the configurations and gclient to be ready for bot update.
 
@@ -191,18 +198,18 @@ class ChromiumApi(recipe_api.RecipeApi):
     build properties; we then apply the configs specified in bot_config
     as appropriate.
 
-    Returns a tuple of (buildername, bot_config) for subsequent use in
-       the recipe.
+    Returns:
+      A tuple of (builder_id, bot_config) for subsequent use in the
+      recipe.
     """
     additional_configs = additional_configs or []
 
     # TODO: crbug.com/358481 . The build_config should probably be a property
     # passed in from the slave config, but that doesn't exist today, so we
     # need a lookup mechanism to map bot name to build_config.
-    mastername = self.m.properties.get('mastername')
-    buildername = self.m.buildbucket.builder_name
-    master_dict = builders_dict.get(mastername, {})
-    bot_config = master_dict.get('builders', {}).get(buildername)
+    builder_id = self.get_builder_id()
+    master_dict = builders_dict.get(builder_id.master, {})
+    bot_config = master_dict.get('builders', {}).get(builder_id.builder)
 
     self.set_config(bot_config.get('chromium_config', 'chromium'),
                     **bot_config.get('chromium_config_kwargs', {}))
@@ -220,7 +227,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
-    return (buildername, bot_config)
+    return (builder_id, bot_config)
 
   def _limit_error_list(self, error_list, char_limit, message_prefix ='',
                         message_suffix='', line_format='{}',
@@ -1175,18 +1182,25 @@ class ChromiumApi(recipe_api.RecipeApi):
     return [build_dir]
 
   @_with_chromium_layout
-  def run_mb_cmd(self, name, mb_command, mastername, buildername,
-                 mb_path=None, mb_config_path=None,
-                 chromium_config=None, phase=None, use_goma=True,
-                 android_version_code=None, android_version_name=None,
-                 additional_args=None, **kwargs):
+  def run_mb_cmd(self,
+                 name,
+                 mb_command,
+                 builder_id,
+                 mb_path=None,
+                 mb_config_path=None,
+                 chromium_config=None,
+                 phase=None,
+                 use_goma=True,
+                 android_version_code=None,
+                 android_version_name=None,
+                 additional_args=None,
+                 **kwargs):
     """Run an arbitrary mb command.
 
     Args:
       name: The name of the step.
       mb_command: The mb command to run.
-      mastername: The name of the master of the configuration to run mb for.
-      buildername: The name of the builder of the configuration to run mb for.
+      builder_id: The ID of the builder of the configuration to run mb for.
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
         used.
@@ -1210,9 +1224,12 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args = [
         mb_command,
-        '-m', mastername,
-        '-b', buildername,
-        '--config-file', mb_config_path,
+        '-m',
+        builder_id.master,
+        '-b',
+        builder_id.builder,
+        '--config-file',
+        mb_config_path,
     ]
 
     if phase is not None:
@@ -1277,15 +1294,20 @@ class ChromiumApi(recipe_api.RecipeApi):
         return self.m.python(**step_kwargs)
 
   @_with_chromium_layout
-  def mb_analyze(self, mastername, buildername, analyze_input,
-                 name=None, mb_path=None, mb_config_path=None,
-                 chromium_config=None, build_dir=None, phase=None, **kwargs):
+  def mb_analyze(self,
+                 builder_id,
+                 analyze_input,
+                 name=None,
+                 mb_path=None,
+                 mb_config_path=None,
+                 chromium_config=None,
+                 build_dir=None,
+                 phase=None,
+                 **kwargs):
     """Determine which targets need to be built and tested.
 
     Args:
-      mastername: The name of the master for the build configuration to
-        analyze.
-      buildername: The name of the builder for the build configuration to
+      builder_id: The ID of the builder with the build configuration to
         analyze.
       analyze_input: a dict of the following form:
         {
@@ -1321,7 +1343,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     )
     with self.mb_failure_handler(name):
       return self.run_mb_cmd(
-          name, 'analyze', mastername, buildername,
+          name,
+          'analyze',
+          builder_id,
           mb_path=mb_path,
           mb_config_path=mb_config_path,
           chromium_config=chromium_config,
@@ -1333,18 +1357,23 @@ class ChromiumApi(recipe_api.RecipeApi):
           **kwargs)
 
   @_with_chromium_layout
-  def mb_lookup(self, mastername, buildername, name=None,
-                mb_path=None, mb_config_path=None, recursive=False,
-                chromium_config=None, phase=None, use_goma=True,
-                android_version_code=None, android_version_name=None,
-                gn_args_location=None, gn_args_max_text_lines=None):
+  def mb_lookup(self,
+                builder_id,
+                name=None,
+                mb_path=None,
+                mb_config_path=None,
+                recursive=False,
+                chromium_config=None,
+                phase=None,
+                use_goma=True,
+                android_version_code=None,
+                android_version_name=None,
+                gn_args_location=None,
+                gn_args_max_text_lines=None):
     """Lookup the GN args for the build.
 
     Args:
-      mastername: The name of the master for the build configuration to
-        look up.
-      buildername: The name of the builder for the build configuration to
-        look up.
+      builder_id: The ID of the builder for the build configuration to look up.
       name: The name of the step. If not provided 'lookup GN args' will be used.
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
@@ -1371,8 +1400,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     """
     name = name or 'lookup GN args'
     additional_args = ['--recursive' if recursive else '--quiet']
+    lookup_test_data = ('goma_dir = "/b/build/slave/cache/goma_client"\n'
+                        'target_cpu = "x86"\n'
+                        'use_goma = true\n')
     result = self.run_mb_cmd(
-        name, 'lookup', mastername, buildername,
+        name,
+        'lookup',
+        builder_id,
         mb_path=mb_path,
         mb_config_path=mb_config_path,
         chromium_config=chromium_config,
@@ -1383,11 +1417,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         additional_args=additional_args,
         ok_ret='any',
         stdout=self.m.raw_io.output_text(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
-            'goma_dir = "/b/build/slave/cache/goma_client"\n'
-            'target_cpu = "x86"\n'
-            'use_goma = true\n'
-        ))
+        step_test_data=
+        lambda: self.m.raw_io.test_api.stream_output(lookup_test_data))
 
     gn_args = result.stdout
     if gn_args is not None:
@@ -1399,19 +1430,25 @@ class ChromiumApi(recipe_api.RecipeApi):
     return gn_args
 
   @_with_chromium_layout
-  def mb_gen(self, mastername, buildername, name=None,
-             mb_path=None, mb_config_path=None, use_goma=True,
-             isolated_targets=None, build_dir=None, phase=None,
-             android_version_code=None, android_version_name=None,
-             gn_args_location=None, gn_args_max_text_lines=None,
-             recursive_lookup=False, **kwargs):
+  def mb_gen(self,
+             builder_id,
+             name=None,
+             mb_path=None,
+             mb_config_path=None,
+             use_goma=True,
+             isolated_targets=None,
+             build_dir=None,
+             phase=None,
+             android_version_code=None,
+             android_version_name=None,
+             gn_args_location=None,
+             gn_args_max_text_lines=None,
+             recursive_lookup=False,
+             **kwargs):
     """Generate the build files in the source tree.
 
     Args:
-      mastername: The name of the master for the build configuration to generate
-        build files for.
-      buildername: The name of the builder for the build configuration to
-        generate build files for.
+      builder_id: The ID for the builder to generate build files for.
       name: The name of the step. If not provided 'generate_build_files' will be
         used.
       mb_path: The path to the source directory containing the mb.py script. If
@@ -1440,9 +1477,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     # steps fail, developers will have the information about what the GN args
     # are so that they can reproduce the issue locally
     gn_args = self.mb_lookup(
-        mastername, buildername,
-        mb_path=mb_path, mb_config_path=mb_config_path,
-        phase=phase, use_goma=use_goma,
+        builder_id,
+        mb_path=mb_path,
+        mb_config_path=mb_config_path,
+        phase=phase,
+        use_goma=use_goma,
         recursive=recursive_lookup,
         android_version_code=android_version_code,
         android_version_name=android_version_name,
@@ -1470,9 +1509,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     name = name or 'generate_build_files'
     with self.mb_failure_handler(name):
       result = self.run_mb_cmd(
-          name, 'gen', mastername, buildername,
-          mb_path=mb_path, mb_config_path=mb_config_path,
-          phase=phase, use_goma=use_goma,
+          name,
+          'gen',
+          builder_id,
+          mb_path=mb_path,
+          mb_config_path=mb_config_path,
+          phase=phase,
+          use_goma=use_goma,
           android_version_code=android_version_code,
           android_version_name=android_version_name,
           additional_args=mb_args,
@@ -1486,10 +1529,17 @@ class ChromiumApi(recipe_api.RecipeApi):
     return gn_args
 
   @_with_chromium_layout
-  def mb_isolate_everything(self, mastername, buildername, use_goma=True,
-                            mb_path=None, mb_config_path=None, name=None,
-                            build_dir=None, android_version_code=None,
-                            android_version_name=None, phase=None, **kwargs):
+  def mb_isolate_everything(self,
+                            builder_id,
+                            use_goma=True,
+                            mb_path=None,
+                            mb_config_path=None,
+                            name=None,
+                            build_dir=None,
+                            android_version_code=None,
+                            android_version_name=None,
+                            phase=None,
+                            **kwargs):
     args = []
 
     args.extend(self._mb_isolate_map_file_args())
@@ -1497,13 +1547,18 @@ class ChromiumApi(recipe_api.RecipeApi):
     args.extend(self._mb_build_dir_args(build_dir))
 
     name = name or 'generate .isolate files'
-    self.run_mb_cmd(name, 'isolate-everything', mastername, buildername,
-                    mb_path=mb_path, mb_config_path=mb_config_path,
-                    phase=phase, use_goma=use_goma,
-                    android_version_code=android_version_code,
-                    android_version_name=android_version_name,
-                    additional_args=args,
-                    **kwargs)
+    self.run_mb_cmd(
+        name,
+        'isolate-everything',
+        builder_id,
+        mb_path=mb_path,
+        mb_config_path=mb_config_path,
+        phase=phase,
+        use_goma=use_goma,
+        android_version_code=android_version_code,
+        android_version_name=android_version_name,
+        additional_args=args,
+        **kwargs)
 
   @contextlib.contextmanager
   def mb_failure_handler(self, name):

@@ -8,15 +8,9 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
-  'archive',
   'depot_tools/bot_update',
   'chromium',
-  'recipe_engine/json',
   'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
   'recipe_engine/step',
 ]
 
@@ -40,15 +34,14 @@ BUILDERS = freeze({
 
 
 def RunSteps(api):
-  mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+  builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.mb_gen(mastername, buildername, use_goma=False)
+  api.chromium.mb_gen(builder_id, use_goma=False)
 
   raw_result = api.chromium.compile(targets=['empty_fuzzer'],
                        use_goma_module=True)
@@ -69,10 +62,10 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='chromium.fyi',
-          buildername='ClangToTLinuxASanLibfuzzer',
-          path_config='generic'),
+          builder='ClangToTLinuxASanLibfuzzer',
+      ),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

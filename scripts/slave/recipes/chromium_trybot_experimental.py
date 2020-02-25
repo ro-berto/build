@@ -10,31 +10,9 @@ debug changes. Do not use without talking to martiniss@.
 from recipe_engine import post_process
 
 DEPS = [
-    'build',
     'chromium',
-    'chromium_android',
-    'chromium_checkout',
-    'chromium_swarming',
     'chromium_tests',
-    'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'depot_tools/gerrit',
-    'depot_tools/tryserver',
-    'filter',
-    'isolate',
-    'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
-    'recipe_engine/file',
-    'recipe_engine/json',
-    'recipe_engine/path',
-    'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
-    'recipe_engine/raw_io',
-    'recipe_engine/step',
-    'recipe_engine/runtime',
-    'test_results',
-    'test_utils',
 ]
 
 
@@ -45,4 +23,5 @@ def RunSteps(api):  # pragma: no cover
 
 
 def GenTests(api):
-  yield api.test('basic', api.post_process(post_process.DropExpectation))
+  yield api.test('basic', api.chromium.try_build(),
+                 api.post_process(post_process.DropExpectation))

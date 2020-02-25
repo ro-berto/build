@@ -7,6 +7,7 @@ from recipe_engine import recipe_api
 from recipe_engine.types import freeze
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
   'chromium',
@@ -144,7 +145,9 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.chromium.runhooks()
 
   if bot_config.get('run_mb'):
-    api.chromium.mb_gen(mastername, buildername, use_goma=True)
+    api.chromium.mb_gen(
+        chromium.BuilderId.create_for_master(mastername, buildername),
+        use_goma=True)
 
   targets = list(bot_config.get('targets', []))
   targets += _GetChromiumTestsCompileTargets(

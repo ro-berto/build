@@ -1,3 +1,5 @@
+from . import types
+
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
@@ -26,3 +28,6 @@ DEPS = [
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
+
+# Forward symbols for other modules to import
+BuilderId = types.BuilderId

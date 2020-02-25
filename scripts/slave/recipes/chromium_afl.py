@@ -13,8 +13,6 @@ DEPS = [
   'depot_tools/depot_tools',
   'recipe_engine/json',
   'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
@@ -55,15 +53,14 @@ def gn_refs(api, step_name, args):
 
 
 def RunSteps(api):
-  mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+  builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   checkout_results = api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.mb_gen(mastername, buildername)
+  api.chromium.mb_gen(builder_id)
 
   all_fuzzers = gn_refs(
           api,
@@ -107,8 +104,8 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.properties.generic(
-          mastername='chromium.fuzz', buildername='Afl Upload Linux ASan'),
+      api.chromium.ci_build(
+          mastername='chromium.fuzz', builder='Afl Upload Linux ASan'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

@@ -754,8 +754,7 @@ class V8Api(recipe_api.RecipeApi):
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
         gn_args = self.m.chromium.mb_gen(
-            self.m.properties['mastername'],
-            self.m.buildbucket.builder_name,
+            self.m.chromium.get_builder_id(),
             use_goma=use_goma,
             mb_config_path=(
                 mb_config_path or

@@ -8,6 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 
 TEST_NAMES_DEBUG_APP_PATTERN = re.compile(
@@ -51,6 +52,11 @@ class iOSApi(recipe_api.RecipeApi):
   def bucket(self):
     assert self.__config is not None
     return self.__config.get('bucket')
+
+  @property
+  def builder_id(self):
+    return chromium.BuilderId.create_for_master(self.__config['mastername'],
+                                                self.m.buildbucket.builder_name)
 
   @property
   def configuration(self):
@@ -377,8 +383,7 @@ class iOSApi(recipe_api.RecipeApi):
       if use_mb:
         with self.m.context(env=env):
           self.m.chromium.mb_gen(
-              self.__config['mastername'],
-              self.m.buildbucket.builder_name,
+              self.builder_id,
               build_dir='//out/%s' % build_sub_path,
               mb_path=mb_path,
               name='generate build files (mb)' + suffix,
@@ -435,8 +440,7 @@ class iOSApi(recipe_api.RecipeApi):
                   self.__config['additional_compile_targets'],
                   'trybot_analyze_config.json',
                   additional_names=['chromium', 'ios'],
-                  mb_mastername=self.__config['mastername'],
-                  mb_buildername=self.m.buildbucket.builder_name,
+                  builder_id=self.builder_id,
                   # Don't re-use the build directory: filter.analyze ignores
                   # goma and it calls 'mb analyze' which results in the args.gn
                   # file having incorrect values for the goma variables

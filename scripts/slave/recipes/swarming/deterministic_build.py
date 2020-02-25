@@ -12,6 +12,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
   'chromium',
@@ -21,12 +22,10 @@ DEPS = [
   'isolate',
   'recipe_engine/context',
   'recipe_engine/file',
-  'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/step',
 ]
 
 DETERMINISTIC_BUILDERS = freeze({
@@ -201,11 +200,11 @@ def RunSteps(api, buildername):
   compare_local = recipe_config.get('compare_local', False)
 
   # Do a first build and move the build artifact to the temp directory.
-  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
-                      phase='local' if compare_local else None)
+  builder_id = chromium.BuilderId.create_for_master(
+      api.properties.get('mastername'), buildername)
+  api.chromium.mb_gen(builder_id, phase='local' if compare_local else None)
   api.chromium.mb_isolate_everything(
-    api.properties.get('mastername'), buildername,
-    phase='local' if compare_local else None)
+      builder_id, phase='local' if compare_local else None)
 
   raw_result = api.chromium.compile(targets, name='First build',
                        use_goma_module=not compare_local)
@@ -222,13 +221,11 @@ def RunSteps(api, buildername):
     target = '%s.2' % api.chromium.c.build_config_fs
     build_dir = '//out/%s' % target
 
-  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
-                      build_dir=build_dir,
-                      phase='goma' if compare_local else None)
+  api.chromium.mb_gen(
+      builder_id, build_dir=build_dir, phase='goma' if compare_local else None)
 
   api.chromium.mb_isolate_everything(
-    api.properties.get('mastername'), buildername, build_dir=build_dir,
-    phase='goma' if compare_local else None)
+      builder_id, build_dir=build_dir, phase='goma' if compare_local else None)
   raw_result = api.chromium.compile(targets, name='Second build',
       use_goma_module=True, target=target)
   if raw_result.status != common_pb.SUCCESS:

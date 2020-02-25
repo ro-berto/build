@@ -17,6 +17,7 @@ from recipe_engine.recipe_api import Property
 
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 
 DEPS = [
@@ -107,8 +108,8 @@ def RunSteps(api, target_mastername, target_testername,
           build_config,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
-          mb_mastername=target_mastername,
-          mb_buildername=target_buildername,
+          builder_id=chromium.BuilderId.create_for_master(
+              target_mastername, target_buildername),
           override_bot_type='builder_tester')
       if raw_result.status != common_pb.SUCCESS:
         return raw_result

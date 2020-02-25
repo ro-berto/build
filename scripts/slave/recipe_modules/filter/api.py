@@ -121,8 +121,7 @@ class FilterApi(recipe_api.RecipeApi):
                                  additional_names=None,
                                  config_file_name='trybot_analyze_config.json',
                                  use_mb=False,
-                                 mb_mastername=None,
-                                 mb_buildername=None,
+                                 builder_id=None,
                                  mb_config_path=None,
                                  build_output_dir=None,
                                  cros_board=None,
@@ -140,8 +139,7 @@ class FilterApi(recipe_api.RecipeApi):
       additional_names: additional top level keys to look up exclusions in,
                         see |config_file_name|.
       config_file_name: the config file to look up exclusions in.
-      mb_mastername: the mastername to pass over to run MB.
-      mb_buildername: the buildername to pass over to run MB.
+      builder_id: the ID of the builder with the config to run MB against.
       mb_config_path: the path to the MB config file.
 
     Within the file we concatenate "base.exclusions" and
@@ -157,13 +155,11 @@ class FilterApi(recipe_api.RecipeApi):
     call completes the results can be obtained from self.compile_targets()
     and self.test_targets().
 
-    To run MB, we need to use the actual mastername and buildername we're
-    running on, and not those of the continuous builder the trybot may be
-    configured to match, because a trybot may be configured with different MB
-    settings.
+    To run MB, we get the build ID for the builder currently being run
+    and not those of the continuous builder the trybot may be configured
+    to match, because the trybot may have a different mb configuration.
     However, recipes used by Findit for culprit finding may override the
-    defaults with `mb_mastername` and `mb_buildername` to exactly match a given
-    continuous builder.
+    default with `builder_id` to exactly match a given continuous builder.
     """
 
     names = ['base']
@@ -259,10 +255,10 @@ class FilterApi(recipe_api.RecipeApi):
     with optional_system_python:
       with self.m.context(cwd=cwd, env=env):
         if use_mb:
-          mb_mastername = mb_mastername or self.m.properties['mastername']
-          mb_buildername = mb_buildername or self.m.buildbucket.builder_name
+          builder_id = builder_id or self.m.chromium.get_builder_id()
           step_result = self.m.chromium.mb_analyze(
-              mb_mastername, mb_buildername, analyze_input,
+              builder_id,
+              analyze_input,
               mb_config_path=mb_config_path,
               build_dir=build_output_dir)
         else:
@@ -314,9 +310,14 @@ class FilterApi(recipe_api.RecipeApi):
       step_result.presentation.step_text = 'No compile necessary'
 
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
-  def analyze(self, affected_files, test_targets, additional_compile_targets,
-              config_file_name, mb_mastername=None, mb_buildername=None,
-              mb_config_path=None, build_output_dir=None,
+  def analyze(self,
+              affected_files,
+              test_targets,
+              additional_compile_targets,
+              config_file_name,
+              builder_id=None,
+              mb_config_path=None,
+              build_output_dir=None,
               additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
@@ -335,8 +336,7 @@ class FilterApi(recipe_api.RecipeApi):
         additional_names=additional_names,
         config_file_name=config_file_name,
         use_mb=use_mb,
-        mb_mastername=mb_mastername,
-        mb_buildername=mb_buildername,
+        builder_id=builder_id,
         mb_config_path=mb_config_path,
         build_output_dir=build_output_dir,
         cros_board=self.m.chromium.c.TARGET_CROS_BOARD)

@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
     'build',
@@ -12,10 +13,8 @@ DEPS = [
     'depot_tools/gclient',
     'recipe_engine/context',
     'recipe_engine/file',
-    'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
 ]
 
@@ -52,7 +51,8 @@ def sdk_multi_steps(api):
 
   # generate_build_files step
   api.chromium.mb_gen(
-      api.properties.get('mastername'), api.properties.get('buildername'))
+      chromium.BuilderId.create_for_master(
+          api.properties.get('mastername'), api.properties.get('buildername')))
 
   # compile step
   raw_result = api.chromium.compile(['chrome'], use_goma_module=True)
@@ -101,7 +101,8 @@ def sdk_multirel_steps(api):
 
   # generate_build_files step
   api.chromium.mb_gen(
-      api.properties.get('mastername'), api.properties.get('buildername'))
+      chromium.BuilderId.create_for_master(
+          api.properties.get('mastername'), api.properties.get('buildername')))
 
   # compile step
   raw_result = api.chromium.compile(['chrome'], use_goma_module=True)

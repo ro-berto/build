@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 import textwrap
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
   'chromium',
   'recipe_engine/path',
@@ -27,8 +29,8 @@ def RunSteps(api):
         api.path['checkout'].join(
             'testing', 'buildbot', 'gn_isolate_map.pyl')]
   api.chromium.mb_gen(
-      mastername='test_mastername',
-      buildername='test_buildername',
+      chromium.BuilderId.create_for_master('test_mastername',
+                                           'test_buildername'),
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,

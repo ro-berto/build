@@ -8,22 +8,12 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'chromium_checkout',
-  'chromium_tests',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/gerrit',
   'depot_tools/tryserver',
   'filter',
   'gn',
   'recipe_engine/context',
-  'recipe_engine/file',
   'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/step',
 ]
 
 BUILDERS = freeze({
@@ -63,8 +53,7 @@ def RunSteps(api):
   assert api.tryserver.is_tryserver
 
   with api.chromium.chromium_layout():
-    mastername = api.m.properties['mastername']
-    buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+    builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
     bot_config = {}
     api.chromium_checkout.ensure_checkout(bot_config)
@@ -75,7 +64,7 @@ def RunSteps(api):
 
       api.chromium.runhooks()
       api.chromium.ensure_goma()
-      api.chromium.mb_gen(mastername, buildername, use_goma=True)
+      api.chromium.mb_gen(builder_id, use_goma=True)
 
       # Calculate the GN labels of all fuzz targets.
       all_fuzz_labels = api.gn.refs(
@@ -97,7 +86,7 @@ def RunSteps(api):
       # Run MB one more time since filter calls above wipes out the specified
       # goma dir.
       api.chromium.mb_gen(
-          mastername, buildername, use_goma=True, gn_args_location=api.gn.LOGS)
+          builder_id, use_goma=True, gn_args_location=api.gn.LOGS)
 
       # Convert the GN labels to ninja targets and pass them into compile.
       affected_fuzz_targets = list(api.gn.ls(
@@ -109,9 +98,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic_linux_tryjob',
-      api.properties.tryserver(
+      api.chromium.try_build(
           mastername='tryserver.chromium.linux',
-          buildername='linux-libfuzzer-asan-rel'),
+          builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
           stdout=api.raw_io.output_text(
@@ -123,9 +112,9 @@ def GenTests(api):
 
   yield api.test(
       'basic_linux_tryjob_with_compile',
-      api.properties.tryserver(
+      api.chromium.try_build(
           mastername='tryserver.chromium.linux',
-          buildername='linux-libfuzzer-asan-rel'),
+          builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
           stdout=api.raw_io.output_text('\n'.join(
@@ -147,9 +136,9 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.properties.tryserver(
+      api.chromium.try_build(
           mastername='tryserver.chromium.linux',
-          buildername='linux-libfuzzer-asan-rel'),
+          builder='linux-libfuzzer-asan-rel'),
       api.step_data(
           'calculate all_fuzzers',
           stdout=api.raw_io.output_text('\n'.join(

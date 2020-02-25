@@ -9,6 +9,8 @@ import sys
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
+
 
 class CronetApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -36,12 +38,8 @@ class CronetApi(recipe_api.RecipeApi):
     droid.init_and_sync(use_bot_update=True)
 
 
-  def build(self, mastername=None, buildername=None, targets=None,
-            use_goma=True):
-    if not mastername:
-      mastername=self.m.properties['mastername']
-    if not buildername:
-      buildername=self.m.buildbucket.builder_name
+  def build(self, builder_id=None, targets=None, use_goma=True):
+    builder_id = builder_id or self.m.chromium.get_builder_id()
     if use_goma:
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks()
@@ -55,10 +53,7 @@ class CronetApi(recipe_api.RecipeApi):
           use_goma=use_goma,
           gn_path=gn_path)
     elif self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.mb_gen(
-          mastername,
-          buildername,
-          use_goma=use_goma)
+      self.m.chromium.mb_gen(builder_id, use_goma=use_goma)
     return self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
 
 
@@ -135,8 +130,10 @@ class CronetApi(recipe_api.RecipeApi):
         """,
         args=[self.m.path['checkout'].join('build', 'get_landmines.py'),
               self.m.path['checkout'].join('.landmines')])
-    raw_result = self.build(targets=['quic_server'],
-               mastername='chromium.linux', buildername='Linux Builder')
+    raw_result = self.build(
+        targets=['quic_server'],
+        builder_id=chromium.BuilderId.create_for_master('chromium.linux',
+                                                        'Linux Builder'))
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 

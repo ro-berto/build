@@ -9,10 +9,7 @@ DEPS = [
   'chromium',
   'chromium_checkout',
   'depot_tools/gclient',
-  'recipe_engine/buildbucket',
   'recipe_engine/context',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
   'recipe_engine/json',
 ]
 
@@ -23,9 +20,7 @@ def RunSteps(api):
   api.chromium_checkout.ensure_checkout({})
   with api.context(cwd=api.chromium_checkout.get_checkout_dir({})):
     api.chromium.mb_analyze(
-        'test_mastername',
-        'test_buildername',
-        {
+        api.chromium.get_builder_id(), {
             'files': ['base/test/launcher/test_launcher.cc'],
             'test_targets': ['base_unittests'],
             'additional_compile_targets': ['chrome']
@@ -35,9 +30,8 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(mastername='test_mastername', path_config='generic'),
-      api.runtime(is_experimental=False, is_luci=True),
+      api.chromium.try_build(
+          mastername='test_mastername', builder='test_buildername'),
       api.post_process(post_process.MustRun, 'analyze'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -45,9 +39,8 @@ def GenTests(api):
 
   yield api.test(
       'analyze_failure',
-      api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(mastername='test_mastername', path_config='generic'),
-      api.runtime(is_experimental=False, is_luci=True),
+      api.chromium.try_build(
+          mastername='test_mastername', builder='test_buildername'),
       api.step_data(
           'analyze',
           api.json.output({
@@ -70,9 +63,8 @@ def GenTests(api):
 
   yield api.test(
       'analyze_failure_no_output',
-      api.buildbucket.try_build(builder='test_buildername'),
-      api.properties(mastername='test_mastername', path_config='generic'),
-      api.runtime(is_experimental=False, is_luci=True),
+      api.chromium.try_build(
+          mastername='test_mastername', builder='test_buildername'),
       api.step_data(
           'analyze',
           api.json.output({

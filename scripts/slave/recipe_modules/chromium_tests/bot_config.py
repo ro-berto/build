@@ -11,6 +11,8 @@ from recipe_engine.types import freeze
 
 from . import bot_spec
 
+from RECIPE_MODULES.build import chromium
+
 
 class BotConfig(object):
   """"Static" configuration for a bot.
@@ -55,10 +57,12 @@ class BotConfig(object):
 
     assert len(bot_ids) >= 1
 
-    def normalize(bot_id):
-      if not isinstance(bot_id, BotConfig.BotId):
-        bot_id = BotConfig.BotId(**bot_id)
-      return bot_id
+    def normalize(b):
+      if isinstance(b, chromium.BuilderId):
+        b = BotConfig.BotId(mastername=b.master, buildername=b.builder)
+      elif not isinstance(b, BotConfig.BotId):
+        b = BotConfig.BotId(**b)
+      return b
 
     self._bot_ids = tuple(normalize(b) for b in bot_ids)
 
@@ -88,9 +92,17 @@ class BotConfig(object):
       return super(BotConfig.BotId, cls).__new__(cls, mastername, buildername,
                                                  tester, tester_mastername)
 
+    def get_builder_id(self):
+      return chromium.BuilderId.create_for_master(self.mastername,
+                                                  self.buildername)
+
   @property
   def bot_ids(self):
     return self._bot_ids
+
+  @property
+  def builder_ids(self):
+    return [b.get_builder_id() for b in self.bot_ids]
 
   def get_bot_type(self, bot_id):
     return self._get(bot_id, 'bot_type', bot_spec.BUILDER_TESTER)
@@ -214,13 +226,12 @@ class BotConfig(object):
   def get_compile_targets(self, chromium_tests_api, build_config, tests):
     compile_targets = set()
     for bot_id in self._bot_ids:
-      bot_config = build_config.get_bot_config(bot_id.mastername,
-                                               bot_id.buildername)
+      builder_id = bot_id.get_builder_id()
+      bot_config = build_config.get_bot_config(builder_id)
       compile_targets.update(bot_config.get('compile_targets', []))
       compile_targets.update(
-          build_config.get_source_side_spec(
-              bot_id.mastername, bot_id.buildername).get(
-                  'additional_compile_targets', []))
+          build_config.get_source_side_spec(builder_id).get(
+              'additional_compile_targets', []))
 
     if self.get('add_tests_as_compile_targets', True):
       for t in tests:
@@ -253,11 +264,10 @@ class BuildConfig(object):
     Corresponds to an individual builder.
     """
 
-    def __init__(self, key, mirrored, tests):
+    def __init__(self, builder_id, mirrored, tests):
       self.children = {}
-      # A key that uniquely identifies this builder.
-      # Currently (mastername, buildername)
-      self.key = key
+      # A BuilderId that uniquely identifies this builder.
+      self.builder_id = builder_id
       # Whether this builder should be mirrored by trybots based on
       # the bot IDs provided to _TestConfig.__init__.
       self.mirrored = mirrored
@@ -271,61 +281,58 @@ class BuildConfig(object):
     self._config = self._ConfigNode(None, False, None)
 
     for bot_id in bot_ids:
-      builder_bot_config = self.get_bot_config(bot_id.mastername,
-                                               bot_id.buildername)
-      key = bot_id.mastername, bot_id.buildername
-      if key not in self._config.children:
-        self._config.children[key] = self._ConfigNode(
-            key, True, builder_bot_config.get('tests', []))
-      builder_config = self._config.children[key]
+      builder_id = bot_id.get_builder_id()
+      builder_bot_config = self.get_bot_config(builder_id)
+      if builder_id not in self._config.children:
+        self._config.children[builder_id] = self._ConfigNode(
+            builder_id, True, builder_bot_config.get('tests', []))
+      builder_config = self._config.children[builder_id]
 
       if bot_id.tester:
-        tester_bot_config = self.get_bot_config(bot_id.tester_mastername,
-                                                bot_id.tester)
-        tester_key = bot_id.tester_mastername, bot_id.tester
-        builder_config.children[tester_key] = self._ConfigNode(
-            tester_key, True, tester_bot_config.get('tests', []))
+        tester_id = chromium.BuilderId.create_for_master(
+            bot_id.tester_mastername, bot_id.tester)
+        tester_bot_config = self.get_bot_config(tester_id)
+        builder_config.children[tester_id] = self._ConfigNode(
+            tester_id, True, tester_bot_config.get('tests', []))
 
       for (
           _luci_project, triggered_mastername, triggered_buildername,
           triggered_bot_config) in self.bot_configs_matching_parent_buildername(
-              bot_id.mastername, bot_id.buildername):
-        triggered_key = (triggered_mastername, triggered_buildername)
-        if triggered_key not in builder_config.children:
-          builder_config.children[triggered_key] = self._ConfigNode(
-              triggered_key, False, triggered_bot_config.get('tests', []))
+              bot_id.get_builder_id()):
+        triggered_id = chromium.BuilderId.create_for_master(
+            triggered_mastername, triggered_buildername)
+        if triggered_id not in builder_config.children:
+          builder_config.children[triggered_id] = self._ConfigNode(
+              triggered_id, False, triggered_bot_config.get('tests', []))
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
-  def get_bot_config(self, mastername, buildername):
-    return self._db[mastername]['master_dict'].get('builders',
-                                                   {}).get(buildername)
+  def get_bot_config(self, builder_id):
+    return self._db[builder_id.master]['master_dict'].get('builders', {}).get(
+        builder_id.builder)
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
   def get_master_settings(self, mastername):
     return self._db[mastername]['master_dict'].get('settings', {})
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
-  def bot_configs_matching_parent_buildername(self, parent_mastername,
-                                              parent_buildername):
+  def bot_configs_matching_parent_buildername(self, parent_builder_id):
     """A generator of all the (buildername, bot_config) tuples whose
     parent_buildername is the passed one on the given master.
     """
     for mastername, master_config in self._db.iteritems():
-      master_dict = master_config['master_dict']
-      for buildername, bot_config in master_dict.get('builders',
-                                                     {}).iteritems():
-        master_matches = (
-            bot_config.get('parent_mastername',
-                           mastername) == parent_mastername)
-        builder_matches = (
-            bot_config.get('parent_buildername') == parent_buildername)
-        if master_matches and builder_matches:
+      builders = master_config['master_dict'].get('builders', {})
+      for buildername, bot_config in builders.iteritems():
+        parent_mastername = bot_config.get('parent_mastername', mastername)
+        parent_buildername = bot_config.get('parent_buildername')
+        if (parent_builder_id.master == parent_mastername and
+            parent_builder_id.builder == parent_buildername):
           master_settings = self.get_master_settings(mastername)
           luci_project = master_settings.get('luci_project', 'chromium')
           yield luci_project, mastername, buildername, bot_config
 
-  def get_source_side_spec(self, mastername, buildername):
-    return self._db[mastername]['source_side_spec'].get(buildername, {})
+  def get_source_side_spec(self, builder_id):
+    return self._db[builder_id.master]['source_side_spec'].get(
+        builder_id.builder, {})
 
   def all_tests(self):
     """Returns all tests."""
@@ -337,17 +344,17 @@ class BuildConfig(object):
         self._iter_tests(
             node for node, _ in self._iter_nodes() if node.mirrored))
 
-  def tests_on(self, mastername, buildername):
+  def tests_on(self, builder_id):
     """Returns all tests for the specified builder."""
     return list(
         self._iter_tests(node for node, _ in self._iter_nodes()
-                         if (mastername, buildername) == node.key))
+                         if builder_id == node.builder_id))
 
-  def tests_triggered_by(self, mastername, buildername):
+  def tests_triggered_by(self, builder_id):
     """Returns all tests for builders triggered by the specified builder."""
     return list(
         self._iter_tests(node for node, parent in self._iter_nodes()
-                         if parent and (mastername, buildername) == parent.key))
+                         if parent and builder_id == parent.builder_id))
 
   def _iter_nodes(self):
     """Generates a sequence of node pairs from the builder graph.

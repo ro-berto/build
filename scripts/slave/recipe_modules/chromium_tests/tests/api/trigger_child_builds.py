@@ -7,13 +7,8 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_tests',
-    'recipe_engine/buildbucket',
-    'recipe_engine/path',
     'recipe_engine/json',
     'recipe_engine/platform',
-    'recipe_engine/properties',
-    'recipe_engine/python',
-    'recipe_engine/runtime',
 ]
 
 CUSTOM_BUILDERS = {
@@ -69,17 +64,12 @@ CUSTOM_BUILDERS = {
 }
 
 def RunSteps(api):
-  builder_name = api.buildbucket.builder_name
+  builder_id = api.chromium.get_builder_id()
   bot_config = api.chromium_tests.create_bot_config_object(
-      [
-          api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                           builder_name)
-      ],
-      builders=CUSTOM_BUILDERS)
+      [builder_id], builders=CUSTOM_BUILDERS)
   api.chromium_tests.configure_build(bot_config)
   update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.trigger_child_builds(
-      api.properties['mastername'], builder_name, update_step, build_config)
+  api.chromium_tests.trigger_child_builds(builder_id, update_step, build_config)
 
 
 def GenTests(api):
@@ -92,7 +82,6 @@ def GenTests(api):
 
   yield api.test(
       'cross_master_trigger',
-      api.runtime(is_luci=True, is_experimental=False),
       api.platform.name('linux'),
       api.chromium.ci_build(
           builder='Fake Builder',

@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
     'chromium',
     'recipe_engine/assertions',
@@ -18,7 +20,8 @@ def RunSteps(api):
       TARGET_CROS_BOARD=api.properties.get('target_cros_board'))
 
   gn_args = api.chromium.mb_lookup(
-      'test_mastername', 'test_buildername',
+      chromium.BuilderId.create_for_master('test_mastername',
+                                           'test_buildername'),
       recursive=api.properties.get('recursive', False))
   expected_gn_args = api.properties.get('expected_gn_args')
   api.assertions.assertEqual(gn_args, expected_gn_args)

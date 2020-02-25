@@ -6,6 +6,8 @@ import re
 
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build import chromium
+
 # Regular expression to identify a Git hash.
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 
@@ -52,11 +54,11 @@ class CodesearchApi(recipe_api.RecipeApi):
 
   def generate_compilation_database(self, targets, mastername, buildername,
                                     output_file=None, mb_config_path=None):
-    self.m.chromium.mb_gen(mastername,
-                           buildername,
-                           build_dir=self.c.debug_path,
-                           name='generate build files',
-                           mb_config_path=mb_config_path)
+    self.m.chromium.mb_gen(
+        chromium.BuilderId.create_for_master(mastername, buildername),
+        build_dir=self.c.debug_path,
+        name='generate build files',
+        mb_config_path=mb_config_path)
 
     output_file = output_file or self.c.compile_commands_json_file
     args = ['-p', self.c.debug_path, '-o', output_file] + list(targets)

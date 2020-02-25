@@ -4,30 +4,28 @@
 
 from recipe_engine.post_process import Filter
 
+from RECIPE_MODULES.build.chromium_tests import bot_spec
+
 DEPS = [
     'chromium',
     'chromium_tests',
-    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/step',
 ]
 
 from recipe_engine import post_process
 
 def RunSteps(api):
-  mastername = api.properties.get('mastername')
-  buildername = api.buildbucket.builder_name
+  builder_id = api.chromium.get_builder_id()
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False)
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
-    bot_config = api.chromium_tests.create_bot_config_object(
-        [api.chromium_tests.create_bot_id(mastername, buildername)])
+    bot_config = api.chromium_tests.create_bot_config_object([builder_id])
     api.chromium_tests.configure_build(bot_config)
 
     if failfast:
@@ -40,10 +38,12 @@ def RunSteps(api):
 
     mb_config_path = api.properties.get('mb_config_path')
 
-    api.chromium.mb_gen(mastername, buildername, use_goma=True,
-                        mb_config_path=mb_config_path,
-                        android_version_code=3,
-                        android_version_name="example")
+    api.chromium.mb_gen(
+        builder_id,
+        use_goma=True,
+        mb_config_path=mb_config_path,
+        android_version_code=3,
+        android_version_name="example")
 
     return api.chromium.compile(
         targets=['All'], out_dir=out_dir,

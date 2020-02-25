@@ -16,6 +16,7 @@ from recipe_engine.recipe_api import Property
 from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
@@ -121,9 +122,11 @@ def _configure_builder(api, target_builder, test_override_builders):
       api.chromium_swarming.set_default_dimension(str(key), str(value))
 
   compile_kwargs = {
-      'mb_mastername': target_mastername,
-      'mb_buildername': target_buildername,
-      'override_bot_type': 'builder_tester',
+      'builder_id':
+          chromium.BuilderId.create_for_master(target_mastername,
+                                               target_buildername),
+      'override_bot_type':
+          'builder_tester',
   }
   return bot_id, bot_config, compile_kwargs
 
@@ -156,8 +159,8 @@ def _compute_targets_and_tests(api, bot_config, build_config, bot_id,
             test_targets=tuple(requested_test_targets),
             additional_compile_targets=tuple(compile_targets),
             config_file_name='trybot_analyze_config.json',
-            mb_mastername=bot_id['mastername'],
-            mb_buildername=bot_id['buildername']))
+            builder_id=chromium.BuilderId.create_for_master(
+                bot_id['mastername'], bot_id['buildername'])))
 
     actual_tests_to_run = []
     for test in requested_tests_to_run:

@@ -13,7 +13,6 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step'
 ]
@@ -52,13 +51,12 @@ SAMPLE_TARGETS = [
 ]
 
 def RunSteps(api):
-  mastername = api.m.properties['mastername']
-  buildername, bot_config = api.m.chromium.configure_bot(BUILDERS, ['mb'])
+  builder_id, bot_config = api.m.chromium.configure_bot(BUILDERS, ['mb'])
   with api.m.context(cwd=api.m.chromium_checkout.get_checkout_dir(bot_config)):
-    _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config)
+    _RunStepsInBuilderCacheDir(api, builder_id, bot_config)
 
 
-def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
+def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
   api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
 
   api.chromium.ensure_toolchains()
@@ -71,7 +69,7 @@ def _RunStepsInBuilderCacheDir(api, mastername, buildername, bot_config):
       'Read clang revision', clang_revision_file, test_data='332838-1')
   api.step.active_result.presentation.step_text = revision
 
-  api.chromium.mb_gen(mastername, buildername, use_goma=True)
+  api.chromium.mb_gen(builder_id, use_goma=True)
 
   coverage_script = 'coverage.py'
   coverage_script_path = api.path['checkout'].join('tools', 'code_coverage',

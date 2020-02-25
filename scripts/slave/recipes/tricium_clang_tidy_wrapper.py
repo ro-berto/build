@@ -15,7 +15,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/gerrit',
     'depot_tools/tryserver',
-    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -252,8 +251,6 @@ def RunSteps(api):
     api.chromium.set_config('chromium')
     api.chromium.apply_config('mb')
 
-    mastername = api.properties['mastername']
-    buildername = api.buildbucket.builder_name
     bot_config = {}
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     with api.context(cwd=checkout_dir):
@@ -285,7 +282,7 @@ def RunSteps(api):
       if tidyable_paths:
         api.chromium.ensure_goma()
         api.goma.start()
-        api.chromium.mb_gen(mastername, buildername)
+        api.chromium.mb_gen(api.chromium.get_builder_id())
 
         with api.step.nest('clang-tidy'):
           with api.step.nest('generate-warnings'):

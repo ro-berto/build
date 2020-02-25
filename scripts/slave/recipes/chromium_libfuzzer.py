@@ -11,15 +11,11 @@ DEPS = [
   'archive',
   'chromium',
   'chromium_checkout',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
   'gn',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
 ]
@@ -187,14 +183,13 @@ BUILDERS = freeze({
 
 
 def RunSteps(api):
-  mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
+  builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   checkout_results = api.chromium_checkout.ensure_checkout(bot_config)
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.mb_gen(mastername, buildername, use_goma=True)
+  api.chromium.mb_gen(builder_id, use_goma=True)
 
   with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
     all_fuzzers = api.gn.refs(
@@ -254,11 +249,11 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.platform.name('mac'),
-      api.properties.generic(
+      api.chromium.ci_build(
           mastername='chromium.fuzz',
-          buildername='Libfuzzer Upload Mac ASan',
-          path_config='generic'),
+          builder='Libfuzzer Upload Mac ASan',
+      ),
+      api.platform.name('mac'),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

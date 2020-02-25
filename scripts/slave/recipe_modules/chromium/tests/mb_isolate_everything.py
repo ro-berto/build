@@ -4,13 +4,16 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = ['chromium']
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium.mb_isolate_everything(
-      mastername='test_mastername',
-      buildername='test_buildername')
+      chromium.BuilderId.create_for_master('test_mastername',
+                                           'test_buildername'))
+
 
 def GenTests(api):
   yield api.test(

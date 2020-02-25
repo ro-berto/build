@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
     'chromium',
     'filter',
@@ -29,8 +31,8 @@ def RunSteps(api):
       api.properties.get('affected_files', ['file1', 'file2']),
       ['test1', 'test2'], ['compile1', 'compile2'],
       'config.json',
-      mb_mastername='test_mastername',
-      mb_buildername='test_buildername',
+      builder_id=chromium.BuilderId.create_for_master('test_mastername',
+                                                      'test_buildername'),
       mb_config_path='path/to/custom_mb_config.pyl')
 
 

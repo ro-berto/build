@@ -8,6 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 
 # This has no special meaning, just a placeholder for expectations data.
@@ -114,8 +115,9 @@ class FinditApi(recipe_api.RecipeApi):
     """
     # Run mb to generate or update ninja build files.
     if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.mb_gen(mb_mastername, mb_buildername,
-                             name='generate_build_files')
+      self.m.chromium.mb_gen(
+          chromium.BuilderId.create_for_master(mb_mastername, mb_buildername),
+          name='generate_build_files')
 
     # Run ninja to check existences of targets.
     args = ['--target-build-dir', self.m.chromium.output_dir]
@@ -210,8 +212,8 @@ class FinditApi(recipe_api.RecipeApi):
                 test_targets=requested_test_targets,
                 additional_compile_targets=[],
                 config_file_name='trybot_analyze_config.json',
-                mb_mastername=target_mastername,
-                mb_buildername=target_buildername,
+                builder_id=chromium.BuilderId.create_for_master(
+                    target_mastername, target_buildername),
                 additional_names=None))
 
         actual_tests_to_run = []
@@ -235,8 +237,8 @@ class FinditApi(recipe_api.RecipeApi):
             build_config,
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
-            mb_mastername=target_mastername,
-            mb_buildername=target_buildername,
+            builder_id=chromium.BuilderId.create_for_master(
+                target_mastername, target_buildername),
             override_bot_type='builder_tester')
 
         if raw_result.status != common_pb.SUCCESS:

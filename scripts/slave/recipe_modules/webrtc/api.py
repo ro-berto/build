@@ -15,10 +15,8 @@ WEBRTC_GS_BUCKET = 'chromium-webrtc'
 from . import builders as webrtc_builders
 from . import steps
 
-THIS_DIR = os.path.dirname(__file__)
-sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
-
-from chromium_tests.steps import SwarmingTest
+from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build.chromium_tests.steps import SwarmingTest
 
 
 CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
@@ -221,6 +219,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.buildbucket.builder_name
 
   @property
+  def builder_id(self):
+    return chromium.BuilderId.create_for_master(self.mastername,
+                                                self.buildername)
+
+  @property
   def build_url(self):
     return 'https://ci.chromium.org/p/%s/builders/%s/%s/%s' % (
         urllib.quote(self.m.buildbucket.build.builder.project),
@@ -396,9 +399,11 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
     self.m.chromium.mb_gen(
-      self.mastername, self.buildername, phase=phase, use_goma=True,
-      mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-      isolated_targets=self._isolated_targets)
+        self.builder_id,
+        phase=phase,
+        use_goma=True,
+        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        isolated_targets=self._isolated_targets)
 
   def run_mb_ios(self):
     # Match the out path that ios recipe module uses.
@@ -409,11 +414,13 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
       self.m.chromium.mb_gen(
-        self.mastername, self.buildername, use_goma=True,
-        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        # mb isolate is not supported (and not needed) on iOS. The ios recipe
-        # module does isolation itself, it basically just includes the .app file
-        isolated_targets=None)
+          self.builder_id,
+          use_goma=True,
+          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+          # mb isolate is not supported (and not needed) on iOS. The ios recipe
+          # module does isolation itself, it basically just includes the .app
+          # file
+          isolated_targets=None)
 
   def compile(self, phase=None, override_targets=None):
     del phase

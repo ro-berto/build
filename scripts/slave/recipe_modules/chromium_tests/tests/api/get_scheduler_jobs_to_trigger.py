@@ -8,20 +8,17 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'recipe_engine/assertions',
-    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
 
 def RunSteps(api):
-  mastername = api.properties['mastername']
-  buildername = api.buildbucket.builder_name
-  bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(mastername, buildername)])
+  builder_id = api.chromium.get_builder_id()
+  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(bot_config)
   _, build_config = api.chromium_tests.prepare_checkout(bot_config)
   actual = api.chromium_tests._get_scheduler_jobs_to_trigger(
-      mastername, buildername, build_config)
+      builder_id, build_config)
 
   # Convert the mappings to comparable types
   actual = {k: set(v) for k, v in actual.iteritems()}
