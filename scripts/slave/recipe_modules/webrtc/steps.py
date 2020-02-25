@@ -133,7 +133,7 @@ def generate_tests(api, phase, bot):
         'CallPerfTest.NoPadWithoutMinTransmitBitrate'
     ])
     tests.append(
-        SwarmingPerfTest(
+        SwarmingAndroidPerfTest(
             'webrtc_perf_tests_experimental_hist',
             target_name='webrtc_perf_tests',
             args=[
@@ -156,6 +156,10 @@ def generate_tests(api, phase, bot):
                 '--save_worst_frame',
                 '--nologs',
             ]))
+    assert all([
+        isinstance(t, SwarmingAndroidPerfTest) for t in tests
+    ]), ('Watch out. Android perf tasks are very picky about flags, so you '
+         'need Android-specific tasks here.')
 
   if test_suite == 'android':
     tests += [
@@ -300,6 +304,19 @@ class AndroidTest(SwarmingGTestTest):
 
 
 class SwarmingAndroidPerfTest(SwarmingTest):
+  """Custom Android perf test runner for WebRTC.
+
+  We don't want to use Chromium's process_perf_results.py or merge scripts, so
+  we use this class to hook in our own code.
+
+  This class isn't a GTest-based runner like for the normal tests. This is
+  because WebRTC is the only team doing C++ perf tests on Android. We need this
+  to be a basic swarming test because android_test_runner.py can't handle the
+  --isolated-script-test-output flag that is passed to swarmed isolated tests
+  (note, this is NOT the same as isolated-script-test-perf-output!), and the
+  swarmed GTest class does not have the capability to do perf uploads.
+  """
+
   def __init__(self, test, args=None, shards=1, cipd_packages=None,
                idempotent=False, **kwargs):
     super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
@@ -341,6 +358,11 @@ class SwarmingAndroidPerfTest(SwarmingTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedTest):
+  """Custom swarmed test runner for WebRTC.
+
+  We don't want to use Chromium's process_perf_results.py or merge scripts, so
+  we use this class to hook in our own code.
+  """
 
   def __init__(self, name, *args, **kwargs):
     # Perf tests are not idempotent, because for almost all tests the binary
