@@ -18,6 +18,7 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build.chromium_tests import bot_spec
 
 
 DEPS = [
@@ -50,17 +51,14 @@ PROPERTIES = {
 
 def RunSteps(api, target_mastername, target_testername,
              revision, isolated_targets):
-  target_buildername, checked_out_revision, cached_revision = (
+  target_tester_id = chromium.BuilderId.create_for_master(
+      target_mastername, target_testername)
+  bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(
-          target_mastername,
-          target_testername,
-          revision,
-          builders=api.properties.get('builders')))
+          target_tester_id, revision, builders=api.properties.get('builders')))
 
-  bot_id = api.chromium_tests.create_bot_id(
-      target_mastername, target_buildername, target_testername)
   bot_config = api.m.chromium_tests.create_bot_config_object(
-      [bot_id], builders=api.properties.get('builders'))
+      [bot_mirror], builders=api.properties.get('builders'))
   bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
       bot_config, root_solution_revision=revision)
 
@@ -96,8 +94,7 @@ def RunSteps(api, target_mastername, target_testername,
           build_config,
           compile_targets,
           tests_including_triggered=tests[:1],  # Only the first test.
-          builder_id=chromium.BuilderId.create_for_master(
-              target_mastername, target_buildername),
+          builder_id=bot_mirror.builder_id,
           override_bot_type='builder_tester')
       if raw_result.status != common_pb.SUCCESS:
         return raw_result

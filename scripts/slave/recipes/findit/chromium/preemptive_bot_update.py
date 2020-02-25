@@ -10,6 +10,8 @@ jobs they have as low latency as possible in their bot_update steps."""
 
 from datetime import datetime
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
     'chromium_checkout',
     'chromium_tests',
@@ -70,7 +72,7 @@ def TargetMasterAndBuilder(api):
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(*TargetMasterAndBuilder(api))])
+      [chromium.BuilderId.create_for_master(*TargetMasterAndBuilder(api))])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 

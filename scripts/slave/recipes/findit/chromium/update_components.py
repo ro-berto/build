@@ -12,6 +12,8 @@ world-readable cloud location.
 import copy
 import re
 
+from RECIPE_MODULES.build import chromium
+
 
 DEPS = [
     'chromium_tests',
@@ -126,7 +128,7 @@ def RunStepsForFile(api, filename, extra_arguments, step_suffix):
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id('chromium.linux', 'Linux Builder')])
+      [chromium.BuilderId.create_for_master('chromium.linux', 'Linux Builder')])
   api.chromium_tests.configure_build(bot_config)
   api.chromium_tests.prepare_checkout(bot_config)
 

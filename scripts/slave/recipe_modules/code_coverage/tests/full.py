@@ -4,6 +4,7 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 
 DEPS = [
@@ -36,7 +37,9 @@ def RunSteps(api):
       'builders', {}).get(buildername)
   if not config:
     config = {
-      'bot_ids': [api.chromium_tests.create_bot_id(mastername, buildername)],
+        'bot_ids': [
+            chromium.BuilderId.create_for_master(mastername, buildername)
+        ],
     }
 
   bot_config_object = api.chromium_tests.create_bot_config_object(

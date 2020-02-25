@@ -7,18 +7,11 @@ DEPS = [
     'chromium_tests',
     'chromium_checkout',
     'depot_tools/bot_update',
-    'depot_tools/gclient',
-    'depot_tools/gsutil',
-    'recipe_engine/buildbucket',
     'recipe_engine/json',
-    'recipe_engine/file',
-    'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_results',
     'test_utils',
-    'zip',
 ]
 
 
@@ -37,7 +30,6 @@ def RunSteps(api):
   api.test_results.set_config('public_server')
 
   mastername = api.properties.get('mastername')
-  buildername = api.buildbucket.build.builder.builder
 
   if 'fyi' in mastername:
     perf_config_mappings = PERF_CONFIG_MAPPINGS
@@ -50,7 +42,7 @@ def RunSteps(api):
                               perf_config_mappings, commit_position_property)
 
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(mastername, buildername)])
+      [api.chromium.get_builder_id()])
   api.chromium_tests.configure_build(bot_config)
   api.chromium_checkout.ensure_checkout(bot_config)
 

@@ -8,8 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -23,6 +22,21 @@ class FinditApi(recipe_api.RecipeApi):
     PASSED = 'passed'  # The compile or test passed.
     FAILED = 'failed'  # The compile or test failed.
     INFRA_FAILED = 'infra_failed'  # Infra failed.
+
+  def get_bot_mirror_for_tester(self, tester_id, builders):
+    tester_spec = builders.get(tester_id.master).get('builders',
+                                                     {}).get(tester_id.builder)
+
+    parent_buildername = tester_spec.get('parent_buildername')
+    if parent_buildername is None:
+      return bot_spec.BotMirror.create(
+          buildername=tester_id.builder, mastername=tester_id.master)
+
+    return bot_spec.BotMirror.create(
+        mastername=tester_spec.get('parent_mastername', tester_id.master),
+        buildername=parent_buildername,
+        tester=tester_id.builder,
+        tester_mastername=tester_id.master)
 
   def _calculate_repo_dir(self, solution_name):
     """Returns the relative path of the solution checkout to the root one."""
@@ -96,7 +110,7 @@ class FinditApi(recipe_api.RecipeApi):
     step_result.presentation.logs['revisions'] = revisions
     return revisions
 
-  def existing_targets(self, targets, mb_mastername, mb_buildername):
+  def existing_targets(self, targets, builder_id):
     """Returns a sublist of the given targets that exist in the build graph.
 
     We test whether a target exists or not by ninja.
@@ -110,14 +124,11 @@ class FinditApi(recipe_api.RecipeApi):
 
     Args:
      targets (list): A list of targets to be tested for existence.
-     mb_mastername (str): The mastername to run MB with.
-     mb_buildername (str): The buildername to run MB with.
+     builder_id (BuilderId): The ID of the builder to run MB for.
     """
     # Run mb to generate or update ninja build files.
     if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.mb_gen(
-          chromium.BuilderId.create_for_master(mb_mastername, mb_buildername),
-          name='generate_build_files')
+      self.m.chromium.mb_gen(builder_id, name='generate_build_files')
 
     # Run ninja to check existences of targets.
     args = ['--target-build-dir', self.m.chromium.output_dir]
@@ -130,9 +141,7 @@ class FinditApi(recipe_api.RecipeApi):
     return step.json.output['found']
 
   def compile_and_test_at_revision(self,
-                                   target_mastername,
-                                   target_buildername,
-                                   target_testername,
+                                   bot_mirror,
                                    revision,
                                    requested_tests,
                                    use_analyze,
@@ -141,9 +150,8 @@ class FinditApi(recipe_api.RecipeApi):
     """Compile the targets needed to execute the specified tests and run them.
 
     Args:
-      target_mastername (str): Which master to derive the configuration off of.
-      target_buildername (str): likewise
-      target_testername (str): likewise
+      bot_mirror (BotMirror): The BotMirror object describing the builder and
+                              possibly tester to derive configuration from.
       revision (str): A string representing the commit hash of the revision to
                       test.
       requested_tests (dict):
@@ -186,9 +194,7 @@ class FinditApi(recipe_api.RecipeApi):
     with self.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
       # TODO(stgao): refactor this out.
-      bot_id = self.m.chromium_tests.create_bot_id(
-          target_mastername, target_buildername, target_testername)
-      bot_config = self.m.chromium_tests.create_bot_config_object([bot_id])
+      bot_config = self.m.chromium_tests.create_bot_config_object([bot_mirror])
       bot_update_step, build_config = self.m.chromium_tests.prepare_checkout(
           bot_config, root_solution_revision=revision)
 
@@ -216,8 +222,7 @@ class FinditApi(recipe_api.RecipeApi):
                 test_targets=requested_test_targets,
                 additional_compile_targets=[],
                 config_file_name='trybot_analyze_config.json',
-                builder_id=chromium.BuilderId.create_for_master(
-                    target_mastername, target_buildername),
+                builder_id=bot_mirror.builder_id,
                 additional_names=None))
 
         actual_tests_to_run = []
@@ -241,8 +246,7 @@ class FinditApi(recipe_api.RecipeApi):
             build_config,
             actual_compile_targets,
             tests_including_triggered=actual_tests_to_run,
-            builder_id=chromium.BuilderId.create_for_master(
-                target_mastername, target_buildername),
+            builder_id=bot_mirror.builder_id,
             override_bot_type='builder_tester')
 
         if raw_result.status != common_pb.SUCCESS:
@@ -317,11 +321,7 @@ class FinditApi(recipe_api.RecipeApi):
 
       return results, failed_tests_dict, None
 
-  def configure_and_sync(self,
-                         target_mastername,
-                         target_testername,
-                         revision,
-                         builders=None):
+  def configure_and_sync(self, target_tester_id, revision, builders=None):
     """Applies compile/test configs & syncs code.
 
     These are common tasks done in preparation ahead of building and testing
@@ -329,30 +329,25 @@ class FinditApi(recipe_api.RecipeApi):
     recipes.
 
     Args:
-      target_mastername (str): Which master to derive the configuration off of.
-      target_testername (str): likewise
+      target_tester_id (BuilderId): The ID of the tester to derive the
+                                    configuration from.
       revision (str): A string representing the commit hash of the revision to
                       test.
-      builders (dict): A dict of the same format as api.chromium_tests.builders.
-    Returns: (target_buildername, checked_out_revision, cached_revision)
+      builders (dict): A dict of the same format as
+                       self.m.chromium_tests.builders.
+    Returns: (bot_mirror, checked_out_revision, cached_revision)
     """
     # Figure out which builder configuration we should match for compile config.
     # Sometimes, the builder itself runs the tests and there is no tester. In
     # such cases, just treat the builder as a "tester". Thus, we default to
     # the target tester.
     builders = builders or self.m.chromium_tests.builders
-    tester_config = builders.get(
-        target_mastername).get('builders', {}).get(target_testername)
-    target_buildername = (tester_config.get('parent_buildername') or
-                          target_testername)
+    bot_mirror = self.get_bot_mirror_for_tester(
+        target_tester_id, builders=builders)
 
     # Configure to match the compile config on the builder.
     bot_config = self.m.chromium_tests.create_bot_config_object(
-        [
-            self.m.chromium_tests.create_bot_id(target_mastername,
-                                                target_buildername)
-        ],
-        builders=builders)
+        [bot_mirror.builder_id], builders=builders)
     self.m.chromium_tests.configure_build(
         bot_config, override_bot_type='builder_tester')
 
@@ -362,9 +357,11 @@ class FinditApi(recipe_api.RecipeApi):
 
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
-    if target_buildername != target_testername:
-      for key, value in tester_config.get('swarming_dimensions', {}
-                                          ).iteritems():
+    if bot_mirror.builder_id != target_tester_id:
+      tester_spec = builders.get(target_tester_id.master).get(
+          'builders', {}).get(target_tester_id.builder)
+
+      for key, value in tester_spec.get('swarming_dimensions', {}).iteritems():
         self.m.chromium_swarming.set_default_dimension(key, value)
 
     # Record the current revision of the checkout and HEAD of the git cache.
@@ -379,9 +376,9 @@ class FinditApi(recipe_api.RecipeApi):
     self.m.chromium_swarming.configure_swarming('chromium', precommit=False)
 
     self.m.step.active_result.presentation.properties['target_buildername'] = (
-        target_buildername)
+        bot_mirror.builder_id.builder)
 
-    return target_buildername, checked_out_revision, cached_revision
+    return bot_mirror, checked_out_revision, cached_revision
 
   def record_previous_revision(self, bot_config):
     """Records the latest checked out and cached revisions.

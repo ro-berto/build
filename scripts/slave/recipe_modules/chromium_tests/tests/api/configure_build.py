@@ -9,9 +9,6 @@ from recipe_engine import post_process
 DEPS = [
     'chromium',
     'chromium_tests',
-    'recipe_engine/buildbucket',
-    'recipe_engine/platform',
-    'recipe_engine/properties',
 ]
 
 BASIC_CONFIG = {
@@ -45,11 +42,7 @@ BUILDERS = {
 
 def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      [
-          api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                           api.buildbucket.builder_name)
-      ],
-      builders=BUILDERS)
+      [api.chromium.get_builder_id()], builders=BUILDERS)
   api.chromium_tests.configure_build(bot_config_object)
 
 

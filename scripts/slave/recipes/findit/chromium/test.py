@@ -10,6 +10,8 @@ from recipe_engine.config import List
 from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
+from RECIPE_MODULES.build import chromium
+
 
 DEPS = [
     'chromium_swarming',
@@ -103,10 +105,10 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, use_analyze,
              suspected_revisions, test_on_good_revision, test_repeat_count):
   assert tests, 'No failed tests were specified.'
-
-  target_buildername, checked_out_revision, cached_revision = (
-      api.findit.configure_and_sync(target_mastername, target_testername,
-                                    bad_revision))
+  target_tester_id = chromium.BuilderId.create_for_master(
+      target_mastername, target_testername)
+  bot_mirror, checked_out_revision, cached_revision = (
+      api.findit.configure_and_sync(target_tester_id, bad_revision))
 
   # retrieve revisions in the regression range.
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)
@@ -181,9 +183,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
         # second revision is not necessarily the culprit.
         (test_results[first_revision], tests_failed_in_potential_green,
          compile_failure) = api.findit.compile_and_test_at_revision(
-             target_mastername,
-             target_buildername,
-             target_testername,
+             bot_mirror,
              first_revision,
              tests_have_not_found_culprit,
              use_analyze=False,
@@ -211,9 +211,9 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
           # whichever test that fails now will find current revision is the
           # culprit.
           test_results[revision], tests_failed_in_revision, compile_failure = (
-              api.findit.compile_and_test_at_revision(
-                  target_mastername, target_buildername, target_testername,
-                  revision, tests_to_run, use_analyze, test_repeat_count))
+              api.findit.compile_and_test_at_revision(bot_mirror, revision,
+                                                      tests_to_run, use_analyze,
+                                                      test_repeat_count))
           if compile_failure:
             return compile_failure
 
@@ -249,8 +249,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
       if tests_run_on_good_revision:
         (test_results[good_revision], tests_failed_in_revision,
          compile_failure) = api.findit.compile_and_test_at_revision(
-             target_mastername, target_buildername, target_testername,
-             good_revision, tests_run_on_good_revision, use_analyze,
+             bot_mirror, good_revision, tests_run_on_good_revision, use_analyze,
              test_repeat_count)
         if compile_failure:
           return compile_failure

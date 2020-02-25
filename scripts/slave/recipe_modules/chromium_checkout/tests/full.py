@@ -4,20 +4,21 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
+    'chromium',
     'chromium_checkout',
     'chromium_tests',
-    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id('chromium.linux', 'Linux Builder')])
+      [chromium.BuilderId.create_for_master('chromium.linux', 'Linux Builder')])
 
   api.chromium_tests.configure_build(bot_config)
 
@@ -40,10 +41,7 @@ def GenTests(api):
     return {}
 
   def try_build():
-    return api.buildbucket.try_build(
-        project='chromium',
-        builder='builder',
-        git_repo='https://chromium.googlesource.com/chromium/src')
+    return api.chromium.try_build(builder='builder')
 
   yield api.test(
       'win',

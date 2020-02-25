@@ -17,7 +17,7 @@ from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
 
 DEPS = [
     'chromium',
@@ -56,7 +56,7 @@ def RunSteps(api, properties):
   assert not properties.test_override_builders or api._test_data.enabled
 
   # 1. Configure the builder.
-  bot_id, bot_config, compile_kwargs = _configure_builder(
+  builder_id, bot_config, compile_kwargs = _configure_builder(
       api, properties.target_builder, properties.test_override_builders)
 
   # 2. Check out the code.
@@ -68,7 +68,7 @@ def RunSteps(api, properties):
 
   # 4. Determine what to build and what to test.
   compile_targets, test_objects = _compute_targets_and_tests(
-      api, bot_config, build_config, bot_id, properties.tests,
+      api, bot_config, build_config, builder_id, properties.tests,
       properties.compile_targets, properties.skip_analyze)
 
   # 5. Build what's needed.
@@ -88,21 +88,17 @@ def RunSteps(api, properties):
              properties.test_repeat_count)
 
 
-def _configure_builder(api, target_builder, test_override_builders):
+def _configure_builder(api, target_tester, test_override_builders):
   if test_override_builders:
     builders = json.loads(test_override_builders)
   else:
     builders = api.chromium_tests.builders
 
-  target_mastername = target_builder.master
-  target_testername = target_builder.builder
-  tester_config = builders[target_mastername].get('builders', {}).get(
-      target_testername, {})
-  target_buildername = (
-      tester_config.get('parent_buildername') or target_testername)
-  bot_id = api.chromium_tests.create_bot_id(
-      target_mastername, target_buildername, target_testername)
-  bot_config = api.chromium_tests.create_bot_config_object([bot_id])
+  bot_mirror = api.findit.get_bot_mirror_for_tester(
+      chromium.BuilderId.create_for_master(target_tester.master,
+                                           target_tester.builder),
+      builders=builders)
+  bot_config = api.chromium_tests.create_bot_config_object([bot_mirror])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
@@ -114,23 +110,22 @@ def _configure_builder(api, target_builder, test_override_builders):
   # manually.
   api.chromium.apply_config('goma_failfast')
 
-  if target_buildername != target_testername:
+  if bot_mirror.tester_id:
+    tester_config = builders[target_tester.master].get('builders', {}).get(
+        target_tester.builder, {})
     for key, value in tester_config.get('swarming_dimensions', {}).iteritems():
       # Coercing str as json.loads creates unicode strings. This only matters
       # for testing.
       api.chromium_swarming.set_default_dimension(str(key), str(value))
 
   compile_kwargs = {
-      'builder_id':
-          chromium.BuilderId.create_for_master(target_mastername,
-                                               target_buildername),
-      'override_bot_type':
-          'builder_tester',
+      'builder_id': bot_mirror.builder_id,
+      'override_bot_type': 'builder_tester',
   }
-  return bot_id, bot_config, compile_kwargs
+  return bot_mirror.builder_id, bot_config, compile_kwargs
 
 
-def _compute_targets_and_tests(api, bot_config, build_config, bot_id,
+def _compute_targets_and_tests(api, bot_config, build_config, builder_id,
                                requested_tests, compile_targets, skip_analyze):
   if requested_tests:
     # Figure out which test steps to run.
@@ -158,8 +153,7 @@ def _compute_targets_and_tests(api, bot_config, build_config, bot_id,
             test_targets=tuple(requested_test_targets),
             additional_compile_targets=tuple(compile_targets),
             config_file_name='trybot_analyze_config.json',
-            builder_id=chromium.BuilderId.create_for_master(
-                bot_id['mastername'], bot_id['buildername'])))
+            builder_id=builder_id))
 
     actual_tests_to_run = []
     for test in requested_tests_to_run:
@@ -181,9 +175,7 @@ def _compute_targets_and_tests(api, bot_config, build_config, bot_id,
   # Filter out targets that do not exist in this revision. i.e. By calling
   # `ninja query`.
   existing_targets = api.findit.existing_targets(
-      compile_targets,
-      mb_mastername=bot_id['mastername'],
-      mb_buildername=bot_id['buildername'])
+      compile_targets, builder_id=builder_id)
   return existing_targets, []
 
 

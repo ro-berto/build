@@ -13,6 +13,7 @@ from . import steps
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
                                              mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build import chromium
 
 BUILDER = 'builder'
 TESTER = 'tester'
@@ -21,6 +22,68 @@ BUILDER_TESTER = 'builder_tester'
 BUILDER_TYPES = (BUILDER, BUILDER_TESTER)
 TESTER_TYPES = (TESTER, BUILDER_TESTER)
 
+
+@attrs()
+class BotMirror(object):
+  """An immutable specification for a trybot-mirroring relationship."""
+
+  # The mirrored builder
+  builder_id = attrib(chromium.BuilderId)
+  # An optional builder that specifies tests that will be executed by the
+  # associated trybot
+  tester_id = attrib(chromium.BuilderId, default=None)
+
+  @classmethod
+  def normalize(cls, mirror):
+    """Converts various representations of a mirror to BotMirror.
+
+    The incoming representation can have one of the following forms:
+    * BotMirror - The input is returned.
+    * BuilderId - A BotMirror with `builder_id` set to the input is
+      returned.
+    * A mapping containing the keys 'mastername' and 'buildername' and
+      optionally 'tester' and 'tester_mastername' - The input is
+      expanded as keyword arguments to BotMirror.create.
+    """
+    if isinstance(mirror, chromium.BuilderId):
+      return cls(builder_id=mirror)
+    if isinstance(mirror, BotMirror):
+      return mirror
+    return cls.create(**mirror)
+
+  @classmethod
+  def create(cls, mastername, buildername, tester=None, tester_mastername=None):
+    """Create a BotMirror.
+
+    Args:
+      mastername - The name of the mirrored builder's master.
+      buildername - The name of the mirrored builder.
+      tester - The name of the mirrored tester. If not provided, the
+        returned BotMirror's tester_id field will be None.
+      tester_mastername - The name of the mirrored tester's master. If
+       not provided and tester is provided, then mastername will be
+       used. Has no effect if tester is not provided.
+
+    Returns:
+      A BotMirror object. builder_id will be set to a BuilderId that
+      identifies the mirrored builder. If tester is provided and the
+      mirrored tester is not the same as the mirrored builder, tester_id
+      will be set to a BuilderId that identifies the mirrored tester.
+      Otherwise, tester_id will be set to None.
+    """
+    builder_id = chromium.BuilderId.create_for_master(mastername, buildername)
+    tester_id = None
+    if tester is not None:
+      tester_id = chromium.BuilderId.create_for_master(
+          tester_mastername or mastername, tester)
+      if tester_id == builder_id:
+        tester_id = None
+    return cls(builder_id, tester_id)
+
+  def __attrs_post_init__(self):
+    assert self.tester_id != self.builder_id, (
+        "'tester_id' should not be equal to 'builder_id',"
+        " pass None for 'tester_id'")
 
 # TODO(gbeaty) Change accesses to use . access and remove the mapping
 @attrs()

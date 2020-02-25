@@ -25,7 +25,7 @@ class BotConfig(object):
   in a manner that ensures they are compatible between all of the wrapped specs.
   """
 
-  def __init__(self, bots_dict, bot_ids):
+  def __init__(self, bots_dict, builder_ids_or_bot_mirrors):
     updated_masters = {}
     for master_name, master_config in bots_dict.iteritems():
       updated_builders = {}
@@ -55,20 +55,14 @@ class BotConfig(object):
 
     self._bots_dict = bots_dict
 
-    assert len(bot_ids) >= 1
+    assert len(builder_ids_or_bot_mirrors) >= 1
 
-    def normalize(b):
-      if isinstance(b, chromium.BuilderId):
-        b = BotConfig.BotId(mastername=b.master, buildername=b.builder)
-      elif not isinstance(b, BotConfig.BotId):
-        b = BotConfig.BotId(**b)
-      return b
+    self._bot_mirrors = tuple(
+        bot_spec.BotMirror.normalize(b) for b in builder_ids_or_bot_mirrors)
 
-    self._bot_ids = tuple(normalize(b) for b in bot_ids)
-
-    for bot_id in self._bot_ids:
-      m = bot_id.mastername
-      b = bot_id.buildername
+    for spec in self._bot_mirrors:
+      m = spec.builder_id.master
+      b = spec.builder_id.builder
       if not m in self._bots_dict:
         raise Exception('No configuration present for master %s' % m)
       master_dict = self._bots_dict[m]
@@ -76,71 +70,52 @@ class BotConfig(object):
         raise Exception(
             'No configuration present for builder %s in master %s' % (b, m))
 
-  class BotId(
-      collections.namedtuple(
-          'BotId',
-          ('mastername', 'buildername', 'tester', 'tester_mastername'))):
-
-    __slots__ = ()
-
-    def __new__(cls,
-                mastername,
-                buildername,
-                tester=None,
-                tester_mastername=None):
-      tester_mastername = tester_mastername or mastername if tester else None
-      return super(BotConfig.BotId, cls).__new__(cls, mastername, buildername,
-                                                 tester, tester_mastername)
-
-    def get_builder_id(self):
-      return chromium.BuilderId.create_for_master(self.mastername,
-                                                  self.buildername)
-
-  @property
-  def bot_ids(self):
-    return self._bot_ids
-
   @property
   def builder_ids(self):
-    return [b.get_builder_id() for b in self.bot_ids]
+    return [m.builder_id for m in self._bot_mirrors]
 
-  def get_bot_type(self, bot_id):
-    return self._get(bot_id, 'bot_type', bot_spec.BUILDER_TESTER)
+  @property
+  def bot_mirrors(self):
+    return self._bot_mirrors
+
+  def get_bot_type(self, builder_id):
+    return self._get(builder_id, 'bot_type', bot_spec.BUILDER_TESTER)
 
   def _consistent_get(self, getter, name, default=None):
     # This logic must be kept in sync with checkConsistentGet in
     # tests/masters_recipes_test.py . It's not feasible to otherwise write an
     # integration test for this code which runs against all of the bots in
     # trybots.py.
-    result = getter(self._bot_ids[0], name, default)
-    for bot_id in self._bot_ids:
-      other_result = getter(bot_id, name, default)
+    result = getter(self.builder_ids[0], name, default)
+    for builder_id in self.builder_ids:
+      other_result = getter(builder_id, name, default)
       assert result == other_result, (
           'Inconsistent value for %r: bot %r has %r, '
-          'but bot %r has %r' % (name, self._bot_ids[0], result, bot_id,
+          'but bot %r has %r' % (name, self.builder_ids[0], result, builder_id,
                                  other_result))
     return result
 
-  def _get_builder_bot_config(self, bot_id):
+  def _get_builder_bot_config(self, builder_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use build_config.
-    return self._bots_dict.get(bot_id.mastername, {}).get('builders', {}).get(
-        bot_id.buildername, {})
+    return self._bots_dict.get(builder_id.master, {}).get('builders', {}).get(
+        builder_id.builder, {})
 
-  def _get(self, bot_id, name, default=None):
-    return self._get_builder_bot_config(bot_id).get(name, default)
+  def _get(self, builder_id, name, default=None):
+    return self._get_builder_bot_config(builder_id).get(name, default)
 
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
 
   def _get_source_side_spec(self, chromium_tests_api, mastername):
-    if len(self._bot_ids) == 1:
-      bot_config = self._get_builder_bot_config(self._bot_ids[0])
+    builder_ids = self.builder_ids
+    if len(builder_ids) == 1:
+      bot_config = self._get_builder_bot_config(builder_ids[0])
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
       if 'source_side_spec' in bot_config:  # pragma: no cover
-        return {self._bot_ids[0].buildername: bot_config['source_side_spec']}
+        return {builder_ids[0].builder: bot_config['source_side_spec']}
 
       # Similar to the source_side_spec special case above, but expected to
       # contain the spec for every builder on the waterfall. This is necessary
@@ -172,9 +147,9 @@ class BotConfig(object):
               parent_buildername == builder_config.get('parent_buildername'))
 
     masternames = set()
-    for bot_id in self._bot_ids:
-      bot_master_name = bot_id.mastername
-      bot_builder_name = bot_id.buildername
+    for builder_id in self.builder_ids:
+      bot_master_name = builder_id.master
+      bot_builder_name = builder_id.builder
       masternames.add(bot_master_name)
 
       for master_name, master_config in self._bots_dict.iteritems():
@@ -219,14 +194,13 @@ class BotConfig(object):
           'source_side_spec': source_side_spec,
       }
 
-    return BuildConfig(self.bot_ids, db)
+    return BuildConfig(self._bot_mirrors, db)
 
   # TODO(gbeaty) Move to BuildConfig
   # TODO(gbeaty) Remove unnecessary chromium_tests_api parameter
   def get_compile_targets(self, chromium_tests_api, build_config, tests):
     compile_targets = set()
-    for bot_id in self._bot_ids:
-      builder_id = bot_id.get_builder_id()
+    for builder_id in self.builder_ids:
       bot_config = build_config.get_bot_config(builder_id)
       compile_targets.update(bot_config.get('compile_targets', []))
       compile_targets.update(
@@ -238,9 +212,6 @@ class BotConfig(object):
         compile_targets.update(t.compile_targets())
 
     return sorted(compile_targets)
-
-  def matches_any_bot_id(self, fun):
-    return any(fun(bot_id) for bot_id in self._bot_ids)
 
 
 class BuildConfig(object):
@@ -274,31 +245,28 @@ class BuildConfig(object):
       # This builder's tests.
       self.tests = tests
 
-  def __init__(self, bot_ids, db):
+  def __init__(self, bot_mirrors, db):
     # Indexed by mastername. Each entry contains a master_dict and a
     # source_side_spec.
     self._db = freeze(db)
     self._config = self._ConfigNode(None, False, None)
 
-    for bot_id in bot_ids:
-      builder_id = bot_id.get_builder_id()
-      builder_bot_config = self.get_bot_config(builder_id)
-      if builder_id not in self._config.children:
-        self._config.children[builder_id] = self._ConfigNode(
-            builder_id, True, builder_bot_config.get('tests', []))
-      builder_config = self._config.children[builder_id]
+    for mirror in bot_mirrors:
+      builder_bot_config = self.get_bot_config(mirror.builder_id)
+      if mirror.builder_id not in self._config.children:
+        self._config.children[mirror.builder_id] = self._ConfigNode(
+            mirror.builder_id, True, builder_bot_config.get('tests', []))
+      builder_config = self._config.children[mirror.builder_id]
 
-      if bot_id.tester:
-        tester_id = chromium.BuilderId.create_for_master(
-            bot_id.tester_mastername, bot_id.tester)
-        tester_bot_config = self.get_bot_config(tester_id)
-        builder_config.children[tester_id] = self._ConfigNode(
-            tester_id, True, tester_bot_config.get('tests', []))
+      if mirror.tester_id:
+        tester_bot_config = self.get_bot_config(mirror.tester_id)
+        builder_config.children[mirror.tester_id] = self._ConfigNode(
+            mirror.tester_id, True, tester_bot_config.get('tests', []))
 
       for (
           _luci_project, triggered_mastername, triggered_buildername,
           triggered_bot_config) in self.bot_configs_matching_parent_buildername(
-              bot_id.get_builder_id()):
+              mirror.builder_id):
         triggered_id = chromium.BuilderId.create_for_master(
             triggered_mastername, triggered_buildername)
         if triggered_id not in builder_config.children:

@@ -3,25 +3,18 @@
 # found in the LICENSE file.
 
 DEPS = [
-    'build',
     'chromium',
-    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
     'code_coverage',
     'depot_tools/bot_update',
     'isolate',
-    'perf_dashboard',
-    'puppet_service_account',
-    'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
-    'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'test_results',
     'test_utils',
@@ -42,10 +35,8 @@ def RunSteps(api):
   # Fake path, as the real one depends on having done a chromium checkout.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
 
-  bot_config_object = api.chromium_tests.create_bot_config_object([
-      api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                       api.buildbucket.build.builder.builder)
-  ])
+  bot_config_object = api.chromium_tests.create_bot_config_object(
+      [api.chromium.get_builder_id()])
   api.chromium_tests.configure_build(bot_config_object)
   api.chromium_tests.prepare_checkout(bot_config_object)
 
@@ -624,7 +615,6 @@ def GenTests(api):
           'base_unittests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               placeholder_test_output, shards=2)),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(
@@ -654,7 +644,6 @@ def GenTests(api):
                   use_json_test_format=True,
                   output_histograms=True),
               shards=2)),
-      api.runtime(is_luci=True, is_experimental=False),
   )
 
   yield api.test(

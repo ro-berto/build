@@ -9,6 +9,8 @@ from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium
+
 
 DEPS = [
     'chromium_swarming',
@@ -55,9 +57,10 @@ def RunSteps(api, target_mastername, target_testername,
              test_revision, tests, test_repeat_count, skip_tests):
   assert tests, 'No failed tests were specified.'
 
-  target_buildername, checked_out_revision, cached_revision = (
-      api.findit.configure_and_sync(target_mastername, target_testername,
-                                    test_revision))
+  target_tester_id = chromium.BuilderId.create_for_master(
+      target_mastername, target_testername)
+  bot_mirror, checked_out_revision, cached_revision = (
+      api.findit.configure_and_sync(target_tester_id, test_revision))
 
   test_results = {}
   report = {
@@ -69,9 +72,9 @@ def RunSteps(api, target_mastername, target_testername,
 
   try:
     test_results[test_revision], _, compile_failure = (
-        api.findit.compile_and_test_at_revision(
-            target_mastername, target_buildername, target_testername,
-            test_revision, tests, False, test_repeat_count, skip_tests))
+        api.findit.compile_and_test_at_revision(bot_mirror, test_revision,
+                                                tests, False, test_repeat_count,
+                                                skip_tests))
     if compile_failure:
       return compile_failure
   except api.step.InfraFailure:

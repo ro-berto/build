@@ -15,6 +15,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
   'chromium',
@@ -69,7 +70,7 @@ def RunSteps(api, buildername, mastername):
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   bot_config = api.chromium_tests.create_bot_config_object(
-      [api.chromium_tests.create_bot_id(mastername, buildername)])
+      [chromium.BuilderId.create_for_master(mastername, buildername)])
   api.chromium_tests.configure_build(bot_config)
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'

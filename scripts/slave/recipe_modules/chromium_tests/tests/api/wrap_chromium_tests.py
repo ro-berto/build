@@ -61,10 +61,7 @@ def RunSteps(api):
         api.properties['mastername']]['builders'][api.buildbucket.builder_name]
     bot_ids = trybot_config['bot_ids']
   else:
-    bot_ids = [
-        api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                         api.buildbucket.builder_name)
-    ]
+    bot_ids = [api.chromium.get_builder_id()]
   bot_config_object = api.chromium_tests.create_bot_config_object(
       bot_ids,
       builders=api.properties.get('builders') or api.chromium_tests.builders)

@@ -5,18 +5,14 @@
 DEPS = [
     'chromium',
     'chromium_tests',
-    'recipe_engine/buildbucket',
     'recipe_engine/path',
-    'recipe_engine/properties',
     'recipe_engine/python',
 ]
 
 
 def RunSteps(api):
-  bot_config = api.chromium_tests.create_bot_config_object([
-      api.chromium_tests.create_bot_id(api.properties['mastername'],
-                                       api.buildbucket.builder_name)
-  ])
+  bot_config = api.chromium_tests.create_bot_config_object(
+      [api.chromium.get_builder_id()])
   api.chromium_tests.configure_build(bot_config)
   api.python(
       'sample script',

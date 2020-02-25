@@ -9,6 +9,7 @@ from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build.chromium_tests import bot_spec
 
 from RECIPE_MODULES.build import chromium
 
@@ -65,13 +66,11 @@ class CompileResult(object):
   INFRA_FAILED = 'infra_failed'  # Infra failed.
 
 
-def _run_compile_at_revision(api, target_mastername, target_buildername,
-                             revision, compile_targets, use_analyze):
+def _run_compile_at_revision(api, builder_id, revision, compile_targets,
+                             use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
-    bot_config = api.chromium_tests.create_bot_config_object([
-        api.chromium_tests.create_bot_id(
-            target_mastername, target_buildername)])
+    bot_config = api.chromium_tests.create_bot_config_object([builder_id])
     bot_update_step, build_config = api.chromium_tests.prepare_checkout(
         bot_config, root_solution_revision=revision)
 
@@ -92,20 +91,16 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
             test_targets=[],
             additional_compile_targets=compile_targets,
             config_file_name='trybot_analyze_config.json',
-            builder_id=chromium.BuilderId.create_for_master(
-                target_mastername, target_buildername),
+            builder_id=builder_id,
             additional_names=None)
     else:
       # Use ninja to filter out none-existing targets.
-      compile_targets = api.findit.existing_targets(
-          compile_targets, target_mastername, target_buildername)
+      compile_targets = api.findit.existing_targets(compile_targets, builder_id)
 
     if not compile_targets:
       # No compile target exists, or is impacted by the given revision.
       return CompileResult.SKIPPED
 
-    builder_id = chromium.BuilderId.create_for_master(target_mastername,
-                                                      target_buildername)
     failure = api.chromium_tests.compile_specific_targets(
         bot_config,
         bot_update_step,
@@ -130,9 +125,9 @@ def RunSteps(api, target_mastername, target_buildername,
              good_revision, bad_revision, compile_targets,
              use_analyze, suspected_revisions, use_bisect,
              compile_on_good_revision):
-  bot_config = api.chromium_tests.create_bot_config_object([
-      api.chromium_tests.create_bot_id(
-          target_mastername, target_buildername)])
+  builder_id = chromium.BuilderId.create_for_master(target_mastername,
+                                                    target_buildername)
+  bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 
@@ -237,8 +232,11 @@ def RunSteps(api, target_mastername, target_buildername,
       if revision_before_suspect is not None:
         revision_being_checked = revision_before_suspect
         compile_result = _run_compile_at_revision(
-            api, target_mastername, target_buildername,
-            revision_being_checked, compile_targets, use_analyze=False)
+            api,
+            builder_id,
+            revision_being_checked,
+            compile_targets,
+            use_analyze=False)
         compile_results[revision_being_checked] = compile_result
         if compile_result == CompileResult.FAILED:
           # The first revision of this sub-range already failed, thus either it
@@ -263,8 +261,8 @@ def RunSteps(api, target_mastername, target_buildername,
             index = len(remaining_revisions) / 2
           revision_being_checked = remaining_revisions[index]
           compile_result = _run_compile_at_revision(
-              api, target_mastername, target_buildername,
-              revision_being_checked, compile_targets, use_analyze)
+              api, builder_id, revision_being_checked, compile_targets,
+              use_analyze)
           compile_results[revision_being_checked] = compile_result
           if compile_result == CompileResult.FAILED:
             # This failed revision is the new candidate to suspect.
@@ -289,8 +287,8 @@ def RunSteps(api, target_mastername, target_buildername,
             use_analyze_for_this_revision = use_analyze
           revision_being_checked = revision
           compile_result = _run_compile_at_revision(
-              api, target_mastername, target_buildername,
-              revision, compile_targets, use_analyze_for_this_revision)
+              api, builder_id, revision, compile_targets,
+              use_analyze_for_this_revision)
           compile_results[revision] = compile_result
           if compile_result == CompileResult.FAILED:
             # First failure after a series of pass.
@@ -311,8 +309,7 @@ def RunSteps(api, target_mastername, target_buildername,
           # The culprit is the first one in the regression range, we need to run
           # compile on last good to reduce false positives.
           compile_result = _run_compile_at_revision(
-              api, target_mastername, target_buildername,
-              good_revision, compile_targets, use_analyze)
+              api, builder_id, good_revision, compile_targets, use_analyze)
           compile_results[good_revision] = compile_result
           # If compile failed on last good revision, the original failure could
           # have been a flaky compile.

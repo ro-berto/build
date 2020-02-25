@@ -105,19 +105,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
 
-  def create_bot_id(self, mastername, buildername, testername=None):
-    bot_id = {
-        'mastername': mastername,
-        'buildername': buildername,
-    }
-    # TODO(crbug.com/884425): Figure out a better solution to mimic a tester.
-    if testername and testername != buildername:
-      bot_id['tester'] = testername
-    return bot_id
-
-  def create_bot_config_object(self, bot_ids, builders=None):
+  def create_bot_config_object(self, builder_ids_or_bot_mirrors, builders=None):
     try:
-      return bot_config_module.BotConfig(builders or self.builders, bot_ids)
+      return bot_config_module.BotConfig(builders or self.builders,
+                                         builder_ids_or_bot_mirrors)
     except Exception:
       if (self._test_data.enabled and
           not self._test_data.get('handle_bot_config_errors', True)):
@@ -757,11 +748,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
           require_device_steps):
+
+        def is_perf(mastername):
+          return any(
+              mastername.startswith(m)
+              for m in ('chromium.perf', 'tryserver.chromium.perf'))
+
         #TODO(prasadv): Remove this hack and implement specific functions
         # at the point of call.
-        perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
-            bot_id.mastername.startswith('chromium.perf') or
-            bot_id.mastername.startswith('tryserver.chromium.perf'))
+        perf_setup = any(is_perf(b.master) for b in bot_config.builder_ids)
         self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
 
       for test in (tests or []):
@@ -1582,40 +1577,42 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
-    def present_bot(bot_id):
-      if bot_id.tester:
+
+    def present_bot(bot_mirror):
+      if bot_mirror.tester_id:
         return ('running tester %r on master %r against builder %r on master %r'
-                % (bot_id.tester, bot_id.tester_mastername,
-                   bot_id.buildername, bot_id.mastername))
-      bot_type = bot_config.get_bot_type(bot_id)
+                % (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
+                   bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
+      bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
       if bot_type == bot_spec.BUILDER_TESTER:
         bot_type = 'builder/tester'
-      return ('running %s \'%s\' on master %r'
-              % (bot_type, bot_id.buildername, bot_id.mastername))
+      return ('running %s \'%s\' on master %r' %
+              (bot_type, bot_mirror.builder_id.builder,
+               bot_mirror.builder_id.master))
 
-
-    lines = [''] + [present_bot(b) for b in bot_config.bot_ids]
+    lines = [''] + [present_bot(m) for m in bot_config.bot_mirrors]
     result = self.m.python.succeeding_step(
         'report builders', '<br/>'.join(lines))
 
-    def as_dict(bot_id):
-      if bot_id.tester:
+    def as_dict(bot_mirror):
+      if bot_mirror.tester_id:
         return {
-            'mastername': bot_id.mastername,
-            'buildername': bot_id.buildername,
-            'tester_buildername': bot_id.tester,
-            'tester_mastername': bot_id.tester_mastername,
+            'mastername': bot_mirror.builder_id.master,
+            'buildername': bot_mirror.builder_id.builder,
+            'tester_buildername': bot_mirror.tester_id.builder,
+            'tester_mastername': bot_mirror.tester_id.master,
             'bot_type': bot_spec.TESTER,
         }
-      bot_type = bot_config.get_bot_type(bot_id)
+      bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
       if bot_type == bot_spec.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return {
-          'mastername': bot_id.mastername,
-          'buildername': bot_id.buildername,
+          'mastername': bot_mirror.builder_id.master,
+          'buildername': bot_mirror.builder_id.builder,
           'bot_type': bot_type,
       }
-    bots_json = [as_dict(b) for b in bot_config.bot_ids]
+
+    bots_json = [as_dict(b) for b in bot_config.bot_mirrors]
     result.presentation.logs['bots.json'] = self.m.json.dumps(
         bots_json, indent=2).split('/n')
 
@@ -1626,20 +1623,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # try -> ci
     # try-beta -> ci-beta
     # try-stable -> ci-stable
-    for bot_id in bot_config.bot_ids:
-      if bot_id.tester:
-        result.presentation.links[bot_id.tester] = (
+    for bot_mirror in bot_config.bot_mirrors:
+      if bot_mirror.tester_id:
+        result.presentation.links[bot_mirror.tester_id.builder] = (
             'https://ci.chromium.org/p/%s/builders/%s/%s' % (
                 self.m.buildbucket.build.builder.project,
                 self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
-                bot_id.tester,
+                bot_mirror.tester_id.builder,
             ))
 
-      result.presentation.links[bot_id.buildername] = (
+      result.presentation.links[bot_mirror.builder_id.builder] = (
           'https://ci.chromium.org/p/%s/builders/%s/%s' % (
               self.m.buildbucket.build.builder.project,
               self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
-              bot_id.buildername,
+              bot_mirror.builder_id.builder,
           ))
 
 

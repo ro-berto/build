@@ -131,7 +131,6 @@
   * [chromium_swarming:tests/task](#recipes-chromium_swarming_tests_task)
   * [chromium_swarming:tests/trigger_output](#recipes-chromium_swarming_tests_trigger_output)
   * [chromium_tests:tests/api/archive_build](#recipes-chromium_tests_tests_api_archive_build)
-  * [chromium_tests:tests/api/bot_id](#recipes-chromium_tests_tests_api_bot_id)
   * [chromium_tests:tests/api/compile_specific_targets](#recipes-chromium_tests_tests_api_compile_specific_targets)
   * [chromium_tests:tests/api/configure_build](#recipes-chromium_tests_tests_api_configure_build)
   * [chromium_tests:tests/api/create_bot_config_object](#recipes-chromium_tests_tests_api_create_bot_config_object)
@@ -154,6 +153,7 @@
   * [chromium_tests:tests/api/trybot_steps_with_specific_tests](#recipes-chromium_tests_tests_api_trybot_steps_with_specific_tests)
   * [chromium_tests:tests/api/wrap_chromium_tests](#recipes-chromium_tests_tests_api_wrap_chromium_tests)
   * [chromium_tests:tests/bot_config](#recipes-chromium_tests_tests_bot_config)
+  * [chromium_tests:tests/bot_mirror](#recipes-chromium_tests_tests_bot_mirror)
   * [chromium_tests:tests/bot_spec](#recipes-chromium_tests_tests_bot_spec)
   * [chromium_tests:tests/builders](#recipes-chromium_tests_tests_builders) &mdash; Test to ensure the validity of the entries within BUILDERS.
   * [chromium_tests:tests/configs](#recipes-chromium_tests_tests_configs)
@@ -1481,7 +1481,7 @@ Uses the 'get_states' endpoint on the swarming server.
 
 #### **class [ChromiumTestsApi](/scripts/slave/recipe_modules/chromium_tests/api.py#87)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#554)(self, builder_id, update_step, build_config):**
+&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#545)(self, builder_id, update_step, build_config):**
 
 Archive the build if the bot is configured to do so.
 
@@ -1493,7 +1493,7 @@ to clusterfuzz.
 
 &emsp; **@property**<br>&mdash; **def [builders](/scripts/slave/recipe_modules/chromium_tests/api.py#96)(self):**
 
-&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#365)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, override_bot_type=None):**
+&mdash; **def [compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#356)(self, bot_config, update_step, build_config, compile_targets, tests_including_triggered, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, override_bot_type=None):**
 
 Runs compile and related steps for given builder.
 
@@ -1523,13 +1523,11 @@ Args:
 Returns:
   RawResult object with compile step status and failure message
 
-&mdash; **def [configure\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#143)(self, bot_config, override_bot_type=None):**
+&mdash; **def [configure\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#134)(self, bot_config, override_bot_type=None):**
 
-&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#118)(self, bot_ids, builders=None):**
+&mdash; **def [create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/api.py#108)(self, builder_ids_or_bot_mirrors, builders=None):**
 
-&mdash; **def [create\_bot\_id](/scripts/slave/recipe_modules/chromium_tests/api.py#108)(self, mastername, buildername, testername=None):**
-
-&mdash; **def [create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/api.py#275)(self, tests, suffix='', serialize_tests=False, retry_failed_shards=False, retry_invalid_shards=False):**
+&mdash; **def [create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/api.py#266)(self, tests, suffix='', serialize_tests=False, retry_failed_shards=False, retry_invalid_shards=False):**
 
 Creates a test runner to run a set of tests.
 
@@ -1548,21 +1546,21 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1258)(self, bot_update_step):**
+&mdash; **def [deapply\_deps](/scripts/slave/recipe_modules/chromium_tests/api.py#1253)(self, bot_update_step):**
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#796)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#791)(self, bot_update_step):**
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#671)(self, builder_id, update_step, build_config, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#662)(self, builder_id, update_step, build_config, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
 
-&mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#248)(self, source_side_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, bot_update_step):**
+&mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#239)(self, source_side_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, bot_update_step):**
 
-&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#335)(self, bot_config, log_details=False):**
+&mdash; **def [get\_android\_version\_details](/scripts/slave/recipe_modules/chromium_tests/api.py#326)(self, bot_config, log_details=False):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#977)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#972)(self, bot_config=None):**
 
-&mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#320)(self, bot_config, build_config, tests):**
+&mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#311)(self, bot_config, build_config, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1011)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1006)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1584,9 +1582,9 @@ Returns:
 TODO:
   * Only gather targets for the scripts that we might concievably run.
 
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#130)(self):**
+&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium_tests/api.py#121)(self):**
 
-&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1188)(self, bot, bot_update_step, build_config):**
+&mdash; **def [inbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1183)(self, bot, bot_update_step, build_config):**
 
 Handles the tester half of the builder->tester transfer flow.
 
@@ -1600,13 +1598,13 @@ Args:
   bot_update_step: the result of a previously executed bot_update step.
   build_config: a BuildConfig object.
 
-&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1281)(self, builders=None, bots=None):**
+&mdash; **def [integration\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1276)(self, builders=None, bots=None):**
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#104)(self, message):**
 
-&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1415)(self, builders, mirrored_bots=None):**
+&mdash; **def [lookup\_bot\_metadata](/scripts/slave/recipe_modules/chromium_tests/api.py#1410)(self, builders, mirrored_bots=None):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1043)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1038)(self, mb_config_path=None, builders=None):**
 
 Compiles and runs tests for chromium recipe.
 
@@ -1615,7 +1613,7 @@ Returns:
     and a failure message if a failure occurred.
   - None if no failures
 
-&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1133)(self, bot, bot_update_step, build_config):**
+&mdash; **def [outbound\_transfer](/scripts/slave/recipe_modules/chromium_tests/api.py#1128)(self, bot, bot_update_step, build_config):**
 
 Handles the builder half of the builder->tester transfer flow.
 
@@ -1648,7 +1646,7 @@ Returns:
   A dict containing additional properties that should be added to any
   triggered child builds.
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#478)(self, builder_id, update_step, build_config, reasons=None):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#469)(self, builder_id, update_step, build_config, reasons=None):**
 
 Zip and upload the build to google storage.
 
@@ -1662,13 +1660,13 @@ Note that:
     handled in archive_build.
   - this may upload twice on perf builders.
 
-&mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#230)(self, bot_config, \*\*kwargs):**
+&mdash; **def [prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/api.py#221)(self, bot_config, \*\*kwargs):**
 
-&mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#263)(self, source_side_spec_file):**
+&mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#254)(self, source_side_spec_file):**
 
-&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#638)(self, compile_targets, isolated_targets, name_suffix, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
+&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#629)(self, compile_targets, isolated_targets, name_suffix, builder_id=None, mb_phase=None, mb_config_path=None, mb_recursive_lookup=False, android_version_code=None, android_version_name=None):**
 
-&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1303)(self, builders, mirrored_bots, deapply_changes, tests=None):**
+&mdash; **def [run\_tests\_with\_and\_without\_changes](/scripts/slave/recipe_modules/chromium_tests/api.py#1298)(self, builders, mirrored_bots, deapply_changes, tests=None):**
 
 Compile and run tests for chromium_trybot recipe.
 
@@ -1685,15 +1683,15 @@ Returns:
   failure message if an error occurred.
   - None if no failures
 
-&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#219)(self, update_step):**
+&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#210)(self, update_step):**
 
-&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/chromium_tests/api.py#206)(self, bot_config):**
+&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/chromium_tests/api.py#197)(self, bot_config):**
 
-&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#606)(self, builder_id, update_step, build_config, additional_properties=None):**
+&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#597)(self, builder_id, update_step, build_config, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1286)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1281)(self, builders=None, trybots=None):**
 
-&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1292)(self, builders=None, trybots=None, tests=None):**
+&mdash; **def [trybot\_steps\_for\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#1287)(self, builders=None, trybots=None, tests=None):**
 
 Similar to trybot_steps, but only runs certain tests.
 
@@ -1702,7 +1700,7 @@ use this.
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#100)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#738)(self, bot_config, tests=None):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#729)(self, bot_config, tests=None):**
 ### *recipe_modules* / [code\_coverage](/scripts/slave/recipe_modules/code_coverage)
 
 [DEPS](/scripts/slave/recipe_modules/code_coverage/__init__.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [swarming\_client](#recipe_modules-swarming_client), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -2117,16 +2115,15 @@ are affected by the set of files that have changed.
 
 [DEPS](/scripts/slave/recipe_modules/findit/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#20)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#19)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#132)(self, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
+&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#143)(self, bot_mirror, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
 
 Compile the targets needed to execute the specified tests and run them.
 
 Args:
-  target_mastername (str): Which master to derive the configuration off of.
-  target_buildername (str): likewise
-  target_testername (str): likewise
+  bot_mirror (BotMirror): The BotMirror object describing the builder and
+                          possibly tester to derive configuration from.
   revision (str): A string representing the commit hash of the revision to
                   test.
   requested_tests (dict):
@@ -2163,7 +2160,7 @@ Returns:
       }
     - RawResult object with compile step status and failure message
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#320)(self, target_mastername, target_testername, revision, builders=None):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#324)(self, target_tester_id, revision, builders=None):**
 
 Applies compile/test configs & syncs code.
 
@@ -2172,14 +2169,15 @@ chromium revisions, extracted as code share between the test and flake
 recipes.
 
 Args:
-  target_mastername (str): Which master to derive the configuration off of.
-  target_testername (str): likewise
+  target_tester_id (BuilderId): The ID of the tester to derive the
+                                configuration from.
   revision (str): A string representing the commit hash of the revision to
                   test.
-  builders (dict): A dict of the same format as api.chromium_tests.builders.
-Returns: (target_buildername, checked_out_revision, cached_revision)
+  builders (dict): A dict of the same format as
+                   self.m.chromium_tests.builders.
+Returns: (bot_mirror, checked_out_revision, cached_revision)
 
-&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#99)(self, targets, mb_mastername, mb_buildername):**
+&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#113)(self, targets, builder_id):**
 
 Returns a sublist of the given targets that exist in the build graph.
 
@@ -2194,10 +2192,9 @@ A "target" here is actually a node in ninja's build graph. For example:
 
 Args:
  targets (list): A list of targets to be tested for existence.
- mb_mastername (str): The mastername to run MB with.
- mb_buildername (str): The buildername to run MB with.
+ builder_id (BuilderId): The ID of the builder to run MB for.
 
-&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#36)(self, revision, solution_name='src'):**
+&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#50)(self, revision, solution_name='src'):**
 
 Returns the files changed by the given revision.
 
@@ -2206,7 +2203,9 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#386)(self, bot_config):**
+&mdash; **def [get\_bot\_mirror\_for\_tester](/scripts/slave/recipe_modules/findit/api.py#26)(self, tester_id, builders):**
+
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#383)(self, bot_config):**
 
 Records the latest checked out and cached revisions.
 
@@ -2219,7 +2218,7 @@ Returns:
   A pair of revisions (checked_out_revision, cached_revision), or None, None
   if the checkout directory does not exist.
 
-&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#67)(self, start_revision, end_revision, solution_name='src'):**
+&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#81)(self, start_revision, end_revision, solution_name='src'):**
 
 Returns the git commit hashes between the given range.
 
@@ -4297,9 +4296,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/zip_and_upload_build.py#11)(api):**
 ### *recipes* / [chromium\_checkout:tests/full](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#19)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_tot](/scripts/slave/recipes/chromium_clang_coverage_tot.py)
 
 [DEPS](/scripts/slave/recipes/chromium_clang_coverage_tot.py#6): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4385,26 +4384,21 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/archive_build.py#11)(api):**
-### *recipes* / [chromium\_tests:tests/api/bot\_id](/scripts/slave/recipe_modules/chromium_tests/tests/api/bot_id.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/bot_id.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/bot_id.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/api/compile\_specific\_targets](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py#37)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/compile_specific_targets.py#34)(api):**
 ### *recipes* / [chromium\_tests:tests/api/configure\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/configure_build.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/configure_build.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/configure_build.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/configure_build.py#46)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/configure_build.py#43)(api):**
 ### *recipes* / [chromium\_tests:tests/api/create\_bot\_config\_object](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#16)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_bot_config_object.py#14)(api):**
 ### *recipes* / [chromium\_tests:tests/api/create\_test\_runner](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_test_runner.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/create_test_runner.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4422,9 +4416,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/download_and_unzip_build.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/api/get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#15)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_common_args_for_scripts.py#13)(api):**
 ### *recipes* / [chromium\_tests:tests/api/get\_scheduler\_jobs\_to\_trigger](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_scheduler_jobs_to_trigger.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/get_scheduler_jobs_to_trigger.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4454,9 +4448,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/package_build.py#20)(api, builders):**
 ### *recipes* / [chromium\_tests:tests/api/prepare\_checkout](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#40)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
 ### *recipes* / [chromium\_tests:tests/api/report\_builders](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/report_builders.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests)
@@ -4504,6 +4498,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#11): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#16)(api):**
+### *recipes* / [chromium\_tests:tests/bot\_mirror](/scripts/slave/recipe_modules/chromium_tests/tests/bot_mirror.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_mirror.py#10): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_mirror.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/bot\_spec](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#12): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
@@ -4511,7 +4510,7 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#33)(api):**
 ### *recipes* / [chromium\_tests:tests/builders](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#18): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#19): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 Test to ensure the validity of the entries within BUILDERS.
 
@@ -4519,9 +4518,9 @@ Each entry in the BUILDERS dict will be checked to ensure
 chromium_tests.configure_build can be called with a BotConfig for that builder
 without error.
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#81)(api, mastername, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#77)(api):**
 
-&mdash; **def [validate\_tester\_config](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#48)(api, mastername, buildername, bot_config):**
+&mdash; **def [validate\_tester\_config](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#42)(api, mastername, buildername, bot_config):**
 ### *recipes* / [chromium\_tests:tests/configs](/scripts/slave/recipe_modules/chromium_tests/tests/configs.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/configs.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4639,14 +4638,14 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_ios_test.py#28)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/swarming\_isolated\_script\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#36)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#29)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/webrtc\_perf\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#35)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#28)(api):**
 ### *recipes* / [chromium\_tests:tests/trybots](/scripts/slave/recipe_modules/chromium_tests/tests/trybots.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/trybots.py#17): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4693,9 +4692,9 @@ debug changes. Do not use without talking to martiniss@.
 &mdash; **def [RunSteps](/scripts/slave/recipes/closure_compilation.py#30)(api):**
 ### *recipes* / [code\_coverage:tests/full](/scripts/slave/recipe_modules/code_coverage/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/code_coverage/tests/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/code_coverage/tests/full.py#10): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/code_coverage/tests/full.py#32)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/code_coverage/tests/full.py#33)(api):**
 ### *recipes* / [codesearch:examples/full](/scripts/slave/recipe_modules/codesearch/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/examples/full.py#9): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4926,19 +4925,19 @@ A generic recipe that runs a given docker container and exits.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/suppress_analyze.py#12)(api):**
 ### *recipes* / [findit/chromium/compile](/scripts/slave/recipes/findit/chromium/compile.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/compile.py#15): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/compile.py#16): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#129)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile.py#124)(api, target_mastername, target_buildername, good_revision, bad_revision, compile_targets, use_analyze, suspected_revisions, use_bisect, compile_on_good_revision):**
 ### *recipes* / [findit/chromium/compile\_isolate](/scripts/slave/recipes/findit/chromium/compile_isolate.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/compile_isolate.py#23): [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/compile_isolate.py#24): [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 This recipe is to compile and isolate the given isolated targets.
 
 If multiple test targets match the same isolated targets, we default to the
 first one after ordering test target names alphabetically.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile_isolate.py#51)(api, target_mastername, target_testername, revision, isolated_targets):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/compile_isolate.py#52)(api, target_mastername, target_testername, revision, isolated_targets):**
 ### *recipes* / [findit/chromium/export\_bot\_db](/scripts/slave/recipes/findit/chromium/export_bot_db.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/export_bot_db.py#12): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4950,12 +4949,12 @@ Export the bot db to cloud storage.
 &mdash; **def [thaw\_and\_remove\_unserializable](/scripts/slave/recipes/findit/chromium/export_bot_db.py#20)(v):**
 ### *recipes* / [findit/chromium/flake](/scripts/slave/recipes/findit/chromium/flake.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/flake.py#13): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/flake.py#15): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/flake.py#54)(api, target_mastername, target_testername, test_revision, tests, test_repeat_count, skip_tests):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/flake.py#56)(api, target_mastername, target_testername, test_revision, tests, test_repeat_count, skip_tests):**
 ### *recipes* / [findit/chromium/preemptive\_bot\_update](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#13): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#15): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 Checkout the chromium src tree at the latest revision.
 
@@ -4963,9 +4962,9 @@ This recipe is meant to be run on idle bots to keep their local checkouts up to
 date as much as possible so that when they are required to run culprit-finding
 jobs they have as low latency as possible in their bot_update steps.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#71)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#73)(api):**
 
-&mdash; **def [TargetMasterAndBuilder](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#65)(api):**
+&mdash; **def [TargetMasterAndBuilder](/scripts/slave/recipes/findit/chromium/preemptive_bot_update.py#67)(api):**
 ### *recipes* / [findit/chromium/single\_revision](/scripts/slave/recipes/findit/chromium/single_revision.py)
 
 [DEPS](/scripts/slave/recipes/findit/chromium/single_revision.py#22): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [findit](#recipe_modules-findit), [isolate](#recipe_modules-isolate), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4973,12 +4972,12 @@ jobs they have as low latency as possible in their bot_update steps.
 &mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/single_revision.py#39)(api, properties):**
 ### *recipes* / [findit/chromium/test](/scripts/slave/recipes/findit/chromium/test.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/test.py#14): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/test.py#16): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [findit](#recipe_modules-findit), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/test.py#102)(api, target_mastername, target_testername, good_revision, bad_revision, tests, use_analyze, suspected_revisions, test_on_good_revision, test_repeat_count):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/test.py#104)(api, target_mastername, target_testername, good_revision, bad_revision, tests, use_analyze, suspected_revisions, test_on_good_revision, test_repeat_count):**
 ### *recipes* / [findit/chromium/update\_components](/scripts/slave/recipes/findit/chromium/update_components.py)
 
-[DEPS](/scripts/slave/recipes/findit/chromium/update_components.py#16): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/findit/chromium/update_components.py#18): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Traverse the source tree and update a cloud file with component mappings.
 
@@ -4986,9 +4985,9 @@ In each OWNERS file, a component and a team may be defined. This recipe calls
 a script that gathers all the information onto a json file and refreshes a
 world-readable cloud location.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/update_components.py#126)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/findit/chromium/update_components.py#128)(api):**
 
-&mdash; **def [RunStepsForFile](/scripts/slave/recipes/findit/chromium/update_components.py#68)(api, filename, extra_arguments, step_suffix):**
+&mdash; **def [RunStepsForFile](/scripts/slave/recipes/findit/chromium/update_components.py#70)(api, filename, extra_arguments, step_suffix):**
 ### *recipes* / [findit:examples/full](/scripts/slave/recipe_modules/findit/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/findit/examples/full.py#5): [findit](#recipe_modules-findit), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -5674,7 +5673,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [RunSteps](/scripts/slave/recipes/swarming/heartbeat.py#19)(api):**
 ### *recipes* / [swarming/staging](/scripts/slave/recipes/swarming/staging.py)
 
-[DEPS](/scripts/slave/recipes/swarming/staging.py#19): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/swarming/staging.py#20): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Swarming staging recipe: runs tests for HEAD of chromium using HEAD of
 swarming_client toolset on Swarming staging server instances
@@ -5685,7 +5684,7 @@ full roll out.
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/staging.py#44)(api, buildername, mastername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/staging.py#45)(api, buildername, mastername):**
 ### *recipes* / [swarming\_client:examples/full](/scripts/slave/recipe_modules/swarming_client/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/swarming_client/examples/full.py#5): [swarming\_client](#recipe_modules-swarming_client), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
