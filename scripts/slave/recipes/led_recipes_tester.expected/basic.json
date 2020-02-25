@@ -417,11 +417,11 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"beeeeeeeee5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task0\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
     ]
   },
   {
@@ -551,11 +551,11 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"beeeeeeeee5\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"task1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
     ]
   },
   {
@@ -630,13 +630,13 @@
       "collect",
       "-S",
       "chromium-swarm.appspot.com",
-      "beeeeeeeee5",
+      "task0",
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
     "name": "collect luci.chromium.try:linux-rel task",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task0@@@"
     ]
   },
   {
@@ -647,13 +647,13 @@
       "collect",
       "-S",
       "chromium-swarm.appspot.com",
-      "beeeeeeeee5",
+      "task1",
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
     "name": "collect luci.chromium.try:win10_chromium_x64_rel_ng task",
     "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task1@@@"
     ]
   },
   {

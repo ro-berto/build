@@ -218,180 +218,130 @@ def RunSteps(api, repo_name):
 
 
 def GenTests(api):
-  def prefix(name):
-    return 'analyze+launch %s.' % (name,)
+  RECIPE = 'foo_recipe'
 
+  def gerrit_change(footer_builder=None):
+    message = 'nothing important'
+    parse_description_json = {}
+    if footer_builder:
+      message = '{}: {}'.format(BUILDER_FOOTER, footer_builder)
+      parse_description_json = {BUILDER_FOOTER: [footer_builder]}
+
+    t = api.override_step_data(
+        'gerrit changes',
+        api.json.output([{
+            'revisions': {
+                1: {
+                    '_number': 12,
+                    'commit': {
+                        'message': message,
+                    }
+                }
+            }
+        }]))
+    t += api.override_step_data('parse description',
+                                api.json.output(parse_description_json))
+    return t
+
+  def prefix(name):
+    return 'analyze+launch {}.'.format(name)
 
   def led_get_builder(name):
     return api.step_data(
         prefix(name) + 'led get-builder',
         stdout=api.json.output({
-          'job_slices': [{
-            'userland': {
-              'recipe_name': 'foo_recipe',
-            },
-          }],
+            'job_slices': [{
+                'userland': {
+                    'recipe_name': RECIPE,
+                },
+            }],
         }))
 
-  def analyze(name, ret_recipe):
-    return api.step_data(
-        prefix(name) + 'analyze foo_recipe',
+  def test_builder(name,
+                   recipe_affected=True,
+                   affected_files=None,
+                   task_id='task0'):
+    t = led_get_builder(name)
+
+    affected_files = affected_files or []
+    if affected_files:
+      t += api.override_step_data(
+          prefix(name) + 'git diff to analyze patch',
+          stdout=api.raw_io.output('\n'.join(affected_files)))
+
+    t += api.step_data(
+        '{}analyze {}'.format(prefix(name), RECIPE),
         api.json.output({
-          'recipes': ([ret_recipe] if ret_recipe else []),
+            'recipes': ([RECIPE] if recipe_affected else []),
         }))
 
-  def led_launch(name):
-    return api.step_data(
-        prefix(name) + 'led launch',
-        stdout=api.json.output({
-            'swarming': {
-                'host_name': 'chromium-swarm.appspot.com',
-                'task_id': 'beeeeeeeee5',
-            }
-        }))
+    if recipe_affected or 'infra/config/recipes.cfg' in affected_files:
+      t += api.step_data(
+          prefix(name) + 'led launch',
+          stdout=api.json.output({
+              'swarming': {
+                  'host_name': 'chromium-swarm.appspot.com',
+                  'task_id': task_id,
+              }
+          }))
 
+    return t
 
-  def git_diff(name, files):
-    return api.override_step_data(
-        prefix(name) + 'git diff to analyze patch',
-        stdout=api.raw_io.output('\n'.join(files)))
-
+  def default_builders(**kwargs):
+    t = api.empty_test_data()
+    for i, b in enumerate(DEFAULT_BUILDERS):
+      t += test_builder(b, task_id='task{}'.format(i), **kwargs)
+    return t
 
   yield api.test(
       'basic',
       api.properties.tryserver(repo_name='build'),
-      led_get_builder('luci.chromium.try:linux-rel'),
-      analyze('luci.chromium.try:linux-rel', 'foo_recipe'),
-      led_launch('luci.chromium.try:linux-rel'),
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe'),
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': 'nothing important'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data('parse description', api.json.output({})),
+      gerrit_change(),
+      default_builders(),
   )
 
   yield api.test(
       'no_jobs_to_run',
       api.properties.tryserver(repo_name='build'),
-      led_get_builder('luci.chromium.try:linux-rel'),
-      analyze('luci.chromium.try:linux-rel', None),
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': 'nothing important'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data('parse description', api.json.output({})),
+      gerrit_change(),
+      default_builders(recipe_affected=False),
       api.post_process(Filter('exiting')),
   )
 
   yield api.test(
       'recipe_roller',
       api.properties.tryserver(repo_name='build'),
-      led_get_builder('luci.chromium.try:linux-rel'),
-      led_launch('luci.chromium.try:linux-rel'),
-      analyze('luci.chromium.try:linux-rel', None),
-      git_diff('luci.chromium.try:linux-rel', [
-          'random/file.py',
-          'infra/config/recipes.cfg',
-      ]),
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', None),
-      git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
-          'random/file.py',
-          'infra/config/recipes.cfg',
-      ]),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': 'nothing important'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data('parse description', api.json.output({})),
+      gerrit_change(),
+      default_builders(
+          recipe_affected=False,
+          affected_files=[
+              'random/file.py',
+              'infra/config/recipes.cfg',
+          ]),
   )
 
   yield api.test(
       'manual_roll_with_changes',
       api.properties.tryserver(repo_name='build'),
-      led_get_builder('luci.chromium.try:linux-rel'),
-      analyze('luci.chromium.try:linux-rel', 'foo_recipe'),
-      led_launch('luci.chromium.try:linux-rel'),
-      git_diff('luci.chromium.try:linux-rel', [
+      gerrit_change(),
+      default_builders(affected_files=[
           'random/file.py',
           'infra/config/recipes.cfg',
       ]),
-      led_get_builder('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      analyze('luci.chromium.try:win10_chromium_x64_rel_ng', 'foo_recipe'),
-      led_launch('luci.chromium.try:win10_chromium_x64_rel_ng'),
-      git_diff('luci.chromium.try:win10_chromium_x64_rel_ng', [
-          'random/file.py',
-          'infra/config/recipes.cfg',
-      ]),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': 'nothing important'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data('parse description', api.json.output({})),
   )
 
   yield api.test(
       'analyze_failure',
       api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
       led_get_builder('luci.chromium.try:linux-rel'),
       api.step_data(
           prefix('luci.chromium.try:linux-rel') + 'analyze foo_recipe',
           api.json.output({
               'error': 'Bad analyze!!!!',
-              'invalid_recipes': ['foo_recipe'],
+              'invalid_recipes': [RECIPE],
           }),
           retcode=1),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': 'nothing important'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data('parse description', api.json.output({})),
       api.post_process(
           Filter(prefix('luci.chromium.try:linux-rel') + 'recipe invalid')),
   )
@@ -399,25 +349,7 @@ def GenTests(api):
   yield api.test(
       'custom_builder',
       api.properties.tryserver(repo_name='build'),
-      api.override_step_data(
-          'gerrit changes',
-          api.json.output([{
-              'revisions': {
-                  1: {
-                      '_number': 12,
-                      'commit': {
-                          'message': BUILDER_FOOTER + ': arbitrary.blah'
-                      }
-                  }
-              }
-          }])),
-      api.override_step_data(
-          'parse description',
-          api.json.output({
-              BUILDER_FOOTER: ['arbitrary.blah']
-          })),
-      led_get_builder('arbitrary.blah'),
-      analyze('arbitrary.blah', 'foo_recipe'),
-      led_launch('arbitrary.blah'),
+      gerrit_change(footer_builder='arbitrary.blah'),
+      test_builder('arbitrary.blah'),
       api.post_process(Filter(prefix('arbitrary.blah') + 'led get-builder')),
   )
