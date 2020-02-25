@@ -35,8 +35,9 @@ def RunSteps(api, properties):
   api.gclient.apply_config('android')
   api.chromium_checkout.ensure_checkout({})
 
-  sdk_manager = api.path['checkout'].join(
-      'third_party', 'android_sdk', 'public', 'tools', 'bin', 'sdkmanager')
+  sdk_manager = api.path['checkout'].join('third_party', 'android_sdk',
+                                          'public', 'cmdline-tools', 'latest',
+                                          'bin', 'sdkmanager')
   if not api.path.exists(sdk_manager):
     summary_markdown = (
         'Unable to find sdkmanager at path `%s`' % str(sdk_manager))
@@ -143,10 +144,10 @@ def GenTests(api):
       emulator_package_properties,
       api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(
-          api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'tools', 'bin', 'sdkmanager'),
-          api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'emulator.yaml')),
+          api.path['checkout'].join(
+              'third_party', 'android_sdk', 'public', 'cmdline-tools', 'latest',
+              'bin', 'sdkmanager'), api.path['checkout'].join(
+                  'third_party', 'android_sdk', 'public', 'emulator.yaml')),
       package_version_steps,
       api.post_process(post_process.MustRun, 'emulator.install'),
       api.post_process(post_process.MustRun, 'emulator.create emulator.yaml'),
@@ -175,8 +176,8 @@ def GenTests(api):
       emulator_package_properties,
       api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
-                                                'public', 'tools', 'bin',
-                                                'sdkmanager')),
+                                                'public', 'cmdline-tools',
+                                                'latest', 'bin', 'sdkmanager')),
       api.override_step_data(
           'package versions.list',
           stdout=api.raw_io.output_text(
@@ -196,8 +197,8 @@ def GenTests(api):
       emulator_package_properties,
       api.runtime(is_experimental=False, is_luci=True),
       api.path.exists(api.path['checkout'].join('third_party', 'android_sdk',
-                                                'public', 'tools', 'bin',
-                                                'sdkmanager')),
+                                                'public', 'cmdline-tools',
+                                                'latest', 'bin', 'sdkmanager')),
       package_version_steps,
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
