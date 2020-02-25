@@ -188,11 +188,11 @@ class DartApi(recipe_api.RecipeApi):
       cipd_ensure_file = self.m.cipd.EnsureFile()
     cipd_ensure_file.add_package(
         'infra/tools/luci/vpython/${platform}',
-        'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
+        'git_revision:b01b3ede35a24f76f21420f11d13f234848e5d34',
         'cipd_bin_packages')
     cipd_ensure_file.add_package(
         'infra/tools/luci/vpython-native/${platform}',
-        'git_revision:e317c7d2c17d4c3460ee37524dfce4e1dee4306a',
+        'git_revision:b01b3ede35a24f76f21420f11d13f234848e5d34',
         'cipd_bin_packages')
     cipd_ensure_file.add_package('infra/3pp/tools/cpython/${platform}',
                                  'version:2.7.17.chromium.24',
