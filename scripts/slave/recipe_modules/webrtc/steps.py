@@ -11,13 +11,9 @@ import sys
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
-THIS_DIR = os.path.dirname(__file__)
-sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
-
-from chromium_tests.steps import SwarmingGTestTest
-from chromium_tests.steps import (SwarmingIsolatedScriptTest as
-                                  SwarmingIsolatedTest)
-from chromium_tests.steps import SwarmingTest
+from RECIPE_MODULES.build.chromium_tests.steps import (
+    SwarmingGTestTest, SwarmingIsolatedScriptTest as SwarmingIsolatedTest,
+    SwarmingTest)
 
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
@@ -123,11 +119,16 @@ def generate_tests(api, phase, bot):
                 '--save_worst_frame',
                 '--nologs',
             ]))
+    assert all([
+        isinstance(t, SwarmingAndroidPerfTest) for t in tests
+    ]), ('Watch out. Android perf tasks are very picky about flags, so you '
+         'need Android-specific tasks here.')
 
   if test_suite == 'android':
     tests += [
         AndroidTest('AppRTCMobile_test_apk'),
         AndroidTest('android_instrumentation_test_apk'),
+
         AndroidTest('audio_decoder_unittests'),
         AndroidTest('common_audio_unittests'),
         AndroidTest('common_video_unittests'),
@@ -141,7 +142,9 @@ def generate_tests(api, phase, bot):
         AndroidTest('tools_unittests'),
         AndroidTest('video_engine_tests', shards=4),
         AndroidTest('webrtc_nonparallel_tests'),
-        AndroidJunitTest('android_junit_tests'),
+
+        AndroidJunitTest('android_examples_junit_tests'),
+        AndroidJunitTest('android_sdk_junit_tests'),
     ]
 
     if bot.should_test_android_studio_project_generation:
@@ -262,6 +265,19 @@ class AndroidTest(SwarmingGTestTest):
 
 
 class SwarmingAndroidPerfTest(SwarmingTest):
+  """Custom Android perf test runner for WebRTC.
+
+  We don't want to use Chromium's process_perf_results.py or merge scripts, so
+  we use this class to hook in our own code.
+
+  This class isn't a GTest-based runner like for the normal tests. This is
+  because WebRTC is the only team doing C++ perf tests on Android. We need this
+  to be a basic swarming test because android_test_runner.py can't handle the
+  --isolated-script-test-output flag that is passed to swarmed isolated tests
+  (note, this is NOT the same as isolated-script-test-perf-output!), and the
+  swarmed GTest class does not have the capability to do perf uploads.
+  """
+
   def __init__(self, test, args=None, shards=1, cipd_packages=None,
                idempotent=False, **kwargs):
     super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
@@ -303,13 +319,18 @@ class SwarmingAndroidPerfTest(SwarmingTest):
 
 
 class SwarmingPerfTest(SwarmingIsolatedTest):
+  """Custom swarmed test runner for WebRTC.
 
-  def __init__(self, *args, **kwargs):
+  We don't want to use Chromium's process_perf_results.py or merge scripts, so
+  we use this class to hook in our own code.
+  """
+
+  def __init__(self, name, *args, **kwargs):
     # Perf tests are not idempotent, because for almost all tests the binary
     # will not return the exact same perf result each time. We want to get those
     # results so the dashboard can properly determine the variance of the test.
     kwargs.setdefault('idempotent', False)
-    super(SwarmingPerfTest, self).__init__(*args, **kwargs)
+    super(SwarmingPerfTest, self).__init__(name, *args, **kwargs)
 
   def validate_task_results(self, api, step_result):
     valid = super(SwarmingPerfTest, self).validate_task_results(
@@ -336,3 +357,7 @@ class IosTest(object):
       self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True
+
+  @property
+  def name(self):
+    return self._name
