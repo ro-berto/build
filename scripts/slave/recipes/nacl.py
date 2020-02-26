@@ -78,6 +78,8 @@ def _AnnotatedStepsSteps(api, got_revision):
           str(api.repo_resource('site_config'))
       ]),
   }
+  if api.platform.is_mac:
+    env['FORCE_MAC_TOOLCHAIN'] = '1'
   # Set up env for the triggered builders.
   if api.buildbucket.builder_name in trigger_map.values():
     env.update({
