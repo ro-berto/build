@@ -918,13 +918,10 @@ class iOSApi(recipe_api.RecipeApi):
     if self.__config.get('additional files'):
       files.extend(self.__config.get('additional files'))
     if self.platform == 'simulator':
-      iossim = self.most_recent_iossim
       cmd.extend([
-        '--iossim', iossim,
         '--platform', '<(platform)',
         '--version', '<(version)',
       ])
-      files.append(iossim)
     isolate_template_contents = {
       'conditions': [
         ['OS == "ios"', {
@@ -1097,8 +1094,3 @@ class iOSApi(recipe_api.RecipeApi):
       'out',
       '%s-%s' % (self.configuration, platform),
     )
-
-  @property
-  def most_recent_iossim(self):
-    """Returns the path to the most recently compiled iossim."""
-    return self.m.path.join(self.most_recent_app_dir, 'iossim')
