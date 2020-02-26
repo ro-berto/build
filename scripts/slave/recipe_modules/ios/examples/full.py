@@ -78,7 +78,7 @@ def GenTests(api):
                     'app': 'fake test 0',
                     'device type': 'fake device 0',
                     'os': '11.0',
-                    'shard size': 2,
+                    'swarming tasks': 3
                 },
                 {
                     'app': 'fake test 1',

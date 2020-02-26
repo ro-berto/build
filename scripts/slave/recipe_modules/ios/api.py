@@ -839,8 +839,11 @@ class iOSApi(recipe_api.RecipeApi):
       return self._get_test_counts_release_app(test_app, ignored_classes)
     return self._get_test_counts_debug_app(test_app, ignored_classes)
 
-  def isolate_earlgrey_test(self, test, shard_size, swarming_tasks,
-                            tmp_dir, isolate_template,
+  def isolate_earlgrey_test(self,
+                            test,
+                            swarming_tasks,
+                            tmp_dir,
+                            isolate_template,
                             bot=None):
     """Isolate earlgrey test into small shards"""
     if 'host' in test:
@@ -858,28 +861,22 @@ class iOSApi(recipe_api.RecipeApi):
     # as well in case we want to shard tests more evenly.
     test_counts = self._get_test_counts(test_app)
 
-    if swarming_tasks:
-      # Stores list of test classes and number of all tests
-      class Shard(object):
-        def __init__(self):
-          self.test_classes = []
-          self.size = 0
+    # Stores list of test classes and number of all tests
+    class Shard(object):
 
-      shards = [Shard() for i in range(swarming_tasks)]
-      # Balances test classes between shards to have
-      # approximately equal number of tests per shard.
-      for test_class, number_of_test_methods in test_counts.most_common():
-        min_shard = min(shards, key=lambda shard: shard.size)
-        min_shard.test_classes.append(test_class)
-        min_shard.size += number_of_test_methods
+      def __init__(self):
+        self.test_classes = []
+        self.size = 0
 
-      sublists = [shard.test_classes for shard in shards]
-    else:
-      # TODO(crbug/1033656): Remove code when all tests use `swarming_tasks`
-      testcases = sorted(test_counts.keys())
-      sublists = [testcases[i: i + shard_size]
-                  for i in range(0, len(testcases), shard_size)]
+    shards = [Shard() for i in range(swarming_tasks)]
+    # Balances test classes between shards to have
+    # approximately equal number of tests per shard.
+    for test_class, number_of_test_methods in test_counts.most_common():
+      min_shard = min(shards, key=lambda shard: shard.size)
+      min_shard.test_classes.append(test_class)
+      min_shard.size += number_of_test_methods
 
+    sublists = [shard.test_classes for shard in shards]
     tasks = []
     bot = bot or self.m.buildbucket.builder_name
     for i, sublist in enumerate(sublists):
@@ -952,15 +949,15 @@ class iOSApi(recipe_api.RecipeApi):
 
     bots_and_tests = [(self.m.buildbucket.builder_name, self.__config['tests'])]
     bots_and_tests.extend(self.__config['triggered tests'].items())
+    # Create swarming tasks with tests per bot.
     for bot, tests in bots_and_tests:
       for test in tests:
-        if ((test.get('shard size') or test.get('swarming tasks'))
-                and 'skip' not in test):
-          tasks += self.isolate_earlgrey_test(test, test.get('shard size', 0),
-                                              test.get('swarming tasks', 0),
-                                              tmp_dir, isolate_template,
-                                              bot=bot)
+        # Split tests to a few bots.
+        if test.get('swarming tasks') and 'skip' not in test:
+          tasks += self.isolate_earlgrey_test(
+              test, test['swarming tasks'], tmp_dir, isolate_template, bot=bot)
         else:
+          # Add tests to a bot.
           tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
           tasks[-1]['buildername'] = bot
 

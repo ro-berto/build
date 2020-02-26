@@ -79,7 +79,7 @@ def GenTests(api):
               'device type': 'fake device',
               'os': '12.1',
               'xctest': True,
-              'shard size': 2,
+              'swarming tasks': 2
           },],
           'triggered by':
               'ios-builder',
