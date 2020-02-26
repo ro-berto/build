@@ -95,6 +95,6 @@ def GenTests(api):
       'no_implied_packages',
       api.properties(pool='chromium.tests.template', task_name='template-task'),
       api.post_process(_StepCommandNotContains, '[trigger] template-task',
-                       ['--cipd-package']),
+                       ['--cipd-package', '--env-prefix']),
       api.post_process(post_process.DropExpectation),
   )

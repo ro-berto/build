@@ -869,8 +869,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # update $PATH
     env_prefixes = dict(task_slice.env_prefixes or {})            # copy it
-    for k, path in IMPLIED_ENV_PREFIXES.iteritems():
-      env_prefixes.setdefault(k, [path])
+    if not task_slice.dimensions.get('pool', '').endswith('.template'):
+      for k, path in IMPLIED_ENV_PREFIXES.iteritems():
+        env_prefixes.setdefault(k, [path])
 
     # Trigger parameters.
     pre_trigger_args = ['trigger']
