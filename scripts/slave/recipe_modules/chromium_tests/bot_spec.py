@@ -125,24 +125,37 @@ class BotSpec(FieldMapping):
       A new BotSpec instance with fields set to the values passed in kwargs and
       all other fields set to their defaults.
     """
-    return cls(**kwargs)
-
-  def __attrs_post_init__(self):
-    bot_type = self.bot_type or BUILDER_TESTER
-
-    if bot_type == TESTER:
-      assert self.parent_buildername is not None, (
-          'Tester-only bot must specify a parent builder')
-
     def get_filtered_attrs(*attributes):
-      return [a for a in attributes if getattr(self, a) is not None]
+      return [a for a in attributes if a in kwargs]
 
+    bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type not in BUILDER_TYPES:
       invalid_attrs = get_filtered_attrs('compile_targets',
                                          'add_tests_as_compile_targets')
       assert not invalid_attrs, (
           "The following fields are ignored unless 'bot_type' is one of {}: {}"
           .format(BUILDER_TYPES, invalid_attrs))
+
+    if not kwargs.get('archive_build'):
+      invalid_attrs = get_filtered_attrs('gs_bucket', 'gs_acl', 'gs_build_name')
+      assert not invalid_attrs, (
+          'The following fields are ignored unless '
+          "'archive_build' is set to True: {}".format(invalid_attrs))
+
+    if not kwargs.get('cf_archive_build'):
+      invalid_attrs = get_filtered_attrs('cf_gs_bucket', 'cf_archive_name',
+                                         'cf_gs_acl',
+                                         'cf_archive_subdir_suffix')
+      assert not invalid_attrs, (
+          'The following fields are ignored unless '
+          "'cf_archive_build' is set to True: {}".format(invalid_attrs))
+
+    return cls(**kwargs)
+
+  def __attrs_post_init__(self):
+    if self.bot_type == TESTER:
+      assert self.parent_buildername is not None, (
+          'Tester-only bot must specify a parent builder')
 
     if self.parent_mastername:
       assert self.parent_buildername, ("'parent_buildername' must be provided "
@@ -151,25 +164,14 @@ class BotSpec(FieldMapping):
     if self.archive_build:
       assert self.gs_bucket, (
           "'gs_bucket' must be provided when 'archive_build' is True")
-    else:
-      invalid_attrs = get_filtered_attrs('gs_bucket', 'gs_acl', 'gs_build_name')
-      assert not invalid_attrs, (
-          'The following fields are ignored unless '
-          "'archive_build' is set to True: {}".format(invalid_attrs))
 
     if self.cf_archive_build:
       assert self.cf_gs_bucket, (
           "'cf_gs_bucket' must be provided when 'cf_archive_build' is True")
-    else:
-      invalid_attrs = get_filtered_attrs('cf_gs_bucket', 'cf_archive_name',
-                                         'cf_gs_acl',
-                                         'cf_archive_subdir_suffix')
-      assert not invalid_attrs, (
-          'The following fields are ignored unless '
-          "'cf_archive_build' is set to True: {}".format(invalid_attrs))
 
   # The type of the bot
-  bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER], default=None)
+  bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER],
+                         default=BUILDER_TESTER)
   # An optional mastername of the bot's parent builder - if parent_buildername
   # is provided and parent_mastername is not, the parent's mastername is the
   # same as the bot associated with this spec
@@ -180,19 +182,21 @@ class BotSpec(FieldMapping):
   # The name of the config to use for the chromium recipe module
   chromium_config = attrib(str, default=None)
   # The names of additional configs to apply for the chromium recipe module
-  chromium_apply_config = sequence_attrib(str, default=None)
+  chromium_apply_config = sequence_attrib(str, default=())
   # The keyword arguments used when setting the config for the chromium recipe
   # module
-  chromium_config_kwargs = mapping_attrib(str, default=None)
+  chromium_config_kwargs = mapping_attrib(str, default={})
+  # The name of the config to use for the chromium_tests recipe module
+  chromium_tests_config = attrib(str, default='chromium')
   # The name of additional configs to apply for the chromium_tests recipe module
-  chromium_tests_apply_config = sequence_attrib(str, default=None)
+  chromium_tests_apply_config = sequence_attrib(str, default=())
   # The name of the config to use for the gclient recipe module
   gclient_config = attrib(str, default=None)
   # The names of additional configs to apply for the gclient recipe module
-  gclient_apply_config = sequence_attrib(str, default=None)
+  gclient_apply_config = sequence_attrib(str, default=())
   # The keyword arguments used when setting the config for the gclient recipe
   # module
-  gclient_config_kwargs = mapping_attrib(str, default=None)
+  gclient_config_kwargs = mapping_attrib(str, default={})
   # Used in branch official continuous specs to control where a buildspec is
   # retrieved from
   # TODO(gbeaty) Clean this up if possible, the use of this field is circuitous:
@@ -203,7 +207,7 @@ class BotSpec(FieldMapping):
   # The name of the config to use for the android recipe module
   android_config = attrib(str, default=None)
   # The names of additional configs to apply for the android recipe module
-  android_apply_config = sequence_attrib(str, default=None)
+  android_apply_config = sequence_attrib(str, default=())
   # The name of the config to use for the test_results recipe module
   test_results_config = attrib(str, default=None)
 
@@ -212,7 +216,7 @@ class BotSpec(FieldMapping):
   # Override for the default priority used when creating swarming tasks
   swarming_default_priority = attrib(int, default=None)
   # Dimensions to apply to all created swarming tasks
-  swarming_dimensions = mapping_attrib(str, default=None)
+  swarming_dimensions = mapping_attrib(str, default={})
   # URL to override the swarming server to use
   swarming_server = attrib(str, default=None)
 
@@ -222,7 +226,7 @@ class BotSpec(FieldMapping):
 
   # A bool controlling whether have bot_update perform a clobber of any
   # pre-existing build outputs
-  clobber = attrib(bool, default=None)
+  clobber = attrib(bool, default=False)
   # A path relative to the checkout to the root where the patch should be
   # applied in bot_update
   patch_root = attrib(str, default=None)
@@ -234,29 +238,29 @@ class BotSpec(FieldMapping):
   #    should be applied to
   #  rev_str - A %-format string that the component revision will be applied to
   #    compute the revision
-  set_component_rev = mapping_attrib(str, str, default=None)
+  set_component_rev = mapping_attrib(str, str, default={})
 
   # The names of targets to compile
-  compile_targets = sequence_attrib(str, default=None)
+  compile_targets = sequence_attrib(str, default=())
   # A bool controlling whether tests listed in the specification will be added
   # to the compile targets to build
-  add_tests_as_compile_targets = attrib(bool, default=None)
+  add_tests_as_compile_targets = attrib(bool, default=True)
 
   # A bool controlling whether the legacy package transfer should be used where
   # the build outputs will be uploaded to Google Storage for the purposes of
   # being downloaded by a tester
   # Don't use this unless you know what you're doing, there's little reason to
   # use this for new builders
-  enable_package_transfer = attrib(bool, default=None)
+  enable_package_transfer = attrib(bool, default=False)
 
   # A bool controlling whether tests should be disabled
-  disable_tests = attrib(bool, default=None)
+  disable_tests = attrib(bool, default=False)
   # Tests to be run for this builder
-  tests = sequence_attrib(steps.Test, default=None)
+  tests = sequence_attrib(steps.Test, default=())
   # A bool controlling whether swarming tests should be run serially
   # If not True, requests for test tasks are issued to swarming in parallel
   # Running tests in serial can be useful if you have limited hardware capacity
-  serialize_tests = attrib(bool, default=None)
+  serialize_tests = attrib(bool, default=False)
 
   # A dictionary describing the tests to be run for this builder - has the same
   # format as the value of a single builder's entry in one of the *.json files
@@ -276,11 +280,11 @@ class BotSpec(FieldMapping):
   #  source_side_spec_file - A path relative to chromium.c.source_side_spec_dir
   #    containing the information describing the tests to be run for this
   #    builder
-  testing = mapping_attrib(str, str, default=None)
+  testing = mapping_attrib(str, str, default={})
 
   # A bool controlling whether an isolate is uploaded to the perf dashboard
   # TODO(gbeaty) Seems like this should be perf_isolate_upload
-  perf_isolate_lookup = attrib(bool, default=None)
+  perf_isolate_lookup = attrib(bool, default=False)
 
   # A bool controlling whether to archive the build outputs
   archive_build = attrib(bool, default=None)
@@ -296,7 +300,7 @@ class BotSpec(FieldMapping):
   gs_build_name = attrib(str, default=None)
 
   # A bool controlling whether to archive the build outputs for Clusterfuzz
-  cf_archive_build = attrib(bool, default=None)
+  cf_archive_build = attrib(bool, default=False)
   # The bucket to archive the build to
   # Must be provided when cf_archive_build is True
   # Cannot be provided when cf_archive_build is not True
@@ -311,7 +315,7 @@ class BotSpec(FieldMapping):
   # Suffix to apply to the subdirectory within the bucket the archived is
   # uploaded to
   # Cannot be provided when cf_archive_build is not True
-  cf_archive_subdir_suffix = attrib(str, default=None)
+  cf_archive_subdir_suffix = attrib(str, default='')
 
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
@@ -339,7 +343,5 @@ class BotSpec(FieldMapping):
     """
     for k, v in kwargs.iteritems():
       current = getattr(self, k)
-      if current is None:
-        current = ()
       kwargs[k] = itertools.chain(current, v)
     return self.evolve(**kwargs)

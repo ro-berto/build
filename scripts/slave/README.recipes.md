@@ -4463,7 +4463,7 @@ linked by commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#5): [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/set_up_swarming.py#21)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
@@ -4503,7 +4503,7 @@ linked by commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#12): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#33)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_spec.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/builders](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/builders.py#19): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

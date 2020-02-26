@@ -35,30 +35,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     bot_config = bot_config_module.BotConfig(builders.BUILDERS, bot_mirrors)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
-        bot_config.get('testing', {}).get('platform'),
-        bot_config.get(
-            'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
-
-  @staticmethod
-  def bot_config(
-      builder_dict,
-      mastername='test_mastername',
-      buildername='test_buildername'):
-    """Returns a synthesized BotConfig instance based on |builder_dict|.
-
-    This makes it possible to test APIs taking a bot config without
-    referencing production data.
-    """
-    return bot_config_module.BotConfig({
-        mastername: {
-            'builders': {
-                buildername: builder_dict
-            }
-        }
-    }, [{
-        'mastername': mastername,
-        'buildername': buildername
-    }])
+        bot_config.testing.get('platform'),
+        bot_config.chromium_config_kwargs.get('TARGET_BITS', 64))
 
   def read_source_side_spec(self, mastername, contents, step_prefix=None,
                             step_suffix=None):

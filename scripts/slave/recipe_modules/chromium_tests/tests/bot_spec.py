@@ -13,78 +13,12 @@ DEPS = [
     'recipe_engine/assertions',
 ]
 
-EMPTY_ATTR_DICT = freeze({k: None for k in attr.fields_dict(bot_spec.BotSpec)})
-
-
-def _attr_dict(spec):
-  """A dictionary of the fields of the spec with their actual values.
-
-  Arguments:
-    spec - The BotSpec object to get the attribute dict for.
-  Returns:
-    A dictionary of the spec's fields: keys are the name of the field, value is
-    the value of the field. In contrast to the mapping implementation for
-    BotSpec, fields with a value of None will be present in the dict.
-  """
-  # retain_collection_types prevents converting tuples back to sets
-  return attr.asdict(spec, retain_collection_types=True)
-
 
 def RunSteps(api):
   api.assertions.maxDiff = None
 
-  sentinel = object()
-
-  # Test creation of an empty spec
-  empty_spec = bot_spec.BotSpec.create()
-  api.assertions.assertEqual(_attr_dict(empty_spec), EMPTY_ATTR_DICT)
-  # Test dict representation
-  api.assertions.assertEqual(dict(empty_spec), {})
-  api.assertions.assertIs(empty_spec.get('bot_type', sentinel), sentinel)
-
-  # Test creation of a non-empty spec
-  spec = bot_spec.BotSpec.create(
-      bot_type=bot_spec.BUILDER,
-      chromium_config='chromium_config',
-      chromium_apply_config=[
-          'chromium_apply_config1', 'chromium_apply_config2'
-      ],
-      chromium_config_kwargs={
-          'kwarg1': 'value1',
-          'kwarg2': 'value2'
-      },
-      clobber=True,
-      set_component_rev={
-          'component1': 'rev1',
-          'component2': 'rev2',
-      },
-  )
-  d = {
-      'bot_type':
-          bot_spec.BUILDER,
-      'chromium_config':
-          'chromium_config',
-      'chromium_apply_config': ('chromium_apply_config1',
-                                'chromium_apply_config2'),
-      'chromium_config_kwargs': {
-          'kwarg1': 'value1',
-          'kwarg2': 'value2'
-      },
-      'clobber':
-          True,
-      'set_component_rev': {
-          'component1': 'rev1',
-          'component2': 'rev2',
-      },
-  }
-  expected_attr_dict = dict(EMPTY_ATTR_DICT)
-  expected_attr_dict.update(d)
-  api.assertions.assertEqual(_attr_dict(spec), expected_attr_dict)
-  # Test dict representation
-  api.assertions.assertEqual(dict(spec), d)
-  api.assertions.assertEqual(spec.get('bot_type', sentinel), bot_spec.BUILDER)
-
   # Test evolve method
+  empty_spec = bot_spec.BotSpec.create()
   api.assertions.assertIsNone(empty_spec.chromium_config)
 
   spec = empty_spec.evolve(chromium_config='foo')
@@ -97,17 +31,17 @@ def RunSteps(api):
   api.assertions.assertIsNone(empty_spec.chromium_config)
 
   # Test extend method
-  api.assertions.assertIsNone(empty_spec.chromium_apply_config)
+  api.assertions.assertEqual(empty_spec.chromium_apply_config, ())
 
   spec = empty_spec.extend(chromium_apply_config=['foo', 'bar'])
   api.assertions.assertEqual(spec.chromium_apply_config, ('foo', 'bar'))
-  api.assertions.assertIsNone(empty_spec.chromium_apply_config)
+  api.assertions.assertEqual(empty_spec.chromium_apply_config, ())
 
   spec2 = spec.extend(chromium_apply_config=['baz', 'shaz'])
   api.assertions.assertEqual(spec2.chromium_apply_config,
                              ('foo', 'bar', 'baz', 'shaz'))
   api.assertions.assertEqual(spec.chromium_apply_config, ('foo', 'bar'))
-  api.assertions.assertIsNone(empty_spec.chromium_apply_config)
+  api.assertions.assertEqual(empty_spec.chromium_apply_config, ())
 
   # Test validation ************************************************************
 
@@ -139,21 +73,6 @@ def RunSteps(api):
         compile_targets=['foo', 'bar'],
         add_tests_as_compile_targets=False,
     )
-  api.assertions.assertEqual(caught.exception.message, message)
-
-  with api.assertions.assertRaises(AssertionError) as caught:
-    tester_spec.evolve(
-        parent_buildername='fake-builder',
-        compile_targets=['foo', 'bar'],
-        add_tests_as_compile_targets=False,
-    )
-  api.assertions.assertEqual(caught.exception.message, message)
-
-  message = (
-      "The following fields are ignored unless 'bot_type' is one of {}: {}"
-      .format(bot_spec.BUILDER_TYPES, ['compile_targets']))
-  with api.assertions.assertRaises(AssertionError) as caught:
-    tester_spec.extend(compile_targets=['foo', 'bar'])
   api.assertions.assertEqual(caught.exception.message, message)
 
   # parent_mastername validations **********************************************
@@ -203,10 +122,6 @@ def RunSteps(api):
     )
   api.assertions.assertEqual(caught.exception.message, message)
 
-  with api.assertions.assertRaises(AssertionError) as caught:
-    archive_build_spec.evolve(archive_build=False)
-  api.assertions.assertEqual(caught.exception.message, message)
-
   # cf_archive_build validations ***********************************************
   cf_archive_build_spec = bot_spec.BotSpec.create(
       cf_archive_build=True,
@@ -239,10 +154,6 @@ def RunSteps(api):
         cf_archive_name='archive-name',
         cf_archive_subdir_suffix='archive-subdir-suffix',
     )
-  api.assertions.assertEqual(caught.exception.message, message)
-
-  with api.assertions.assertRaises(AssertionError) as caught:
-    cf_archive_build_spec.evolve(cf_archive_build=False)
   api.assertions.assertEqual(caught.exception.message, message)
 
 

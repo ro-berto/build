@@ -9,7 +9,7 @@ import sys
 
 from recipe_engine.types import freeze
 
-from . import bot_spec
+from . import bot_spec as bot_spec_module
 
 from RECIPE_MODULES.build import chromium
 
@@ -23,6 +23,9 @@ class BotConfig(object):
 
   BotConfig wraps multiple bot specs and provides the means for getting values
   in a manner that ensures they are compatible between all of the wrapped specs.
+  BotConfig overrides attribute access so that attempting to access any
+  attribute that is defined on the specs returns the value on the specs, raising
+  an exception if the value is inconsistent between the specs.
   """
 
   def __init__(self, bots_dict, builder_ids_or_bot_mirrors):
@@ -32,7 +35,7 @@ class BotConfig(object):
       builders = master_config.get('builders', {})
       for builder_name, spec in builders.iteritems():
         try:
-          new_spec = bot_spec.BotSpec.normalize(spec)
+          new_spec = bot_spec_module.BotSpec.normalize(spec)
         except Exception as e:
           # Re-raise the exception with information that identifies the builder
           # dict that is problematic
@@ -58,7 +61,8 @@ class BotConfig(object):
     assert len(builder_ids_or_bot_mirrors) >= 1
 
     self._bot_mirrors = tuple(
-        bot_spec.BotMirror.normalize(b) for b in builder_ids_or_bot_mirrors)
+        bot_spec_module.BotMirror.normalize(b)
+        for b in builder_ids_or_bot_mirrors)
 
     for spec in self._bot_mirrors:
       m = spec.builder_id.master
@@ -79,7 +83,7 @@ class BotConfig(object):
     return self._bot_mirrors
 
   def get_bot_type(self, builder_id):
-    return self._get(builder_id, 'bot_type', bot_spec.BUILDER_TESTER)
+    return self._get(builder_id, 'bot_type', bot_spec_module.BUILDER_TESTER)
 
   def _consistent_get(self, getter, name, default=None):
     # This logic must be kept in sync with checkConsistentGet in
@@ -106,6 +110,19 @@ class BotConfig(object):
 
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
+
+  def __getattr__(self, attr):
+    per_builder_values = {}
+    for builder_id in self.builder_ids:
+      bot_spec = self._bots_dict[builder_id.master]['builders'][builder_id
+                                                                .builder]
+      value = getattr(bot_spec, attr)
+      per_builder_values[builder_id] = value
+    values = list(set(per_builder_values.values()))
+    assert len(values) == 1, 'Inconsistent value for {!r}:\n  {}'.format(
+        attr, '\n  '.join('{!r}: {!r}'.format(k, v)
+                          for k, v in per_builder_values.iteritems()))
+    return values[0]
 
   def _get_source_side_spec(self, chromium_tests_api, mastername):
     builder_ids = self.builder_ids
