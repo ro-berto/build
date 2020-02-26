@@ -1044,7 +1044,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     bot = self.lookup_bot_metadata(builders)
-    self._report_builders(bot.settings)
     self.configure_build(bot.settings)
     # TODO(crbug.com/1019824): We fetch tags here because |no_fetch_tags|
     # is not specified as True. Since chromium has 10k+ tags this can be slow.
@@ -1055,23 +1054,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     bot_type = bot.settings.get('bot_type')
     if bot_type == bot_spec.TESTER:
-      # Lookup GN args for the associated builder
-      parent_builder_id = chromium.BuilderId.create_for_master(
-          bot.settings.get('parent_mastername', bot.builder_id.master),
-          bot.settings.get('parent_buildername'))
-      parent_bot_config = self.create_bot_config_object([parent_builder_id],
-                                                        builders=builders)
-      parent_chromium_config = self._chromium_config(parent_bot_config)
-      android_version_name, android_version_code = (
-          self.get_android_version_details(parent_bot_config))
-      self.m.chromium.mb_lookup(
-          parent_builder_id,
-          mb_config_path=mb_config_path,
-          chromium_config=parent_chromium_config,
-          use_goma=self._use_goma(parent_chromium_config),
-          android_version_name=android_version_name,
-          android_version_code=android_version_code,
-          name='lookup builder GN args')
+      self._lookup_builder_gn_args(bot, mb_config_path, builders)
 
     compile_targets = self.get_compile_targets(bot.settings, build_config,
                                                build_config.all_tests())
@@ -1098,32 +1081,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.inbound_transfer(bot, update_step, build_config)
 
-    tests = build_config.tests_on(bot.builder_id)
-    if not tests:
-      return
-
-    self.m.chromium_swarming.configure_swarming(
-        'chromium',
-        precommit=False,
-        mastername=bot.builder_id.master,
-        default_priority=bot.settings.get('swarming_default_priority'))
-    test_runner = self.create_test_runner(
-        tests,
-        serialize_tests=bot.settings.get('serialize_tests'),
-        # If any tests export coverage data we want to retry invalid shards due
-        # to an existing issue with occasional corruption of collected coverage
-        # data.
-        retry_invalid_shards=any(
-            t.runs_on_swarming and t.isolate_coverage_data for t in tests),
-    )
-    with self.wrap_chromium_tests(bot.settings, tests):
-      test_failure_summary = test_runner()
-
-      if self.m.code_coverage.using_coverage:
-        self.m.code_coverage.process_coverage_data(tests)
-
-      if test_failure_summary:
-        return test_failure_summary
+    return self._run_tests(bot, build_config)
 
   def outbound_transfer(self, bot, bot_update_step, build_config):
     """Handles the builder half of the builder->tester transfer flow.
@@ -1439,6 +1397,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     settings = self.create_bot_config_object(
         config['bot_ids'], builders=builders)
 
+    self._report_builders(settings)
+
     return BotMetadata(builder_id, config, settings)
 
   def _determine_compilation_targets(self, bot, affected_files, build_config):
@@ -1500,8 +1460,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         Configuration of the build/test.
     """
     bot = self.lookup_bot_metadata(builders, mirrored_bots=mirrored_bots)
-
-    self._report_builders(bot.settings)
 
     # Applies build/test configurations from bot.settings.
     self.configure_build(
@@ -1663,3 +1621,56 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
+
+
+  def _lookup_builder_gn_args(self,
+                              bot_meta_data,
+                              mb_config_path=None,
+                              builders=None):
+    # Lookup GN args for the associated builder
+    parent_builder_id = chromium.BuilderId.create_for_master(
+        bot_meta_data.settings.get('parent_mastername',
+                                   bot_meta_data.builder_id.master),
+        bot_meta_data.settings.get('parent_buildername'))
+    parent_bot_config = self.create_bot_config_object([parent_builder_id],
+                                                      builders=builders)
+    parent_chromium_config = self._chromium_config(parent_bot_config)
+    android_version_name, android_version_code = (
+        self.get_android_version_details(parent_bot_config))
+    self.m.chromium.mb_lookup(
+        parent_builder_id,
+        mb_config_path=mb_config_path,
+        chromium_config=parent_chromium_config,
+        use_goma=self._use_goma(parent_chromium_config),
+        android_version_name=android_version_name,
+        android_version_code=android_version_code,
+        name='lookup builder GN args')
+
+  def _run_tests(self, bot_meta_data, build_config):
+    tests = build_config.tests_on(bot_meta_data.builder_id)
+    if not tests:
+      return
+
+    self.m.chromium_swarming.configure_swarming(
+        'chromium',
+        precommit=False,
+        mastername=bot_meta_data.builder_id.master,
+        default_priority=bot_meta_data.settings.get(
+            'swarming_default_priority'))
+    test_runner = self.create_test_runner(
+        tests,
+        serialize_tests=bot_meta_data.settings.get('serialize_tests'),
+        # If any tests export coverage data we want to retry invalid shards due
+        # to an existing issue with occasional corruption of collected coverage
+        # data.
+        retry_invalid_shards=any(
+            t.runs_on_swarming and t.isolate_coverage_data for t in tests),
+    )
+    with self.wrap_chromium_tests(bot_meta_data.settings, tests):
+      test_failure_summary = test_runner()
+
+      if self.m.code_coverage.using_coverage:
+        self.m.code_coverage.process_coverage_data(tests)
+
+      if test_failure_summary:
+        return test_failure_summary
