@@ -331,65 +331,178 @@ class Tests(unittest.TestCase):
             contents_text=_convert_tidy_diags_to_yaml(tidy_diags),
             tidy_invocation_dir='/tidy'), tidy_diags)
 
-  def test_generate_tidy_actions_actually_builds_everything(self):
-    chunk_size = 2
-    has_built = set()
+  def test_generate_tidy_actions_only_generates_up_to_n_actions_per_src(self):
 
-    def builder(what_to_build):
-      what_to_build = set(what_to_build)
-      self.assertLessEqual(len(what_to_build), chunk_size)
-      self.assertEqual(what_to_build & has_built, set())
-      has_built.update(what_to_build)
-      return []
+    def parse_ninja_deps(_):
+      return [
+          ('foo.o', ['/foo.h', '/foo.cc']),
+          ('bar.o', ['/foo.h', '/bar.cc']),
+      ]
 
-    what_to_build = ['foo.cc', 'bar.cc', 'baz.cc']
-    objects_to_build = [name + '.o' for name in what_to_build]
+    # Each test case is a tuple of `(max_tidy_actions_per_file,
+    # expected_tidy_actions)`.
+    test_cases = [
+        (1, {
+            tidy._TidyAction(
+                cc_file='/foo.cc', target='foo.o', in_dir='/in',
+                flags='whee'): ['/foo.h'],
+        }),
+        (2, {
+            tidy._TidyAction(
+                cc_file='/foo.cc', target='foo.o', in_dir='/in',
+                flags='whee'): ['/foo.h'],
+            tidy._TidyAction(
+                cc_file='/bar.cc', target='bar.o', in_dir='/in',
+                flags='whee'): ['/foo.h'],
+        }),
+    ]
+
+    for max_actions, expected_actions in test_cases:
+      actions, _ = tidy._generate_tidy_actions(
+          out_dir='/out',
+          only_src_files=['/foo.h'],
+          run_ninja=lambda out_dir, phony_targets, object_targets: (),
+          gn_desc=tidy._GnDesc({
+              '//rule': ['/foo.h', '/foo.cc', '/bar.cc'],
+          }),
+          parse_ninja_deps=parse_ninja_deps,
+          compile_commands=[
+              tidy._CompileCommand(
+                  target_name='foo.o',
+                  file_abspath='/foo.cc',
+                  file='foo.cc',
+                  directory='/in',
+                  command='whee',
+              ),
+              tidy._CompileCommand(
+                  target_name='bar.o',
+                  file_abspath='/bar.cc',
+                  file='bar.cc',
+                  directory='/in',
+                  command='whee',
+              ),
+          ],
+          max_tidy_actions_per_file=max_actions)
+
+      self.assertEqual(actions, expected_actions)
+
+  def test_generate_tidy_actions_works_with_cc_files(self):
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      self.assertEqual(out_dir, '/out')
+      self.assertEqual(phony_targets, [])
+      self.assertEqual(object_targets, ['bar.o', 'foo.o'])
+      return ()
+
     compile_commands = [
         tidy._CompileCommand(
-            target_name=obj,
-            file_abspath='/%s' % name,
-            file=name,
+            target_name='foo.o',
+            file_abspath='/foo.cc',
+            file='foo.cc',
             directory='/in',
             command='whee',
-        ) for name, obj in zip(what_to_build, objects_to_build)
+        ),
+        tidy._CompileCommand(
+            target_name='bar.o',
+            file_abspath='/bar.cc',
+            file='bar.cc',
+            directory='/in',
+            command='whee',
+        ),
     ]
 
     actions, failed = tidy._generate_tidy_actions(
-        '/out', ['/%s' % x for x in what_to_build], builder, compile_commands,
-        chunk_size)
+        out_dir='/out',
+        only_src_files=['/foo.cc', '/bar.cc'],
+        run_ninja=run_ninja,
+        gn_desc=tidy._GnDesc({}),
+        parse_ninja_deps=lambda _: (),
+        compile_commands=compile_commands)
     self.assertEqual(failed, [])
-    self.assertEqual(set(objects_to_build), has_built)
     self.assertEqual(
         actions, {
             tidy._TidyAction(
-                cc_file=cmd.file_abspath,
-                target=cmd.target_name,
-                in_dir=cmd.directory,
-                flags=cmd.command): [cmd.file_abspath]
-            for cmd in compile_commands
+                cc_file='/foo.cc', target='foo.o', in_dir='/in',
+                flags='whee'): ['/foo.cc'],
+            tidy._TidyAction(
+                cc_file='/bar.cc', target='bar.o', in_dir='/in',
+                flags='whee'): ['/bar.cc'],
         })
 
-  def test_generate_tidy_actions_doesnt_crash_on_nonexistent_files(self):
+  def test_generate_tidy_actions_includes_headers_in_output(self):
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      self.assertEqual(out_dir, '/out')
+      self.assertEqual(phony_targets, ['my/awesome:target'])
+      self.assertEqual(object_targets, ['bar.o', 'foo.o'])
+      return ()
+
+    compile_commands = [
+        tidy._CompileCommand(
+            target_name='foo.o',
+            file_abspath='/foo.cc',
+            file='foo.cc',
+            directory='/in',
+            command='whee',
+        ),
+        tidy._CompileCommand(
+            target_name='bar.o',
+            file_abspath='/bar.cc',
+            file='bar.cc',
+            directory='/in',
+            command='whee',
+        ),
+    ]
+
+    def parse_ninja_deps(_):
+      return [
+          ('foo.o', ['/foo.h', '/foo.cc']),
+          ('bar.o', ['/bar.cc']),
+      ]
+
+    actions, failed = tidy._generate_tidy_actions(
+        out_dir='/out',
+        only_src_files=['/foo.cc', '/foo.h', '/bar.cc'],
+        run_ninja=run_ninja,
+        gn_desc=tidy._GnDesc({
+            '//my/awesome:target': ['/foo.cc', '/bar.cc', '/baz.cc'],
+        }),
+        parse_ninja_deps=parse_ninja_deps,
+        compile_commands=compile_commands)
+    self.assertEqual(failed, [])
+    self.assertEqual(
+        actions, {
+            tidy._TidyAction(
+                cc_file='/foo.cc', target='foo.o', in_dir='/in',
+                flags='whee'): ['/foo.cc', '/foo.h'],
+            tidy._TidyAction(
+                cc_file='/bar.cc', target='bar.o', in_dir='/in',
+                flags='whee'): ['/bar.cc'],
+        })
+
+  def test_generate_tidy_actions_ignores_nonexistent_files(self):
     self._silence_logs()
 
-    builder_called_with = set()
-
-    def builder(what_to_build):
-      builder_called_with.update(set(what_to_build))
-      return []
-
-    compile_commands = [
-        tidy._CompileCommand(
-            target_name='foo.cc.o',
-            file_abspath='/foo.cc',
-            file='foo.cc',
-            directory='/in',
-            command='whee',
-        )
-    ]
+    def run_ninja(out_dir, phony_targets, object_targets):
+      if phony_targets != ['all']:
+        self.assertEqual(object_targets, ['foo.cc.o'])
+      return ()
 
     actions, failed = tidy._generate_tidy_actions(
-        '/out', ['/foo.cc', '/bar.cc'], builder, compile_commands)
+        out_dir='/out',
+        only_src_files=['/foo.cc', '/bar.cc'],
+        run_ninja=run_ninja,
+        gn_desc=tidy._GnDesc({}),
+        parse_ninja_deps=lambda _: (),
+        compile_commands=[
+            tidy._CompileCommand(
+                target_name='foo.cc.o',
+                file_abspath='/foo.cc',
+                file='foo.cc',
+                directory='/in',
+                command='whee',
+            )
+        ])
     self.assertEqual(failed, [])
     self.assertEqual(
         actions, {
@@ -399,27 +512,31 @@ class Tests(unittest.TestCase):
                 in_dir='/in',
                 flags='whee'): ['/foo.cc'],
         })
-    self.assertEqual(builder_called_with, set(x.target for x in actions))
 
-  def test_generate_tidy_actions_functions_with_no_filter(self):
-    builder_called_with = set()
+  def test_generate_tidy_actions_functions_with_no_src_file_filter(self):
 
-    def builder(what_to_build):
-      builder_called_with.update(set(what_to_build))
-      return []
+    def run_ninja(out_dir, phony_targets, object_targets):
+      self.assertEqual(out_dir, '/out')
+      self.assertEqual(phony_targets, [])
+      self.assertEqual(object_targets, ['foo.cc.o'])
+      return ()
 
-    compile_commands = [
-        tidy._CompileCommand(
-            target_name='foo.cc.o',
-            file_abspath='/foo.cc',
-            file='foo.cc',
-            directory='/in',
-            command='whee',
-        )
-    ]
+    actions, failed = tidy._generate_tidy_actions(
+        out_dir='/out',
+        only_src_files=None,
+        run_ninja=run_ninja,
+        parse_ninja_deps=lambda _: (),
+        gn_desc=tidy._GnDesc({}),
+        compile_commands=[
+            tidy._CompileCommand(
+                target_name='foo.cc.o',
+                file_abspath='/foo.cc',
+                file='foo.cc',
+                directory='/in',
+                command='whee',
+            )
+        ])
 
-    actions, failed = tidy._generate_tidy_actions('/out', None, builder,
-                                                  compile_commands)
     self.assertEqual(failed, [])
     self.assertEqual(
         actions, {
@@ -429,34 +546,32 @@ class Tests(unittest.TestCase):
                 in_dir='/in',
                 flags='whee'): ['/foo.cc'],
         })
-    self.assertEqual(builder_called_with, set(x.target for x in actions))
 
   def test_generate_tidy_actions_reports_failures(self):
     self._silence_logs()
 
-    builder_called_with = set()
+    def run_ninja(out_dir, phony_targets, object_targets):
+      return list(object_targets)
 
-    def builder(what_to_build):
-      builder_called_with.update(set(what_to_build))
-      return list(what_to_build)
-
-    compile_commands = [
-        tidy._CompileCommand(
-            target_name='foo.cc.o',
-            file_abspath='/foo.cc',
-            file='foo.cc',
-            directory='/in',
-            command='whee',
-        )
-    ]
-
-    actions, failed = tidy._generate_tidy_actions('/out', None, builder,
-                                                  compile_commands)
+    actions, failed = tidy._generate_tidy_actions(
+        out_dir='/out',
+        only_src_files=None,
+        run_ninja=run_ninja,
+        parse_ninja_deps=lambda _: (),
+        gn_desc=tidy._GnDesc({}),
+        compile_commands={
+            tidy._CompileCommand(
+                target_name='foo.cc.o',
+                file_abspath='/foo.cc',
+                file='foo.cc',
+                directory='/in',
+                command='whee',
+            )
+        })
     expected_action = tidy._TidyAction(
         cc_file='/foo.cc', target='foo.cc.o', in_dir='/in', flags='whee')
     self.assertEqual(failed, [expected_action])
     self.assertEqual(actions, {expected_action: ['/foo.cc']})
-    self.assertEqual(builder_called_with, set(x.target for x in actions))
 
   def test_run_all_tidy_actions_reports_everything(self):
     self._silence_logs()
@@ -672,6 +787,210 @@ class Tests(unittest.TestCase):
             'failed_src_files': ['src_file.cc'],
             'timed_out_src_files': ['src_file.cc'],
         })
+
+  def test_ninja_deps_parsing_filters_stale_entries(self):
+    test_input = '\n'.join([
+        'obj/foo.o: #deps 43, deps mtime 1579507293554707398 (STALE)',
+        '    ../../tools/cfi/blacklist.txt',
+        '    ../../base/foo_unittest.cc',
+        'obj/bar.o: #deps 43, deps mtime 1579507293554707399 (VALID)',
+        '    ../../tools/cfi/blacklist.txt',
+        '    ../../base/bar_unittest.cc',
+    ])
+
+    output = list(
+        tidy._parse_ninja_deps_output(_to_stringio(test_input), u'/in/dir'))
+    self.assertEqual(output, [
+        ('obj/bar.o', [
+            '/in/dir/../../tools/cfi/blacklist.txt',
+            '/in/dir/../../base/bar_unittest.cc'
+        ]),
+    ])
+
+  def test_gn_desc_parsing_makes_only_file_paths_relative_to_root(self):
+    gn_desc = {
+        '//my_awesome:target': {
+            'sources': ['//awesome.cpp'],
+        },
+    }
+
+    results = tidy._parse_gn_desc_output(gn_desc, '/root')
+    self.assertEqual(results.targets_containing('//awesome.cpp'), ())
+    self.assertEqual(
+        results.targets_containing('/root/awesome.cpp'),
+        ['//my_awesome:target'])
+    self.assertEqual(
+        results.source_files_for_target('//my_awesome:target'),
+        ['/root/awesome.cpp'])
+    self.assertEqual(
+        results.source_files_for_target('//my_awesome:target_v2'), ())
+
+  def test_gn_desc_parsing_gracefully_handles_unknown_paths(self):
+    gn_desc = {
+        '//my_awesome:target': {
+            'sources': ['//awesome.cpp'],
+        },
+    }
+
+    results = tidy._parse_gn_desc_output(gn_desc, '/root')
+    self.assertEqual(results.targets_containing('/doesnt/exist'), ())
+    self.assertEqual(results.source_files_for_target('//doesnt/exist'), ())
+
+  def test_buildable_src_files_returns_identity_if_file_is_buildable(self):
+    cc_to_target_map = {
+        '/foo.gen': ['foo.gen.o'],
+        '/foo.cc': ['foo.cc.o'],
+        '/foo.h': ['foo.h.o'],
+    }
+
+    no_desc = tidy._GnDesc({})
+    for target in cc_to_target_map:
+      self.assertEqual(
+          tidy._buildable_src_files_for(target, cc_to_target_map, no_desc),
+          [target])
+
+  def test_buildable_src_files_returns_nothing_if_nonbuildable_nonheader(self):
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+    }
+
+    no_desc = tidy._GnDesc({})
+    self.assertEqual(
+        tidy._buildable_src_files_for('/foo.inc', cc_to_target_map, no_desc),
+        [])
+
+  def test_buildable_src_files_returns_naive_rename_for_headers(self):
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+    }
+
+    no_desc = tidy._GnDesc({})
+    self.assertEqual(
+        tidy._buildable_src_files_for('/foo.h', cc_to_target_map, no_desc),
+        ['/foo.cc'])
+
+  def test_perform_build_builds_all_src_phony_and_object_targets(self):
+    self._silence_logs()
+
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+        '/bar.cc': ['bar.o'],
+    }
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      self.assertEqual(phony_targets, ['path/to/my:targ'])
+      self.assertEqual(sorted(object_targets), ['bar.o', 'foo.o'])
+      return ()
+
+    tidy._perform_build(
+        out_dir='/out',
+        run_ninja=run_ninja,
+        parse_ninja_deps=lambda _: [('foo.o', ['/foo.cc', '/foo.h'])],
+        cc_to_target_map=cc_to_target_map,
+        gn_desc=tidy._GnDesc(per_target_srcs={
+            '//path/to/my:targ': ['/foo.cc', '/bar.cc', '/foo.h']
+        }),
+        potential_src_cc_file_deps={
+            '/foo.h': ['/foo.cc', '/bar.cc'],
+        })
+
+  def test_perform_builds_falls_back_to_all_if_deps_werent_found(self):
+    self._silence_logs()
+
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+        '/bar.cc': ['bar.o'],
+        '/baz.cc': ['baz.o'],
+    }
+
+    built_objects = []
+    built_targets = []
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      built_targets.append(phony_targets)
+      built_objects.append(object_targets)
+      return ()
+
+    tidy._perform_build(
+        out_dir='/out',
+        run_ninja=run_ninja,
+        parse_ninja_deps=lambda _: [('foo.o', ['/foo.cc'])],
+        cc_to_target_map=cc_to_target_map,
+        gn_desc=tidy._GnDesc(per_target_srcs={
+            '//path/to/my:targ': ['/foo.cc', '/foo.h'],
+        }),
+        potential_src_cc_file_deps={
+            '/foo.h': ['/foo.cc'],
+        })
+
+    self.assertEqual(built_objects, [['foo.o'], []])
+    self.assertEqual(built_targets, [['path/to/my:targ'], ['all']])
+
+  def test_perform_build_reported_dependency_information_is_correct(self):
+    self._silence_logs()
+
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+        '/bar.cc': ['bar.o'],
+        '/baz.cc': ['baz.o'],
+    }
+
+    src_file_to_target_map, _ = tidy._perform_build(
+        out_dir='/out',
+        run_ninja=lambda out_dir, phony_targets, object_targets: (),
+        parse_ninja_deps=lambda _: [
+            ('foo.o', ['/foo.cc', '/foo.h']),
+            ('bar.o', ['/bar.cc', '/foo.h']),
+            ('baz.o', ['/baz.cc']),],
+        cc_to_target_map=cc_to_target_map,
+        gn_desc=tidy._GnDesc(per_target_srcs={
+            '//path/to/my:targ': ['/foo.cc', '/foo.h', '/bar.cc', '/baz.cc'],
+        }),
+        potential_src_cc_file_deps={
+            '/foo.h': ['/foo.cc', '/bar.cc', '/baz.cc'],
+        })
+
+    self.assertEqual(src_file_to_target_map, {
+        '/foo.h': {'foo.o', 'bar.o'},
+    })
+
+  def test_perform_build_includes_dep_info_from_build_of_all(self):
+    self._silence_logs()
+
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+        '/bar.cc': ['bar.o'],
+        '/baz.cc': ['baz.o'],
+    }
+
+    built_objects = set()
+    built_targets = set()
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      built_targets.update(phony_targets)
+      built_objects.update(object_targets)
+      return ()
+
+    def parse_ninja_deps(out_dir):
+      self.assertEqual(out_dir, '/out')
+      if 'all' in built_targets:
+        return [('foo.o', ['/foo.cc', '/foo.h'])]
+      return ()
+
+    src_file_to_target_map, _ = tidy._perform_build(
+        out_dir='/out',
+        run_ninja=run_ninja,
+        parse_ninja_deps=parse_ninja_deps,
+        cc_to_target_map=cc_to_target_map,
+        gn_desc=tidy._GnDesc({}),
+        potential_src_cc_file_deps={
+            '/foo.h': [],
+        })
+
+    self.assertIn('all', built_targets)
+    self.assertEqual(src_file_to_target_map, {
+        '/foo.h': {'foo.o'},
+    })
 
 
 if __name__ == '__main__':

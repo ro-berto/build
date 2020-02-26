@@ -32,6 +32,7 @@ import os.path
 import pipes
 import re
 import shlex
+import shutil
 import signal
 import subprocess
 import sys
@@ -74,21 +75,80 @@ def _generate_compile_commands(out_dir):
   return compile_commands
 
 
-def _try_build_targets(out_dir, targets, jobs):
-  # I demand the sum of... one MILLION targets.
-  ninja_cmd = ['ninja', '-k', '1000000']
-  if jobs is not None:
-    ninja_cmd.append('-j%d' % jobs)
-  ninja_cmd.append('--')
-  ninja_cmd += targets
+def _run_ninja(out_dir,
+               phony_targets,
+               object_targets,
+               jobs=None,
+               max_targets_per_invocation=500):
+  """Runs ninja, returning the object_targets that failed to build.
 
-  if subprocess.call(ninja_cmd, cwd=out_dir):
-    logging.warning('Build of all targets failed; falling back to individual '
-                    'builds to figure out the failing targets')
+  Args:
+    out_dir: The directory to perform the build in.
+    phony_targets: 'phonies' to pass into ninja. Errors in building these will
+      not be reported to the caller.
+    object_targets: Object files to build. Errors in building these will be
+      reported to the caller.
+    jobs: How many jobs to use. If None, lets `ninja` pick a value.
+    max_targets_per_invocation: How many targets to build per ninja invocation.
 
-  # Assume that all targets are actual object files, so we don't have to
-  # iteratively `ninja` things to figure out what failed to build.
-  return [x for x in targets if not os.path.isfile(os.path.join(out_dir, x))]
+  Returns:
+    A list of elements in `object_targets` that failed to build.
+  """
+
+  # 500 targets per invocation is arbitrary, but we start hitting OS argv size
+  # limits around 1K in my experience.
+  #
+  # In builds where both are specified, phony_targets are meant to be redundant
+  # with the given object_targets. Essentially, the goal is to get ninja to
+  # build more things per command, since more build actions per command lets us
+  # better saturate our ninja job limit. In practice, on pathological cases
+  # (e.g., base/ header changes where the file isn't built on Linux, but
+  # there's no way to tell), this cuts our total wall-time by over 30% when
+  # goma's cache is hot; more otherwise.
+
+  def make_ninja_command(targets):
+    ninja_cmd = ['ninja', '-k', '1000000']
+    if jobs is not None:
+      ninja_cmd.append('-j%d' % jobs)
+
+    ninja_cmd.append('--')
+    ninja_cmd += targets
+    return ninja_cmd
+
+  phonies_built = 0
+  for phonies in _chunk_iterable(phony_targets, max_targets_per_invocation):
+    logging.info("Building phonies %d-%d/%d...", phonies_built,
+                 phonies_built + len(phonies), len(phony_targets))
+    subprocess.call(make_ninja_command(phonies), cwd=out_dir)
+    phonies_built += len(phonies)
+
+  objects_built = 0
+  objects_implicitly_built = 0
+
+  remaining_objects = object_targets[::-1]
+  while 1:
+    to_build = []
+    while len(to_build) < max_targets_per_invocation and remaining_objects:
+      obj = remaining_objects.pop()
+      if os.path.exists(os.path.join(out_dir, obj)):
+        objects_implicitly_built += 1
+      else:
+        to_build.append(obj)
+
+    if not to_build:
+      break
+
+    logging.info('Building objects %d-%d/%d', objects_built,
+                 objects_built + len(to_build),
+                 len(object_targets) - objects_implicitly_built)
+    subprocess.call(make_ninja_command(to_build), cwd=out_dir)
+    objects_built += len(to_build)
+
+  logging.info('%d/%d objects were successfully implicitly built',
+               objects_implicitly_built, len(object_targets))
+  return [
+      x for x in object_targets if not os.path.isfile(os.path.join(out_dir, x))
+  ]
 
 
 # File path is omitted, since these are intended to be associated with
@@ -437,23 +497,297 @@ def _chunk_iterable(iterable, chunk_size):
     yield this_chunk
 
 
+def _parse_ninja_deps_output(input_stream, cwd):
+  """Parses the output of `ninja -t deps`.
+
+  Yields successive tuples of (object_file, [file_it_depends_on]). Ignores any
+  stale deps entries, since they might have incorrect information.
+
+  `object_file`s are all relative to out_dir; all `file_it_depends_on`s are
+  absolute.
+  """
+  # If True, both `current_target` and `all_deps` are meaningless.
+  #
+  # It adds some complexity, but ninja may dump up to ~1GB of deps, most of
+  # which are stale. Lowering the constant factor there is helpful.
+  current_target_is_stale = True
+  current_target = None
+  all_deps = None
+  for line in input_stream:
+    line = line.rstrip()
+    if not line:
+      continue
+
+    # ninja's deplog format looks like:
+    # obj/foo.o: #deps 43, deps mtime 123456 (STALE)
+    #   ../../file/foo/depends/on/one.h
+    #   ../../file/foo/depends/on/two.h
+    #
+    # As one might infer, '(STALE)' is only printed if the deps are potentially
+    # stale, and the files that `foo.o` depends on are printed with an indent
+    # under the first line.
+    if not line[0].isspace():
+      if not current_target_is_stale:
+        yield current_target, all_deps
+
+      current_target_is_stale = line.endswith('(STALE)')
+      if current_target_is_stale:
+        current_target = None
+        all_deps = None
+      else:
+        current_target = line.rsplit(':', 1)[0]
+        all_deps = []
+      continue
+
+    if not current_target_is_stale:
+      all_deps.append(os.path.join(cwd, line.lstrip()))
+
+  if not current_target_is_stale:
+    yield current_target, all_deps
+
+
+def _parse_ninja_deps(out_dir):
+  """Runs and parses the output of `ninja -t deps`.
+
+  Yields successive tuples of (object_file, [file_it_depends_on]). Ignores any
+  stale deps entries, since they might have incorrect information.
+
+  `object_file`s are all relative to out_dir; all `file_it_depends_on`s are
+  absolute.
+  """
+  command = ['ninja', '-t', 'deps']
+  ninja = subprocess.Popen(command, cwd=out_dir, stdout=subprocess.PIPE)
+  try:
+    for val in _parse_ninja_deps_output(ninja.stdout, out_dir):
+      yield val
+  except:
+    ninja.kill()
+    raise
+  finally:
+    if ninja.poll() is None:
+      # If ninja is in the process of exiting, let it.
+      time.sleep(1)
+      if ninja.poll() is None:
+        ninja.kill()
+        ninja.wait()
+
+  if ninja.returncode:
+    raise subprocess.CalledProcessError(ninja.returncode, command)
+
+
+# `gn desc` dumps a ton of information about the structure of Chromium's build
+# targets. The bits we're most interested in are build targets, and the source
+# files that said build targets contain. This lets us make accurate guesses
+# about relationships between source files (for example, which cc_files are
+# likely to include a particular header file).
+class _GnDesc(object):
+  """Represents the output of `gn desc` in an efficiently-usable manner."""
+
+  def __init__(self, per_target_srcs):
+    self._per_target_srcs = per_target_srcs
+
+    targets_containing = collections.defaultdict(list)
+    for target, srcs in per_target_srcs.items():
+      for src in srcs:
+        targets_containing[src].append(target)
+    self._targets_containing = targets_containing
+
+  def targets_containing(self, src_file):
+    return self._targets_containing.get(src_file, ())
+
+  def source_files_for_target(self, target):
+    return self._per_target_srcs.get(target, ())
+
+
+def _parse_gn_desc_output(full_desc, chromium_root):
+  per_target_srcs = {}
+  for target, val in full_desc.items():
+    all_srcs = val.get('sources')
+    if not all_srcs:
+      continue
+
+    srcs = []
+    for src in all_srcs:
+      assert src.startswith('//'), src
+      srcs.append(os.path.join(chromium_root, src[2:]))
+    per_target_srcs[target] = srcs
+
+  return _GnDesc(per_target_srcs)
+
+
+def _parse_gn_desc(out_dir, chromium_root):
+  logging.info('Parsing gn desc...')
+
+  command = ['gn', 'desc', '.', '//*:*', '--format=json']
+  gn_desc = subprocess.Popen(command, stdout=subprocess.PIPE, cwd=out_dir)
+  full_desc = json.load(gn_desc.stdout)
+  return_code = gn_desc.wait()
+  if return_code:
+    raise subprocess.CalledProcessError(return_code, command)
+  return _parse_gn_desc_output(full_desc, chromium_root)
+
+
+def _buildable_src_files_for(src_file, cc_to_target_map, gn_desc):
+  """Returns cc_files that might depend on the given src_file.
+
+  Args:
+    src_file: the path to the source file we care about.
+    cc_to_target_map: a map of {src_file_abs_path: [target_name]} from
+      compile_commands.json.
+    gn_desc: a _GnDesc describing our build tree.
+
+  Returns:
+    All results are source files that might depend on src_file, in the order of
+    more => less likely to contain src_file. This is presented as a list of
+    lists; the intent is that the first sublist should be explored entirely
+    before the second, etc.
+  """
+  if src_file in cc_to_target_map:
+    return [src_file]
+
+  no_suffix, suffix = os.path.splitext(src_file)
+  if suffix not in ('.h', '.hpp'):
+    return []
+
+  no_suffix = os.path.splitext(src_file)[0]
+  renames = [no_suffix + x for x in ('.cc', '.cpp', '.c')]
+
+  targets = gn_desc.targets_containing(src_file)
+  same_target_srcs = []
+  for targ in targets:
+    same_target_srcs += gn_desc.source_files_for_target(targ)
+
+  seen = set()
+  result = []
+  for path in renames + same_target_srcs:
+    if path in seen:
+      continue
+
+    seen.add(path)
+    if path in cc_to_target_map:
+      result.append(path)
+
+  return result
+
+
+def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
+                   gn_desc, potential_src_cc_file_deps):
+  """Performs a build, collecting info pertinent to clang-tidy's interests.
+
+  Args:
+    out_dir: the out/ directory for us to target with the build.
+    run_ninja: a function that runs `ninja` on the given targets. Takes three
+      kwargs:
+        out_dir: the out dir mentioned above.
+        phony_targets: a list of phony ninja targets to build.
+        object_targets: a list of file-backed ninja targets to build.
+      Builds them all, returns a best-effort subset of `object_targets` that
+      failed.
+    parse_ninja_deps: given an out_dir, yields non-stale ninja deps.
+    cc_to_target_map: a mapping of cc_files -> [targets_built_by_it].
+    potential_src_cc_file_deps: A mapping of
+      {src_files_to_generate_build_artifacts_for:
+        [buildable_srcs_that_may_include_the_key]}.
+      See-also _buildable_src_files_for.
+
+  Returns a tuple of:
+    - Reverse-dependency information (i.e., a mapping of src_files -> targets
+      that included them, as reported by ninja). This reverse-dependency
+      information may not be complete if the build partially failed, or if
+      src_files_to_cc_files_map didn't mention a cc_file that actually
+      #includes a given src_file.
+    - A list of targets that failed to build.
+  """
+
+  def parse_deps(only_targets, interesting_src_files):
+    logging.info('Parsing deps...')
+    src_file_to_target_map = collections.defaultdict(set)
+    for target, src_files in parse_ninja_deps(out_dir):
+      if only_targets is not None and target not in only_targets:
+        continue
+
+      for src_file in src_files:
+        src_file = os.path.abspath(src_file)
+        if src_file in interesting_src_files:
+          src_file_to_target_map[src_file].add(target)
+
+    logging.info('Dep parsing complete')
+    return src_file_to_target_map
+
+  cc_files_to_build = {
+      cc_file for cc_files in potential_src_cc_file_deps.values()
+      for cc_file in cc_files
+  }
+
+  all_targets = set()
+  gn_targets = set()
+  for cc_file in cc_files_to_build:
+    all_targets.update(cc_to_target_map[cc_file])
+    gn_targets.update(
+        x.lstrip('/') for x in gn_desc.targets_containing(cc_file))
+
+  failed_targets = run_ninja(
+      out_dir=out_dir,
+      phony_targets=sorted(gn_targets),
+      object_targets=sorted(all_targets))
+
+  src_file_to_target_map = parse_deps(
+      only_targets=all_targets,
+      interesting_src_files=potential_src_cc_file_deps)
+
+  # As a special case, we know that files depend on themselves. This lets us
+  # more reliably report broken source files (since a failed compilation
+  # might not produce dependency info).
+  for src_file, cc_files in potential_src_cc_file_deps.items():
+    if src_file in cc_files:
+      src_file_to_target_map[src_file].update(cc_to_target_map[src_file])
+
+  still_missing = {
+      src_file for src_file in potential_src_cc_file_deps
+      if src_file not in src_file_to_target_map
+  }
+
+  # Heuristics failed, so some header files don't have a cc_file that depends
+  # on them. Build the world in a last-ditch effort to see if we can find
+  # candidates.
+  if still_missing:
+    logging.info('Missing deps for %r; falling back to a full build',
+                 sorted(still_missing))
+    # It's not super easy (and probably not very valuable?) to pick out all of
+    # the failures here. If any source files fail, let them fail silently.
+    run_ninja(out_dir=out_dir, phony_targets=['all'], object_targets=[])
+
+    missing_deps = parse_deps(
+        only_targets=None, interesting_src_files=still_missing)
+
+    shared = set(src_file_to_target_map.keys()) & set(missing_deps.keys())
+    assert len(shared) == 0, shared
+    src_file_to_target_map.update(missing_deps)
+
+  return src_file_to_target_map, failed_targets
+
+
 def _generate_tidy_actions(out_dir,
                            only_src_files,
-                           build_targets,
+                           run_ninja,
+                           parse_ninja_deps,
+                           gn_desc,
                            compile_commands,
-                           build_chunk_size=500):
+                           max_tidy_actions_per_file=16):
   """Figures out how to lint `only_src_files` and builds their dependencies.
 
   Args:
     out_dir: the out/ directory for us to interrogate.
-    only_src_files: a set of C++ files to look at. If None, we pretend you
+    only_src_files: a list of C++ files to look at. If None, we pretend you
       passed in every C/C++ file in compile_commands, ignoring generated
       targets.
-    build_targets: a function that takes a list of build targets, builds
-      them, and returns a list of ones that failed to build.
+    run_ninja: forwarded to _perform_build; please see comments there.
+    parse_ninja_deps: a function that, given an out_dir, yields non-stale ninja
+      deps.
+    gn_desc: a _GnDesc object describing our world.
     compile_commands: a list of `_CompileCommand`s.
-    build_chunk_size: how many targets to build at once. 500 is likely to not
-      overflow argv limits.
+    max_tidy_actions_per_file: the maximum number of `_TidyAction`s to emit
+      per src_file.
 
   Returns:
     A tuple of:
@@ -469,8 +803,10 @@ def _generate_tidy_actions(out_dir,
         x for x in all_src_files if not x.startswith(out_dir))
 
   cc_to_target_map = collections.defaultdict(list)
+  target_to_cc_map = {}
   for action in compile_commands:
     cc_to_target_map[action.file_abspath].append(action.target_name)
+    target_to_cc_map[action.target_name] = action.file_abspath
 
   target_to_command_map = {}
   for action in compile_commands:
@@ -478,42 +814,53 @@ def _generate_tidy_actions(out_dir,
         'Multiple actions for %s in compile_commands?' % action.target_name
     target_to_command_map[action.target_name] = action
 
+  potential_src_cc_file_deps = {
+      src_file: _buildable_src_files_for(src_file, cc_to_target_map, gn_desc)
+      for src_file in only_src_files
+  }
+
+  src_file_to_target_map, failed_targets = _perform_build(
+      out_dir, run_ninja, parse_ninja_deps, cc_to_target_map, gn_desc,
+      potential_src_cc_file_deps)
+
   actions = collections.defaultdict(list)
   for src_file in only_src_files:
-    targets = cc_to_target_map[src_file]
-    if not targets:
+    dependent_cc_files = {
+        target_to_cc_map[x] for x in src_file_to_target_map[src_file]
+    }
+    if not dependent_cc_files:
       logging.error('No targets found for %r', src_file)
       continue
 
-    for target in targets:
+    priorities = {
+        x: i for i, x in enumerate(potential_src_cc_file_deps[src_file])
+    }
+
+    # Sort by priority; in the case of unexpected dependencies, just use the
+    # file name.
+    dependent_cc_files = sorted(
+        dependent_cc_files,
+        key=lambda x: (priorities.get(x, len(priorities)), x))
+
+    tidy_targets = []
+    for cc_file in dependent_cc_files:
+      for target in cc_to_target_map[cc_file]:
+        tidy_targets.append((cc_file, target))
+
+    if len(tidy_targets) > max_tidy_actions_per_file:
+      tidy_targets = tidy_targets[:max_tidy_actions_per_file]
+
+    for cc_file, target in tidy_targets:
       command = target_to_command_map[target]
       action = _TidyAction(
-          cc_file=src_file,
+          cc_file=cc_file,
           target=target,
           in_dir=command.directory,
           flags=command.command,
       )
       actions[action].append(src_file)
 
-  logging.info('Loaded %d targets', len(actions))
-
-  failing_targets = []
-  targets_built = 0
-  # 500 is arbitrary. If too high, we'll start getting into argv size limits.
-  for actions_subslice in _chunk_iterable(actions, build_chunk_size):
-    logging.info('Building target(s) %d-%d / %d', targets_built,
-                 targets_built + len(actions_subslice), len(actions))
-
-    failed_targets = set(build_targets([x.target for x in actions_subslice]))
-    failing_targets.extend(
-        x for x in actions_subslice if x.target in failed_targets)
-    targets_built += len(actions_subslice)
-
-  if failing_targets:
-    logging.error('Some targets failed: %r; soldiering on anyway...',
-                  sorted(x.target for x in failing_targets))
-
-  return actions, failing_targets
+  return actions, sorted(x for x in actions if x.target in failed_targets)
 
 
 def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
@@ -588,7 +935,7 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
 
     # (If memory use becomes important, there's _a ton_ of duplicated
     # strings in these. Would probably be pretty trivial to intern them.)
-    all_findings |= set(findings)
+    all_findings.update(findings)
 
   pool.join()
 
@@ -717,6 +1064,25 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
   }
 
 
+def _clean_out_dir(out_dir):
+  """Cleans `out_dir`. Only guarantees that args.gn remains."""
+  if not subprocess.call(['ninja', '-t', 'clean'], cwd=out_dir):
+    return
+
+  logging.error('`ninja -t clean` failed; falling back to manual cleaning.')
+  # Sometimes ninja leaves directories hanging around, so `clean` fails. Go
+  # back and get those.
+  for x in os.listdir(out_dir):
+    if x == 'args.gn':
+      continue
+
+    path = os.path.join(out_dir, x)
+    if os.path.isdir(path):
+      shutil.rmtree(path)
+    else:
+      os.unlink(path)
+
+
 def main():
   parser = argparse.ArgumentParser(
       description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -730,7 +1096,8 @@ def main():
       '--base_path',
       required=True,
       help='Base path for all files to output. Any paths that aren\'t '
-      'subdirectories of this will be ignored.')
+      'subdirectories of this will be ignored. Also the root of your gn build '
+      'tree.')
   parser.add_argument(
       '--ninja_jobs', type=int, help='Number of jobs to run `ninja` with')
   parser.add_argument(
@@ -752,6 +1119,9 @@ def main():
   args = parser.parse_args()
 
   base_path = os.path.realpath(args.base_path)
+  if not os.path.isfile(os.path.join(base_path, 'BUILD.gn')):
+    parser.error('base_path should be pointing to a gn build root. Did you '
+                 'mean to point to %s/src/?' % base_path)
 
   # Mututally exclusive arg groups apparently don't like positional args, so
   # emulate that here.
@@ -780,16 +1150,22 @@ def main():
       if not os.path.isfile(src_file):
         sys.exit('Provided src_file at %r does not exist' % src_file)
 
-  compile_commands_location = _generate_compile_commands(out_dir)
   if args.clean:
-    subprocess.check_call(['ninja', '-t', 'clean'], cwd=out_dir)
+    _clean_out_dir(out_dir)
+
+  compile_commands_location = _generate_compile_commands(out_dir)
+
+  def run_ninja(out_dir, phony_targets, object_targets):
+    return _run_ninja(
+        out_dir, phony_targets, object_targets, jobs=args.ninja_jobs)
 
   with open(compile_commands_location) as f:
     tidy_actions, failed_actions = _generate_tidy_actions(
         out_dir,
         only_src_files,
-        build_targets=
-        lambda targets: _try_build_targets(out_dir, targets, args.ninja_jobs),
+        run_ninja,
+        _parse_ninja_deps,
+        gn_desc=_parse_gn_desc(out_dir, base_path),
         compile_commands=list(_parse_compile_commands(f)))
 
   if logging.getLogger().isEnabledFor(logging.DEBUG):
