@@ -7,8 +7,8 @@ import attr
 from recipe_engine import post_process
 from recipe_engine.types import FrozenDict
 
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (
+    FieldMapping, attrib, attrs, enum_attrib, mapping_attrib, sequence_attrib)
 
 DEPS = [
     'recipe_engine/assertions',
@@ -184,6 +184,21 @@ def RunSteps(api):
   # make sure a unicode can be asigned
   x = StrTest(x=u'foo')
   api.assertions.assertEqual(x.x, u'foo')
+
+  # FieldMapping ***************************************************************
+  @attrs()
+  class FieldMappingTest(FieldMapping):
+    x = attrib(str, default=None)
+    y = attrib(str, default=None)
+
+  x = FieldMappingTest()
+  with api.assertions.assertRaises(KeyError):
+    _ = x['x']
+  api.assertions.assertEqual(dict(x), {})
+
+  x = FieldMappingTest(x='foo', y='bar')
+  api.assertions.assertEqual(x['x'], 'foo')
+  api.assertions.assertEqual(dict(x), {'x': 'foo', 'y': 'bar'})
 
 
 def GenTests(api):

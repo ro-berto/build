@@ -11,8 +11,8 @@ from recipe_engine.types import FrozenDict, freeze
 
 from . import steps
 
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (
+    FieldMapping, attrib, attrs, enum_attrib, mapping_attrib, sequence_attrib)
 from RECIPE_MODULES.build import chromium
 
 BUILDER = 'builder'
@@ -87,7 +87,7 @@ class BotMirror(object):
 
 # TODO(gbeaty) Change accesses to use . access and remove the mapping
 @attrs()
-class BotSpec(collections.Mapping):
+class BotSpec(FieldMapping):
   """An immutable specification for a bot.
 
   This type provides the means of specifying all of the input values for a bot.
@@ -343,22 +343,3 @@ class BotSpec(collections.Mapping):
         current = ()
       kwargs[k] = itertools.chain(current, v)
     return self.evolve(**kwargs)
-
-  # TODO(gbeaty) Switch users over to accessing attributes directly
-  def __getitem__(self, key):
-    if key in attr.fields_dict(type(self)):
-      value = getattr(self, key)
-      if value is not None:
-        return value
-    raise KeyError(key)
-
-  def _non_none_attrs(self):
-    for k, v in attr.asdict(self).iteritems():
-      if v is not None:
-        yield k
-
-  def __iter__(self):
-    return self._non_none_attrs()
-
-  def __len__(self):
-    return sum(1 for a in self._non_none_attrs())

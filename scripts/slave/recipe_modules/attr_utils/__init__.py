@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 """Utilities for declaring immutable attr types."""
 
+import collections
 import sys
 
 import attr
@@ -171,3 +172,32 @@ def attrs(slots=True, **kwargs):
     return cls
 
   return inner
+
+
+class FieldMapping(collections.Mapping):
+  """Mixin to give attrs-types dict-like access.
+
+  An attrs-type that inherits from this mixin can be treated like a
+  mapping. The mapping will have keys for each of the attrs fields that
+  are not None, with the key being the name of the field.
+
+  This mixin eases transitioning away from raw-dicts to attrs types.
+  """
+
+  def __getitem__(self, key):
+    if key in attr.fields_dict(type(self)):
+      value = getattr(self, key)
+      if value is not None:
+        return value
+    raise KeyError(key)
+
+  def _non_none_attrs(self):
+    for k, v in attr.asdict(self).iteritems():
+      if v is not None:
+        yield k
+
+  def __iter__(self):
+    return self._non_none_attrs()
+
+  def __len__(self):
+    return sum(1 for a in self._non_none_attrs())
