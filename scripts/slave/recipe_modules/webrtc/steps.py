@@ -14,10 +14,7 @@ from recipe_engine import recipe_api
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
-from chromium_tests.steps import SwarmingGTestTest
-from chromium_tests.steps import (SwarmingIsolatedScriptTest as
-                                  SwarmingIsolatedTest)
-from chromium_tests.steps import SwarmingTest
+from chromium_tests import steps
 
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
@@ -52,28 +49,28 @@ def generate_tests(api, phase, bot):
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     tests += [
-        SwarmingIsolatedTest('audio_decoder_unittests'),
-        SwarmingIsolatedTest('common_audio_unittests'),
-        SwarmingIsolatedTest('common_video_unittests'),
-        SwarmingIsolatedTest('low_bandwidth_audio_test'),
-        SwarmingIsolatedTest('modules_tests', shards=2),
-        SwarmingIsolatedTest('modules_unittests', shards=6),
-        SwarmingIsolatedTest('peerconnection_unittests', shards=4),
-        SwarmingIsolatedTest('rtc_media_unittests'),
-        SwarmingIsolatedTest('rtc_pc_unittests'),
-        SwarmingIsolatedTest('rtc_stats_unittests'),
-        SwarmingIsolatedTest('rtc_unittests', shards=6),
-        SwarmingIsolatedTest('slow_tests'),
-        SwarmingIsolatedTest('system_wrappers_unittests'),
-        SwarmingIsolatedTest('test_support_unittests'),
-        SwarmingIsolatedTest('tools_unittests'),
-        SwarmingIsolatedTest('video_engine_tests', shards=4),
-        SwarmingIsolatedTest('webrtc_nonparallel_tests'),
+        steps.SwarmingIsolatedScriptTest('audio_decoder_unittests'),
+        steps.SwarmingIsolatedScriptTest('common_audio_unittests'),
+        steps.SwarmingIsolatedScriptTest('common_video_unittests'),
+        steps.SwarmingIsolatedScriptTest('low_bandwidth_audio_test'),
+        steps.SwarmingIsolatedScriptTest('modules_tests', shards=2),
+        steps.SwarmingIsolatedScriptTest('modules_unittests', shards=6),
+        steps.SwarmingIsolatedScriptTest('peerconnection_unittests', shards=4),
+        steps.SwarmingIsolatedScriptTest('rtc_media_unittests'),
+        steps.SwarmingIsolatedScriptTest('rtc_pc_unittests'),
+        steps.SwarmingIsolatedScriptTest('rtc_stats_unittests'),
+        steps.SwarmingIsolatedScriptTest('rtc_unittests', shards=6),
+        steps.SwarmingIsolatedScriptTest('slow_tests'),
+        steps.SwarmingIsolatedScriptTest('system_wrappers_unittests'),
+        steps.SwarmingIsolatedScriptTest('test_support_unittests'),
+        steps.SwarmingIsolatedScriptTest('tools_unittests'),
+        steps.SwarmingIsolatedScriptTest('video_engine_tests', shards=4),
+        steps.SwarmingIsolatedScriptTest('webrtc_nonparallel_tests'),
     ]
 
   if test_suite == 'webrtc_and_baremetal':
     baremetal_test = functools.partial(
-        SwarmingIsolatedTest,
+        steps.SwarmingIsolatedScriptTest,
         dimensions=bot.config['baremetal_swarming_dimensions'])
 
     tests.append(baremetal_test('video_capture_tests'))
@@ -206,7 +203,7 @@ def generate_tests(api, phase, bot):
 
   if test_suite == 'more_configs':
     if 'no_sctp' in phase:
-      tests.append(SwarmingIsolatedTest('peerconnection_unittests'))
+      tests.append(steps.SwarmingIsolatedScriptTest('peerconnection_unittests'))
 
   return tests
 
@@ -219,8 +216,6 @@ def _MergeFiles(output_dir, suffix):
   return result
 
 
-# TODO(kjellander): Continue refactoring an integrate the classes in the
-# chromium_tests recipe module instead (if possible).
 class Test(object):
   def __init__(self, test, name=None):
     self._test = test
@@ -246,7 +241,8 @@ class PythonTest(Test):
         return api.python(self._test, self._script, self._args)
 
 
-class AndroidTest(SwarmingGTestTest):
+class AndroidTest(steps.SwarmingGTestTest):
+
   def __init__(self, test, **kwargs):
     super(AndroidTest, self).__init__(test,
                                       cipd_packages=ANDROID_CIPD_PACKAGES,
@@ -262,7 +258,8 @@ class AndroidTest(SwarmingGTestTest):
     return _create_test_run_results_dictionary(valid)
 
 
-class SwarmingAndroidPerfTest(SwarmingTest):
+class SwarmingAndroidPerfTest(steps.SwarmingTest):
+
   def __init__(self, test, args=None, shards=1, cipd_packages=None,
                idempotent=False, **kwargs):
     super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
@@ -335,7 +332,7 @@ class SwarmingAndroidPerfTest(SwarmingTest):
     return []
 
 
-class SwarmingPerfTest(SwarmingIsolatedTest):
+class SwarmingPerfTest(steps.SwarmingIsolatedScriptTest):
 
   def __init__(self, *args, **kwargs):
     # Perf tests are not idempotent, because for almost all tests the binary
