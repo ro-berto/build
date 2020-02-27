@@ -31,3 +31,4 @@ DEPS = [
 
 # Forward symbols for other modules to import
 BuilderId = types.BuilderId
+BuilderSpec = types.BuilderSpec

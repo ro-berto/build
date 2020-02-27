@@ -4097,9 +4097,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/configs.py#15)(api):**
 ### *recipes* / [chromium:tests/configure\_bot](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py#8): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py#10): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py#37)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py#38)(api):**
 ### *recipes* / [chromium:tests/gclient](/scripts/slave/recipe_modules/chromium/tests/gclient.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/gclient.py#7): [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
