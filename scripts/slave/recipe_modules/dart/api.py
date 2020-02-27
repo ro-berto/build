@@ -439,7 +439,9 @@ class DartApi(recipe_api.RecipeApi):
             'tools', 'bots', 'post_results_to_pubsub.dart'), '--result_file',
         self.m.raw_io.input_text(results_str), '--auth_token',
         self.m.raw_io.input_text(access_token), '--id',
-        self.m.buildbucket.build.id
+        self.m.buildbucket.build.id, '--base_revision',
+        self.m.bot_update.last_returned_properties.get(
+            'got_revision', 'got_revision property not found')
     ])
 
 

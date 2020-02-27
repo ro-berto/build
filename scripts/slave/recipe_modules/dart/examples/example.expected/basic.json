@@ -1845,7 +1845,9 @@
       "--auth_token",
       "extra.secret.token.should.not.be.logged",
       "--id",
-      "8945511751514863184"
+      "8945511751514863184",
+      "--base_revision",
+      "got_revision property not found"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
