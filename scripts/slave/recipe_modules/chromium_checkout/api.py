@@ -12,6 +12,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # None means "default value".
     self._working_dir = None
 
+  # TODO(gbeaty) Switch callers to use checkout_dir
   @property
   def working_dir(self):
     """Returns parent directory of the checkout.
@@ -21,7 +22,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # TODO(phajdan.jr): assert ensure_checkout has been called.
     return self._working_dir
 
-  def get_checkout_dir(self, bot_config):
+  @property
+  def checkout_dir(self):
     """Returns directory where checkout can be created."""
     # On LUCI, Buildbucket by default maps a per-builder unique directory in
     # as the 'builder' cache. Builders that are intended to share a cache
@@ -38,6 +40,10 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # can end up in cached goma keys/objects; mounting the named cache to an
     # alternate location could result in goma cache bloating.
     return self.m.path['cache'].join('builder')
+
+  # TODO(gbeaty) Switch callers to use checkout_dir
+  def get_checkout_dir(self, bot_config):
+    return self.checkout_dir
 
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None):
     """Returns list of POSIX paths of files affected by patch for "analyze".
@@ -60,9 +66,11 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
       files[i] = self.m.path.relpath(path, relative_to)
     return files
 
-  def ensure_checkout(self, bot_config, **kwargs):
+  def ensure_checkout(self, bot_config=None, **kwargs):
     """Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     """
+    bot_config = bot_config or {}
+
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 

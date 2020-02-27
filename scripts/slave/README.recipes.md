@@ -1107,22 +1107,24 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#63)(self, bot_config, \*\*kwargs):**
+&emsp; **@property**<br>&mdash; **def [checkout\_dir](/scripts/slave/recipe_modules/chromium_checkout/api.py#25)(self):**
+
+Returns directory where checkout can be created.
+
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#69)(self, bot_config=None, \*\*kwargs):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
 
-&mdash; **def [get\_checkout\_dir](/scripts/slave/recipe_modules/chromium_checkout/api.py#24)(self, bot_config):**
+&mdash; **def [get\_checkout\_dir](/scripts/slave/recipe_modules/chromium_checkout/api.py#45)(self, bot_config):**
 
-Returns directory where checkout can be created.
-
-&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#42)(self, relative_to='src/', cwd=None):**
+&mdash; **def [get\_files\_affected\_by\_patch](/scripts/slave/recipe_modules/chromium_checkout/api.py#48)(self, relative_to='src/', cwd=None):**
 
 Returns list of POSIX paths of files affected by patch for "analyze".
 
 Paths are relative to `relative_to` which for analyze should be 'src/'.
 
-&emsp; **@property**<br>&mdash; **def [working\_dir](/scripts/slave/recipe_modules/chromium_checkout/api.py#15)(self):**
+&emsp; **@property**<br>&mdash; **def [working\_dir](/scripts/slave/recipe_modules/chromium_checkout/api.py#16)(self):**
 
 Returns parent directory of the checkout.
 
