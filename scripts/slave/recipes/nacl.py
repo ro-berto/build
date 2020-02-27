@@ -54,13 +54,15 @@ def _PlatformSDK(api):
       yield
 
 def _CheckoutSteps(api):
-  api.gclient.set_config('nacl')
-  result = api.bot_update.ensure_checkout()
+  checkout_env = {'FORCE_MAC_TOOLCHAIN': '1'} if api.platform.is_mac else {}
+  with api.context(env=checkout_env):
+    api.gclient.set_config('nacl')
+    result = api.bot_update.ensure_checkout()
 
-  # HACK(iannucci): bot_update.ensure_checkout should return an actual meaninful
-  # object with actual meaningful semantics.
-  got_revision = result.presentation.properties['got_revision']
-  api.gclient.runhooks()
+    # HACK(iannucci): bot_update.ensure_checkout should return an actual
+    # meaningful object with actual meaningful semantics.
+    got_revision = result.presentation.properties['got_revision']
+    api.gclient.runhooks()
   return got_revision
 
 def _AnnotatedStepsSteps(api, got_revision):
@@ -78,8 +80,6 @@ def _AnnotatedStepsSteps(api, got_revision):
           str(api.repo_resource('site_config'))
       ]),
   }
-  if api.platform.is_mac:
-    env['FORCE_MAC_TOOLCHAIN'] = '1'
   # Set up env for the triggered builders.
   if api.buildbucket.builder_name in trigger_map.values():
     env.update({

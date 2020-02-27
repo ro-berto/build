@@ -17,6 +17,9 @@
       "--revision",
       "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -70,6 +73,9 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/native_client",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -145,7 +151,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_newlib_dbg_asan",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -209,7 +214,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
@@ -256,7 +260,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
@@ -286,7 +289,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
@@ -316,7 +318,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
@@ -344,7 +345,6 @@
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
