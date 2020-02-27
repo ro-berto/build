@@ -28,6 +28,23 @@ SPEC = {
                     'platform': 'linux',
                 },
             ),
+        'Android WebLayer P FYI (rel)':
+            bot_spec.BotSpec.create(
+                chromium_config='android',
+                chromium_apply_config=['mb'],
+                gclient_config='chromium',
+                gclient_apply_config=['android'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'android',
+                },
+                android_config='main_builder',
+                bot_type=bot_spec.BUILDER_TESTER,
+                testing={
+                    'platform': 'linux',
+                },
+            ),
         'Android WebView P FYI (rel)':
             bot_spec.BotSpec.create(
                 chromium_config='android',
