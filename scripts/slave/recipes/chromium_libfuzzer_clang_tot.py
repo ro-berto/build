@@ -6,6 +6,7 @@ import re
 from recipe_engine.types import freeze
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
   'depot_tools/bot_update',
@@ -16,28 +17,28 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'chromium.fyi': {
-    'builders': {
-      'ClangToTLinuxASanLibfuzzer': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clang_tot' ],
-        'gclient_apply_config': ['clang_tot'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
+    'chromium.fyi': {
+        'builders': {
+            'ClangToTLinuxASanLibfuzzer':
+                chromium.BuilderSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clang_tot'],
+                    gclient_apply_config=['clang_tot'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                ),
         },
-      },
     },
-  },
 })
 
 
 def RunSteps(api):
   builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
-  api.bot_update.ensure_checkout(
-      patch_root=bot_config.get('root_override'))
+  api.bot_update.ensure_checkout(patch_root=bot_config.patch_root)
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
@@ -48,8 +49,8 @@ def RunSteps(api):
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
-  config_kwargs = bot_config.get('chromium_config_kwargs', dict())
-  build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
+  build_config = bot_config.chromium_config_kwargs.get('BUILD_CONFIG',
+                                                       'Release')
   build_dir=api.path['start_dir'].join('src', 'out', build_config)
 
   api.step('running empty_fuzzer', [api.path.join(build_dir, 'empty_fuzzer'),

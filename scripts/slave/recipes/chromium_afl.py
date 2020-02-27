@@ -5,6 +5,8 @@
 from recipe_engine.types import freeze
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build.attr_utils import attrs, attrib
+from RECIPE_MODULES.build import chromium
 
 DEPS = [
   'archive',
@@ -19,22 +21,39 @@ DEPS = [
 ]
 
 
+@attrs()
+class AflSpec(chromium.BuilderSpec):
+
+  # Fields without defaults can't be declared when inheriting from a type that
+  # has defaults for any fields
+  # TODO(gbeaty) Once we're on python3, we can switch these to be kwonly and not
+  # specify a default. For now, it's enforced in __attrs_post_init__, which gets
+  # run after the fields are initialized
+  upload_bucket = attrib(str, default=None)
+  upload_directory = attrib(str, default=None)
+
+  def __attrs_post_init__(self):
+    assert self.upload_bucket is not None
+    assert self.upload_directory is not None
+
+
 BUILDERS = freeze({
-  'chromium.fuzz': {
-    'builders': {
-      'Afl Upload Linux ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
+    'chromium.fuzz': {
+        'builders': {
+            'Afl Upload Linux ASan':
+                AflSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-afl',
+                    upload_directory='asan',
+                ),
         },
-        'upload_bucket': 'chromium-browser-afl',
-        'upload_directory': 'asan',
-      },
     },
-  },
 })
 
 
@@ -56,7 +75,7 @@ def RunSteps(api):
   builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   checkout_results = api.bot_update.ensure_checkout(
-      patch_root=bot_config.get('root_override'))
+      patch_root=bot_config.patch_root)
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
@@ -85,12 +104,12 @@ def RunSteps(api):
     return raw_result
 
   api.archive.clusterfuzz_archive(
-          build_dir=api.chromium.output_dir,
-          update_properties=checkout_results.json.output['properties'],
-          gs_bucket=bot_config['upload_bucket'],
-          archive_prefix='afl',
-          archive_subdir_suffix=bot_config['upload_directory'],
-          gs_acl='public-read')
+      build_dir=api.chromium.output_dir,
+      update_properties=checkout_results.json.output['properties'],
+      gs_bucket=bot_config.upload_bucket,
+      archive_prefix='afl',
+      archive_subdir_suffix=bot_config.upload_directory,
+      gs_acl='public-read')
 
 
 def GenTests(api):

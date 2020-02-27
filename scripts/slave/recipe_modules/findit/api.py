@@ -26,15 +26,15 @@ class FinditApi(recipe_api.RecipeApi):
   def get_bot_mirror_for_tester(self, tester_id, builders):
     tester_spec = builders.get(tester_id.master).get('builders',
                                                      {}).get(tester_id.builder)
+    tester_spec = bot_spec.BotSpec.normalize(tester_spec)
 
-    parent_buildername = tester_spec.get('parent_buildername')
-    if parent_buildername is None:
+    if tester_spec.parent_buildername is None:
       return bot_spec.BotMirror.create(
           buildername=tester_id.builder, mastername=tester_id.master)
 
     return bot_spec.BotMirror.create(
-        mastername=tester_spec.get('parent_mastername', tester_id.master),
-        buildername=parent_buildername,
+        mastername=tester_spec.parent_mastername or tester_id.master,
+        buildername=tester_spec.parent_buildername,
         tester=tester_id.builder,
         tester_mastername=tester_id.master)
 
@@ -360,8 +360,9 @@ class FinditApi(recipe_api.RecipeApi):
     if bot_mirror.builder_id != target_tester_id:
       tester_spec = builders.get(target_tester_id.master).get(
           'builders', {}).get(target_tester_id.builder)
+      tester_spec = bot_spec.BotSpec.normalize(tester_spec)
 
-      for key, value in tester_spec.get('swarming_dimensions', {}).iteritems():
+      for key, value in tester_spec.swarming_dimensions.iteritems():
         self.m.chromium_swarming.set_default_dimension(key, value)
 
     # Record the current revision of the checkout and HEAD of the git cache.

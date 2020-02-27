@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 from recipe_engine.types import freeze
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
   'chromium',
   'chromium_checkout',
@@ -17,32 +19,32 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
-  'tryserver.chromium.linux': {
-    'builders': {
-      'linux-libfuzzer-asan-rel': {
-        'chromium_config': 'chromium',
-        'gclient_config': 'chromium',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
+    'tryserver.chromium.linux': {
+        'builders': {
+            'linux-libfuzzer-asan-rel':
+                chromium.BuilderSpec.create(
+                    chromium_config='chromium',
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                ),
         },
-      },
     },
-  },
-  'tryserver.chromium.win': {
-    'builders': {
-      'win-libfuzzer-asan-rel': {
-        'chromium_config': 'chromium_clang',
-        'gclient_config': 'chromium',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
+    'tryserver.chromium.win': {
+        'builders': {
+            'win-libfuzzer-asan-rel':
+                chromium.BuilderSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 64,
+                    },
+                ),
         },
-      },
     },
-  },
 })
 
 INCLUDED_FUZZ_TARGETS = ['//testing/libfuzzer:libfuzzer_main']
@@ -55,7 +57,6 @@ def RunSteps(api):
   with api.chromium.chromium_layout():
     builder_id, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
-    bot_config = {}
     api.chromium_checkout.ensure_checkout(bot_config)
     checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config).join(
         'src')

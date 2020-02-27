@@ -19,7 +19,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
 from . import bot_config as bot_config_module
-from . import bot_spec
+from . import bot_spec as bot_spec_module
 from . import builders as builders_module
 from . import generators
 from . import trybots as trybots_module
@@ -123,10 +123,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _chromium_config(self, bot_config):
     chromium_config = self.m.chromium.make_config(
-        bot_config.get('chromium_config'),
-        **bot_config.get('chromium_config_kwargs', {}))
+        bot_config.chromium_config, **bot_config.chromium_config_kwargs)
 
-    for c in bot_config.get('chromium_apply_config', []):
+    for c in bot_config.chromium_apply_config:
       self.m.chromium.apply_config(c, chromium_config)
 
     return chromium_config
@@ -134,51 +133,49 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
-    buildspec_version = (self.m.properties.get('buildspec_version') or
-                         bot_config.get('buildspec_version'))
+    buildspec_version = (
+        self.m.properties.get('buildspec_version') or
+        bot_config.buildspec_version)
 
-    self.m.chromium.set_config(
-        bot_config.get('chromium_config'),
-        **bot_config.get('chromium_config_kwargs', {}))
-    self.set_config(bot_config.get('chromium_tests_config', 'chromium'))
+    self.m.chromium.set_config(bot_config.chromium_config,
+                               **bot_config.chromium_config_kwargs)
+    self.set_config(bot_config.chromium_tests_config)
 
     self.m.gclient.set_config(
-        bot_config.get('gclient_config'),
+        bot_config.gclient_config,
         BUILDSPEC_VERSION=buildspec_version,
-        **bot_config.get('gclient_config_kwargs', {}))
+        **bot_config.gclient_config_kwargs)
 
     default_test_results_config = (
         'staging_server'
         if self.m.runtime.is_experimental
         else 'public_server')
-    self.m.test_results.set_config(
-        bot_config.get('test_results_config', default_test_results_config))
+    self.m.test_results.set_config(bot_config.test_results_config or
+                                   default_test_results_config)
 
-    if bot_config.get('android_config'):
+    if bot_config.android_config:
       self.m.chromium_android.configure_from_properties(
-          bot_config.get('android_config'),
-          **bot_config.get('chromium_config_kwargs', {}))
+          bot_config.android_config, **bot_config.chromium_config_kwargs)
 
-    for c in bot_config.get('chromium_apply_config', []):
+    for c in bot_config.chromium_apply_config:
       self.m.chromium.apply_config(c)
 
-    for c in bot_config.get('gclient_apply_config', []):
+    for c in bot_config.gclient_apply_config:
       self.m.gclient.apply_config(c)
 
     if self.m.chromium.c.TARGET_CROS_BOARD:
       self.m.gclient.c.solutions[0].custom_vars['cros_board'] = (
           self.m.chromium.c.TARGET_CROS_BOARD)
 
-    for c in bot_config.get('android_apply_config', []):
+    for c in bot_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
 
-    for c in bot_config.get('chromium_tests_apply_config', []):
+    for c in bot_config.chromium_tests_apply_config:
       self.apply_config(c)
 
-    bot_type = override_bot_type or bot_config.get('bot_type',
-                                                   bot_spec.BUILDER_TESTER)
+    bot_type = override_bot_type or bot_config.bot_type
 
-    if bot_config.get('set_component_rev'):
+    if bot_config.set_component_rev:
       # If this is a component build and the main revision is e.g. blink,
       # webrtc, or v8, the custom deps revision of this component must be
       # dynamically set to either:
@@ -187,24 +184,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # (3) 'HEAD' for forced builds with unspecified gitiles commit.
       component_rev = self.m.buildbucket.gitiles_commit.id or 'HEAD'
 
-      if bot_type == bot_spec.TESTER:
+      if bot_type == bot_spec_module.TESTER:
         component_rev = self.m.properties.get(
             'parent_got_revision', component_rev)
-      dep = bot_config.get('set_component_rev')
+      dep = bot_config.set_component_rev
       self.m.gclient.c.revisions[dep['name']] = dep['rev_str'] % component_rev
 
 
   def set_up_swarming(self, bot_config):
     self.m.chromium_swarming.check_client_version()
 
-    if bot_config.get('isolate_server'):
-      self.m.isolate.isolate_server = bot_config.get('isolate_server')
+    if bot_config.isolate_server:
+      self.m.isolate.isolate_server = bot_config.isolate_server
 
-    if bot_config.get('swarming_server'):
-      self.m.chromium_swarming.swarming_server = bot_config.get(
-          'swarming_server')
+    if bot_config.swarming_server:
+      self.m.chromium_swarming.swarming_server = bot_config.swarming_server
 
-    for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
+    for key, value in bot_config.swarming_dimensions.iteritems():
       self.m.chromium_swarming.set_default_dimension(key, value)
 
   def runhooks(self, update_step):
@@ -236,10 +232,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, build_config
 
-  def generate_tests_from_source_side_spec(self, source_side_spec, builder_dict,
-      buildername, mastername, swarming_dimensions,
-      scripts_compile_targets, bot_update_step):
-    tests = builder_dict.get('tests', ())
+  def generate_tests_from_source_side_spec(
+      self, source_side_spec, bot_spec, buildername, mastername,
+      swarming_dimensions, scripts_compile_targets, bot_update_step):
+    tests = bot_spec.tests
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators.ALL_GENERATORS:
       tests = (
@@ -324,7 +320,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   }
 
   def get_android_version_details(self, bot_config, log_details=False):
-    version = bot_config.get('android_version')
+    version = bot_config.android_version
     if not version:
       return None, None
 
@@ -395,14 +391,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
-    bot_type = override_bot_type or bot_config.get('bot_type',
-                                                   bot_spec.BUILDER_TESTER)
+    bot_type = override_bot_type or bot_config.bot_type
 
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
 
-    if bot_type in bot_spec.BUILDER_TYPES:
+    if bot_type in bot_spec_module.BUILDER_TYPES:
       isolated_targets = [
           t.isolate_target
           for t in tests_including_triggered if t.uses_isolate
@@ -454,7 +449,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
-        if bot_config.get('perf_isolate_lookup'):
+        if bot_config.perf_isolate_lookup:
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
               self.m.perf_dashboard.get_change_info([{
@@ -481,14 +476,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     bot_config = build_config.get_bot_config(builder_id)
 
-    bot_type = bot_config.get('bot_type')
-    assert bot_type in bot_spec.BUILDER_TYPES, (
+    bot_type = bot_config.bot_type
+    assert bot_type in bot_spec_module.BUILDER_TYPES, (
         'Called package_build for %s:%s, which is a "%s". '
         'package_build only supports "builder" and "builder_tester". '
         'This is a bug in your recipe.' % (builder_id.master,
                                            builder_id.builder, bot_type))
 
-    if not bot_config.get('cf_archive_build'):
+    if not bot_config.cf_archive_build:
       master_config = build_config.get_master_settings(builder_id.master)
       build_revision = update_step.presentation.properties.get(
           'got_revision',
@@ -553,24 +548,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     bot_config = build_config.get_bot_config(builder_id)
 
-    if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
+    if bot_config.archive_build and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
           'archive_build',
-          bot_config['gs_bucket'],
-          bot_config.get('gs_acl'),
+          bot_config.gs_bucket,
+          bot_config.gs_acl,
           mode='dev',
-          build_name=bot_config.get('gs_build_name'),
+          build_name=bot_config.gs_build_name,
       )
-    if bot_config.get('cf_archive_build') and not self.m.tryserver.is_tryserver:
+    if bot_config.cf_archive_build and not self.m.tryserver.is_tryserver:
       self.m.archive.clusterfuzz_archive(
           build_dir=self.m.chromium.c.build_dir.join(
               self.m.chromium.c.build_config_fs),
           update_properties=update_step.presentation.properties,
-          gs_bucket=bot_config.get('cf_gs_bucket'),
-          gs_acl=bot_config.get('cf_gs_acl'),
-          archive_prefix=bot_config.get('cf_archive_name'),
-          archive_subdir_suffix=bot_config.get('cf_archive_subdir_suffix', ''),
-          revision_dir=bot_config.get('cf_revision_dir'),
+          gs_bucket=bot_config.cf_gs_bucket,
+          gs_acl=bot_config.cf_gs_acl,
+          archive_prefix=bot_config.cf_archive_name,
+          archive_subdir_suffix=bot_config.cf_archive_subdir_suffix,
       )
 
   def _get_scheduler_jobs_to_trigger(self, builder_id, build_config):
@@ -671,9 +665,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         "build_config argument %r was not a BuildConfig" % (build_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
-    bot_type = override_bot_type or build_config.get_bot_config(builder_id).get(
-        'bot_type')
-    if bot_type != bot_spec.TESTER:  # pragma: no cover
+    bot_type = override_bot_type or build_config.get_bot_config(
+        builder_id).bot_type
+    if bot_type != bot_spec_module.TESTER:  # pragma: no cover
       return
 
     # Protect against hard to debug mismatches between directory names
@@ -731,9 +725,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(
         cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
         env=self.m.chromium.get_env()):
-      bot_type = bot_config.get('bot_type', bot_spec.BUILDER_TESTER)
+      bot_type = bot_config.bot_type
 
-      if bot_type in bot_spec.TESTER_TYPES:
+      if bot_type in bot_spec_module.TESTER_TYPES:
         isolated_targets = [
             t.isolate_target
             for t in tests if t.uses_isolate]
@@ -1051,9 +1045,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # need tags?)
     update_step, build_config = self.prepare_checkout(
         bot.settings, timeout=3600)
-
-    bot_type = bot.settings.get('bot_type')
-    if bot_type == bot_spec.TESTER:
+    bot_type = bot.settings.bot_type
+    if bot_type == bot_spec_module.TESTER:
       self._lookup_builder_gn_args(bot, mb_config_path, builders)
 
     compile_targets = self.get_compile_targets(bot.settings, build_config,
@@ -1115,7 +1108,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       A dict containing additional properties that should be added to any
       triggered child builds.
     """
-    bot_type = bot.settings.get('bot_type')
+    bot_type = bot.settings.bot_type
 
     isolate_transfer = any(
         t.uses_isolate for t in build_config.tests_triggered_by(bot.builder_id))
@@ -1124,13 +1117,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not t.uses_isolate
     ]
     package_transfer = (
-        bool(non_isolated_tests) or bot.settings.get('enable_package_transfer'))
+        bool(non_isolated_tests) or bot.settings.enable_package_transfer)
 
     additional_trigger_properties = {}
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
-    if package_transfer and bot_type in bot_spec.BUILDER_TYPES:
+    if package_transfer and bot_type in bot_spec_module.BUILDER_TYPES:
       self.package_build(
           bot.builder_id,
           bot_update_step,
@@ -1151,9 +1144,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       bot_update_step: the result of a previously executed bot_update step.
       build_config: a BuildConfig object.
     """
-    bot_type = bot.settings.get('bot_type')
+    bot_type = bot.settings.bot_type
 
-    if not bot_type == bot_spec.TESTER:
+    if not bot_type == bot_spec_module.TESTER:
       return
 
     non_isolated_tests = [
@@ -1189,7 +1182,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     ]
     for t in non_isolated_tests:
       package_transfer_reasons.append(" - %s doesn't use isolate" % t.name)
-    if bot.settings.get('enable_package_transfer'):
+    if bot.settings.enable_package_transfer:
       package_transfer_reasons.append(
           " - package transfer is explicitly enabled")
     return package_transfer_reasons
@@ -1463,7 +1456,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Applies build/test configurations from bot.settings.
     self.configure_build(
-        bot.settings, override_bot_type=bot_spec.BUILDER_TESTER)
+        bot.settings, override_bot_type=bot_spec_module.BUILDER_TESTER)
 
     self.m.chromium.apply_config('trybot_flavor')
 
@@ -1520,7 +1513,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           build_config,
           compile_targets,
           tests_including_triggered,
-          override_bot_type=bot_spec.BUILDER_TESTER)
+          override_bot_type=bot_spec_module.BUILDER_TESTER)
     else:
       # Even though the patch doesn't require a compile on this platform,
       # we'd still like to run tests not depending on
@@ -1542,7 +1535,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 % (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
                    bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
       bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
-      if bot_type == bot_spec.BUILDER_TESTER:
+      if bot_type == bot_spec_module.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return ('running %s \'%s\' on master %r' %
               (bot_type, bot_mirror.builder_id.builder,
@@ -1559,10 +1552,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'buildername': bot_mirror.builder_id.builder,
             'tester_buildername': bot_mirror.tester_id.builder,
             'tester_mastername': bot_mirror.tester_id.master,
-            'bot_type': bot_spec.TESTER,
+            'bot_type': bot_spec_module.TESTER,
         }
       bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
-      if bot_type == bot_spec.BUILDER_TESTER:
+      if bot_type == bot_spec_module.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return {
           'mastername': bot_mirror.builder_id.master,
@@ -1629,9 +1622,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                               builders=None):
     # Lookup GN args for the associated builder
     parent_builder_id = chromium.BuilderId.create_for_master(
-        bot_meta_data.settings.get('parent_mastername',
-                                   bot_meta_data.builder_id.master),
-        bot_meta_data.settings.get('parent_buildername'))
+        bot_meta_data.settings.parent_mastername or
+        bot_meta_data.builder_id.master,
+        bot_meta_data.settings.parent_buildername)
     parent_bot_config = self.create_bot_config_object([parent_builder_id],
                                                       builders=builders)
     parent_chromium_config = self._chromium_config(parent_bot_config)
@@ -1655,11 +1648,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'chromium',
         precommit=False,
         mastername=bot_meta_data.builder_id.master,
-        default_priority=bot_meta_data.settings.get(
-            'swarming_default_priority'))
+        default_priority=bot_meta_data.settings.swarming_default_priority)
     test_runner = self.create_test_runner(
         tests,
-        serialize_tests=bot_meta_data.settings.get('serialize_tests'),
+        serialize_tests=bot_meta_data.settings.serialize_tests,
         # If any tests export coverage data we want to retry invalid shards due
         # to an existing issue with occasional corruption of collected coverage
         # data.

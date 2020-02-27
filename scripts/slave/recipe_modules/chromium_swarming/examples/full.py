@@ -46,9 +46,8 @@ def RunSteps(api, platforms, custom_trigger_script,
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
-  bot_config = {}
   api.gclient.set_config('chromium')
-  api.chromium_checkout.ensure_checkout(bot_config)
+  api.chromium_checkout.ensure_checkout()
 
   # Ensure swarming_client version is fresh enough.
   api.chromium_swarming.check_client_version(step_test_data=(0, 8, 6))

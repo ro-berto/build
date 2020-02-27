@@ -83,9 +83,9 @@ class BotConfig(object):
     return self._bot_mirrors
 
   def get_bot_type(self, builder_id):
-    return self._get(builder_id, 'bot_type', bot_spec_module.BUILDER_TESTER)
+    return self._get_builder_bot_config(builder_id).bot_type
 
-  def _consistent_get(self, getter, name, default=None):
+  def _consistent_get(self, getter, name, default=None):  # pragma: no cover
     # This logic must be kept in sync with checkConsistentGet in
     # tests/masters_recipes_test.py . It's not feasible to otherwise write an
     # integration test for this code which runs against all of the bots in
@@ -105,10 +105,10 @@ class BotConfig(object):
     return self._bots_dict.get(builder_id.master, {}).get('builders', {}).get(
         builder_id.builder, {})
 
-  def _get(self, builder_id, name, default=None):
+  def _get(self, builder_id, name, default=None):  # pragma: no cover
     return self._get_builder_bot_config(builder_id).get(name, default)
 
-  def get(self, name, default=None):
+  def get(self, name, default=None):  # pragma: no cover
     return self._consistent_get(self._get, name, default)
 
   def __getattr__(self, attr):
@@ -131,37 +131,37 @@ class BotConfig(object):
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
-      if 'source_side_spec' in bot_config:  # pragma: no cover
-        return {builder_ids[0].builder: bot_config['source_side_spec']}
+      if bot_config.source_side_spec is not None:  # pragma: no cover
+        return {builder_ids[0].builder: bot_config.source_side_spec}
 
       # Similar to the source_side_spec special case above, but expected to
       # contain the spec for every builder on the waterfall. This is necessary
       # because only having one builder like in the source_side_spec approach
       # breaks parent/child builder relationships due to the parent not knowing
       # which targets to build and isolate for its children.
-      elif 'downstream_spec' in bot_config:  # pragma: no cover
-        return bot_config['downstream_spec']
+      elif bot_config.downstream_spec is not None:  # pragma: no cover
+        return bot_config.downstream_spec
 
     # TODO(phajdan.jr): Get rid of disable_tests.
-    if self.get('disable_tests'):
+    if self.disable_tests:
       return {}
 
-    source_side_spec_file = self.get('testing', {}).get('source_side_spec_file',
-                                                        '%s.json' % mastername)
+    source_side_spec_file = self.testing.get('source_side_spec_file',
+                                             '%s.json' % mastername)
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
   def create_build_config(self, chromium_tests_api, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
-    if self.get('disable_tests'):
+    if self.disable_tests:
       scripts_compile_targets = {}
     else:
       scripts_compile_targets = \
           chromium_tests_api.get_compile_targets_for_scripts(self)
 
     def is_child_of(builder_config, parent_mastername, parent_buildername):
-      return (parent_mastername == builder_config.get('parent_mastername') and
-              parent_buildername == builder_config.get('parent_buildername'))
+      return (parent_mastername == builder_config.parent_mastername and
+              parent_buildername == builder_config.parent_buildername)
 
     masternames = set()
     for builder_id in self.builder_ids:
@@ -191,15 +191,14 @@ class BotConfig(object):
 
         builders = master_dict['builders'] = dict(master_dict['builders'])
         for loop_buildername in builders:
-          builder_dict = builders[loop_buildername] = (
-              dict(builders[loop_buildername]))
-          builders[loop_buildername]['tests'] = (
-              chromium_tests_api.generate_tests_from_source_side_spec(
+          spec = builders[loop_buildername]
+          builders[loop_buildername] = spec.evolve(
+              tests=chromium_tests_api.generate_tests_from_source_side_spec(
                   source_side_spec,
-                  builder_dict,
+                  spec,
                   loop_buildername,
                   mastername,
-                  builder_dict.get('swarming_dimensions', {}),
+                  spec.swarming_dimensions,
                   scripts_compile_targets,
                   bot_update_step,
               ))
@@ -219,12 +218,12 @@ class BotConfig(object):
     compile_targets = set()
     for builder_id in self.builder_ids:
       bot_config = build_config.get_bot_config(builder_id)
-      compile_targets.update(bot_config.get('compile_targets', []))
+      compile_targets.update(bot_config.compile_targets)
       compile_targets.update(
           build_config.get_source_side_spec(builder_id).get(
               'additional_compile_targets', []))
 
-    if self.get('add_tests_as_compile_targets', True):
+    if self.add_tests_as_compile_targets:
       for t in tests:
         compile_targets.update(t.compile_targets())
 
@@ -272,13 +271,13 @@ class BuildConfig(object):
       builder_bot_config = self.get_bot_config(mirror.builder_id)
       if mirror.builder_id not in self._config.children:
         self._config.children[mirror.builder_id] = self._ConfigNode(
-            mirror.builder_id, True, builder_bot_config.get('tests', []))
+            mirror.builder_id, True, builder_bot_config.tests)
       builder_config = self._config.children[mirror.builder_id]
 
       if mirror.tester_id:
         tester_bot_config = self.get_bot_config(mirror.tester_id)
         builder_config.children[mirror.tester_id] = self._ConfigNode(
-            mirror.tester_id, True, tester_bot_config.get('tests', []))
+            mirror.tester_id, True, tester_bot_config.tests)
 
       for (
           _luci_project, triggered_mastername, triggered_buildername,
@@ -288,7 +287,7 @@ class BuildConfig(object):
             triggered_mastername, triggered_buildername)
         if triggered_id not in builder_config.children:
           builder_config.children[triggered_id] = self._ConfigNode(
-              triggered_id, False, triggered_bot_config.get('tests', []))
+              triggered_id, False, triggered_bot_config.tests)
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
   def get_bot_config(self, builder_id):
@@ -307,8 +306,8 @@ class BuildConfig(object):
     for mastername, master_config in self._db.iteritems():
       builders = master_config['master_dict'].get('builders', {})
       for buildername, bot_config in builders.iteritems():
-        parent_mastername = bot_config.get('parent_mastername', mastername)
-        parent_buildername = bot_config.get('parent_buildername')
+        parent_mastername = bot_config.parent_mastername or mastername
+        parent_buildername = bot_config.parent_buildername
         if (parent_builder_id.master == parent_mastername and
             parent_builder_id.builder == parent_buildername):
           master_settings = self.get_master_settings(mastername)

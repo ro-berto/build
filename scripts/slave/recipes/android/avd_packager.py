@@ -24,7 +24,7 @@ PROPERTIES = avd_packager.InputProperties
 def RunSteps(api, properties):
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
-  api.chromium_checkout.ensure_checkout({})
+  api.chromium_checkout.ensure_checkout()
 
   chromium_src = api.path['checkout']
   avd_script_path = chromium_src.join(

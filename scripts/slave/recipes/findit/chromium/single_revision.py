@@ -111,9 +111,10 @@ def _configure_builder(api, target_tester, test_override_builders):
   api.chromium.apply_config('goma_failfast')
 
   if bot_mirror.tester_id:
-    tester_config = builders[target_tester.master].get('builders', {}).get(
+    tester_spec = builders[target_tester.master].get('builders', {}).get(
         target_tester.builder, {})
-    for key, value in tester_config.get('swarming_dimensions', {}).iteritems():
+    tester_spec = bot_spec.BotSpec.normalize(tester_spec)
+    for key, value in tester_spec.swarming_dimensions.iteritems():
       # Coercing str as json.loads creates unicode strings. This only matters
       # for testing.
       api.chromium_swarming.set_default_dimension(str(key), str(value))

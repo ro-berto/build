@@ -6,6 +6,8 @@ import re
 from recipe_engine.types import freeze
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build.attr_utils import attrs, attrib
 
 DEPS = [
   'archive',
@@ -21,164 +23,195 @@ DEPS = [
 ]
 
 
+@attrs()
+class LibfuzzerSpec(chromium.BuilderSpec):
+
+  archive_prefix = attrib(str, default='libfuzzer')
+  v8_targets_only = attrib(bool, default=False)
+  # Fields without defaults can't be declared when inheriting from a type that
+  # has defaults for any fields
+  # TODO(gbeaty) Once we're on python3, we can switch these to be kwonly and not
+  # specify a default. For now, it's enforced in __attrs_post_init__, which gets
+  # run after the fields are initialized
+  upload_bucket = attrib(str, default=None)
+  upload_directory = attrib(str, default=None)
+
+  def __attrs_post_init__(self):
+    assert self.upload_bucket is not None
+    assert self.upload_directory is not None
+
+
 BUILDERS = freeze({
-  'chromium.fuzz': {
-    'builders': {
-      'Libfuzzer Upload Chrome OS ASan': {
-        'archive_prefix': 'libfuzzer-chromeos',
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'chromeos',
-          'TARGET_BITS': 64,
+    'chromium.fuzz': {
+        'builders': {
+            'Libfuzzer Upload Chrome OS ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'chromeos',
+                        'TARGET_BITS': 64,
+                    },
+                    gclient_apply_config=['chromeos'],
+                    archive_prefix='libfuzzer-chromeos',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='chromeos-asan',
+                ),
+            'Libfuzzer Upload Linux32 ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 32,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
+            'Libfuzzer Upload Linux32 ASan Debug':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Debug',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 32,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
+            'Libfuzzer Upload Linux32 V8-ARM ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 32,
+                    },
+                    archive_prefix='libfuzzer-v8-arm',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan-arm-sim',
+                    v8_targets_only=True,
+                ),
+            'Libfuzzer Upload Linux32 V8-ARM ASan Debug':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Debug',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 32,
+                    },
+                    archive_prefix='libfuzzer-v8-arm',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan-arm-sim',
+                    v8_targets_only=True,
+                ),
+            'Libfuzzer Upload Linux ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
+            'Libfuzzer Upload Linux ASan Debug':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Debug',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
+            'Libfuzzer Upload Linux V8-ARM64 ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    archive_prefix='libfuzzer-v8-arm64',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan-arm64-sim',
+                    v8_targets_only=True,
+                ),
+            'Libfuzzer Upload Linux V8-ARM64 ASan Debug':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Debug',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    archive_prefix='libfuzzer-v8-arm64',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan-arm64-sim',
+                    v8_targets_only=True,
+                ),
+            'Libfuzzer Upload Linux MSan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber', 'msan'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='msan',
+                ),
+            'Libfuzzer Upload Linux UBSan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='ubsan',
+                ),
+            'Libfuzzer Upload Mac ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'mac',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
+            'Libfuzzer Upload Windows ASan':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=['clobber'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 64,
+                    },
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='asan',
+                ),
         },
-        'gclient_apply_config': ['chromeos'],
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'chromeos-asan',
-      },
-      'Libfuzzer Upload Linux32 ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
-      'Libfuzzer Upload Linux32 ASan Debug': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
-      'Libfuzzer Upload Linux32 V8-ARM ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
-        },
-        'archive_prefix': 'libfuzzer-v8-arm',
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan-arm-sim',
-        'v8_targets_only': True,
-      },
-      'Libfuzzer Upload Linux32 V8-ARM ASan Debug': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 32,
-        },
-        'archive_prefix': 'libfuzzer-v8-arm',
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan-arm-sim',
-        'v8_targets_only': True,
-      },
-      'Libfuzzer Upload Linux ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
-      'Libfuzzer Upload Linux ASan Debug': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
-      'Libfuzzer Upload Linux V8-ARM64 ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'archive_prefix': 'libfuzzer-v8-arm64',
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan-arm64-sim',
-        'v8_targets_only': True,
-      },
-      'Libfuzzer Upload Linux V8-ARM64 ASan Debug': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'archive_prefix': 'libfuzzer-v8-arm64',
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan-arm64-sim',
-        'v8_targets_only': True,
-      },
-      'Libfuzzer Upload Linux MSan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['clobber', 'msan' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'msan',
-      },
-      'Libfuzzer Upload Linux UBSan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'ubsan',
-      },
-      'Libfuzzer Upload Mac ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
-      'Libfuzzer Upload Windows ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
-      },
     },
-  },
 })
 
 
@@ -200,7 +233,7 @@ def RunSteps(api):
         step_name='calculate all_fuzzers',
         step_test_data=lambda: api.raw_io.test_api.stream_output(
             'target1\ntarget2\nv8_target3', stream='stdout'))
-    if bot_config.get('v8_targets_only', False):
+    if bot_config.v8_targets_only:
       # Some builders only need the V8 targets as the only difference is code
       # generated by V8 simulators.
       v8_fuzzers = api.gn.refs(
@@ -237,9 +270,9 @@ def RunSteps(api):
   api.archive.clusterfuzz_archive(
       build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
-      gs_bucket=bot_config['upload_bucket'],
-      archive_prefix=bot_config.get('archive_prefix', 'libfuzzer'),
-      archive_subdir_suffix=bot_config['upload_directory'],
+      gs_bucket=bot_config.upload_bucket,
+      archive_prefix=bot_config.archive_prefix,
+      archive_subdir_suffix=bot_config.upload_directory,
       gs_acl='public-read',
       **kwargs)
 

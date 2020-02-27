@@ -29,6 +29,8 @@ from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build.chromium_tests import bot_spec
+
 import re
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
@@ -216,6 +218,8 @@ def _CheckoutChromiumRepo(api):
 
     if project == 'chrome':
       bot_config['gclient_apply_config'] = ['chrome_internal']
+
+    bot_config = bot_spec.BotSpec.create(**bot_config)
 
     api.chromium_tests.configure_build(bot_config)
     api.chromium_checkout.ensure_checkout(bot_config)

@@ -89,10 +89,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       allow_regressions = is_revert or has_size_footer
 
       suffix = ' (with patch)'
-      bot_config = {}
-      checkout_dir = self.m.chromium_checkout.get_checkout_dir(bot_config)
-      with self.m.context(cwd=checkout_dir):
-        bot_update_step = self.m.chromium_checkout.ensure_checkout(bot_config)
+      bot_update_step = self.m.chromium_checkout.ensure_checkout()
       self.m.chromium.runhooks(name='runhooks' + suffix)
 
       self._clear_failed_expectation_files()
@@ -139,7 +136,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       # We could build without-patch first to avoid having to apply the patch
       # twice, but it's nicer to fail fast when the patch does not compile.
       suffix = ' (with patch again)'
-      with self.m.context(cwd=checkout_dir):
+      with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
         bot_update_step = self.m.bot_update.ensure_checkout(
             suffix=suffix, patch=True)
       self.m.chromium.runhooks(name='runhooks' + suffix)

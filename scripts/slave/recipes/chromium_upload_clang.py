@@ -5,6 +5,8 @@
 from recipe_engine import post_process
 from recipe_engine.types import freeze
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
   'chromium',
   'chromium_checkout',
@@ -23,44 +25,45 @@ DEPS = [
 
 
 BUILDERS = freeze({
-  'tryserver.chromium.linux': {
-    'builders': {
-      'linux_upload_clang': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
+    'tryserver.chromium.linux': {
+        'builders': {
+            'linux_upload_clang':
+                chromium.BuilderSpec.create(
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
 
-        # 'android' is required to build the Clang toolchain with proper
-        # AddressSanitizer prebuilts for Chrome on Android.
-        # 'fuchsia' is required to build the builtins.a for Fuchsia.
-        'gclient_apply_config': ['android', 'fuchsia'],
-      },
-    },
-  },
-  'tryserver.chromium.mac': {
-    'builders': {
-      'mac_upload_clang': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
+                    # 'android' is required to build the Clang toolchain with
+                    # proper AddressSanitizer prebuilts for Chrome on Android.
+                    # 'fuchsia' is required to build the builtins.a for Fuchsia.
+                    gclient_apply_config=['android', 'fuchsia'],
+                ),
         },
-      },
     },
-  },
-  'tryserver.chromium.win': {
-    'builders': {
-      'win_upload_clang': {
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'win',
-          'TARGET_BITS': 32,
+    'tryserver.chromium.mac': {
+        'builders': {
+            'mac_upload_clang':
+                chromium.BuilderSpec.create(
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'mac',
+                        'TARGET_BITS': 64,
+                    },),
         },
-      },
     },
-  },
+    'tryserver.chromium.win': {
+        'builders': {
+            'win_upload_clang':
+                chromium.BuilderSpec.create(
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'win',
+                        'TARGET_BITS': 32,
+                    },),
+        },
+    },
 })
 
 

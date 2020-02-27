@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 from recipe_engine.types import freeze
 
+from RECIPE_MODULES.build import chromium
+
 DEPS = [
     'chromium',
     'chromium_checkout',
@@ -18,30 +20,32 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
-  'chromium.clang': {
-    'builders': {
-      'ToTMacCoverage': {
-        'chromium_config': 'clang_tot_mac',
-        'chromium_apply_config': [],
-        'gclient_apply_config': ['clang_tot'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'mac',
-          'TARGET_BITS': 64,
+    'chromium.clang': {
+        'builders': {
+            'ToTMacCoverage':
+                chromium.BuilderSpec.create(
+                    chromium_config='clang_tot_mac',
+                    chromium_apply_config=[],
+                    gclient_apply_config=['clang_tot'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'mac',
+                        'TARGET_BITS': 64,
+                    },
+                ),
+            'ToTLinuxCoverage':
+                chromium.BuilderSpec.create(
+                    chromium_config='clang_tot_linux',
+                    chromium_apply_config=[],
+                    gclient_apply_config=['clang_tot'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_PLATFORM': 'linux',
+                        'TARGET_BITS': 64,
+                    },
+                ),
         },
-      },
-      'ToTLinuxCoverage': {
-        'chromium_config': 'clang_tot_linux',
-        'chromium_apply_config': [],
-        'gclient_apply_config': ['clang_tot'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-      },
     },
-  },
 })
 
 # Sample targets that are used to test the coverage script against clang tot
@@ -57,7 +61,7 @@ def RunSteps(api):
 
 
 def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
-  api.bot_update.ensure_checkout(patch_root=bot_config.get('root_override'))
+  api.bot_update.ensure_checkout(patch_root=bot_config.patch_root)
 
   api.chromium.ensure_toolchains()
   api.chromium.ensure_goma()

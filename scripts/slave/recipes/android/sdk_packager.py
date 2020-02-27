@@ -33,7 +33,7 @@ PROPERTIES = sdk_packager.InputProperties
 def RunSteps(api, properties):
   api.gclient.set_config('chromium')
   api.gclient.apply_config('android')
-  api.chromium_checkout.ensure_checkout({})
+  api.chromium_checkout.ensure_checkout()
 
   sdk_manager = api.path['checkout'].join('third_party', 'android_sdk',
                                           'public', 'cmdline-tools', 'latest',

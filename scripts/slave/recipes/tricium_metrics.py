@@ -67,17 +67,13 @@ def RunSteps(api):
     api.gclient.set_config('chromium')
     api.chromium.set_config('chromium')
 
-    bot_config = {}
-    checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
-    with api.context(cwd=checkout_dir):
-      # Do not rebase the patch, so that the Tricium analyzer observes
-      # the correct line numbers. Otherwise, line numbers would be
-      # relative to origin/master, which will typically be synced to
-      # include changes subsequent to the actual patch.
-      api.chromium_checkout.ensure_checkout(
-          bot_config, gerrit_no_rebase_patch_ref=True)
+    # Do not rebase the patch, so that the Tricium analyzer observes the correct
+    # line numbers. Otherwise, line numbers would be relative to origin/master,
+    # which will typically be synced to include changes subsequent to the actual
+    # patch.
+    api.chromium_checkout.ensure_checkout(gerrit_no_rebase_patch_ref=True)
 
-    src_dir = checkout_dir.join('src')
+    src_dir = api.chromium_checkout.checkout_dir.join('src')
     with api.context(cwd=src_dir):
       # Do not analyze removed files.
       affected = [

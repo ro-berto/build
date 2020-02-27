@@ -44,21 +44,18 @@ def validate_tester_config(api, mastername, buildername, bot_config):
   # for configuration reasons. Don't validate these builders.
   if 'dummy' in buildername:
     return  # pragma: no cover
-  parent_buildername = bot_config.get('parent_buildername')
+  parent_buildername = bot_config.parent_buildername
 
-  parent_mastername = bot_config.get('parent_mastername', mastername)
+  parent_mastername = bot_config.parent_mastername or mastername
   parent_bot_config = api.chromium_tests.create_bot_config_object([
       chromium.BuilderId.create_for_master(parent_mastername,
                                            parent_buildername)
   ])
 
-  for a in ('chromium_config',
-            'chromium_apply_config',
-            'chromium_config_kwargs',
-            'android_config',
-            'android_config_kwargs'):
-    tester_value = _normalize(bot_config.get(a))
-    builder_value = _normalize(parent_bot_config.get(a))
+  for a in ('chromium_config', 'chromium_apply_config',
+            'chromium_config_kwargs', 'android_config'):
+    tester_value = _normalize(getattr(bot_config, a))
+    builder_value = _normalize(getattr(parent_bot_config, a))
 
     validator = VALIDATORS.get(
         (mastername, buildername, a),
@@ -79,7 +76,7 @@ def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object([builder_id])
 
   # For testers, check that various configs are equal to the builder's
-  if bot_config.get('bot_type', bot_spec.BUILDER_TESTER) == 'tester':
+  if bot_config.bot_type == bot_spec.TESTER:
     validate_tester_config(api, builder_id.master, builder_id.builder,
                            bot_config)
 

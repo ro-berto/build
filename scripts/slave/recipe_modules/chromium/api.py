@@ -211,10 +211,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     master_dict = builders_dict.get(builder_id.master, {})
     bot_config = master_dict.get('builders', {}).get(builder_id.builder)
 
-    self.set_config(bot_config.get('chromium_config', 'chromium'),
-                    **bot_config.get('chromium_config_kwargs', {}))
+    self.set_config(bot_config.chromium_config or 'chromium',
+                    **bot_config.chromium_config_kwargs)
 
-    for c in bot_config.get('chromium_apply_config', []):
+    for c in bot_config.chromium_apply_config:
       self.apply_config(c)
 
     for c in additional_configs:
@@ -224,7 +224,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # calling chromium.set_config(), above, because otherwise the chromium
     # call would reset the gclient config to its defaults.
     self.m.gclient.set_config('chromium')
-    for c in bot_config.get('gclient_apply_config', []):
+    for c in bot_config.gclient_apply_config:
       self.m.gclient.apply_config(c)
 
     return (builder_id, bot_config)

@@ -4,6 +4,8 @@
 
 from recipe_engine import recipe_api
 
+from RECIPE_MODULES.build import chromium
+
 
 class ChromiumCheckoutApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
@@ -69,7 +71,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
   def ensure_checkout(self, bot_config=None, **kwargs):
     """Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     """
-    bot_config = bot_config or {}
+    bot_config = bot_config or chromium.BuilderSpec.create()
 
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
@@ -79,8 +81,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # Bot Update re-uses the gclient configs.
     with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
-          patch_root=bot_config.get('patch_root'),
-          clobber=bot_config.get('clobber', False),
+          patch_root=bot_config.patch_root,
+          clobber=bot_config.clobber,
           **kwargs)
 
     assert update_step.json.output['did_run']

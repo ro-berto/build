@@ -20,7 +20,7 @@ def RunSteps(api):
   api.gclient.apply_config('android')
   api.chromium.set_config('chromium')
   api.chromium_android.set_config('main_builder', BUILD_CONFIG='Release')
-  api.chromium_checkout.ensure_checkout({})
+  api.chromium_checkout.ensure_checkout()
   api.chromium_android.run_java_unit_test_suite(
       'test_suite',
       target_name=api.properties.get('target_name', 'test_suite'),
