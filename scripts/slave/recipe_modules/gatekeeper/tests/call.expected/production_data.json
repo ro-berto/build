@@ -107,7 +107,8 @@
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.mac\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-device\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"ios-simulator\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-full-configs\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-full-configs\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ios-simulator-noncq\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
@@ -372,7 +373,7 @@
       "--verbose",
       "--build-db",
       "[CACHE]/builder/ios_db.json",
-      "https://build.chromium.org/p/chromium.mac:ios-device,ios-simulator,ios-simulator-full-configs"
+      "https://build.chromium.org/p/chromium.mac:ios-device,ios-simulator,ios-simulator-full-configs,ios-simulator-noncq"
     ],
     "name": "gatekeeper: ios"
   },

@@ -359,7 +359,6 @@
           "experimental_tests"
         ],
         "excluded_builders" : [
-          "ios-simulator-noncq",
           "mac-osxbeta-rel"
         ],
         "builders": {
@@ -374,6 +373,10 @@
           "ios-simulator-full-configs": {
             "sheriff_classes": ["sheriff_ios"],
             "closing_optional": []
+          },
+          "ios-simulator-noncq": {
+            "closing_optional": [],
+            "sheriff_classes": ["sheriff_ios"]
           },
           "*": {}
         }

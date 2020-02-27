@@ -65,7 +65,8 @@
           "https://build.chromium.org/p/chromium.mac": [
               "ios-device",
               "ios-simulator",
-              "ios-simulator-full-configs"
+              "ios-simulator-full-configs",
+              "ios-simulator-noncq"
           ]
         }
     },
