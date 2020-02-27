@@ -288,6 +288,38 @@ class SwarmingAndroidPerfTest(SwarmingTest):
         extra_args=self._args,
         build_properties=api.chromium.build_properties)
 
+  @recipe_api.composite_step
+  def run(self, api, suffix):
+    """Waits for launched test to finish and collects the results."""
+    # TODO(phoglund); upstream allow_missing_json; that's the only thing we
+    # change from the base algorithm. Or, simplify this class to reduce
+    # duplication.
+    assert suffix not in self._test_runs, (
+        'Results of %s were already collected' % self.step_name(suffix))
+
+    # Emit error if test wasn't triggered. This happens if *.isolated is not
+    # found. (The build is already red by this moment anyway).
+    if suffix not in self._tasks:  # pragma: no cover
+      return api.python.failing_step(
+          '[collect error] %s' % self.step_name(suffix),
+          '%s wasn\'t triggered' % self.target_name)
+
+    step_result, has_valid_results = api.chromium_swarming.collect_task(
+        self._tasks[suffix], allow_missing_json=True)
+    self._suffix_step_name_map[suffix] = step_result.step['name']
+
+    step_result.presentation.logs['step_metadata'] = (json.dumps(
+        self.step_metadata(suffix), sort_keys=True, indent=2)).splitlines()
+
+    # TODO(martiniss): Consider moving this into some sort of base
+    # validate_task_results implementation.
+    results = self.validate_task_results(api, step_result)
+    if not has_valid_results:
+      results['valid'] = False  # pragma: no cover
+
+    self.update_test_run(api, suffix, results)
+    return step_result
+
   def validate_task_results(self, api, step_result):
     task_output_dir = step_result.raw_io.output_dir
     logcats = _MergeFiles(task_output_dir, 'logcats')
