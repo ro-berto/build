@@ -276,7 +276,7 @@ class IndexPack(object):
       # foo/units/bar
       # We only care for foo/files/* and foo/units/*
       segments = zip_info.filename.split('/')
-      if len(segments) != 3:
+      if len(segments) != 3 or segments[-1] == '':
         continue
 
       try:

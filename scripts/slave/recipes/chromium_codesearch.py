@@ -235,8 +235,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
-  with api.context(env={'KYTHE_ROOT_DIRECTORY': api.path['checkout'],
-                        'KYTHE_OUTPUT_DIRECTORY': kzip_dir}):
+  with api.context(
+      env={
+          'KYTHE_ROOT_DIRECTORY': api.path['checkout'],
+          'KYTHE_OUTPUT_DIRECTORY': kzip_dir,
+          'KYTHE_CORPUS': corpus
+      }):
     raw_result = api.chromium.compile(targets, use_goma_module=True,
                          out_dir='out', target=gen_repo_out_dir or 'Debug')
   if raw_result.status != common_pb.SUCCESS:

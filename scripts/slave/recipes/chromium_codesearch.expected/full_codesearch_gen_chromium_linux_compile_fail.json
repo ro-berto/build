@@ -395,6 +395,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -425,6 +426,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -453,6 +455,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -484,6 +487,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -519,6 +523,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -566,6 +571,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -601,6 +607,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -625,6 +632,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -681,6 +689,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
@@ -713,6 +722,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },

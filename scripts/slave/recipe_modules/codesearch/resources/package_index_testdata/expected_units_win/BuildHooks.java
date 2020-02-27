@@ -5,7 +5,7 @@ unit {
   }
   required_input {
     v_name {
-      corpus: "kythe"
+      corpus: "chromium-test"
       path: "/source/chromium/src/build/android/buildhooks/java/org/chromium/build/BuildHooks.java"
     }
     info {
@@ -15,7 +15,7 @@ unit {
   }
   required_input {
     v_name {
-      corpus: "kythe"
+      corpus: "chromium-test"
       path: "gen/build/android/buildhooks/build_hooks_java/generated_java/input_srcjars/org/chromium/build/BuildHooksConfig.java"
     }
     info {
