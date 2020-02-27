@@ -1342,6 +1342,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if (step_result.retcode != 0 and failure_as_exception and not
         task.ignore_task_failure):
+      step_result.presentation.status = self.m.step.FAILURE
       raise recipe_api.StepFailure(
           'Swarming collect had non-zero exit code.',
           result=step_result)
