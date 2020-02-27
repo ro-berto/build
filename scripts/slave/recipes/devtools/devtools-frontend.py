@@ -19,18 +19,12 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
 ]
 
-STEPS_N_SCRIPTS = [
-    ('Unit Tests', 'run_unittests.py'),
-    ('Type Check', 'run_type_check.py'),
-    ('Lint Check', 'run_lint_check.py'),
-    ('Localization Check', 'run_localization_check.py'),
-    ('E2E tests', 'run_e2e.py'),
-]
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
@@ -48,8 +42,11 @@ def RunSteps(api):
     compilation_result = api.chromium.compile(use_goma_module=True)
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
-    for step, script in STEPS_N_SCRIPTS:
-      run_script(api, step, script)
+    run_unit_tests(api)
+    run_type_check(api)
+    run_lint_check(api)
+    run_localization_check(api)
+    run_e2e(api)
 
     publish_coverage_points(api)
 
@@ -86,6 +83,29 @@ def run_script(api, step_name, script):
   with api.step.defer_results():
     sc_path = api.path['checkout'].join('scripts', 'test', script)
     api.python(step_name, sc_path)
+
+
+def run_unit_tests(api):
+  run_script(api, 'Unit Tests', 'run_unittests.py')
+
+
+def run_type_check(api):
+  if api.platform.is_win:
+    api.step('Skipping Type Check ...', [])
+  else:
+    run_script(api, 'Type Check', 'run_type_check.py')
+
+
+def run_lint_check(api):
+  run_script(api, 'Lint Check', 'run_lint_check.py')
+
+
+def run_localization_check(api):
+  run_script(api, 'Localization Check', 'run_localization_check.py')
+
+
+def run_e2e(api):
+  run_script(api, 'E2E tests', 'run_e2e.py')
 
 
 # TODO(liviurau): remove this temp hack after devtools refactorings that
@@ -197,3 +217,7 @@ def GenTests(api):
       mastername='tryserver.devtools-frontend',
   ) + api.step_data(
       'compile', retcode=1) + api.post_process(StatusFailure)
+  yield api.test('basic win') + api.properties(
+      path_config='generic',
+      mastername='tryserver.devtools-frontend',
+  ) + api.platform('win', 64)
