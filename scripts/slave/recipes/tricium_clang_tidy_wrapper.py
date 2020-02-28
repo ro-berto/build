@@ -263,18 +263,17 @@ def RunSteps(api):
       # If files were removed by the CL, they'll be listed by
       # get_files_affected_by_patch. We probably don't want to try to lint
       # them. :)
+      #
+      # Similarly, linting non-source files is out of scope.
+      # TODO(crbug.com/1035017): add headers here.
+      cc_file_suffixes = {'.cc', '.cpp', '.cxx', '.c'}
       affected = [
           f for f in api.chromium_checkout.get_files_affected_by_patch()
-          if api.path.exists(src_dir.join(f))
+          if api.path.exists(src_dir.join(f)) and
+          api.path.splitext(f)[1] in cc_file_suffixes
       ]
 
-      # TODO(crbug.com/1035017): add headers here
-      cc_file_suffixes = {'.cc', '.cpp', '.cxx', '.c'}
-      tidyable_paths = [
-          p for p in affected if api.path.splitext(p)[1] in cc_file_suffixes
-      ]
-
-      if tidyable_paths:
+      if affected:
         api.chromium.ensure_goma()
         api.goma.start()
         api.chromium.mb_gen(api.chromium.get_builder_id())
