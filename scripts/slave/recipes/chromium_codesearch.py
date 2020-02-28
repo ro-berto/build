@@ -229,7 +229,6 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   # Prepare Java Kythe output directory
   kzip_dir = api.codesearch.c.javac_extractor_output_dir
   api.file.ensure_directory('java kzip', kzip_dir)
-  api.file.rmcontents('java kzip', kzip_dir)
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails

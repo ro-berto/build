@@ -388,19 +388,6 @@
     "name": "java kzip"
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmcontents",
-      "[CACHE]/builder/src/out/win-Debug/kzip"
-    ],
-    "infra_step": true,
-    "name": "java kzip (2)"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
