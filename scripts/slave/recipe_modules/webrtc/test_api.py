@@ -25,10 +25,18 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
         'value': base64.b64encode('diff --git a/a b/a\nnew file mode 100644\n')
     })
 
-  def generate_builder(self, builders, bucketname, buildername, revision,
-                       parent_got_revision=None, failing_test=None,
-                        fail_compile=False, suffix='', is_chromium=False,
-                        fail_android_archive=False, is_experimental=False):
+  def generate_builder(self,
+                       builders,
+                       bucketname,
+                       buildername,
+                       revision,
+                       parent_got_revision=None,
+                       failing_test=None,
+                       fail_compile=False,
+                       suffix='',
+                       is_chromium=False,
+                       fail_android_archive=False,
+                       is_experimental=False):
     mastername = builders[bucketname]['settings'].get('mastername', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')

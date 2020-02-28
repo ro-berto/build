@@ -50,28 +50,28 @@ def generate_tests(api, phase, bot):
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     tests += [
-        steps.SwarmingIsolatedScriptTest('audio_decoder_unittests'),
-        steps.SwarmingIsolatedScriptTest('common_audio_unittests'),
-        steps.SwarmingIsolatedScriptTest('common_video_unittests'),
-        steps.SwarmingIsolatedScriptTest('low_bandwidth_audio_test'),
-        steps.SwarmingIsolatedScriptTest('modules_tests', shards=2),
-        steps.SwarmingIsolatedScriptTest('modules_unittests', shards=6),
-        steps.SwarmingIsolatedScriptTest('peerconnection_unittests', shards=4),
-        steps.SwarmingIsolatedScriptTest('rtc_media_unittests'),
-        steps.SwarmingIsolatedScriptTest('rtc_pc_unittests'),
-        steps.SwarmingIsolatedScriptTest('rtc_stats_unittests'),
-        steps.SwarmingIsolatedScriptTest('rtc_unittests', shards=6),
-        steps.SwarmingIsolatedScriptTest('slow_tests'),
-        steps.SwarmingIsolatedScriptTest('system_wrappers_unittests'),
-        steps.SwarmingIsolatedScriptTest('test_support_unittests'),
-        steps.SwarmingIsolatedScriptTest('tools_unittests'),
-        steps.SwarmingIsolatedScriptTest('video_engine_tests', shards=4),
-        steps.SwarmingIsolatedScriptTest('webrtc_nonparallel_tests'),
+        WebRtcIsolatedGtest('audio_decoder_unittests'),
+        WebRtcIsolatedGtest('common_audio_unittests'),
+        WebRtcIsolatedGtest('common_video_unittests'),
+        WebRtcIsolatedGtest('low_bandwidth_audio_test'),
+        WebRtcIsolatedGtest('modules_tests', shards=2),
+        WebRtcIsolatedGtest('modules_unittests', shards=6),
+        WebRtcIsolatedGtest('peerconnection_unittests', shards=4),
+        WebRtcIsolatedGtest('rtc_media_unittests'),
+        WebRtcIsolatedGtest('rtc_pc_unittests'),
+        WebRtcIsolatedGtest('rtc_stats_unittests'),
+        WebRtcIsolatedGtest('rtc_unittests', shards=6),
+        WebRtcIsolatedGtest('slow_tests'),
+        WebRtcIsolatedGtest('system_wrappers_unittests'),
+        WebRtcIsolatedGtest('test_support_unittests'),
+        WebRtcIsolatedGtest('tools_unittests'),
+        WebRtcIsolatedGtest('video_engine_tests', shards=4),
+        WebRtcIsolatedGtest('webrtc_nonparallel_tests'),
     ]
 
   if test_suite == 'webrtc_and_baremetal':
     baremetal_test = functools.partial(
-        steps.SwarmingIsolatedScriptTest,
+        WebRtcIsolatedGtest,
         dimensions=bot.config['baremetal_swarming_dimensions'])
 
     tests.append(baremetal_test('video_capture_tests'))
@@ -208,9 +208,115 @@ def generate_tests(api, phase, bot):
 
   if test_suite == 'more_configs':
     if 'no_sctp' in phase:
-      tests.append(steps.SwarmingIsolatedScriptTest('peerconnection_unittests'))
+      tests.append(WebRtcIsolatedGtest('peerconnection_unittests'))
 
   return tests
+
+
+class WebRtcIsolatedGtest(object):
+  """Triggers an isolated task to run a GTest binary, and collects the results.
+
+  This class is based off Chromium's SwarmingIsolatedScriptTest, but strips out
+  the parts we don't need.
+  """
+
+  def __init__(self, name, args=None, shards=1, dimensions=None):
+    self._name = name
+    self._args = args or []
+    self._shards = shards
+    self._task = None
+    self._has_collected = False
+    self._dimensions = dimensions
+
+  @property
+  def isolate_target(self):
+    return self._name
+
+  @property
+  def name(self):
+    return self._name
+
+  @property
+  def step_name(self):
+    return self._name
+
+  def pre_run(self, api, suffix):
+    """Launches the test on Swarming."""
+    del suffix
+    assert self._task is None, (
+        'Test %s was already triggered' % self.step_name)  # pragma no cover
+
+    # *.isolated may be missing if *_run target is misconfigured.
+    isolated = api.isolate.isolated_tests.get(self.isolate_target)
+    if not isolated:  # pragma no cover
+      return api.python.failing_step(
+          '[error] %s' % self.step_name,
+          '*.isolated file for target %s is missing' % self.isolate_target)
+
+    self._task = self.create_task(api, isolated)
+
+    return api.chromium_swarming.trigger_task(self._task)
+
+  @recipe_api.composite_step
+  def run(self, api, suffix):
+    """Waits for launched test to finish and collects the results."""
+    del suffix
+    assert not self._has_collected, (  # pragma no cover
+        'Results of %s were already collected' % self.step_name)
+
+    self._has_collected = True
+
+    step_result, has_valid_results = api.chromium_swarming.collect_task(
+        self._task, allow_missing_json=True)
+
+    if (api.step.active_result.retcode == 0 and not has_valid_results):
+      # This failure won't be caught automatically. Need to manually
+      # raise it as a step failure.
+      raise api.step.StepFailure(
+          api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
+
+    return step_result
+
+  def create_task(self, api, isolated):
+    task = api.chromium_swarming.task(name=self.step_name)
+
+    task_slice = task.request[0]
+    task.request = task.request.with_slice(0, task_slice)
+
+    self._apply_swarming_task_config(task, api, isolated)
+    return task
+
+  def _apply_swarming_task_config(self, task, api, isolated):
+    """Applies shared configuration for swarming tasks.
+    """
+    task.shards = self._shards
+    task.shard_indices = range(task.shards)
+    task.build_properties = api.chromium.build_properties
+
+    task_slice = task.request[0]
+    ensure_file = task_slice.cipd_ensure_file
+
+    task_slice = (
+        task_slice.with_cipd_ensure_file(ensure_file).with_isolated(isolated))
+
+    task_dimensions = task_slice.dimensions
+    # Add custom dimensions.
+    if self._dimensions:
+      for k, v in self._dimensions.iteritems():
+        task_dimensions[k] = v
+
+    # Set default value.
+    if 'os' not in task_dimensions:
+      task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
+          api.platform.name)  # pragma no cover
+
+    task_slice = task_slice.with_dimensions(**task_dimensions)
+
+    task.extra_args.extend(self._args)
+
+    task.request = (
+        task.request.with_slice(0, task_slice).with_name(self.step_name))
+    return task
 
 
 def _MergeFiles(output_dir, suffix):

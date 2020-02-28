@@ -269,7 +269,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     for bot in self.related_bots():
       if bot.should_test:
         for test in steps.generate_tests(self.m, phase, bot):
-          if isinstance(test, (SwarmingTest, steps.IosTest)):
+          if isinstance(
+              test, (SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
             isolated_targets.add(test.name)
 
     self._isolated_targets = sorted(isolated_targets)
