@@ -38,6 +38,7 @@ unit {
   details {
     [kythe.io/proto/kythe.proto.BuildDetails] {
       build_target: "#2186a1be811eaf56d7637f18695b2e2f9ecd4fa05439d8e925f21e7bc44a8693"
+      build_config: "linux"
     }
   }
 }

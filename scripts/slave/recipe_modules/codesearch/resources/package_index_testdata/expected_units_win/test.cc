@@ -71,7 +71,7 @@ unit {
   working_directory: "package_index_testdata/input/src/out/Debug"
   details {
     [kythe.io/proto/kythe.proto.BuildDetails] {
-      build_config: "linux"
+      build_config: "win"
     }
   }
 }

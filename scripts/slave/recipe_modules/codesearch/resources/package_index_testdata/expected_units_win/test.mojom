@@ -43,7 +43,7 @@ unit {
   source_file: "../../test.mojom"
   details {
     [kythe.io/proto/kythe.proto.BuildDetails] {
-      build_config: "linux"
+      build_config: "win"
     }
   }
 }

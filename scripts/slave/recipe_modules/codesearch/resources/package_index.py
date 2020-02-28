@@ -293,6 +293,10 @@ class IndexPack(object):
         indexed_compilation_proto = json_format.Parse(
             content,
             analysis_pb2.IndexedCompilation())
+
+        if self.build_config and indexed_compilation_proto.unit:
+          self._InjectUnitBuildDetails(indexed_compilation_proto.unit)
+
         self.kzip.writestr(self.units_directory + '/' + segments[2],
                            indexed_compilation_proto.SerializeToString())
 
@@ -310,6 +314,24 @@ class IndexPack(object):
       else:
         print('WARNING: Unexpected file %s in kzip %s' % (
             zip_info.filename, f))
+
+  def _InjectUnitBuildDetails(self, unit):
+    # If there is already BuildDetails, we need to reuse it
+    for any_details in unit.details:
+      if any_details.type_url == 'kythe.io/proto/kythe.proto.BuildDetails':
+        build_details = buildinfo_pb2.BuildDetails()
+        build_details.ParseFromString(any_details.value)
+        build_details.build_config = self.build_config
+        any_details.Pack(build_details, 'kythe.io/proto')
+        return
+
+    # BuildDetails wasn't found, create a new one
+    details = buildinfo_pb2.BuildDetails()
+    details.build_config = self.build_config
+
+    details_any_proto = unit.details.add()
+    details_any_proto.Pack(details, 'kythe.io/proto')
+
 
   def _ConvertGnPath(self, gn_path):
     """Converts gn paths into output-directory-relative paths.
@@ -432,11 +454,7 @@ class IndexPack(object):
       unit_proto.v_name.corpus = self.corpus
       unit_proto.v_name.language = 'mojom'
       if self.build_config:
-        details = buildinfo_pb2.BuildDetails()
-        details.build_config = self.build_config
-
-        details_any_proto = unit_proto.details.add()
-        details_any_proto.Pack(details, 'kythe.io/proto')
+        self._InjectUnitBuildDetails(unit_proto)
 
       # Files in a module might import other files in the same module. Don't
       # include the file twice if so.

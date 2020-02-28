@@ -199,7 +199,7 @@ class PackageIndexTest(PackageIndexBootstrap):
         os.path.join(self.build_dir, 'gn_targets.json'),
         os.path.join(self.build_dir, 'kzip'),
         corpus=CORPUS,
-        build_config=BUILD_CONFIG,
+        build_config='win',
         out_dir=OUT_DIR,
         verbose=True)
     self.index_pack.GenerateIndexPack()
