@@ -85,31 +85,11 @@ class BotConfig(object):
   def get_bot_type(self, builder_id):
     return self._get_builder_bot_config(builder_id).bot_type
 
-  def _consistent_get(self, getter, name, default=None):  # pragma: no cover
-    # This logic must be kept in sync with checkConsistentGet in
-    # tests/masters_recipes_test.py . It's not feasible to otherwise write an
-    # integration test for this code which runs against all of the bots in
-    # trybots.py.
-    result = getter(self.builder_ids[0], name, default)
-    for builder_id in self.builder_ids:
-      other_result = getter(builder_id, name, default)
-      assert result == other_result, (
-          'Inconsistent value for %r: bot %r has %r, '
-          'but bot %r has %r' % (name, self.builder_ids[0], result, builder_id,
-                                 other_result))
-    return result
-
   def _get_builder_bot_config(self, builder_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use build_config.
     return self._bots_dict.get(builder_id.master, {}).get('builders', {}).get(
         builder_id.builder, {})
-
-  def _get(self, builder_id, name, default=None):  # pragma: no cover
-    return self._get_builder_bot_config(builder_id).get(name, default)
-
-  def get(self, name, default=None):  # pragma: no cover
-    return self._consistent_get(self._get, name, default)
 
   def __getattr__(self, attr):
     per_builder_values = {}

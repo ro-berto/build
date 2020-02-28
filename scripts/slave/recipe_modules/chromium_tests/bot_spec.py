@@ -11,8 +11,8 @@ from recipe_engine.types import FrozenDict, freeze
 
 from . import steps
 
-from RECIPE_MODULES.build.attr_utils import (
-    FieldMapping, attrib, attrs, enum_attrib, mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
+                                             mapping_attrib, sequence_attrib)
 from RECIPE_MODULES.build import chromium
 
 BUILDER = 'builder'
@@ -85,27 +85,22 @@ class BotMirror(object):
         "'tester_id' should not be equal to 'builder_id',"
         " pass None for 'tester_id'")
 
-# TODO(gbeaty) Change accesses to use . access and remove the mapping
+
 @attrs()
-class BotSpec(FieldMapping):
+class BotSpec(object):
   """An immutable specification for a bot.
 
-  This type provides the means of specifying all of the input values for a bot.
-  Previously, dictionaries were used which have the following drawbacks:
-    * Susceptible to typos for key names
-    * Lack of validation at definition time
-    * Poor discoverability of available fields
-    * Default values for fields are specified at the point(s) of access
+  This type provides a means of specifying all of the input values for
+  the bot with the following benefits:
+    * All available fields and their default values are declared and
+      documented in one place
+    * Typos are caught at the time a spec is instantiated
+    * Validation is performed to ensure that values are of approriate
+      type and that combinations make sense
 
-  This type address the first 2 points. The 3rd point is also addressed with the
-  caveat that recipes/recipe modules that add their own information to the spec
-  require a type containing fields with the additional information. To remain
-  backwards compatible with existing code, the 4th point is not addressed yet.
-
-  Backwards compatibility:
-  Until callers have switched over to accessing the fields directly, a BotSpec
-  acts as a mapping with an item for each field whose value is not None, with
-  the name of the field as the key.
+  If another recipe/recipe module needs to add its own information, it
+  should define a subclass of this type and declare fields for its
+  additional information.
   """
 
   @classmethod
