@@ -4,6 +4,9 @@
 
 """Tests a recipe CL by running a chromium builder."""
 
+import attr
+import collections
+
 from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 
@@ -140,6 +143,48 @@ def trigger_cl(api, recipe, repo_path, recipes_py_path, builder):
   return None
 
 
+@attr.s(frozen=True)
+class RelatedBuilder(object):
+  """Type to record a related builder.
+
+  When a footer builder is requested, we will try to run the equivalent
+  builder for the release branches. This type is used to record the
+  original builder and the bucket variant.
+  """
+  original_builder = attr.ib()
+  bucket = attr.ib()
+
+
+def _process_footer_builders(api, builders):
+  bad_builders = sorted(b for b in builders if ':' not in b)
+  if bad_builders:
+    step_name = 'bad builders'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(['\n  ' + b for b in bad_builders])
+    raise api.step.StepFailure(step_name, result)
+  buckets = set(b.split(':', 1)[0] for b in builders)
+  unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
+  if unknown_buckets:
+    step_name = 'unknown buckets'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(
+        ['\n  ' + b for b in sorted(unknown_buckets)])
+    raise api.step.StepFailure(step_name, result)
+
+  builder_map = collections.OrderedDict.fromkeys(builders)
+  # For each builder, add an entry for the version of the builder in each
+  # branch, with a RelatedBuilder indicating what it was computed from
+  for builder in builders:
+    name = builder.split(':', 1)[1]
+    for bucket in CHROMIUM_SRC_TEST_CLS:
+      builder_map.setdefault('{}:{}'.format(bucket, name),
+                             RelatedBuilder(builder, bucket))
+
+  return builder_map.items()
+
+
 # TODO(martiniss): make this work if repo_name != 'build'
 def RunSteps(api, repo_name):
   workdir_base = api.path['cache']
@@ -158,26 +203,13 @@ def RunSteps(api, repo_name):
 
   cl_footers = api.tryserver.get_footers() or {}
   builders = cl_footers.get(BUILDER_FOOTER)
+
+  # builders needs to be in the form of tuples:
+  # (builder (str), related_builder (RelatedBuilder or None))
   if builders is None:
-    builders = DEFAULT_BUILDERS
+    builders = [(b, None) for b in DEFAULT_BUILDERS]
   else:
-    bad_builders = sorted(b for b in builders if ':' not in b)
-    if bad_builders:
-      step_name = 'bad builders'
-      result = api.step(step_name, [])
-      result.presentation.status = api.step.FAILURE
-      result.presentation.step_text = ''.join(
-          ['\n  ' + b for b in bad_builders])
-      raise api.step.StepFailure(step_name, result)
-    buckets = set(b.split(':', 1)[0] for b in builders)
-    unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
-    if unknown_buckets:
-      step_name = 'unknown buckets'
-      result = api.step(step_name, [])
-      result.presentation.status = api.step.FAILURE
-      result.presentation.step_text = ''.join(
-          ['\n  ' + b for b in unknown_buckets])
-      raise api.step.StepFailure(step_name, result)
+    builders = _process_footer_builders(api, builders)
 
 
   # We don't currently check anything about the list of builders to trigger.
@@ -187,11 +219,20 @@ def RunSteps(api, repo_name):
   # possibility for running a tryjob on itself.
   triggered_jobs = {}
 
-  for builder in builders:
-    with api.step.nest('analyze+launch '+builder):
+  for builder, related_builder in builders:
+    with api.step.nest('analyze+launch ' + builder) as presentation:
       with api.context(cwd=cl_workdir.join('build')):
-        # intermediate result
-        ir = api.led('get-builder', builder)
+        try:
+          # intermediate result
+          ir = api.led('get-builder', builder)
+        except api.step.StepFailure:
+          if related_builder is None:
+            raise
+          presentation.status = api.step.SUCCESS
+          presentation.step_text = (
+              '\nNo equivalent to builder {} was found for bucket {}'.format(
+                  related_builder.original_builder, related_builder.bucket))
+          continue
         # Recipe we run probably doesn't change between slices.
         job_slice = ir.result['job_slices'][0]
         # TODO(martiniss): Use recipe_cipd_source to determine which repo this
@@ -289,12 +330,15 @@ def GenTests(api):
                                 api.json.output(parse_description_json))
     return t
 
-  def prefix(name):
-    return 'analyze+launch {}.'.format(name)
+  def builder_step_name(builder, sub_step=None):
+    name = 'analyze+launch {}'.format(builder)
+    if sub_step:
+      name = '{}.{}'.format(name, sub_step)
+    return name
 
   def led_get_builder(name):
     return api.step_data(
-        prefix(name) + 'led get-builder',
+        builder_step_name(name, 'led get-builder'),
         stdout=api.json.output({
             'job_slices': [{
                 'userland': {
@@ -312,18 +356,18 @@ def GenTests(api):
     affected_files = affected_files or []
     if affected_files:
       t += api.override_step_data(
-          prefix(name) + 'git diff to analyze patch',
+          builder_step_name(name, 'git diff to analyze patch'),
           stdout=api.raw_io.output('\n'.join(affected_files)))
 
     t += api.step_data(
-        '{}analyze {}'.format(prefix(name), RECIPE),
+        builder_step_name(name, 'analyze {}'.format(RECIPE)),
         api.json.output({
             'recipes': ([RECIPE] if recipe_affected else []),
         }))
 
     if recipe_affected or 'infra/config/recipes.cfg' in affected_files:
       t += api.step_data(
-          prefix(name) + 'led launch',
+          builder_step_name(name, 'led launch'),
           stdout=api.json.output({
               'swarming': {
                   'host_name': 'chromium-swarm.appspot.com',
@@ -382,7 +426,8 @@ def GenTests(api):
       gerrit_change(),
       led_get_builder('luci.chromium.try:linux-rel'),
       api.step_data(
-          prefix('luci.chromium.try:linux-rel') + 'analyze foo_recipe',
+          builder_step_name('luci.chromium.try:linux-rel',
+                            'analyze {}'.format(RECIPE)),
           api.json.output({
               'error': 'Bad analyze!!!!',
               'invalid_recipes': [RECIPE],
@@ -390,7 +435,8 @@ def GenTests(api):
           retcode=1),
       api.post_process(
           post_process.Filter(
-              prefix('luci.chromium.try:linux-rel') + 'recipe invalid')),
+              builder_step_name('luci.chromium.try:linux-rel',
+                                'recipe invalid'))),
   )
 
   def step_text_lines(step):
@@ -427,7 +473,40 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       test_builder('luci.chromium.try:arbitrary-builder'),
+      test_builder('luci.chromium.try-beta:arbitrary-builder'),
+      test_builder('luci.chromium.try-stable:arbitrary-builder'),
       api.post_check(post_process.DoesNotRun,
-                     *[prefix(b) for b in DEFAULT_BUILDERS]),
+                     *[builder_step_name(b) for b in DEFAULT_BUILDERS]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def non_existent_builder(name):
+    return api.step_data(
+        builder_step_name(name, 'led get-builder'),
+        retcode=1,
+    )
+
+  yield api.test(
+      'footer_builder_not_on_all_branches',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
+      test_builder('luci.chromium.try:arbitrary-builder'),
+      test_builder('luci.chromium.try-beta:arbitrary-builder'),
+      non_existent_builder('luci.chromium.try-stable:arbitrary-builder'),
+      api.post_check(
+          post_process.StepSuccess,
+          builder_step_name('luci.chromium.try-stable:arbitrary-builder')),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'footer_builder_does_not_exist',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
+      non_existent_builder('luci.chromium.try:arbitrary-builder'),
+      api.post_check(post_process.StepFailure,
+                     builder_step_name('luci.chromium.try:arbitrary-builder')),
+      api.post_check(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

@@ -5562,13 +5562,13 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/isolate/tests/run_isolated.py#10)(api):**
 ### *recipes* / [led\_recipes\_tester](/scripts/slave/recipes/led_recipes_tester.py)
 
-[DEPS](/scripts/slave/recipes/led_recipes_tester.py#10): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/led][recipe_engine/recipe_modules/led], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/led_recipes_tester.py#13): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/led][recipe_engine/recipe_modules/led], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Tests a recipe CL by running a chromium builder.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#144)(api, repo_name):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#189)(api, repo_name):**
 
-&mdash; **def [trigger\_cl](/scripts/slave/recipes/led_recipes_tester.py#99)(api, recipe, repo_path, recipes_py_path, builder):**
+&mdash; **def [trigger\_cl](/scripts/slave/recipes/led_recipes_tester.py#102)(api, recipe, repo_path, recipes_py_path, builder):**
 
 Calculates the chromium testing CL for the current CL.
 
