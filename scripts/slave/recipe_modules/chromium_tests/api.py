@@ -1047,7 +1047,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, timeout=3600)
     bot_type = bot.settings.bot_type
     if bot_type == bot_spec_module.TESTER:
-      self._lookup_builder_gn_args(bot, mb_config_path, builders)
+      self.lookup_builder_gn_args(bot, mb_config_path, builders)
 
     compile_targets = self.get_compile_targets(bot.settings, build_config,
                                                build_config.all_tests())
@@ -1074,7 +1074,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.inbound_transfer(bot, update_step, build_config)
 
-    return self._run_tests(bot, build_config)
+    return self.run_tests(bot, build_config)
 
   def outbound_transfer(self, bot, bot_update_step, build_config):
     """Handles the builder half of the builder->tester transfer flow.
@@ -1616,10 +1616,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return result
 
 
-  def _lookup_builder_gn_args(self,
-                              bot_meta_data,
-                              mb_config_path=None,
-                              builders=None):
+  def lookup_builder_gn_args(self,
+                             bot_meta_data,
+                             mb_config_path=None,
+                             builders=None):
     # Lookup GN args for the associated builder
     parent_builder_id = chromium.BuilderId.create_for_master(
         bot_meta_data.settings.parent_mastername or
@@ -1639,7 +1639,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         android_version_code=android_version_code,
         name='lookup builder GN args')
 
-  def _run_tests(self, bot_meta_data, build_config):
+  def run_tests(self, bot_meta_data, build_config):
     tests = build_config.tests_on(bot_meta_data.builder_id)
     if not tests:
       return
