@@ -1029,7 +1029,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  def main_waterfall_steps(self, mb_config_path=None, builders=None):
+  def main_waterfall_steps(self,
+                           mb_config_path=None,
+                           mb_phase=None,
+                           builders=None):
     """Compiles and runs tests for chromium recipe.
 
     Returns:
@@ -1047,7 +1050,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot.settings, timeout=3600)
     bot_type = bot.settings.bot_type
     if bot_type == bot_spec_module.TESTER:
-      self.lookup_builder_gn_args(bot, mb_config_path, builders)
+      self.lookup_builder_gn_args(
+          bot,
+          mb_config_path=mb_config_path,
+          mb_phase=mb_phase,
+          builders=builders)
 
     compile_targets = self.get_compile_targets(bot.settings, build_config,
                                                build_config.all_tests())
@@ -1057,7 +1064,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         build_config,
         compile_targets,
         build_config.all_tests(),
-        mb_config_path=mb_config_path)
+        mb_config_path=mb_config_path,
+        mb_phase=mb_phase)
 
     if compile_result and compile_result.status != common_pb.SUCCESS:
       return compile_result
@@ -1619,6 +1627,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def lookup_builder_gn_args(self,
                              bot_meta_data,
                              mb_config_path=None,
+                             mb_phase=None,
                              builders=None):
     # Lookup GN args for the associated builder
     parent_builder_id = chromium.BuilderId.create_for_master(
@@ -1634,6 +1643,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         parent_builder_id,
         mb_config_path=mb_config_path,
         chromium_config=parent_chromium_config,
+        phase=mb_phase,
         use_goma=self._use_goma(parent_chromium_config),
         android_version_name=android_version_name,
         android_version_code=android_version_code,
