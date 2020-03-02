@@ -326,6 +326,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
     command += [
         cc_file,
         '--export-fixes=%s' % findings_file,
+        '--header-filter=.*',
         '--',
     ]
     command.extend(shlex.split(compile_command))
@@ -881,8 +882,8 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
       otherwise.
 
   Returns:
-    - A set of _TidyActions where tidy died with a non-zero exit code
-    - A set of _TidyActions that tidy timed out on
+    - A set of _TidyActions where tidy died with a non-zero exit code.
+    - A set of _TidyActions that tidy timed out on.
     - A set of all diags emitted by tidy throughout the run.
   """
   # Threads make sharing for testing _way_ easier. Unfortunately, YAML parsing
@@ -984,7 +985,7 @@ def _normalize_path_to_base(path, base):
 
 def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
                                   failed_tidy_actions, timed_out_actions,
-                                  findings):
+                                  findings, only_src_files):
   """Converts the results of this run into a JSON-serializable object.
 
   Args:
@@ -996,6 +997,9 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
     failed_tidy_actions: _TidyActions for which tidy exited with an error.
     timed_out_actions: _TidyActions that we timed out while executing.
     findings: A collection of all clang-tidy diagnostics we observed.
+    only_src_files: A collection of src_files we care about. If not-None, we'll
+      drop any diagnostics that aren't in this collection. These paths are
+      expected to be absolute.
 
   Returns:
     A JSON object that represents the entire result of this script.
@@ -1040,6 +1044,25 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
       logging.info('Dropping out-of-base diagnostic from %s', diag.file_path)
     else:
       all_diagnostics.append(diag._replace(file_path=normalized))
+
+  if only_src_files is not None:
+    src_file_filter = set()
+
+    for path in only_src_files:
+      normalized = _normalize_path_to_base(path, base_path)
+      if not normalized:
+        logging.error("Got only_src_file %r, which isn't relative to base @ %r",
+                      path, base_path)
+      else:
+        src_file_filter.add(normalized)
+
+    new_diagnostics = [
+        x for x in all_diagnostics if x.file_path in src_file_filter
+    ]
+    logging.info('Dropping %d/%d diagnostics outside of only_src_files',
+                 len(all_diagnostics) - len(new_diagnostics),
+                 len(all_diagnostics))
+    all_diagnostics = new_diagnostics
 
   # This is the object that we ship to Tricium. Comments are overdescriptive
   # so that people don't have to reason about code above in order to
@@ -1187,9 +1210,9 @@ def main():
       clang_tidy_binary,
       use_threads=False)
 
-  results = _convert_tidy_output_json_obj(base_path, tidy_actions,
-                                          failed_actions, failed_tidy_actions,
-                                          timed_out_actions, findings)
+  results = _convert_tidy_output_json_obj(
+      base_path, tidy_actions, failed_actions, failed_tidy_actions,
+      timed_out_actions, findings, only_src_files)
 
   # Do a two-step write, so the user can't see partial results.
   tempfile_name = findings_file + '.new'

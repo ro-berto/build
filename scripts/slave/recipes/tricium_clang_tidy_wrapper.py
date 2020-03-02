@@ -265,12 +265,11 @@ def RunSteps(api):
       # them. :)
       #
       # Similarly, linting non-source files is out of scope.
-      # TODO(crbug.com/1035017): add headers here.
-      cc_file_suffixes = {'.cc', '.cpp', '.cxx', '.c'}
+      src_file_suffixes = {'.cc', '.cpp', '.cxx', '.c', '.h', '.hpp'}
       affected = [
           f for f in api.chromium_checkout.get_files_affected_by_patch()
           if api.path.exists(src_dir.join(f)) and
-          api.path.splitext(f)[1] in cc_file_suffixes
+          api.path.splitext(f)[1] in src_file_suffixes
       ]
 
       if affected:
