@@ -131,7 +131,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -160,7 +160,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PATH": "RECIPE_REPO[depot_tools];<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
@@ -189,7 +189,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -216,7 +216,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -249,7 +249,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -276,7 +276,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -305,7 +305,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -330,7 +330,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -354,7 +354,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -383,7 +383,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -415,7 +415,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -446,7 +446,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -487,7 +487,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/beta",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {

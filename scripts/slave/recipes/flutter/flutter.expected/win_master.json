@@ -127,7 +127,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -147,7 +147,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "env_prefixes": {
@@ -260,7 +260,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "SHARD": "tests",
@@ -288,7 +288,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -315,7 +315,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -342,7 +342,7 @@
     "env": {
       "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "GOLDCTL": "[CACHE]\\gold\\goldctl",
-      "GOLD_TRYJOB": "True",
+      "GOLD_TRYJOB": "refs/heads/master",
       "JAVA_HOME": "[CACHE]\\java",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"

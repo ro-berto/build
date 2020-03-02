@@ -5617,13 +5617,13 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#241)(api):**
 
-&mdash; **def [tricium\_has\_message](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#311)(check, steps, message):**
+&mdash; **def [tricium\_has\_message](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#310)(check, steps, message):**
 
-&mdash; **def [tricium\_has\_no\_messages](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#306)(check, steps):**
+&mdash; **def [tricium\_has\_no\_messages](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#305)(check, steps):**
 
-&mdash; **def [tricium\_has\_replacements](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#318)(check, steps, \*expected_replacements):**
+&mdash; **def [tricium\_has\_replacements](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#317)(check, steps, \*expected_replacements):**
 
-&mdash; **def [tricium\_outputs\_json](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#328)(check, steps, json_obj):**
+&mdash; **def [tricium\_outputs\_json](/scripts/slave/recipes/tricium_clang_tidy_wrapper.py#327)(check, steps, json_obj):**
 ### *recipes* / [tricium\_metrics](/scripts/slave/recipes/tricium_metrics.py)
 
 [DEPS](/scripts/slave/recipes/tricium_metrics.py#9): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tricium][recipe_engine/recipe_modules/tricium]

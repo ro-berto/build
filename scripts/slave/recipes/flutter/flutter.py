@@ -332,8 +332,16 @@ def RunSteps(api):
       'DEPOT_TOOLS': str(api.depot_tools.root),
       # Goldctl binary for Flutter Gold, used by framework and driver tests.
       'GOLDCTL': EnsureGoldctl(api),
-      'GOLD_TRYJOB': ShouldRunGoldTryjob(api),
   }
+
+  if ShouldRunGoldTryjob(api) and git_ref:
+    # Tryjob should be run for given git_ref
+    env.update({
+        'GOLD_TRYJOB': git_ref,
+    })
+
+
+
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
