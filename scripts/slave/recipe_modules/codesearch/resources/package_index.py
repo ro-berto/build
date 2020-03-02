@@ -151,7 +151,10 @@ class IndexPack(object):
         # the mojom analyzer only bothers with the C++ output.
         any(gn_target['args'][i:i + 2] == ['-g', 'c++']
             for i in range(len(gn_target['args']) - 1)) and
-        '--generate_message_ids' not in gn_target['args'])
+        '--generate_message_ids' not in gn_target['args'] and
+        # TODO(crbug.com/1057746): Fix cross reference support for
+        # auto-generated files.
+        not any(source.startswith('//out') for source in gn_target['sources']))
 
   def _FindMojomImports(self, gn_target):
     """Find the direct imports of a Mojom target.
