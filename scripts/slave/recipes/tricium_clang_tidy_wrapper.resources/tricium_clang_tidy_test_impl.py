@@ -944,7 +944,7 @@ class Tests(unittest.TestCase):
             '/foo.h': ['/foo.cc', '/bar.cc'],
         })
 
-  def test_perform_builds_falls_back_to_all_if_deps_werent_found(self):
+  def test_perform_build_falls_back_to_all_if_deps_werent_found(self):
     self._silence_logs()
 
     cc_to_target_map = {
@@ -975,6 +975,34 @@ class Tests(unittest.TestCase):
 
     self.assertEqual(built_objects, [['foo.o'], []])
     self.assertEqual(built_targets, [['path/to/my:targ'], ['all']])
+
+  def test_perform_build_doesnt_fall_back_if_only_cc_files_werent_found(self):
+    self._silence_logs()
+
+    built_objects = []
+    built_targets = []
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      built_targets.append(phony_targets)
+      built_objects.append(object_targets)
+      return ()
+
+    tidy._perform_build(
+        out_dir='/out',
+        run_ninja=run_ninja,
+        parse_ninja_deps=lambda _: [],
+        cc_to_target_map={
+            '/foo.cc': ['foo.o'],
+        },
+        gn_desc=tidy._GnDesc(per_target_srcs={
+            '//path/to/my:targ': ['/foo.cc', '/foo.h'],
+        }),
+        potential_src_cc_file_deps={
+            '/foo.cc': ['/foo.cc'],
+        })
+
+    self.assertEqual(built_objects, [['foo.o']])
+    self.assertEqual(built_targets, [['path/to/my:targ']])
 
   def test_perform_build_reported_dependency_information_is_correct(self):
     self._silence_logs()

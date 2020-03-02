@@ -42,6 +42,9 @@ import time
 
 import yaml
 
+_CC_FILE_EXTENSIONS = ('.cc', '.cpp', '.c', '.cxx')
+_HEADER_FILE_EXTENSIONS = ('.h', '.hpp')
+
 
 @contextlib.contextmanager
 def _temp_file():
@@ -647,12 +650,10 @@ def _buildable_src_files_for(src_file, cc_to_target_map, gn_desc):
     return [src_file]
 
   no_suffix, suffix = os.path.splitext(src_file)
-  if suffix not in ('.h', '.hpp'):
+  if suffix not in _HEADER_FILE_EXTENSIONS:
     return []
 
-  no_suffix = os.path.splitext(src_file)[0]
-  renames = [no_suffix + x for x in ('.cc', '.cpp', '.c')]
-
+  renames = [no_suffix + x for x in _CC_FILE_EXTENSIONS]
   targets = gn_desc.targets_containing(src_file)
   same_target_srcs = []
   for targ in targets:
@@ -751,7 +752,13 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
   # Heuristics failed, so some header files don't have a cc_file that depends
   # on them. Build the world in a last-ditch effort to see if we can find
   # candidates.
-  if still_missing:
+  #
+  # It's possible for .cc files to be in `still_missing` if they're only built
+  # for certain OSes. It's highly unlikely that an `all` build will reveal
+  # users of them, so we skip this if .cc files are all that we're missing
+  # dependency info for.
+  if any(
+      os.path.splitext(x)[1] not in _CC_FILE_EXTENSIONS for x in still_missing):
     logging.info('Missing deps for %r; falling back to a full build',
                  sorted(still_missing))
     # It's not super easy (and probably not very valuable?) to pick out all of
