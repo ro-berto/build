@@ -381,7 +381,8 @@ class Runner(object):
     def collect_task(task):
       try:
         step_result, _ = self.api.chromium_swarming.collect_task(
-          task, gen_step_test_data=self._default_task_pass_test_data)
+          task, allow_missing_json=True,
+          gen_step_test_data=self._default_task_pass_test_data)
         # TODO(machenbach): Handle valid results data.
         data = step_result.chromium_swarming.summary['shards'][0]
         # Sanity checks.
