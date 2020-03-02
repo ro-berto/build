@@ -76,6 +76,11 @@ def EnsureGoldctl(api):
     return goldctl_cache_dir.join('goldctl')
 
 
+def ShouldRunGoldTryjob(api):
+  """Specifies pre-submit conditions for executing gold tryjobs."""
+  return api.properties.get('gold_tryjob', True)
+
+
 @contextmanager
 def MakeTempDir(api, label):
   temp_dir = api.path.mkdtemp('tmp')
@@ -327,6 +332,7 @@ def RunSteps(api):
       'DEPOT_TOOLS': str(api.depot_tools.root),
       # Goldctl binary for Flutter Gold, used by framework and driver tests.
       'GOLDCTL': EnsureGoldctl(api),
+      'GOLD_TRYJOB': ShouldRunGoldTryjob(api),
   }
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
@@ -390,7 +396,8 @@ def GenTests(api):
           api.properties(
               shard='coverage',
               coveralls_lcov_version='5.1.0',
-              upload_packages=should_upload),
+              upload_packages=should_upload,
+              gold_tryjob=not should_upload),
       ) + api.post_check(
           lambda check, steps: check('Download goldctl' in steps)))
       for platform in ('mac', 'linux', 'win'):
@@ -404,7 +411,8 @@ def GenTests(api):
               api.properties(
                   shard='tests',
                   fuchsia_ctl_version='version:0.0.2',
-                  upload_packages=should_upload),
+                  upload_packages=should_upload,
+                  gold_tryjob=not should_upload),
               api.runtime(is_luci=True, is_experimental=experimental),
           )
           yield test + api.post_check(

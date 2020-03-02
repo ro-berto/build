@@ -5134,37 +5134,42 @@ task that:
 
 [DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/isolated][recipe_engine/recipe_modules/isolated], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#261)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#267)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
-&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#208)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
+&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#214)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
 
-&mdash; **def [DownloadFuchsiaSystemImageAndPackages](/scripts/slave/recipes/flutter/flutter.py#88)(api, fuchsia_dir, target_dir):**
+&mdash; **def [DownloadFuchsiaSystemImageAndPackages](/scripts/slave/recipes/flutter/flutter.py#94)(api, fuchsia_dir, target_dir):**
 
-&mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#197)(api, version=None):**
+&mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#203)(api, version=None):**
 
 &mdash; **def [EnsureGoldctl](/scripts/slave/recipes/flutter/flutter.py#69)(api):**
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#222)(api, git_hash, path):**
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#228)(api, git_hash, path):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [Install7za](/scripts/slave/recipes/flutter/flutter.py#55)(api):**
 
-&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#186)(api):**
+&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#192)(api):**
 
-&mdash; **def [IsolateDriverDeps](/scripts/slave/recipes/flutter/flutter.py#123)(api):**
+&mdash; **def [IsolateDriverDeps](/scripts/slave/recipes/flutter/flutter.py#129)(api):**
 
-&mdash; **def [IsolateFuchsiaCtlDeps](/scripts/slave/recipes/flutter/flutter.py#108)(api, fuchsia_ctl_wd):**
+&mdash; **def [IsolateFuchsiaCtlDeps](/scripts/slave/recipes/flutter/flutter.py#114)(api, fuchsia_ctl_wd):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/flutter.py#79)(api, label):**
+&emsp; **@contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/flutter.py#85)(api, label):**
 
-&mdash; **def [RunFuchsiaDriverTests](/scripts/slave/recipes/flutter/flutter.py#164)(api):**
+&mdash; **def [RunFuchsiaDriverTests](/scripts/slave/recipes/flutter/flutter.py#170)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#296)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#302)(api):**
 
-&mdash; **def [SwarmFuchsiaTests](/scripts/slave/recipes/flutter/flutter.py#135)(api):**
+&mdash; **def [ShouldRunGoldTryjob](/scripts/slave/recipes/flutter/flutter.py#79)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#228)(api):**
+Uploads the Flutter coverage output to cloud storage and Coveralls.
+    
+
+&mdash; **def [SwarmFuchsiaTests](/scripts/slave/recipes/flutter/flutter.py#141)(api):**
+
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#234)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   
