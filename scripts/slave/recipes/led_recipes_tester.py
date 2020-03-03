@@ -90,59 +90,6 @@ CHROMIUM_SRC_TEST_CLS = {
 }
 
 
-def _checkout_project(api, workdir, gclient_config, patch):
-  api.file.ensure_directory(
-      '%s checkout' % gclient_config.solutions[0].name, workdir)
-
-  with api.context(cwd=workdir):
-    api.bot_update.ensure_checkout(
-        patch=patch, gclient_config=gclient_config)
-
-
-def trigger_cl(api, recipe, repo_path, recipes_py_path, builder):
-  """Calculates the chromium testing CL for the current CL.
-
-  Returns None if we shouldn't trigger anything.
-  Returns a key in the CHROMIUM_SRC_TEST_CLS dictionary.
-  """
-  recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
-
-  affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
-  try:
-    analyze_step = api.python(
-      'analyze %s' % recipe,
-      recipes_py_path, [
-        '--package', recipes_cfg_path,
-        'analyze',
-        api.json.input({
-            'files': affected_files,
-            'recipes': [recipe],
-        }),
-        api.json.output()],
-      venv=True)
-  except api.step.StepFailure:
-    analyze_step = api.step.active_result
-    if analyze_step.json.output:
-      analyze_step.presentation.logs['error'] = (
-        analyze_step.json.output['error'])
-
-  if recipe in analyze_step.json.output.get('invalid_recipes', []):
-    api.python.failing_step(
-        'recipe invalid',
-        'analyze reported that the recipe \'%s\' was invalid. Something may'
-        ' be wrong with the swarming task this is based on.' % recipe)
-
-  if recipe in analyze_step.json.output['recipes']:
-    if builder in FAST_BUILDERS:
-      return 'fast'
-    return 'slow'
-
-  if str(repo_path.join('infra', 'config', 'recipes.cfg')) in affected_files:
-    return 'fast'
-
-  return None
-
-
 @attr.s(frozen=True)
 class RelatedBuilder(object):
   """Type to record a related builder.
@@ -153,6 +100,261 @@ class RelatedBuilder(object):
   """
   original_builder = attr.ib()
   bucket = attr.ib()
+
+
+def _get_recipe(led_builder):
+  # Recipe we run probably doesn't change between slices.
+  job_slice = led_builder.result['job_slices'][0]
+  # TODO(martiniss): Use recipe_cipd_source to determine which repo this recipe
+  # lives in. For now we assume the recipe lives in the repo the CL lives in.
+  return job_slice['userland']['recipe_name']
+
+
+def _checkout_project(api, workdir, gclient_config, patch):
+  api.file.ensure_directory(
+      '%s checkout' % gclient_config.solutions[0].name, workdir)
+
+  with api.context(cwd=workdir):
+    api.bot_update.ensure_checkout(
+        patch=patch, gclient_config=gclient_config)
+
+
+def _get_led_builders(api, builders):
+  """Get the led job definitions for the builders.
+
+  Args:
+    api - The recipe API object.
+    builders - A mapping that maps the builder name to a RelatedBuilder
+      or None. A RelatedBuilder object means that the builder named by
+      the key is a provisional builder that may or may not exist but
+      we're checking because we think it may exist based off of another
+      builder that's been requested. A None value indicates that we
+      expect the builder to exist and it is an error if it does not.
+
+  Returns:
+    An OrderedDict mapping builder name to the led job definition for
+    the builder. Any provisional builders that do not exist will not
+    have an entry in the returned dictionary.
+
+  Raises:
+    StepFailure if getting the job definition for a builder fails and
+    the builder was not a provisional builder.
+  """
+  led_builders = collections.OrderedDict()
+
+  with api.step.nest('get led builders'):
+    for builder, related_builder in builders:
+      # Nest the led get-builder call because we don't get to control the step
+      # name and having the step name identify the buidler we're getting is more
+      # helpful than 'led get-builder', 'led get-builder (2)',
+      # 'led get-builder (3)', etc.
+      with api.step.nest('get ' + builder):
+        try:
+          led_builders[builder] = api.led('get-builder', builder)
+        except api.step.StepFailure as e:
+          if related_builder is None:
+            raise
+          e.result.presentation.status = api.step.WARNING
+          e.result.presentation.step_text = (
+              '\nNo equivalent to builder {} was found for bucket {}'.format(
+                  related_builder.original_builder, related_builder.bucket))
+
+  return led_builders
+
+
+def _determine_affected_recipes(api, affected_files, recipes, recipes_py_path,
+                                recipes_cfg_path):
+  """Determine the set of recipes that are affected by the change.
+
+  Args:
+    api - The recipe API object.
+    affected_files - The set of files affected by the change.
+    recipes - The set of recipes that the prospective builders run.
+    recipes_py_path - A Path object identifying the location of the
+      recipes.py script.
+    recipes_cfg_path - A Path object identifying the location of the
+      recipes.cfg file.
+
+  Returns:
+    A set of the recipes that are affected by the change.
+
+  Raises:
+    StepFailure if analyzing the recipes fails.
+  """
+  cmd = [
+      '--package',
+      recipes_cfg_path,
+      'analyze',
+      api.json.input({
+          'files': affected_files,
+          'recipes': sorted(set(recipes)),
+      }),
+      api.json.output(),
+  ]
+
+  step_name = 'determine affected recipes'
+  result = api.python(
+      step_name,
+      recipes_py_path,
+      cmd,
+      ok_ret='any',
+      venv=True,
+      step_test_data=lambda: api.json.test_api.output({'recipes': []}),
+  )
+
+  json = getattr(result, 'json', None)
+  json_output = getattr(json, 'output', None)
+  if json_output is None:
+    result.presentation.status = api.step.EXCEPTION
+    result.presentation.step_text = 'Missing json output'
+    raise api.step.InfraFailure(step_name, result)
+
+  error = json_output.get('error', None)
+  if error:
+    result.presentation.logs['error'] = json_output['error']
+
+  invalid_recipes = json_output.get('invalid_recipes', [])
+  if invalid_recipes:
+    result.presentation.step_text = (
+        '\nanalyze reported that the recipes {!r} were invalid. '
+        'The associated builders may be incorrectly configured.'.format(
+            invalid_recipes))
+    result.presentation.logs['invalid recipes'] = invalid_recipes
+
+  if error or invalid_recipes:
+    result.presentation.status = api.step.FAILURE
+    raise api.step.StepFailure(step_name, result)
+
+  affected_recipes = json_output['recipes']
+  result.presentation.logs['recipes'] = '\n'.join(affected_recipes)
+
+  return set(affected_recipes)
+
+
+def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
+                                recipe, recipes_cfg_path):
+  """Calculates the chromium testing CL for the current CL.
+
+  Args:
+    affected_files - The set of files affected by the CL.
+    affected_recipes - The set of recipes affected by the CL.
+    builder - The name of the builder to get the CL category for.
+    recipe - The recipe of the builder.
+    recipes_cfg_path - A Path object identifying the location of the
+      recipes.cfg file.
+
+  Returns:
+    None if nothing should be triggered. A CL category for indexing
+    into CHROMIUM_SRC_TEST_CLS to get the CL to trigger.
+  """
+  if recipe in affected_recipes:
+    if builder in FAST_BUILDERS:
+      return 'fast'
+    return 'slow'
+
+  if str(recipes_cfg_path) in affected_files:
+    return 'fast'
+
+  return None
+
+
+def _trigger_builders(api, affected_files, affected_recipes, led_builders,
+                      cl_workdir, recipes_cfg_path):
+  """Trigger led jobs for builders that are affected by the change.
+
+  Args:
+    api - The recipe API object.
+    affected_files - The set of files affected by the change.
+    affected_recipes - The set of recipes affected by the change.
+    led_builders - A mapping that maps builder name to the led job
+      definition for the builder.
+    cl_workdir - A Path object identifying the root of the repo
+      checkout.
+    recipes_cfg_path - A Path object identifying the location of the
+      recipes.cfg file.
+
+  Returns:
+    An OrderedDict mapping builder name to the swarming task ID for the
+    triggered led job. Depending on the affected files/recipes, it may
+    be determined that some of the builders don't need to be run, the
+    returned dictionary contains keys only for those builders that are
+    run.
+
+  Raises:
+    StepFailure if any of the led calls fail.
+  """
+  triggered_jobs = collections.OrderedDict()
+
+  for builder, led_builder in led_builders.iteritems():
+    with api.context(cwd=cl_workdir.join('build')):
+      trigger_name = 'trigger {}'.format(builder)
+      cl_key = _get_cl_category_to_trigger(affected_files, affected_recipes,
+                                           builder, _get_recipe(led_builder),
+                                           recipes_cfg_path)
+      if not cl_key:
+        result = api.step(trigger_name, [])
+        result.presentation.step_text = (
+            '\nNot running a tryjob for {!r}. The CL does not affect the '
+            '{!r} recipe and the CL does not affect recipes.cfg'.format(
+                builder, _get_recipe(led_builder)))
+        continue
+
+      with api.step.nest(trigger_name):
+        # FIXME: We should check if the recipe we're testing tests patches to
+        # chromium/src. For now just assume this works.
+        bucket = builder.split(':', 1)[0]
+        cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
+        ir = led_builder.then('edit-cr-cl', cl)
+        preso = api.step.active_result.presentation
+        preso.step_text += 'Using %s testing CL' % cl_key
+        preso.links['Test CL'] = cl
+
+        # ir - intermediate result
+        ir = ir.then('edit-recipe-bundle')
+        # We used to set `is_experimental` to true, but the chromium recipe
+        # currently uses that to deprioritize swarming tasks, which results in
+        # very slow runtimes for the led task. Because this recipe blocks the
+        # build.git CQ, we decided the tradeoff to run these edited recipes in
+        # production mode instead would be better.
+        ir = ir.then('edit', '-exp', 'false')
+        ir = ir.then('launch')
+        result = ir.result
+
+        triggered_jobs[builder] = result['swarming']
+
+  return triggered_jobs
+
+
+def _collect_triggered_jobs(api, triggered_jobs, client_py_workdir):
+  # Check out the client-py repo, which gives us swarming.py.
+  client_py_config = api.gclient.make_config()
+  soln = client_py_config.solutions.add()
+  soln.name = 'client-py'
+  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
+  _checkout_project(api, client_py_workdir, client_py_config, False)
+
+  for builder, job in triggered_jobs.items():
+    result = None
+    try:
+      result = api.python(
+          'collect %s task' % builder,
+          client_py_workdir.join('client-py', 'swarming.py'),
+          [
+              'collect',
+              '-S',
+              job['host_name'],
+              job['task_id'],
+              # Needed because these jobs often take >40 minutes, since they're
+              # regular tryjobs.
+              '--print-status-updates',
+              # Don't need task stdout; if the task fails then the user should
+              # just look at the task itself.
+              '--task-output-stdout=none',
+          ])
+    finally:
+      if result:
+        result.presentation.links['Swarming task'] = 'https://%s/task?id=%s' % (
+            job['host_name'], job['task_id'])
 
 
 def _process_footer_builders(api, builders):
@@ -211,97 +413,32 @@ def RunSteps(api, repo_name):
   else:
     builders = _process_footer_builders(api, builders)
 
+  repo_path = cl_workdir.join(repo_name)
+  with api.context(cwd=repo_path):
+    affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
+
+  led_builders = _get_led_builders(api, builders)
+  recipes = set(
+      _get_recipe(led_builder) for led_builder in led_builders.values())
+
+  recipes_py_path = recipes_dir.join('recipes.py')
+  recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
+  affected_recipes = _determine_affected_recipes(
+      api, affected_files, recipes, recipes_py_path, recipes_cfg_path)
 
   # We don't currently check anything about the list of builders to trigger.
   # This is because the only existing builder which runs this recipe uses a
   # service account which is only allowed to trigger jobs in the
   # luci.chromium.try bucket. That builder is not in that bucket, so there's no
   # possibility for running a tryjob on itself.
-  triggered_jobs = {}
-
-  for builder, related_builder in builders:
-    with api.step.nest('analyze+launch ' + builder) as presentation:
-      with api.context(cwd=cl_workdir.join('build')):
-        try:
-          # intermediate result
-          ir = api.led('get-builder', builder)
-        except api.step.StepFailure:
-          if related_builder is None:
-            raise
-          presentation.status = api.step.SUCCESS
-          presentation.step_text = (
-              '\nNo equivalent to builder {} was found for bucket {}'.format(
-                  related_builder.original_builder, related_builder.bucket))
-          continue
-        # Recipe we run probably doesn't change between slices.
-        job_slice = ir.result['job_slices'][0]
-        # TODO(martiniss): Use recipe_cipd_source to determine which repo this
-        # recipe lives in. For now we assume the recipe lives in the repo the CL
-        # lives in.
-        recipe = job_slice['userland']['recipe_name']
-
-        # FIXME: If we collect all the recipes-to-run up front, we can do
-        # a single analysis pass, instead of one per builder.
-        cl_key = trigger_cl(api, recipe, cl_workdir.join(repo_name),
-                            recipes_dir.join('recipes.py'), builder)
-        if not cl_key:
-          result = api.python.succeeding_step(
-              'not running a tryjob for %s' % recipe,
-              '`recipes.py analyze` indicates this recipe is not affected by '
-              'the files changed by the CL, and the CL does not affect '
-              'recipes.cfg')
-          continue
-
-        # FIXME: We should check if the recipe we're testing tests patches to
-        # chromium/src. For now just assume this works.
-        bucket = builder.split(':', 1)[0]
-        cl = CHROMIUM_SRC_TEST_CLS[bucket][cl_key]
-        ir = ir.then('edit-cr-cl', cl)
-        preso = api.step.active_result.presentation
-        preso.step_text += 'Using %s testing CL' % cl_key
-        preso.links['Test CL'] = cl
-
-        result = (
-          ir.then('edit-recipe-bundle').
-          # We used to set `is_experimental` to true, but the chromium recipe
-          # currently uses that to deprioritize swarming tasks, which results in
-          # very slow runtimes for the led task. Because this recipe blocks the
-          # build.git CQ, we decided the tradeoff to run these edited recipes in
-          # production mode instead would be better.
-          then('edit', '-exp', 'false').
-          then('launch')).result
-
-        triggered_jobs[builder] = result['swarming']
+  triggered_jobs = _trigger_builders(api, affected_files, affected_recipes,
+                                     led_builders, cl_workdir, recipes_cfg_path)
 
   if not triggered_jobs:
     api.python.succeeding_step('exiting', 'no tryjobs to run, exiting')
     return
 
-  # Check out the client-py repo, which gives us swarming.py.
-  client_py_config = api.gclient.make_config()
-  soln = client_py_config.solutions.add()
-  soln.name = 'client-py'
-  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
-  _checkout_project(api, client_py_workdir, client_py_config, False)
-
-  for builder, job in triggered_jobs.items():
-    result = None
-    try:
-      result = api.python(
-      'collect %s task' % builder, client_py_workdir.join(
-          'client-py', 'swarming.py'), [
-              'collect', '-S', job['host_name'], job['task_id'],
-              # Needed because these jobs often take >40 minutes, since they're
-              # regular tryjobs.
-              '--print-status-updates',
-              # Don't need task stdout; if the task fails then the user should
-              # just look at the task itself.
-              '--task-output-stdout=none',
-          ])
-    finally:
-      if result:
-        result.presentation.links['Swarming task'] = 'https://%s/task?id=%s' % (
-            job['host_name'], job['task_id'])
+  _collect_triggered_jobs(api, triggered_jobs, client_py_workdir)
 
 
 def GenTests(api):
@@ -330,15 +467,23 @@ def GenTests(api):
                                 api.json.output(parse_description_json))
     return t
 
-  def builder_step_name(builder, sub_step=None):
-    name = 'analyze+launch {}'.format(builder)
-    if sub_step:
-      name = '{}.{}'.format(name, sub_step)
-    return name
+  def affected_files(*affected_files):
+    return api.override_step_data(
+        'git diff to analyze patch',
+        stdout=api.raw_io.output('\n'.join(affected_files)))
+
+  def affected_recipes(*affected_recipes):
+    return api.step_data('determine affected recipes',
+                         api.json.output({
+                             'recipes': affected_recipes,
+                         }))
+
+  def led_get_builder_name(name):
+    return 'get led builders.get {}.led get-builder'.format(name)
 
   def led_get_builder(name):
     return api.step_data(
-        builder_step_name(name, 'led get-builder'),
+        led_get_builder_name(name),
         stdout=api.json.output({
             'job_slices': [{
                 'userland': {
@@ -347,96 +492,98 @@ def GenTests(api):
             }],
         }))
 
-  def test_builder(name,
-                   recipe_affected=True,
-                   affected_files=None,
-                   task_id='task0'):
-    t = led_get_builder(name)
+  def led_launch_name(name):
+    return 'trigger {}.led launch'.format(name)
 
-    affected_files = affected_files or []
-    if affected_files:
-      t += api.override_step_data(
-          builder_step_name(name, 'git diff to analyze patch'),
-          stdout=api.raw_io.output('\n'.join(affected_files)))
-
-    t += api.step_data(
-        builder_step_name(name, 'analyze {}'.format(RECIPE)),
-        api.json.output({
-            'recipes': ([RECIPE] if recipe_affected else []),
+  def led_launch(name, task_id='task0'):
+    return api.step_data(
+        led_launch_name(name),
+        stdout=api.json.output({
+            'swarming': {
+                'host_name': 'chromium-swarm.appspot.com',
+                'task_id': task_id,
+            }
         }))
 
-    if recipe_affected or 'infra/config/recipes.cfg' in affected_files:
-      t += api.step_data(
-          builder_step_name(name, 'led launch'),
-          stdout=api.json.output({
-              'swarming': {
-                  'host_name': 'chromium-swarm.appspot.com',
-                  'task_id': task_id,
-              }
-          }))
-
-    return t
-
-  def default_builders(**kwargs):
+  def default_builders(launch):
     t = api.empty_test_data()
     for i, b in enumerate(DEFAULT_BUILDERS):
-      t += test_builder(b, task_id='task{}'.format(i), **kwargs)
+      t += led_get_builder(b)
+      if launch:
+        t += led_launch(b, task_id='task{}'.format(i))
     return t
 
   yield api.test(
       'basic',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(),
+      affected_recipes(RECIPE),
+      default_builders(launch=True),
   )
 
   yield api.test(
       'no_jobs_to_run',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(recipe_affected=False),
-      api.post_process(post_process.Filter('exiting')),
+      default_builders(launch=False),
+      api.post_check(post_process.MustRun, 'exiting'),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'recipe_roller',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(
-          recipe_affected=False,
-          affected_files=[
-              'random/file.py',
-              'infra/config/recipes.cfg',
-          ]),
+      affected_files(
+          'random/file.py',
+          'infra/config/recipes.cfg',
+      ),
+      default_builders(launch=True),
   )
 
   yield api.test(
       'manual_roll_with_changes',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      default_builders(affected_files=[
+      affected_files(
           'random/file.py',
           'infra/config/recipes.cfg',
-      ]),
+      ),
+      default_builders(launch=True),
+  )
+
+  yield api.test(
+      'analyze_missing_json',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
+      default_builders(launch=False),
+      api.override_step_data('determine affected recipes', retcode=1),
+      api.post_check(post_process.StepException, 'determine affected recipes'),
+      api.post_check(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'analyze_failure',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(),
-      led_get_builder('luci.chromium.try:linux-rel'),
+      default_builders(launch=False),
       api.step_data(
-          builder_step_name('luci.chromium.try:linux-rel',
-                            'analyze {}'.format(RECIPE)),
+          'determine affected recipes',
           api.json.output({
               'error': 'Bad analyze!!!!',
               'invalid_recipes': [RECIPE],
           }),
           retcode=1),
-      api.post_process(
-          post_process.Filter(
-              builder_step_name('luci.chromium.try:linux-rel',
-                                'recipe invalid'))),
+      api.post_check(post_process.StepFailure, 'determine affected recipes'),
+      api.post_check(
+          lambda check, steps: \
+          check(RECIPE in
+                steps['determine affected recipes'].logs['invalid recipes'])
+      ),
+      api.post_check(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
   def step_text_lines(step):
@@ -472,30 +619,34 @@ def GenTests(api):
       'footer_builder',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
-      test_builder('luci.chromium.try:arbitrary-builder'),
-      test_builder('luci.chromium.try-beta:arbitrary-builder'),
-      test_builder('luci.chromium.try-stable:arbitrary-builder'),
+      affected_recipes(RECIPE),
+      led_get_builder('luci.chromium.try:arbitrary-builder'),
+      led_launch('luci.chromium.try:arbitrary-builder'),
+      led_get_builder('luci.chromium.try-beta:arbitrary-builder'),
+      led_launch('luci.chromium.try-beta:arbitrary-builder'),
+      led_get_builder('luci.chromium.try-stable:arbitrary-builder'),
+      led_launch('luci.chromium.try-stable:arbitrary-builder'),
       api.post_check(post_process.DoesNotRun,
-                     *[builder_step_name(b) for b in DEFAULT_BUILDERS]),
+                     *[led_get_builder_name(b) for b in DEFAULT_BUILDERS]),
       api.post_process(post_process.DropExpectation),
   )
 
   def non_existent_builder(name):
-    return api.step_data(
-        builder_step_name(name, 'led get-builder'),
-        retcode=1,
-    )
+    return api.step_data(led_get_builder_name(name), retcode=1)
 
   yield api.test(
       'footer_builder_not_on_all_branches',
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
-      test_builder('luci.chromium.try:arbitrary-builder'),
-      test_builder('luci.chromium.try-beta:arbitrary-builder'),
+      affected_recipes(RECIPE),
+      led_get_builder('luci.chromium.try:arbitrary-builder'),
+      led_launch('luci.chromium.try:arbitrary-builder'),
+      led_get_builder('luci.chromium.try-beta:arbitrary-builder'),
+      led_launch('luci.chromium.try-beta:arbitrary-builder'),
       non_existent_builder('luci.chromium.try-stable:arbitrary-builder'),
       api.post_check(
-          post_process.StepSuccess,
-          builder_step_name('luci.chromium.try-stable:arbitrary-builder')),
+          post_process.StepWarning,
+          led_get_builder_name('luci.chromium.try-stable:arbitrary-builder')),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -505,8 +656,9 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build'),
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       non_existent_builder('luci.chromium.try:arbitrary-builder'),
-      api.post_check(post_process.StepFailure,
-                     builder_step_name('luci.chromium.try:arbitrary-builder')),
+      api.post_check(
+          post_process.StepFailure,
+          led_get_builder_name('luci.chromium.try:arbitrary-builder')),
       api.post_check(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

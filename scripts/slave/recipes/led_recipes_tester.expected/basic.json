@@ -263,8 +263,32 @@
     ]
   },
   {
+    "cmd": [
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "git diff to analyze patch",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try:linux-rel"
+    "name": "get led builders"
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -277,10 +301,9 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.ensure_installed",
+    "name": "get led builders.get luci.chromium.try:linux-rel.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -300,10 +323,149 @@
       "get-builder",
       "luci.chromium.try:linux-rel"
     ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.led get-builder",
+    "name": "get led builders.get luci.chromium.try:linux-rel.led get-builder",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium.try:win10_chromium_x64_rel_ng"
+    ],
+    "name": "get led builders.get luci.chromium.try:win10_chromium_x64_rel_ng.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try-beta:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium.try-beta:linux-rel"
+    ],
+    "name": "get led builders.get luci.chromium.try-beta:linux-rel.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try-beta:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium.try-beta:win10_chromium_x64_rel_ng"
+    ],
+    "name": "get led builders.get luci.chromium.try-beta:win10_chromium_x64_rel_ng.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try-stable:linux-rel",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium.try-stable:linux-rel"
+    ],
+    "name": "get led builders.get luci.chromium.try-stable:linux-rel.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get led builders.get luci.chromium.try-stable:win10_chromium_x64_rel_ng",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
+      "get-builder",
+      "luci.chromium.try-stable:win10_chromium_x64_rel_ng"
+    ],
+    "name": "get led builders.get luci.chromium.try-stable:win10_chromium_x64_rel_ng.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -318,24 +480,6 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try:linux-rel.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
       "vpython",
       "-u",
       "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
@@ -345,17 +489,21 @@
       "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.analyze foo_recipe",
+    "name": "determine affected recipes",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@recipes@foo_recipe@@@",
+      "@@@STEP_LOG_END@recipes@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger luci.chromium.try:linux-rel"
   },
   {
     "cmd": [
@@ -364,7 +512,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.led edit-cr-cl",
+    "name": "trigger luci.chromium.try:linux-rel.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -381,7 +529,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try:linux-rel.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -397,7 +545,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.led edit",
+    "name": "trigger luci.chromium.try:linux-rel.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -411,7 +559,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:linux-rel.led launch",
+    "name": "trigger luci.chromium.try:linux-rel.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -426,70 +574,7 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try:win10_chromium_x64_rel_ng"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led get-builder",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng"
   },
   {
     "cmd": [
@@ -498,7 +583,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit-cr-cl",
+    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -515,7 +600,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -531,7 +616,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led edit",
+    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -545,7 +630,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try:win10_chromium_x64_rel_ng.led launch",
+    "name": "trigger luci.chromium.try:win10_chromium_x64_rel_ng.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -560,70 +645,7 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try-beta:linux-rel"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.led get-builder",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "trigger luci.chromium.try-beta:linux-rel"
   },
   {
     "cmd": [
@@ -632,7 +654,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/2067090"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.led edit-cr-cl",
+    "name": "trigger luci.chromium.try-beta:linux-rel.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -649,7 +671,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try-beta:linux-rel.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -665,7 +687,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.led edit",
+    "name": "trigger luci.chromium.try-beta:linux-rel.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -679,7 +701,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:linux-rel.led launch",
+    "name": "trigger luci.chromium.try-beta:linux-rel.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -694,70 +716,7 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try-beta:win10_chromium_x64_rel_ng"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.led get-builder",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "trigger luci.chromium.try-beta:win10_chromium_x64_rel_ng"
   },
   {
     "cmd": [
@@ -766,7 +725,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/2066664"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit-cr-cl",
+    "name": "trigger luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -783,7 +742,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -799,7 +758,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit",
+    "name": "trigger luci.chromium.try-beta:win10_chromium_x64_rel_ng.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -813,7 +772,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-beta:win10_chromium_x64_rel_ng.led launch",
+    "name": "trigger luci.chromium.try-beta:win10_chromium_x64_rel_ng.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -828,70 +787,7 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try-stable:linux-rel"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.led get-builder",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "trigger luci.chromium.try-stable:linux-rel"
   },
   {
     "cmd": [
@@ -900,7 +796,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/2068245"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.led edit-cr-cl",
+    "name": "trigger luci.chromium.try-stable:linux-rel.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -917,7 +813,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try-stable:linux-rel.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -933,7 +829,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.led edit",
+    "name": "trigger luci.chromium.try-stable:linux-rel.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -947,7 +843,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:linux-rel.led launch",
+    "name": "trigger luci.chromium.try-stable:linux-rel.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -962,70 +858,7 @@
   },
   {
     "cmd": [],
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng"
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
-      "get-builder",
-      "luci.chromium.try-stable:win10_chromium_x64_rel_ng"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.led get-builder",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/recipe_engine/infra/recipes-py/recipes.py",
-      "--package",
-      "[CACHE]/build/build/infra/config/recipes.cfg",
-      "analyze",
-      "{\"files\": [\"[CACHE]/build/build/foo.cc\"], \"recipes\": [\"foo_recipe\"]}",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.analyze foo_recipe",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"recipes\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "trigger luci.chromium.try-stable:win10_chromium_x64_rel_ng"
   },
   {
     "cmd": [
@@ -1034,7 +867,7 @@
       "https://chromium-review.googlesource.com/c/chromium/src/+/2068246"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit-cr-cl",
+    "name": "trigger luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit-cr-cl",
     "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1051,7 +884,7 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "name": "trigger luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1067,7 +900,7 @@
       "false"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit",
+    "name": "trigger luci.chromium.try-stable:win10_chromium_x64_rel_ng.led edit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -1081,7 +914,7 @@
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "analyze+launch luci.chromium.try-stable:win10_chromium_x64_rel_ng.led launch",
+    "name": "trigger luci.chromium.try-stable:win10_chromium_x64_rel_ng.led launch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1166,57 +999,6 @@
       "collect",
       "-S",
       "chromium-swarm.appspot.com",
-      "task4",
-      "--print-status-updates",
-      "--task-output-stdout=none"
-    ],
-    "name": "collect luci.chromium.try-stable:linux-rel task",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/client_py/client-py/swarming.py",
-      "collect",
-      "-S",
-      "chromium-swarm.appspot.com",
-      "task3",
-      "--print-status-updates",
-      "--task-output-stdout=none"
-    ],
-    "name": "collect luci.chromium.try-beta:win10_chromium_x64_rel_ng task",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/client_py/client-py/swarming.py",
-      "collect",
-      "-S",
-      "chromium-swarm.appspot.com",
-      "task5",
-      "--print-status-updates",
-      "--task-output-stdout=none"
-    ],
-    "name": "collect luci.chromium.try-stable:win10_chromium_x64_rel_ng task",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/client_py/client-py/swarming.py",
-      "collect",
-      "-S",
-      "chromium-swarm.appspot.com",
       "task0",
       "--print-status-updates",
       "--task-output-stdout=none"
@@ -1258,6 +1040,57 @@
     "name": "collect luci.chromium.try-beta:linux-rel task",
     "~followup_annotations": [
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/client_py/client-py/swarming.py",
+      "collect",
+      "-S",
+      "chromium-swarm.appspot.com",
+      "task3",
+      "--print-status-updates",
+      "--task-output-stdout=none"
+    ],
+    "name": "collect luci.chromium.try-beta:win10_chromium_x64_rel_ng task",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task3@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/client_py/client-py/swarming.py",
+      "collect",
+      "-S",
+      "chromium-swarm.appspot.com",
+      "task4",
+      "--print-status-updates",
+      "--task-output-stdout=none"
+    ],
+    "name": "collect luci.chromium.try-stable:linux-rel task",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task4@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/client_py/client-py/swarming.py",
+      "collect",
+      "-S",
+      "chromium-swarm.appspot.com",
+      "task5",
+      "--print-status-updates",
+      "--task-output-stdout=none"
+    ],
+    "name": "collect luci.chromium.try-stable:win10_chromium_x64_rel_ng task",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=task5@@@"
     ]
   },
   {
