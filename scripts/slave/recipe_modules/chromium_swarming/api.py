@@ -812,6 +812,12 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     to_add = dict(IMPLIED_CIPD_BINARIES)
 
+    # HACK(crbug.com/842234) - we don't support cpython or cpython3 on mips yet,
+    # so remove them from packages to inject.
+    cpu_dimension = task_slice.dimensions.get('cpu', '')
+    if 'mips' in cpu_dimension:
+      to_add.pop('cpython', None)
+
     path_env_prefix = set()
     for pkg, details in sorted(to_add.items()):
       path = IMPLIED_BINARY_PATH
