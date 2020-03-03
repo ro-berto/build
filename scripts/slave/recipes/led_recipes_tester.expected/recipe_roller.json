@@ -209,6 +209,24 @@
   },
   {
     "cmd": [
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "infra_step": true,
+    "name": "git diff to analyze patch",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/random/file.py@@@",
+      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/infra/config/recipes.cfg@@@",
+      "@@@STEP_LOG_END@files@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
@@ -260,24 +278,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "infra_step": true,
-    "name": "git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/random/file.py@@@",
-      "@@@STEP_LOG_LINE@files@[CACHE]/build/build/infra/config/recipes.cfg@@@",
-      "@@@STEP_LOG_END@files@@@"
     ]
   },
   {
@@ -487,7 +487,7 @@
       "--package",
       "[CACHE]/build/build/infra/config/recipes.cfg",
       "analyze",
-      "{\"files\": [\"[CACHE]/build/build/random/file.py\", \"[CACHE]/build/build/infra/config/recipes.cfg\"], \"recipes\": [\"foo_recipe\"]}",
+      "{\"files\": [\"[CACHE]/build/build/infra/config/recipes.cfg\", \"[CACHE]/build/build/random/file.py\"], \"recipes\": [\"foo_recipe\"]}",
       "/path/to/tmp/json"
     ],
     "name": "determine affected recipes",

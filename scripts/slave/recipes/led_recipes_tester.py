@@ -38,23 +38,45 @@ PROPERTIES = {
 BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
-DEFAULT_BUILDERS = [
+DEFAULT_BUILDERS = (
     'luci.chromium.try:linux-rel',
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium.try-beta:linux-rel',
     'luci.chromium.try-beta:win10_chromium_x64_rel_ng',
     'luci.chromium.try-stable:linux-rel',
     'luci.chromium.try-stable:win10_chromium_x64_rel_ng',
-]
+)
+
+
+@attr.s(frozen=True)
+class PathBasedBuilderSet(object):
+  builders = attr.ib()
+  files = attr.ib()
+
+
+# Builders that will be tested only if specific files are touched
+IOS_PATH_BASED_BUILDERS = PathBasedBuilderSet(
+    builders=[
+        'luci.chromium.try:ios-simulator',
+        'luci.chromium.try-beta:ios-simulator',
+        'luci.chromium.try-stable:ios-simulator',
+    ],
+    files=[
+        'scripts/slave/recipes/ios/try.py',
+        'scripts/slave/recipe_modules/ios/api.py',
+    ],
+)
+
+PATH_BASED_BUILDER_SETS = (IOS_PATH_BASED_BUILDERS,)
 
 
 # We run the fast CL on Windows to speed up cycle time. Most of the
 # recipe functionality is tested by the slow CL on Linux.
-FAST_BUILDERS = [
+FAST_BUILDERS = (
     'luci.chromium.try:win10_chromium_x64_rel_ng',
     'luci.chromium.try-beta:win10_chromium_x64_rel_ng',
     'luci.chromium.try-stable:win10_chromium_x64_rel_ng',
-]
+)
 
 # CL to use when testing a recipe which touches chromium source.
 # The first level of keys is the bucket of the builder. The second level of keys
@@ -111,12 +133,84 @@ def _get_recipe(led_builder):
 
 
 def _checkout_project(api, workdir, gclient_config, patch):
-  api.file.ensure_directory(
-      '%s checkout' % gclient_config.solutions[0].name, workdir)
+  api.file.ensure_directory('%s checkout' % gclient_config.solutions[0].name,
+                            workdir)
 
   with api.context(cwd=workdir):
-    api.bot_update.ensure_checkout(
-        patch=patch, gclient_config=gclient_config)
+    api.bot_update.ensure_checkout(patch=patch, gclient_config=gclient_config)
+
+
+def _process_footer_builders(api, builders):
+  bad_builders = sorted(b for b in builders if ':' not in b)
+  if bad_builders:
+    step_name = 'bad builders'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(['\n  ' + b for b in bad_builders])
+    raise api.step.StepFailure(step_name, result)
+  buckets = set(b.split(':', 1)[0] for b in builders)
+  unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
+  if unknown_buckets:
+    step_name = 'unknown buckets'
+    result = api.step(step_name, [])
+    result.presentation.status = api.step.FAILURE
+    result.presentation.step_text = ''.join(
+        ['\n  ' + b for b in sorted(unknown_buckets)])
+    raise api.step.StepFailure(step_name, result)
+
+  builder_map = collections.OrderedDict.fromkeys(builders)
+  # For each builder, add an entry for the version of the builder in each
+  # branch, with a RelatedBuilder indicating what it was computed from
+  for builder in builders:
+    name = builder.split(':', 1)[1]
+    for bucket in CHROMIUM_SRC_TEST_CLS:
+      builder_map.setdefault('{}:{}'.format(bucket, name),
+                             RelatedBuilder(builder, bucket))
+
+  return builder_map
+
+
+def _get_builders_to_check(api, affected_files, repo_path):
+  """Get the set of builders to test the recipe change against.
+
+  If the CL has Led-Recipes-Tester-Builder footer in its description,
+  then those builders will be the on tested, with branched versions of
+  them provisonally included. Otherwise, a default set of builders will
+  be tested, with some additional testing of iOS builders if
+  iOS-specific recipe files are changed.
+
+  Args:
+    api - The recipe API object.
+    affected_files - The set of files affected by the change.
+    repo_path - A Path object identifying the root of repo the change is
+      against.
+
+  Returns:
+    An OrderedDict mapping builder name to None or a RelatedBuilder
+    instance. If the value is None, the associated builder should exist
+    and it will be considered an error if it does not. If the value is
+    not None, the associated builder may or may not exist and the value
+    identifies the related builder and the alternative bucket that the
+    builder was based on.
+  """
+  cl_footers = api.tryserver.get_footers() or {}
+  footer_builders = cl_footers.get(BUILDER_FOOTER)
+
+  if footer_builders is not None:
+    return _process_footer_builders(api, footer_builders)
+
+  prefix = str(repo_path) + '/'
+
+  def remove_prefix(f):
+    assert f.startswith(prefix)
+    return f[len(prefix):]
+
+  affected_files = set(remove_prefix(f) for f in affected_files)
+  builders = list(DEFAULT_BUILDERS)
+  for builder_set in PATH_BASED_BUILDER_SETS:
+    if any(f in affected_files for f in builder_set.files):
+      builders.extend(builder_set.builders)
+  return collections.OrderedDict.fromkeys(builders)
 
 
 def _get_led_builders(api, builders):
@@ -143,7 +237,7 @@ def _get_led_builders(api, builders):
   led_builders = collections.OrderedDict()
 
   with api.step.nest('get led builders'):
-    for builder, related_builder in builders:
+    for builder, related_builder in builders.iteritems():
       # Nest the led get-builder call because we don't get to control the step
       # name and having the step name identify the buidler we're getting is more
       # helpful than 'led get-builder', 'led get-builder (2)',
@@ -186,8 +280,8 @@ def _determine_affected_recipes(api, affected_files, recipes, recipes_py_path,
       recipes_cfg_path,
       'analyze',
       api.json.input({
-          'files': affected_files,
-          'recipes': sorted(set(recipes)),
+          'files': sorted(affected_files),
+          'recipes': sorted(recipes),
       }),
       api.json.output(),
   ]
@@ -357,36 +451,6 @@ def _collect_triggered_jobs(api, triggered_jobs, client_py_workdir):
             job['host_name'], job['task_id'])
 
 
-def _process_footer_builders(api, builders):
-  bad_builders = sorted(b for b in builders if ':' not in b)
-  if bad_builders:
-    step_name = 'bad builders'
-    result = api.step(step_name, [])
-    result.presentation.status = api.step.FAILURE
-    result.presentation.step_text = ''.join(['\n  ' + b for b in bad_builders])
-    raise api.step.StepFailure(step_name, result)
-  buckets = set(b.split(':', 1)[0] for b in builders)
-  unknown_buckets = set(b for b in buckets if b not in CHROMIUM_SRC_TEST_CLS)
-  if unknown_buckets:
-    step_name = 'unknown buckets'
-    result = api.step(step_name, [])
-    result.presentation.status = api.step.FAILURE
-    result.presentation.step_text = ''.join(
-        ['\n  ' + b for b in sorted(unknown_buckets)])
-    raise api.step.StepFailure(step_name, result)
-
-  builder_map = collections.OrderedDict.fromkeys(builders)
-  # For each builder, add an entry for the version of the builder in each
-  # branch, with a RelatedBuilder indicating what it was computed from
-  for builder in builders:
-    name = builder.split(':', 1)[1]
-    for bucket in CHROMIUM_SRC_TEST_CLS:
-      builder_map.setdefault('{}:{}'.format(bucket, name),
-                             RelatedBuilder(builder, bucket))
-
-  return builder_map.items()
-
-
 # TODO(martiniss): make this work if repo_name != 'build'
 def RunSteps(api, repo_name):
   workdir_base = api.path['cache']
@@ -403,19 +467,11 @@ def RunSteps(api, repo_name):
   cl_config = api.gclient.make_config(repo_name)
   _checkout_project(api, cl_workdir, cl_config, True)
 
-  cl_footers = api.tryserver.get_footers() or {}
-  builders = cl_footers.get(BUILDER_FOOTER)
-
-  # builders needs to be in the form of tuples:
-  # (builder (str), related_builder (RelatedBuilder or None))
-  if builders is None:
-    builders = [(b, None) for b in DEFAULT_BUILDERS]
-  else:
-    builders = _process_footer_builders(api, builders)
-
   repo_path = cl_workdir.join(repo_name)
   with api.context(cwd=repo_path):
     affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
+
+  builders = _get_builders_to_check(api, affected_files, repo_path)
 
   led_builders = _get_led_builders(api, builders)
   recipes = set(
@@ -481,13 +537,13 @@ def GenTests(api):
   def led_get_builder_name(name):
     return 'get led builders.get {}.led get-builder'.format(name)
 
-  def led_get_builder(name):
+  def led_get_builder(name, recipe=RECIPE):
     return api.step_data(
         led_get_builder_name(name),
         stdout=api.json.output({
             'job_slices': [{
                 'userland': {
-                    'recipe_name': RECIPE,
+                    'recipe_name': recipe,
                 },
             }],
         }))
@@ -661,4 +717,49 @@ def GenTests(api):
           led_get_builder_name('luci.chromium.try:arbitrary-builder')),
       api.post_check(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'cl_indirectly_affects_ios',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
+      affected_recipes(),
+      default_builders(launch=False),
+      api.post_check(
+          post_process.DoesNotRun,
+          *[led_get_builder_name(b) for b in IOS_PATH_BASED_BUILDERS.builders]),
+      api.post_check(post_process.MustRun, 'exiting'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'ios-recipe-module-change',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
+      affected_files('scripts/slave/recipe_modules/ios/api.py',),
+      affected_recipes('ios/try'),
+      default_builders(launch=False),
+      led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try:ios-simulator', task_id='task0'),
+      led_get_builder('luci.chromium.try-beta:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-beta:ios-simulator', task_id='task1'),
+      led_get_builder(
+          'luci.chromium.try-stable:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-stable:ios-simulator', task_id='task2'),
+  )
+
+  yield api.test(
+      'ios-try-recipe-change',
+      api.properties.tryserver(repo_name='build'),
+      gerrit_change(),
+      affected_files('scripts/slave/recipes/ios/try.py',),
+      affected_recipes('ios/try'),
+      default_builders(launch=False),
+      led_get_builder('luci.chromium.try:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try:ios-simulator', task_id='task0'),
+      led_get_builder('luci.chromium.try-beta:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-beta:ios-simulator', task_id='task1'),
+      led_get_builder(
+          'luci.chromium.try-stable:ios-simulator', recipe='ios/try'),
+      led_launch('luci.chromium.try-stable:ios-simulator', task_id='task2'),
   )
