@@ -67,8 +67,8 @@
     "cmd": [
       "[CACHE]/builder/buildtools/mac/gn",
       "gen",
-      "[CACHE]/builder/crashpad/out/Debug-iphonesimulator",
-      "--args=target_os=\"ios\" target_cpu=\"x64\" is_debug=true"
+      "[CACHE]/builder/crashpad/out/Release-iphoneos",
+      "--args=target_os=\"ios\" target_cpu=\"arm64\" is_debug=false"
     ],
     "cwd": "[CACHE]/builder/crashpad",
     "name": "generate build files"
@@ -77,19 +77,9 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[CACHE]/builder/crashpad/out/Debug-iphonesimulator"
+      "[CACHE]/builder/crashpad/out/Release-iphoneos"
     ],
     "name": "compile with ninja"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/crashpad/build/run_tests.py",
-      "[CACHE]/builder/crashpad/out/Debug-iphonesimulator"
-    ],
-    "name": "run tests",
-    "timeout": 300
   },
   {
     "cmd": [

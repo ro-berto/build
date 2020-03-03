@@ -122,6 +122,12 @@ def RunSteps(api, config, target_os, target_cpu):
     api.gclient.runhooks()
 
   dirname = config
+  if is_ios:
+    if target_cpu == 'arm64':
+      dirname = dirname + '-iphoneos'
+    else:
+      dirname = dirname + '-iphonesimulator'
+
   if is_fuchsia or is_ios or is_linux or is_mac:
     # TODO(crbug.com/crashpad/319): Simplify once all platforms use the cache.
     if is_ios:
@@ -182,6 +188,10 @@ def RunSteps(api, config, target_os, target_cpu):
       # to (and should) do `build/run_fuchsia_qemu.py start` before, and `...
       # stop` after calling run_tests.py.
       # https://bugs.chromium.org/p/crashpad/issues/detail?id=219.
+      return
+
+    if is_ios and target_cpu == 'arm64':
+      # Testing is not supported on iOS devices (arm64).
       return
 
     with api.context(env=env):
@@ -245,6 +255,7 @@ def GenTests(api):
       ('crashpad_try_linux_rel', 'linux', ''),
       ('crashpad_fuchsia_rel', 'fuchsia', ''),
       ('crashpad_ios_simulator_dbg', 'ios', ''),
+      ('crashpad_ios_device_rel', 'ios', 'arm64'),
   ]
   for t, os, cpu in tests:
     yield api.test(
