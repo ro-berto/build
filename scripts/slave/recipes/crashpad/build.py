@@ -124,9 +124,9 @@ def RunSteps(api, config, target_os, target_cpu):
   dirname = config
   if is_ios:
     if target_cpu == 'arm64':
-      dirname = dirname + '-iphoneos'
+      dirname += '-iphoneos'
     else:
-      dirname = dirname + '-iphonesimulator'
+      dirname += '-iphonesimulator'
 
   if is_fuchsia or is_ios or is_linux or is_mac:
     # TODO(crbug.com/crashpad/319): Simplify once all platforms use the cache.
@@ -142,7 +142,11 @@ def RunSteps(api, config, target_os, target_cpu):
     args = (
       'target_os="' + target_os + '" target_cpu="' + target_cpu + '"' +
       ' is_debug=' + ('true' if is_debug else 'false'))
-    if is_linux:
+    if is_ios and target_cpu == 'arm64':
+      # Disable code signing for iOS device builds since the bots don't have
+      # certs installed.
+      args += ' ios_enable_code_signing=false'
+    elif is_linux:
       # Point at the local copy of clang and a sysroot that were downloaded by
       # gclient runhooks.
       args += ' clang_path="//third_party/linux/clang/linux-amd64"'
