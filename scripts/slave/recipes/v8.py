@@ -955,20 +955,6 @@ def GenTests(api):
       api.post_process(DropExpectation)
   )
 
-  # Test for covering a hack in swarming/api.py for crbug.com/842234.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Foobar',
-        'no_cpython_on_mips',
-        parent_buildername='V8 Foobar - builder',
-        parent_bot_config=release_bot_config,
-        parent_test_spec='{"tests": [{"name": "mjsunit"}], '
-                         '"swarming_dimensions": {"cpu": "mips-32"}}',
-    ) +
-    api.post_process(DropExpectation)
-  )
-
   # Cover test config entries with specific isolate targets.
   yield (
     api.v8.test(
