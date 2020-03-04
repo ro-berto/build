@@ -51,11 +51,12 @@ class BadShards:
 
 class AggregatedResults:
 
-  def __init__(self):
+  def __init__(self, slow_tests_cutoff):
     self.archs = []
     self.modes = []
     self.slowest_tests = []
     self.results = []
+    self.slow_tests_cutoff = slow_tests_cutoff
 
   def append(self, json_data):
     # On continuous bots, the test driver outputs exactly one item in the
@@ -72,11 +73,10 @@ class AggregatedResults:
     assert len(set(self.modes)) == 1
     sorted_tests = sorted(
         self.slowest_tests, key=lambda t: t['duration'], reverse=True)
-    cut_off = 10
     return [{
         'arch': self.archs[0],
         'mode': self.modes[0],
-        'slowest_tests': sorted_tests[:cut_off],
+        'slowest_tests': sorted_tests[:self.slow_tests_cutoff],
         'results': self.results,
         'tags': sorted(tags),
     }]
@@ -103,7 +103,7 @@ def get_shards_info(output_dir):
     return None
 
 
-def merge_shard_results(output_dir, shards):
+def merge_shard_results(output_dir, shards, options):
   """Reads JSON test output from all shards and combines them into one.
 
   Also merges sancov coverage data if coverage_dir is spefied.
@@ -117,7 +117,7 @@ def merge_shard_results(output_dir, shards):
   # Merge all JSON files together.
 
   tags = set()
-  aggregated_results = AggregatedResults()
+  aggregated_results = AggregatedResults(options.slow_tests_cutoff)
   bad_shards = BadShards()
   for index, result in enumerate(shards):
     if result is not None:
@@ -152,7 +152,8 @@ def merge_shard_results(output_dir, shards):
 
 def merge_test_results(output_dir, shards, options):
   with open(options.merged_test_output, 'wb') as f:
-    json.dump(merge_shard_results(output_dir, shards), f, separators=(',', ':'))
+    merged_data = merge_shard_results(output_dir, shards, options)
+    json.dump(merged_data, f, separators=(',', ':'))
 
 
 def merge_coverage_data(output_dir, shards, options):
@@ -211,6 +212,7 @@ def parse_args(args):
   parser = optparse.OptionParser()
   parser.add_option('--temp-root-dir', default=tempfile.gettempdir())
   parser.add_option('--merged-test-output')
+  parser.add_option('--slow-tests-cutoff', type="int", default=100)
   parser.add_option('--coverage-dir')
   parser.add_option('--sancov-merger')
   options, extra_args = parser.parse_args(shim_args)
