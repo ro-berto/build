@@ -12,6 +12,7 @@ import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
 import zipfile
 
@@ -44,6 +45,15 @@ class PackageIndexBootstrap(unittest.TestCase):
     # "out/Debug" build directory which all the compilation DB
     # entries are relative to.
     self.build_dir = os.path.join(TEST_DATA_INPUT_DIR, OUT_DIR)
+
+    # Set new.kzip to be modified the last.
+    today = time.time()
+    # Set to yesterday as some operating systems may have 1 day resolution.
+    yesterday = today - 86400
+    os.utime(os.path.join(self.build_dir, 'kzip', 'new.kzip'), (today, today))
+    os.utime(
+        os.path.join(self.build_dir, 'kzip', 'old_duplicate.kzip'),
+        (yesterday, yesterday))
 
     # Create a path for the archive to be written to.
     with tempfile.NamedTemporaryFile(

@@ -91,6 +91,7 @@ class IndexPack(object):
     self.build_config = build_config
     self.out_dir = out_dir
     self.verbose = verbose
+    self._java_output_set = set()
 
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
@@ -257,12 +258,21 @@ class IndexPack(object):
 
 
   def _MergeExistingKzips(self):
-    for f in os.listdir(self.existing_java_kzips):
-      if not f.endswith('.kzip'):
-        continue
+    # There might be more than one kzip file for the same target. This happens
+    # when arguments to javac change and ninja can't remove dynamicly generated
+    # kzip file.
+    # Sort by modified time, and discard older targets that have the same output
+    # key.
+    listdir = [
+        os.path.join(self.existing_java_kzips, f)
+        for f in os.listdir(self.existing_java_kzips)
+        if f.endswith('.kzip')
+    ]
+    listdir.sort(key=os.path.getmtime, reverse=True)
+    for f in listdir:
       try:
-        with zipfile.ZipFile(os.path.join(self.existing_java_kzips, f), 'r',
-                             zipfile.ZIP_DEFLATED, allowZip64=True) as kzip:
+        with zipfile.ZipFile(
+            f, 'r', zipfile.ZIP_DEFLATED, allowZip64=True) as kzip:
           self._MergeExistingKzip(kzip)
       except zipfile.BadZipfile as e:
         # Should there be issue with kzip, skip this unit
@@ -270,6 +280,9 @@ class IndexPack(object):
         continue
 
   def _MergeExistingKzip(self, kzip):
+    files = {}
+    unit = None
+
     for zip_info in kzip.infolist():
       # kzip should contain following structure:
       # foo/
@@ -277,46 +290,79 @@ class IndexPack(object):
       # foo/files/bar
       # foo/units
       # foo/units/bar
-      # We only care for foo/files/* and foo/units/*
+      # We only care for foo/files/* and foo/units/* and we expect only one file
+      # in foo/units/ directory
       segments = zip_info.filename.split('/')
       if len(segments) != 3 or segments[-1] == '':
         continue
 
+      if segments[1] == 'units':
+        if unit:
+          print('Ignoring kzip file as more than one units in kzip file %s.' %
+                (zip_info.filename))
+          return
+        unit = zip_info
+      elif segments[1] == 'files':
+        files[segments[2]] = zip_info
+      else:
+        print('WARNING: Unexpected file %s in kzip %s.' % (zip_info.filename,
+                                                           kzip.filename))
+        return
+
+    if not unit:
+      print(
+          'Ignoring kzip file %s as unit file is not found.' % (kzip.filename))
+      return
+
+    # Add unit file
+    try:
+      with kzip.open(unit, 'rU') as f:
+        content = f.read()
+    except zipfile.BadZipfile as e:
+      # Should there be issue with extracting kzip, skip this unit
+      print('Error reading generated zip file %s: %s' % (kzip.filename, e))
+      return
+
+    # Units in Java zip archive are json encoded
+    # convert json into a protobuf
+    indexed_compilation_proto = json_format.Parse(
+        content, analysis_pb2.IndexedCompilation())
+
+    output_key = indexed_compilation_proto.unit.output_key
+    if output_key in self._java_output_set:
+      print('Duplicated unit "%s" (filename: %s)' % (output_key, kzip.filename))
+      return
+
+    self._java_output_set.add(output_key)
+
+    if self.build_config and indexed_compilation_proto.unit:
+      self._InjectUnitBuildDetails(indexed_compilation_proto.unit)
+
+    unit_file_content = indexed_compilation_proto.SerializeToString()
+    unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
+    unit_file_path = os.path.join(self.units_directory, unit_file_content_hash)
+    self.kzip.writestr(unit_file_path, unit_file_content)
+
+    if self.verbose:
+      print('Added %s from java kzip' % unit_file_path)
+
+    # Add all files
+    for (filename, zip_info) in files.iteritems():
       try:
-        content = kzip.open(zip_info, 'rU').read()
+        with kzip.open(zip_info, 'rU') as f:
+          content = f.read()
       except zipfile.BadZipfile as e:
         # Should there be issue with extracting kzip, skip this unit
         print('Error reading generated zip file %s: %s' % (kzip.filename, e))
         continue
+      if not self._SetFileHashEntry(filename, filename):
+        # File already added
+        continue
 
-      if segments[1] == 'units':
-        # Units in Java zip archive are json encoded
-
-        # convert json into a protobuf
-        indexed_compilation_proto = json_format.Parse(
-            content,
-            analysis_pb2.IndexedCompilation())
-
-        if self.build_config and indexed_compilation_proto.unit:
-          self._InjectUnitBuildDetails(indexed_compilation_proto.unit)
-
-        self.kzip.writestr(self.units_directory + '/' + segments[2],
-                           indexed_compilation_proto.SerializeToString())
-
-        if self.verbose:
-          print("Added unit %s from java kzip" % zip_info.filename)
-      elif segments[1] == 'files':
-        if not self._SetFileHashEntry(segments[2], segments[2]):
-          # File already added
-          continue
-
-        self.kzip.writestr(self.files_directory + '/' + segments[2],
-                           content)
-        if self.verbose:
-          print("Added file %s from java kzip" % zip_info.filename)
-      else:
-        print('WARNING: Unexpected file %s in kzip %s' % (
-            zip_info.filename, f))
+      path = os.path.join(self.files_directory, filename)
+      self.kzip.writestr(path, content)
+      if self.verbose:
+        print('Added %s from java kzip' % path)
 
   def _InjectUnitBuildDetails(self, unit):
     # If there is already BuildDetails, we need to reuse it
