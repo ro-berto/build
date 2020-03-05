@@ -304,12 +304,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_runner
 
+  # TODO(https://crbug.com/1042425) Switch callers to
+  # build_config.get_compile_targets and remove this method
   def get_compile_targets(self, bot_config, build_config, tests):
     assert isinstance(build_config, bot_config_module.BuildConfig), \
         "build_config argument %r was not a BuildConfig" % (build_config)
-
-    compile_targets = bot_config.get_compile_targets(self, build_config, tests)
-    return sorted(set(compile_targets))
+    return sorted(set(build_config.get_compile_targets(tests)))
 
   _ARCHITECTURE_DIGIT_MAP = {
       ('arm', 32): 0,
@@ -461,6 +461,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m.isolate.isolated_tests)
       return raw_result
 
+  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
   def package_build(self, builder_id, update_step, build_config, reasons=None):
     """Zip and upload the build to google storage.
 
@@ -474,16 +475,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         handled in archive_build.
       - this may upload twice on perf builders.
     """
-    bot_config = build_config.get_bot_config(builder_id)
+    bot_spec = build_config.get_bot_spec(builder_id)
 
-    bot_type = bot_config.bot_type
+    bot_type = bot_spec.bot_type
     assert bot_type in bot_spec_module.BUILDER_TYPES, (
         'Called package_build for %s:%s, which is a "%s". '
         'package_build only supports "builder" and "builder_tester". '
         'This is a bug in your recipe.' % (builder_id.master,
                                            builder_id.builder, bot_type))
 
-    if not bot_config.cf_archive_build:
+    if not bot_spec.cf_archive_build:
       master_config = build_config.get_master_settings(builder_id.master)
       build_revision = update_step.presentation.properties.get(
           'got_revision',
@@ -536,6 +537,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             standard_reasons)
 
 
+  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
   def archive_build(self, builder_id, update_step, build_config):
     """Archive the build if the bot is configured to do so.
 
@@ -545,25 +547,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     This is currently used to store builds long-term and to transfer them
     to clusterfuzz.
     """
-    bot_config = build_config.get_bot_config(builder_id)
+    bot_spec = build_config.get_bot_spec(builder_id)
 
-    if bot_config.archive_build and not self.m.tryserver.is_tryserver:
+    if bot_spec.archive_build and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
           'archive_build',
-          bot_config.gs_bucket,
-          bot_config.gs_acl,
+          bot_spec.gs_bucket,
+          bot_spec.gs_acl,
           mode='dev',
-          build_name=bot_config.gs_build_name,
+          build_name=bot_spec.gs_build_name,
       )
-    if bot_config.cf_archive_build and not self.m.tryserver.is_tryserver:
+    if bot_spec.cf_archive_build and not self.m.tryserver.is_tryserver:
       self.m.archive.clusterfuzz_archive(
           build_dir=self.m.chromium.c.build_dir.join(
               self.m.chromium.c.build_config_fs),
           update_properties=update_step.presentation.properties,
-          gs_bucket=bot_config.cf_gs_bucket,
-          gs_acl=bot_config.cf_gs_acl,
-          archive_prefix=bot_config.cf_archive_name,
-          archive_subdir_suffix=bot_config.cf_archive_subdir_suffix,
+          gs_bucket=bot_spec.cf_gs_bucket,
+          gs_acl=bot_spec.cf_gs_acl,
+          archive_prefix=bot_spec.cf_archive_name,
+          archive_subdir_suffix=bot_spec.cf_archive_subdir_suffix,
       )
 
   def _get_scheduler_jobs_to_trigger(self, builder_id, build_config):
@@ -652,6 +654,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           name='compile%s' % name_suffix,
           use_goma_module=use_goma_module)
 
+  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
   def download_and_unzip_build(self,
                                builder_id,
                                update_step,
@@ -664,7 +667,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         "build_config argument %r was not a BuildConfig" % (build_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
-    bot_type = override_bot_type or build_config.get_bot_config(
+    bot_type = override_bot_type or build_config.get_bot_spec(
         builder_id).bot_type
     if bot_type != bot_spec_module.TESTER:  # pragma: no cover
       return

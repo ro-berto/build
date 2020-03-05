@@ -53,13 +53,10 @@ class BotConfig(object):
   def builder_ids(self):
     return [m.builder_id for m in self.bot_mirrors]
 
+  # TODO(https://crbug.com/1042425) Switch callers to use
+  # bot_config.bot_db[builder_id].bot_type instead and remove this
   def get_bot_type(self, builder_id):
-    return self._get_bot_spec(builder_id).bot_type
-
-  def _get_bot_spec(self, builder_id):
-    # WARNING: This doesn't take into account dynamic
-    # tests from test spec etc. If you need that, please use build_config.
-    return self.bot_db.get(builder_id, bot_spec_module.BotSpec.create())
+    return self.bot_db[builder_id].bot_type
 
   def __getattr__(self, attr):
     per_builder_values = {}
@@ -75,7 +72,7 @@ class BotConfig(object):
 
   def _get_source_side_spec(self, chromium_tests_api, mastername):
     if len(self.builder_ids) == 1:
-      bot_spec = self._get_bot_spec(self.builder_ids[0])
+      bot_spec = self.bot_db[self.builder_ids[0]]
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
@@ -137,23 +134,6 @@ class BotConfig(object):
 
     return BuildConfig(self, source_side_specs, tests)
 
-  # TODO(gbeaty) Move to BuildConfig
-  # TODO(gbeaty) Remove unnecessary chromium_tests_api parameter
-  def get_compile_targets(self, chromium_tests_api, build_config, tests):
-    compile_targets = set()
-    for builder_id in self.builder_ids:
-      bot_config = build_config.get_bot_config(builder_id)
-      compile_targets.update(bot_config.compile_targets)
-      compile_targets.update(
-          build_config.get_source_side_spec(builder_id).get(
-              'additional_compile_targets', []))
-
-    if self.add_tests_as_compile_targets:
-      for t in tests:
-        compile_targets.update(t.compile_targets())
-
-    return sorted(compile_targets)
-
 
 @attrs()
 class BuildConfig(object):
@@ -188,15 +168,19 @@ class BuildConfig(object):
     return self.bot_config.bot_db.bot_graph.get_transitive_closure(
         self._root_keys)
 
-  # TODO(gbeaty) Move this method, it's not rev-specific information
-  def get_bot_config(self, builder_id):
+  # TODO(https://crbug.com/1042425) Switch callers to use
+  # bot_config.bot_db[builder_id] instead and remove this
+  def get_bot_spec(self, builder_id):
     return self.bot_config.bot_db[builder_id]
 
-  # TODO(gbeaty) Move this method, it's not rev-specific information
+  # TODO(https://crbug.com/1042425) Switch callers to use
+  # bot_config.bot_db.master_specs[mastername].settings and remove this
   def get_master_settings(self, mastername):
     return self.bot_config.bot_db.master_specs[mastername].settings
 
-  # TODO(gbeaty) Move this method, it's not rev-specific information
+  # TODO(https://crbug.com/1042425) Switch callers to use
+  # bot_config.bot_db[parent_builder_id] and then extract desired information
+  # via bot_config and remove this method
   def bot_configs_matching_parent_buildername(self, parent_builder_id):
     """A generator of all the (buildername, bot_config) tuples whose
     parent_buildername is the passed one on the given master.
@@ -205,10 +189,6 @@ class BuildConfig(object):
     for child_id in bot_db.bot_graph[parent_builder_id]:
       luci_project = bot_db.master_specs[child_id.master].settings.luci_project
       yield luci_project, child_id.master, child_id.builder, bot_db[child_id]
-
-  def get_source_side_spec(self, builder_id):
-    return self._source_side_specs[builder_id.master].get(
-        builder_id.builder, {})
 
   def _get_tests_for(self, keys):
     tests = []
@@ -231,3 +211,19 @@ class BuildConfig(object):
   def tests_triggered_by(self, builder_id):
     """Returns all tests for builders triggered by the specified builder."""
     return self._get_tests_for(self.bot_config.bot_db.bot_graph[builder_id])
+
+  def get_compile_targets(self, tests):
+    compile_targets = set()
+    for builder_id in self.bot_config.builder_ids:
+      bot_spec = self.bot_config.bot_db[builder_id]
+      compile_targets.update(bot_spec.compile_targets)
+      source_side_spec = self._source_side_specs[builder_id.master].get(
+          builder_id.builder, {})
+      compile_targets.update(
+          source_side_spec.get('additional_compile_targets', []))
+
+    if self.bot_config.add_tests_as_compile_targets:
+      for t in tests:
+        compile_targets.update(t.compile_targets())
+
+    return sorted(compile_targets)
