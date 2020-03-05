@@ -85,17 +85,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for mastername, builders_dict in sorted(builders.BUILDERS.iteritems()):
-    for buildername in sorted(builders_dict['builders']):
-      yield api.test(
-          ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
-          api.properties(mastername=mastername, buildername=buildername),
-          # We want any errors when creating the BotConfig to be surfaced
-          # directly to the test rather than creating a failing step
-          api.chromium_tests.handle_bot_config_errors(False),
-          api.chromium_tests.platform([{
-              'mastername': mastername,
-              'buildername': buildername
-          }]),
-          api.post_process(post_process.DropExpectation),
-      )
+  for builder_id in sorted(builders.BUILDERS):
+    mastername = builder_id.master
+    buildername = builder_id.builder
+    yield api.test(
+        ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
+        api.properties(mastername=mastername, buildername=buildername),
+        # We want any errors when creating the BotConfig to be surfaced
+        # directly to the test rather than creating a failing step
+        api.chromium_tests.handle_bot_config_errors(False),
+        api.chromium_tests.platform([{
+            'mastername': mastername,
+            'buildername': buildername
+        }]),
+        api.post_process(post_process.DropExpectation),
+    )

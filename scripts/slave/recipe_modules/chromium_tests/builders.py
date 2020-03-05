@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.types import freeze
-
+from . import bot_db
 from . import bot_spec
 from . import chromium
 from . import chromium_android
@@ -39,7 +38,7 @@ from . import tryserver_chromium_mac
 from . import tryserver_devtools_frontend
 from . import tryserver_webrtc
 
-BUILDERS = freeze({
+BUILDERS = bot_db.BotDatabase.create({
     'chromium':
         chromium.SPEC,
     'chromium.android':

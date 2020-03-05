@@ -18,7 +18,7 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 
 DEPS = [
@@ -53,9 +53,12 @@ def RunSteps(api, target_mastername, target_testername,
              revision, isolated_targets):
   target_tester_id = chromium.BuilderId.create_for_master(
       target_mastername, target_testername)
+  builders = api.properties.get('builders')
+  if builders is not None:
+    builders = bot_db.BotDatabase.create(builders)
   bot_mirror, checked_out_revision, cached_revision = (
       api.findit.configure_and_sync(
-          target_tester_id, revision, builders=api.properties.get('builders')))
+          target_tester_id, revision, builders=builders))
 
   bot_config = api.m.chromium_tests.create_bot_config_object(
       [bot_mirror], builders=api.properties.get('builders'))

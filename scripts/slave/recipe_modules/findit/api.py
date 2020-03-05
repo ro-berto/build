@@ -8,8 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import (bot_spec, master_spec as
-                                                 master_spec_module, steps)
+from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -25,10 +24,7 @@ class FinditApi(recipe_api.RecipeApi):
     INFRA_FAILED = 'infra_failed'  # Infra failed.
 
   def get_bot_mirror_for_tester(self, tester_id, builders):
-    master_spec = master_spec_module.MasterSpec.normalize(
-        builders.get(tester_id.master))
-    tester_spec = bot_spec.BotSpec.normalize(
-        master_spec.builders.get(tester_id.builder))
+    tester_spec = builders[tester_id]
 
     if tester_spec.parent_buildername is None:
       return bot_spec.BotMirror.create(
@@ -335,8 +331,7 @@ class FinditApi(recipe_api.RecipeApi):
                                     configuration from.
       revision (str): A string representing the commit hash of the revision to
                       test.
-      builders (dict): A dict of the same format as
-                       self.m.chromium_tests.builders.
+      builders (BotDatabase): The database of builders.
     Returns: (bot_mirror, checked_out_revision, cached_revision)
     """
     # Figure out which builder configuration we should match for compile config.
@@ -359,12 +354,8 @@ class FinditApi(recipe_api.RecipeApi):
 
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
-    if bot_mirror.builder_id != target_tester_id:
-      master_spec = master_spec_module.MasterSpec.normalize(
-          builders.get(target_tester_id.master))
-      tester_spec = bot_spec.BotSpec.normalize(
-          master_spec.builders.get(target_tester_id.builder))
-
+    if bot_mirror.tester_id:
+      tester_spec = builders[bot_mirror.tester_id]
       for key, value in tester_spec.swarming_dimensions.iteritems():
         self.m.chromium_swarming.set_default_dimension(key, value)
 

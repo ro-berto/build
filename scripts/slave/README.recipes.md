@@ -153,6 +153,7 @@
   * [chromium_tests:tests/api/trybot_steps_with_specific_tests](#recipes-chromium_tests_tests_api_trybot_steps_with_specific_tests)
   * [chromium_tests:tests/api/wrap_chromium_tests](#recipes-chromium_tests_tests_api_wrap_chromium_tests)
   * [chromium_tests:tests/bot_config](#recipes-chromium_tests_tests_bot_config)
+  * [chromium_tests:tests/bot_db](#recipes-chromium_tests_tests_bot_db)
   * [chromium_tests:tests/bot_mirror](#recipes-chromium_tests_tests_bot_mirror)
   * [chromium_tests:tests/bot_spec](#recipes-chromium_tests_tests_bot_spec)
   * [chromium_tests:tests/builders](#recipes-chromium_tests_tests_builders) &mdash; Test to ensure the validity of the entries within BUILDERS.
@@ -2048,9 +2049,9 @@ are affected by the set of files that have changed.
 
 [DEPS](/scripts/slave/recipe_modules/findit/__init__.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#20)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#19)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#145)(self, bot_mirror, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
+&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#141)(self, bot_mirror, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
 
 Compile the targets needed to execute the specified tests and run them.
 
@@ -2093,7 +2094,7 @@ Returns:
       }
     - RawResult object with compile step status and failure message
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#326)(self, target_tester_id, revision, builders=None):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#322)(self, target_tester_id, revision, builders=None):**
 
 Applies compile/test configs & syncs code.
 
@@ -2106,11 +2107,10 @@ Args:
                                 configuration from.
   revision (str): A string representing the commit hash of the revision to
                   test.
-  builders (dict): A dict of the same format as
-                   self.m.chromium_tests.builders.
+  builders (BotDatabase): The database of builders.
 Returns: (bot_mirror, checked_out_revision, cached_revision)
 
-&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#115)(self, targets, builder_id):**
+&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#111)(self, targets, builder_id):**
 
 Returns a sublist of the given targets that exist in the build graph.
 
@@ -2127,7 +2127,7 @@ Args:
  targets (list): A list of targets to be tested for existence.
  builder_id (BuilderId): The ID of the builder to run MB for.
 
-&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#52)(self, revision, solution_name='src'):**
+&mdash; **def [files\_changed\_by\_revision](/scripts/slave/recipe_modules/findit/api.py#48)(self, revision, solution_name='src'):**
 
 Returns the files changed by the given revision.
 
@@ -2136,9 +2136,9 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [get\_bot\_mirror\_for\_tester](/scripts/slave/recipe_modules/findit/api.py#27)(self, tester_id, builders):**
+&mdash; **def [get\_bot\_mirror\_for\_tester](/scripts/slave/recipe_modules/findit/api.py#26)(self, tester_id, builders):**
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#387)(self, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#378)(self, bot_config):**
 
 Records the latest checked out and cached revisions.
 
@@ -2151,7 +2151,7 @@ Returns:
   A pair of revisions (checked_out_revision, cached_revision), or None, None
   if the checkout directory does not exist.
 
-&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#83)(self, start_revision, end_revision, solution_name='src'):**
+&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#79)(self, start_revision, end_revision, solution_name='src'):**
 
 Returns the git commit hashes between the given range.
 
@@ -4436,6 +4436,11 @@ linked by commit hash.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#11): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_config.py#16)(api):**
+### *recipes* / [chromium\_tests:tests/bot\_db](/scripts/slave/recipe_modules/chromium_tests/tests/bot_db.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_db.py#10): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/bot_db.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/bot\_mirror](/scripts/slave/recipe_modules/chromium_tests/tests/bot_mirror.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/bot_mirror.py#10): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]

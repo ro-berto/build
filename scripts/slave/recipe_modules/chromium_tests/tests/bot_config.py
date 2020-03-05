@@ -24,7 +24,7 @@ def RunSteps(api):
       },
   }
   with api.assertions.assertRaises(AssertionError) as caught:
-    bot_config_module.BotConfig(
+    bot_config_module.BotConfig.create(
         builders,
         [chromium.BuilderId.create_for_master('fake-master', 'fake-builder')])
   message = ('Tester-only bot must specify a parent builder '
@@ -59,7 +59,7 @@ def RunSteps(api):
   }
 
   # Test builders_id method
-  bot_config = bot_config_module.BotConfig(builders, [
+  bot_config = bot_config_module.BotConfig.create(builders, [
       {
           'mastername': 'fake-master',
           'buildername': 'fake-builder',
@@ -71,10 +71,10 @@ def RunSteps(api):
           'tester': 'fake-tester2'
       },
   ])
-  api.assertions.assertEqual(bot_config.builder_ids, [
+  api.assertions.assertEqual(bot_config.builder_ids, (
       chromium.BuilderId.create_for_master('fake-master', 'fake-builder'),
       chromium.BuilderId.create_for_master('fake-master2', 'fake-builder2'),
-  ])
+  ))
 
 
 def GenTests(api):

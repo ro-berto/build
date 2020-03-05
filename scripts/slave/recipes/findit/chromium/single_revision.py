@@ -17,7 +17,7 @@ from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import bot_db, steps
 
 DEPS = [
     'chromium',
@@ -90,7 +90,7 @@ def RunSteps(api, properties):
 
 def _configure_builder(api, target_tester, test_override_builders):
   if test_override_builders:
-    builders = json.loads(test_override_builders)
+    builders = bot_db.BotDatabase.create(json.loads(test_override_builders))
   else:
     builders = api.chromium_tests.builders
 
@@ -111,9 +111,7 @@ def _configure_builder(api, target_tester, test_override_builders):
   api.chromium.apply_config('goma_failfast')
 
   if bot_mirror.tester_id:
-    tester_spec = builders[target_tester.master].get('builders', {}).get(
-        target_tester.builder, {})
-    tester_spec = bot_spec.BotSpec.normalize(tester_spec)
+    tester_spec = builders[bot_mirror.tester_id]
     for key, value in tester_spec.swarming_dimensions.iteritems():
       # Coercing str as json.loads creates unicode strings. This only matters
       # for testing.

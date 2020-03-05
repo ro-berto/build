@@ -32,7 +32,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return size_limit
 
   def platform(self, bot_mirrors):
-    bot_config = bot_config_module.BotConfig(builders.BUILDERS, bot_mirrors)
+    bot_config = bot_config_module.BotConfig.create(builders.BUILDERS,
+                                                    bot_mirrors)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
         bot_config.testing.get('platform'),

@@ -107,8 +107,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def create_bot_config_object(self, builder_ids_or_bot_mirrors, builders=None):
     try:
-      return bot_config_module.BotConfig(builders or self.builders,
-                                         builder_ids_or_bot_mirrors)
+      return bot_config_module.BotConfig.create(builders or self.builders,
+                                                builder_ids_or_bot_mirrors)
     except Exception:
       if (self._test_data.enabled and
           not self._test_data.get('handle_bot_config_errors', True)):
