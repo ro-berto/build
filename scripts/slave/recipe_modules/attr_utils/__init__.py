@@ -148,6 +148,54 @@ def mapping_attrib(key_type=None, value_type=None, default=attr.NOTHING):
   return _attrib(default, validator, converter)
 
 
+@attr.s(frozen=True)
+class _CachedProperty(object):
+  """Descriptor for computing cached properties.
+
+  See https://docs.python.org/3/howto/descriptor.html for a description
+  of how descriptors in python work (information is applicable to
+  python2).
+
+  This class implements a non-data descriptor that when invoked for an
+  instance will call its getter to get its value. It will then set the
+  value on the instance's attribute. Because it is a non-data
+  descriptor, instance attributes take precedence, so it will not be
+  invoked again for the same instance.
+  """
+  getter = attr.ib()
+
+  def __get__(self, obj, type_=None):
+    # Used if someone attempts to access the class attribute
+    if obj is None:  # pragma: no cover
+      return self
+    value = freeze(self.getter(obj))
+    object.__setattr__(obj, self.getter.__name__, value)
+    return value
+
+
+def cached_property(getter):
+  """Decorator for a method to create a property calculated only once.
+
+  The decorator should be applied to a method on a class created using
+  the attrs decorator. The method must take zero arguments. The first
+  time the property is accessed, the getter will be called to compute
+  the value. The value is frozen so that all data accessible via the
+  containing class is immutable. All subsequent access of the property
+  will get the same value.
+
+  The decorator saves the cost of computing values that are expensive
+  but also communicates to a reader of the code that for a given object
+  the value of the property will not change.
+
+  The value returned by the getter should not include any mutable state
+  in its computation so that the value is dependent only on the value of
+  the containing object. Otherwise, it becomes harder to reason about
+  what the value will be/what the state was that led to the returned
+  value.
+  """
+  return _CachedProperty(getter)
+
+
 def attrs(slots=True, **kwargs):
   """A replacement for attr.s that provides some additional conveniences.
 
@@ -161,7 +209,17 @@ def attrs(slots=True, **kwargs):
   """
 
   def inner(cls):
+    cached_properties = None
+    # If the class is using slots, then we need to take extra steps so that
+    # there are slots for the cached properties
+    if slots:
+      cached_properties = {
+          a for a, val in cls.__dict__.iteritems()
+          if isinstance(val, _CachedProperty)
+      }
     cls = attr.s(frozen=True, slots=slots, **kwargs)(cls)
+    if slots and cached_properties:
+      cls = type(cls.__name__, (cls,), {'slots': cached_properties})
     for a in attr.fields(cls):
       if a.validator is not None and a.default is not attr.NOTHING:
         try:
@@ -169,6 +227,7 @@ def attrs(slots=True, **kwargs):
         except Exception as e:
           message = 'default for ' + e.message
           raise type(e)(message), None, sys.exc_info()[2]
+
     return cls
 
   return inner

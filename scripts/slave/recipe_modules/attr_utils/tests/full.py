@@ -7,8 +7,9 @@ import attr
 from recipe_engine import post_process
 from recipe_engine.types import FrozenDict
 
-from RECIPE_MODULES.build.attr_utils import (
-    FieldMapping, attrib, attrs, enum_attrib, mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
+                                             cached_property, enum_attrib,
+                                             mapping_attrib, sequence_attrib)
 
 DEPS = [
     'recipe_engine/assertions',
@@ -199,6 +200,30 @@ def RunSteps(api):
   x = FieldMappingTest(x='foo', y='bar')
   api.assertions.assertEqual(x['x'], 'foo')
   api.assertions.assertEqual(dict(x), {'x': 'foo', 'y': 'bar'})
+
+  # cached_property ************************************************************
+  calls = []
+
+  @attrs()
+  class CachedPropertyTest(object):
+    x = attrib(str)
+
+    @cached_property
+    def y(self):
+      calls.append(1)
+      return self.x.upper()
+
+  x = CachedPropertyTest('foo')
+  api.assertions.assertEqual(len(calls), 0)
+
+  api.assertions.assertEqual(x.y, 'FOO')
+  api.assertions.assertEqual(len(calls), 1)
+
+  api.assertions.assertEqual(x.y, 'FOO')
+  api.assertions.assertEqual(len(calls), 1)
+
+  with api.assertions.assertRaises(AttributeError):
+    x.y = 'bar'
 
 
 def GenTests(api):
