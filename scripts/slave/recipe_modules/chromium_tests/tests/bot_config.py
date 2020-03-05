@@ -27,9 +27,9 @@ def RunSteps(api):
     bot_config_module.BotConfig(
         builders,
         [chromium.BuilderId.create_for_master('fake-master', 'fake-builder')])
-  message = (
-      'Tester-only bot must specify a parent builder while creating spec for '
-      "('fake-master', 'fake-builder'): {!r}".format(spec))
+  message = ('Tester-only bot must specify a parent builder '
+             "while creating spec for builder 'fake-builder': {!r} "
+             "while creating spec for master 'fake-master'".format(spec))
   api.assertions.assertEqual(message, caught.exception.message)
 
   # Set up data for testing bot_config methods

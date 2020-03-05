@@ -493,9 +493,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # For archiving 'chromium.perf', the builder also archives a version
       # without perf test files for manual bisect.
       # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
-      if (master_config.get('bisect_builders') and
-          builder_id.builder in master_config.get('bisect_builders') and
-          'bisect_build_gs_bucket' in master_config):
+      if (builder_id.builder in master_config.bisect_builders and
+          master_config.bisect_build_gs_bucket):
         bisect_package_step = self.m.archive.zip_and_upload_build(
             'package build for bisect',
             self.m.chromium.c.build_config_fs,
@@ -511,12 +510,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bisect_reasons.extend([
             ' - %s is listed in bisect_builders' % builder_id.builder,
             ' - bisect_build_gs_bucket is configured to %s' %
-            master_config.get('bisect_build_gs_bucket'),
+            master_config.bisect_build_gs_bucket,
         ])
         bisect_package_step.presentation.logs['why is this running?'] = (
             bisect_reasons)
 
-      if 'build_gs_bucket' in master_config:
+      if master_config.build_gs_bucket:
         package_step = self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
@@ -530,8 +529,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         )
         standard_reasons = list(reasons or [])
         standard_reasons.extend([
-            ' - build_gs_bucket is configured to %s'
-                % master_config.get('build_gs_bucket'),
+            ' - build_gs_bucket is configured to %s' %
+            master_config.build_gs_bucket,
         ])
         package_step.presentation.logs['why is this running?'] = (
             standard_reasons)
@@ -715,10 +714,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not source_master:
       source_master = self.m.properties['mastername']  # pragma: no cover
     return self.m.archive.legacy_download_url(
-               master_config.get('build_gs_bucket'),
-               extra_url_components=(
-                   None if mastername.startswith('chromium.perf')
-                   else source_master))
+        master_config.build_gs_bucket,
+        extra_url_components=(None if mastername.startswith('chromium.perf')
+                              else source_master))
 
   @contextlib.contextmanager
   def wrap_chromium_tests(self, bot_config, tests=None):
@@ -938,8 +936,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
-        master_config.get('bisect_build_gs_bucket'),
-        extra_url_components=master_config.get('bisect_build_gs_extra'))
+        master_config.bisect_build_gs_bucket,
+        extra_url_components=master_config.bisect_build_gs_extra)
 
   def _build_gs_archive_url(self, mastername, master_config, buildername):
     """Returns the archive URL to pass to self.m.archive.zip_and_upload_build.
@@ -956,11 +954,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     if mastername.startswith('chromium.perf'):
       return self.m.archive.legacy_upload_url(
-          master_config.get('build_gs_bucket'),
-          extra_url_components=None)
+          master_config.build_gs_bucket, extra_url_components=None)
     else:
       return self.m.archive.legacy_upload_url(
-          master_config.get('build_gs_bucket'),
+          master_config.build_gs_bucket,
           extra_url_components=self.m.properties['mastername'])
 
   def get_common_args_for_scripts(self, bot_config=None):

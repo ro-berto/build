@@ -10,6 +10,7 @@ import sys
 from recipe_engine.types import freeze
 
 from . import bot_spec as bot_spec_module
+from . import master_spec as master_spec_module
 
 from RECIPE_MODULES.build import chromium
 
@@ -29,34 +30,18 @@ class BotConfig(object):
   """
 
   def __init__(self, bots_dict, builder_ids_or_bot_mirrors):
-    updated_masters = {}
-    for master_name, master_config in bots_dict.iteritems():
-      updated_builders = {}
-      builders = master_config.get('builders', {})
-      for builder_name, spec in builders.iteritems():
-        try:
-          new_spec = bot_spec_module.BotSpec.normalize(spec)
-        except Exception as e:
-          # Re-raise the exception with information that identifies the builder
-          # dict that is problematic
-          message = '{} while creating spec for ({!r}, {!r}): {}'.format(
-              e.message, master_name, builder_name, spec)
-          raise type(e)(message), None, sys.exc_info()[2]
-        if new_spec is not spec:
-          updated_builders[builder_name] = new_spec
-      if updated_builders:
-        builders = dict(master_config['builders'])
-        builders.update(updated_builders)
-        master_config = dict(master_config)
-        master_config['builders'] = builders
-        updated_masters[master_name] = master_config
+    new_bots_dict = {}
+    for name, spec in bots_dict.iteritems():
+      try:
+        new_bots_dict[name] = master_spec_module.MasterSpec.normalize(spec)
+      except Exception as e:
+        # Re-raise the exception with information that identifies the master
+        # that is problematic
+        message = '{} while creating spec for master {!r}'.format(
+            e.message, name)
+        raise type(e)(message), None, sys.exc_info()[2]
 
-    if updated_masters:
-      bots_dict = dict(bots_dict)
-      bots_dict.update(updated_masters)
-      bots_dict = freeze(bots_dict)
-
-    self._bots_dict = bots_dict
+    self._bots_dict = freeze(new_bots_dict)
 
     assert len(builder_ids_or_bot_mirrors) >= 1
 
@@ -70,7 +55,7 @@ class BotConfig(object):
       if not m in self._bots_dict:
         raise Exception('No configuration present for master %s' % m)
       master_dict = self._bots_dict[m]
-      if not b in master_dict.get('builders', {}):
+      if not b in master_dict.builders:
         raise Exception(
             'No configuration present for builder %s in master %s' % (b, m))
 
@@ -88,14 +73,13 @@ class BotConfig(object):
   def _get_builder_bot_config(self, builder_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use build_config.
-    return self._bots_dict.get(builder_id.master, {}).get('builders', {}).get(
+    return self._bots_dict[builder_id.master].builders.get(
         builder_id.builder, {})
 
   def __getattr__(self, attr):
     per_builder_values = {}
     for builder_id in self.builder_ids:
-      bot_spec = self._bots_dict[builder_id.master]['builders'][builder_id
-                                                                .builder]
+      bot_spec = self._bots_dict[builder_id.master].builders[builder_id.builder]
       value = getattr(bot_spec, attr)
       per_builder_values[builder_id] = value
     values = list(set(per_builder_values.values()))
@@ -155,7 +139,7 @@ class BotConfig(object):
 
         if any(
             is_child_of(b, bot_master_name, bot_builder_name)
-            for b in master_config.get('builders', {}).itervalues()):
+            for b in master_config.builders.itervalues()):
           masternames.add(master_name)
 
     db = {}
@@ -163,13 +147,13 @@ class BotConfig(object):
     for mastername in sorted(self._bots_dict):
       # We manually thaw the path to the elements we are modifying, since the
       # builders are frozen.
-      master_dict = dict(self._bots_dict[mastername])
+      master_spec = self._bots_dict[mastername]
 
       if mastername in masternames:
         source_side_spec = self._get_source_side_spec(chromium_tests_api,
                                                       mastername)
 
-        builders = master_dict['builders'] = dict(master_dict['builders'])
+        builders = dict(master_spec.builders)
         for loop_buildername in builders:
           spec = builders[loop_buildername]
           builders[loop_buildername] = spec.evolve(
@@ -182,11 +166,13 @@ class BotConfig(object):
                   scripts_compile_targets,
                   bot_update_step,
               ))
+        master_spec = master_spec_module.MasterSpec.create(
+            settings=master_spec.settings, builders=builders)
       else:
         source_side_spec = None
 
       db[mastername] = {
-          'master_dict': freeze(master_dict),
+          'master_spec': master_spec,
           'source_side_spec': source_side_spec,
       }
 
@@ -271,12 +257,12 @@ class BuildConfig(object):
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
   def get_bot_config(self, builder_id):
-    return self._db[builder_id.master]['master_dict'].get('builders', {}).get(
+    return self._db[builder_id.master]['master_spec'].builders.get(
         builder_id.builder)
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
   def get_master_settings(self, mastername):
-    return self._db[mastername]['master_dict'].get('settings', {})
+    return self._db[mastername]['master_spec'].settings
 
   # TODO(gbeaty) Move this method, it's not rev-specific information
   def bot_configs_matching_parent_buildername(self, parent_builder_id):
@@ -284,14 +270,13 @@ class BuildConfig(object):
     parent_buildername is the passed one on the given master.
     """
     for mastername, master_config in self._db.iteritems():
-      builders = master_config['master_dict'].get('builders', {})
+      builders = master_config['master_spec'].builders
       for buildername, bot_config in builders.iteritems():
         parent_mastername = bot_config.parent_mastername or mastername
         parent_buildername = bot_config.parent_buildername
         if (parent_builder_id.master == parent_mastername and
             parent_builder_id.builder == parent_buildername):
-          master_settings = self.get_master_settings(mastername)
-          luci_project = master_settings.get('luci_project', 'chromium')
+          luci_project = self.get_master_settings(mastername).luci_project
           yield luci_project, mastername, buildername, bot_config
 
   def get_source_side_spec(self, builder_id):
