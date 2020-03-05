@@ -177,8 +177,10 @@ class WebRTCApi(recipe_api.RecipeApi):
       tests = steps.generate_tests(self.m, None, self.bot)
       for test in tests:
         assert isinstance(test, steps.IosTest)
+        # TODO(crbug.com/812428): Move this back to the old chromium.tests pool
+        # after it's migrated to using task templates.
         test_dict = {
-            'pool': 'chromium.tests',
+            'pool': 'chromium.tests.template',
             'priority': 30,
         }
         # Apply generic parameters.
