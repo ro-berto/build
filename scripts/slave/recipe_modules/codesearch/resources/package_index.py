@@ -54,6 +54,86 @@ UNWANTED_ARG_SUBSTRINGS_WIN = [
     '-DSK_GPU_WORKAROUNDS_HEADER',
 ]
 
+
+def ConvertPathToForwardSlashes(path):
+  """Converts a path that may use \ as a path separator to use /.
+
+  Kythe expects all paths to use forward slashes, but if this script is
+  running on Windows we may get some backslashes in our paths.
+  """
+  if sys.platform == 'win32':
+    return path.replace('\\', '/')
+  return path
+
+
+def InjectUnitBuildDetails(unit, build_config):
+  """InjectUnitBuildDetails adds BuildDetail information into unit."""
+  # If there is already BuildDetails, we need to reuse it
+  for any_details in unit.details:
+    if any_details.type_url == 'kythe.io/proto/kythe.proto.BuildDetails':
+      build_details = buildinfo_pb2.BuildDetails()
+      build_details.ParseFromString(any_details.value)
+      build_details.build_config = build_config
+      any_details.Pack(build_details, 'kythe.io/proto')
+      return
+
+  # BuildDetails wasn't found, create a new one
+  details = buildinfo_pb2.BuildDetails()
+  details.build_config = build_config
+
+  details_any_proto = unit.details.add()
+  details_any_proto.Pack(details, 'kythe.io/proto')
+
+
+def ConvertGnPath(gn_path, out_dir):
+  """Converts gn paths into output-directory-relative paths.
+
+  gn paths begin with a //, which represents the root of the repository.
+  expectation is that out_dir always contains src/"""
+  assert out_dir.startswith('src')
+  return os.path.relpath(os.path.join('src', *gn_path[2:].split('/')), out_dir)
+
+
+def FindImports(regex, file_path, import_paths):
+  """FindImports looks for all import statements and returns absolute path
+  to all imported files.
+
+  Args:
+    input: compiled regex that matches import statement. It can have only
+    one group which yields import filename
+    file_path: path to file that will be inspected, absolute path
+    import_paths: list of import directories, should be absolute path
+
+  Returns:
+    set containing all imports
+
+  For example, if content of .proto file is following:
+  import "foo.proto"
+  import weak "bar.proto"
+
+  and working directory is '/tmp' and regex is PROTO_IMPORT_RE
+
+  this function will return set('/tmp/foo.proto', '/tmp/bar.proto')
+  """
+  imports = set()
+  if not os.path.exists(file_path):
+    print('file %s does not exist, returning empty import set' % file_path)
+    return imports
+
+  with open(file_path, 'r') as f:
+    contents = f.read()
+
+  for imp in re.findall(regex, contents):
+    for import_path in import_paths:
+      path = os.path.join(import_path, imp)
+      if os.path.exists(path):
+        imports.add(os.path.normpath(path))
+        break
+    else:
+      print('couldn\'t find import %s for file %s.' % (imp, file_path))
+  return imports
+
+
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
@@ -125,15 +205,16 @@ class IndexPack(object):
     with open(gn_targets_path, 'rb') as json_gn_targets_file:
       gn_targets_dict = json.load(json_gn_targets_file)
 
-      # We only care about certain mojom targets. Filter it down here so we
-      # don't need to do so both times we iterate over it.
-      self.mojom_targets = [
-          dict(target,
-               args=_MergeFeatureArgs(gn_targets_dict, target_name, target),
-               imported_files=self._FindMojomImports(target))
-          for target_name, target in gn_targets_dict.items()
-          if self._IsMojomTarget(target)
-      ]
+      self.mojom_targets = []
+      for target_name, target in gn_targets_dict.items():
+        # We only care about certain mojom targets. Filter it down here so we
+        # don't need to do so both times we iterate over it.
+        if self._IsMojomTarget(target):
+          self.mojom_targets.append(
+              dict(
+                  target,
+                  args=_MergeFeatureArgs(gn_targets_dict, target_name, target),
+                  imported_files=self._FindMojomImports(target)))
 
   def _IsMojomTarget(self, gn_target):
     """Predicate to check if a GN target is a Mojom target.
@@ -170,30 +251,18 @@ class IndexPack(object):
     """
     args = gn_target['args']
     import_paths = [
-        args[i + 1] for i in range(len(args) - 1) if args[i] == '-I'
+        os.path.normpath(
+            os.path.join(self.root_dir, self.out_dir, args[i + 1]))
+        for i in range(len(args) - 1)
+        if args[i] == '-I'
     ]
 
-    imports = []
+    imports = set()
     for source in gn_target['sources']:
       path = os.path.join(self.root_dir, self.out_dir,
-                          self._ConvertGnPath(source))
-      with open(path, 'r') as f:
-        contents = f.read()
+                          ConvertGnPath(source, self.out_dir))
 
-      for imp in re.findall(MOJOM_IMPORT_RE, contents):
-        for import_path in import_paths:
-          out_relative_path = os.path.join(import_path, imp)
-          if os.path.exists(
-              os.path.join(self.root_dir, self.out_dir, out_relative_path)):
-            # Don't include a file multiple times if it's imported by different
-            # files in the same compilation unit.
-            if out_relative_path not in imports:
-              imports.append(out_relative_path)
-            break
-        else:
-          # Just print a warning, don't fail completely.
-          print("couldn't resolve import %s" % imp)
-
+      imports |= FindImports(MOJOM_IMPORT_RE, path, import_paths)
     return imports
 
 
@@ -336,7 +405,7 @@ class IndexPack(object):
     self._java_output_set.add(output_key)
 
     if self.build_config and indexed_compilation_proto.unit:
-      self._InjectUnitBuildDetails(indexed_compilation_proto.unit)
+      InjectUnitBuildDetails(indexed_compilation_proto.unit, self.build_config)
 
     unit_file_content = indexed_compilation_proto.SerializeToString()
     unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
@@ -364,31 +433,6 @@ class IndexPack(object):
       if self.verbose:
         print('Added %s from java kzip' % path)
 
-  def _InjectUnitBuildDetails(self, unit):
-    # If there is already BuildDetails, we need to reuse it
-    for any_details in unit.details:
-      if any_details.type_url == 'kythe.io/proto/kythe.proto.BuildDetails':
-        build_details = buildinfo_pb2.BuildDetails()
-        build_details.ParseFromString(any_details.value)
-        build_details.build_config = self.build_config
-        any_details.Pack(build_details, 'kythe.io/proto')
-        return
-
-    # BuildDetails wasn't found, create a new one
-    details = buildinfo_pb2.BuildDetails()
-    details.build_config = self.build_config
-
-    details_any_proto = unit.details.add()
-    details_any_proto.Pack(details, 'kythe.io/proto')
-
-
-  def _ConvertGnPath(self, gn_path):
-    """Converts gn paths into output-directory-relative paths.
-
-    gn paths begin with a //, which represents the root of the repository."""
-    return os.path.relpath(os.path.join('src', *gn_path[2:].split('/')),
-                           self.out_dir)
-
   def _NormalizePath(self, path):
     """Normalize a path.
 
@@ -397,16 +441,6 @@ class IndexPack(object):
     double slashes, unnecessary '.' and '..'s, etc.
     """
     return os.path.normpath(os.path.join(self.out_dir, path))
-
-  def _ConvertPathToForwardSlashes(self, path):
-    """Converts a path that may use \ as a path separator to use /.
-
-    Kythe expects all paths to use forward slashes, but if this script is
-    running on Windows we may get some backslashes in our paths.
-    """
-    if sys.platform == 'win32':
-      return path.replace('\\', '/')
-    return path
 
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
@@ -457,7 +491,7 @@ class IndexPack(object):
         # Add the .mojom file itself.
         self._AddDataFile(
             os.path.join(self.root_dir, self.out_dir,
-                         self._ConvertGnPath(source)))
+                         ConvertGnPath(source, self.out_dir)))
 
   def _GenerateUnitFiles(self):
     """Produces the unit files for the index pack.
@@ -487,7 +521,7 @@ class IndexPack(object):
       unit_proto = analysis_pb2.CompilationUnit()
 
       source_files = [
-          self._ConvertPathToForwardSlashes(self._ConvertGnPath(source))
+          ConvertPathToForwardSlashes(ConvertGnPath(source, self.out_dir))
           for source in target['sources']
       ]
       unit_proto.source_file.extend(source_files)
@@ -503,13 +537,17 @@ class IndexPack(object):
       unit_proto.v_name.corpus = self.corpus
       unit_proto.v_name.language = 'mojom'
       if self.build_config:
-        self._InjectUnitBuildDetails(unit_proto)
+        InjectUnitBuildDetails(unit_proto, self.build_config)
 
       # Files in a module might import other files in the same module. Don't
       # include the file twice if so.
-      imported_files = [
-          imp for imp in target['imported_files'] if imp not in source_files
-      ]
+      imported_files = []
+      for imp in target['imported_files']:
+        path = os.path.relpath(
+            ConvertPathToForwardSlashes(imp),
+            os.path.join(self.root_dir, self.out_dir))
+        if path not in source_files:
+          imported_files.append(path)
 
       for required_file in source_files + imported_files:
         path = os.path.normpath(
@@ -521,10 +559,9 @@ class IndexPack(object):
 
         required_input = unit_proto.required_input.add()
         required_input.v_name.corpus = self.corpus
-        required_input.v_name.path = self._ConvertPathToForwardSlashes(
-                        self._NormalizePath(required_file))
-        required_input.info.path = self._ConvertPathToForwardSlashes(
-            required_file)
+        required_input.v_name.path = ConvertPathToForwardSlashes(
+            self._NormalizePath(required_file))
+        required_input.info.path = ConvertPathToForwardSlashes(required_file)
         required_input.info.digest = self.filehashes[path]
 
       self._AddUnitFile(unit_proto)
@@ -625,16 +662,16 @@ class IndexPack(object):
           fname = os.path.relpath(fname, directory)
 
         normalized_fname = self._NormalizePath(fname)
-        normalized_fname = self._ConvertPathToForwardSlashes(normalized_fname)
+        normalized_fname = ConvertPathToForwardSlashes(normalized_fname)
 
         required_input = unit_proto.required_input.add()
         _SetVNameForFile(required_input.v_name, normalized_fname, corpus)
 
-        required_input.info.path = self._ConvertPathToForwardSlashes(fname)
+        required_input.info.path = ConvertPathToForwardSlashes(fname)
         required_input.info.digest = self.filehashes[fname_fullpath]
 
     unit_proto.source_file.append(filename)
-    unit_proto.working_directory = self._ConvertPathToForwardSlashes(directory)
+    unit_proto.working_directory = ConvertPathToForwardSlashes(directory)
     unit_proto.output_key = output_file
     unit_proto.v_name.corpus = _CorpusForFile(filename, corpus)
     unit_proto.v_name.language = 'c++'
