@@ -26,7 +26,7 @@ def RunSteps(api):
     api.chromium_tests.lookup_builder_gn_args(bot)
     test_failure_summary = api.chromium_tests.run_tests(bot, build_config)
     api.chromium_tests.trigger_child_builds(bot.builder_id, update_step,
-                                            build_config)
+                                            bot.settings)
     return test_failure_summary
 
 

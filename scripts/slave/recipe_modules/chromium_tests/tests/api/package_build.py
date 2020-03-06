@@ -22,9 +22,9 @@ def RunSteps(api, builders):
   bot_config = api.chromium_tests.create_bot_config_object([builder_id],
                                                            builders=builders)
   api.chromium_tests.configure_build(bot_config)
-  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.package_build(
-      builder_id, update_step, build_config, reasons=['for test coverage'])
+      builder_id, update_step, bot_config, reasons=['for test coverage'])
 
 
 def GenTests(api):

@@ -304,13 +304,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return test_runner
 
-  # TODO(https://crbug.com/1042425) Switch callers to
-  # build_config.get_compile_targets and remove this method
-  def get_compile_targets(self, bot_config, build_config, tests):
-    assert isinstance(build_config, bot_config_module.BuildConfig), \
-        "build_config argument %r was not a BuildConfig" % (build_config)
-    return sorted(set(build_config.get_compile_targets(tests)))
-
   _ARCHITECTURE_DIGIT_MAP = {
       ('arm', 32): 0,
       ('arm', 64): 5,
@@ -461,8 +454,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m.isolate.isolated_tests)
       return raw_result
 
-  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
-  def package_build(self, builder_id, update_step, build_config, reasons=None):
+  def package_build(self, builder_id, update_step, bot_config, reasons=None):
     """Zip and upload the build to google storage.
 
     This is currently used for transfer between builder and tester,
@@ -475,7 +467,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         handled in archive_build.
       - this may upload twice on perf builders.
     """
-    bot_spec = build_config.get_bot_spec(builder_id)
+    bot_spec = bot_config.bot_db[builder_id]
 
     bot_type = bot_spec.bot_type
     assert bot_type in bot_spec_module.BUILDER_TYPES, (
@@ -485,7 +477,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                            builder_id.builder, bot_type))
 
     if not bot_spec.cf_archive_build:
-      master_config = build_config.get_master_settings(builder_id.master)
+      master_settings = (
+          bot_config.bot_db.master_specs[builder_id.master].settings)
       build_revision = update_step.presentation.properties.get(
           'got_revision',
           update_step.presentation.properties.get('got_src_revision'))
@@ -494,34 +487,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # For archiving 'chromium.perf', the builder also archives a version
       # without perf test files for manual bisect.
       # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
-      if (builder_id.builder in master_config.bisect_builders and
-          master_config.bisect_build_gs_bucket):
+      if (builder_id.builder in master_settings.bisect_builders and
+          master_settings.bisect_build_gs_bucket):
         bisect_package_step = self.m.archive.zip_and_upload_build(
             'package build for bisect',
             self.m.chromium.c.build_config_fs,
-            build_url=self._build_bisect_gs_archive_url(master_config),
+            build_url=self._build_bisect_gs_archive_url(master_settings),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             update_properties=update_step.presentation.properties,
             exclude_perf_test_files=True,
             store_by_hash=False,
-            platform=self.m.chromium.c.TARGET_PLATFORM
-        )
+            platform=self.m.chromium.c.TARGET_PLATFORM)
         bisect_reasons = list(reasons or [])
         bisect_reasons.extend([
             ' - %s is listed in bisect_builders' % builder_id.builder,
             ' - bisect_build_gs_bucket is configured to %s' %
-            master_config.bisect_build_gs_bucket,
+            master_settings.bisect_build_gs_bucket,
         ])
         bisect_package_step.presentation.logs['why is this running?'] = (
             bisect_reasons)
 
-      if master_config.build_gs_bucket:
+      if master_settings.build_gs_bucket:
         package_step = self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
             build_url=self._build_gs_archive_url(
-                builder_id.master, master_config, builder_id.builder),
+                builder_id.master, master_settings, builder_id.builder),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             # TODO(machenbach): Make asan a configuration switch.
@@ -531,14 +523,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         standard_reasons = list(reasons or [])
         standard_reasons.extend([
             ' - build_gs_bucket is configured to %s' %
-            master_config.build_gs_bucket,
+            master_settings.build_gs_bucket,
         ])
         package_step.presentation.logs['why is this running?'] = (
             standard_reasons)
 
 
-  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
-  def archive_build(self, builder_id, update_step, build_config):
+  def archive_build(self, builder_id, update_step, bot_config):
     """Archive the build if the bot is configured to do so.
 
     See api.archive.clusterfuzz_archive and archive_build.py for more
@@ -547,7 +538,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     This is currently used to store builds long-term and to transfer them
     to clusterfuzz.
     """
-    bot_spec = build_config.get_bot_spec(builder_id)
+    bot_spec = bot_config.bot_db[builder_id]
 
     if bot_spec.archive_build and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
@@ -568,7 +559,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           archive_subdir_suffix=bot_spec.cf_archive_subdir_suffix,
       )
 
-  def _get_scheduler_jobs_to_trigger(self, builder_id, build_config):
+  def _get_scheduler_jobs_to_trigger(self, builder_id, bot_config):
     """Get the LUCI scheduler jobs to trigger.
 
     Child builds are triggered through LUCI scheduler rather than buildbucket
@@ -582,17 +573,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       get_job_name = lambda buildername: prefix + buildername
 
     scheduler_jobs = collections.defaultdict(list)
-    for luci_project, _, loop_buildername, _ in sorted(
-        build_config.bot_configs_matching_parent_buildername(builder_id)):
-      job = get_job_name(loop_buildername)
-      scheduler_jobs[luci_project].append(job)
+    for child_id in sorted(bot_config.bot_db.bot_graph[builder_id]):
+      job = get_job_name(child_id.builder)
+      master_spec = bot_config.bot_db.master_specs[child_id.master]
+      scheduler_jobs[master_spec.settings.luci_project].append(job)
 
     return scheduler_jobs
 
   def trigger_child_builds(self,
                            builder_id,
                            update_step,
-                           build_config,
+                           bot_config,
                            additional_properties=None):
     additional_properties = additional_properties or {}
 
@@ -611,8 +602,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     properties.update(additional_properties)
 
-    scheduler_jobs = self._get_scheduler_jobs_to_trigger(
-        builder_id, build_config)
+    scheduler_jobs = self._get_scheduler_jobs_to_trigger(builder_id, bot_config)
 
     if scheduler_jobs:
       self.m.scheduler.emit_triggers(
@@ -654,21 +644,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           name='compile%s' % name_suffix,
           use_goma_module=use_goma_module)
 
-  # TODO(https://crbug.com/1042425) Switch build_config to bot_config
   def download_and_unzip_build(self,
                                builder_id,
                                update_step,
-                               build_config,
+                               bot_config,
                                build_archive_url=None,
                                build_revision=None,
                                override_bot_type=None,
                                read_gn_args=True):
-    assert isinstance(build_config, bot_config_module.BuildConfig), \
-        "build_config argument %r was not a BuildConfig" % (build_config)
+    assert isinstance(bot_config, bot_config_module.BotConfig), \
+        "bot_config argument %r was not a BotConfig" % (bot_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
-    bot_type = override_bot_type or build_config.get_bot_spec(
-        builder_id).bot_type
+    bot_type = override_bot_type or bot_config.bot_db[builder_id].bot_type
     if bot_type != bot_spec_module.TESTER:  # pragma: no cover
       return
 
@@ -693,8 +681,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     build_archive_url = build_archive_url or self.m.properties.get(
         'parent_build_archive_url')
     if not build_archive_url:
-      master_config = build_config.get_master_settings(builder_id.master)
-      legacy_build_url = self._make_legacy_build_url(master_config,
+      master_settings = (
+          bot_config.bot_db.master_specs[builder_id.master].settings)
+      legacy_build_url = self._make_legacy_build_url(master_settings,
                                                      builder_id.master)
 
     self.m.archive.download_and_unzip_build(
@@ -708,7 +697,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gn.get_args(
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-  def _make_legacy_build_url(self, master_config, mastername):
+  def _make_legacy_build_url(self, master_settings, mastername):
     # The master where the build was zipped and uploaded from.
     source_master = self.m.properties.get('parent_mastername')
     # TODO(gbeaty) I think this can be removed, this method is only used when
@@ -717,7 +706,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not source_master:
       source_master = self.m.properties['mastername']  # pragma: no cover
     return self.m.archive.legacy_download_url(
-        master_config.build_gs_bucket,
+        master_settings.build_gs_bucket,
         extra_url_components=(None if mastername.startswith('chromium.perf')
                               else source_master))
 
@@ -937,12 +926,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       return None, unrecoverable_test_suites
 
-  def _build_bisect_gs_archive_url(self, master_config):
+  def _build_bisect_gs_archive_url(self, master_settings):
     return self.m.archive.legacy_upload_url(
-        master_config.bisect_build_gs_bucket,
-        extra_url_components=master_config.bisect_build_gs_extra)
+        master_settings.bisect_build_gs_bucket,
+        extra_url_components=master_settings.bisect_build_gs_extra)
 
-  def _build_gs_archive_url(self, mastername, master_config, buildername):
+  def _build_gs_archive_url(self, mastername, master_settings, buildername):
     """Returns the archive URL to pass to self.m.archive.zip_and_upload_build.
 
     Most builders on most masters use a standard format for the build archive
@@ -957,10 +946,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     if mastername.startswith('chromium.perf'):
       return self.m.archive.legacy_upload_url(
-          master_config.build_gs_bucket, extra_url_components=None)
+          master_settings.build_gs_bucket, extra_url_components=None)
     else:
       return self.m.archive.legacy_upload_url(
-          master_config.build_gs_bucket,
+          master_settings.build_gs_bucket,
           extra_url_components=self.m.properties['mastername'])
 
   def get_common_args_for_scripts(self, bot_config=None):
@@ -1056,8 +1045,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_phase=mb_phase,
           builders=builders)
 
-    compile_targets = self.get_compile_targets(bot.settings, build_config,
-                                               build_config.all_tests())
+    compile_targets = build_config.get_compile_targets(build_config.all_tests())
     compile_result = self.compile_specific_targets(
         bot.settings,
         update_step,
@@ -1076,9 +1064,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.trigger_child_builds(
         bot.builder_id,
         update_step,
-        build_config,
+        bot.settings,
         additional_properties=additional_trigger_properties)
-    self.archive_build(bot.builder_id, update_step, build_config)
+    self.archive_build(bot.builder_id, update_step, bot.settings)
 
     self.inbound_transfer(bot, update_step, build_config)
 
@@ -1135,7 +1123,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.package_build(
           bot.builder_id,
           bot_update_step,
-          build_config,
+          bot.settings,
           reasons=self._explain_package_transfer(bot, non_isolated_tests))
     return additional_trigger_properties
 
@@ -1178,7 +1166,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if package_transfer:
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
-          bot.builder_id, bot_update_step, build_config, read_gn_args=False)
+          bot.builder_id,
+          bot_update_step,
+          build_config.bot_config,
+          read_gn_args=False)
       self.m.python.succeeding_step(
           'explain extract build',
           self._explain_package_transfer(bot, non_isolated_tests),
@@ -1403,8 +1394,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return BotMetadata(builder_id, config, settings)
 
   def _determine_compilation_targets(self, bot, affected_files, build_config):
-    compile_targets = self.get_compile_targets(bot.settings, build_config,
-                                               build_config.all_tests())
+    compile_targets = build_config.get_compile_targets(build_config.all_tests())
     test_targets = sorted(
         set(self._all_compile_targets(build_config.all_tests())))
 
@@ -1542,7 +1532,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return ('running tester %r on master %r against builder %r on master %r'
                 % (bot_mirror.tester_id.builder, bot_mirror.tester_id.master,
                    bot_mirror.builder_id.builder, bot_mirror.builder_id.master))
-      bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
+      bot_type = bot_config.bot_db[bot_mirror.builder_id].bot_type
       if bot_type == bot_spec_module.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return ('running %s \'%s\' on master %r' %
@@ -1562,7 +1552,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             'tester_mastername': bot_mirror.tester_id.master,
             'bot_type': bot_spec_module.TESTER,
         }
-      bot_type = bot_config.get_bot_type(bot_mirror.builder_id)
+      bot_type = bot_config.bot_db[bot_mirror.builder_id].bot_type
       if bot_type == bot_spec_module.BUILDER_TESTER:
         bot_type = 'builder/tester'
       return {

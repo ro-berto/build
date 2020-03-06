@@ -114,8 +114,7 @@ def _GetChromiumTestsCompileTargets(api, mastername, buildername, update_step):
   ct_bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   ct_build_config = ct_bot_config.create_build_config(api.chromium_tests,
                                                       update_step)
-  return api.chromium_tests.get_compile_targets(ct_bot_config, ct_build_config,
-                                                ct_build_config.all_tests())
+  return ct_build_config.get_compile_targets(ct_build_config.all_tests())
 
 
 def _RunStepsInternal(api, mastername, buildername, revision):

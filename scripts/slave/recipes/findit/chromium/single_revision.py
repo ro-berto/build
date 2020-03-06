@@ -166,8 +166,8 @@ def _compute_targets_and_tests(api, bot_config, build_config, builder_id,
     return actual_compile_targets, actual_tests_to_run
 
   # No tests, only compile targets
-  default_compile_targets = api.chromium_tests.get_compile_targets(
-      bot_config, build_config, build_config.all_tests())
+  default_compile_targets = build_config.get_compile_targets(
+      build_config.all_tests())
   # If no targets were specifically requested, compile every target in the spec.
   if not compile_targets:
     return default_compile_targets, []

@@ -14,9 +14,9 @@ def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
   bot_config = api.chromium_tests.create_bot_config_object([builder_id])
   api.chromium_tests.configure_build(bot_config)
-  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
+  update_step, _ = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.download_and_unzip_build(
-      builder_id, update_step, build_config, **api.properties.get('kwargs', {}))
+      builder_id, update_step, bot_config, **api.properties.get('kwargs', {}))
 
 
 def GenTests(api):

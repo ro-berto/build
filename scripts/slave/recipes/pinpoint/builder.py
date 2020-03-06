@@ -23,8 +23,7 @@ def RunSteps(api):
 
     api.chromium_tests.configure_build(bot_config)
     update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
-    compile_targets = api.chromium_tests.get_compile_targets(
-        bot_config, build_config, build_config.all_tests())
+    compile_targets = build_config.get_compile_targets(build_config.all_tests())
     return api.chromium_tests.compile_specific_targets(
         bot_config, update_step, build_config, compile_targets,
         build_config.all_tests())

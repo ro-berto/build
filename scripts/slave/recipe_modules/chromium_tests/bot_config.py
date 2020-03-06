@@ -53,11 +53,6 @@ class BotConfig(object):
   def builder_ids(self):
     return [m.builder_id for m in self.bot_mirrors]
 
-  # TODO(https://crbug.com/1042425) Switch callers to use
-  # bot_config.bot_db[builder_id].bot_type instead and remove this
-  def get_bot_type(self, builder_id):
-    return self.bot_db[builder_id].bot_type
-
   def __getattr__(self, attr):
     per_builder_values = {}
     for builder_id in self.builder_ids:
@@ -167,28 +162,6 @@ class BuildConfig(object):
   def _all_keys(self):
     return self.bot_config.bot_db.bot_graph.get_transitive_closure(
         self._root_keys)
-
-  # TODO(https://crbug.com/1042425) Switch callers to use
-  # bot_config.bot_db[builder_id] instead and remove this
-  def get_bot_spec(self, builder_id):
-    return self.bot_config.bot_db[builder_id]
-
-  # TODO(https://crbug.com/1042425) Switch callers to use
-  # bot_config.bot_db.master_specs[mastername].settings and remove this
-  def get_master_settings(self, mastername):
-    return self.bot_config.bot_db.master_specs[mastername].settings
-
-  # TODO(https://crbug.com/1042425) Switch callers to use
-  # bot_config.bot_db[parent_builder_id] and then extract desired information
-  # via bot_config and remove this method
-  def bot_configs_matching_parent_buildername(self, parent_builder_id):
-    """A generator of all the (buildername, bot_config) tuples whose
-    parent_buildername is the passed one on the given master.
-    """
-    bot_db = self.bot_config.bot_db
-    for child_id in bot_db.bot_graph[parent_builder_id]:
-      luci_project = bot_db.master_specs[child_id.master].settings.luci_project
-      yield luci_project, child_id.master, child_id.builder, bot_db[child_id]
 
   def _get_tests_for(self, keys):
     tests = []

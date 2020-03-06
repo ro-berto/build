@@ -77,8 +77,8 @@ def _run_compile_at_revision(api, builder_id, revision, compile_targets,
     compile_targets = sorted(set(compile_targets or []))
     if not compile_targets:
       # If compile targets are not specified, retrieve them from the build spec.
-      compile_targets = api.chromium_tests.get_compile_targets(
-          bot_config, build_config, build_config.all_tests())
+      compile_targets = build_config.get_compile_targets(
+          build_config.all_tests())
 
       # Use dependency "analyze" to filter out those that are not impacted by
       # the given revision. This is to reduce the number of targets to be
