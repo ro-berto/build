@@ -97,11 +97,10 @@ class _SourceFileComments(object):
 
     def fix_message(message, check_name):
       name, is_diagnostic = _canonicalize_check_name(check_name)
-      if is_diagnostic:
-        suffix = name
-      else:
-        suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % (
-            name)
+      # FIXME(crbug.com/1059096): Simplify this code if we want to no longer
+      # handle diags here.
+      assert not is_diagnostic, check_name
+      suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % name
       return message + ' (' + suffix + ')'
 
     for (message, line_number,
@@ -174,12 +173,6 @@ def _generate_clang_tidy_comments(api, file_paths):
       'timed_out_src_files'):
     api.step.active_result.presentation.status = 'WARNING'
 
-  for failed in clang_tidy_output.get('failed_src_files', []):
-    per_file_comments[failed].add_file_comment(
-        'warning: building this file '
-        'or its dependencies failed; clang-tidy comments may be incorrect or '
-        'incomplete.')
-
   for timed_out in clang_tidy_output.get('timed_out_src_files', []):
     file_comments = per_file_comments[timed_out]
     file_comments.add_file_comment('warning: clang-tidy timed out on this '
@@ -193,6 +186,14 @@ def _generate_clang_tidy_comments(api, file_paths):
     file_path = diagnostic['file_path']
     assert file_path, ("Empty paths should've been filtered "
                        "by tricium_clang_tidy: %s" % diagnostic)
+
+    # FIXME(crbug.com/1059096): Reporting this has caused more confusion than
+    # not. Let's disable it for a bit and see if anyone complains.
+    diag_name = diagnostic['diag_name']
+    _, is_diagnostic = _canonicalize_check_name(diag_name)
+    if is_diagnostic:
+      continue
+
     tidy_replacements = diagnostic['replacements']
     if tidy_replacements:
       suggestions = [{
@@ -211,7 +212,6 @@ def _generate_clang_tidy_comments(api, file_paths):
     message = diagnostic['message']
     report_line = diagnostic['line_number']
     report_file = file_path
-    diag_name = diagnostic['diag_name']
 
     expansions = diagnostic['expansion_locs']
     if expansions:
@@ -486,35 +486,6 @@ def GenTests(api):
          api.post_process(post_process.StatusSuccess) +
          api.post_process(tricium_has_no_messages) + api.post_process(
              post_process.DropExpectation))
-
-  yield (test_with_patch(
-      'diagnostic_warning',
-      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
-          'clang-tidy.generate-warnings.read tidy output',
-          api.file.read_json({
-              'diagnostics': [
-                  {
-                      'file_path': 'path/to/some/cc/file.cpp',
-                      'line_number': 2,
-                      'diag_name': 'clang-diagnostic-warning',
-                      'message': 'hello, world',
-                      'replacements': [],
-                      'expansion_locs': [],
-                  },
-                  {
-                      'file_path': 'path/to/some/cc/file.cpp',
-                      'line_number': 2,
-                      'diag_name': 'some-cool-check',
-                      'message': 'hello, world',
-                      'replacements': [],
-                      'expansion_locs': [],
-                  },
-              ]
-          })) + api.post_process(post_process.StepSuccess,
-                                 'clang-tidy.generate-warnings') +
-         api.post_process(post_process.StatusSuccess) + api.post_process(
-             tricium_has_message, 'hello, world (compile-time warning)') +
-         api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
       'diagnostic_suggestions',
