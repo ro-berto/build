@@ -37,7 +37,7 @@
         "password-file": "/creds/gatekeeper/v8_status_password",
         "set-status": true,
         "status-url": "https://devtools-status.appspot.com",
-        "track-revisions": true
+        "track-revisions": false
     },
     "android": {
         "open-tree": false,
