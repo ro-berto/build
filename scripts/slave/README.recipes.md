@@ -5769,7 +5769,7 @@ which has offset 0.
 
 See PROPERTIES for documentation on the recipe's interface.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#546)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, max_calibration_attempts, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, swarming_priority, swarming_expiration, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#548)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, max_calibration_attempts, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, swarming_priority, swarming_expiration, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
 
 &mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#444)(api, depot, initial_commit_offset, is_bad_func, offset):**
 
