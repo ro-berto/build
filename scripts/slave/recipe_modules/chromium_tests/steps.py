@@ -41,16 +41,17 @@ WPR_REPLAY_DATA_ROOT = 'wpr-replay-data'
 # Mapping of common names of supported iOS devices to product types
 # exposed by the Swarming server.
 IOS_PRODUCT_TYPES = {
-  'iPad 4 GSM CDMA': 'iPad3,6',
-  'iPad 5th Gen':    'iPad6,11',
-  'iPad 6th Gen':    'iPad7,5',
-  'iPad Air':        'iPad4,1',
-  'iPad Air 2':      'iPad5,3',
-  'iPhone 5':        'iPhone5,1',
-  'iPhone 5s':       'iPhone6,1',
-  'iPhone 6s':       'iPhone8,1',
-  'iPhone 7':        'iPhone9,1',
-  'iPhone X':        'iPhone10,3',
+    'iPad 4 GSM CDMA': 'iPad3,6',
+    'iPad 5th Gen': 'iPad6,11',
+    'iPad 6th Gen': 'iPad7,5',
+    'iPad Air': 'iPad4,1',
+    'iPad Air 2': 'iPad5,3',
+    'iPhone 5': 'iPhone5,1',
+    'iPhone 5s': 'iPhone6,1',
+    'iPhone 6s': 'iPhone8,1',
+    'iPhone 7': 'iPhone9,1',
+    'iPhone X': 'iPhone10,3',
+    'iPhone 11': 'iPhone12,1',
 }
 
 class TestOptions(object):
