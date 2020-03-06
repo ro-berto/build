@@ -75,7 +75,6 @@ _WIN_CONFIG = CreateStandardConfig('win')
 _WIN_CLOBBER_CONFIG = CreateStandardConfig('win', ['clobber'])
 
 _ANDROID32_CONFIG = CreateAndroidConfig(32)
-_ANDROID32_CLOBBER_CONFIG = CreateAndroidConfig(32, ['clobber'])
 
 _SPEC_BUILDERS = {
     # clients5
@@ -101,14 +100,6 @@ _SPEC_BUILDERS = {
         _LINUX_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg) (clobber)':
         _LINUX_CLOBBER_CONFIG,
-    'Chromium Linux Goma RBE Prod':
-        _LINUX_CONFIG,
-    'Chromium Linux Goma RBE Prod (clobber)':
-        _LINUX_CLOBBER_CONFIG,
-    'Chromium Linux Goma RBE Prod (dbg)':
-        _LINUX_CONFIG,
-    'Chromium Linux Goma RBE Prod (dbg) (clobber)':
-        _LINUX_CLOBBER_CONFIG,
 
     # Mac RBE
     'Chromium Mac Goma RBE ToT':
@@ -119,14 +110,6 @@ _SPEC_BUILDERS = {
         _MAC_CLOBBER_CONFIG,
     'Chromium Mac Goma RBE Staging (dbg)':
         _MAC_CONFIG,
-    'Chromium Mac Goma RBE Prod':
-        _MAC_CONFIG,
-    'Chromium Mac Goma RBE Prod (clobber)':
-        _MAC_CLOBBER_CONFIG,
-    'Chromium Mac Goma RBE Prod (dbg)':
-        _MAC_CONFIG,
-    'Chromium Mac Goma RBE Prod (dbg) (clobber)':
-        _MAC_CLOBBER_CONFIG,
 
     # Android ARM 32-bit RBE
     # TODO(crbug.com/1040754): ToT builders have temporarily been made 'clobber'
@@ -137,14 +120,6 @@ _SPEC_BUILDERS = {
         CreateAndroidConfig(32, ['goma_client_candidate', 'clobber']),
     'Chromium Android ARM 32-bit Goma RBE Staging':
         _ANDROID32_CONFIG,
-    'Chromium Android ARM 32-bit Goma RBE Prod':
-        _ANDROID32_CONFIG,
-    'Chromium Android ARM 32-bit Goma RBE Prod (clobber)':
-        _ANDROID32_CLOBBER_CONFIG,
-    'Chromium Android ARM 32-bit Goma RBE Prod (dbg)':
-        _ANDROID32_CONFIG,
-    'Chromium Android ARM 32-bit Goma RBE Prod (dbg) (clobber)':
-        _ANDROID32_CLOBBER_CONFIG,
 
     # Windows RBE
     'Chromium Win Goma RBE ToT':
@@ -152,14 +127,6 @@ _SPEC_BUILDERS = {
     'Chromium Win Goma RBE Staging':
         _WIN_CONFIG,
     'Chromium Win Goma RBE Staging (clobber)':
-        _WIN_CLOBBER_CONFIG,
-    'Chromium Win Goma RBE Prod':
-        _WIN_CONFIG,
-    'Chromium Win Goma RBE Prod (clobber)':
-        _WIN_CLOBBER_CONFIG,
-    'Chromium Win Goma RBE Prod (dbg)':
-        _WIN_CONFIG,
-    'Chromium Win Goma RBE Prod (dbg) (clobber)':
         _WIN_CLOBBER_CONFIG,
 }
 
