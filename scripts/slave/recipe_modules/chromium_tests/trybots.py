@@ -1233,13 +1233,13 @@ TRYBOTS = freeze({
                 'bot_ids': [
                     {
                         'mastername': 'chromium.win',
-                        'buildername': 'Win x64 Builder',
-                        'tester': 'Win10 Tests x64',
+                        'buildername': 'Win x64 Builder Code Coverage',
+                        'tester': 'Win10 Tests x64 Code Coverage',
                     },
                     {
                         'mastername': 'chromium.gpu',
-                        'buildername': 'GPU Win x64 Builder',
-                        'tester': 'Win10 x64 Release (NVIDIA)',
+                        'buildername': 'GPU Win x64 Builder Code Coverage',
+                        'tester': 'Win10 x64 Release (NVIDIA) Code Coverage',
                     },
                 ],
             },
