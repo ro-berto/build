@@ -14,8 +14,6 @@ from recipe_engine import recipe_api
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
-from RECIPE_MODULES.build.chromium_tests import steps
-
 
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
@@ -27,21 +25,6 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
-
-def _create_test_run_results_dictionary(valid):
-  """Returns the dictionary for an invalid test run.
-
-  Args:
-    valid: A boolean.
-  """
-  return {
-    'valid': valid,
-    'failures': [],
-    'total_tests_ran': 0,
-    'pass_fail_counts': {},
-    'findit_notrun': set()
-  }
-
 def generate_tests(api, phase, bot):
   tests = []
   build_out_dir = api.path['checkout'].join(
@@ -50,28 +33,28 @@ def generate_tests(api, phase, bot):
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     tests += [
-        WebRtcIsolatedGtest('audio_decoder_unittests'),
-        WebRtcIsolatedGtest('common_audio_unittests'),
-        WebRtcIsolatedGtest('common_video_unittests'),
-        WebRtcIsolatedGtest('low_bandwidth_audio_test'),
-        WebRtcIsolatedGtest('modules_tests', shards=2),
-        WebRtcIsolatedGtest('modules_unittests', shards=6),
-        WebRtcIsolatedGtest('peerconnection_unittests', shards=4),
-        WebRtcIsolatedGtest('rtc_media_unittests'),
-        WebRtcIsolatedGtest('rtc_pc_unittests'),
-        WebRtcIsolatedGtest('rtc_stats_unittests'),
-        WebRtcIsolatedGtest('rtc_unittests', shards=6),
-        WebRtcIsolatedGtest('slow_tests'),
-        WebRtcIsolatedGtest('system_wrappers_unittests'),
-        WebRtcIsolatedGtest('test_support_unittests'),
-        WebRtcIsolatedGtest('tools_unittests'),
-        WebRtcIsolatedGtest('video_engine_tests', shards=4),
-        WebRtcIsolatedGtest('webrtc_nonparallel_tests'),
+        SwarmingDesktopTest('audio_decoder_unittests'),
+        SwarmingDesktopTest('common_audio_unittests'),
+        SwarmingDesktopTest('common_video_unittests'),
+        SwarmingDesktopTest('low_bandwidth_audio_test'),
+        SwarmingDesktopTest('modules_tests', shards=2),
+        SwarmingDesktopTest('modules_unittests', shards=6),
+        SwarmingDesktopTest('peerconnection_unittests', shards=4),
+        SwarmingDesktopTest('rtc_media_unittests'),
+        SwarmingDesktopTest('rtc_pc_unittests'),
+        SwarmingDesktopTest('rtc_stats_unittests'),
+        SwarmingDesktopTest('rtc_unittests', shards=6),
+        SwarmingDesktopTest('slow_tests'),
+        SwarmingDesktopTest('system_wrappers_unittests'),
+        SwarmingDesktopTest('test_support_unittests'),
+        SwarmingDesktopTest('tools_unittests'),
+        SwarmingDesktopTest('video_engine_tests', shards=4),
+        SwarmingDesktopTest('webrtc_nonparallel_tests'),
     ]
 
   if test_suite == 'webrtc_and_baremetal':
     baremetal_test = functools.partial(
-        WebRtcIsolatedGtest,
+        SwarmingDesktopTest,
         dimensions=bot.config['baremetal_swarming_dimensions'])
 
     tests.append(baremetal_test('video_capture_tests'))
@@ -121,28 +104,24 @@ def generate_tests(api, phase, bot):
                 '--save_worst_frame',
                 '--nologs',
             ]))
-    assert all([
-        isinstance(t, SwarmingAndroidPerfTest) for t in tests
-    ]), ('Watch out. Android perf tasks are very picky about flags, so you '
-         'need Android-specific tasks here.')
 
   if test_suite == 'android':
     tests += [
-        AndroidTest('AppRTCMobile_test_apk'),
-        AndroidTest('android_instrumentation_test_apk'),
-        AndroidTest('audio_decoder_unittests'),
-        AndroidTest('common_audio_unittests'),
-        AndroidTest('common_video_unittests'),
-        AndroidTest('modules_tests', shards=2),
-        AndroidTest('modules_unittests', shards=6),
-        AndroidTest('peerconnection_unittests', shards=4),
-        AndroidTest('rtc_stats_unittests'),
-        AndroidTest('rtc_unittests', shards=6),
-        AndroidTest('system_wrappers_unittests'),
-        AndroidTest('test_support_unittests'),
-        AndroidTest('tools_unittests'),
-        AndroidTest('video_engine_tests', shards=4),
-        AndroidTest('webrtc_nonparallel_tests'),
+        SwarmingAndroidTest('AppRTCMobile_test_apk'),
+        SwarmingAndroidTest('android_instrumentation_test_apk'),
+        SwarmingAndroidTest('audio_decoder_unittests'),
+        SwarmingAndroidTest('common_audio_unittests'),
+        SwarmingAndroidTest('common_video_unittests'),
+        SwarmingAndroidTest('modules_tests', shards=2),
+        SwarmingAndroidTest('modules_unittests', shards=6),
+        SwarmingAndroidTest('peerconnection_unittests', shards=4),
+        SwarmingAndroidTest('rtc_stats_unittests'),
+        SwarmingAndroidTest('rtc_unittests', shards=6),
+        SwarmingAndroidTest('system_wrappers_unittests'),
+        SwarmingAndroidTest('test_support_unittests'),
+        SwarmingAndroidTest('tools_unittests'),
+        SwarmingAndroidTest('video_engine_tests', shards=4),
+        SwarmingAndroidTest('webrtc_nonparallel_tests'),
         AndroidJunitTest('android_examples_junit_tests'),
         AndroidJunitTest('android_sdk_junit_tests'),
     ]
@@ -156,10 +135,13 @@ def generate_tests(api, phase, bot):
           env={'GOMA_DISABLED': True}))
 
     if api.tryserver.is_tryserver:
-      tests.append(AndroidTest('webrtc_perf_tests', args=[
-          '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
-          '--nologs',
-      ]))
+      tests.append(
+          SwarmingAndroidTest(
+              'webrtc_perf_tests',
+              args=[
+                  '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
+                  '--nologs',
+              ]))
 
   if test_suite == 'ios':
     tests += [
@@ -208,7 +190,7 @@ def generate_tests(api, phase, bot):
 
   if test_suite == 'more_configs':
     if 'no_sctp' in phase:
-      tests.append(WebRtcIsolatedGtest('peerconnection_unittests'))
+      tests.append(SwarmingDesktopTest('peerconnection_unittests'))
 
   return tests
 
@@ -220,13 +202,42 @@ class WebRtcIsolatedGtest(object):
   the parts we don't need.
   """
 
-  def __init__(self, name, args=None, shards=1, dimensions=None):
+  def __init__(self,
+               name,
+               dimensions=None,
+               args=None,
+               shards=1,
+               cipd_packages=None,
+               idempotent=None,
+               result_handlers=None):
+    """Constructs an instance of WebRtcIsolatedGtest.
+
+    Args:
+      name: Displayed name of the test.
+      dimensions (dict of str: str): Requested dimensions of the test.
+      args: List of arguments to pass as "Extra Args" to the swarming task.
+          These are passed to whatever runs first in the swarming job, like
+          build/android/test_runner.py on Android or gtest-parallel on Desktop.
+          (these often pass through args to the test binary).
+      shards: Number of shards to trigger.
+      cipd_packages: [(str, str, str)] list of 3-tuples containing cipd
+          package root, package name, and package version.
+      idempotent: Whether to mark the task as idempotent. A value of None will
+          cause chromium_swarming/api.py to apply its default_idempotent val.
+      result_handlers: a list of callbacks that take (api, step_result,
+          has_valid_results) and take some action to it (typically writing
+          something into the step result).
+    """
     self._name = name
+    self._dimensions = dimensions or {}
     self._args = args or []
     self._shards = shards
+    self._cipd_packages = cipd_packages
+    self._idempotent = idempotent
+    self._result_handlers = result_handlers or []
+
     self._task = None
     self._has_collected = False
-    self._dimensions = dimensions
 
   @property
   def isolate_target(self):
@@ -240,9 +251,8 @@ class WebRtcIsolatedGtest(object):
   def step_name(self):
     return self._name
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, api):
     """Launches the test on Swarming."""
-    del suffix
     assert self._task is None, (
         'Test %s was already triggered' % self.step_name)  # pragma no cover
 
@@ -258,22 +268,17 @@ class WebRtcIsolatedGtest(object):
     return api.chromium_swarming.trigger_task(self._task)
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, api):
     """Waits for launched test to finish and collects the results."""
-    del suffix
     assert not self._has_collected, (  # pragma no cover
         'Results of %s were already collected' % self.step_name)
-
     self._has_collected = True
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
         self._task, allow_missing_json=True)
 
-    if (api.step.active_result.retcode == 0 and not has_valid_results):
-      # This failure won't be caught automatically. Need to manually
-      # raise it as a step failure.
-      raise api.step.StepFailure(
-          api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
+    for handler in self._result_handlers:
+      handler(api, step_result, has_valid_results)
 
     return step_result
 
@@ -286,6 +291,7 @@ class WebRtcIsolatedGtest(object):
     self._apply_swarming_task_config(task, api, isolated)
     return task
 
+
   def _apply_swarming_task_config(self, task, api, isolated):
     """Applies shared configuration for swarming tasks.
     """
@@ -294,18 +300,22 @@ class WebRtcIsolatedGtest(object):
     task.build_properties = api.chromium.build_properties
 
     task_slice = task.request[0]
-    ensure_file = task_slice.cipd_ensure_file
 
+    if self._idempotent is not None:
+      task_slice = task_slice.with_idempotent(self._idempotent)
+
+    ensure_file = task_slice.cipd_ensure_file
+    if self._cipd_packages:
+      for package in self._cipd_packages:
+        ensure_file.add_package(package[1], package[2], package[0])
     task_slice = (
         task_slice.with_cipd_ensure_file(ensure_file).with_isolated(isolated))
 
     task_dimensions = task_slice.dimensions
-    # Add custom dimensions.
-    if self._dimensions:
-      for k, v in self._dimensions.iteritems():
-        task_dimensions[k] = v
+    for k, v in self._dimensions.iteritems():
+      task_dimensions[k] = v
 
-    # Set default value.
+    # Set default value for os.
     if 'os' not in task_dimensions:
       task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
           api.platform.name)  # pragma no cover
@@ -319,170 +329,123 @@ class WebRtcIsolatedGtest(object):
     return task
 
 
-def _MergeFiles(output_dir, suffix):
+def InvalidResultsHandler(api, step_result, has_valid_results):
+  if (api.step.active_result.retcode == 0 and not has_valid_results):
+    # This failure won't be caught automatically. Need to manually
+    # raise it as a step failure.
+    raise api.step.StepFailure(
+        api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
+
+
+def LogcatHandler(api, step_result, has_valid_results):
+  del has_valid_results
+  task_output_dir = api.step.active_result.raw_io.output_dir
   result = ""
-  for file_name, contents in output_dir.iteritems():
-    if file_name.endswith(suffix): # pragma: no cover
+  for file_name, contents in task_output_dir.iteritems():
+    if file_name.endswith('logcats'):  # pragma: no cover
       result += contents
-  return result
+
+  step_result.presentation.logs['logcats'] = result.splitlines()
+
+
+def SwarmingDesktopTest(name, **kwargs):
+  return WebRtcIsolatedGtest(
+      name, result_handlers=[InvalidResultsHandler], **kwargs)
+
+
+def SwarmingPerfTest(name, args=None, **kwargs):
+
+  def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
+    del has_valid_results
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
+
+  handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
+
+  args = list(args or [])
+  args.extend([
+      '--isolated-script-test-perf-output',
+      '${ISOLATED_OUTDIR}/perftest-output.json',
+  ])
+
+  # Perf tests are marked as not idempotent, which means they're re-run if they
+  # did not change this build. This will give the dashboard some more variance
+  # data to work with."""
+  return WebRtcIsolatedGtest(
+      name,
+      args=args,
+      cipd_packages=ANDROID_CIPD_PACKAGES,
+      shards=1,
+      idempotent=False,
+      result_handlers=handlers,
+      **kwargs)
+
+
+def SwarmingAndroidTest(name, **kwargs):
+  return WebRtcIsolatedGtest(
+      name,
+      cipd_packages=ANDROID_CIPD_PACKAGES,
+      result_handlers=[InvalidResultsHandler, LogcatHandler],
+      **kwargs)
+
+
+def SwarmingAndroidPerfTest(name, args=None, **kwargs):
+
+  def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
+    del has_valid_results
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
+
+  handlers = [
+      InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
+  ]
+
+  args = list(args or [])
+  args.extend([
+      '--isolated-script-test-perf-output',
+      '${ISOLATED_OUTDIR}/perftest-output.json',
+  ])
+
+  return WebRtcIsolatedGtest(
+      name,
+      args=args,
+      shards=1,
+      idempotent=False,
+      result_handlers=handlers,
+      **kwargs)
 
 
 class Test(object):
+
   def __init__(self, test, name=None):
     self._test = test
     self._name = name or test
 
-  def pre_run(self, api, suffix): # pylint: disable=unused-argument
+  def pre_run(self, api):
+    del api
     return []
 
-  def run(self, api, suffix): # pragma: no cover pylint: disable=unused-argument
+  def run(self, api):  # pragma: no cover
+    del api
     return []
 
 
 class PythonTest(Test):
+
   def __init__(self, test, script, args, env):
     super(PythonTest, self).__init__(test)
     self._script = script
     self._args = args
     self._env = env or {}
 
-  def run(self, api, suffix):
+  def run(self, api):
     with api.depot_tools.on_path():
       with api.context(env=self._env):
         return api.python(self._test, self._script, self._args)
 
 
-class AndroidTest(steps.SwarmingGTestTest):
-
-  def __init__(self, test, **kwargs):
-    super(AndroidTest, self).__init__(test,
-                                      cipd_packages=ANDROID_CIPD_PACKAGES,
-                                      **kwargs)
-
-  def validate_task_results(self, api, step_result):
-    valid = super(AndroidTest, self).validate_task_results(api, step_result)
-
-    task_output_dir = api.step.active_result.raw_io.output_dir
-    logcats = _MergeFiles(task_output_dir, 'logcats')
-    step_result.presentation.logs['logcats'] = logcats.splitlines()
-
-    return _create_test_run_results_dictionary(valid)
-
-
-
-class SwarmingAndroidPerfTest(steps.SwarmingTest):
-  """Custom Android perf test runner for WebRTC.
-
-  We don't want to use Chromium's process_perf_results.py or merge scripts, so
-  we use this class to hook in our own code.
-
-  This class isn't a GTest-based runner like for the normal tests. This is
-  because WebRTC is the only team doing C++ perf tests on Android. We need this
-  to be a basic swarming test because android_test_runner.py can't handle the
-  --isolated-script-test-output flag that is passed to swarmed isolated tests
-  (note, this is NOT the same as isolated-script-test-perf-output!), and the
-  swarmed GTest class does not have the capability to do perf uploads.
-  """
-
-  def __init__(self, test, args=None, shards=1, cipd_packages=None,
-               idempotent=False, **kwargs):
-    super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
-    args = list(args or [])
-    args.extend([
-        '--isolated-script-test-perf-output',
-        '${ISOLATED_OUTDIR}/perftest-output.json',
-    ])
-    self._args = args
-    self._shards = shards
-    self._idempotent = idempotent
-    if cipd_packages is None:
-      cipd_packages = ANDROID_CIPD_PACKAGES
-    self._cipd_packages = cipd_packages
-
-  def create_task(self, api, suffix, isolated_hash):
-    return api.chromium_swarming.task(
-        name=self.step_name(suffix),
-        isolated=isolated_hash,
-        shards=self._shards,
-        cipd_packages=self._cipd_packages,
-        idempotent=self._idempotent,
-        extra_args=self._args,
-        build_properties=api.chromium.build_properties)
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    """Waits for launched test to finish and collects the results."""
-    # TODO(phoglund); upstream allow_missing_json; that's the only thing we
-    # change from the base algorithm. Or, simplify this class to reduce
-    # duplication.
-    assert suffix not in self._test_runs, (
-        'Results of %s were already collected' % self.step_name(suffix))
-
-    # Emit error if test wasn't triggered. This happens if *.isolated is not
-    # found. (The build is already red by this moment anyway).
-    if suffix not in self._tasks:  # pragma: no cover
-      return api.python.failing_step(
-          '[collect error] %s' % self.step_name(suffix),
-          '%s wasn\'t triggered' % self.target_name)
-
-    step_result, has_valid_results = api.chromium_swarming.collect_task(
-        self._tasks[suffix], allow_missing_json=True)
-    self._suffix_step_name_map[suffix] = step_result.step['name']
-
-    step_result.presentation.logs['step_metadata'] = (json.dumps(
-        self.step_metadata(suffix), sort_keys=True, indent=2)).splitlines()
-
-    # TODO(martiniss): Consider moving this into some sort of base
-    # validate_task_results implementation.
-    results = self.validate_task_results(api, step_result)
-    if not has_valid_results:
-      results['valid'] = False  # pragma: no cover
-
-    self.update_test_run(api, suffix, results)
-    return step_result
-
-  def validate_task_results(self, api, step_result):
-    task_output_dir = step_result.raw_io.output_dir
-    logcats = _MergeFiles(task_output_dir, 'logcats')
-    step_result.presentation.logs['logcats'] = logcats.splitlines()
-
-    api.webrtc.upload_to_perf_dashboard(self.name, step_result)
-
-    # There currently exists no validation logic for the results generated by
-    # swarming android perf tests. This should be fixed.
-    return _create_test_run_results_dictionary(True)
-
-  def compile_targets(self): # pragma: no cover
-    return []
-
-
-class SwarmingPerfTest(steps.SwarmingIsolatedScriptTest):
-  """Custom swarmed test runner for WebRTC.
-
-  We don't want to use Chromium's process_perf_results.py or merge scripts, so
-  we use this class to hook in our own code.
-  """
-
-  def __init__(self, name, *args, **kwargs):
-    # Perf tests are not idempotent, because for almost all tests the binary
-    # will not return the exact same perf result each time. We want to get those
-    # results so the dashboard can properly determine the variance of the test.
-    kwargs.setdefault('idempotent', False)
-    super(SwarmingPerfTest, self).__init__(name, *args, **kwargs)
-
-  def validate_task_results(self, api, step_result):
-    valid = super(SwarmingPerfTest, self).validate_task_results(
-        api, step_result)
-
-    api.webrtc.upload_to_perf_dashboard(self.name, step_result)
-
-    return _create_test_run_results_dictionary(valid)
-
-
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
-  def run(self, api, suffix):
+  def run(self, api):
     return api.chromium_android.run_java_unit_test_suite(self._name)
 
 

@@ -466,7 +466,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       tests = steps.generate_tests(self.m, phase, self.bot)
       if tests:
         for test in tests:
-          test.pre_run(self.m, suffix='')
+          test.pre_run(self.m)
 
         # Build + upload archives while waiting for swarming tasks to finish.
         if self.bot.config.get('build_android_archive'):
@@ -476,12 +476,15 @@ class WebRTCApi(recipe_api.RecipeApi):
 
         failures = []
         for test in tests:
-          result = test.run(self.m, suffix='')
-          if result.presentation.status != self.m.step.SUCCESS:
-            failures.append(test._name)
+          try:
+            test.run(self.m)
+          except self.m.step.StepFailure:
+            failures.append(test.name)
+
         if failures:
           raise self.m.step.StepFailure('Test target(s) failed: %s' %
                                         ', '.join(failures))
+
 
   def maybe_trigger(self):
     properties = {
@@ -565,7 +568,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'logcats': 'foo',
       }
     else:
-      task_output_dir = step_result.raw_io.output_dir
+      task_output_dir = step_result.raw_io.output_dir  # pragma no cover
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):
