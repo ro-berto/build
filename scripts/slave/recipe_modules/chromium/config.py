@@ -242,10 +242,7 @@ def win_analyze(c):
 
 @config_ctx(group='builder')
 def ninja(c):
-  out_path = 'out'
-  if c.TARGET_CROS_BOARD:
-    out_path += '_%s' % (c.TARGET_CROS_BOARD,)
-  c.build_dir = c.CHECKOUT_PATH.join(out_path)
+  c.build_dir = c.CHECKOUT_PATH.join('out')
 
 
 @config_ctx()

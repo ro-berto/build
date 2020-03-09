@@ -599,9 +599,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       optional_system_python = self.m.chromite.with_system_python()
 
-    if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
-      out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
-    elif out_dir is None:
+    if out_dir is None:
       out_dir = 'out'
 
     target_output_dir = self.m.path.join(self.m.path['checkout'], out_dir,
@@ -1175,10 +1173,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def _mb_build_dir_args(self, build_dir):
     if not build_dir:
-      out_dir = 'out'
-      if self.c.TARGET_CROS_BOARD:
-        out_dir += '_%s' % self.c.TARGET_CROS_BOARD
-      build_dir = '//%s/%s' % (out_dir, self.c.build_config_fs)
+      build_dir = '//out/%s' % self.c.build_config_fs
     return [build_dir]
 
   @_with_chromium_layout

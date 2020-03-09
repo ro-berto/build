@@ -323,7 +323,7 @@
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "base_unittests_run\n",
-      "//out_x86-generic/Release"
+      "//out/Release"
     ],
     "cwd": "None",
     "env": {

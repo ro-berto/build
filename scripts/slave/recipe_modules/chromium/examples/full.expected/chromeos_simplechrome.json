@@ -681,7 +681,7 @@
       "--android-version-name=example",
       "--json-output",
       "/path/to/tmp/json",
-      "//out_amd64-generic/Release"
+      "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -829,7 +829,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out_amd64-generic/Release",
+      "/tmp/Release",
       "All"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -849,7 +849,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out_amd64-generic/Release",
+      "/tmp/Release",
       "All",
       "-d",
       "explain",
@@ -879,9 +879,9 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--skip-sendgomatsmon",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out_amd64-generic/Release",
+      "/tmp/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out_amd64-generic/Release\", \"All\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Release\", \"All\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
