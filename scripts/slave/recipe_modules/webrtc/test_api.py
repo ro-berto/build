@@ -4,6 +4,7 @@
 
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
+import os
 import base64
 import json
 
@@ -114,6 +115,14 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     test += self.m.properties(buildnumber=1337)
 
     return test
+
+  def example_proto(self):
+    # Tip: to see what's in the proto, use the tracing/bin/proto2json tool
+    # in the Catapult repo.
+    this_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
+    proto = os.path.join(this_dir, 'testdata', 'perftest-output.pb')
+    with open(proto, "rb") as f:
+      return f.read()
 
   def example_chartjson(self):
     return json.dumps({
