@@ -357,14 +357,14 @@ def SwarmingPerfTest(name, args=None, **kwargs):
 
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
-    api.webrtc.upload_to_perf_dashboard(name, step_result, use_histograms=True)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
 
   args = list(args or [])
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   # Perf tests are marked as not idempotent, which means they're re-run if they
@@ -392,7 +392,7 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
 
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
-    api.webrtc.upload_to_perf_dashboard(name, step_result, use_histograms=True)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [
       InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
@@ -401,7 +401,7 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
   args = list(args or [])
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   return WebRtcIsolatedGtest(
