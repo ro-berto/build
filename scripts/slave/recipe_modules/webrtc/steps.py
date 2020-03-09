@@ -363,8 +363,8 @@ def SwarmingPerfTest(name, args=None, **kwargs):
 
   args = list(args or [])
   args.extend([
-      '--isolated-script-test-perf-output',
-      '${ISOLATED_OUTDIR}/perftest-output.json',
+      ('--isolated-script-test-perf-output='
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   # Perf tests are marked as not idempotent, which means they're re-run if they
@@ -400,8 +400,8 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
 
   args = list(args or [])
   args.extend([
-      '--isolated-script-test-perf-output',
-      '${ISOLATED_OUTDIR}/perftest-output.json',
+      ('--isolated-script-test-perf-output='
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   return WebRtcIsolatedGtest(
