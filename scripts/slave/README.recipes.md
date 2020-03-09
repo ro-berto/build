@@ -40,7 +40,6 @@
   * [puppet_service_account](#recipe_modules-puppet_service_account) &mdash; **[DEPRECATED]** API for generating OAuth2 access tokens from service account keys predeployed to Chrome Ops bots via Puppet.
   * [repo](#recipe_modules-repo) &mdash; Common steps for recipes that use repo for source control.
   * [swarming_client](#recipe_modules-swarming_client)
-  * [swarming_heartbeat](#recipe_modules-swarming_heartbeat)
   * [tar](#recipe_modules-tar)
   * [test_results](#recipe_modules-test_results)
   * [test_utils](#recipe_modules-test_utils)
@@ -284,10 +283,8 @@
   * [repo:examples/full](#recipes-repo_examples_full)
   * [run_presubmit](#recipes-run_presubmit)
   * [swarming/deterministic_build](#recipes-swarming_deterministic_build) &mdash; Recipe to test the deterministic build.
-  * [swarming/heartbeat](#recipes-swarming_heartbeat) &mdash; Swarming heart beat recipe: runs a dummy job on the prod Swarming instance to ensure it is working properly.
   * [swarming/staging](#recipes-swarming_staging) &mdash; Swarming staging recipe: runs tests for HEAD of chromium using HEAD of swarming_client toolset on Swarming staging server instances (*-dev.
   * [swarming_client:examples/full](#recipes-swarming_client_examples_full)
-  * [swarming_heartbeat:examples/full](#recipes-swarming_heartbeat_examples_full)
   * [tar:examples/full](#recipes-tar_examples_full)
   * [test_results:examples/full](#recipes-test_results_examples_full)
   * [test_utils:tests/exonerate_flaky_failures](#recipes-test_utils_tests_exonerate_flaky_failures)
@@ -3087,17 +3084,6 @@ Version tuple is later accessible via 'get_script_version' method. If
 tests by default.
 
 Does nothing if script's version is already known.
-### *recipe_modules* / [swarming\_heartbeat](/scripts/slave/recipe_modules/swarming_heartbeat)
-
-[DEPS](/scripts/slave/recipe_modules/swarming_heartbeat/__init__.py#5): [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-#### **class [SwarmingHeartbeatApi](/scripts/slave/recipe_modules/swarming_heartbeat/api.py#7)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-Defines support to run automated heartbeat.
-
-&mdash; **def [run](/scripts/slave/recipe_modules/swarming_heartbeat/api.py#10)(self):**
-
-Runs job_runs_fine.py to run an heartbeat check.
 ### *recipe_modules* / [tar](/scripts/slave/recipe_modules/tar)
 
 [DEPS](/scripts/slave/recipe_modules/tar/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -5541,16 +5527,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 &mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#121)(api, src_dir, dst_dir):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#157)(api, buildername):**
-### *recipes* / [swarming/heartbeat](/scripts/slave/recipes/swarming/heartbeat.py)
-
-[DEPS](/scripts/slave/recipes/swarming/heartbeat.py#11): [chromium\_swarming](#recipe_modules-chromium_swarming), [swarming\_client](#recipe_modules-swarming_client), [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Swarming heart beat recipe: runs a dummy job on the prod Swarming instance to
-ensure it is working properly.
-
-Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/heartbeat.py#19)(api):**
 ### *recipes* / [swarming/staging](/scripts/slave/recipes/swarming/staging.py)
 
 [DEPS](/scripts/slave/recipes/swarming/staging.py#20): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/commit\_position][recipe_engine/recipe_modules/commit_position], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5570,11 +5546,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/swarming_client/examples/full.py#5): [swarming\_client](#recipe_modules-swarming_client), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming_client/examples/full.py#13)(api):**
-### *recipes* / [swarming\_heartbeat:examples/full](/scripts/slave/recipe_modules/swarming_heartbeat/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/swarming_heartbeat/examples/full.py#5): [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming_heartbeat/examples/full.py#11)(api):**
 ### *recipes* / [tar:examples/full](/scripts/slave/recipe_modules/tar/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
