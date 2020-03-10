@@ -1006,7 +1006,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         'The list of shards being dispatched should be the enumeration of '
         'task.shards.'
     )
-    pre_trigger_args += ['--shards', str(task.shards)]
+    if task.shards > 1:
+      pre_trigger_args += ['--shards', str(task.shards)]
     args = pre_trigger_args + post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
@@ -1041,12 +1042,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, **kwargs))
 
-    if task.shards == 1:
-      # TODO(erikchen): Remove this placeholder logic. It should have no
-      # functional effect, it's just there to make expectation diffs easier to
-      # review.
-      pre_trigger_args += ['--shards', str(task.shards)]
-    else:
+    if task.shards > 1:
       # We must use different logic for swarming.py vs. custom trigger script.
       if task.trigger_script:
         pre_trigger_args += ['--shard-index', str(shard_index)]

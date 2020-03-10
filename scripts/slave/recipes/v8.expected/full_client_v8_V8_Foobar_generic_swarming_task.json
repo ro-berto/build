@@ -57,8 +57,6 @@
       "-u",
       "[START_DIR]/swarming.client/swarming.py",
       "trigger",
-      "--shards",
-      "1",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--isolate-server",

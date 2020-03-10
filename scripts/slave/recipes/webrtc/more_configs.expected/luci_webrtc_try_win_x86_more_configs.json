@@ -1279,8 +1279,6 @@
       "-u",
       "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
-      "--shards",
-      "1",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--isolate-server",

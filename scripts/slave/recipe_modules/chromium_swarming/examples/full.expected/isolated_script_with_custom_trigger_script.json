@@ -7,8 +7,6 @@
       "foo",
       "bar",
       "trigger",
-      "--shards",
-      "1",
       "--swarming",
       "https://chromium-swarm-dev.appspot.com",
       "--isolate-server",

@@ -182,8 +182,6 @@
       "-u",
       "[START_DIR]/src/trigger_script.py",
       "trigger",
-      "--shards",
-      "1",
       "--swarming",
       "https://chromium-swarm.appspot.com",
       "--isolate-server",
