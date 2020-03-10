@@ -87,5 +87,19 @@
     "toolchain": "//build/toolchain/android:android_clang_arm",
     "type": "action",
     "visibility": [ "//mojo/public/cpp/bindings/tests:*" ]
-   }
+   },
+  "//components/send_tab_to_self/proto:send_tab_to_self_proto_gen" : {
+    "outputs" : ["not inspected"],
+    "args" : ["main.proto", "--protoc", "./clang_x64/protoc", "--proto-in-dir", "../../", "--cc-out-dir", "gen/", "--py-out-dir", "pyproto/"],
+    "toolchain" : "//build/toolchain/android:android_clang_arm",
+    "visibility" : ["//proto:main"],
+    "testonly" : false,
+    "type" : "action",
+    "public" : "*",
+    "metadata" : {},
+    "sources" : ["//main.proto"],
+    "script" : "//tools/protoc_wrapper/protoc_wrapper.py",
+    "deps" : ["//third_party/protobuf:protoc(//build/toolchain/linux:clang_x64)"],
+    "inputs" : ["//out/android-Debug/clang_x64/protoc"]
+  }
 }
