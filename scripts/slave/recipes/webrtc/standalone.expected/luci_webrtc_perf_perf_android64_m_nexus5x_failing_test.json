@@ -772,9 +772,8 @@
       "[dummy hash for webrtc_perf_tests]",
       "--",
       "--save_worst_frame",
-      "--write_histogram_proto_json",
       "--nologs",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb"
+      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

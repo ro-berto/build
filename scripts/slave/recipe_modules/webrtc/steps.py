@@ -84,7 +84,6 @@ def generate_tests(api, phase, bot):
             args=[
                 '--test_artifacts_dir',
                 '${ISOLATED_OUTDIR}',
-                '--write_histogram_proto_json',
                 '--save_worst_frame',
                 '--nologs',
             ]),
@@ -101,10 +100,8 @@ def generate_tests(api, phase, bot):
             ]))
     tests.append(
         SwarmingAndroidPerfTest(
-            'webrtc_perf_tests',
-            args=[
+            'webrtc_perf_tests', args=[
                 '--save_worst_frame',
-                '--write_histogram_proto_json',
                 '--nologs',
             ]))
 
@@ -357,26 +354,17 @@ def SwarmingDesktopTest(name, **kwargs):
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
-  if name == 'webrtc_perf_tests':
-    use_histograms = True
-  else:
-    # TODO(http://crbug.com/1029452): also port over isac_fix_test and
-    # low_bandwidth_audio_test.
-    use_histograms = False
 
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
-
-    api.webrtc.upload_to_perf_dashboard(
-        name, step_result, use_histograms=use_histograms)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
 
   args = list(args or [])
-  extension = 'pb' if use_histograms else 'json'
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   # Perf tests are marked as not idempotent, which means they're re-run if they
@@ -401,28 +389,19 @@ def SwarmingAndroidTest(name, **kwargs):
 
 
 def SwarmingAndroidPerfTest(name, args=None, **kwargs):
-  if name == 'webrtc_perf_tests':
-    use_histograms = True
-  else:
-    # TODO(http://crbug.com/1029452): also port over isac_fix_test and
-    # low_bandwidth_audio_test.
-    use_histograms = False
 
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
-
-    api.webrtc.upload_to_perf_dashboard(
-        name, step_result, use_histograms=use_histograms)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [
       InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
   ]
 
   args = list(args or [])
-  extension = 'pb' if use_histograms else 'json'
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
 
   return WebRtcIsolatedGtest(
