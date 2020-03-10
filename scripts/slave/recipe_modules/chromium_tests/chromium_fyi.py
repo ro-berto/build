@@ -653,7 +653,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=[
-                    'ios_release_simulator',
+                    'mb',
                     'mac_toolchain',
                 ],
                 gclient_config='ios',
