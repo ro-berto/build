@@ -564,19 +564,22 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     if self._test_data.enabled and test_succeeded:
       task_output_dir = {
-        '0/perftest-output.json': self.test_api.example_chartjson(),
         'logcats': 'foo',
       }
+      if use_histograms:
+        task_output_dir['0/perftest-output.pb'] = (
+            self.test_api.example_proto())
+      else:
+        task_output_dir['0/perftest-output.json'] = (
+            self.test_api.example_chartjson())
     else:
       task_output_dir = step_result.raw_io.output_dir  # pragma no cover
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):
-      if use_histograms:  # pragma: no cover
-        # TODO(http://crbug.com/1029452): Rename test outputs json -> proto.
-        # The extension is currently hard-coded in isolated_script_task().
-        # In histogram mode, the tests output protos rather than JSON.
-        if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
+      if use_histograms:
+        # If there are retries, you might see perftest-output_1.pb and so on.
+        if re.search(r'perftest-output.*\.pb$', filepath):
           results_to_upload.append(task_output_dir[filepath])
       else:
         if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
@@ -593,9 +596,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.runtime.is_experimental:
       perf_bot_group = 'Experimental' + perf_bot_group
 
-    if use_histograms:  # pragma: no cover
+    if use_histograms:
       for perf_results in results_to_upload:
-        perf_bot_group = 'ZZExperimentalHistograms' + perf_bot_group
         args = [
             '--build-page-url', self.build_url, '--test-suite',
             'webrtc_perf_tests', '--bot', self.c.PERF_ID, '--output-json-file',
@@ -614,10 +616,7 @@ class WebRTCApi(recipe_api.RecipeApi):
             upload_script,
             args,
             step_test_data=lambda: self.m.json.test_api.output({}),
-            # TODO(http://crbug.com/1029452): Ignore failures in this step while
-            # experimenting. Don't make the bots red or purple.
-            infra_step=True,
-            ok_ret='all')
+            infra_step=True)
     else:
       token = self.m.service_account.default().get_access_token()
       for perf_results in results_to_upload:
