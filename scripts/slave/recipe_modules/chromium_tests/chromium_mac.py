@@ -9,6 +9,25 @@ SPEC = {
         'build_gs_bucket': 'chromium-mac-archive',
     },
     'builders': {
+        'ios-simulator':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=[],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
         'Mac Builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
