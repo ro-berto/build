@@ -97,6 +97,18 @@ def _run_ninja(out_dir,
   Returns:
     A list of elements in `object_targets` that failed to build.
   """
+  # We ideally don't want to always do clean rebuilds (crbug.com/1060168),
+  # but we also use the existence of an object to determine if it successfully
+  # built. Remove everything we're going to be checking ahead-of-time.
+  #
+  # FIXME(gbiv): We may be able to do better than this (interrogate ninja to
+  # see which objects are _actually_ out-of-date?)
+  for target in object_targets:
+    try:
+      os.unlink(target)
+    except OSError as e:
+      if e.errno != errno.ENOENT:
+        raise
 
   # 500 targets per invocation is arbitrary, but we start hitting OS argv size
   # limits around 1K in my experience.
@@ -1094,25 +1106,6 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
   }
 
 
-def _clean_out_dir(out_dir):
-  """Cleans `out_dir`. Only guarantees that args.gn remains."""
-  if not subprocess.call(['ninja', '-t', 'clean'], cwd=out_dir):
-    return
-
-  logging.error('`ninja -t clean` failed; falling back to manual cleaning.')
-  # Sometimes ninja leaves directories hanging around, so `clean` fails. Go
-  # back and get those.
-  for x in os.listdir(out_dir):
-    if x == 'args.gn':
-      continue
-
-    path = os.path.join(out_dir, x)
-    if os.path.isdir(path):
-      shutil.rmtree(path)
-    else:
-      os.unlink(path)
-
-
 def main():
   parser = argparse.ArgumentParser(
       description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1130,11 +1123,6 @@ def main():
       'tree.')
   parser.add_argument(
       '--ninja_jobs', type=int, help='Number of jobs to run `ninja` with')
-  parser.add_argument(
-      '--no_clean',
-      dest='clean',
-      action='store_false',
-      help='Don\'t clean the build directory before running clang-tidy. ')
   parser.add_argument(
       '--out_dir', required=True, help='Chromium out/ directory')
   parser.add_argument(
@@ -1179,9 +1167,6 @@ def main():
     for src_file in only_src_files:
       if not os.path.isfile(src_file):
         sys.exit('Provided src_file at %r does not exist' % src_file)
-
-  if args.clean:
-    _clean_out_dir(out_dir)
 
   compile_commands_location = _generate_compile_commands(out_dir)
 
