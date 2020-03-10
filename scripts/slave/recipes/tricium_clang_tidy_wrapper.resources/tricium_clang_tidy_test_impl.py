@@ -433,7 +433,7 @@ class Tests(unittest.TestCase):
 
     def run_ninja(out_dir, phony_targets, object_targets):
       self.assertEqual(out_dir, '/out')
-      self.assertEqual(phony_targets, ['my/awesome:target'])
+      self.assertEqual(phony_targets, [])
       self.assertEqual(object_targets, ['bar.o', 'foo.o'])
       return ()
 
@@ -928,7 +928,7 @@ class Tests(unittest.TestCase):
     }
 
     def run_ninja(out_dir, phony_targets, object_targets):
-      self.assertEqual(phony_targets, ['path/to/my:targ'])
+      self.assertEqual(phony_targets, [])
       self.assertEqual(sorted(object_targets), ['bar.o', 'foo.o'])
       return ()
 
@@ -974,7 +974,7 @@ class Tests(unittest.TestCase):
         })
 
     self.assertEqual(built_objects, [['foo.o'], []])
-    self.assertEqual(built_targets, [['path/to/my:targ'], ['all']])
+    self.assertEqual(built_targets, [[], ['all']])
 
   def test_perform_build_doesnt_fall_back_if_only_cc_files_werent_found(self):
     self._silence_logs()
@@ -1002,7 +1002,7 @@ class Tests(unittest.TestCase):
         })
 
     self.assertEqual(built_objects, [['foo.o']])
-    self.assertEqual(built_targets, [['path/to/my:targ']])
+    self.assertEqual(built_targets, [[]])
 
   def test_perform_build_reported_dependency_information_is_correct(self):
     self._silence_logs()

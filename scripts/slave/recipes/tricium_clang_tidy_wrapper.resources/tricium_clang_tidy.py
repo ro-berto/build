@@ -733,16 +733,17 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
       for cc_file in cc_files
   }
 
-  all_targets = set()
-  gn_targets = set()
-  for cc_file in cc_files_to_build:
-    all_targets.update(cc_to_target_map[cc_file])
-    gn_targets.update(
-        x.lstrip('/') for x in gn_desc.targets_containing(cc_file))
+  all_targets = {
+      x for cc_file in cc_files_to_build for x in cc_to_target_map[cc_file]}
 
+  # NOTE: a single target can force the build of a lot of dependencies. Picking
+  # a good heuristic here for which targets to build is difficult. In practice,
+  # the reduced parallelism here isn't a huge problem as long as
+  # len(object_targets) is, say, <1.5K files, which should be the
+  # overwhelmingly common case.
   failed_targets = run_ninja(
       out_dir=out_dir,
-      phony_targets=sorted(gn_targets),
+      phony_targets=[],
       object_targets=sorted(all_targets))
 
   src_file_to_target_map = parse_deps(
