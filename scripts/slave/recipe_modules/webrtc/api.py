@@ -430,7 +430,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if override_targets is None:
       targets = self._isolated_targets
       if targets:
-        targets = ['default'] + targets
+        targets = ['all'] + targets
     else:
       targets = override_targets
 
