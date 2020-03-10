@@ -275,7 +275,13 @@ def RunSteps(api):
       if affected:
         api.chromium.ensure_goma()
         api.goma.start()
-        api.chromium.mb_gen(api.chromium.get_builder_id())
+
+        # `gn gen` can take up to a minute, and the script we call out to
+        # already does that for us, so set up a minimal build dir.
+        gn_args = api.chromium.mb_lookup(api.chromium.get_builder_id())
+        api.file.ensure_directory('ensure out dir', api.chromium.output_dir)
+        api.file.write_text('write args.gn',
+                            api.chromium.output_dir.join('args.gn'), gn_args)
 
         with api.step.nest('clang-tidy'):
           with api.step.nest('generate-warnings'):
