@@ -630,6 +630,25 @@ SPEC = {
                     'platform': 'mac',
                 },
             ),
+        'ios13-sdk-device':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=[],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
         'ios-simulator-cr-recipe':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
