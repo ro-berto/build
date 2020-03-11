@@ -104,11 +104,13 @@ def _run_ninja(out_dir,
   # FIXME(gbiv): We may be able to do better than this (interrogate ninja to
   # see which objects are _actually_ out-of-date?)
   for target in object_targets:
+    target = os.path.join(out_dir, target)
     try:
       os.unlink(target)
     except OSError as e:
       if e.errno != errno.ENOENT:
         raise
+      logging.info('Removed existing target at %s', target)
 
   # 500 targets per invocation is arbitrary, but we start hitting OS argv size
   # limits around 1K in my experience.
