@@ -4882,7 +4882,7 @@ and if they fail we cancel the scheduled builds.
 
 &mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#1116)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1281)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#1278)(api):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#572)(api):**
 
@@ -4892,11 +4892,11 @@ and if they fail we cancel the scheduled builds.
 
 &mdash; **def [BuildNoGoma](/scripts/slave/recipes/flutter/engine.py#84)(api, config, \*targets):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1346)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#1343)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#1182)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#1179)(api):**
 
 &mdash; **def [CancelBuilds](/scripts/slave/recipes/flutter/engine.py#114)(api, builds):**
 
@@ -4904,7 +4904,7 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [DownloadFuchsiaSystemImage](/scripts/slave/recipes/flutter/engine.py#634)(api, target_dir, bucket_name, build_id, image_name):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1364)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#1361)(api):**
 
 &mdash; **def [GetCheckoutPath](/scripts/slave/recipes/flutter/engine.py#57)(api):**
 
@@ -4922,7 +4922,7 @@ Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [GetRemoteFileName](/scripts/slave/recipes/flutter/engine.py#725)(exec_path):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1325)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGems](/scripts/slave/recipes/flutter/engine.py#1322)(api):**
 
 &mdash; **def [IsolateFuchsiaTestArtifacts](/scripts/slave/recipes/flutter/engine.py#641)(api, checkout, fuchsia_tools, image_name, fuchsia_test_script):**
 
@@ -4936,7 +4936,7 @@ engine/testing/fuchsia/run_tests.sh) to drive the flutter_ctl.
 
 &mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#1027)(api, label, arm64_out, armv7_out, sim_out, bucket_name, strip_bitcode=False):**
 
-&mdash; **def [PackageWindowsDesktopVariant](/scripts/slave/recipes/flutter/engine.py#1165)(api, label, bucket_name):**
+&mdash; **def [PackageWindowsDesktopVariant](/scripts/slave/recipes/flutter/engine.py#1162)(api, label, bucket_name):**
 
 &mdash; **def [RunGN](/scripts/slave/recipes/flutter/engine.py#172)(api, \*args):**
 
@@ -4944,13 +4944,13 @@ engine/testing/fuchsia/run_tests.sh) to drive the flutter_ctl.
 
 &mdash; **def [RunIOSTests](/scripts/slave/recipes/flutter/engine.py#1104)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1386)(api, properties, env_properties):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#1383)(api, properties, env_properties):**
 
 &mdash; **def [RunTests](/scripts/slave/recipes/flutter/engine.py#96)(api, out_dir, android_out_dir=None, types='all'):**
 
 &mdash; **def [ScheduleBuilds](/scripts/slave/recipes/flutter/engine.py#106)(api, builder_name, drone_props):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupMacOSSDK](/scripts/slave/recipes/flutter/engine.py#1305)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupMacOSSDK](/scripts/slave/recipes/flutter/engine.py#1302)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#876)(api):**
 
