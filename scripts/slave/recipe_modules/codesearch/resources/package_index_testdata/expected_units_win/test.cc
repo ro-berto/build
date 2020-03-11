@@ -55,24 +55,23 @@ unit {
       digest: "5b7b820f13b680cfa034895bcdb46cbe95ad19b9c099a080fc6d23d3e606438c"
     }
   }
-  argument: "clang++"
-  argument: "-fsyntax-only"
-  argument: "-DFOO=\"foo bar\""
-  argument: "-std=c++11"
-  argument: "-Wno-c++11-narrowing"
-  argument: "-Wall"
-  argument: "-c"
+  argument: "path\\to\\clang-cl.exe"
+  argument: "--driver-mode=cl"
+  argument: "-imsvcfoo/bar/baz"
+  argument: "/c"
   argument: "test.cc"
-  argument: "-o"
-  argument: "test.o"
+  argument: "/Fotest.obj"
+  argument: "-D__CLANG_CUDA_WRAPPERS_NEW"
+  argument: "-D__CLANG_CUDA_WRAPPERS_COMPLEX"
+  argument: "-D__CLANG_CUDA_WRAPPERS_ALGORITHM"
   argument: "-DKYTHE_IS_RUNNING=1"
   argument: "-w"
   source_file: "../../test.cc"
-  output_key: "test.o"
-  working_directory: "package_index_testdata/input.expected/src/out/Debug"
+  output_key: "test.obj"
+  working_directory: "package_index_testdata/input/src/out/Debug"
   details {
     [kythe.io/proto/kythe.proto.BuildDetails] {
-      build_config: "linux"
+      build_config: "win"
     }
   }
 }
