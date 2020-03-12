@@ -153,3 +153,12 @@ def GenTests(api):
         """).strip()),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'mb_luci_auth',
+      api.properties(chromium_apply_config=['mb', 'mb_luci_auth']),
+      api.post_process(post_process.StepCommandContains, 'generate_build_files',
+                       ['--luci-auth']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

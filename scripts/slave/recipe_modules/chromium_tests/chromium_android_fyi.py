@@ -98,7 +98,7 @@ SPEC = {
         'android-pie-x86-fyi-rel':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
                 chromium_config_kwargs={

@@ -94,6 +94,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           config_path=Single(Path),
           args=Set(basestring),
           isolate_map_paths=List(Path),
+          # TODO(crbug.com/1060857): Remove this once swarming task templates
+          # support command prefixes.
+          use_luci_auth=Single(bool, empty_val=False, required=False),
       ),
       build_dir=Single(Path),
       cros_sdk=ConfigGroup(
@@ -233,6 +236,11 @@ def gn(c):
 @config_ctx()
 def mb(c):
   c.project_generator.tool = 'mb'
+
+
+@config_ctx()
+def mb_luci_auth(c):
+  c.project_generator.use_luci_auth = True
 
 
 @config_ctx()
