@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import ntpath
 import os
 import sys
 import unittest
@@ -233,6 +234,11 @@ class AggregationUtilTest(unittest.TestCase):
     self.maxDiff = None
     self.assertDictEqual(expected_per_directory_data, per_directory_data)
     self.assertDictEqual(expected_per_component_data, per_component_data)
+
+  def test_windows(self):
+    with mock.patch('os.sep', '\\'), mock.patch('os.path', ntpath):
+      self.test_basic()
+      self.test_avoid_component_double_counting()
 
 
 if __name__ == '__main__':

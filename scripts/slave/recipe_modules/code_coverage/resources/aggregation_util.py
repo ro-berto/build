@@ -51,7 +51,7 @@ def get_aggregated_coverage_data_from_files(files_coverage_data,
 
     sub_dirs = [{
         'path': dir_path,
-        'name': os.path.basename(dir_path[:-1]) + '/',
+        'name': posixpath.basename(dir_path[:-1]) + '/',
         'summaries': per_directory_summaries[dir_path],
     } for dir_path in component_to_dirs[component]]
 
@@ -100,13 +100,13 @@ def _calculate_per_directory_files(files_coverage_data):
   """
   per_directory_files = defaultdict(list)
   for file_record in files_coverage_data:
-    direct_parent_dir = os.path.dirname(file_record['path'])
+    direct_parent_dir = posixpath.dirname(file_record['path'])
     if direct_parent_dir != '//':
       # In the coverage data format, dirs end with '/' except for root.
       direct_parent_dir += '/'
 
     per_directory_files[direct_parent_dir].append({
-        'name': os.path.basename(file_record['path']),
+        'name': posixpath.basename(file_record['path']),
         'path': file_record['path'],
         'summaries': file_record['summaries'],
     })
@@ -132,7 +132,7 @@ def _calculate_per_directory_subdirs(per_directory_summaries):
     assert dir_path.endswith('/'), (
         'Directory path: %s is expected to end with / in coverage data format' %
         dir_path)
-    parent_dir_path, dirname = os.path.split(dir_path[:-1])
+    parent_dir_path, dirname = posixpath.split(dir_path[:-1])
     if parent_dir_path != '//':
       parent_dir_path += '/'
 
@@ -171,13 +171,13 @@ def _extract_component_to_dirs_mapping(dir_to_component):
     # Check if we already added the parent directory of this directory. If
     # yes, skip this sub-directory to avoid double-counting.
     found_parent_same_component = False
-    parent_dir_path = os.path.dirname(dir_path)
+    parent_dir_path = posixpath.dirname(dir_path)
     while parent_dir_path:
       if dir_to_component.get(parent_dir_path) == component:
         found_parent_same_component = True
         break
 
-      parent_dir_path = os.path.dirname(parent_dir_path)
+      parent_dir_path = posixpath.dirname(parent_dir_path)
 
     if found_parent_same_component:
       continue
