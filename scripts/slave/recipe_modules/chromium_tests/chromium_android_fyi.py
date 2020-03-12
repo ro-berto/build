@@ -112,22 +112,6 @@ SPEC = {
                     'platform': 'linux',
                 },
             ),
-        'android-bfcache-debug':
-            bot_spec.BotSpec.create(
-                chromium_config='android',
-                gclient_config='chromium',
-                gclient_apply_config=['android'],
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_BITS': 32,
-                    'TARGET_PLATFORM': 'android',
-                },
-                android_config='main_builder_mb',
-                bot_type=bot_spec.BUILDER_TESTER,
-                testing={
-                    'platform': 'linux',
-                },
-            ),
         'android-bfcache-rel':
             bot_spec.BotSpec.create(
                 chromium_config='android',
