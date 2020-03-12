@@ -15,11 +15,10 @@ DEPS = [
 
 def RunSteps(api):
   with api.chromium.chromium_layout():
-    mastername = api.properties.get('mastername')
-    buildername = api.buildbucket.builder_name
+    builder_id = api.chromium.get_builder_id()
 
-    bot = api.chromium_tests.trybots[mastername]['builders'][buildername]
-    bot_config = api.chromium_tests.create_bot_config_object(bot['bot_ids'])
+    try_spec = api.chromium_tests.trybots[builder_id]
+    bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
 
     api.chromium_tests.configure_build(bot_config)
     update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)

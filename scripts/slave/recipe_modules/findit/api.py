@@ -8,7 +8,7 @@ import re
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests import bot_spec, steps
+from RECIPE_MODULES.build.chromium_tests import steps, try_spec
 
 # This has no special meaning, just a placeholder for expectations data.
 _GIT_LS_REMOTE_OUTPUT = ('1234567123456712345671234567888812345678'
@@ -27,10 +27,10 @@ class FinditApi(recipe_api.RecipeApi):
     tester_spec = builders[tester_id]
 
     if tester_spec.parent_buildername is None:
-      return bot_spec.BotMirror.create(
+      return try_spec.TryMirror.create(
           buildername=tester_id.builder, mastername=tester_id.master)
 
-    return bot_spec.BotMirror.create(
+    return try_spec.TryMirror.create(
         mastername=tester_spec.parent_mastername or tester_id.master,
         buildername=tester_spec.parent_buildername,
         tester=tester_id.builder,
@@ -148,7 +148,7 @@ class FinditApi(recipe_api.RecipeApi):
     """Compile the targets needed to execute the specified tests and run them.
 
     Args:
-      bot_mirror (BotMirror): The BotMirror object describing the builder and
+      bot_mirror (TryMirror): The TryMirror object describing the builder and
                               possibly tester to derive configuration from.
       revision (str): A string representing the commit hash of the revision to
                       test.

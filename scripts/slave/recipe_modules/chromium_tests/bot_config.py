@@ -7,6 +7,7 @@ from recipe_engine.types import FrozenDict, freeze
 from . import bot_db as bot_db_module
 from . import bot_spec as bot_spec_module
 from . import master_spec as master_spec_module
+from . import try_spec as try_spec_module
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
@@ -29,14 +30,14 @@ class BotConfig(object):
   """
 
   bot_db = attrib(bot_db_module.BotDatabase)
-  bot_mirrors = sequence_attrib(bot_spec_module.BotMirror)
+  bot_mirrors = sequence_attrib(try_spec_module.TryMirror)
 
   @classmethod
   def create(cls, bot_db, builder_ids_or_bot_mirrors):
     assert len(builder_ids_or_bot_mirrors) >= 1
     bot_db = bot_db_module.BotDatabase.normalize(bot_db)
     bot_mirrors = tuple(
-        bot_spec_module.BotMirror.normalize(b)
+        try_spec_module.TryMirror.normalize(b)
         for b in builder_ids_or_bot_mirrors)
     return cls(bot_db, bot_mirrors)
 

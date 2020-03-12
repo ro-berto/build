@@ -36,21 +36,18 @@ def RunSteps(api):
   if api.properties.get('swarming_gtest'):
     tests.append(steps.SwarmingGTestTest('base_unittests'))
 
-  mastername = api.properties['mastername']
-  buildername = api.buildbucket.builder_name
-  if api.tryserver.is_tryserver and mastername in api.chromium_tests.trybots:
-    bot_config = api.chromium_tests.trybots[mastername]['builders'][buildername]
-    bot_config_object = api.chromium_tests.create_bot_config_object(
-        bot_config['bot_ids'])
+  builder_id = api.chromium.get_builder_id()
+  if api.tryserver.is_tryserver and builder_id in api.chromium_tests.trybots:
+    try_spec = api.chromium_tests.trybots[builder_id]
+    bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
   else:
-    builders = BUILDERS if 'fake.master' in mastername else None
-    bot_config_object = api.chromium_tests.create_bot_config_object(
+    builders = BUILDERS if 'fake.master' in builder_id.master else None
+    bot_config = api.chromium_tests.create_bot_config_object(
         [api.chromium.get_builder_id()], builders=builders)
-  api.chromium_tests.configure_build(bot_config_object)
-  update_step, build_config = api.chromium_tests.prepare_checkout(
-      bot_config_object)
+  api.chromium_tests.configure_build(bot_config)
+  update_step, build_config = api.chromium_tests.prepare_checkout(bot_config)
   return api.chromium_tests.compile_specific_targets(
-      bot_config_object,
+      bot_config,
       update_step,
       build_config,
       compile_targets=['base_unittests'],

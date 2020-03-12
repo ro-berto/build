@@ -5,7 +5,8 @@
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.chromium_tests import (steps, try_spec as
+                                                 try_spec_module)
 
 DEPS = [
     'chromium',
@@ -31,24 +32,18 @@ _DEFAULT_GIT_REPO = 'https://chromium.googlesource.com/chromium/src'
 
 
 def RunSteps(api):
-  mastername = api.properties['mastername']
-  buildername = api.properties['buildername']
-  config = api.chromium_tests.trybots.get(mastername, {}).get(
-      'builders', {}).get(buildername)
-  if not config:
-    config = {
-        'bot_ids': [
-            chromium.BuilderId.create_for_master(mastername, buildername)
-        ],
-    }
+  builder_id = chromium.BuilderId.create_for_master(
+      api.properties['mastername'], api.properties['buildername'])
+  try_spec = api.chromium_tests.trybots.get(builder_id)
+  if try_spec is None:
+    try_spec = try_spec_module.TrySpec.create(bot_ids=[builder_id])
 
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      config['bot_ids'])
-  api.chromium_tests.configure_build(bot_config_object)
+  bot_config = api.chromium_tests.create_bot_config_object(try_spec.mirrors)
+  api.chromium_tests.configure_build(bot_config)
   # Fake path.
   api.code_coverage._merge_scripts_location = api.path['start_dir']
 
-  if 'tryserver' in mastername:
+  if 'tryserver' in builder_id.master:
     api.code_coverage.instrument(api.properties['files_to_instrument'])
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(

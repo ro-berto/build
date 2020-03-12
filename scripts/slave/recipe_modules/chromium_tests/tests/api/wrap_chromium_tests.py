@@ -57,9 +57,9 @@ def RunSteps(api):
             script_args=['some', 'args'],
             override_compile_targets=['other_target']))
   if api.tryserver.is_tryserver:
-    trybot_config = api.chromium_tests.trybots[
-        api.properties['mastername']]['builders'][api.buildbucket.builder_name]
-    bot_ids = trybot_config['bot_ids']
+    builder_id = api.chromium.get_builder_id()
+    try_spec = api.chromium_tests.trybots[builder_id]
+    bot_ids = try_spec.mirrors
   else:
     bot_ids = [api.chromium.get_builder_id()]
   bot_config_object = api.chromium_tests.create_bot_config_object(

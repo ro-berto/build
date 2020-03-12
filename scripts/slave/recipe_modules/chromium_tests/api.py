@@ -22,6 +22,7 @@ from . import bot_config as bot_config_module
 from . import bot_spec as bot_spec_module
 from . import builders as builders_module
 from . import generators
+from . import try_spec as try_spec_module
 from . import trybots as trybots_module
 from . import steps
 
@@ -41,7 +42,8 @@ class BotMetadata(object):
     self.settings = settings
 
   def is_compile_only(self):
-    return self.config.get('analyze_mode') == 'compile'
+    return self.config.execution_mode == try_spec_module.COMPILE
+
 
 class Task(object):
   """Represents the configuration for build/test tasks.
@@ -82,7 +84,8 @@ class Task(object):
     return self._affected_files
 
   def should_retry_failures_with_changes(self):
-    return self.bot.config.get('retry_failed_shards', True)
+    return self.bot.config.retry_failed_shards
+
 
 class ChromiumTestsApi(recipe_api.RecipeApi):
   BotMetadata = BotMetadata
@@ -1372,26 +1375,28 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     #   'analyze_mode': None
     # }
     # See ChromiumTestsApi for more details.
-    bots = mirrored_bots or self.trybots
+    try_db = try_spec_module.TryDatabase.normalize(mirrored_bots or
+                                                   self.trybots)
     builder_id = self.m.chromium.get_builder_id()
-    config = bots.get(builder_id.master, {}).get('builders',
-                                                 {}).get(builder_id.builder)
+    try_spec = try_db.get(builder_id)
 
-    if not config:
+    if not try_spec:
       # Some trybots do not mirror a CI bot. In this case, return a
       # configuration that uses the same <mastername, buildername> of the
       # triggering trybot.
-      config = {
+      try_spec = {
           'bot_ids': [builder_id],
       }
 
+    try_spec = try_spec_module.TrySpec.normalize(try_spec)
+
     # contains build/test settings for the bot
     settings = self.create_bot_config_object(
-        config['bot_ids'], builders=builders)
+        try_spec.mirrors, builders=builders)
 
     self._report_builders(settings)
 
-    return BotMetadata(builder_id, config, settings)
+    return BotMetadata(builder_id, try_spec, settings)
 
   def _determine_compilation_targets(self, bot, affected_files, build_config):
     compile_targets = build_config.get_compile_targets(build_config.all_tests())
@@ -1403,8 +1408,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
-      analyze_names = ['chromium'] + list(
-          bot.config.get('analyze_names', []))
+      analyze_names = ['chromium'] + list(bot.config.analyze_names)
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path
           or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))

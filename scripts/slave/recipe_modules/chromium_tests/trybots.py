@@ -4,6 +4,8 @@
 
 from recipe_engine.types import freeze
 
+from RECIPE_MODULES.build.chromium_tests import try_spec
+
 
 def simple_bot(bot_id, analyze_mode=None):
   return {
@@ -12,7 +14,7 @@ def simple_bot(bot_id, analyze_mode=None):
   }
 
 
-TRYBOTS = freeze({
+TRYBOTS = try_spec.TryDatabase.create({
     'tryserver.blink': {
         'builders': {
             'linux-blink-rel':
