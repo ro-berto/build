@@ -19,6 +19,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 
 from . import bot_config as bot_config_module
+from . import bot_db
 from . import bot_spec as bot_spec_module
 from . import builders as builders_module
 from . import generators
@@ -93,8 +94,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
-    self._builders = builders_module.BUILDERS
     self._bucketed_triggers = input_properties.bucketed_triggers
+    self._builders = builders_module.BUILDERS
+    self._trybots = trybots_module.TRYBOTS
+    if self._test_data.enabled:
+      if 'builders' in self._test_data:
+        self._builders = self._test_data['builders']
+      if 'trybots' in self._test_data:
+        self._trybots = self._test_data['trybots']
 
   @property
   def builders(self):
@@ -102,7 +109,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @property
   def trybots(self):
-    return trybots_module.TRYBOTS
+    return self._trybots
 
   def log(self, message):
     presentation = self.m.step.active_result.presentation

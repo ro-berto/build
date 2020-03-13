@@ -5,10 +5,33 @@
 from recipe_engine import recipe_test_api
 
 from . import bot_config as bot_config_module
-from . import builders
+from . import bot_db
+from . import builders as builders_module
+from . import try_spec
 
 
 class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def builders(builders):
+    """Override chromium_tests's builders for a test.
+
+    Args:
+      builders - A BotDatabase to replace chromium_tests.builders.
+    """
+    return builders
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def trybots(trybots):
+    """Override chromium_tests's builders for a test.
+
+    Args:
+      trybots - A TryDatabase to replace chromium_tests.trybots.
+    """
+    return trybots
+
   @recipe_test_api.mod_test_data
   @staticmethod
   def handle_bot_config_errors(handle_bot_config_errors):
@@ -32,7 +55,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return size_limit
 
   def platform(self, bot_mirrors):
-    bot_config = bot_config_module.BotConfig.create(builders.BUILDERS,
+    bot_config = bot_config_module.BotConfig.create(builders_module.BUILDERS,
                                                     bot_mirrors)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(

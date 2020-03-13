@@ -4,7 +4,8 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, master_spec,
+                                                 steps)
 
 DEPS = [
     'chromium',
@@ -62,46 +63,45 @@ def RunSteps(api):
     bot_ids = try_spec.mirrors
   else:
     bot_ids = [api.chromium.get_builder_id()]
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_ids,
-      builders=api.properties.get('builders') or api.chromium_tests.builders)
+  bot_config_object = api.chromium_tests.create_bot_config_object(bot_ids)
   api.chromium_tests.configure_build(bot_config_object)
   with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests=tests):
     pass
 
 
 def GenTests(api):
-
-  test_builders = {
-      'chromium.example': {
-          'builders': {
-              'android-basic': {
-                  'android_config': 'main_builder',
-                  'chromium_apply_config': [
-                      'mb',
-                  ],
-                  'chromium_config': 'android',
-                  'chromium_config_kwargs': {
-                      'BUILD_CONFIG': 'Release',
-                      'TARGET_BITS': 32,
-                      'TARGET_PLATFORM': 'android',
-                  },
-                  'gclient_config': 'chromium',
-                  'gclient_apply_config': ['android'],
-                  'bot_type': 'builder_tester',
-                  'testing': {
-                      'platform': 'linux',
-                  },
-              },
-          },
-      },
-  }
+  test_builders = bot_db.BotDatabase.create({
+      'chromium.example':
+          master_spec.MasterSpec.create(
+              builders={
+                  'android-basic':
+                      bot_spec.BotSpec.create(
+                          android_config='main_builder',
+                          chromium_apply_config=[
+                              'mb',
+                          ],
+                          chromium_config='android',
+                          chromium_config_kwargs={
+                              'BUILD_CONFIG': 'Release',
+                              'TARGET_BITS': 32,
+                              'TARGET_PLATFORM': 'android',
+                          },
+                          gclient_config='chromium',
+                          gclient_apply_config=['android'],
+                          bot_type='builder_tester',
+                          testing={
+                              'platform': 'linux',
+                          },
+                      ),
+              }),
+  })
 
   yield api.test(
       'require_device_steps',
       api.chromium.ci_build(
           mastername='chromium.example', builder='android-basic'),
-      api.properties(local_gtest=True, builders=test_builders),
+      api.chromium_tests.builders(test_builders),
+      api.properties(local_gtest=True),
       api.post_process(post_process.MustRun, 'device_recovery'),
       api.post_process(post_process.MustRun, 'provision_devices'),
       api.post_process(post_process.MustRun, 'device_status'),
