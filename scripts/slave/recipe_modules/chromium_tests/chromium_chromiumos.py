@@ -93,6 +93,9 @@ def _config(name,
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
+    # TODO(crbug.com/1060857): Remove 'mb_luci_auth' when task templates can
+    # handle it themselves.
+    cfg['chromium_apply_config'].append('mb_luci_auth')
   return name, bot_spec.BotSpec.create(**cfg)
 
 
