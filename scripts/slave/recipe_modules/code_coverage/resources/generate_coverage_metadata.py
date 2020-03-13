@@ -261,7 +261,11 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   rel_file_path = os.path.relpath(filename, src_path)
   # TODO(crbug.com/1010267) Remove prefixes when Clang supports relative paths
   # for coverage.
-  prefixes = [src_path, r'C:\botcode\w']
+  prefixes = [
+      src_path,
+      r'C:\botcode\w',  # crbug.com/1010267
+      '/b/f/w',  # crbug.com/1061603
+  ]
   coverage_path = os.path.normpath(filename)
   for prefix in prefixes:
     if coverage_path.startswith(prefix):
