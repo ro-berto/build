@@ -582,6 +582,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.fyi',
                     'buildername': 'linux-bfcache-debug',
                 }),
+            'linux-bfcache-rel':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'linux-bfcache-rel',
+                }),
             'linux-blink-heap-concurrent-marking-tsan-rel':
                 simple_bot({
                     'mastername':
