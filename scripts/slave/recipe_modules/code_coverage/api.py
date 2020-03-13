@@ -211,6 +211,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['blink_python_tests', None],
           ['grit_python_unittests', None],
           ['metrics_python_tests', None],
+          ['mojo_python_unittests', None],
           ['telemetry_gpu_unittests', None],
           ['python3_smoketest', None],
 
