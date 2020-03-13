@@ -754,6 +754,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # that shard indices are passed one at a time. See https://crbug.com/937927.
     if task.trigger_script and task.trigger_script.get(
         'requires_simultaneous_shard_dispatch', False):
+      script = str(task.trigger_script.get('script', ''))
+      assert not script.endswith('swarming.py'), (
+          'trigger_script[\'script\'] must be a custom script, as %s no longer '
+          'supports \'--shards\'.' % script)
       return [self._trigger_all_task_shards(task, task.shard_indices, **kwargs)]
 
     for shard_index in task.shard_indices:
