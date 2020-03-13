@@ -32,7 +32,6 @@ import os.path
 import pipes
 import re
 import shlex
-import shutil
 import signal
 import subprocess
 import sys
