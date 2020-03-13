@@ -341,6 +341,7 @@ SPEC = {
                     # in 'chromium.android:Marshmallow Phone Tester (rel)'.
                     'goma_high_parallel',
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],

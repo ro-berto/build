@@ -105,6 +105,7 @@ SPEC = {
                 chromium_config='android',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -141,7 +142,9 @@ SPEC = {
         'KitKat Phone Tester (rel)':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['download_vr_test_apks', 'mb'],
+                chromium_apply_config=[
+                    'download_vr_test_apks', 'mb', 'mb_luci_auth'
+                ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
                 chromium_config_kwargs={
@@ -461,7 +464,7 @@ def stock_config(name,
                  **kwargs):
   bot_config = {
       'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'mb_luci_auth'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
