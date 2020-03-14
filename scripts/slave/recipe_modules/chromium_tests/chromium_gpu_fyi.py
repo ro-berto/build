@@ -1335,7 +1335,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1357,7 +1361,11 @@ SPEC = {
                 chromium_config='android',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 32,
@@ -1376,7 +1384,11 @@ SPEC = {
                     'download_vr_test_apks',
                 ],
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1391,7 +1403,11 @@ SPEC = {
                 chromium_config='android',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 32,
@@ -1407,7 +1423,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1421,7 +1441,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1435,7 +1459,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1449,7 +1477,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1463,7 +1495,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1477,7 +1513,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 32,
@@ -1493,7 +1533,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -1509,7 +1553,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 32,
@@ -1525,7 +1573,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -1573,7 +1625,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
@@ -1790,7 +1846,11 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 gclient_config='chromium',
-                gclient_apply_config=['android', 'angle_top_of_tree'],
+                gclient_apply_config=[
+                    'android',
+                    'angle_internal',
+                    'angle_top_of_tree',
+                ],
                 chromium_config_kwargs={
                     'TARGET_PLATFORM': 'android',
                 },
