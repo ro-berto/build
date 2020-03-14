@@ -101,7 +101,7 @@
       "--root=[CACHE]/builder/angle",
       "gen",
       "//out/release",
-      "--args=build_angle_gles1_conform_tests=true is_debug=false is_component_build=false symbol_level=1 is_clang=false",
+      "--args=build_angle_gles1_conform_tests=true build_angle_trace_perf_tests=true is_debug=false is_component_build=false symbol_level=1 is_clang=false",
       "--check"
     ],
     "cwd": "[CACHE]/builder/angle",

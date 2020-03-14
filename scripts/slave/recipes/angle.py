@@ -73,6 +73,7 @@ def _GNGenBuilds(api, target_cpu, debug, clang, uwp, out_dir):
   # Prepare the arguments to pass in.
   args = [
       'build_angle_gles1_conform_tests=true',
+      'build_angle_trace_perf_tests=true',
       'is_debug=%s' % gn_bool[debug],
       'is_component_build=false',
   ]
