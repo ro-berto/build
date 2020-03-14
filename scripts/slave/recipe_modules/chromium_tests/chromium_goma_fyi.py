@@ -275,6 +275,18 @@ SPEC = {
                     'platform': 'linux',
                 },
             ),
+        'ios-device-goma-canary-clobber':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['ios-device'],
+                                   ['goma_canary', 'clobber']),
+        'ios-device-goma-latest-clobber':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['ios-device'],
+                                   ['goma_latest_client', 'clobber']),
+        'ios-device-goma-rbe-canary-clobber':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['ios-device'],
+                                   ['goma_canary', 'clobber']),
+        'ios-device-goma-rbe-latest-clobber':
+            chromium_apply_configs(chromium_mac.SPEC['builders']['ios-device'],
+                                   ['goma_latest_client', 'clobber']),
     }
 }
 

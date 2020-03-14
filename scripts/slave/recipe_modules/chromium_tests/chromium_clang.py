@@ -136,6 +136,44 @@ SPEC = {
                 # our compile line. We want to build everything.
                 add_tests_as_compile_targets=False,
             ),
+        'ToTiOS':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=['clang_tot'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'ToTiOSDevice':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=['clang_tot'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
         'ToTWinCFI':
             bot_spec.BotSpec.create(
                 chromium_config='chromium_win_clang_tot',

@@ -139,8 +139,6 @@ def GenTests(api):
 
   yield from_config('android_internal_isolate_maps')
 
-  yield from_config('ios_release_simulator')
-
   yield from_config('official_no_clobber')
 
   yield api.test(

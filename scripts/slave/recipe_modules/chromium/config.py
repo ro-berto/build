@@ -683,8 +683,3 @@ def android_internal_isolate_maps(c):
       c.CHECKOUT_PATH.join('clank', 'build', 'gn_isolate_map.pyl'),
       c.CHECKOUT_PATH.join('testing', 'buildbot', 'gn_isolate_map.pyl'),
   ]
-
-
-@config_ctx()
-def ios_release_simulator(c):
-  c.build_config_fs = 'Release-iphonesimulator'

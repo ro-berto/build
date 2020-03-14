@@ -611,6 +611,44 @@ SPEC = {
                     'platform': 'win',
                 },
             ),
+        'ios-simulator-cronet':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=[],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'ios-webkit-tot':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=[],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
         'ios13-beta-simulator':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
@@ -631,6 +669,25 @@ SPEC = {
                 },
             ),
         'ios13-sdk-device':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mac_toolchain',
+                ],
+                chromium_tests_apply_config=[],
+                gclient_config='ios',
+                gclient_apply_config=[],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'ios',
+                },
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'ios13-sdk-simulator':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=[
