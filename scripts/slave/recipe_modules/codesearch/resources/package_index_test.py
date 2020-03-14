@@ -8,7 +8,6 @@
 from __future__ import absolute_import
 
 import hashlib
-import mock
 import os
 import shutil
 import sys
@@ -29,196 +28,9 @@ OUT_DIR = 'src/out/Debug'
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 TEST_DATA_DIR = os.path.join(SCRIPT_DIR, 'package_index_testdata')
-TEST_DATA_INPUT_DIR = os.path.join(TEST_DATA_DIR, 'input.expected')
+TEST_DATA_INPUT_DIR = os.path.join(TEST_DATA_DIR, 'input')
 
-
-class FunctionTest(unittest.TestCase):
-  """Test functions in package_index"""
-
-  def testInjectUtilBuildDetails(self):
-    unit = analysis_pb2.CompilationUnit()
-    package_index.InjectUnitBuildDetails(unit, 'linux')
-    self.assertEqual(1, len(unit.details))
-    self.assertTrue('linux' in str(unit.details))
-
-    package_index.InjectUnitBuildDetails(unit, 'win')
-    self.assertTrue('linux' not in str(unit.details))
-    self.assertTrue('win' in str(unit.details))
-
-  def testInjectUtilBuildDetailsMultipleDetails(self):
-    """This tests that build details doesn't override non BuildDetails detail"""
-    unit = analysis_pb2.CompilationUnit()
-    unit.details.add()
-    package_index.InjectUnitBuildDetails(unit, 'linux')
-    self.assertEqual(2, len(unit.details))
-
-  def testConvertGnPath(self):
-    self.assertEqual('../../foo.ext',
-                     package_index.ConvertGnPath('//foo.ext', 'src/out/debug'))
-    self.assertEqual('../../../../foo.ext',
-                     package_index.ConvertGnPath('//foo.ext', 'src/a/b/c/d'))
-
-  def testImport(self):
-    src_dir = os.path.join(TEST_DATA_INPUT_DIR, 'src')
-
-    # Expectation: test.mojom includes test2.mojom.
-    path = os.path.join(src_dir, 'test.mojom')
-    files = package_index.FindImports(package_index.MOJOM_IMPORT_RE, path,
-                                      [src_dir])
-    self.assertEqual(set([os.path.join(src_dir, 'test2.mojom')]), files)
-
-    # File can't be found, ignore it.
-    files = package_index.FindImports(package_index.MOJOM_IMPORT_RE, path,
-                                      [TEST_DATA_INPUT_DIR])
-    self.assertEqual(set(), files)
-
-    # Expectation: test2.mojom has no imports.
-    path = os.path.join(src_dir, 'test2.mojom')
-    files = package_index.FindImports(package_index.MOJOM_IMPORT_RE, path,
-                                      [src_dir])
-    self.assertEqual(set(), files)
-
-    # Expectation: main.proto has sub.proto and subsub.proto import.
-    path = os.path.join(src_dir, 'main.proto')
-    files = package_index.FindImports(package_index.PROTO_IMPORT_RE, path,
-                                      [src_dir])
-    self.assertEqual(
-        set([
-            os.path.join(src_dir, 'sub.proto'),
-            os.path.join(src_dir, 'subsub.proto')
-        ]), files)
-
-
-class ProtoTargetTest(unittest.TestCase):
-  """Test ProtoTarget class"""
-
-  def ImportMockGen(self, expected_regex, expected_paths, import_mapping):
-
-    def InnerFunc(regex, file_path, import_paths):
-      self.assertEqual(expected_regex, regex)
-      self.assertEqual(expected_paths, import_paths)
-      self.assertIn(file_path, import_mapping)
-      return import_mapping[file_path]
-
-    return InnerFunc
-
-  @mock.patch('package_index.FindImports')
-  def testNoProtoInDir(self, findImportsMock):
-    findImportsMock.side_effect = self.ImportMockGen(
-        package_index.PROTO_IMPORT_RE, ['/foo/src/out/debug'], {
-            '/foo/src/orig.proto': set(['/foo/src/out/debug/baz.proto']),
-            '/foo/src/out/debug/baz.proto': set(),
-        })
-
-    pt = package_index.ProtoTarget({
-        'sources': ['//orig.proto']
-    }, '/foo', 'src/out/debug')
-
-    expected_result = set(
-        ['/foo/src/orig.proto', '/foo/src/out/debug/baz.proto'])
-    self.assertEqual(expected_result, pt.GetFiles())
-    self.assertEqual(2, findImportsMock.call_count)
-
-  @mock.patch('package_index.FindImports')
-  def testProtoInDir(self, findImportsMock):
-    findImportsMock.side_effect = self.ImportMockGen(
-        package_index.PROTO_IMPORT_RE, ['/foo/src', '/abspath'], {
-            '/foo/src/orig.proto': set(['/abspath/baz.proto']),
-            '/foo/src/orig2.proto': set(),
-            '/abspath/baz.proto': set(),
-        })
-
-    # Last proto-in-dir should be discarded
-    args = [
-        '--proto-in-dir', '../..', 'x', '--import-dir=/abspath',
-        '--proto-in-dir'
-    ]
-    pt = package_index.ProtoTarget({
-        'sources': ['//orig.proto', '//orig2.proto'],
-        'args': args
-    }, '/foo', 'src/out/debug')
-
-    expected_result = set(
-        ['/foo/src/orig.proto', '/foo/src/orig2.proto', '/abspath/baz.proto'])
-    self.assertEqual(expected_result, pt.GetFiles())
-    self.assertEqual(3, findImportsMock.call_count)
-
-    # Test getting compilation unit
-    filehashes = {
-        '/foo/src/orig.proto': '1',
-        '/foo/src/orig2.proto': '2',
-        '/abspath/baz.proto': '3',
-    }
-    unit_proto = pt.GetUnit('corpusname', filehashes, 'build_config')
-    self.assertIsNotNone(unit_proto)
-    self.assertEqual(['../../orig.proto', '../../orig2.proto'],
-                     unit_proto.source_file)
-    self.assertEqual('protobuf', unit_proto.v_name.language)
-    self.assertEqual('corpusname', unit_proto.v_name.corpus)
-    self.assertEqual(1, len(unit_proto.details))
-    self.assertEqual(3, len(unit_proto.required_input))
-    # Expect no new calls, the results should be cached
-    self.assertEqual(3, findImportsMock.call_count)
-
-  @mock.patch('package_index.FindImports')
-  def testRecusiveImport(self, findImportsMock):
-    findImportsMock.side_effect = self.ImportMockGen(
-        package_index.PROTO_IMPORT_RE, ['/foo/src'], {
-            '/foo/src/orig.proto': set(['/foo/src/import.proto']),
-            '/foo/src/import.proto': set(['/foo/src/import2.proto']),
-            '/foo/src/import2.proto': set(),
-        })
-
-    # Last proto-in-dir should be discarded
-    args = ['--proto-in-dir', '../..']
-    pt = package_index.ProtoTarget({
-        'sources': ['//orig.proto', '//import.proto'],
-        'args': args
-    }, '/foo', 'src/out/debug')
-
-    expected_result = set([
-        '/foo/src/orig.proto', '/foo/src/import.proto', '/foo/src/import2.proto'
-    ])
-    self.assertEqual(expected_result, pt.GetFiles())
-    self.assertEqual(3, findImportsMock.call_count)
-
-    # Test getting compilation unit
-    filehashes = {
-        '/foo/src/orig.proto': '1',
-        '/foo/src/import.proto': '2',
-        '/foo/src/import2.proto': '3',
-    }
-    unit_proto = pt.GetUnit('corpusname', filehashes, 'build_config')
-    self.assertIsNotNone(unit_proto)
-    # Only explicitly imported source files should be here, sorted
-    self.assertEqual(['../../import.proto', '../../orig.proto'],
-                     unit_proto.source_file)
-    self.assertEqual('protobuf', unit_proto.v_name.language)
-    self.assertEqual('corpusname', unit_proto.v_name.corpus)
-    self.assertEqual(1, len(unit_proto.details))
-    self.assertEqual(3, len(unit_proto.required_input))
-
-  @mock.patch('package_index.FindImports')
-  def testProtoMissingFile(self, findImportsMock):
-    findImportsMock.side_effect = self.ImportMockGen(
-        package_index.PROTO_IMPORT_RE, ['/foo/src/out/debug'], {
-            '/foo/src/orig.proto': set(),
-        })
-
-    pt = package_index.ProtoTarget({
-        'sources': ['//orig.proto']
-    }, '/foo', 'src/out/debug')
-
-    expected_result = set(['/foo/src/orig.proto'])
-    self.assertEqual(expected_result, pt.GetFiles())
-    unit_proto = pt.GetUnit('corpusname', {}, 'build_config')
-    self.assertIsNone(unit_proto)
-    self.assertEqual(1, findImportsMock.call_count)
-
-
-class IndexPackBootstrap(unittest.TestCase):
-  """IndexPackBootstrap is "abstract" class used by other test cases classes"""
-
+class PackageIndexBootstrap(unittest.TestCase):
   def setUp(self):
     self.maxDiff = None
 
@@ -249,9 +61,7 @@ class IndexPackBootstrap(unittest.TestCase):
       self.archive_path = archive_file.name
 
 
-class IndexPackInvalidParametersTest(IndexPackBootstrap):
-  """IndexPackInvalidParametersTest tests constructor failures"""
-
+class PackageIndexInvalidParametersTest(PackageIndexBootstrap):
   def testInvalidKzips(self):
     with self.assertRaises(Exception):
       package_index.IndexPack(
@@ -266,13 +76,9 @@ class IndexPackInvalidParametersTest(IndexPackBootstrap):
           verbose=True)
 
 
-class IndexPackTest(IndexPackBootstrap):
-  """IndexPackTest contains integration tests that should cover entire
-  package_index
-  """
-
+class PackageIndexTest(PackageIndexBootstrap):
   def setUp(self):
-    super(IndexPackTest, self).setUp()
+    super(PackageIndexTest, self).setUp()
 
     self.index_pack = package_index.IndexPack(
         self.archive_path,
@@ -362,7 +168,7 @@ class IndexPackTest(IndexPackBootstrap):
   def testGenerateDataFiles(self):
     self._CheckFilesMatchExactly(
         out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'files'),
-        golden_dir=os.path.join(TEST_DATA_DIR, 'files.expected'))
+        golden_dir=os.path.join(TEST_DATA_DIR, 'expected_files'))
 
   def testGenerateUnitFiles(self):
     # Do not run the linux tests pbunits on windows, windows shell escaping is
@@ -370,7 +176,7 @@ class IndexPackTest(IndexPackBootstrap):
     if sys.platform != 'win32':
       self._CheckUnitFilesMatch(
           out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
-          golden_dir=os.path.join(TEST_DATA_DIR, 'units.expected'))
+          golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units'))
 
   def testGenerateUnitFilesWindows(self):
     # Since most development is done in linux, windows tests are runnable
@@ -419,7 +225,7 @@ class IndexPackTest(IndexPackBootstrap):
 
     self._CheckUnitFilesMatch(
         out_dir=os.path.join(self.unpacked_index_dir, 'kzip', 'pbunits'),
-        golden_dir=os.path.join(TEST_DATA_DIR, 'units_win.expected'))
+        golden_dir=os.path.join(TEST_DATA_DIR, 'expected_units_win'))
 
   def testCreateArchive(self):
     # Verify the structure of the archive. It should be as follows:
@@ -458,7 +264,7 @@ class IndexPackTest(IndexPackBootstrap):
                       for path in zipped_filenames
                       if 'files' in path
                       and os.path.basename(path) != '']
-    golden_filenames = os.listdir(os.path.join(TEST_DATA_DIR, 'files.expected'))
+    golden_filenames = os.listdir(os.path.join(TEST_DATA_DIR, 'expected_files'))
     self.assertEqual(set(golden_filenames), set(data_filenames))
 
 if __name__ == '__main__':
