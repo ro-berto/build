@@ -198,11 +198,15 @@ def RunSteps(api, config, target_os, target_cpu):
       # Testing is not supported on iOS devices (arm64).
       return
 
+    # Bringing up the iOS simulator can add a sizable delay per test case.
+    timeout_in_minutes = 10 if is_ios else 5
+
     with api.context(env=env):
-      api.python('run tests',
-                api.path['checkout'].join('build', 'run_tests.py'),
-                args=[build_dir],
-                timeout=5*60)
+      api.python(
+          'run tests',
+          api.path['checkout'].join('build', 'run_tests.py'),
+          args=[build_dir],
+          timeout=timeout_in_minutes * 60)
 
   ninja = api.depot_tools.ninja_path
   if is_win:

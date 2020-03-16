@@ -89,7 +89,7 @@
       "[CACHE]/builder/crashpad/out/Debug-iphonesimulator"
     ],
     "name": "run tests",
-    "timeout": 300
+    "timeout": 600
   },
   {
     "cmd": [
