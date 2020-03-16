@@ -71,25 +71,29 @@ def run_command(command):
 
 
 def run_test_isolated(isolate_script, test_exe, original_command):
-  """Runs the test under isolate.py run.
+  """Runs the test under `isolate run`.
 
   It compensates for discrepancies between sharding_supervisor.py arguments and
   run_test_cases.py arguments.
 
-  The isolated file must be alongside the test executable, with the same
-  name and the .isolated extension.
+  The isolate file must be alongside the test executable, with the same
+  name and the .isolate extension.
   """
-  isolated_file = os.path.splitext(test_exe)[0] + '.isolated'
+  isolate_file = os.path.splitext(test_exe)[0] + '.isolate'
 
-  if not os.path.exists(isolated_file):
-    logging.error('No isolate file %s', isolated_file)
+  if not os.path.exists(isolate_file):
+    logging.error('No isolate file %s', isolate_file)
     return 1
 
-  isolate_command = [sys.executable, isolate_script,
-                     'run', '--isolated', isolated_file,
-                     # Print info log lines, so isolate.py prints the path to
-                     # the binary it's about to run, http://crbug.com/311625
-                     '-v']
+  isolate_command = [
+      isolate_script,
+      'run',
+      '-isolate',
+      isolate_file,
+      # Print info log lines, so `isolate` prints the path to
+      # the binary it's about to run, http://crbug.com/311625
+      '-verbose'
+  ]
 
   # Start setting the test specific options.
   isolate_command.append('--')
@@ -141,9 +145,10 @@ def main(argv):
   if (options.force_isolated or
       should_run_as_isolated(options.builder_name, options.test_name)):
     logging.info('Running test in isolate mode')
-    # Search first in swarming_client
-    isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
-                                  'swarming_client', 'isolate.py')
+    # Search first in luci-go
+    isolate_script = os.path.join(
+        options.checkout_dir, 'src', 'tools', 'luci-go', 'isolate'
+    )
 
     return run_test_isolated(isolate_script, test_exe, original_command)
   else:

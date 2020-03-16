@@ -33,19 +33,19 @@ class TestAll(unittest.TestCase):
     actual = []
     runisolatedtest.run_command = lambda x: actual.append(x) or 0
     exe = os.path.join(self.tempdir, 'foo')
-    isolated = exe + '.isolated'
+    isolated = exe + '.isolate'
 
     data = {
-      'version': '1.0',
-      'command': ['../testing/test_env.py',
-                  r'..\out\Release/browser_test.exe'],
-      'files': {r'out\Release\testdata': {}},
-
-      'variables' : {
-        'EXECUTABLE_SUFFIX' :'.exe',
-        'OS' :'win',
-        'PRODUCT_DIR' :'../out/Release'
-      },
+        'version':
+            '1.0',
+        'command': [
+            '../testing/test_env.py', r'..\out\Release/browser_test.exe'
+        ],
+        'files': {r'out\Release\testdata': {}},
+        'variables': {
+            'EXECUTABLE_SUFFIX': '.exe', 'OS': 'win',
+            'PRODUCT_DIR': '../out/Release'
+        },
     }
     with open(isolated, 'w') as f:
       json.dump(data, f)
@@ -69,20 +69,21 @@ class TestAll(unittest.TestCase):
       '--gtest_filter=Junk',
     ]
     expected = [
-      [
-        sys.executable,
-        'build/src/tools/swarming_client/isolate.py',
-        'run',
-        '--isolated',
-        isolated,
-        '-v',
-        '--',
-        '--no-cr',
-        '--gtest_output=xml:build/gtest-results/base_unittests.xml',
-        '--shards', '1',
-        '--index', '2',
-        '--gtest_filter=Junk',
-      ],
+        [
+            'build/src/tools/luci-go/isolate',
+            'run',
+            '-isolate',
+            isolated,
+            '-verbose',
+            '--',
+            '--no-cr',
+            '--gtest_output=xml:build/gtest-results/base_unittests.xml',
+            '--shards',
+            '1',
+            '--index',
+            '2',
+            '--gtest_filter=Junk',
+        ],
     ]
     res = runisolatedtest.main(sample_line)
 
