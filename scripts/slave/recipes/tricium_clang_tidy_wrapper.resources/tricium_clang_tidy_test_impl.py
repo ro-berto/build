@@ -1062,13 +1062,42 @@ class Tests(unittest.TestCase):
         cc_to_target_map=cc_to_target_map,
         gn_desc=tidy._GnDesc({}),
         potential_src_cc_file_deps={
-            '/foo.h': [],
+            '/foo.h': ['/baz.cc'],
         })
 
     self.assertIn('all', built_targets)
     self.assertEqual(src_file_to_target_map, {
         '/foo.h': {'foo.o'},
     })
+
+  def test_perform_build_doesnt_build_all_for_candidates_with_no_potential(
+      self):
+    self._silence_logs()
+
+    cc_to_target_map = {
+        '/foo.cc': ['foo.o'],
+    }
+
+    def run_ninja(out_dir, phony_targets, object_targets):
+      self.assertEqual(phony_targets, [])
+      self.assertEqual(object_targets, [])
+      return ()
+
+    def parse_ninja_deps(out_dir):
+      self.assertEqual(out_dir, '/out')
+      return ()
+
+    src_file_to_target_map, _ = tidy._perform_build(
+        out_dir='/out',
+        run_ninja=run_ninja,
+        parse_ninja_deps=parse_ninja_deps,
+        cc_to_target_map=cc_to_target_map,
+        gn_desc=tidy._GnDesc({}),
+        potential_src_cc_file_deps={
+            '/foo.h': [],
+        })
+
+    self.assertEqual(src_file_to_target_map, {})
 
 
 if __name__ == '__main__':

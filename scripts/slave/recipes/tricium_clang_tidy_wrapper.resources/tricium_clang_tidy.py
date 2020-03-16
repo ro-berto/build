@@ -735,7 +735,8 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
   }
 
   all_targets = {
-      x for cc_file in cc_files_to_build for x in cc_to_target_map[cc_file]}
+      x for cc_file in cc_files_to_build for x in cc_to_target_map[cc_file]
+  }
 
   # NOTE: a single target can force the build of a lot of dependencies. Picking
   # a good heuristic here for which targets to build is difficult. In practice,
@@ -743,9 +744,7 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
   # len(object_targets) is, say, <1.5K files, which should be the
   # overwhelmingly common case.
   failed_targets = run_ninja(
-      out_dir=out_dir,
-      phony_targets=[],
-      object_targets=sorted(all_targets))
+      out_dir=out_dir, phony_targets=[], object_targets=sorted(all_targets))
 
   src_file_to_target_map = parse_deps(
       only_targets=all_targets,
@@ -763,18 +762,30 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
       if src_file not in src_file_to_target_map
   }
 
+  def likely_found_by_all_build(src_file):
+    # It's possible for .cc files to be in `still_missing` if they're only
+    # built for certain OSes. It's highly unlikely that an `all` build will
+    # reveal users of them, so we skip this if .cc files are all that we're
+    # missing dependency info for.
+    if os.path.splitext(src_file)[1] in _CC_FILE_EXTENSIONS:
+      return False
+
+    # Otherwise, if we found nothing that _might_ depend on the file, just
+    # assume that it's not built on this target and move on.
+    return bool(potential_src_cc_file_deps[src_file])
+
+  likely_found = sorted(
+      x for x in still_missing if likely_found_by_all_build(x))
+
+  logging.info(
+      'Still missing deps for %r, of which, %r may be used if we build `all`.',
+      sorted(still_missing), likely_found)
+
   # Heuristics failed, so some header files don't have a cc_file that depends
   # on them. Build the world in a last-ditch effort to see if we can find
   # candidates.
-  #
-  # It's possible for .cc files to be in `still_missing` if they're only built
-  # for certain OSes. It's highly unlikely that an `all` build will reveal
-  # users of them, so we skip this if .cc files are all that we're missing
-  # dependency info for.
-  if any(
-      os.path.splitext(x)[1] not in _CC_FILE_EXTENSIONS for x in still_missing):
-    logging.info('Missing deps for %r; falling back to a full build',
-                 sorted(still_missing))
+  if likely_found:
+    logging.info('Falling back to a full build')
     # It's not super easy (and probably not very valuable?) to pick out all of
     # the failures here. If any source files fail, let them fail silently.
     run_ninja(out_dir=out_dir, phony_targets=['all'], object_targets=[])
