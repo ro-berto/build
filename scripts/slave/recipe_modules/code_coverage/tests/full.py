@@ -21,7 +21,7 @@ DEPS = [
 ]
 
 # Number of tests. Needed by the tests.
-_NUM_TESTS = 5
+_NUM_TESTS = 6
 
 # For trybot test data. If not given, buildbucket module will make the gerrit
 # project the same as the buildbucket project, but since
@@ -67,7 +67,8 @@ def RunSteps(api):
                   api.path['start_dir'].join('coverage', 'tests',
                                              'merge_blink_web_tests.py'),
               'args': ['random', 'args'],
-          })
+          }),
+      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests')
   ]
   assert _NUM_TESTS == len(tests)
 
@@ -536,3 +537,58 @@ def GenTests(api):
           'process clang code coverage data.gsutil upload html report'),
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
+
+  yield api.test(
+      'iOS CI code coverage',
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='ios-simulator-code-coverage',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+                       _NUM_TESTS, _NUM_TESTS),
+      api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data.merge profile data for %s tests' %
+           _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.gsutil upload merged.profdata'),
+      api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data.generate line number mapping from '
+          'bot to Gerrit'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.Run component extraction script to '
+          'generate mapping'),
+      api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data.generate metadata for %s tests' %
+           _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data.gsutil upload coverage metadata'),
+      api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data.generate html report for %s '
+          'tests' % _NUM_TESTS),
+      api.post_process(
+          post_process.DoesNotRun,
+          'process clang code coverage data.gsutil upload html report'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'process clang code coverage data.Finding merging errors',
+          ['--root-dir']),
+      api.post_process(
+          post_process.StepCommandContains,
+          ('process clang code coverage data.generate metadata for %s tests' %
+           _NUM_TESTS), ['None/out/Debug/content_shell.app/content_shell']),
+      api.post_process(
+          post_process.StepCommandContains,
+          ('process clang code coverage data.generate metadata for %s tests' %
+           _NUM_TESTS),
+          ['None/out/Debug/ios_chrome_eg2tests.app/ios_chrome_eg2tests']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

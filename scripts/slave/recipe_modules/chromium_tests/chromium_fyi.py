@@ -738,6 +738,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'ios',
+                    'HOST_PLATFORM': 'mac',
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
                 testing={
