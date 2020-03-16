@@ -288,7 +288,7 @@
       "--author",
       "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "--reviewer",
-      "hablich@chromium.org,v8-waterfall-sheriff@grotations.appspotmail.com",
+      "hablich@chromium.org,vahl@chromium.org,v8-waterfall-sheriff@grotations.appspotmail.com",
       "--roll",
       "--json-output",
       "/path/to/tmp/json",

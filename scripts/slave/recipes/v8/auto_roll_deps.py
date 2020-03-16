@@ -159,6 +159,7 @@ def RunSteps(api):
             ['--chromium', api.path['checkout'],
              '--author', push_account,
              '--reviewer', 'hablich@chromium.org,'
+                           'vahl@chromium.org,'
                            'v8-waterfall-sheriff@grotations.appspotmail.com',
              '--roll',
              '--json-output', api.json.output(),
