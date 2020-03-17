@@ -831,7 +831,6 @@ SPEC['builders'].update([
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
     stock_config('linux-annotator-rel'),
-    stock_config('linux-bfcache-debug', config='Debug'),
     stock_config('linux-bfcache-rel', config='Release'),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),

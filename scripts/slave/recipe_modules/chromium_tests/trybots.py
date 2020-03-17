@@ -577,11 +577,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.fyi',
                     'buildername': 'linux-annotator-rel',
                 }),
-            'linux-bfcache-debug':
-                simple_bot({
-                    'mastername': 'chromium.fyi',
-                    'buildername': 'linux-bfcache-debug',
-                }),
             'linux-bfcache-rel':
                 simple_bot({
                     'mastername': 'chromium.fyi',
