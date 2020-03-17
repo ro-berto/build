@@ -682,7 +682,6 @@ class iOSApi(recipe_api.RecipeApi):
     ])
 
     args.extend([
-      '--config-variable', 'xcode_arg_name', 'xcode-build-version',
       '--config-variable', 'xcode_version', task['xcode build version'],
     ])
 
@@ -900,7 +899,7 @@ class iOSApi(recipe_api.RecipeApi):
         '<(host_app_path)', '--args-json', args_json, '--out-dir',
         '${ISOLATED_OUTDIR}', '--retries',
         self.__config.get('retries', '3'), '--shards', '<(shards)',
-        '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd',
+        '--xcode-build-version', '<(xcode_version)', '--mac-toolchain-cmd',
         '%s/mac_toolchain' % steps.MAC_TOOLCHAIN_ROOT, '--xcode-path',
         self.XCODE_APP_PATH, '--wpr-tools-path', '<(wpr_tools_path)',
         '--replay-path', '<(replay_path)'
