@@ -169,9 +169,6 @@ def _AddBuildSpec(name,
     SPEC['settings']['bisect_builders'].append(name)
 
 
-_AddBuildSpec('Android Builder Perf', 'android', target_bits=32)
-_AddBuildSpec('Android arm64 Builder Perf', 'android')
-
 # LUCI builder
 _AddBuildSpec(
     'android-builder-perf',
