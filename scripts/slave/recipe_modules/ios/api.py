@@ -632,7 +632,6 @@ class iOSApi(recipe_api.RecipeApi):
     task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
 
     args = [
-      '--config-variable', 'OS', 'ios',
       '--config-variable', 'app_path', app_path,
       '--config-variable', 'restart', (
         'true' if test.get('restart') else 'false'),
@@ -926,14 +925,10 @@ class iOSApi(recipe_api.RecipeApi):
       ])
       files.append(iossim)
     isolate_template_contents = {
-      'conditions': [
-        ['OS == "ios"', {
-          'variables': {
+        'variables': {
             'command': cmd,
             'files': files,
-          },
-        }],
-      ],
+        },
     }
 
     isolate_template = self._ensure_checkout_dir().join('template.isolate')
