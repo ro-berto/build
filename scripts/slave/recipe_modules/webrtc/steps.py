@@ -185,10 +185,13 @@ def generate_tests(api, phase, bot):
 
   if test_suite == 'ios_perf':
     tests += [
-        IosTest('webrtc_perf_tests', args=[
-            '--save_chartjson_result',
-            '--nologs',
-        ]),
+        IosTest(
+            'webrtc_perf_tests',
+            args=[
+                '--save_chartjson_result',
+                '--write_histogram_proto_json',
+                '--nologs',
+            ]),
     ]
 
   if test_suite == 'more_configs':
