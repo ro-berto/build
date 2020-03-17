@@ -81,3 +81,7 @@ SPEC = {
             ),
     },
 }
+
+# Use the same config for builders using staging swarming instance.
+SPEC['builders']['linux-rel-swarming-staging'] = (
+    SPEC['builders']['linux-rel-swarming'])
