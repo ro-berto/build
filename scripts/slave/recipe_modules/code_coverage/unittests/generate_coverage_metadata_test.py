@@ -316,8 +316,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
   def test_compute_llvm_args(self):
     args = generator._compute_llvm_args(
-        '/path/to/coverage.profdata', '/path/to/llvm-cov',
-        ['/path/to/1.exe', '/path/to/2.exe'], ['/src/a.cc', '/src/b.cc'], 1)
+        '/path/to/coverage.profdata',
+        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
+        ['/src/a.cc', '/src/b.cc'],
+        1,
+        arch="x86_64")
     expected_args = [
         '/path/to/llvm-cov',
         'export',
@@ -325,6 +328,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         '-skip-functions',
         '-num-threads',
         '1',
+        '-arch=x86_64',
+        '-arch=x86_64',
         '-instr-profile',
         '/path/to/coverage.profdata',
         '/path/to/1.exe',
@@ -392,7 +397,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         sources=['/path/to/src/dir/file.cc'],
         diff_mapping=diff_mapping,
         exclusions=None,
-    )
+        arch=None)
 
     expected_compressed_files = [{
         'path':
@@ -505,7 +510,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         sources=[],
         diff_mapping=None,
         exclusions='.*bad_file.*',
-    )
+        arch=None)
 
     expected_compressed_components = [{
         'dirs': [
@@ -710,11 +715,13 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     cpu_count.return_value = 100
 
     summaries = generator._get_per_target_coverage_summary(
-        '/foo/bar/baz.profdata', '/path/to/llvm-cov', ['binary1'])
+        '/foo/bar/baz.profdata',
+        '/path/to/llvm-cov', ['binary1'],
+        arch='x86_64')
 
     call.assert_called_with([
         '/path/to/llvm-cov', 'export', '-skip-expansions', '-skip-functions',
-        '-num-threads', '95', '-summary-only', '-instr-profile',
+        '-num-threads', '95', '-summary-only', '-arch=x86_64', '-instr-profile',
         '/foo/bar/baz.profdata', 'binary1'
     ])
     self.assertIn('binary1', summaries)

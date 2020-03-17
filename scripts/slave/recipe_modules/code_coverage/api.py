@@ -749,6 +749,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['--component-mapping-path',
            self._generate_component_mapping()])
 
+    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+      args.extend(['--arch', 'x86_64'])
+
     try:
       self.m.python(
           'generate metadata for %d tests' % len(self._profdata_dirs),

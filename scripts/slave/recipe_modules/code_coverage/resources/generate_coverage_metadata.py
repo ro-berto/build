@@ -301,7 +301,8 @@ def _compute_llvm_args(profdata_path,
                        sources=None,
                        num_threads=None,
                        exclusions=None,
-                       summary_only=False):
+                       summary_only=False,
+                       arch=None):
   # Use as many cpu cores as possible for parallel processing of huge data.
   # Leave 5 cpu cores out for other processes in the bot.
   cpu_count = num_threads or max(10, psutil.cpu_count() - 5)
@@ -320,6 +321,12 @@ def _compute_llvm_args(profdata_path,
 
   if summary_only:
     args.append('-summary-only')
+
+  if arch:
+    # The number of -arch=some_arch arguments needs to be the same as the number
+    # of binaries passed to llvm-cov command. Nth entry in the arch list
+    # corresponds to the Nth specified binary.
+    args.extend(['-arch=%s' % arch] * len(binaries))
 
   args.extend(['-instr-profile', profdata_path, binaries[0]])
   for b in binaries[1:]:
@@ -394,7 +401,7 @@ def _show_system_resource_usage(proc):
 
 
 def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
-                               output_dir, exclusions):
+                               output_dir, exclusions, arch):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
@@ -408,7 +415,8 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
           llvm_cov_path,
           binaries,
           sources,
-          exclusions=exclusions)
+          exclusions=exclusions,
+          arch=arch)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -505,12 +513,13 @@ def _split_metadata_in_shards_if_necessary(
   return compressed_data
 
 
-def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries):
+def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries,
+                                     arch):
   logging.info('Generating per-target coverage summaries ...')
   summaries = {}
   for binary in binaries:
     args = _compute_llvm_args(
-        profdata_path, llvm_cov_path, [binary], summary_only=True)
+        profdata_path, llvm_cov_path, [binary], summary_only=True, arch=arch)
     try:
       output = subprocess.check_output(args)
       summaries[binary] = json.loads(output)['data'][0]['totals']
@@ -529,7 +538,7 @@ def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, binaries):
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
                        binaries, component_mapping, sources, diff_mapping,
-                       exclusions):
+                       exclusions, arch):
   """Generates code coverage metadata.
 
   Args:
@@ -546,6 +555,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
     exclusions: A regex string to exclude matches from aggregation.
+    arch: A string indicating the architecture of the binaries.
 
   Returns:
     A tuple (compressed_data, summaries) where:
@@ -557,7 +567,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
-                                    sources, output_dir, exclusions)
+                                    sources, output_dir, exclusions, arch)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '
@@ -579,7 +589,7 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
             files_coverage_data, component_mapping))
 
   summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
-                                               binaries)
+                                               binaries, arch)
 
   if not diff_mapping:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
@@ -685,6 +695,11 @@ def _parse_args(args):
       '--exclusion-pattern',
       type=str,
       help='regex pattern for sources to exclude from aggregation')
+  parser.add_argument(
+      '--arch',
+      type=str,
+      help='architecture of binaries',
+  )
   return parser.parse_args(args=args)
 
 
@@ -733,7 +748,7 @@ def main():
   compressed_data, summaries = _generate_metadata(
       params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
       params.binaries, component_mapping, abs_sources, diff_mapping,
-      params.exclusion_pattern)
+      params.exclusion_pattern, params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
