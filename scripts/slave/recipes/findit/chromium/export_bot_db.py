@@ -3,64 +3,64 @@
 # found in the LICENSE file.
 """Export the bot db to cloud storage."""
 
+import attr
 import collections
 import json
 
-from recipe_engine.post_process import DropExpectation
+from recipe_engine import post_process, types
 
+from RECIPE_MODULES.build.chromium_tests import (bot_db as bot_db_module,
+                                                 bot_spec, master_spec, steps)
 
 DEPS = [
     'chromium_tests',
     'depot_tools/gsutil',
-    'recipe_engine/json',
+    'recipe_engine/raw_io',
     'recipe_engine/properties',
 ]
 
 
-def thaw_and_remove_unserializable(v):
-  if isinstance(v, collections.Mapping):
-    return {
-        thaw_and_remove_unserializable(k): thaw_and_remove_unserializable(v)
-        for k, v in v.items()}
-  if isinstance(v, (list, tuple, set, frozenset)):
-    return [thaw_and_remove_unserializable(e) for e in v]
-  try:
-    json.dumps(v)
-  except TypeError:
+def _bot_db_to_json(bot_db):
+
+  def encode(obj):
+    if isinstance(obj, types.FrozenDict):
+      return dict(obj)
+    if attr.has(type(obj)):
+      return attr.asdict(obj, dict_factory=collections.OrderedDict)
     return None
-  return v
+
+  return json.dumps(bot_db.master_specs, default=encode)
 
 
 def RunSteps(api):
   bucket = api.properties['gs_bucket']
   object_path = api.properties['gs_object']
-  # We allow overriding the content to export from a property to allow test to
-  # inject values, as we don't want to have the expectations of this recipe
-  # change every time the bot_db changes, also because it's massive.
-  builders = thaw_and_remove_unserializable(
-      api.properties.get('builders') or api.chromium_tests.builders)
-  api.gsutil.upload(api.json.input(builders), bucket, object_path)
+  builders_json = _bot_db_to_json(api.chromium_tests.builders)
+  api.gsutil.upload(api.raw_io.input(builders_json), bucket, object_path)
 
 
 def GenTests(api):
   yield api.test(
       'with_mock_bdb',
-      api.properties(
-          gs_bucket='bucket',
-          gs_object='data.json',
-          builders={
-              'mockmaster': {
-                  'mockbuilder': {
-                      # Something frozen.
-                      'something': frozenset([]),
-                      # Something not serializable.
-                      'something_else': object()
-                  }
-              }
-          }),
+      api.properties(gs_bucket='bucket', gs_object='data.json'),
+      api.chromium_tests.builders(
+          bot_db_module.BotDatabase.create({
+              'mockmaster':
+                  master_spec.MasterSpec.create(
+                      builders={
+                          'mockbuilder':
+                              bot_spec.BotSpec.create(
+                                  compile_targets=['foo', 'bar'],
+                                  tests=[
+                                      steps.SizesStep('fake-url',
+                                                      'fake-config-name')
+                                  ],
+                              ),
+                      })
+          })),
   )
   yield api.test(
       'with_real_bdb_no_expect',
       api.properties(gs_bucket='bucket', gs_object='data.json'),
-      api.post_process(DropExpectation),
+      api.post_process(post_process.DropExpectation),
   )

@@ -23,7 +23,9 @@ class FinditApi(recipe_api.RecipeApi):
     FAILED = 'failed'  # The compile or test failed.
     INFRA_FAILED = 'infra_failed'  # Infra failed.
 
-  def get_bot_mirror_for_tester(self, tester_id, builders):
+  def get_bot_mirror_for_tester(self, tester_id, builders=None):
+    builders = builders or self.m.chromium_tests.builders
+
     tester_spec = builders[tester_id]
 
     if tester_spec.parent_buildername is None:

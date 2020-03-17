@@ -17,7 +17,8 @@ from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_db, steps
+from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, master_spec,
+                                                 steps)
 
 DEPS = [
     'chromium',
@@ -52,12 +53,10 @@ def RunSteps(api, properties):
   assert (
       properties.target_builder and properties.target_builder.master and
       properties.target_builder.builder), 'Target builder property is required'
-  # test_override_builders should not be set except when testing.
-  assert not properties.test_override_builders or api._test_data.enabled
 
   # 1. Configure the builder.
   builder_id, bot_config, compile_kwargs = _configure_builder(
-      api, properties.target_builder, properties.test_override_builders)
+      api, properties.target_builder)
 
   # 2. Check out the code.
   bot_update_step, build_config = api.chromium_tests.prepare_checkout(
@@ -88,16 +87,10 @@ def RunSteps(api, properties):
              properties.test_repeat_count)
 
 
-def _configure_builder(api, target_tester, test_override_builders):
-  if test_override_builders:
-    builders = bot_db.BotDatabase.create(json.loads(test_override_builders))
-  else:
-    builders = api.chromium_tests.builders
-
+def _configure_builder(api, target_tester):
   bot_mirror = api.findit.get_bot_mirror_for_tester(
       chromium.BuilderId.create_for_master(target_tester.master,
-                                           target_tester.builder),
-      builders=builders)
+                                           target_tester.builder))
   bot_config = api.chromium_tests.create_bot_config_object([bot_mirror])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
@@ -111,7 +104,7 @@ def _configure_builder(api, target_tester, test_override_builders):
   api.chromium.apply_config('goma_failfast')
 
   if bot_mirror.tester_id:
-    tester_spec = builders[bot_mirror.tester_id]
+    tester_spec = api.chromium_tests.builders[bot_mirror.tester_id]
     for key, value in tester_spec.swarming_dimensions.iteritems():
       # Coercing str as json.loads creates unicode strings. This only matters
       # for testing.
@@ -230,44 +223,38 @@ def GenTests(api):
             }],
         }
     }
-    _default_builders = json.dumps({
-        'chromium.linux': {
-            'builders': {
-                'Linux Tests': {
-                    'parent_buildername': 'Linux Builder',
-                    'swarming_dimensions': {
-                        'pool': 'luci.dummy.pool'
-                    },
-                    'chromium_config': 'chromium',
-                    'chromium_apply_config': ['mb'],
-                    'gclient_config': 'chromium',
-                    'chromium_config_kwargs': {
-                        'BUILD_CONFIG': 'Release',
-                        'TARGET_BITS': 64,
-                    },
-                    'bot_type': 'tester',
-                    'testing': {
-                        'platform': 'linux'
-                    },
-                },
-                'Linux Builder': {
-                    'swarming_dimensions': {
-                        'pool': 'luci.dummy.pool'
-                    },
-                    'chromium_config': 'chromium',
-                    'chromium_apply_config': ['mb'],
-                    'gclient_config': 'chromium',
-                    'chromium_config_kwargs': {
-                        'BUILD_CONFIG': 'Release',
-                        'TARGET_BITS': 64,
-                    },
-                    'bot_type': 'builder',
-                    'testing': {
-                        'platform': 'linux'
-                    },
-                }
-            }
-        }
+    _default_builders = bot_db.BotDatabase.create({
+        'chromium.linux':
+            master_spec.MasterSpec.create(
+                builders={
+                    'Linux Tests':
+                        bot_spec.BotSpec.create(
+                            parent_buildername='Linux Builder',
+                            swarming_dimensions={'pool': 'luci.dummy.pool'},
+                            chromium_config='chromium',
+                            chromium_apply_config=['mb'],
+                            gclient_config='chromium',
+                            chromium_config_kwargs={
+                                'BUILD_CONFIG': 'Release',
+                                'TARGET_BITS': 64,
+                            },
+                            bot_type='tester',
+                            testing={'platform': 'linux'},
+                        ),
+                    'Linux Builder':
+                        bot_spec.BotSpec.create(
+                            swarming_dimensions={'pool': 'luci.dummy.pool'},
+                            chromium_config='chromium',
+                            chromium_apply_config=['mb'],
+                            gclient_config='chromium',
+                            chromium_config_kwargs={
+                                'BUILD_CONFIG': 'Release',
+                                'TARGET_BITS': 64,
+                            },
+                            bot_type='builder',
+                            testing={'platform': 'linux'},
+                        ),
+                }),
     })
 
     props_proto = InputProperties()
@@ -281,18 +268,18 @@ def GenTests(api):
       new_message = props_proto.tests[k]
       for t in v:
         new_message.names.append(t)
-    if test_override_builders:
-      props_proto.test_override_builders = _default_builders
-    return (
-        api.properties(props_proto)
-        + api.properties.generic(
+
+    t = sum([
+        api.chromium.ci_build(
             mastername=target_master,
-            buildername=target_builder)
-        + api.buildbucket.ci_build(
-            project='chromium/src',
-            builder=target_builder)
-        + api.chromium_tests.read_source_side_spec(*(spec or _default_spec))
-    )
+            builder=target_builder,
+        ),
+        api.properties(props_proto),
+        api.chromium_tests.read_source_side_spec(*(spec or _default_spec)),
+    ], api.empty_test_data())
+    if test_override_builders:
+      t += api.chromium_tests.builders(_default_builders)
+    return t
 
   yield api.test(
       'all_targets',

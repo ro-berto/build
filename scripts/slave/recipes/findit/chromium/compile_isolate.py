@@ -18,10 +18,10 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
-
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, master_spec
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'findit',
     'isolate',
@@ -53,15 +53,10 @@ def RunSteps(api, target_mastername, target_testername,
              revision, isolated_targets):
   target_tester_id = chromium.BuilderId.create_for_master(
       target_mastername, target_testername)
-  builders = api.properties.get('builders')
-  if builders is not None:
-    builders = bot_db.BotDatabase.create(builders)
   bot_mirror, checked_out_revision, cached_revision = (
-      api.findit.configure_and_sync(
-          target_tester_id, revision, builders=builders))
+      api.findit.configure_and_sync(target_tester_id, revision))
 
-  bot_config = api.m.chromium_tests.create_bot_config_object(
-      [bot_mirror], builders=api.properties.get('builders'))
+  bot_config = api.m.chromium_tests.create_bot_config_object([bot_mirror])
   bot_update_step, build_config = api.m.chromium_tests.prepare_checkout(
       bot_config, root_solution_revision=revision)
 
@@ -119,75 +114,77 @@ def RunSteps(api, target_mastername, target_testername,
 def GenTests(api):
   def base(isolated_targets, tester_name):
     # TODO(crbug/1018836): Use distro specific name instead of Linux.
-    properties = {
-        'path_config': 'generic',
-        'mastername': 'chromium.findit',
-        'bot_id': 'beefy_vm',
-        'target_mastername': 'chromium.findit',
-        'target_testername': tester_name,
-        'revision': 'r0',
-        'isolated_targets': isolated_targets,
-        'builders': {
-            'chromium.findit': {
-                'builders': {
-                    'findit_builder': {
-                        'chromium_config': 'chromium',
-                        'chromium_apply_config': [
-                            'mb',
-                            'goma_high_parallel',
-                        ],
-                        'gclient_config': 'chromium',
-                        'chromium_config_kwargs': {
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        'bot_type': 'builder',
-                        'testing': {
-                            'platform': 'linux',
-                        },
-                    },
-                    'findit_tester': {
-                        'chromium_config': 'chromium',
-                        'chromium_apply_config': ['mb'],
-                        'gclient_config': 'chromium',
-                        'chromium_config_kwargs': {
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        'bot_type': 'tester',
-                        'parent_buildername': 'findit_builder',
-                        'testing': {
-                            'platform': 'linux',
-                        },
-                        'swarming_dimensions': {
-                            'os': 'Linux',
-                        },
-                    },
-                    'findit_builder_tester': {
-                        'chromium_config': 'chromium',
-                        'chromium_apply_config': ['mb'],
-                        'gclient_config': 'chromium',
-                        'chromium_config_kwargs': {
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        'bot_type': 'builder_tester',
-                        'testing': {
-                            'platform': 'linux',
-                        },
-                        'swarming_dimensions': {
-                            'os': 'Linux',
-                        },
-                    },
-                }
-            }
-        },
-    }
+    builders = bot_db.BotDatabase.create({
+        'chromium.findit':
+            master_spec.MasterSpec.create(
+                builders={
+                    'findit_builder':
+                        bot_spec.BotSpec.create(
+                            chromium_config='chromium',
+                            chromium_apply_config=[
+                                'mb',
+                                'goma_high_parallel',
+                            ],
+                            gclient_config='chromium',
+                            chromium_config_kwargs={
+                                'BUILD_CONFIG': 'Release',
+                                'TARGET_BITS': 64,
+                            },
+                            bot_type='builder',
+                            testing={
+                                'platform': 'linux',
+                            },
+                        ),
+                    'findit_tester':
+                        bot_spec.BotSpec.create(
+                            chromium_config='chromium',
+                            chromium_apply_config=['mb'],
+                            gclient_config='chromium',
+                            chromium_config_kwargs={
+                                'BUILD_CONFIG': 'Release',
+                                'TARGET_BITS': 64,
+                            },
+                            bot_type='tester',
+                            parent_buildername='findit_builder',
+                            testing={
+                                'platform': 'linux',
+                            },
+                            swarming_dimensions={
+                                'os': 'Linux',
+                            },
+                        ),
+                    'findit_builder_tester':
+                        bot_spec.BotSpec.create(
+                            chromium_config='chromium',
+                            chromium_apply_config=['mb'],
+                            gclient_config='chromium',
+                            chromium_config_kwargs={
+                                'BUILD_CONFIG': 'Release',
+                                'TARGET_BITS': 64,
+                            },
+                            bot_type='builder_tester',
+                            testing={
+                                'platform': 'linux',
+                            },
+                            swarming_dimensions={
+                                'os': 'Linux',
+                            },
+                        ),
+                }),
+    })
     return sum([
-        api.properties(**properties),
-        api.buildbucket.ci_build(
+        api.chromium_tests.builders(builders),
+        api.chromium.ci_build(
+            bucket='findit',
             builder='findit_variable',
-            git_repo='https://chromium.googlesource.com/chromium/src',
+            mastername='chromium.findit',
+            bot_id='beefy_vm',
+        ),
+        api.properties(
+            target_mastername='chromium.findit',
+            target_testername=tester_name,
+            revision='r0',
+            isolated_targets=isolated_targets,
         ),
         api.platform.name('linux'),
     ], api.empty_test_data())

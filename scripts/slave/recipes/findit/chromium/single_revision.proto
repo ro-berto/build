@@ -7,6 +7,9 @@ syntax = "proto3";
 package recipes.build.findit.chromium.single_revision;
 
 message InputProperties {
+  reserved 6;
+  reserved "test_override_builders";
+
   // Identifies a builder in terms compatible with chromium_tests.
   // May eventually be replaced with luci-style identifiers i.e.
   // project/bucket/builder.
@@ -37,10 +40,6 @@ message InputProperties {
   // Repeat the tests a number of times. If unset, defaults to 20. To avoid
   // running tests altogether, use `compile_targets` field instead of `tests`.
   int32 test_repeat_count = 5;
-
-  // Test override for chromium_tests.builders. Only set during testing.
-  // This is a json-encoded object.
-  string test_override_builders = 6;
 
   // Identifies a particular isolate object.
   message IsolateObject {
