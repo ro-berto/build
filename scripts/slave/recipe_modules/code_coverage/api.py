@@ -4,6 +4,7 @@
 
 import json
 import re
+import sys
 
 from recipe_engine import recipe_api
 
@@ -368,7 +369,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if not self._profdata_dirs:  # pragma: no cover.
       return
 
-    with self.m.step.nest('process clang code coverage data'):
+    with self.m.step.nest(
+        'process clang code coverage data') as processing_step:
       try:
         merged_profdata = self._merge_and_upload_profdata()
         if not merged_profdata:
@@ -388,15 +390,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self._generate_and_upload_metadata(binaries, merged_profdata)
         self._generate_and_upload_html_report_on_trybot(binaries,
                                                         merged_profdata)
-      except self.m.step.StepFailure:
+      except: # pylint: disable=bare-except
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
 
-        if not self._is_per_cl_coverage:
+        if self._is_per_cl_coverage:
           # Do not raise coverage steps exception for per-cl coverage because
           # per-cl coverage is integrated into Chromium try jobs, coverage steps
           # are expected to be non-fatal.
+          processing_step.logs['error'] = '\n'.join(
+              str(x) for x in sys.exc_info())
+        else:
           raise
+
 
   def process_java_coverage_data(self, **kwargs):
     """Generates metadata and JaCoCo HTML report to upload to storage bucket.
