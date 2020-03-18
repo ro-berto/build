@@ -55,27 +55,28 @@ _TidyDiagnosticID = collections.namedtuple(
 class _SourceFileComments(object):
 
   def __init__(self):
-    self._file_comments = []
     self._source_comments = []
     # _source_comments which have notes that map them back to macros. We have
     # to group these, since a single CL might have multiple diagnostics that
     # ultimately point to this same macro.
     self._macro_comments = collections.defaultdict(set)
-    self._force_emission = False
+    self._tidy_failed = False
+    self._tidy_timed_out = False
 
   def is_emission_useful(self):
-    if self._force_emission:
+    # Always tell the user if clang-tidy timed out.
+    if self._tidy_timed_out:
       return True
 
     is_tidy_nit = lambda check_name: not _canonicalize_check_name(check_name)[1]
     return (any(is_tidy_nit(x.check_name) for x in self._macro_comments) or
             any(is_tidy_nit(x.check_name) for x, _ in self._source_comments))
 
-  def force_emission(self):
-    self._force_emission = True
+  def note_tidy_timed_out(self):
+    self._tidy_timed_out = True
 
-  def add_file_comment(self, message):
-    self._file_comments.append(message)
+  def note_tidy_failed(self):
+    self._tidy_failed = True
 
   def add_macro_expanded_tidy_diagnostic(self, message, line_number, check_name,
                                          suggestions, file_of_expansion,
@@ -92,7 +93,10 @@ class _SourceFileComments(object):
   def __iter__(self):
     """Yields comments as (category, message, line_num, suggestions) tuples."""
     category = 'ClangTidy'
-    for message in self._file_comments:
+
+    if self._tidy_timed_out:
+      message = ('warning: clang-tidy timed out on this file; issuing '
+                 'diagnostics is impossible.')
       yield category, message, 0, ()
 
     def fix_message(message, check_name):
@@ -103,10 +107,17 @@ class _SourceFileComments(object):
       suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % name
       return message + ' (' + suffix + ')'
 
+    if self._tidy_failed:
+      failure_suffix = ('\n\n(Note: building this file or its dependencies '
+                        'failed; this diagnostic might be incorrect as a '
+                        'result.)')
+    else:
+      failure_suffix = ''
+
     for (message, line_number,
          check_name), suggestions in self._source_comments:
       subcategory = '/'.join([category, check_name])
-      message = fix_message(message, check_name)
+      message = fix_message(message, check_name) + failure_suffix
       yield subcategory, message, line_number, suggestions
 
     macro_comments = sorted(self._macro_comments.items())
@@ -127,7 +138,7 @@ class _SourceFileComments(object):
         suffix += ', and %d other places.' % (len(expansions) - 1)
 
       subcategory = '/'.join([category, check_name])
-      yield subcategory, message + suffix, line_number, ()
+      yield subcategory, message + suffix + failure_suffix, line_number, ()
 
 
 def _generate_clang_tidy_comments(api, file_paths):
@@ -173,14 +184,11 @@ def _generate_clang_tidy_comments(api, file_paths):
       'timed_out_src_files'):
     api.step.active_result.presentation.status = 'WARNING'
 
-  for timed_out in clang_tidy_output.get('timed_out_src_files', []):
-    file_comments = per_file_comments[timed_out]
-    file_comments.add_file_comment('warning: clang-tidy timed out on this '
-                                   'file; issuing diagnostics is impossible.')
-    # If files time out, it's likely that _someone_ should know that. Maybe a
-    # better approach is to remain quiet if our metrics are robust enough, but
-    # for now, loud breakages haven't generated a bug report yet. :)
-    file_comments.force_emission()
+  for file_path in clang_tidy_output.get('failed_src_files', []):
+    per_file_comments[file_path].note_tidy_failed()
+
+  for file_path in clang_tidy_output.get('timed_out_src_files', []):
+    per_file_comments[file_path].note_tidy_timed_out()
 
   for diagnostic in clang_tidy_output.get('diagnostics', []):
     file_path = diagnostic['file_path']
@@ -492,6 +500,29 @@ def GenTests(api):
          api.post_process(post_process.StatusSuccess) +
          api.post_process(tricium_has_no_messages) + api.post_process(
              post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'append_complaint_on_failure',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'failed_src_files': ['path/to/some/cc/file.cpp'],
+              'diagnostics': [{
+                  'file_path': 'path/to/some/cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'b',
+                  'message': 'a',
+                  'replacements': [],
+                  'expansion_locs': [],
+              },],
+          })) + api.post_process(post_process.StepWarning,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             tricium_has_message,
+             'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
+             '(Note: building this file or its dependencies failed; this '
+             'diagnostic might be incorrect as a result.)') + api.post_process(
+                 post_process.DropExpectation))
 
   yield (test_with_patch(
       'diagnostic_suggestions',
