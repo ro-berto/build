@@ -91,20 +91,18 @@ def RunSteps(api, platforms, custom_trigger_script,
   tasks = []
   for platform in platforms:
     # Isolate example hello_world.isolate from swarming client repo.
-    # TODO(vadimsh): Add a thin wrapper around isolate.py to 'isolate' module?
-    step_result = api.python(
-        'archive for %s' % platform,
-        api.swarming_client.path.join('isolate.py'),
-        [
-          'archive',
-          '--isolate', api.swarming_client.path.join(
-              'example', 'payload', 'hello_world.isolate'),
-          '--isolated', temp_dir.join('hello_world.isolated'),
-          '--isolate-server', api.isolate.isolate_server,
-          '--config-variable', 'OS', platform,
-          '--verbose',
-        ], stdout=api.raw_io.output_text())
-    # TODO(vadimsh): Pass result from isolate.py though --output-json option.
+    # TODO(vadimsh): Add a thin wrapper around isolate to 'isolate' module?
+    step_result = api.step(
+        'archive for %s' % platform, [
+            'tools/luci-go/isolate',
+            'archive',
+            '-isolate',
+            api.swarming_client.path.join('example', 'payload',
+                                          'hello_world.isolate'),
+            '-verbose',
+        ],
+        stdout=api.raw_io.output_text())
+    # TODO(vadimsh): Pass result from isolate though --output-json option.
     isolated = step_result.stdout.split()[0].strip()
 
     # Create a task to run the isolated file on swarming, set OS dimension.

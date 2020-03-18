@@ -274,58 +274,31 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/isolate.py",
+      "tools/luci-go/isolate",
       "archive",
-      "--isolate",
+      "-isolate",
       "[START_DIR]/swarming.client/example/payload/hello_world.isolate",
-      "--isolated",
-      "[CLEANUP]/hello_isolated_world_tmp_1/hello_world.isolated",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--config-variable",
-      "OS",
-      "win",
-      "--verbose"
+      "-verbose"
     ],
     "name": "archive for win"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/isolate.py",
+      "tools/luci-go/isolate",
       "archive",
-      "--isolate",
+      "-isolate",
       "[START_DIR]/swarming.client/example/payload/hello_world.isolate",
-      "--isolated",
-      "[CLEANUP]/hello_isolated_world_tmp_1/hello_world.isolated",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--config-variable",
-      "OS",
-      "linux",
-      "--verbose"
+      "-verbose"
     ],
     "name": "archive for linux"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/isolate.py",
+      "tools/luci-go/isolate",
       "archive",
-      "--isolate",
+      "-isolate",
       "[START_DIR]/swarming.client/example/payload/hello_world.isolate",
-      "--isolated",
-      "[CLEANUP]/hello_isolated_world_tmp_1/hello_world.isolated",
-      "--isolate-server",
-      "https://isolateserver-dev.appspot.com",
-      "--config-variable",
-      "OS",
-      "mac",
-      "--verbose"
+      "-verbose"
     ],
     "name": "archive for mac"
   },
