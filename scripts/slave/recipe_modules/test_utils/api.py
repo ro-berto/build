@@ -409,7 +409,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_test_suites, failed_test_suites = self._run_tests_once(
         caller_api, test_suites, suffix, sort_by_shard=sort_by_shard)
 
-    if len(failed_test_suites) >= self._min_failed_suites_to_skip_retry:
+    if self.m.tryserver.is_tryserver and len(
+        failed_test_suites) >= self._min_failed_suites_to_skip_retry:
       result = self.m.python.succeeding_step(
           'skip retrying because there are >= %d test suites with test '
           'failures and it most likely indicate a problem with the CL' %

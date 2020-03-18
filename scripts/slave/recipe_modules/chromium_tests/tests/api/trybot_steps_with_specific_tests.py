@@ -1434,6 +1434,10 @@ def GenTests(api):
               api.test_utils.gtest_results(
                   json.dumps(results_with_failure), retcode=1),
               failure=True)),
+      api.post_process(
+          post_process.MustRun,
+          'skip retrying because there are >= 3 test suites with test failures '
+          'and it most likely indicate a problem with the CL'),
       api.post_process(post_process.DoesNotRunRE,
                        'target\d \(retry shards with patch\)'),
       api.post_process(post_process.DropExpectation),

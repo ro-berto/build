@@ -636,3 +636,57 @@ def GenTests(api):
       api.post_process(post_process.ResultReason, 'Compile step failed.'),
       api.post_process(post_process.DropExpectation),
   )
+
+  results_with_failure = {
+      'per_iteration_data': [{
+          'Suite.Test': [{
+              'elapsed_time_ms': 0,
+              'output_snippet': '',
+              'status': 'FAILURE',
+          },],
+      }]
+  }
+  yield api.test(
+      'skip_retrying_logic_is_limited_to_try_jobs',
+      api.chromium_tests.platform([{
+          'mastername': 'chromium.linux',
+          'buildername': 'Linux Tests'
+      }]),
+      api.chromium.ci_build(
+          mastername='chromium.linux',
+          builder='Linux Tests',
+          parent_buildername='Linux Builder'),
+      api.properties(**{
+          '$build/test_utils': {
+              'min_failed_suites_to_skip_retry': 3,
+          },
+      }),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Tests': {
+                  'gtest_tests': [
+                      'base_unittests', 'target1', 'target2', 'target3'
+                  ],
+              },
+          }),
+      api.override_step_data(
+          'target1',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'target2',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.override_step_data(
+          'target3',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results(
+                  json.dumps(results_with_failure), retcode=1),
+              failure=True)),
+      api.post_process(post_process.DoesNotRunRE, 'skip retrying'),
+      api.post_process(post_process.DropExpectation),
+  )
