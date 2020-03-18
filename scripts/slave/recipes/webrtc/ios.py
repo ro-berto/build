@@ -498,7 +498,8 @@ def RunSteps(api):
     triggered_tests = []
     with api.step.nest('trigger'):
       if webrtc.bot.should_upload_perf_results:
-        result_callback = webrtc.upload_to_perf_dashboard
+        result_callback = functools.partial(
+            webrtc.upload_to_perf_dashboard, use_histograms=True)
       else:
         result_callback = result_callback=lambda **kw: True
       for task in tasks:
