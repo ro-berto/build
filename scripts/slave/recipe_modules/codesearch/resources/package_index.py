@@ -38,6 +38,12 @@ from windows_shell_split import WindowsShellSplit
 # is more important here.
 MOJOM_IMPORT_RE = re.compile(r'^\s*import\s*"([^"]*)"', re.MULTILINE)
 
+# Used for finding required_input for a Proto target, by finding the imports in
+# its source. Import spec:
+# https://developers.google.com/protocol-buffers/docs/reference/proto3-spec#import_statement
+PROTO_IMPORT_RE = re.compile(r'^\s*import\s*(?:weak|public)?\s*"([^"]*)\s*";',
+                             re.MULTILINE)
+
 # A list of path prefixes to external corpsus names, used by kythe/grimoire
 # to find external headers.
 EXTERNAL_CORPORA = [
@@ -131,7 +137,128 @@ def FindImports(regex, file_path, import_paths):
         break
     else:
       print('couldn\'t find import %s for file %s.' % (imp, file_path))
+      print(import_paths)
   return imports
+
+
+class ProtoTarget():
+  """Class that defines a single proto compilation unit"""
+
+  def __init__(self, gn_target, root_dir, out_dir):
+    assert 'sources' in gn_target
+    assert out_dir.startswith('src')
+
+    self._all_files = None
+    self.sources = gn_target['sources']
+    self.args = gn_target['args'] if 'args' in gn_target else []
+    self.root_dir = root_dir
+    self.out_dir = out_dir
+
+    def construct_normpath(arg_path):
+      return os.path.normpath(
+          os.path.join(self.root_dir, self.out_dir, arg_path))
+
+    self.proto_paths = [
+        construct_normpath(self.args[i + 1])
+        for i in range(len(self.args) - 1)
+        if self.args[i] == '--proto-in-dir'
+    ]
+
+    import_dir_prefix = '--import-dir='
+    self.proto_paths += [
+        construct_normpath(arg[len(import_dir_prefix):])
+        for arg in self.args
+        if arg.startswith(import_dir_prefix)
+    ]
+
+    if not self.proto_paths:
+      self.proto_paths = [os.path.join(self.root_dir, out_dir)]
+
+  def GetFiles(self):
+    """Retrieve list of all files that are required for compilation of target
+
+    Returns:
+      list of all included files, in their absolute paths
+    """
+    if self._all_files is None:
+      self._all_files = self._FindAllUsedFiles()
+
+    return self._all_files
+
+  def GetUnit(self, corpus, filehashes, build_config=None):
+    """Retrieve compulation unit for target
+
+    Args:
+      corpus: string
+      filehashes: map of filename to hash, to avoid recomputing
+      build_config: string
+
+    Returns:
+      analysis_pb2.CompilationUnit for target
+    """
+    unit_proto = analysis_pb2.CompilationUnit()
+    source_files = [
+        ConvertPathToForwardSlashes(ConvertGnPath(source, self.out_dir))
+        for source in self.sources
+    ]
+
+    # use sort to make it deterministic, used for unit tests
+    for source_file in sorted(source_files):
+      unit_proto.source_file.append(source_file)
+      # Append to arguments since original source argument needs to be modified.
+      unit_proto.argument.append(source_file)
+
+    for arg in self.args:
+      # .proto files can be ignored since they are already added.
+      if not arg.endswith('.proto'):
+        unit_proto.argument.append(arg)
+
+    unit_proto.v_name.corpus = corpus
+    unit_proto.v_name.language = 'protobuf'
+    if build_config:
+      InjectUnitBuildDetails(unit_proto, build_config)
+
+    # use sort to make it deterministic, used for unit tests
+    for f in sorted(self.GetFiles()):
+      if f not in filehashes:
+        # Indexer can't recover from such error so don't bother with unit
+        # creation.
+        print('WARNING: missing file %s in filehashes, skipping unit '
+              'completely.' % f)
+        return None
+      required_input = unit_proto.required_input.add()
+      required_input.v_name.corpus = corpus
+      required_input.v_name.path = ConvertPathToForwardSlashes(
+          os.path.relpath(os.path.normpath(f), self.root_dir))
+      required_input.info.path = ConvertPathToForwardSlashes(
+          os.path.relpath(f, os.path.join(self.root_dir, self.out_dir)))
+      required_input.info.digest = filehashes[f]
+
+    return unit_proto
+
+  def _FindAllUsedFiles(self):
+    """_FindAllUsedFiles walks through all source files and looks for import
+    statements.  The process repeats until all imported files are inspected.
+    """
+
+    # Use absolute paths as it makes things easier. gn_target sources start
+    # with // so that needs to be stripped
+    paths = [
+        os.path.normpath(
+            os.path.join(self.root_dir, self.out_dir,
+                         ConvertGnPath(source, self.out_dir)))
+        for source in self.sources
+    ]
+    all_files = set()
+    while len(paths):
+      path = paths.pop()
+      if path in all_files:
+        # Already processed, move on
+        continue
+      all_files.add(path)
+      for imp in FindImports(PROTO_IMPORT_RE, path, self.proto_paths):
+        paths.append(imp)
+    return all_files
 
 
 class IndexPack(object):
@@ -206,6 +333,7 @@ class IndexPack(object):
       gn_targets_dict = json.load(json_gn_targets_file)
 
       self.mojom_targets = []
+      self.proto_targets = []
       for target_name, target in gn_targets_dict.items():
         # We only care about certain mojom targets. Filter it down here so we
         # don't need to do so both times we iterate over it.
@@ -215,6 +343,13 @@ class IndexPack(object):
                   target,
                   args=_MergeFeatureArgs(gn_targets_dict, target_name, target),
                   imported_files=self._FindMojomImports(target)))
+        elif self._IsProtoTarget(target):
+          self.proto_targets.append(
+              ProtoTarget(target, self.root_dir, self.out_dir))
+
+  def _IsProtoTarget(self, target):
+    return ('script' in target and
+            target['script'].endswith('/protoc_wrapper.py'))
 
   def _IsMojomTarget(self, gn_target):
     """Predicate to check if a GN target is a Mojom target.
@@ -493,6 +628,11 @@ class IndexPack(object):
             os.path.join(self.root_dir, self.out_dir,
                          ConvertGnPath(source, self.out_dir)))
 
+    for target in self.proto_targets:
+      for path in target.GetFiles():
+        self._AddDataFile(path)
+
+
   def _GenerateUnitFiles(self):
     """Produces the unit files for the index pack.
 
@@ -565,6 +705,12 @@ class IndexPack(object):
         required_input.info.digest = self.filehashes[path]
 
       self._AddUnitFile(unit_proto)
+
+    # add proto compilation units
+    for target in self.proto_targets:
+      unit = target.GetUnit(self.corpus, self.filehashes, self.build_config)
+      if unit:
+        self._AddUnitFile(unit)
 
   def _AddClangUnitFile(self, filename, directory, command, filepaths_fn,
                         corpus, build_config=None):
