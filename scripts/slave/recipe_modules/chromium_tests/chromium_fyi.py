@@ -14,7 +14,10 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 
 KITCHEN_TEST_SPEC = {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb',],
+    'chromium_apply_config': [
+        'mb',
+        'mb_luci_auth',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -40,7 +43,10 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
   bot_config = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb',],
+      'chromium_apply_config': [
+          'mb',
+          'mb_luci_auth',
+      ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
@@ -93,6 +99,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -108,6 +115,8 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
+                # TODO(crbug.com/1060280): Add mb_luci_auth when adding it
+                # to chromium.mac.
                 chromium_apply_config=['mb'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -130,7 +139,7 @@ SPEC = {
         'WebKit Linux composite_after_paint Dummy Builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -148,7 +157,7 @@ SPEC = {
         'WebKit Linux layout_ng_disabled Builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -166,7 +175,7 @@ SPEC = {
         'fuchsia-fyi-arm64-rel':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
                 chromium_config_kwargs={
@@ -185,7 +194,7 @@ SPEC = {
         'fuchsia-fyi-x64-dbg':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['fuchsia_x64'],
                 chromium_config_kwargs={
@@ -204,7 +213,7 @@ SPEC = {
         'fuchsia-fyi-x64-rel':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['fuchsia_x64'],
                 chromium_config_kwargs={
@@ -264,6 +273,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'goma_high_parallel',
                 ],
                 gclient_config='chromium',
@@ -280,7 +290,7 @@ SPEC = {
         'mac-code-coverage':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
                 chromium_config_kwargs={
@@ -328,7 +338,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -342,7 +352,7 @@ SPEC = {
         'Win 10 Fast Ring':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -358,6 +368,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -375,6 +386,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -435,7 +447,7 @@ SPEC = {
         'Mojo ChromiumOS':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
                 chromium_config_kwargs={
@@ -452,7 +464,7 @@ SPEC = {
         'Mojo Linux':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 swarming_default_priority=25,
                 chromium_config_kwargs={
@@ -467,7 +479,7 @@ SPEC = {
         'mac-mojo-rel':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 swarming_default_priority=25,
                 chromium_config_kwargs={
@@ -482,7 +494,7 @@ SPEC = {
         'Mojo Windows':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 swarming_default_priority=25,
                 chromium_config_kwargs={
@@ -500,6 +512,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -521,6 +534,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -541,7 +555,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -558,6 +572,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'goma_high_parallel',
                 ],
                 gclient_config='chromium',
@@ -577,7 +592,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -596,7 +611,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -616,6 +631,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -635,6 +651,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -654,6 +671,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -673,6 +691,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -692,6 +711,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -711,6 +731,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -730,6 +751,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 gclient_config='ios',
@@ -748,7 +770,9 @@ SPEC = {
         'android-code-coverage':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['download_vr_test_apks', 'mb'],
+                chromium_apply_config=[
+                    'download_vr_test_apks', 'mb', 'mb_luci_auth'
+                ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
                 chromium_config_kwargs={
@@ -765,7 +789,9 @@ SPEC = {
         'android-code-coverage-native':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['download_vr_test_apks', 'mb'],
+                chromium_apply_config=[
+                    'download_vr_test_apks', 'mb', 'mb_luci_auth'
+                ],
                 gclient_config='chromium',
                 gclient_apply_config=['android', 'use_clang_coverage'],
                 chromium_config_kwargs={
@@ -782,6 +808,8 @@ SPEC = {
         'Win10 Tests x64 1803':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
+                # TODO(crbug.com/1060280): Add mb_luci_auth when adding it
+                # to chromium.win.
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -801,6 +829,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'goma_high_parallel',
                 ],
                 gclient_config='chromium',
