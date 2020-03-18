@@ -46,8 +46,6 @@ PROPERTIES = {
 def RunSteps(api, buildername, mastername):
   # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
-  api.chromium_swarming.swarming_server = (
-      'https://chromium-swarm-dev.appspot.com')
   api.chromium_swarming.verbose = True
 
   # Run tests from chromium.swarm buildbot with a relatively high priority
@@ -72,6 +70,9 @@ def RunSteps(api, buildername, mastername):
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
   bot_config = api.chromium_tests.create_bot_config_object(
       [chromium.BuilderId.create_for_master(mastername, buildername)])
+  api.chromium_swarming.swarming_server = (
+      bot_config.swarming_server or 'https://chromium-swarm-dev.appspot.com')
+
   api.chromium_tests.configure_build(bot_config)
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
@@ -126,6 +127,32 @@ def GenTests(api):
           bot_id='TestSlave',
           buildnumber=123,
           path_config='generic'),
+  )
+
+  yield api.test(
+      'linux-rel-swarming-staging',
+      api.properties(
+          buildername='linux-rel-swarming-staging',
+          mastername='chromium.dev',
+          bot_id='TestSlave',
+          buildnumber=123,
+          path_config='generic'),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.dev', {
+              'linux-rel-swarming-staging': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      }
+                  },],
+              },
+          }),
+      api.override_step_data('find isolated tests',
+                             api.json.output({
+                                 'browser_tests': 'deadbeef',
+                             })),
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
