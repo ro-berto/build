@@ -504,7 +504,7 @@
   },
   {
     "cmd": [],
-    "name": "Skipping Type Check ..."
+    "name": "Skipping Type Check with Closure ..."
   },
   {
     "cmd": [
@@ -517,7 +517,7 @@
         "[BUILDER_CACHE]\\devtools-frontend\\third_party"
       ]
     },
-    "name": "Lint Check"
+    "name": "Lint Check with ESLint"
   },
   {
     "cmd": [

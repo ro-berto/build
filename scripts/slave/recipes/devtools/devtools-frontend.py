@@ -91,13 +91,13 @@ def run_unit_tests(api):
 
 def run_type_check(api):
   if api.platform.is_win:
-    api.step('Skipping Type Check ...', [])
+    api.step('Skipping Type Check with Closure ...', [])
   else:
-    run_script(api, 'Type Check', 'run_type_check.py')
+    run_script(api, 'Type Check with Closure', 'run_type_check.py')
 
 
 def run_lint_check(api):
-  run_script(api, 'Lint Check', 'run_lint_check.py')
+  run_script(api, 'Lint Check with ESLint', 'run_lint_check.py')
 
 
 def run_localization_check(api):

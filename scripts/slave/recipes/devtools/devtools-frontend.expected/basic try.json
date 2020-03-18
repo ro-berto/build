@@ -562,7 +562,7 @@
         "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
-    "name": "Type Check"
+    "name": "Type Check with Closure"
   },
   {
     "cmd": [
@@ -575,7 +575,7 @@
         "[BUILDER_CACHE]/devtools-frontend/third_party"
       ]
     },
-    "name": "Lint Check"
+    "name": "Lint Check with ESLint"
   },
   {
     "cmd": [
