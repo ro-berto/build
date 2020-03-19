@@ -115,6 +115,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'goma_high_parallel',
                 ],
                 gclient_config='chromium',
@@ -149,6 +150,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'goma_high_parallel',
                 ],
                 gclient_config='chromium',
