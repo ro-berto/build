@@ -188,7 +188,7 @@ def generate_tests(api, phase, bot):
         IosTest(
             'webrtc_perf_tests',
             args=[
-                '--save_chartjson_result',
+                '--write_perf_output_on_ios',
                 '--write_histogram_proto_json',
                 '--nologs',
             ]),
