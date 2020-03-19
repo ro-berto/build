@@ -16,7 +16,6 @@ SPEC = {
                     'goma_high_parallel',
                     'goma_enable_global_file_stat_cache',
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -37,7 +36,6 @@ SPEC = {
                     'goma_high_parallel',
                     'goma_enable_global_file_stat_cache',
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -52,7 +50,7 @@ SPEC = {
         'Win10 Tests x64':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -68,7 +66,7 @@ SPEC = {
         'Win10 Tests x64 Code Coverage':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
                 chromium_config_kwargs={
@@ -89,7 +87,6 @@ SPEC = {
                     'goma_high_parallel',
                     'goma_enable_global_file_stat_cache',
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -109,7 +106,6 @@ SPEC = {
                     'goma_high_parallel',
                     'goma_enable_global_file_stat_cache',
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -126,7 +122,7 @@ SPEC = {
         'Win x64 Builder':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -140,7 +136,7 @@ SPEC = {
         'Win x64 Builder Code Coverage':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
                 chromium_config_kwargs={
@@ -155,7 +151,7 @@ SPEC = {
         'Win 7 Tests x64 (1)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -171,7 +167,7 @@ SPEC = {
         'Win x64 Builder (dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -185,7 +181,7 @@ SPEC = {
         'Win Builder (dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -199,7 +195,7 @@ SPEC = {
         'Win7 Tests (dbg)(1)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -214,7 +210,7 @@ SPEC = {
         'Win10 Tests x64 (dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb', 'mb_luci_auth'],
+                chromium_apply_config=['mb'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
