@@ -187,7 +187,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -220,7 +219,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
@@ -238,7 +236,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -256,7 +253,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
@@ -292,7 +288,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -310,7 +305,6 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
-                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
