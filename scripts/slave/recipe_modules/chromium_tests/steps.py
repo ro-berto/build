@@ -116,13 +116,12 @@ def _merge_args_and_test_options(test, args, options):
   """
   args = args[:]
 
-  if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or (isinstance(
-              test, (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
-              ('webkit_layout_tests' in test.target_name or
-               # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
-               'blink_web_tests' in test.target_name))):
+  if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or
+          (isinstance(test,
+                      (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
+           'blink_web_tests' in test.target_name)):
     # The args that are being merged by this function are only supported
-    # by gtest and webkit_layout_tests.
+    # by gtest and blink_web_tests.
     return args
 
   if options.test_filter:

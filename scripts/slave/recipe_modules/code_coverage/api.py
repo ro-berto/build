@@ -206,7 +206,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         continue
 
       target = t.isolate_target
-      # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
       patterns = [
           # Following are scripts based tests that don't build any binaries.
           ['blink_python_tests', None],
@@ -227,7 +226,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['webdriver_wpt_tests', 'chrome'],
           ['xr_browser_tests', 'xr_browser_tests_binary'],
           ['content_shell_crash_test', 'content_shell'],
-          ['.*webkit_layout_tests', 'content_shell'],
           ['.*blink_web_tests', 'content_shell'],
           ['.*_ozone', target[:-len('_ozone')]],
           ['.*', target],

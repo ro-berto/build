@@ -555,9 +555,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ignored_flakes = sorted(ignored_flakes)
 
     suffix = 'test results summary'
-    # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
-    if (test_suite.name == 'webkit_layout_tests' or
-        test_suite.name == 'blink_web_tests'):
+    if test_suite.name == 'blink_web_tests':
       dest_file = '%s.json' % suffix.replace(' ', '_')
       self._archive_test_results_summary({
           'failures': new_failures,
