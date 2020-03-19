@@ -14,6 +14,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -34,6 +35,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -53,6 +55,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -72,6 +75,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -91,6 +95,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -110,6 +115,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -129,6 +135,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -145,6 +152,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
@@ -162,6 +170,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -179,6 +188,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -196,6 +206,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=['use_clang_coverage'],
@@ -214,6 +225,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -231,6 +243,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -248,6 +261,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -265,6 +279,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -281,6 +296,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -298,6 +314,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 chromium_config_kwargs={

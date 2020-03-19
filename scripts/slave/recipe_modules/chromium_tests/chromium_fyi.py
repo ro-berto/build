@@ -115,9 +115,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 gclient_config='chromium',
-                # TODO(crbug.com/1060280): Add mb_luci_auth when adding it
-                # to chromium.mac.
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
