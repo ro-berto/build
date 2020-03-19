@@ -1080,7 +1080,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.inbound_transfer(bot, update_step, build_config)
 
-    return self.run_tests(bot, build_config)
+    tests = build_config.tests_on(bot.builder_id)
+    return self.run_tests(bot, tests)
 
   def outbound_transfer(self, bot, bot_update_step, build_config):
     """Handles the builder half of the builder->tester transfer flow.
@@ -1650,8 +1651,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         android_version_code=android_version_code,
         name='lookup builder GN args')
 
-  def run_tests(self, bot_meta_data, build_config):
-    tests = build_config.tests_on(bot_meta_data.builder_id)
+  def run_tests(self, bot_meta_data, tests):
     if not tests:
       return
 

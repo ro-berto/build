@@ -8,8 +8,19 @@ DEPS = [
     'chromium_tests',
     'recipe_engine/python',
 ]
+NO_SUFFIX = ''
 
 from recipe_engine import post_process
+
+
+def _debug_lines(bot, tests, task_groups):
+  debug_lines = []
+  debug_lines.append('bot.builder_id: %s' % bot.builder_id)
+  debug_lines += ['test name: %s' % t.name for t in tests]
+  debug_lines += [
+      'group: %s <br/> tasks: %s' % (k, v) for k, v in task_groups.iteritems()
+  ]
+  return debug_lines
 
 
 def RunSteps(api):
@@ -24,9 +35,20 @@ def RunSteps(api):
     update_step, build_config = api.chromium_tests.prepare_checkout(
         bot.settings, timeout=3600, no_fetch_tags=True)
     api.chromium_tests.lookup_builder_gn_args(bot)
-    test_failure_summary = api.chromium_tests.run_tests(bot, build_config)
-    api.chromium_tests.trigger_child_builds(bot.builder_id, update_step,
-                                            bot.settings)
+    tests = build_config.tests_on(bot.builder_id)
+    test_failure_summary = api.chromium_tests.run_tests(bot, tests)
+    task_groups = {
+        t.get_task(NO_SUFFIX).request.name:
+        t.get_task(NO_SUFFIX).collect_cmd_input() for t in tests
+    }
+    additional_trigger_properties = {'tasks_groups': task_groups}
+    api.python.succeeding_step(
+        'Debug info', '<br/>'.join(_debug_lines(bot, tests, task_groups)))
+    api.chromium_tests.trigger_child_builds(
+        bot.builder_id,
+        update_step,
+        bot.settings,
+        additional_properties=additional_trigger_properties)
     return test_failure_summary
 
 

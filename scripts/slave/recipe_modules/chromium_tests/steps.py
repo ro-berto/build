@@ -1919,10 +1919,9 @@ class SwarmingTest(Test):
       self._tasks[suffix])
     self._suffix_step_name_map[suffix] = step_result.step['name']
 
-    step_result.presentation.logs['step_metadata'] = (
-        json.dumps(self.step_metadata(suffix), sort_keys=True,
-                   indent=2)
-    ).splitlines()
+    metadata = self.step_metadata(suffix)
+    step_result.presentation.logs['step_metadata'] = (json.dumps(
+        metadata, sort_keys=True, indent=2)).splitlines()
 
     # TODO(martiniss): Consider moving this into some sort of base
     # validate_task_results implementation.
