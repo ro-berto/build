@@ -1041,6 +1041,14 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
+    "cmd": [],
+    "name": "[skipped] derive test results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

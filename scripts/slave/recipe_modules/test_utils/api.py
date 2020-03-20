@@ -4,6 +4,7 @@
 
 import itertools
 import json
+import urlparse
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -267,6 +268,49 @@ class TestUtilsApi(recipe_api.RecipeApi):
         invalid_results.append(t)
       elif t.deterministic_failures(suffix) and t not in failed_test_suites:
         failed_test_suites.append(t)
+
+    # Only derive results from linux-rel builder to confirm the feature works.
+    # Will roll-out to all builders later.
+    if self.m.buildbucket.builder_name != 'linux-rel':
+      return invalid_results, failed_test_suites
+
+    if suffix == 'without patch':
+      # Don't derive test results for without patch steps.
+      return invalid_results, failed_test_suites
+
+    # Derives swarming test results to ResultDB.
+    # The returned results are not being used yet.
+    swarming_task_ids = []
+    for t in swarming_test_suites:
+      task = t.get_task(suffix)
+      swarming_task_ids.extend(task.get_task_ids())
+
+    derive_step_name = 'derive test results (%s)' % suffix
+    if len(swarming_task_ids) == 0:
+      step_result = self.m.step('[skipped] %s' % derive_step_name, [])
+      step_result.presentation.logs["stdout"] = [
+          'No swarming test results to derive.'
+      ]
+      return invalid_results, failed_test_suites
+
+    swarming_host = caller_api.chromium_swarming.swarming_server
+    parsed = urlparse.urlparse(swarming_host)
+    if parsed.scheme:
+      swarming_host = parsed.netloc
+
+    try:
+      # Failure of this step should not fail the build.
+      # TODO(crbug.com/1021849): include derived invocations into the build's
+      # invocation.
+      self.m.resultdb.chromium_derive(
+          step_name=derive_step_name,
+          swarming_host=swarming_host,
+          task_ids=swarming_task_ids,
+          variants_with_unexpected_results=True,
+      )
+    except (self.m.step.InfraFailure,
+            self.m.step.StepFailure):  # pragma: no cover
+      pass
 
     return invalid_results, failed_test_suites
 

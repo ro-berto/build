@@ -388,7 +388,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self._generate_and_upload_metadata(binaries, merged_profdata)
         self._generate_and_upload_html_report_on_trybot(binaries,
                                                         merged_profdata)
-      except: # pylint: disable=bare-except
+      except:  # pylint: disable=bare-except
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
 

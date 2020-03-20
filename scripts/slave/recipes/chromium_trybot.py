@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import (
-    Filter, DoesNotRun, DropExpectation, StatusFailure)
+from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
+                                        StatusFailure, StatusSuccess)
 
 DEPS = [
   'build',
@@ -882,5 +882,34 @@ def GenTests(api):
           })),
       suppress_analyze(),
       api.post_process(check_ordering),
+      api.post_process(DropExpectation),
+  )
+
+  # This test is used to confirm that failure to derive test results to ResultDB
+  # will not fail the build.
+  yield api.test(
+      'fail_to_derive_results_doesnt_fail_build',
+      props(extra_swarmed_tests=['1_gtest']),
+      api.platform.name('linux'),
+      api.override_step_data(
+          'read test spec (chromium.linux.json)',
+          api.json.output({
+              'Linux Tests': {
+                  'gtest_tests': [{
+                      'name': '1_gtest',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 1,
+                      },
+                  },],
+              },
+          })),
+      suppress_analyze(),
+      api.override_step_data(
+          '1_gtest (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              canned_test(passing=True), failure=False)),
+      api.override_step_data('derive test results (with patch)', retcode=1),
+      api.post_process(StatusSuccess),
       api.post_process(DropExpectation),
   )
