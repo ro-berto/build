@@ -21,7 +21,7 @@ DEPS = [
 ]
 
 BUILD_CONFIG = 'Default'
-BUILD_TARGETS = ['gn_all', 'openscreen_unittests']
+BUILD_TARGETS = ['gn_all', 'openscreen_unittests', 'e2e_tests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 def _GetHostToolLabel(platform):
@@ -78,6 +78,12 @@ def RunSteps(api):
           ninja_log_outdir=output_path)
     api.step('Run unit tests', [output_path.join('openscreen_unittests')])
 
+    # TODO(btolsch): Make these required when they appear stable on the bots.
+    try:
+      api.step('Run e2e tests', [output_path.join('e2e_tests')])
+    except api.step.StepFailure:
+      pass
+
 
 def GenTests(api):
   yield api.test(
@@ -104,3 +110,7 @@ def GenTests(api):
       api.buildbucket.try_build('openscreen', 'try'),
       api.properties(debug=True, is_asan=False),
   )
+  yield api.test('linux64_debug (fail e2e tests)', api.platform('linux', 64),
+                 api.buildbucket.try_build('openscreen', 'try'),
+                 api.properties(debug=True, is_asan=True),
+                 api.step_data('Run e2e tests', retcode=1))

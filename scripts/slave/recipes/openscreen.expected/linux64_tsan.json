@@ -226,7 +226,8 @@
       "-j",
       "80",
       "gn_all",
-      "openscreen_unittests"
+      "openscreen_unittests",
+      "e2e_tests"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "compile"
@@ -335,7 +336,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/openscreen/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 80, \"gn_all\", \"openscreen_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 80, \"gn_all\", \"openscreen_unittests\", \"e2e_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -394,6 +395,13 @@
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "Run unit tests"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/openscreen/out/Default/e2e_tests"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "name": "Run e2e tests"
   },
   {
     "name": "$result"
