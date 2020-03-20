@@ -32,6 +32,8 @@ def GenTests(api):
     buildername = builder_id.builder
     yield api.test(
         ('%s-%s' % (mastername, buildername)).replace(' ', '_'),
+        (api.properties(xcode_build_version='11c29')
+         if 'ios' in buildername else api.properties()),
         api.chromium.try_build(
             mastername=mastername,
             builder=buildername,

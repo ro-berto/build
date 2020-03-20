@@ -945,6 +945,11 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     'tryserver.chromium.mac': {
         'builders': {
+            'ios-simulator-code-coverage':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'ios-simulator-code-coverage',
+                }),
             'mac_chromium_archive_rel_ng':
                 simple_bot({
                     'mastername': 'chromium',
