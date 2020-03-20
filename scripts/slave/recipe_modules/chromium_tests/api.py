@@ -1368,7 +1368,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return '\n\n'.join(test_summary_lines)
 
-  def lookup_bot_metadata(self, builders, mirrored_bots=None):
+  def lookup_bot_metadata(self, builders=None, mirrored_bots=None):
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
     # This logic takes the <mastername, buildername> of the triggering trybot,
@@ -1401,6 +1401,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # contains build/test settings for the bot
     settings = self.create_bot_config_object(
         try_spec.mirrors, builders=builders)
+    for b in settings.builder_ids:
+      assert settings.bot_db[b].bot_type != bot_spec_module.DUMMY_TESTER, (
+          'bot {} has bot type {!r},'
+          ' which should only appear as a tester in a mirror configuration'
+          .format(b, bot_spec_module.DUMMY_TESTER))
 
     self._report_builders(settings)
 

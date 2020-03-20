@@ -18,6 +18,10 @@ from RECIPE_MODULES.build import chromium
 BUILDER = 'builder'
 TESTER = 'tester'
 BUILDER_TESTER = 'builder_tester'
+# The type of a bot that is never actually executed, it is only used as the
+# tester in a trybot-mirror configuration so that src-side information can be
+# specified providing different test configurations
+DUMMY_TESTER = 'dummy_tester'
 
 BUILDER_TYPES = (BUILDER, BUILDER_TESTER)
 TESTER_TYPES = (TESTER, BUILDER_TESTER)
@@ -61,7 +65,19 @@ class BotSpec(object):
       return [a for a in attributes if a in kwargs]
 
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
-    if bot_type not in BUILDER_TYPES:
+    if bot_type == DUMMY_TESTER:
+      # DUMMY_TESTER bots should never be executed, so most fields are invalid
+      # The testing field is a dict; one of the keys overrides the location of
+      # the src-side spec, which is the point of DUMMY_TESTER bots, so it is
+      # valid to set
+      invalid_attrs = get_filtered_attrs(*[
+          a for a in attr.fields_dict(cls) if a not in ('bot_type', 'testing')
+      ])
+      assert not invalid_attrs, (
+          "The following fields are ignored when 'bot_type' is {!r}: {}".format(
+              DUMMY_TESTER, invalid_attrs))
+
+    elif bot_type not in BUILDER_TYPES:
       invalid_attrs = get_filtered_attrs('compile_targets',
                                          'add_tests_as_compile_targets')
       assert not invalid_attrs, (
@@ -102,7 +118,7 @@ class BotSpec(object):
           "'cf_gs_bucket' must be provided when 'cf_archive_build' is True")
 
   # The type of the bot
-  bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER],
+  bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER, DUMMY_TESTER],
                          default=BUILDER_TESTER)
   # An optional mastername of the bot's parent builder - if parent_buildername
   # is provided and parent_mastername is not, the parent's mastername is the

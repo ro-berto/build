@@ -1696,130 +1696,24 @@ SPEC = {
         # to be read, and the "optional" GPU tryservers to be specified in
         # terms of them.
         'Optional Win10 x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Win x64 Builder',
-                testing={
-                    'platform': 'win',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Win10 x64 Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Win x64 Builder',
-                testing={
-                    'platform': 'win',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Linux Builder',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Linux Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Linux Builder',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Release (Intel)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Retina Release (AMD)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Android Release (Nexus 5X)':
             bot_spec.BotSpec.create(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
-
                     # This is specified in order to match the same configuration
                     # in 'chromium.android:Marshmallow Phone Tester (rel)'.
                     'goma_high_parallel',
@@ -1861,141 +1755,20 @@ SPEC = {
                 },
             ),
         'ANGLE GPU Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Linux Builder',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Linux Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Linux Builder',
-                testing={
-                    'platform': 'linux',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Release (Intel)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Retina Release (AMD)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Win10 x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Win x64 Builder',
-                testing={
-                    'platform': 'win',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Win10 x64 Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Win x64 Builder',
-                testing={
-                    'platform': 'win',
-                },
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
         'Win7 ANGLE Tryserver (AMD)':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='GPU FYI Win Builder',
-                testing={
-                    'platform': 'win',
-                },
-                serialize_tests=True,
-            ),
+            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
     },
 }

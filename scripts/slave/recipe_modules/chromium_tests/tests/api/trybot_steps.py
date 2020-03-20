@@ -198,6 +198,59 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  yield api.test(
+      'dummy-tester',
+      api.chromium.try_build(
+          mastername='fake-master', builder='fake-try-builder'),
+      api.chromium_tests.trybots(
+          try_spec.TryDatabase.create({
+              'fake-master':
+                  try_spec.TryMasterSpec.create(
+                      builders={
+                          'fake-try-builder':
+                              try_spec.TrySpec.create(mirrors=[
+                                  try_spec.TryMirror.create(
+                                      mastername='fake-master',
+                                      buildername='fake-builder',
+                                      tester='fake-dummy-tester',
+                                  )
+                              ]),
+                      }),
+          })),
+      api.chromium_tests.builders(
+          bot_db.BotDatabase.create({
+              'fake-master':
+                  master_spec.MasterSpec.create(
+                      builders={
+                          'fake-builder':
+                              bot_spec.BotSpec.create(
+                                  chromium_config='chromium',
+                                  gclient_config='chromium',
+                              ),
+                          'fake-dummy-tester':
+                              bot_spec.BotSpec.create(
+                                  bot_type=bot_spec.DUMMY_TESTER),
+                      }),
+          })),
+      api.filter.suppress_analyze(),
+      api.chromium_tests.read_source_side_spec(
+          'fake-master',
+          {
+              'fake-dummy-tester': {
+                  'gtest_tests': [{
+                      'test': 'fake-test',
+                  }],
+              },
+          },
+      ),
+      api.post_check(
+          lambda check, steps: \
+          check('fake-test' in steps['compile (with patch)'].cmd)
+      ),
+      api.post_check(post_process.MustRun, 'fake-test (with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
   CUSTOM_PROPS = sum([
       api.chromium.try_build(
           mastername='tryserver.chromium.test',

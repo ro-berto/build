@@ -54,6 +54,18 @@ class BotConfig(object):
   def builder_ids(self):
     return [m.builder_id for m in self.bot_mirrors]
 
+  @cached_property
+  def root_keys(self):
+    keys = list(self.builder_ids)
+    keys.extend(mirror.tester_id
+                for mirror in self.bot_mirrors
+                if mirror.tester_id is not None)
+    return keys
+
+  @cached_property
+  def all_keys(self):
+    return self.bot_db.bot_graph.get_transitive_closure(self.root_keys)
+
   def __getattr__(self, attr):
     per_builder_values = {}
     for builder_id in self.builder_ids:
@@ -93,8 +105,7 @@ class BotConfig(object):
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
   def _get_source_side_specs(self, chromium_tests_api):
-    closure = self.bot_db.bot_graph.get_transitive_closure(self.builder_ids)
-    masters = set(n.master for n in closure)
+    masters = set(key.master for key in self.all_keys)
     specs = {}
     for master_name in sorted(masters):
       specs[master_name] = self._get_source_side_spec(chromium_tests_api,
@@ -151,19 +162,6 @@ class BuildConfig(object):
   _source_side_specs = mapping_attrib(str, FrozenDict)
   _tests = mapping_attrib(chromium.BuilderId, tuple)
 
-  @cached_property
-  def _root_keys(self):
-    keys = list(self.bot_config.builder_ids)
-    keys.extend(mirror.tester_id
-                for mirror in self.bot_config.bot_mirrors
-                if mirror.tester_id is not None)
-    return keys
-
-  @cached_property
-  def _all_keys(self):
-    return self.bot_config.bot_db.bot_graph.get_transitive_closure(
-        self._root_keys)
-
   def _get_tests_for(self, keys):
     tests = []
     for k in keys:
@@ -172,11 +170,11 @@ class BuildConfig(object):
 
   def all_tests(self):
     """Returns all tests."""
-    return self._get_tests_for(self._all_keys)
+    return self._get_tests_for(self.bot_config.all_keys)
 
   def tests_in_scope(self):
     """Returns all tests for the provided bot IDs."""
-    return self._get_tests_for(self._root_keys)
+    return self._get_tests_for(self.bot_config.root_keys)
 
   def tests_on(self, builder_id):
     """Returns all tests for the specified builder."""

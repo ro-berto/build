@@ -85,7 +85,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for builder_id in sorted(builders.BUILDERS):
+  for builder_id, builder_spec in sorted(builders.BUILDERS.iteritems()):
+    if builder_spec.bot_type == bot_spec.DUMMY_TESTER:
+      continue
     mastername = builder_id.master
     buildername = builder_id.builder
     yield api.test(

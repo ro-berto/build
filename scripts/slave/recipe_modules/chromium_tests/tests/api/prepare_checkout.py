@@ -40,10 +40,9 @@ DUMMY_BUILDERS = bot_db.BotDatabase.create({
 
 
 def RunSteps(api):
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      [api.chromium.get_builder_id()])
-  api.chromium_tests.configure_build(bot_config_object)
-  api.chromium_tests.prepare_checkout(bot_config_object)
+  bot = api.chromium_tests.lookup_bot_metadata()
+  api.chromium_tests.configure_build(bot.settings)
+  api.chromium_tests.prepare_checkout(bot.settings)
 
 
 def GenTests(api):
@@ -66,5 +65,47 @@ def GenTests(api):
       api.chromium_tests.builders(DUMMY_BUILDERS),
       api.post_process(post_process.MustRun,
                        'read test spec (chromium.fake.fyi.json)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'mirror-with-non-child-tester',
+      api.chromium.try_build(
+          mastername='fake-try-master',
+          builder='fake-try-builder',
+      ),
+      api.chromium_tests.builders({
+          'fake-master': {
+              'builders': {
+                  'fake-builder': {
+                      'chromium_config': 'chromium',
+                      'gclient_config': 'chromium',
+                  }
+              },
+          },
+          'fake-tester-master': {
+              'builders': {
+                  'fake-tester': {
+                      'bot_type': bot_spec.DUMMY_TESTER,
+                  },
+              },
+          },
+      }),
+      api.chromium_tests.trybots({
+          'fake-try-master': {
+              'builders': {
+                  'fake-try-builder': {
+                      'bot_ids': [{
+                          'mastername': 'fake-master',
+                          'buildername': 'fake-builder',
+                          'tester_mastername': 'fake-tester-master',
+                          'tester': 'fake-tester',
+                      }],
+                  },
+              },
+          },
+      }),
+      api.post_process(post_process.MustRun,
+                       'read test spec (fake-tester-master.json)'),
       api.post_process(post_process.DropExpectation),
   )
