@@ -111,6 +111,24 @@ SPEC = {
                     'platform': 'mac',
                 },
             ),
+        'Mac10.15 Tests':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mb_luci_auth',
+                ],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.TESTER,
+                parent_buildername='Mac Builder Next',
+                testing={
+                    'platform': 'mac',
+                },
+            ),
         'mac-osxbeta-rel':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
@@ -851,6 +869,7 @@ SPEC['builders'].update([
     stock_config('mac10.13_retina-blink-rel-dummy', staging=False),
     stock_config('mac10.13-blink-rel-dummy', staging=False),
     stock_config('mac10.14-blink-rel-dummy', staging=False),
+    stock_config('mac10.15-blink-rel-dummy', staging=False),
     stock_config('win7-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win10-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('VR Linux'),

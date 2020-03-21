@@ -52,6 +52,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.fyi',
                     'buildername': 'mac10.14-blink-rel-dummy',
                 }),
+            'mac10.15-blink-rel':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'mac10.15-blink-rel-dummy',
+                }),
             'win7-blink-rel':
                 simple_bot({
                     'mastername': 'chromium.fyi',
@@ -1029,6 +1034,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.mac',
                     'buildername': 'Mac Builder',
                     'tester': 'Mac10.14 Tests',
+                }),
+            'mac_chromium_10.15_rel_ng':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'Mac Builder Next',
+                    'tester': 'Mac10.15 Tests',
                 }),
             'mac_chromium_compile_dbg_ng':
                 simple_bot({

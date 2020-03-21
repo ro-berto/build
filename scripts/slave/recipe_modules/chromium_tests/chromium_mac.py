@@ -165,61 +165,6 @@ SPEC = {
                     'platform': 'mac',
                 },
             ),
-        'Mac10.13 Tests':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                    'mb_luci_auth',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
-        'Mac10.14 Tests':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                    'mb_luci_auth',
-                ],
-                gclient_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='Mac Builder',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
-        'Mac10.13 Tests Code Coverage':
-            bot_spec.BotSpec.create(
-                chromium_config='chromium',
-                chromium_apply_config=[
-                    'mb',
-                    'mb_luci_auth',
-                ],
-                gclient_config='chromium',
-                gclient_apply_config=['use_clang_coverage'],
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
-                bot_type=bot_spec.TESTER,
-                parent_buildername='Mac Builder Code Coverage',
-                testing={
-                    'platform': 'mac',
-                },
-            ),
         'Mac10.10 Tests':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
@@ -257,6 +202,61 @@ SPEC = {
                 },
             ),
         'Mac10.12 Tests':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mb_luci_auth',
+                ],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.TESTER,
+                parent_buildername='Mac Builder',
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'Mac10.13 Tests':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mb_luci_auth',
+                ],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.TESTER,
+                parent_buildername='Mac Builder',
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'Mac10.13 Tests Code Coverage':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=[
+                    'mb',
+                    'mb_luci_auth',
+                ],
+                gclient_config='chromium',
+                gclient_apply_config=['use_clang_coverage'],
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.TESTER,
+                parent_buildername='Mac Builder Code Coverage',
+                testing={
+                    'platform': 'mac',
+                },
+            ),
+        'Mac10.14 Tests':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
                 chromium_apply_config=[
