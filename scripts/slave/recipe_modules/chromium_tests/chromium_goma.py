@@ -64,6 +64,34 @@ def CreateAndroidConfig(bits, apply_configs=None):
   )
 
 
+def CreateIosConfig():
+  """Generates a builder recipe config for iOS builder.
+
+    Args:
+        apply_configs: list of additional config names to apply.
+
+    Returns:
+        A dict mapping string keys to field values in the build config format.
+    """
+
+  return bot_spec.BotSpec.create(
+      chromium_config='chromium',
+      chromium_apply_config=([
+          'mb', 'mac_toolchain', 'goma_failfast', 'use_autoninja',
+          'goma_client_candidate', 'clobber'
+      ]),
+      gclient_config='ios',
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'ios',
+      },
+      testing={
+          'platform': 'mac',
+      },
+  )
+
+
 # Predefined builder configs:
 _LINUX_CONFIG = CreateStandardConfig('linux')
 _LINUX_CLOBBER_CONFIG = CreateStandardConfig('linux', ['clobber'])
@@ -128,6 +156,10 @@ _SPEC_BUILDERS = {
         _WIN_CONFIG,
     'Chromium Win Goma RBE Staging (clobber)':
         _WIN_CLOBBER_CONFIG,
+
+    # iOS RBE
+    'Chromium iOS Goma RBE ToT':
+        CreateIosConfig()
 }
 
 SPEC = {
