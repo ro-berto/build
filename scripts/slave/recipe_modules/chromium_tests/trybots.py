@@ -1403,6 +1403,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'buildername': 'GPU FYI Win x64 Builder',
                     'tester': 'Win10 FYI x64 Release (NVIDIA)',
                 }),
+            'gpu-fyi-try-win10-nvidia-sk-dawn-rel-64':
+                simple_bot({
+                    'mastername':
+                        'chromium.gpu.fyi',
+                    'buildername':
+                        'Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)',
+                }),
             'gpu-fyi-try-win10-nvidia-skgl-64':
                 simple_bot({
                     'mastername': 'chromium.gpu.fyi',

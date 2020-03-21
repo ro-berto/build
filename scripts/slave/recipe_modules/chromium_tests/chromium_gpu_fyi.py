@@ -488,6 +488,21 @@ SPEC = {
                 },
                 serialize_tests=True,
             ),
+        'Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+                testing={
+                    'platform': 'win',
+                },
+                serialize_tests=True,
+            ),
         'Win10 FYI x64 SkiaRenderer GL (NVIDIA)':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
