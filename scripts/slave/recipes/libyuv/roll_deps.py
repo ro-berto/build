@@ -50,7 +50,7 @@ def RunSteps(api):
     if commits:
       with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
         with api.depot_tools.on_path():
-          api.git('cl', 'set-close', '--gerrit', '-i', commits[0]['_number'])
+          api.git('cl', 'set-close', '-i', commits[0]['_number'])
         api.step.active_result.presentation.step_text = (
             'Stale roll found. Abandoned.')
 
