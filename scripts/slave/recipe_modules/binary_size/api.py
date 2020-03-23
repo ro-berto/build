@@ -294,20 +294,23 @@ class BinarySizeApi(recipe_api.RecipeApi):
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
-    self.m.python('Generate diffs', checker_script, [
-        '--author',
-        author,
-        '--apk-name',
-        self._apk_name,
-        '--before-dir',
-        before_dir,
-        '--after-dir',
-        after_dir,
-        '--results-path',
-        results_path,
-        '--staging-dir',
-        staging_dir,
-    ])
+    with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
+      self.m.step(
+          name='Generate diffs',
+          cmd=[checker_script] + [
+              '--author',
+              author,
+              '--apk-name',
+              self._apk_name,
+              '--before-dir',
+              before_dir,
+              '--after-dir',
+              after_dir,
+              '--results-path',
+              results_path,
+              '--staging-dir',
+              staging_dir,
+          ])
 
   def _archive_artifact(self, staging_dir, filename):
     today = self.m.time.utcnow().date()

@@ -1905,8 +1905,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools/binary_size/trybot_commit_size_checker.py",
       "--author",
       "foo@bar.com",
@@ -1923,7 +1921,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "PYTHONUNBUFFERED": "1"
     },
     "name": "Generate diffs"
   },
