@@ -13,7 +13,8 @@ import sys
 
 
 # TODO(crbug.com/929769): Remove this method when the fix is landed upstream.
-def _get_binaries_with_coverage_data(profdata_path, llvm_cov_path, binaries):
+def _get_binaries_with_coverage_data(profdata_path, llvm_cov_path, binaries,
+                                     arch):
   """Gets binaries with valid coverage data.
 
   llvm-cov bails out with error message "No coverage data found" if an included
@@ -31,8 +32,10 @@ def _get_binaries_with_coverage_data(profdata_path, llvm_cov_path, binaries):
   for binary in binaries:
     cmd = [
         llvm_cov_path, 'export', '-summary-only',
-        '-instr-profile=%s' % profdata_path, binary
     ]
+    if arch:
+      cmd.append('-arch=%s' % arch)
+    cmd.extend(['-instr-profile=%s' % profdata_path, binary])
     try:
       _ = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
@@ -82,6 +85,8 @@ def _parse_args():
       type=str,
       help='absolute path to binaries to generate the coverage for')
 
+  parser.add_argument('--arch', type=str, help='architecture of binaries')
+
   return parser.parse_args()
 
 
@@ -92,7 +97,7 @@ def main():
   assert os.path.isfile(args.llvm_cov), '"%s" llvm_cov does not exist'
 
   binaries_with_coverage_data = _get_binaries_with_coverage_data(
-      args.profdata_path, args.llvm_cov, args.binaries)
+      args.profdata_path, args.llvm_cov, args.binaries, args.arch)
   with open(args.output_json, 'w') as f:
     json.dump(binaries_with_coverage_data, f)
 

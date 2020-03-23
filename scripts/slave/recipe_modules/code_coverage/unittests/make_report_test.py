@@ -29,6 +29,7 @@ class MakeReportTest(unittest.TestCase):
       llvm_cov = '/usr/bin/llvm_cov'
       binaries = ['binary1', 'binary2']
       sources = ['base/file1.cc', 'base/file2.cc']
+      arch = 'x86_64'
 
       # Test successful call, without sources.
       args = [
@@ -42,9 +43,8 @@ class MakeReportTest(unittest.TestCase):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries, None),
+          mock.call(llvm_cov, profdata_file, out_dir, binaries, None, None),
           mock_gen_report.call_args)
-
 
       # With sources.
       args.append('--sources')
@@ -55,7 +55,18 @@ class MakeReportTest(unittest.TestCase):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources),
+          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources, None),
+          mock_gen_report.call_args)
+
+      # With arch.
+      args.extend(['--arch', 'x86_64'])
+      with mock.patch('os.path.exists'):
+        with mock.patch('os.path.isfile'):
+          with mock.patch('os.access'):
+            with mock.patch('sys.argv', args):
+              make_report.main()
+      self.assertEqual(
+          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources, arch),
           mock_gen_report.call_args)
 
       # Test validation.
@@ -113,9 +124,9 @@ class MakeReportTest(unittest.TestCase):
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
-              '-output-dir=out-dir', '-instr-profile=merge.profdata',
-              '-Xdemangler', 'c++filt', '-Xdemangler', '-n', 'binary1',
-              '-object', 'binary2', 'base/file1.cc', 'base/file2.cc'
+              '-output-dir=out-dir', '-Xdemangler', 'c++filt', '-Xdemangler',
+              '-n', '-instr-profile=merge.profdata', 'binary1', '-object',
+              'binary2', 'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
       with mock.patch('platform.system', return_value='Windows'):
@@ -124,9 +135,31 @@ class MakeReportTest(unittest.TestCase):
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
-              '-output-dir=out-dir', '-instr-profile=merge.profdata',
-              '-Xdemangler', 'llvm-undname.exe', 'binary1', '-object',
-              'binary2', 'base/file1.cc', 'base/file2.cc'
+              '-output-dir=out-dir', '-Xdemangler', 'llvm-undname.exe',
+              '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
+              'base/file1.cc', 'base/file2.cc'
+          ]), mock_run.call_args)
+
+  def test_arch(self):
+    with mock.patch.object(subprocess, 'check_output') as mock_run:
+      out_dir = 'out-dir'
+      profdata_file = 'merge.profdata'
+      # Not the real path.
+      llvm_cov = '/usr/bin/llvm_cov'
+      binaries = ['binary1', 'binary2']
+      sources = ['base/file1.cc', 'base/file2.cc']
+      arch = 'x86_64'
+
+      with mock.patch('platform.system', return_value='Linux'):
+        reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
+                                 sources, arch)
+      self.assertEqual(
+          mock.call([
+              '/usr/bin/llvm_cov', 'show', '-format=html',
+              '-output-dir=out-dir', '-arch=x86_64', '-arch=x86_64',
+              '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
+              '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
+              'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
 

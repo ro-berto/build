@@ -11,7 +11,7 @@ import subprocess
 
 
 def _call_cov_tool(cov_tool_path, profile_input_file_path,
-                   report_output_dir_path, binaries, sources):
+                   report_output_dir_path, binaries, sources, arch):
   """Calls the llvm-cov tool.
 
   Args:
@@ -23,6 +23,7 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
         create a report for.
     sources (list of str): list of paths to the source files to include in the
         report, includes all if not specified.
+    arch (str): Binary architechture. Consumed by llvm command. Can be None.
 
   Raises:
     CalledProcessError: An error occurred generating the report.
@@ -31,17 +32,22 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
 
   try:
     subprocess_cmd = [
-        cov_tool_path,
-        'show',
-        '-format=html',
-        '-output-dir=' + report_output_dir_path,
-        '-instr-profile=' + profile_input_file_path,
+        cov_tool_path, 'show', '-format=html',
+        '-output-dir=' + report_output_dir_path
     ]
+
+    if arch:
+      # The number of -arch=some_arch arguments needs to be the same as the
+      # number of binaries passed to llvm-cov command. Nth entry in the arch
+      # list corresponds to the Nth specified binary.
+      subprocess_cmd.extend(['-arch=%s' % arch] * len(binaries))
 
     if platform.system() == 'Windows':
       subprocess_cmd.extend(['-Xdemangler', 'llvm-undname.exe'])
     else:
       subprocess_cmd.extend(['-Xdemangler', 'c++filt', '-Xdemangler', '-n'])
+
+    subprocess_cmd.append('-instr-profile=' + profile_input_file_path)
 
     subprocess_cmd.append(binaries[0])
     for binary in binaries[1:]:
@@ -58,8 +64,12 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
   logging.info('Report created in: "%s".', report_output_dir_path)
 
 
-def generate_report(llvm_cov, profdata_path, report_directory, binaries,
-                    sources=None):
+def generate_report(llvm_cov,
+                    profdata_path,
+                    report_directory,
+                    binaries,
+                    sources=None,
+                    arch=None):
   """Generates an html report for profile data using llvm-cov.
 
   Args:
@@ -69,5 +79,7 @@ def generate_report(llvm_cov, profdata_path, report_directory, binaries,
     binaries (list of str): The binaries to write a report for.
     sources (list of str): list of paths to the source files to include in the
         report, includes all if not specified.
+    arch (str): Binary architechture. Consumed by llvm command.
   """
-  _call_cov_tool(llvm_cov, profdata_path, report_directory, binaries, sources)
+  _call_cov_tool(llvm_cov, profdata_path, report_directory, binaries, sources,
+                 arch)

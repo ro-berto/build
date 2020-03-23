@@ -558,7 +558,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     number of files are instrumented.
 
     Args:
-      binaryes (list): A list of absolute paths to binaries.
+      binaries (list): A list of absolute paths to binaries.
       profdata_path (str): Path to the merged profdata file.
 
     Returns:
@@ -576,6 +576,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     ]
 
     args.extend(binaries)
+
+    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+      args.extend(['--arch', 'x86_64'])
+
     step_result = self.m.python(
         'filter binaries with valid data for %s binaries' % len(binaries),
         self.resource('get_binaries_with_valid_coverage_data.py'),
@@ -604,6 +608,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     args.append('--sources')
     args.extend(
         [self.m.path['checkout'].join(s) for s in self._affected_source_files])
+
+    if self.m.chromium.c.TARGET_PLATFORM == 'ios':
+      args.extend(['--arch', 'x86_64'])
 
     self.m.python(
         'generate html report for %d tests' % len(self._profdata_dirs),

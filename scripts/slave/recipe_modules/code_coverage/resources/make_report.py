@@ -30,6 +30,7 @@ def _make_report_argument_parser(*args, **kwargs):
       '--binaries', nargs='+', help='the binaries to generate the report for')
   parser.add_argument(
       '--sources', nargs='*', help='the source files to include in the report')
+  parser.add_argument('--arch', type=str, help='architecture of binaries')
   return parser
 
 
@@ -52,7 +53,7 @@ def main():
 
   reporter.generate_report(params.llvm_cov, params.profdata_path,
                            params.report_directory, params.binaries,
-                           params.sources)
+                           params.sources, params.arch)
 
   return 0
 
