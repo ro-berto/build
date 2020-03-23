@@ -15,6 +15,7 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
       chromium_config='chromium',
       chromium_apply_config=[
           'mb',
+          'mb_luci_auth',
       ],
       gclient_config='chromium',
       gclient_apply_config=configs,

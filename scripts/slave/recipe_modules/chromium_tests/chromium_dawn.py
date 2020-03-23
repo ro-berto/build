@@ -8,7 +8,7 @@ from . import bot_spec
 def CreateBuilderConfig(os, bits, top_of_tree):
   return bot_spec.BotSpec.create(
       chromium_config='chromium',
-      chromium_apply_config=['mb'],
+      chromium_apply_config=['mb', 'mb_luci_auth'],
       gclient_config='chromium',
       gclient_apply_config=['dawn_top_of_tree'] if top_of_tree else [],
       chromium_config_kwargs={
@@ -25,7 +25,7 @@ def CreateBuilderConfig(os, bits, top_of_tree):
 def CreateTesterConfig(os, bits, builder):
   return bot_spec.BotSpec.create(
       chromium_config='chromium',
-      chromium_apply_config=['mb'],
+      chromium_apply_config=['mb', 'mb_luci_auth'],
       gclient_config='chromium',
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
