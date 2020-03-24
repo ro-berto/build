@@ -13,7 +13,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER_TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -32,7 +34,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -51,7 +55,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -70,7 +76,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -92,7 +100,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -116,6 +126,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -136,6 +147,7 @@ SPEC = {
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
@@ -153,7 +165,7 @@ SPEC = {
         'WebRTC Chromium FYI Linux Builder':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -169,7 +181,7 @@ SPEC = {
         'WebRTC Chromium FYI Linux Builder (dbg)':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER_TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -185,7 +197,7 @@ SPEC = {
         'WebRTC Chromium FYI Linux Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -207,6 +219,7 @@ SPEC = {
                 chromium_apply_config=[
                     'dcheck',
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_config='chromium',
@@ -227,6 +240,7 @@ SPEC = {
                 chromium_apply_config=[
                     'dcheck',
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_config='chromium',
@@ -247,6 +261,7 @@ SPEC = {
                 chromium_apply_config=[
                     'dcheck',
                     'mb',
+                    'mb_luci_auth',
                     'mac_toolchain',
                 ],
                 chromium_config='chromium',
@@ -267,7 +282,7 @@ SPEC = {
         'WebRTC Chromium FYI Win Builder':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -283,7 +298,7 @@ SPEC = {
         'WebRTC Chromium FYI Win Builder (dbg)':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER_TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
@@ -299,7 +314,7 @@ SPEC = {
         'WebRTC Chromium FYI Win10 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -318,7 +333,7 @@ SPEC = {
         'WebRTC Chromium FYI Win7 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -337,7 +352,7 @@ SPEC = {
         'WebRTC Chromium FYI Win8 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',

@@ -47,7 +47,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -63,7 +65,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -85,7 +89,7 @@ SPEC = {
         'WebRTC Chromium Linux Builder':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -98,7 +102,7 @@ SPEC = {
         'WebRTC Chromium Linux Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -114,7 +118,7 @@ SPEC = {
         'WebRTC Chromium Mac Builder':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -127,7 +131,7 @@ SPEC = {
         'WebRTC Chromium Mac Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -143,7 +147,7 @@ SPEC = {
         'WebRTC Chromium Win Builder':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -156,7 +160,7 @@ SPEC = {
         'WebRTC Chromium Win10 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -172,7 +176,7 @@ SPEC = {
         'WebRTC Chromium Win7 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -188,7 +192,7 @@ SPEC = {
         'WebRTC Chromium Win8 Tester':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',

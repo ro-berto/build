@@ -13,7 +13,9 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'android'],
+                chromium_apply_config=[
+                    'dcheck', 'mb', 'mb_luci_auth', 'android'
+                ],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -27,7 +29,7 @@ SPEC = {
         'linux_chromium_compile':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -39,7 +41,7 @@ SPEC = {
         'linux_chromium_compile_dbg':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -51,7 +53,7 @@ SPEC = {
         'mac_chromium_compile':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -63,7 +65,7 @@ SPEC = {
         'win_chromium_compile':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -75,7 +77,7 @@ SPEC = {
         'win_chromium_compile_dbg':
             bot_spec.BotSpec.create(
                 bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb'],
+                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
