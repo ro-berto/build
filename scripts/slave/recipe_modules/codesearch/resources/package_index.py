@@ -26,7 +26,6 @@ import zipfile
 from contextlib import closing
 
 from google.protobuf import json_format
-
 from kythe.proto import analysis_pb2, buildinfo_pb2, java_pb2
 
 from windows_shell_split import WindowsShellSplit
@@ -337,7 +336,10 @@ class IndexPack(object):
       for target_name, target in gn_targets_dict.items():
         # We only care about certain mojom targets. Filter it down here so we
         # don't need to do so both times we iterate over it.
-        if self._IsMojomTarget(target):
+        # TODO(crbug/1064321): There are generator targets with args after them
+        # I do not know if these should be included or not, but the current
+        # version of the code fails with them so for now we are rejecting them.
+        if target_name.endswith('__generator') and self._IsMojomTarget(target):
           self.mojom_targets.append(
               dict(
                   target,

@@ -21,6 +21,21 @@
     "sources": ["//test.mojom"],
     "outputs": ["//out/Debug/gen/test.mojom.h"]
   },
+  "//:test_mojom__parser(//foo/bar:baz)": {
+    "args": [
+      "parse",
+      "--filelist={{response_file_name}}",
+      "-o",
+      "gen",
+      "-d",
+      "../",
+      "--enable_feature",
+      "ipc_logging"
+    ],
+    "script": "//mojo/mojom_bindings_generator.py",
+    "sources": ["//test.mojom"],
+    "outputs": ["//out/Debug/gen/test.p"]
+  },
   "//:test_mojom__parser": {
     "args": [
       "parse",
