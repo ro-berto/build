@@ -14,7 +14,10 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 
 KITCHEN_TEST_SPEC = {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb',],
+    'chromium_apply_config': [
+        'mb',
+        'mb_luci_auth',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -257,7 +260,9 @@ SPEC = {
         'Android Builder (dbg)':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['mb', 'download_vr_test_apks'],
+                chromium_apply_config=[
+                    'mb', 'mb_luci_auth', 'download_vr_test_apks'
+                ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
                 chromium_config_kwargs={
