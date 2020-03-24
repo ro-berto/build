@@ -12,7 +12,9 @@ SPEC = {
         'Android CFI':
             bot_spec.BotSpec.create(
                 chromium_config='android',
-                chromium_apply_config=['mb', 'download_vr_test_apks'],
+                chromium_apply_config=[
+                    'mb', 'mb_luci_auth', 'download_vr_test_apks'
+                ],
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
                 chromium_config_kwargs={
@@ -34,7 +36,9 @@ SPEC = {
                 },
                 # This doesn't affect the build, but ensures that trybots get
                 # the right runtime flags.
-                chromium_apply_config=['lsan', 'mb', 'goma_high_parallel'],
+                chromium_apply_config=[
+                    'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
+                ],
                 bot_type=bot_spec.BUILDER,
                 testing={'platform': 'linux'},
             ),
@@ -48,7 +52,9 @@ SPEC = {
                 },
                 # Enable LSan at runtime. This disables the sandbox in browser
                 # tests. http://crbug.com/336218
-                chromium_apply_config=['lsan', 'mb', 'goma_high_parallel'],
+                chromium_apply_config=[
+                    'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
+                ],
                 bot_type=bot_spec.TESTER,
                 parent_buildername='Linux ASan LSan Builder',
                 testing={'platform': 'linux'},
@@ -61,7 +67,9 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['mb', 'goma_high_parallel'],
+                chromium_apply_config=[
+                    'mb', 'mb_luci_auth', 'goma_high_parallel'
+                ],
                 # We want to test ASan+sandbox as well, so run browser tests
                 # again, this time with LSan disabled.
                 bot_type=bot_spec.TESTER,
@@ -71,7 +79,7 @@ SPEC = {
         'Linux CFI':
             bot_spec.BotSpec.create(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -84,7 +92,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -96,7 +104,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -110,7 +118,7 @@ SPEC = {
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -123,7 +131,7 @@ SPEC = {
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -136,7 +144,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium_tsan2',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -150,7 +158,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 chromium_config='chromium_tsan2',
                 gclient_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -171,6 +179,7 @@ SPEC = {
                 },
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 bot_type=bot_spec.BUILDER,
                 testing={'platform': 'mac'},
@@ -185,6 +194,7 @@ SPEC = {
                 },
                 chromium_apply_config=[
                     'mb',
+                    'mb_luci_auth',
                 ],
                 bot_type=bot_spec.TESTER,
                 parent_buildername='Mac ASan 64 Builder',
@@ -199,7 +209,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['lsan', 'mb'],
+                chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
                 bot_type=bot_spec.BUILDER,
                 testing={'platform': 'linux'},
             ),
@@ -212,7 +222,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['lsan', 'mb'],
+                chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
                 parent_buildername='Linux Chromium OS ASan LSan Builder',
                 bot_type=bot_spec.TESTER,
                 testing={'platform': 'linux'},
@@ -225,7 +235,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['asan', 'mb'],
+                chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
                 tests=[],
                 testing={'platform': 'linux'},
             ),
@@ -237,7 +247,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['asan', 'mb'],
+                chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
                 tests=[],
                 testing={'platform': 'linux'},
             ),
@@ -249,7 +259,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 compile_targets=[
                     'blink_tests',
                 ],
@@ -260,7 +270,7 @@ SPEC = {
             bot_spec.BotSpec.create(
                 android_config='main_builder',
                 chromium_config='android_asan',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -279,7 +289,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                 },
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 bot_type=bot_spec.BUILDER_TESTER,
                 testing={'platform': 'win'},
             ),
