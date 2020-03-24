@@ -14,6 +14,11 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              mapping_attrib, sequence_attrib)
 
 
+class BotConfigException(Exception):
+  """Exception indicating an attempt to create an invalid BotConfig."""
+  pass
+
+
 @attrs()
 class BotConfig(object):
   """"Static" configuration for a bot.
@@ -44,11 +49,12 @@ class BotConfig(object):
   def __attrs_post_init__(self):
     for mirror in self.bot_mirrors:
       if not mirror.builder_id.master in self.bot_db.master_specs:
-        raise Exception('No configuration present for master {!r}'.format(
-            mirror.builder_id.master))
+        raise BotConfigException(
+            'No configuration present for master {!r}'.format(
+                mirror.builder_id.master))
       if not mirror.builder_id in self.bot_db:
-        raise Exception('No configuration present for builder {}'.format(
-            mirror.builder_id))
+        raise BotConfigException(
+            'No configuration present for builder {}'.format(mirror.builder_id))
 
   @cached_property
   def builder_ids(self):

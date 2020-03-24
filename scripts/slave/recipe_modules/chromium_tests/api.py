@@ -119,7 +119,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     try:
       return bot_config_module.BotConfig.create(builders or self.builders,
                                                 builder_ids_or_bot_mirrors)
-    except Exception:
+    except bot_config_module.BotConfigException:
       if (self._test_data.enabled and
           not self._test_data.get('handle_bot_config_errors', True)):
         raise  # pragma: no cover
