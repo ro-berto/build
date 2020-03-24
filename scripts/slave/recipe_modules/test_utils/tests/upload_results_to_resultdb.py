@@ -7,11 +7,16 @@ DEPS = [
     'chromium_tests',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'test_utils',
 ]
 
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
+
+from PB.go.chromium.org.luci.resultdb.proto.rpc.v1 import (invocation as
+                                                           invocation_pb2)
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
@@ -40,6 +45,47 @@ def RunSteps(api, is_swarming_test=True):
 
 
 def GenTests(api):
+  inv_bundle = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),),
+      'invid2':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),),
+  }
+
+  yield api.test(
+      'include_invocation',
+      api.properties(
+          mastername='m',
+          buildername='linux-rel',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=False)),
+      api.resultdb.chromium_derive(
+          step_name='derive test results (with patch)',
+          results=inv_bundle,
+      ),
+      api.post_process(post_process.MustRun,
+                       'derive test results (with patch)'),
+      api.post_process(post_process.StepSuccess,
+                       'derive test results (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'include derived test results (with patch)'),
+      api.post_process(post_process.StepCommandContains,
+                       'include derived test results (with patch)',
+                       ['invid,invid2']),
+      api.post_process(post_process.DropExpectation))
 
   yield api.test(
       'swarming_test_results',

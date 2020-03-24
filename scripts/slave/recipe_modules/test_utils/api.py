@@ -302,12 +302,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Failure of this step should not fail the build.
       # TODO(crbug.com/1021849): include derived invocations into the build's
       # invocation.
-      self.m.resultdb.chromium_derive(
+      invocations = self.m.resultdb.chromium_derive(
           step_name=derive_step_name,
           swarming_host=swarming_host,
           task_ids=swarming_task_ids,
           variants_with_unexpected_results=True,
       )
+      # Include the derived invocations in the build's invocation.
+      self.m.resultdb.include_invocations(
+          invocations.keys(),
+          step_name='include derived test results (%s)' % suffix)
     except (self.m.step.InfraFailure,
             self.m.step.StepFailure):  # pragma: no cover
       pass
