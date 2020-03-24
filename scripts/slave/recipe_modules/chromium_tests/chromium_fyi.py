@@ -657,6 +657,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'ios',
+                    'HOST_PLATFORM': 'mac',
                 },
                 testing={
                     'platform': 'mac',
@@ -697,6 +698,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'ios',
+                    'HOST_PLATFORM': 'mac',
                 },
                 testing={
                     'platform': 'mac',
@@ -737,6 +739,7 @@ SPEC = {
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'ios',
+                    'HOST_PLATFORM': 'mac',
                 },
                 testing={
                     'platform': 'mac',

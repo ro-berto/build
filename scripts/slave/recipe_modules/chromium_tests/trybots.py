@@ -955,6 +955,36 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.fyi',
                     'buildername': 'ios-simulator-code-coverage',
                 }),
+            'ios-simulator-cronet':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'ios-simulator-cronet',
+                }),
+            'ios-simulator-full-configs':
+                simple_bot({
+                    'mastername': 'chromium.mac',
+                    'buildername': 'ios-simulator-full-configs',
+                }),
+            'ios-simulator-noncq':
+                simple_bot({
+                    'mastername': 'chromium.mac',
+                    'buildername': 'ios-simulator-noncq',
+                }),
+            'ios-simulator':
+                simple_bot({
+                    'mastername': 'chromium.mac',
+                    'buildername': 'ios-simulator',
+                }),
+            'ios13-beta-simulator':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'ios13-beta-simulator',
+                }),
+            'ios13-sdk-simulator':
+                simple_bot({
+                    'mastername': 'chromium.fyi',
+                    'buildername': 'ios13-sdk-simulator',
+                }),
             'mac_chromium_archive_rel_ng':
                 simple_bot({
                     'mastername': 'chromium',
