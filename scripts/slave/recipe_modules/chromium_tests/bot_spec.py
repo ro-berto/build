@@ -98,6 +98,12 @@ class BotSpec(object):
           'The following fields are ignored unless '
           "'cf_archive_build' is set to True: {}".format(invalid_attrs))
 
+    if not kwargs.get('bisect_archive_build'):
+      invalid_attrs = get_filtered_attrs('bisect_gs_bucket', 'bisect_gs_extra')
+      assert not invalid_attrs, (
+          'The following fields are ignored unless '
+          "'bisect_archive_build' is set to True: {}".format(invalid_attrs))
+
     return cls(**kwargs)
 
   def __attrs_post_init__(self):
@@ -117,9 +123,17 @@ class BotSpec(object):
       assert self.cf_gs_bucket, (
           "'cf_gs_bucket' must be provided when 'cf_archive_build' is True")
 
+    if self.bisect_archive_build:
+      assert self.bisect_gs_bucket, ("'bisect_gs_bucket' must be provided when "
+                                     "'bisect_archive_build' is True")
+
+  # The LUCI project that the builder belongs to
+  luci_project = attrib(str, default='chromium')
+
   # The type of the bot
   bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER, DUMMY_TESTER],
                          default=BUILDER_TESTER)
+
   # An optional mastername of the bot's parent builder - if parent_buildername
   # is provided and parent_mastername is not, the parent's mastername is the
   # same as the bot associated with this spec
@@ -194,9 +208,14 @@ class BotSpec(object):
   # to the compile targets to build
   add_tests_as_compile_targets = attrib(bool, default=True)
 
-  # A bool controlling whether the legacy package transfer should be used where
-  # the build outputs will be uploaded to Google Storage for the purposes of
-  # being downloaded by a tester
+  # Name of a Google Storage bucket to use when using the legacy package
+  # transfer where build outputs are uploaded to Google Storage and then
+  # downloaded by the tester
+  # This must be set for builders with the BUILDER bot type that trigger testers
+  # that will run non-isolated tests
+  build_gs_bucket = attrib(str, default=None)
+  # A bool controlling whether the legacy package transfer mechanism should be
+  # used for all tests, even those that are isolated
   # Don't use this unless you know what you're doing, there's little reason to
   # use this for new builders
   enable_package_transfer = attrib(bool, default=False)
@@ -264,6 +283,17 @@ class BotSpec(object):
   # uploaded to
   # Cannot be provided when cf_archive_build is not True
   cf_archive_subdir_suffix = attrib(str, default='')
+
+  # A bool indicating whether the build should be archived for bisection
+  bisect_archive_build = attrib(bool, default=False)
+  # The bucket to archive the build to
+  # Must be provided when bisect_archive_build is True
+  # Cannot be provided when bisect_archive_build is not True
+  bisect_gs_bucket = attrib(str, default=None)
+  # Additional URL components to add to the Google Storage URL for bisection
+  # archiving
+  # Cannot be provided when bisect_archive_build is not True
+  bisect_gs_extra = attrib(str, default=None)
 
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.

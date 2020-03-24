@@ -156,6 +156,35 @@ def RunSteps(api):
     )
   api.assertions.assertEqual(caught.exception.message, message)
 
+  # bisect_archive_build validations *******************************************
+  bisect_archive_build_spec = bot_spec.BotSpec.create(
+      bisect_archive_build=True,
+      bisect_gs_bucket='bucket',
+      bisect_gs_extra='extra',
+  )
+
+  # Required field when bisect_archive_build is True
+  message = (
+      "'bisect_gs_bucket' must be provided when 'bisect_archive_build' is True")
+  with api.assertions.assertRaises(AssertionError) as caught:
+    bot_spec.BotSpec.create(bisect_archive_build=True)
+  api.assertions.assertEqual(caught.exception.message, message)
+
+  with api.assertions.assertRaises(AssertionError) as caught:
+    bisect_archive_build_spec.evolve(bisect_gs_bucket=None)
+  api.assertions.assertEqual(caught.exception.message, message)
+
+  # Invalid fields when bisect_archive_build is falsey
+  message = ('The following fields are ignored unless '
+             "'bisect_archive_build' is set to True: {}".format(
+                 ['bisect_gs_bucket', 'bisect_gs_extra']))
+  with api.assertions.assertRaises(AssertionError) as caught:
+    bot_spec.BotSpec.create(
+        bisect_gs_bucket='bucket',
+        bisect_gs_extra='extra',
+    )
+  api.assertions.assertEqual(caught.exception.message, message)
+
 
 def GenTests(api):
   yield api.test(
