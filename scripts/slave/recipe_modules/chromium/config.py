@@ -680,6 +680,6 @@ def mac_toolchain(c):
 @config_ctx(includes=['mb'])
 def android_internal_isolate_maps(c):
   c.project_generator.isolate_map_paths = [
-      c.CHECKOUT_PATH.join('clank', 'build', 'gn_isolate_map.pyl'),
+      c.CHECKOUT_PATH.join('clank', 'build', 'bot', 'gn_isolate_map.pyl'),
       c.CHECKOUT_PATH.join('testing', 'buildbot', 'gn_isolate_map.pyl'),
   ]

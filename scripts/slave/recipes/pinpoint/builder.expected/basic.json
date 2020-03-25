@@ -460,7 +460,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--isolate-map-file",
-      "[CACHE]/builder/src/clank/build/gn_isolate_map.pyl",
+      "[CACHE]/builder/src/clank/build/bot/gn_isolate_map.pyl",
       "--isolate-map-file",
       "[CACHE]/builder/src/testing/buildbot/gn_isolate_map.pyl",
       "//out/Release"
