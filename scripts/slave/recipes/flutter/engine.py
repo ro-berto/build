@@ -162,7 +162,13 @@ def BuildAndTestFuchsia(api, build_script, git_rev):
       '--archs', 'x64', '--runtime-mode', 'debug'
   ]
 
-  if api.platform.is_linux and api.properties.get('test_fuchsia', True):
+  run_fuchsia_tests = api.platform.is_linux and api.properties.get(
+      'test_fuchsia', True)
+  # Temporarily disable Fuchsia tests as all the NUCs have been quarantined:
+  # See: https://github.com/flutter/flutter/issues/53202.
+  if not api.runtime.is_experimental:
+    run_fuchsia_tests = False
+  if run_fuchsia_tests:
     api.step('Package Fuchsia Artifacts', fuchsia_package_cmd)
     TestFuchsia(api)
 
