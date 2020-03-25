@@ -476,6 +476,14 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "[skipped] derive test results ()",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**test_script_with_broken_tests** failed because of:\n\n- FailSuite.Test1\n\n- FlakySuite.TestA"

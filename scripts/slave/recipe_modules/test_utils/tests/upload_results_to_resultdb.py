@@ -141,23 +141,3 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        '[skipped] derive test results (with patch)'),
       api.post_process(post_process.DropExpectation))
-
-  yield api.test(
-      'non_linux-rel_builder',
-      api.properties(
-          mastername='m',
-          buildername='mac-rel',
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          is_swarming_test=True,
-      ),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True),
-              shards=2,
-              failure=False)),
-      api.post_process(post_process.DoesNotRun,
-                       'derive test results (with patch)'),
-      api.post_process(post_process.DropExpectation))

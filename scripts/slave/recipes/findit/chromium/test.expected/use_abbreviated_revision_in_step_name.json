@@ -1495,6 +1495,29 @@
   },
   {
     "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "10000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "test gfedcba.derive test results (gfedcba)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "import sys; sys.exit(0)"

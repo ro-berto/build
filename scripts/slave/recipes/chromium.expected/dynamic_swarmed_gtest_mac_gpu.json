@@ -998,6 +998,30 @@
   },
   {
     "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "10000",
+      "110000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "derive test results ()",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "import sys; sys.exit(0)"

@@ -1518,6 +1518,29 @@
     ]
   },
   {
+    "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "10000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "test r1.derive test results (r1)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "test r0",
     "~followup_annotations": [
@@ -2623,6 +2646,29 @@
     "name": "test r0.Upload to test-results [test r0.blink_web_tests (r0)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "110000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "test r0.derive test results (r0)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {

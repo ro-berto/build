@@ -269,11 +269,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif t.deterministic_failures(suffix) and t not in failed_test_suites:
         failed_test_suites.append(t)
 
-    # Only derive results from linux-rel builder to confirm the feature works.
-    # Will roll-out to all builders later.
-    if self.m.buildbucket.builder_name != 'linux-rel':
-      return invalid_results, failed_test_suites
-
     if suffix == 'without patch':
       # Don't derive test results for without patch steps.
       return invalid_results, failed_test_suites

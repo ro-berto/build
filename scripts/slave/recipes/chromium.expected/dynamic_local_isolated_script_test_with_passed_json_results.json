@@ -476,6 +476,14 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "[skipped] derive test results ()",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

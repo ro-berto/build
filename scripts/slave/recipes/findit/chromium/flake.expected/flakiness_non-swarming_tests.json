@@ -1224,6 +1224,15 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "test r0.[skipped] derive test results (r0)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@stdout@No swarming test results to derive.@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

@@ -1101,6 +1101,28 @@
   },
   {
     "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "10000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "derive test results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
@@ -1369,6 +1391,28 @@
     "~followup_annotations": [
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/Linux_Builder/0/blink_web_tests (retry shards with patch)/layout-test-results/results.html@@@",
       "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/Linux_Builder/0/blink_web_tests (retry shards with patch)/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "chromium-derive",
+      "-json",
+      "-wait",
+      "-n",
+      "1000",
+      "-u",
+      "chromium-swarm.appspot.com",
+      "110000"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "derive test results (retry shards with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
