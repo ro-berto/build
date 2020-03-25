@@ -378,7 +378,7 @@ def SwarmingPerfTest(name, args=None, **kwargs):
   args = list(args or [])
   extension = 'pb' if use_histograms else 'json'
   args.extend([
-      ('--isolated-script-test-perf-output='
+      ('--isolated_script_test_perf_output='
        '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
   ])
 
@@ -424,7 +424,7 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
   args = list(args or [])
   extension = 'pb' if use_histograms else 'json'
   args.extend([
-      ('--isolated-script-test-perf-output='
+      ('--isolated_script_test_perf_output='
        '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
   ])
 

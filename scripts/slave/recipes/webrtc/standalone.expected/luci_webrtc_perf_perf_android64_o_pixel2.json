@@ -655,7 +655,7 @@
       "--android",
       "--adb-path",
       "../../third_party/android_sdk/public/platform-tools/adb",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
+      "--isolated_script_test_perf_output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -770,7 +770,7 @@
       "--save_worst_frame",
       "--write_histogram_proto_json",
       "--nologs",
-      "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb"
+      "--isolated_script_test_perf_output=${ISOLATED_OUTDIR}/perftest-output.pb"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
