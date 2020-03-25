@@ -20,6 +20,11 @@ DEPS = [
   'webrtc',
 ]
 
+PUBLIC_TEST_SERVICE_ACCOUNT = (
+    'chromium-tester@chops-service-accounts.iam.gserviceaccount.com')
+INTERNAL_TEST_SERVICE_ACCOUNT = (
+    'chrome-tester@chops-service-accounts.iam.gserviceaccount.com')
+
 RECIPE_CONFIGS = freeze({
   'webrtc_ios': {
     'chromium_config': 'webrtc_default',
@@ -322,6 +327,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -346,6 +352,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -371,6 +378,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -404,6 +412,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -428,6 +437,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -452,6 +462,7 @@ BUILDERS = freeze({
                 },
                 'isolate_server': 'https://chrome-isolated.appspot.com',
                 'swarming_server': 'https://chrome-swarming.appspot.com',
+                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
@@ -493,6 +504,10 @@ def RunSteps(api):
       return raw_result
 
   if webrtc.bot.should_test:
+    swarming_service_account = webrtc.bot.config.get(
+        'swarming_service_account', PUBLIC_TEST_SERVICE_ACCOUNT)
+    if swarming_service_account:
+      api.ios.swarming_service_account = swarming_service_account
     with api.step.nest('isolate'):
       tasks = api.ios.isolate()
     triggered_tests = []
