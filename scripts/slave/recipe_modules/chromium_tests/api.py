@@ -497,14 +497,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # For archiving 'chromium.perf', the builder also archives a version
       # without perf test files for manual bisect.
       # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
-      if (bot_spec.bisect_archive_build or
-          (builder_id.builder in master_settings.bisect_builders and
-           master_settings.bisect_build_gs_bucket)):
+      if (builder_id.builder in master_settings.bisect_builders and
+          master_settings.bisect_build_gs_bucket):
         bisect_package_step = self.m.archive.zip_and_upload_build(
             'package build for bisect',
             self.m.chromium.c.build_config_fs,
-            build_url=self._build_bisect_gs_archive_url(bot_spec,
-                                                        master_settings),
+            build_url=self._build_bisect_gs_archive_url(master_settings),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             update_properties=update_step.presentation.properties,
@@ -513,21 +511,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             platform=self.m.chromium.c.TARGET_PLATFORM)
         bisect_reasons = list(reasons or [])
         bisect_reasons.extend([
-            ' - %s is a bisect builder' % builder_id.builder,
+            ' - %s is listed in bisect_builders' % builder_id.builder,
             ' - bisect_build_gs_bucket is configured to %s' %
-            (bot_spec.bisect_gs_bucket or
-             master_settings.bisect_build_gs_bucket),
+            master_settings.bisect_build_gs_bucket,
         ])
         bisect_package_step.presentation.logs['why is this running?'] = (
             bisect_reasons)
 
-      if bot_spec.build_gs_bucket or master_settings.build_gs_bucket:
+      if master_settings.build_gs_bucket:
         package_step = self.m.archive.zip_and_upload_build(
             'package build',
             self.m.chromium.c.build_config_fs,
-            build_url=self._build_gs_archive_url(bot_spec, builder_id.master,
-                                                 master_settings,
-                                                 builder_id.builder),
+            build_url=self._build_gs_archive_url(
+                builder_id.master, master_settings, builder_id.builder),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
             # TODO(machenbach): Make asan a configuration switch.
@@ -537,7 +533,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         standard_reasons = list(reasons or [])
         standard_reasons.extend([
             ' - build_gs_bucket is configured to %s' %
-            (bot_spec.build_gs_bucket or master_settings.build_gs_bucket),
+            master_settings.build_gs_bucket,
         ])
         package_step.presentation.logs['why is this running?'] = (
             standard_reasons)
@@ -588,11 +584,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     scheduler_jobs = collections.defaultdict(list)
     for child_id in sorted(bot_config.bot_db.bot_graph[builder_id]):
-      child_spec = bot_config.bot_db[child_id]
       job = get_job_name(child_id.builder)
       master_spec = bot_config.bot_db.master_specs[child_id.master]
-      scheduler_jobs[child_spec.luci_project or
-                     master_spec.settings.luci_project].append(job)
+      scheduler_jobs[master_spec.settings.luci_project].append(job)
 
     return scheduler_jobs
 
@@ -672,8 +666,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         "bot_config argument %r was not a BotConfig" % (bot_config)
     # We only want to do this for tester bots (i.e. those which do not compile
     # locally).
-    bot_spec = bot_config.bot_db[builder_id]
-    bot_type = override_bot_type or bot_spec.bot_type
+    bot_type = override_bot_type or bot_config.bot_db[builder_id].bot_type
     if bot_type != bot_spec_module.TESTER:  # pragma: no cover
       return
 
@@ -700,7 +693,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not build_archive_url:
       master_settings = (
           bot_config.bot_db.master_specs[builder_id.master].settings)
-      legacy_build_url = self._make_legacy_build_url(bot_spec, master_settings,
+      legacy_build_url = self._make_legacy_build_url(master_settings,
                                                      builder_id.master)
 
     self.m.archive.download_and_unzip_build(
@@ -714,7 +707,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.gn.get_args(
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-  def _make_legacy_build_url(self, bot_spec, master_settings, mastername):
+  def _make_legacy_build_url(self, master_settings, mastername):
     # The master where the build was zipped and uploaded from.
     source_master = self.m.properties.get('parent_mastername')
     # TODO(gbeaty) I think this can be removed, this method is only used when
@@ -723,7 +716,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if not source_master:
       source_master = self.m.properties['mastername']  # pragma: no cover
     return self.m.archive.legacy_download_url(
-        bot_spec.build_gs_bucket or master_settings.build_gs_bucket,
+        master_settings.build_gs_bucket,
         extra_url_components=(None if mastername.startswith('chromium.perf')
                               else source_master))
 
@@ -943,14 +936,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       return None, unrecoverable_test_suites
 
-  def _build_bisect_gs_archive_url(self, bot_spec, master_settings):
+  def _build_bisect_gs_archive_url(self, master_settings):
     return self.m.archive.legacy_upload_url(
-        bot_spec.bisect_gs_bucket or master_settings.bisect_build_gs_bucket,
-        extra_url_components=bot_spec.bisect_gs_extra or
-        master_settings.bisect_build_gs_extra)
+        master_settings.bisect_build_gs_bucket,
+        extra_url_components=master_settings.bisect_build_gs_extra)
 
-  def _build_gs_archive_url(self, bot_spec, mastername, master_settings,
-                            buildername):
+  def _build_gs_archive_url(self, mastername, master_settings, buildername):
     """Returns the archive URL to pass to self.m.archive.zip_and_upload_build.
 
     Most builders on most masters use a standard format for the build archive
@@ -965,11 +956,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     if mastername.startswith('chromium.perf'):
       return self.m.archive.legacy_upload_url(
-          bot_spec.build_gs_bucket or master_settings.build_gs_bucket,
-          extra_url_components=None)
+          master_settings.build_gs_bucket, extra_url_components=None)
     else:
       return self.m.archive.legacy_upload_url(
-          bot_spec.build_gs_bucket or master_settings.build_gs_bucket,
+          master_settings.build_gs_bucket,
           extra_url_components=self.m.properties['mastername'])
 
   def get_common_args_for_scripts(self, bot_config=None):
