@@ -82,8 +82,7 @@ def generate_tests(api, phase, bot):
         SwarmingPerfTest(
             'webrtc_perf_tests',
             args=[
-                '--test_artifacts_dir',
-                '${ISOLATED_OUTDIR}',
+                '--test_artifacts_dir=${ISOLATED_OUTDIR}',
                 '--write_histogram_proto_json',
                 '--save_worst_frame',
                 '--nologs',
