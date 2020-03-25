@@ -963,7 +963,7 @@
       "xcode_ios_10l232m",
       "Xcode.app",
       "--service-account",
-      "chrome-tester@chops-service-accounts.iam.gserviceaccount.com",
+      "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--wait-for-capacity",
       "--tag",
       "bucket:ci",
