@@ -280,7 +280,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       task = t.get_task(suffix)
       swarming_task_ids.extend(task.get_task_ids())
 
-    derive_step_name = 'derive test results (%s)' % suffix
+    derive_step_name = ('derive test results (%s)' % suffix
+                        if suffix else 'derive test results')
     if len(swarming_task_ids) == 0:
       step_result = self.m.step('[skipped] %s' % derive_step_name, [])
       step_result.presentation.logs["stdout"] = [

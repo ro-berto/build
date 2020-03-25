@@ -1230,7 +1230,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
-    "name": "derive test results ()",
+    "name": "derive test results",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
