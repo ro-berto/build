@@ -736,7 +736,7 @@ SPEC = {
                 gclient_config='ios',
                 gclient_apply_config=[],
                 chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
+                    'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
                     'TARGET_PLATFORM': 'ios',
                     'HOST_PLATFORM': 'mac',
