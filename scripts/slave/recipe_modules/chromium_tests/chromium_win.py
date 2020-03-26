@@ -226,5 +226,19 @@ SPEC = {
                     'platform': 'win',
                 },
             ),
+        'win-upload-perfetto':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb', 'mb_luci_auth'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.BUILDER_TESTER,
+                testing={
+                    'platform': 'win',
+                },
+            ),
     },
 }
