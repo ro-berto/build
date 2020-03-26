@@ -1051,42 +1051,63 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
           continue
 
         seen.add(src_file)
-        normalized = _normalize_path_to_base(src_file, base_path)
-        yield src_file, normalized
+        normalized_path = _normalize_path_to_base(src_file, base_path)
+        yield src_file, normalized_path
 
   failed_src_files = []
-  for src_file, normalized in normalized_src_files_for_actions(failed_actions):
-    if normalized is None:
+  for src_file, normalized_path in normalized_src_files_for_actions(
+      failed_actions):
+    if normalized_path is None:
       logging.info('Dropping failed src file %s in normalization', src_file)
     else:
-      failed_src_files.append(normalized)
+      failed_src_files.append(normalized_path)
 
   timed_out_src_files = []
-  for src_file, normalized in normalized_src_files_for_actions(
+  for src_file, normalized_path in normalized_src_files_for_actions(
       timed_out_actions):
-    if normalized is None:
+    if normalized_path is None:
       logging.info('Dropping timed out src file %s in normalization', src_file)
     else:
-      timed_out_src_files.append(normalized)
+      timed_out_src_files.append(normalized_path)
 
   all_diagnostics = []
   for diag in findings:
-    normalized = _normalize_path_to_base(diag.file_path, base_path)
-    if normalized is None:
+    normalized_path = _normalize_path_to_base(diag.file_path, base_path)
+    if normalized_path is None:
       logging.info('Dropping out-of-base diagnostic from %s', diag.file_path)
-    else:
-      all_diagnostics.append(diag._replace(file_path=normalized))
+      continue
+
+    normalized_locs = []
+    for loc in diag.expansion_locs:
+      n = _normalize_path_to_base(loc.file_path, base_path)
+      if n is None:
+        logging.warning('Failed to normalize expansion loc path %s',
+                        loc.file_path)
+        # Dropping `expansion_loc`s, with machine-specific path-y parts to
+        # them seems worse than keeping them around. At the moment, they're
+        # only ultimately used so we can present better diagnostics to the
+        # user, so there's no _hard_ requirement for them all to be relative to
+        # a specific place.
+        normalized_locs.append(loc)
+      else:
+        normalized_locs.append(loc._replace(file_path=n))
+
+    all_diagnostics.append(
+        diag._replace(
+            file_path=normalized_path,
+            expansion_locs=normalized_locs,
+        ))
 
   if only_src_files is not None:
     src_file_filter = set()
 
     for path in only_src_files:
-      normalized = _normalize_path_to_base(path, base_path)
-      if not normalized:
+      normalized_path = _normalize_path_to_base(path, base_path)
+      if not normalized_path:
         logging.error("Got only_src_file %r, which isn't relative to base @ %r",
                       path, base_path)
       else:
-        src_file_filter.add(normalized)
+        src_file_filter.add(normalized_path)
 
     new_diagnostics = [
         x for x in all_diagnostics if x.file_path in src_file_filter

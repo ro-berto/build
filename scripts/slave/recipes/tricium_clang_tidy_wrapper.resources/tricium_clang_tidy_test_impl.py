@@ -838,6 +838,53 @@ class Tests(unittest.TestCase):
             'timed_out_src_files': [],
         })
 
+  def test_output_conversion_translates_expansion_locs(self):
+    self._silence_logs()
+
+    main_action = tidy._TidyAction(
+        cc_file='/foo/src_file.cc', target='bar.o', in_dir='in/', flags='')
+    result = tidy._convert_tidy_output_json_obj(
+        base_path='/foo',
+        tidy_actions={
+            main_action: ['/foo/src_file.cc', '/foo/src_file.h'],
+        },
+        failed_actions=[],
+        failed_tidy_actions=[],
+        timed_out_actions=[],
+        findings=[
+            tidy._TidyDiagnostic(
+                file_path='/foo/src_file.h',
+                line_number=1,
+                diag_name='bar',
+                message='baz',
+                replacements=(),
+                expansion_locs=(
+                    tidy._ExpandedFrom('/foo/src_file2.h', 1),
+                    tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
+                ),
+            ),
+        ],
+        only_src_files=None,
+    )
+
+    self.assertEqual(
+        result, {
+            'diagnostics': [
+                tidy._TidyDiagnostic(
+                    file_path='src_file.h',
+                    line_number=1,
+                    diag_name='bar',
+                    message='baz',
+                    replacements=(),
+                    expansion_locs=(
+                        tidy._ExpandedFrom('src_file2.h', 1),
+                        tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
+                    )).to_dict(),
+            ],
+            'failed_src_files': [],
+            'timed_out_src_files': [],
+        })
+
   def test_ninja_deps_parsing_filters_stale_entries(self):
     test_input = '\n'.join([
         'obj/foo.o: #deps 43, deps mtime 1579507293554707398 (STALE)',
