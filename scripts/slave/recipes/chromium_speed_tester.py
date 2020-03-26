@@ -17,8 +17,19 @@ def _debug_lines(bot, tests, task_groups):
   debug_lines = []
   debug_lines.append('bot.builder_id: %s' % bot.builder_id)
   debug_lines += ['test name: %s' % t.name for t in tests]
+  debug_lines += [' == task IDs ==']
   debug_lines += [
       'group: %s <br/> tasks: %s' % (k, v) for k, v in task_groups.iteritems()
+  ]
+  debug_lines += [' == building prop ==']
+  debug_lines += [
+      'test: %s <br/> prop: %s' %
+      (t.name, t.get_task(NO_SUFFIX).build_properties) for t in tests
+  ]
+  debug_lines += [' == task output dir ==']
+  debug_lines += [
+      'test: %s <br/> dir: %s' % (t.name, t.get_task(NO_SUFFIX).task_output_dir)
+      for t in tests
   ]
   return debug_lines
 
@@ -38,8 +49,11 @@ def RunSteps(api):
     tests = build_config.tests_on(bot.builder_id)
     test_failure_summary = api.chromium_tests.run_tests(bot, tests)
     task_groups = {
-        t.get_task(NO_SUFFIX).request.name:
-        t.get_task(NO_SUFFIX).collect_cmd_input() for t in tests
+        t.get_task(NO_SUFFIX).request.name: {
+            'task_ids': t.get_task(NO_SUFFIX).collect_cmd_input(),
+            'building_prop': t.get_task(NO_SUFFIX).build_properties,
+            'task_output_dir': t.get_task(NO_SUFFIX).task_output_dir
+        } for t in tests
     }
     additional_trigger_properties = {'tasks_groups': task_groups}
     api.python.succeeding_step(
