@@ -139,10 +139,6 @@ def RunSteps(api):
             'dummy_audio_file_devices_no_protobuf',
             'rtti_no_sctp']
   for phase in phases:
-    if not webrtc.is_compile_needed(phase=phase):
-      step_result = api.step('No further steps are necessary.', cmd=None)
-      step_result.presentation.status = api.step.SUCCESS
-      return
     webrtc.configure_isolate(phase)
     webrtc.run_mb(phase)
     raw_result = webrtc.compile(phase)
@@ -156,32 +152,21 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = BUILDERS
-  recipe_configs = RECIPE_CONFIGS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
-                                       recipe_configs)
-  phases = [
-      'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf', 'rtti_no_sctp'
-  ]
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
 
   for bucketname in builders.keys():
     master_config = builders[bucketname]
     for buildername in master_config['builders'].keys():
-      yield generate_builder(
-          bucketname, buildername, revision='a' * 40, phases=phases)
+      yield generate_builder(bucketname, buildername, revision='a' * 40)
 
-  yield (generate_builder(
+  yield (
+    generate_builder(
       'luci.webrtc.ci',
       'Linux (more configs)',
       revision='b' * 40,
       suffix='_fail_compile',
-      fail_compile=True,
-      phases=phases) + api.post_process(post_process.StatusFailure) +
-         api.post_process(post_process.DropExpectation))
-
-  gn_analyze_no_deps_output = {'status': ['No dependency']}
-  yield generate_builder(
-      'luci.webrtc.try',
-      'linux_more_configs',
-      revision='a' * 40,
-      suffix='_gn_analyze_no_dependency',
-      gn_analyze_output=gn_analyze_no_deps_output)
+      fail_compile=True
+    ) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
