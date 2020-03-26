@@ -25,7 +25,6 @@ DEPS = [
     'depot_tools/gclient',
     'isolate',
     'recipe_engine/commit_position',
-    'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -76,16 +75,7 @@ def RunSteps(api, buildername, mastername):
   api.chromium_tests.configure_build(bot_config)
   api.gclient.c.solutions[0].custom_vars['swarming_revision'] = ''
   api.gclient.c.revisions['src/tools/swarming_client'] = 'HEAD'
-
-  # TODO(crbug.com/1060874): remove this when re-bootstrapping for 0 pack files
-  # happens.
-  env = {
-      # Turn off the low speed limit, since checkout will be long.
-      'GIT_HTTP_LOW_SPEED_LIMIT': '0',
-      'GIT_HTTP_LOW_SPEED_TIME': '0',
-  }
-  with api.context(env=env):
-    update_step = api.chromium_checkout.ensure_checkout(bot_config)
+  update_step = api.chromium_checkout.ensure_checkout(bot_config)
 
   # Ensure swarming_client version is fresh enough.
   api.chromium_swarming.check_client_version()
