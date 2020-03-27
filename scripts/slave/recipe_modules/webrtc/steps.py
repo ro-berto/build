@@ -83,7 +83,6 @@ def generate_tests(api, phase, bot):
             'webrtc_perf_tests',
             args=[
                 '--test_artifacts_dir=${ISOLATED_OUTDIR}',
-                '--write_histogram_proto_json',
                 '--save_worst_frame',
                 '--nologs',
             ]),
@@ -103,7 +102,6 @@ def generate_tests(api, phase, bot):
             'webrtc_perf_tests',
             args=[
                 '--save_worst_frame',
-                '--write_histogram_proto_json',
                 '--nologs',
             ]))
 
@@ -188,7 +186,6 @@ def generate_tests(api, phase, bot):
             'webrtc_perf_tests',
             args=[
                 '--write_perf_output_on_ios',
-                '--write_histogram_proto_json',
                 '--nologs',
             ]),
     ]
