@@ -492,6 +492,12 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   webrtc.check_swarming_version()
+
+  if not webrtc.is_compile_needed(is_ios=True):
+    step_result = api.step('No further steps are necessary.', cmd=None)
+    step_result.presentation.status = api.step.SUCCESS
+    return
+
   webrtc.configure_isolate()
 
   with api.step.nest('apply build config'):
@@ -528,7 +534,9 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = BUILDERS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
+  recipe_configs = RECIPE_CONFIGS
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
+                                       recipe_configs)
 
   for bucketname in builders.keys():
     master_config = builders[bucketname]
@@ -551,3 +559,11 @@ def GenTests(api):
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )
+
+  gn_analyze_no_deps_output = {'status': ['No dependency']}
+  yield generate_builder(
+      'luci.webrtc.try',
+      'ios_compile_arm_dbg',
+      revision='a' * 40,
+      suffix='_gn_analyze_no_dependency',
+      gn_analyze_output=gn_analyze_no_deps_output)
