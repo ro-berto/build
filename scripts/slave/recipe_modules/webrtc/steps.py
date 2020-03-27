@@ -25,10 +25,26 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
-def generate_tests(api, phase, bot):
+
+def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
+                   is_tryserver):
+  """Generate a list of tests to run on a bot.
+
+  Args:
+    phase: string to distinguish the phase of a builder (used only for
+      more_configs builders).
+    bot: string with the name of the bot (e.g. 'linux_compile_rel').
+    platform: String representing the platform on which tests
+      will run. Possible values are: "linux", "mac", "win".
+    build_out_dir: the out/ dir of the builder.
+    checkout_path: the path to the checkout on the builder.
+    is_tryserver: True if the tests needs to be generated for a tryserver.
+
+  Returns:
+    A list of steps.WebRtcIsolatedGtest to compile and run on a bot.
+  """
+  assert platform_name in ('linux', 'mac', 'win')
   tests = []
-  build_out_dir = api.path['checkout'].join(
-      'out', api.chromium.c.build_config_fs)
   test_suite = bot.test_suite
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
@@ -60,16 +76,17 @@ def generate_tests(api, phase, bot):
     tests.append(baremetal_test('video_capture_tests'))
 
     # Cover tests only running on perf tests on our trybots:
-    if api.tryserver.is_tryserver:
-      if api.platform.is_linux:
+    if is_tryserver:
+      if platform_name == 'linux':
         tests.append(baremetal_test('isac_fix_test'))
 
-      is_win_clang = (api.platform.is_win and
-                      'clang' in bot.recipe_config['chromium_config'])
+      is_win_clang = (
+          platform_name == 'win' and
+          'clang' in bot.recipe_config['chromium_config'])
 
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
-      if api.platform.is_linux or is_win_clang:
+      if platform_name == 'linux' or is_win_clang:
         tests.append(baremetal_test('webrtc_perf_tests', args=[
             '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
             '--nologs',
@@ -127,14 +144,15 @@ def generate_tests(api, phase, bot):
     ]
 
     if bot.should_test_android_studio_project_generation:
-      tests.append(PythonTest(
-          test='gradle_project_test',
-          script=str(api.path['checkout'].join('examples',  'androidtests',
-                                               'gradle_project_test.py')),
-          args=[build_out_dir],
-          env={'GOMA_DISABLED': True}))
+      tests.append(
+          PythonTest(
+              test='gradle_project_test',
+              script=checkout_path.join('examples', 'androidtests',
+                                        'gradle_project_test.py'),
+              args=[build_out_dir],
+              env={'GOMA_DISABLED': True}))
 
-    if api.tryserver.is_tryserver:
+    if is_tryserver:
       tests.append(
           SwarmingAndroidTest(
               'webrtc_perf_tests',
@@ -445,6 +463,11 @@ class PythonTest(Test):
     self._script = script
     self._args = args
     self._env = env or {}
+    self._name = test
+
+  @property
+  def name(self):
+    return self._name
 
   def run(self, api):
     with api.depot_tools.on_path():
@@ -454,6 +477,10 @@ class PythonTest(Test):
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
+
+  @property
+  def name(self):
+    return self._name
 
   def run(self, api):
     return api.chromium_android.run_java_unit_test_suite(self._name)
