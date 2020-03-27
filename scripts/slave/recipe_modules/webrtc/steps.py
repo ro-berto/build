@@ -359,25 +359,22 @@ def SwarmingDesktopTest(name, **kwargs):
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
-  if name == 'webrtc_perf_tests' or name == 'low_bandwidth_audio_perf_test':
-    use_histograms = True
-  else:
-    # TODO(http://crbug.com/1029452): also port over isac_fix_test.
-    use_histograms = False
-
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
 
-    api.webrtc.upload_to_perf_dashboard(
-        name, step_result, use_histograms=use_histograms)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
 
   args = list(args or [])
-  extension = 'pb' if use_histograms else 'json'
+  # This flag is translated to --isolated_script_test_perf_output in
+  # gtest-parallel_wrapper.py and flags_compatibility.py. Why not pass the right
+  # flag right away? Unfortunately Chromium's android/test_runner.py does
+  # magical treatment of the dashed version of the flag, and we need that to
+  # get a writable out dir on Android, so we must have this translation step.
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
+       '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
 
   # Perf tests are marked as not idempotent, which means they're re-run if they
@@ -405,13 +402,16 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
 
-    api.webrtc.upload_to_perf_dashboard(name, step_result, use_histograms=True)
+    api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [
       InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
   ]
 
   args = list(args or [])
+
+  # See SwarmingDesktopPerfTest for more details why we pass this rather than
+  # --isolated_script_test_perf_output.
   args.extend([
       ('--isolated-script-test-perf-output='
        '${ISOLATED_OUTDIR}/perftest-output.pb'),

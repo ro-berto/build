@@ -3797,7 +3797,7 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#259)(self):**
 
-&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#562)(self, name, step_result, use_histograms=False):**
+&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#562)(self, name, step_result):**
 ### *recipe_modules* / [yaml](/scripts/slave/recipe_modules/yaml)
 
 [DEPS](/scripts/slave/recipe_modules/yaml/__init__.py#1): [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

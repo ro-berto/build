@@ -124,35 +124,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     with open(proto, "rb") as f:
       return f.read()
 
-  def example_chartjson(self):
-    return json.dumps({
-      "format_version": "1.0",
-      "charts": {
-        "warm_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "values": [9, 9, 8, 9],
-            "units": "sec"
-          },
-        },
-        "html_size": {
-          "http://www.google.com/": {
-            "type": "scalar",
-            "value": 13579,
-            "units": "bytes"
-          }
-        },
-        "load_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "value": [4.2],
-            "std": 1.25,
-            "units": "sec"
-          }
-        }
-      }
-    })
-
 
 def _sanitize_builder_name(name):
   return api.sanitize_file_name(name.lower())
