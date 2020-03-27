@@ -359,11 +359,10 @@ def SwarmingDesktopTest(name, **kwargs):
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
-  if name == 'webrtc_perf_tests':
+  if name == 'webrtc_perf_tests' or name == 'low_bandwidth_audio_perf_test':
     use_histograms = True
   else:
-    # TODO(http://crbug.com/1029452): also port over isac_fix_test and
-    # low_bandwidth_audio_test.
+    # TODO(http://crbug.com/1029452): also port over isac_fix_test.
     use_histograms = False
 
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
@@ -403,28 +402,19 @@ def SwarmingAndroidTest(name, **kwargs):
 
 
 def SwarmingAndroidPerfTest(name, args=None, **kwargs):
-  if name == 'webrtc_perf_tests':
-    use_histograms = True
-  else:
-    # TODO(http://crbug.com/1029452): also port over isac_fix_test and
-    # low_bandwidth_audio_test.
-    use_histograms = False
-
   def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
     del has_valid_results
 
-    api.webrtc.upload_to_perf_dashboard(
-        name, step_result, use_histograms=use_histograms)
+    api.webrtc.upload_to_perf_dashboard(name, step_result, use_histograms=True)
 
   handlers = [
       InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
   ]
 
   args = list(args or [])
-  extension = 'pb' if use_histograms else 'json'
   args.extend([
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.%s' % extension),
+       '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
 
   return WebRtcIsolatedGtest(

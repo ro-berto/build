@@ -599,8 +599,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     if use_histograms:
       for perf_results in results_to_upload:
         args = [
-            '--build-page-url', self.build_url, '--test-suite',
-            'webrtc_perf_tests', '--bot', self.c.PERF_ID, '--output-json-file',
+            '--build-page-url', self.build_url, '--test-suite', name, '--bot',
+            self.c.PERF_ID, '--output-json-file',
             self.m.json.output(), '--input-results-file',
             self.m.raw_io.input(perf_results), '--dashboard-url',
             DASHBOARD_UPLOAD_URL, '--commit-position', self.revision_number,
