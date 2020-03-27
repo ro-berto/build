@@ -497,11 +497,6 @@ def RunSteps(api):
   with api.step.nest('apply build config'):
     webrtc.apply_ios_config()
 
-  if not webrtc.is_compile_needed(is_ios=True):
-    step_result = api.step('No further steps are necessary.', cmd=None)
-    step_result.presentation.status = api.step.SUCCESS
-    return
-
   with webrtc.ensure_sdk():
     webrtc.run_mb_ios()
     raw_result = webrtc.compile()
@@ -532,9 +527,7 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = BUILDERS
-  recipe_configs = RECIPE_CONFIGS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
-                                       recipe_configs)
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
 
   for bucketname in builders.keys():
     master_config = builders[bucketname]
@@ -557,14 +550,3 @@ def GenTests(api):
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )
-
-  gn_analyze_no_deps_output = {'status': ['No dependency']}
-  yield (generate_builder(
-      'luci.webrtc.try',
-      'ios_compile_arm_dbg',
-      revision='a' * 40,
-      suffix='_gn_analyze_no_dependency',
-      gn_analyze_output=gn_analyze_no_deps_output) +
-         api.properties(**{'$depot_tools/osx_sdk': {
-             'sdk_version': '10l232m'
-         }}))
