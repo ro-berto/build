@@ -9,7 +9,6 @@ import base64
 import json
 
 from recipe_engine import recipe_test_api
-from recipe_engine import config_types
 from . import api
 from . import builders as webrtc_builders
 from . import steps
@@ -29,7 +28,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
   def generate_builder(self,
                        builders,
-                       recipe_configs,
                        bucketname,
                        buildername,
                        revision,
@@ -39,15 +37,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        suffix='',
                        is_chromium=False,
                        fail_android_archive=False,
-                       is_experimental=False,
-                       gn_analyze_output=None,
-                       phases=None):
+                       is_experimental=False):
     mastername = builders[bucketname]['settings'].get('mastername', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
-
-    if phases is None:
-      phases = []
 
     if bot_type in ('builder', 'builder_tester'):
       assert bot_config.get('parent_buildername') is None, (
@@ -106,20 +99,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       git_repo = 'https://chromium.googlesource.com/chromium/src'
     _, project, short_bucket = bucketname.split('.')
     if 'try' in bucketname:
-      if 'fuzzer' not in buildername:
-        if len(phases) > 0:
-          for phase_number, phase in enumerate(phases):
-            phase_suffix = ''
-            if phase_number > 0:
-              phase_suffix = ' (%s)' % (phase_number + 1)
-            test += self.override_gn_analyze(gn_analyze_output, builders,
-                                             recipe_configs, bucketname,
-                                             buildername, phase, phase_suffix)
-        else:
-          test += self.override_gn_analyze(gn_analyze_output, builders,
-                                           recipe_configs, bucketname,
-                                           buildername, None, '')
-
       test += self.m.buildbucket.try_build(
           project=project,
           bucket=short_bucket,
@@ -136,42 +115,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     test += self.m.properties(buildnumber=1337)
 
     return test
-
-  def override_gn_analyze(self,
-                          gn_analyze_output,
-                          builders,
-                          recipe_configs,
-                          bucketname,
-                          buildername,
-                          phase=None,
-                          phase_suffix=''):
-    if gn_analyze_output is None:
-      bot = api.Bot(builders, recipe_configs, bucketname, buildername)
-      self.m.tryserver.is_tryserver = True
-      platform_name = bot.platform_name()
-      build_out_dir = 'out/build_dir'
-      checkout_path = config_types.Path(config_types.RepoBasePath('foo', 'bar'))
-      is_tryserver = 'try' in bucketname
-      test_targets = [
-          t.name for t in steps.generate_tests(
-              phase=phase,
-              bot=bot,
-              platform_name=platform_name,
-              build_out_dir=build_out_dir,
-              checkout_path=checkout_path,
-              is_tryserver=is_tryserver)
-      ]
-
-      analyze_output = {
-          'compile_targets': ['default'] + test_targets,
-          'status': 'Found dependency',
-          'test_targets': test_targets,
-      }
-      return self.override_step_data('analyze' + phase_suffix,
-                                     self.m.json.output(analyze_output))
-    else:
-      return self.override_step_data('analyze' + phase_suffix,
-                                     self.m.json.output(gn_analyze_output))
 
   def example_proto(self):
     # Tip: to see what's in the proto, use the tracing/bin/proto2json tool
