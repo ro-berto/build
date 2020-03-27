@@ -685,7 +685,7 @@
     "infra_step": true,
     "name": "gsutil upload goldens 0",
     "~followup_annotations": [
-      "@@@STEP_LINK@archive goldens@https://storage.googleapis.com/mybucket/web_engine/0@@@"
+      "@@@STEP_LINK@archive goldens@https://console.cloud.google.com/storage/browser/mybucket/web_engine/0@@@"
     ]
   },
   {
