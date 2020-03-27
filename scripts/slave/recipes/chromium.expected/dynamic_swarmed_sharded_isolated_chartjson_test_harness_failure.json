@@ -822,29 +822,6 @@
     "name": "Upload to test-results [telemetry_gpu_unittests]"
   },
   {
-    "cmd": [
-      "rdb",
-      "chromium-derive",
-      "-json",
-      "-wait",
-      "-n",
-      "1000",
-      "-u",
-      "chromium-swarm.appspot.com",
-      "10000",
-      "110100"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "derive test results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- test1.Test2-2\n\n- test1.Test1\n\n- ...1 more failure(s) (3 total)..."

@@ -269,6 +269,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif t.deterministic_failures(suffix) and t not in failed_test_suites:
         failed_test_suites.append(t)
 
+    if (self.m.buildbucket.build.builder.project != 'chromium' or
+        self.m.buildbucket.build.builder.bucket not in ['ci', 'try']):
+      # Only derives results on chromium ci/try builders.
+      # Note: this is a temporary change for ResultDB to control the builders it
+      # gets test results from.
+      return invalid_results, failed_test_suites
+
     if suffix == 'without patch':
       # Don't derive test results for without patch steps.
       return invalid_results, failed_test_suites

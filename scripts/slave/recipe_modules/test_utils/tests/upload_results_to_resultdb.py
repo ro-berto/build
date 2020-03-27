@@ -5,6 +5,7 @@
 DEPS = [
     'chromium_swarming',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -60,12 +61,11 @@ def GenTests(api):
       'include_invocation',
       api.properties(
           mastername='m',
-          buildername='linux-rel',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
-      ),
+      ), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -91,12 +91,11 @@ def GenTests(api):
       'swarming_test_results',
       api.properties(
           mastername='m',
-          buildername='linux-rel',
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           is_swarming_test=True,
-      ),
+      ), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -131,13 +130,31 @@ def GenTests(api):
       'local_test_results',
       api.properties(
           mastername='m',
-          buildername='linux-rel',
           is_swarming_test=False,
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }),
+          }), api.buildbucket.try_build('chromium', 'try', 'linux-rel'),
       api.post_process(post_process.DoesNotRun,
                        'derive test results (with patch)'),
       api.post_process(post_process.MustRun,
                        '[skipped] derive test results (with patch)'),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
+      'non_chromium_builder',
+      api.properties(
+          mastername='m',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          is_swarming_test=True,
+      ), api.buildbucket.try_build('project', 'try', 'linux-rel'),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True),
+              shards=2,
+              failure=False)),
+      api.post_process(post_process.DoesNotRun,
+                       'derive test results (with patch)'),
       api.post_process(post_process.DropExpectation))

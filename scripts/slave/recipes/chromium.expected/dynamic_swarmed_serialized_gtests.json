@@ -706,28 +706,6 @@
     "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux]"
   },
   {
-    "cmd": [
-      "rdb",
-      "chromium-derive",
-      "-json",
-      "-wait",
-      "-n",
-      "1000",
-      "-u",
-      "chromium-swarm.appspot.com",
-      "10000"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "derive test results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "test_pre_run (2)"
   },
@@ -951,28 +929,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "Upload to test-results [browser_tests on NVIDIA GPU on Linux]"
-  },
-  {
-    "cmd": [
-      "rdb",
-      "chromium-derive",
-      "-json",
-      "-wait",
-      "-n",
-      "1000",
-      "-u",
-      "chromium-swarm.appspot.com",
-      "110000"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "derive test results (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
-    ]
   },
   {
     "cmd": [
