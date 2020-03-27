@@ -90,7 +90,9 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = BUILDERS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
+  recipe_configs = api.webrtc.RECIPE_CONFIGS
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
+                                       recipe_configs)
 
   for bucketname in builders.keys():
     master_config = builders[bucketname]

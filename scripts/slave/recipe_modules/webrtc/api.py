@@ -38,6 +38,9 @@ class Bot(object):
   def __repr__(self):  # pragma: no cover
     return '<Bot %s/%s>' % (self.bucket, self.builder)
 
+  def platform_name(self):
+    return self.config.get('testing').get('platform')
+
   @property
   def config(self):
     return self._builders[self.bucket]['builders'][self.builder]
@@ -83,7 +86,8 @@ class WebRTCApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}
-    self._isolated_targets = None
+    self._isolated_targets = []
+    self._compile_targets = []
 
     # Keep track of working directory (which contains the checkout).
     # None means "default value".
@@ -174,7 +178,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     ios_config['tests'] = []
     if self.bot.should_test:
-      tests = steps.generate_tests(self.m, None, self.bot)
+      out_dir = self.m.path['checkout'].join('out',
+                                             self.m.chromium.c.build_config_fs)
+      tests = steps.generate_tests(None, self.bot, self.m.platform.name,
+                                   out_dir, self.m.path['checkout'],
+                                   self.m.tryserver.is_tryserver)
       for test in tests:
         assert isinstance(test, steps.IosTest)
         # TODO(crbug.com/812428): Move this back to the old chromium.tests pool
@@ -263,19 +271,83 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
+  def is_compile_needed(self, phase=None, is_ios=False):
+    test_targets = set()
+    for bot in self.related_bots():
+      if bot.should_test:
+        out_dir = self.m.path['checkout'].join(
+            'out', self.m.chromium.c.build_config_fs)
+        for test in steps.generate_tests(
+            phase=phase,
+            bot=bot,
+            platform_name=self.m.platform.name,
+            build_out_dir=out_dir,
+            checkout_path=self.m.path['checkout'],
+            is_tryserver=self.m.tryserver.is_tryserver):
+          if isinstance(
+              test, (SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
+            test_targets.add(test.name)
+
+    # The default behavior is to always build the :default target and
+    # the tests that need to be run.
+    # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
+    # :default to "all".
+    self._isolated_targets = sorted(test_targets)
+    self._compile_targets = ['default'] + self._isolated_targets
+
+    # Run gn analyze only on trybots. The CI bots can rebuild everything;
+    # they're less time sensitive than trybots.
+    if self.m.tryserver.is_tryserver:
+      patch_root = self.m.gclient.get_gerrit_patch_root()
+      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+          relative_to=patch_root, cwd=self.m.path['checkout'])
+      analyze_input = {
+          'files': affected_files,
+          'test_targets': list(test_targets),
+          'additional_compile_targets': ['all'],
+      }
+      if not is_ios:
+        step_result = self.m.chromium.mb_analyze(
+            self.builder_id,
+            analyze_input,
+            mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+            phase=phase)
+      else:
+        # Match the out path that ios recipe module uses.
+        self.m.chromium.c.build_config_fs = os.path.basename(
+            self.m.ios.most_recent_app_dir)
+        with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
+          step_result = self.m.chromium.mb_analyze(
+              self.builder_id,
+              analyze_input,
+              mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'))
+
+      if 'error' in step_result.json.output:
+        step_result.presentation.step_text = (
+            'Error: ' + step_result.json.output['error'])
+        step_result.presentation.status = self.m.step.FAILURE
+        raise self.m.step.StepFailure('Error: ' +
+                                      step_result.json.output['error'])
+
+      if 'invalid_targets' in step_result.json.output:
+        raise self.m.step.StepFailure(
+            'Error, following targets were not '
+            'found: ' + ', '.join(step_result.json.output['invalid_targets']))
+
+      deps_status = ('Found dependency', 'Found dependency (all)')
+      if step_result.json.output['status'] in deps_status:
+        self._compile_targets = step_result.json.output['compile_targets']
+        self._isolated_targets = step_result.json.output['test_targets']
+      else:
+        step_result.presentation.step_text = 'No compile necessary'
+        self._compile_targets = []
+        self._isolated_targets = []
+
+    return len(self._compile_targets) > 0
+
   def configure_isolate(self, phase=None):
     if self.bot.config.get('isolate_server'):
       self.m.isolate.isolate_server = self.bot.config['isolate_server']
-
-    isolated_targets = set()
-    for bot in self.related_bots():
-      if bot.should_test:
-        for test in steps.generate_tests(self.m, phase, bot):
-          if isinstance(
-              test, (SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
-            isolated_targets.add(test.name)
-
-    self._isolated_targets = sorted(isolated_targets)
 
     if self.bot.config.get('parent_buildername'):
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
@@ -428,9 +500,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def compile(self, phase=None, override_targets=None):
     del phase
     if override_targets is None:
-      targets = self._isolated_targets
-      if targets:
-        targets = ['default'] + targets
+      targets = self._compile_targets
     else:
       targets = override_targets
 
@@ -463,7 +533,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      tests = steps.generate_tests(self.m, phase, self.bot)
+      out_dir = self.m.path['checkout'].join('out',
+                                             self.m.chromium.c.build_config_fs)
+      tests = steps.generate_tests(phase, self.bot, self.m.platform.name,
+                                   out_dir, self.m.path['checkout'],
+                                   self.m.tryserver.is_tryserver)
+
       if tests:
         for test in tests:
           test.pre_run(self.m)
