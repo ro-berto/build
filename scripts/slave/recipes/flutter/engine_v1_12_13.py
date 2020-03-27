@@ -4,7 +4,8 @@
 
 # This file is a copy of engine.py from
 # 62f52b6e2a50f2df3ec81509f93c578847e03947, or the version of the recipe at
-# the time v1.12.13's version of the engine was built.
+# the time v1.12.13's version of the engine was built, with an additional
+# workaround patch from 77e8cdf6d2.
 
 from contextlib import contextmanager
 import contextlib
@@ -1221,20 +1222,43 @@ def BuildJavadoc(api):
         name='upload javadoc')
 
 
+# See 77e8cdf6d2 for context on this change.
+@contextmanager
+def SetupMacOSSDK(api):
+  xcode_binary_cache_dir = api.path['cache'].join('xcode_binary')
+  # Pull a trimmed version of Xcode 10.2.1(10E1001) that contains the MacOS
+  # 10.14 SDK needed for installing gems. This does not affect what
+  # `xcode-select -p` points to.
+  api.cipd.ensure(
+      xcode_binary_cache_dir,
+      api.cipd.EnsureFile().add_package(
+          'infra_internal/ios/xcode/xcode_binaries/${platform}',
+          'yjQtk3auAegQO4t18uBtBlKbj76xBjVtLE-3UM2faRUC'))
+
+  # Override SDKROOT during gem installation.
+  sdk_relative_path = 'Contents/Developer/Platforms/' \
+                      'MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk'
+  with api.context(
+      env={"SDKROOT": xcode_binary_cache_dir.join(sdk_relative_path)}):
+    yield
+
+
 @contextmanager
 def InstallGems(api):
   gem_dir = api.path['start_dir'].join('gems')
   api.file.ensure_directory('mkdir gems', gem_dir)
-  with api.context(cwd=gem_dir):
-    api.step('install jazzy', [
-        'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
-        '--install-dir', '.'
-    ])
-    api.step('install xcpretty', [
-        'gem', 'install',
-        'xcpretty:' + api.properties.get('xcpretty_version', '0.3.0'),
-        '--install-dir', '.'
-    ])
+
+  with SetupMacOSSDK(api):
+    with api.context(cwd=gem_dir):
+      api.step('install jazzy', [
+          'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
+          '--install-dir', '.'
+      ])
+      api.step('install xcpretty', [
+          'gem', 'install',
+          'xcpretty:' + api.properties.get('xcpretty_version', '0.3.0'),
+          '--install-dir', '.'
+      ])
   with api.context(
       env={"GEM_HOME": gem_dir}, env_prefixes={'PATH': [gem_dir.join('bin')]}):
     yield
