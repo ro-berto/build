@@ -58,6 +58,12 @@ def RunSteps(api):
   if webrtc.bot.should_build:
     api.chromium.runhooks()
   webrtc.check_swarming_version()
+
+  if not webrtc.is_compile_needed():
+    step_result = api.step('No further steps are necessary.', cmd=None)
+    step_result.presentation.status = api.step.SUCCESS
+    return
+
   webrtc.configure_isolate()
 
   if webrtc.bot.should_build:
@@ -81,7 +87,9 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = api.webrtc.BUILDERS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
+  recipe_configs = api.webrtc.RECIPE_CONFIGS
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
+                                       recipe_configs)
 
   for bucketname in builders.keys():
     master_config = builders[bucketname]
@@ -140,3 +148,27 @@ def GenTests(api):
   yield generate_builder('luci.webrtc.perf', 'Perf Linux Xenial',
                          is_experimental=True,
                          suffix='_experimental', revision='a' * 40)
+
+  gn_analyze_error_output = {'error': 'Wrong input'}
+  yield generate_builder(
+      'luci.webrtc.try',
+      'linux_compile_rel',
+      revision='a' * 40,
+      suffix='_gn_analyze_error',
+      gn_analyze_output=gn_analyze_error_output)
+
+  gn_analyze_invalid_output = {'invalid_targets': ['non_existent_target']}
+  yield generate_builder(
+      'luci.webrtc.try',
+      'linux_compile_rel',
+      revision='a' * 40,
+      suffix='_gn_analyze_invalid_targets',
+      gn_analyze_output=gn_analyze_invalid_output)
+
+  gn_analyze_no_deps_output = {'status': ['No dependency']}
+  yield generate_builder(
+      'luci.webrtc.try',
+      'linux_compile_rel',
+      revision='a' * 40,
+      suffix='_gn_analyze_no_dependency',
+      gn_analyze_output=gn_analyze_no_deps_output)
