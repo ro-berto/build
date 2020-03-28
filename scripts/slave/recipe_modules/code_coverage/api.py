@@ -245,7 +245,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               break
         elif self.m.chromium.c.TARGET_PLATFORM == 'ios':
           binary_name = binary
-          if target.endswith("eg2tests"):
+          if target.endswith("eg2tests_module"):
             # iOS EG2 tests coverage data is generated from the host app named
             # "ios_chrome_eg2tests".
             binary_name = "ios_chrome_eg2tests"

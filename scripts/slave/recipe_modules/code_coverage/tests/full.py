@@ -68,7 +68,7 @@ def RunSteps(api):
                                              'merge_blink_web_tests.py'),
               'args': ['random', 'args'],
           }),
-      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests')
+      steps.SwarmingIsolatedScriptTest('ios_chrome_smoke_eg2tests_module')
   ]
   assert _NUM_TESTS == len(tests)
 
