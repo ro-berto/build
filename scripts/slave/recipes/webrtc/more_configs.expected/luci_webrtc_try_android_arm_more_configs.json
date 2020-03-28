@@ -162,64 +162,6 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "android_arm_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "bwe_test_logging",
-      "-v",
-      "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -378,8 +320,7 @@
       "-C",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
-      "80",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -398,7 +339,6 @@
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
       "80",
-      "default",
       "-d",
       "explain",
       "-n"
@@ -515,7 +455,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 80, \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -578,64 +518,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "android_arm_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "dummy_audio_file_devices_no_protobuf",
-      "-v",
-      "//out/bwe_test_logging",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "name": "analyze (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
     ]
   },
   {
@@ -798,8 +680,7 @@
       "-C",
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
-      "80",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -818,7 +699,6 @@
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
       "80",
-      "default",
       "-d",
       "explain",
       "-n"
@@ -935,7 +815,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 80, \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1002,78 +882,6 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "android_arm_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "rtti_no_sctp",
-      "-v",
-      "//out/dummy_audio_file_devices_no_protobuf",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "name": "analyze (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/rtti_no_sctp",
-      "--clean-isolated-files"
-    ],
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -1119,8 +927,6 @@
       "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
-      "--swarming-targets-file",
-      "peerconnection_unittests\n",
       "//out/rtti_no_sctp"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1132,9 +938,7 @@
     "name": "generate_build_files (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -1236,9 +1040,7 @@
       "-C",
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "-j",
-      "80",
-      "default",
-      "peerconnection_unittests"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1257,8 +1059,6 @@
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "-j",
       "80",
-      "default",
-      "peerconnection_unittests",
       "-d",
       "explain",
       "-n"
@@ -1375,7 +1175,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/rtti_no_sctp\", \"-j\", 80, \"default\", \"peerconnection_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/rtti_no_sctp\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1438,36 +1238,6 @@
     "name": "postprocess_for_goma (3).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/src/tools/luci-go/isolate",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--namespace",
-      "default-gzip",
-      "--eventlog-endpoint",
-      "prod",
-      "--blacklist",
-      "*.pyc",
-      "--blacklist",
-      "*.swp",
-      "--blacklist",
-      ".git",
-      "[CACHE]/builder/src/out/rtti_no_sctp/peerconnection_unittests.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\"}@@@"
     ]
   },
   {

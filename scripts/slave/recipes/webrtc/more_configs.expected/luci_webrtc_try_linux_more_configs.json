@@ -161,63 +161,6 @@
   },
   {
     "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "linux_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "bwe_test_logging",
-      "-v",
-      "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "analyze",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -373,8 +316,7 @@
       "-C",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
-      "80",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -392,7 +334,6 @@
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
       "80",
-      "default",
       "-d",
       "explain",
       "-n"
@@ -508,7 +449,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 80, \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -571,63 +512,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "linux_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "dummy_audio_file_devices_no_protobuf",
-      "-v",
-      "//out/bwe_test_logging",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "analyze (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
     ]
   },
   {
@@ -787,8 +671,7 @@
       "-C",
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
-      "80",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -806,7 +689,6 @@
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
       "80",
-      "default",
       "-d",
       "explain",
       "-n"
@@ -922,7 +804,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 80, \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -985,66 +867,6 @@
     "name": "postprocess_for_goma (2).stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
-      "analyze",
-      "-m",
-      "tryserver.webrtc",
-      "-b",
-      "linux_more_configs",
-      "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "--phase",
-      "rtti_no_sctp",
-      "-v",
-      "//out/dummy_audio_file_devices_no_protobuf",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"peerconnection_unittests\"]}",
-      "/path/to/tmp/json",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "analyze (3)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
     ]
   },
   {
