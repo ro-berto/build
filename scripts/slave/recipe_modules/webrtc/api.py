@@ -352,6 +352,13 @@ class WebRTCApi(recipe_api.RecipeApi):
             t for t in step_result.json.output['test_targets']
             if t in non_isolated_test_targets
         ]
+        # See crbug.com/557505 - we need to not prune meta
+        # targets that are part of 'test_targets', because otherwise
+        # we might not actually build all of the binaries needed for
+        # a given test, even if they aren't affected by the patch.
+        self._compile_targets = sorted(
+            set(self._compile_targets + self._isolated_targets +
+                self._non_isolated_targets))
       else:
         step_result.presentation.step_text = 'No compile necessary'
         self._compile_targets = []
