@@ -92,6 +92,21 @@ SPEC = {
                     'platform': 'linux',
                 },
             ),
+        'Linux Ozone Tester (Headless)':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                chromium_apply_config=['mb', 'mb_luci_auth'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                bot_type=bot_spec.TESTER,
+                parent_buildername='linux-ozone-rel',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
         'Linux Ozone Tester (X11)':
             _chromium_linux_spec(
                 chromium_config='chromium',
