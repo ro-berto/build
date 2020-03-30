@@ -372,6 +372,19 @@ class WebRTCApi(recipe_api.RecipeApi):
         self._isolated_targets = []
         self._non_isolated_targets = []
 
+    # TODO(bugs.webrtc.org/11262): Some trybots are used to calculate
+    # the binary size impact of the current CL. These targets should
+    # always be built but we should find a better way to hook this up
+    # with the rest of the infrastructure to avoid to update the config
+    # in two places.
+    if self.buildername in ('android_compile_arm_rel',
+                            'android_compile_arm64_rel'):
+      self._compile_targets = sorted(
+          set(self._compile_targets +
+              ['libjingle_peerconnection_so', 'AppRTCMobile']))
+    elif self.buildername == 'linux_compile_rel':
+      self._compile_targets = sorted(set(self._compile_targets + ['webrtc']))
+
     return len(self._compile_targets) > 0
 
   def configure_isolate(self, phase=None):

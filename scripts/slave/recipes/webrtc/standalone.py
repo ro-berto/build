@@ -97,7 +97,7 @@ def GenTests(api):
       yield generate_builder(bucketname, buildername, revision='a' * 40)
 
   bucketname = 'luci.webrtc.try'
-  buildername = 'linux_compile_rel'
+  buildername = 'linux_compile_arm_rel'
   yield generate_builder(bucketname, buildername, revision=None,
                          is_chromium=True, suffix='_chromium')
 
@@ -168,7 +168,7 @@ def GenTests(api):
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield generate_builder(
       'luci.webrtc.try',
-      'linux_compile_rel',
+      'linux_compile_arm_rel',
       revision='a' * 40,
       suffix='_gn_analyze_no_dependency',
       gn_analyze_output=gn_analyze_no_deps_output)
