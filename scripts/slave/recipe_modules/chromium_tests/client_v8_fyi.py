@@ -21,7 +21,7 @@ SPEC = {
                     'chromium_lkgr',
                     'show_v8_revision',
                 ],
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
@@ -45,7 +45,7 @@ SPEC = {
                     'chromium_lkgr',
                     'show_v8_revision',
                 ],
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
@@ -72,7 +72,7 @@ SPEC = {
         'V8 Android GN (dbg)':
             _client_v8_fyi_spec(
                 chromium_config='android',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'android',
@@ -104,7 +104,7 @@ SPEC = {
         'V8 Blink Linux':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -128,7 +128,7 @@ SPEC = {
         'V8 Blink Linux Debug':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -152,7 +152,7 @@ SPEC = {
         'V8 Blink Mac':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -176,7 +176,7 @@ SPEC = {
         'V8 Blink Win':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -200,7 +200,7 @@ SPEC = {
         'V8 Blink Linux Future':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -224,7 +224,7 @@ SPEC = {
         'V8 Blink Linux Layout NG':
             _client_v8_fyi_spec(
                 chromium_config='chromium',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'show_v8_revision',
@@ -256,7 +256,7 @@ SPEC = {
                     'chromium_lkgr',
                     'show_v8_revision',
                 ],
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Debug',
                     'TARGET_BITS': 64,
@@ -275,7 +275,7 @@ SPEC = {
         'Linux ASAN Builder':
             _client_v8_fyi_spec(
                 chromium_config='chromium_asan',
-                chromium_apply_config=['mb'],
+                chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=[
                     'v8_tot',
@@ -306,7 +306,7 @@ SPEC = {
             _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
-                    'mb',
+                    'mb', 'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -333,7 +333,7 @@ SPEC = {
             _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
-                    'mb',
+                    'mb', 'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -360,7 +360,7 @@ SPEC = {
             _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
-                    'mb',
+                    'mb', 'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -387,7 +387,7 @@ SPEC = {
             _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
-                    'mb',
+                    'mb', 'mb_luci_auth',
                 ],
                 gclient_config='chromium',
                 gclient_apply_config=[
