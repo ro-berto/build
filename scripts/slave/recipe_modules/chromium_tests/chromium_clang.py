@@ -50,7 +50,7 @@ def config(name,
     cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
     cfg['isolate_server'] = 'https://chrome-isolated.appspot.com'
     cfg['swarming_dimensions'] = {
-        'pool': 'chrome.tests',
+        'pool': 'chrome.tests.template',
         'os': 'Ubuntu-14.04',
     }
 
