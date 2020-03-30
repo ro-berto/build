@@ -41,7 +41,6 @@ DRONE_TIMEOUT_SECS = 7200
 
 BUCKET_NAME = 'flutter_infra'
 MAVEN_BUCKET_NAME = 'download.flutter.io'
-FUCHSIA_DEBUG_SYMBOLS_BUCKET_NAME = 'fuchsia-infra-debug-symbols'
 FUCHSIA_ARTIFACTS_BUCKET_NAME = 'fuchsia-artifacts-release'
 FUCHSIA_ARTIFACTS_DEBUG_NAMESPACE = 'debug'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
@@ -761,13 +760,6 @@ def UploadFuchsiaDebugSymbolsToSymbolServer(api, arch, symbol_dirs):
         exec_path = str(executable)
         if 'dbg_success' not in exec_path:
           remote_file_name = GetRemoteFileName(exec_path)
-          # TODO(fxb/48833): Stop uploading to this bucket.
-          api.gsutil.upload(
-              executable,
-              FUCHSIA_DEBUG_SYMBOLS_BUCKET_NAME,
-              remote_file_name,
-              args=['-n'],
-              name='deprecated upload "%s"' % remote_file_name)
           api.gsutil.upload(
               executable,
               FUCHSIA_ARTIFACTS_BUCKET_NAME,
