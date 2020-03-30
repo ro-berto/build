@@ -4,14 +4,16 @@
 
 from . import bot_spec
 
+
+def _client_v8_fyi_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-v8', luci_project='v8', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-v8',
-        'luci_project': 'v8',
-    },
     'builders': {
         'Linux Debug Builder':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -35,7 +37,7 @@ SPEC = {
                 },
             ),
         'V8 Linux GN':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -68,7 +70,7 @@ SPEC = {
                 },
             ),
         'V8 Android GN (dbg)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -100,7 +102,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Linux':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -124,7 +126,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Linux Debug':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -148,7 +150,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Mac':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -172,7 +174,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Win':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -196,7 +198,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Linux Future':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -220,7 +222,7 @@ SPEC = {
                 },
             ),
         'V8 Blink Linux Layout NG':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -246,7 +248,7 @@ SPEC = {
         # Bot names should be in sync with chromium.linux's names to retrieve
         # the same test configuration files.
         'Linux Tests (dbg)(1)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -271,7 +273,7 @@ SPEC = {
                 },
             ),
         'Linux ASAN Builder':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium_asan',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -301,7 +303,7 @@ SPEC = {
             ),
         # GPU bots.
         'Win V8 FYI Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -328,7 +330,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac V8 FYI Release (Intel)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -355,7 +357,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux V8 FYI Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -382,7 +384,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux V8 FYI Release - pointer compression (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -409,7 +411,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Android V8 FYI Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _client_v8_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=[],
                 gclient_config='chromium',

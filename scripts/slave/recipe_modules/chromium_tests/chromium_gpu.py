@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_gpu_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-gpu-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-gpu-archive',
-    },
     'builders': {
         'GPU Win x64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -27,7 +30,7 @@ SPEC = {
                 },
             ),
         'GPU Win x64 Builder Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -45,7 +48,7 @@ SPEC = {
                 },
             ),
         'GPU Win x64 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -62,7 +65,7 @@ SPEC = {
                 },
             ),
         'Win10 x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -80,7 +83,7 @@ SPEC = {
                 },
             ),
         'Win10 x64 Release (NVIDIA) Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -99,7 +102,7 @@ SPEC = {
                 },
             ),
         'Win10 x64 Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -117,7 +120,7 @@ SPEC = {
                 },
             ),
         'GPU Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -136,7 +139,7 @@ SPEC = {
                 },
             ),
         'GPU Linux Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -153,7 +156,7 @@ SPEC = {
                 },
             ),
         'Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -173,7 +176,7 @@ SPEC = {
                 },
             ),
         'Linux Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -191,7 +194,7 @@ SPEC = {
                 },
             ),
         'GPU Mac Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -208,7 +211,7 @@ SPEC = {
                 },
             ),
         'GPU Mac Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -225,7 +228,7 @@ SPEC = {
                 },
             ),
         'GPU Mac Builder Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -243,7 +246,7 @@ SPEC = {
                 },
             ),
         'Mac Release (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -261,7 +264,7 @@ SPEC = {
                 },
             ),
         'Mac Release (Intel) Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -280,7 +283,7 @@ SPEC = {
                 },
             ),
         'Mac Debug (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -298,7 +301,7 @@ SPEC = {
                 },
             ),
         'Mac Retina Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -316,7 +319,7 @@ SPEC = {
                 },
             ),
         'Mac Retina Release (AMD) Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -335,7 +338,7 @@ SPEC = {
                 },
             ),
         'Mac Retina Debug (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -353,7 +356,7 @@ SPEC = {
                 },
             ),
         'Android Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',

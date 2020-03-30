@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_memory_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-memory-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-memory-archive',
-    },
     'builders': {
         'Android CFI':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'mb', 'mb_luci_auth', 'download_vr_test_apks'
@@ -27,7 +30,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux ASan LSan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -43,7 +46,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux ASan LSan Tests (1)':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -60,7 +63,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux ASan Tests (sandboxed)':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -77,7 +80,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux CFI':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -89,7 +92,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux MSan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -101,7 +104,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux MSan Tests':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -114,7 +117,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux ChromiumOS MSan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -127,7 +130,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux ChromiumOS MSan Tests':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_msan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -141,7 +144,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux TSan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_tsan2',
                 gclient_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -155,7 +158,7 @@ SPEC = {
                 },
             ),
         'Linux TSan Tests':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_tsan2',
                 gclient_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -170,7 +173,7 @@ SPEC = {
                 },
             ),
         'Mac ASan 64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -185,7 +188,7 @@ SPEC = {
                 testing={'platform': 'mac'},
             ),
         'Mac ASan 64 Tests (1)':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -201,7 +204,7 @@ SPEC = {
                 testing={'platform': 'mac'},
             ),
         'Linux Chromium OS ASan LSan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -214,7 +217,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'Linux Chromium OS ASan LSan Tests (1)':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_asan',
                 gclient_config='chromium',
                 gclient_apply_config=['chromeos'],
@@ -228,7 +231,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebKit Linux ASAN':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_clang',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -240,7 +243,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebKit Linux MSAN':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_clang',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -252,7 +255,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebKit Linux Leak':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium',
                 gclient_config='chromium',
                 chromium_config_kwargs={
@@ -267,7 +270,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'android-asan':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 android_config='main_builder',
                 chromium_config='android_asan',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -282,7 +285,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'win-asan':
-            bot_spec.BotSpec.create(
+            _chromium_memory_spec(
                 chromium_config='chromium_win_clang_asan',
                 gclient_config='chromium',
                 chromium_config_kwargs={

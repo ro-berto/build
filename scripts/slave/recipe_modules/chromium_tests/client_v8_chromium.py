@@ -4,14 +4,16 @@
 
 from . import bot_spec
 
+
+def _client_v8_chromium_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-v8', luci_project='v8', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-v8',
-        'luci_project': 'v8',
-    },
     'builders': {
         'Linux - Future':
-            bot_spec.BotSpec.create(
+            _client_v8_chromium_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -30,7 +32,7 @@ SPEC = {
                 },
             ),
         'Linux - Future (dbg)':
-            bot_spec.BotSpec.create(
+            _client_v8_chromium_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -44,7 +46,7 @@ SPEC = {
                 },
             ),
         'Linux V8 API Stability':
-            bot_spec.BotSpec.create(
+            _client_v8_chromium_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',

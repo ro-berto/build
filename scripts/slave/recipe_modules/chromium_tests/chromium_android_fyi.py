@@ -6,13 +6,16 @@ from . import bot_spec
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
+
+def _chromium_android_fyi_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-android-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-android-archive',
-    },
     'builders': {
         'Android WebView P Blink-CORS FYI (rel)':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -29,7 +32,7 @@ SPEC = {
                 },
             ),
         'Android WebLayer P FYI (rel)':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -46,7 +49,7 @@ SPEC = {
                 },
             ),
         'Android WebView P FYI (rel)':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -63,7 +66,7 @@ SPEC = {
                 },
             ),
         'Memory Infra Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -79,7 +82,7 @@ SPEC = {
                 },
             ),
         'android-marshmallow-x86-fyi-rel':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -96,7 +99,7 @@ SPEC = {
                 },
             ),
         'android-pie-x86-fyi-rel':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -113,7 +116,7 @@ SPEC = {
                 },
             ),
         'android-bfcache-rel':
-            bot_spec.BotSpec.create(
+            _chromium_android_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],

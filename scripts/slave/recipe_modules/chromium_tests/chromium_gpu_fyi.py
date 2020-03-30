@@ -4,13 +4,17 @@
 
 from . import bot_spec
 
+
+def _chromium_gpu_fyi_spec(**kwargs):
+  if kwargs.get('bot_type') != bot_spec.DUMMY_TESTER:
+    kwargs['build_gs_bucket'] = 'chromium-gpu-fyi-archive'
+  return bot_spec.BotSpec.create(**kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-gpu-fyi-archive',
-    },
     'builders': {
         'GPU FYI Win Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -33,7 +37,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -56,7 +60,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win dEQP Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -85,7 +89,7 @@ SPEC = {
                 # than the common case.
             ),
         'Win7 FYI Debug (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -104,7 +108,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win7 FYI Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -123,7 +127,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win7 FYI Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -142,7 +146,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win7 FYI dEQP Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -161,7 +165,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU FYI Win x64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -184,7 +188,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win x64 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -207,7 +211,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win x64 Builder DEPS ANGLE':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -229,7 +233,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win x64 dEQP Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -258,7 +262,7 @@ SPEC = {
                 # than the common case.
             ),
         'GPU FYI Win x64 DX12 Vulkan Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -281,7 +285,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Win x64 DX12 Vulkan Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -304,7 +308,7 @@ SPEC = {
                 },
             ),
         'Win10 FYI x64 Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -323,7 +327,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -342,7 +346,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 DX12 Vulkan Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -361,7 +365,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Exp Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -380,7 +384,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Exp Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -399,7 +403,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Release (AMD RX 550)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -418,7 +422,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -437,7 +441,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Release (Intel UHD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -456,7 +460,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -475,7 +479,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x86 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -494,7 +498,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -528,7 +532,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 SkiaRenderer GL (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -547,7 +551,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 dEQP Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -566,7 +570,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win10 FYI x64 dEQP Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -585,7 +589,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win7 FYI x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -604,7 +608,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Win7 FYI x64 dEQP Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -623,7 +627,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU FYI XR Win x64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -653,7 +657,7 @@ SPEC = {
                 perf_isolate_lookup=True,
             ),
         'Win10 FYI x64 Release XR Perf (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -672,7 +676,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU FYI Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -695,7 +699,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Linux Builder DEPS ANGLE':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -717,7 +721,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Linux Ozone Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -740,7 +744,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Linux Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -763,7 +767,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Linux dEQP Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -792,7 +796,7 @@ SPEC = {
                 # than the common case.
             ),
         'Linux FYI Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -811,7 +815,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Experimental Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -830,7 +834,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -846,7 +850,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI dEQP Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -865,7 +869,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI SkiaRenderer Vulkan (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -884,7 +888,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI SkiaRenderer Vulkan (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -903,7 +907,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -922,7 +926,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Release (Intel UHD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -941,7 +945,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Experimental Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -960,7 +964,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI dEQP Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -979,7 +983,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI GPU TSAN Release':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1000,7 +1004,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI Release (AMD R7 240)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1019,7 +1023,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1034,7 +1038,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU FYI Fuchsia Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1059,7 +1063,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Mac Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1082,7 +1086,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Mac Builder DEPS ANGLE':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1104,7 +1108,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Mac Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1127,7 +1131,7 @@ SPEC = {
                 },
             ),
         'GPU FYI Mac dEQP Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[],
                 gclient_config='chromium',
@@ -1153,7 +1157,7 @@ SPEC = {
                 # than the common case.
             ),
         'Mac FYI Release (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1172,7 +1176,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Debug (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1191,7 +1195,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac Pro FYI Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1210,7 +1214,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1229,7 +1233,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Retina Debug (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1248,7 +1252,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Retina Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1267,7 +1271,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Retina Debug (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1286,7 +1290,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Experimental Release (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1305,7 +1309,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Experimental Retina Release (AMD)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1324,7 +1328,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI Experimental Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1343,7 +1347,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI GPU ASAN Release':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1363,7 +1367,7 @@ SPEC = {
                 },
             ),
         'Mac FYI dEQP Release AMD':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[],
                 gclient_config='chromium',
@@ -1385,7 +1389,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Mac FYI dEQP Release Intel':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[],
                 gclient_config='chromium',
@@ -1407,7 +1411,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU FYI Perf Android 64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1432,7 +1436,7 @@ SPEC = {
                 perf_isolate_lookup=True,
             ),
         'Android FYI Release (Nexus 5)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1453,7 +1457,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -1474,7 +1478,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (Nexus 6)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1495,7 +1499,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (Nexus 6P)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1513,7 +1517,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (Nexus 9)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1531,7 +1535,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (NVIDIA Shield TV)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1549,7 +1553,7 @@ SPEC = {
                 },
             ),
         'Android FYI Release (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1567,7 +1571,7 @@ SPEC = {
                 },
             ),
         'Android FYI dEQP Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1585,7 +1589,7 @@ SPEC = {
                 },
             ),
         'Android FYI 32 Vk Release (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1605,7 +1609,7 @@ SPEC = {
                 },
             ),
         'Android FYI 64 Vk Release (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1625,7 +1629,7 @@ SPEC = {
                 },
             ),
         'Android FYI 32 dEQP Vk Release (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1645,7 +1649,7 @@ SPEC = {
                 },
             ),
         'Android FYI 64 dEQP Vk Release (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1665,7 +1669,7 @@ SPEC = {
                 },
             ),
         'Android FYI SkiaRenderer GL (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -1681,7 +1685,7 @@ SPEC = {
                 },
             ),
         'Android FYI SkiaRenderer Vulkan (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -1697,7 +1701,7 @@ SPEC = {
                 },
             ),
         'Android FYI 64 Perf (Pixel 2)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1717,7 +1721,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'GPU Fake Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1734,7 +1738,7 @@ SPEC = {
                 },
             ),
         'Fake Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -1749,7 +1753,7 @@ SPEC = {
                 },
             ),
         'Linux FYI Ozone (Intel)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -1773,21 +1777,21 @@ SPEC = {
         # to be read, and the "optional" GPU tryservers to be specified in
         # terms of them.
         'Optional Win10 x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Win10 x64 Release (Intel HD 630)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Linux Release (Intel HD 630)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Release (Intel)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Mac Retina Release (AMD)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Optional Android Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -1814,7 +1818,7 @@ SPEC = {
         # the tests on the GPU try servers. And to specify tests for
         # ANGLE's try servers separately from the gpu.fyi waterfall.
         'ANGLE GPU Android Release (Nexus 5X)':
-            bot_spec.BotSpec.create(
+            _chromium_gpu_fyi_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=[
@@ -1832,20 +1836,20 @@ SPEC = {
                 },
             ),
         'ANGLE GPU Linux Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Linux Release (Intel HD 630)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Release (Intel)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Retina Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Mac Retina Release (AMD)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Win10 x64 Release (NVIDIA)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'ANGLE GPU Win10 x64 Release (Intel HD 630)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
         'Win7 ANGLE Tryserver (AMD)':
-            bot_spec.BotSpec.create(bot_type=bot_spec.DUMMY_TESTER),
+            _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),
     },
 }

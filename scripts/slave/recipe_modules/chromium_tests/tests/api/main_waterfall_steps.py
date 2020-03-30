@@ -28,14 +28,18 @@ DEPS = [
 
 PROPERTIES = {'fail_compile': Property(default=False, kind=bool)}
 
+
+def _builder_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-example-archive', **kwargs)
+
+
 CUSTOM_BUILDERS = bot_db.BotDatabase.create({
     'chromium.example':
         master_spec.MasterSpec.create(
-            settings=master_spec.MasterSettings.create(
-                build_gs_bucket='chromium-example-archive',),
             builders={
                 'Isolated Transfer Builder':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='builder',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -49,7 +53,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Isolated Transfer Tester':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='tester',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -64,7 +68,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Isolated Transfer: mixed builder, isolated tester (builder)':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='builder',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -78,7 +82,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Isolated Transfer: mixed builder, isolated tester (tester)':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='tester',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -95,7 +99,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Isolated Transfer: mixed BT, isolated tester (BT)':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         android_config='main_builder_mb',
                         bot_type='builder_tester',
                         chromium_config='android',
@@ -110,7 +114,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Isolated Transfer: mixed BT, isolated tester (tester)':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         android_config='main_builder_mb',
                         bot_type='tester',
                         chromium_config='android',
@@ -127,7 +131,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Packaged Transfer Builder':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='builder',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -141,7 +145,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Packaged Transfer Enabled Builder':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='builder',
                         enable_package_transfer=True,
                         chromium_apply_config=['mb'],
@@ -156,7 +160,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Packaged Transfer Tester':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         bot_type='tester',
                         chromium_apply_config=['mb'],
                         chromium_config='chromium',
@@ -171,7 +175,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Multiple Triggers: Builder':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         android_config='main_builder',
                         bot_type='builder',
                         chromium_apply_config=['mb'],
@@ -188,7 +192,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Multiple Triggers: Mixed':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         android_config='main_builder',
                         bot_type='tester',
                         chromium_apply_config=['mb'],
@@ -206,7 +210,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                         },
                     ),
                 'Multiple Triggers: Isolated':
-                    bot_spec.BotSpec.create(
+                    _builder_spec(
                         android_config='main_builder',
                         bot_type='tester',
                         chromium_apply_config=['mb'],
@@ -223,8 +227,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                             'platform': 'linux',
                         },
                     ),
-            },
-        ),
+            },),
 })
 
 

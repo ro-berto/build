@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_mac_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-mac-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-mac-archive',
-    },
     'builders': {
         'ios-device':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -32,7 +35,7 @@ SPEC = {
                 },
             ),
         'ios-simulator-full-configs':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -53,7 +56,7 @@ SPEC = {
                 },
             ),
         'ios-simulator-noncq':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -74,7 +77,7 @@ SPEC = {
                 },
             ),
         'ios-simulator':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -95,7 +98,7 @@ SPEC = {
                 },
             ),
         'Mac Builder':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -112,7 +115,7 @@ SPEC = {
                 },
             ),
         'Mac Builder Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -130,7 +133,7 @@ SPEC = {
                 },
             ),
         'Mac10.10 Tests':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -148,7 +151,7 @@ SPEC = {
                 },
             ),
         'Mac10.11 Tests':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -166,7 +169,7 @@ SPEC = {
                 },
             ),
         'Mac10.12 Tests':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -184,7 +187,7 @@ SPEC = {
                 },
             ),
         'Mac10.13 Tests':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -202,7 +205,7 @@ SPEC = {
                 },
             ),
         'Mac10.13 Tests Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -221,7 +224,7 @@ SPEC = {
                 },
             ),
         'Mac10.14 Tests':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -239,7 +242,7 @@ SPEC = {
                 },
             ),
         'Mac Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -256,7 +259,7 @@ SPEC = {
                 },
             ),
         'Mac10.13 Tests (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -274,7 +277,7 @@ SPEC = {
                 },
             ),
         'WebKit Mac10.13 (retina)':
-            bot_spec.BotSpec.create(
+            _chromium_mac_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',

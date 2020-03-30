@@ -14,17 +14,6 @@ DEPS = [
 def RunSteps(api):
   # normalize ******************************************************************
   x = master_spec.MasterSpec.normalize({
-      'settings': {
-          'luci_project':
-              'fake-luci-project',
-          'build_gs_bucket':
-              'fake-build-gs-bucket',
-          'bisect_builders': ['fake-bisect-builder-1', 'fake-bisect-builder-2'],
-          'bisect_build_gs_bucket':
-              'fake-bisect-build-gs-bucket',
-          'bisect_build_gs_extra':
-              'fake-bisect-build-gs-extra',
-      },
       'builders': {
           'fake-builder': {
               'bot_type': bot_spec.BUILDER,
@@ -32,13 +21,6 @@ def RunSteps(api):
       },
   })
   y = master_spec.MasterSpec.create(
-      settings=master_spec.MasterSettings.create(
-          luci_project='fake-luci-project',
-          build_gs_bucket='fake-build-gs-bucket',
-          bisect_builders=['fake-bisect-builder-1', 'fake-bisect-builder-2'],
-          bisect_build_gs_bucket='fake-bisect-build-gs-bucket',
-          bisect_build_gs_extra='fake-bisect-build-gs-extra',
-      ),
       builders={
           'fake-builder': bot_spec.BotSpec.create(bot_type=bot_spec.BUILDER),
       },

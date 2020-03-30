@@ -4,13 +4,15 @@
 
 from . import bot_spec
 
+
+def _tryserver_webrtc_spec(**kwargs):
+  return bot_spec.BotSpec.create(luci_project='webrtc', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'luci_project': 'webrtc'
-    },
     'builders': {
         'android_chromium_compile':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=[
@@ -27,7 +29,7 @@ SPEC = {
                 gclient_config='chromium_no_telemetry_dependencies',
                 testing={'platform': 'linux'}),
         'linux_chromium_compile':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -39,7 +41,7 @@ SPEC = {
                 gclient_config='chromium_no_telemetry_dependencies',
                 testing={'platform': 'linux'}),
         'linux_chromium_compile_dbg':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -51,7 +53,7 @@ SPEC = {
                 gclient_config='chromium_no_telemetry_dependencies',
                 testing={'platform': 'linux'}),
         'mac_chromium_compile':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -63,7 +65,7 @@ SPEC = {
                 gclient_config='chromium_no_telemetry_dependencies',
                 testing={'platform': 'mac'}),
         'win_chromium_compile':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -75,7 +77,7 @@ SPEC = {
                 gclient_config='chromium_no_telemetry_dependencies',
                 testing={'platform': 'win'}),
         'win_chromium_compile_dbg':
-            bot_spec.BotSpec.create(
+            _tryserver_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',

@@ -12,23 +12,6 @@ from . import steps
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-KITCHEN_TEST_SPEC = {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': [
-        'mb',
-        'mb_luci_auth',
-    ],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-    },
-    'compile_targets': ['all',],
-    'testing': {
-        'platform': 'linux',
-    },
-}
-
 
 def stock_config(name, config='Release', target_bits=64, staging=True,
                  **kwargs):
@@ -90,9 +73,6 @@ def no_archive(base_config):
 
 
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-fyi-archive',
-    },
     'builders': {
         'Mac Builder Next':
             bot_spec.BotSpec.create(
@@ -942,3 +922,10 @@ SPEC['builders'].update([
         bot_type=bot_spec.TESTER,
         parent_buildername='win-pixel-builder-rel'),
 ])
+
+# Many of the FYI specs are made by transforming specs from other files, so
+# rather than have to do 2 different things for specs based on other specs and
+# specs created within this file, just evolve all of the specs afterwards
+for builder_name, spec in SPEC['builders'].iteritems():
+  SPEC['builders'][builder_name] = spec.evolve(
+      build_gs_bucket='chromium-fyi-archive')

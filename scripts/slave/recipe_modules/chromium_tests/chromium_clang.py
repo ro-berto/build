@@ -8,6 +8,11 @@ from . import steps
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
 
+def _chromium_clang_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-clang-archive', **kwargs)
+
+
 def config(name,
            android_config=None,
            build_config='Release',
@@ -54,16 +59,13 @@ def config(name,
         'os': 'Ubuntu-14.04',
     }
 
-  return name, bot_spec.BotSpec.create(**cfg)
+  return name, _chromium_clang_spec(**cfg)
 
 
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-clang-archive',
-    },
     'builders': {
         'CFI Linux ToT':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_linux',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -79,7 +81,7 @@ SPEC = {
                 },
             ),
         'CFI Linux CF':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -98,7 +100,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'UBSanVptr Linux':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -114,7 +116,7 @@ SPEC = {
                 },
             ),
         'linux-win_cross-rel':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -137,7 +139,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTiOS':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -157,7 +159,7 @@ SPEC = {
                 },
             ),
         'ToTiOSDevice':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -177,7 +179,7 @@ SPEC = {
                 },
             ),
         'ToTWinCFI':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -200,7 +202,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWinCFI64':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -223,7 +225,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWinOfficial':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -252,7 +254,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWinThinLTO64':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -281,7 +283,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'CrWinAsan':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_asan_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -300,7 +302,7 @@ SPEC = {
                 # doesn't build everything.
             ),
         'CrWinAsan(dll)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_asan_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -319,7 +321,7 @@ SPEC = {
                 # doesn't build everything.
             ),
         'ToTAndroidASan':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_android_asan',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -344,7 +346,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTAndroid (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_android_dbg',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -369,7 +371,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTAndroid x64':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_android',
                 gclient_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
@@ -393,7 +395,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTMac':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_mac',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -416,7 +418,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTMacOfficial':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_mac',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -447,7 +449,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTMac (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_mac',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -470,7 +472,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTMacASan':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='clang_tot_mac_asan',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -493,7 +495,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_official_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -524,7 +526,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin(dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -549,7 +551,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin(dll)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -574,7 +576,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin64':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_official_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -605,7 +607,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWinASanLibfuzzer':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_asan_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -627,7 +629,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin64(dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -652,7 +654,7 @@ SPEC = {
                 add_tests_as_compile_targets=False,
             ),
         'ToTWin64(dll)':
-            bot_spec.BotSpec.create(
+            _chromium_clang_spec(
                 chromium_config='chromium_win_clang_tot',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',

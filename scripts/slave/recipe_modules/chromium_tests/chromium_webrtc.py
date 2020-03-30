@@ -38,13 +38,14 @@ def browser_perf_test(perf_id):
       commit_position_property='got_revision_cp')
 
 
+def _chromium_webrtc_spec(**kwargs):
+  return bot_spec.BotSpec.create(build_gs_bucket='chromium-webrtc', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-webrtc'
-    },
     'builders': {
         'WebRTC Chromium Android Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=[
@@ -62,7 +63,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium Android Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=[
@@ -87,7 +88,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -100,7 +101,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium Linux Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -116,7 +117,7 @@ SPEC = {
                 tests=[browser_perf_test('chromium-webrtc-rel-linux')],
             ),
         'WebRTC Chromium Mac Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -129,7 +130,7 @@ SPEC = {
                 testing={'platform': 'mac'},
             ),
         'WebRTC Chromium Mac Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -145,7 +146,7 @@ SPEC = {
                 tests=[browser_perf_test('chromium-webrtc-rel-mac')],
             ),
         'WebRTC Chromium Win Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -158,7 +159,7 @@ SPEC = {
                 testing={'platform': 'win'},
             ),
         'WebRTC Chromium Win10 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -174,7 +175,7 @@ SPEC = {
                 tests=[browser_perf_test('chromium-webrtc-rel-win10')],
             ),
         'WebRTC Chromium Win7 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -190,7 +191,7 @@ SPEC = {
                 tests=[browser_perf_test('chromium-webrtc-rel-7')],
             ),
         'WebRTC Chromium Win8 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',

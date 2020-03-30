@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_linux_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-linux-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-linux-archive',
-    },
     'builders': {
         'fuchsia-arm64-cast':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -26,7 +29,7 @@ SPEC = {
                 },
             ),
         'fuchsia-x64-cast':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -42,7 +45,7 @@ SPEC = {
                 },
             ),
         'fuchsia-x64-dbg':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -58,7 +61,7 @@ SPEC = {
                 },
             ),
         'linux-gcc-rel':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium_no_goma',
                 chromium_apply_config=[
                     'mb',
@@ -75,7 +78,7 @@ SPEC = {
                 },
             ),
         'linux-ozone-rel':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -90,7 +93,7 @@ SPEC = {
                 },
             ),
         'Linux Ozone Tester (X11)':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -105,7 +108,7 @@ SPEC = {
                 },
             ),
         'Linux Ozone Tester (Wayland)':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -120,7 +123,7 @@ SPEC = {
                 },
             ),
         'Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -142,7 +145,7 @@ SPEC = {
                 },
             ),
         'linux-trusty-rel':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -158,7 +161,7 @@ SPEC = {
                 },
             ),
         'Linux Tests':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -178,7 +181,7 @@ SPEC = {
                 },
             ),
         'Linux Builder (dbg)(32)':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -195,7 +198,7 @@ SPEC = {
                 },
             ),
         'Linux Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -212,7 +215,7 @@ SPEC = {
                 },
             ),
         'Linux Tests (dbg)(1)':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -227,7 +230,7 @@ SPEC = {
                 },
             ),
         'Cast Audio Linux':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium_clang',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -240,7 +243,7 @@ SPEC = {
                 },
             ),
         'Cast Linux':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium_clang',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -253,7 +256,7 @@ SPEC = {
                 },
             ),
         'Fuchsia ARM64 Cast Audio':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -269,7 +272,7 @@ SPEC = {
                 },
             ),
         'Fuchsia ARM64':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -289,7 +292,7 @@ SPEC = {
                 },
             ),
         'Fuchsia x64 Cast Audio':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -305,7 +308,7 @@ SPEC = {
                 },
             ),
         'Fuchsia x64':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -321,7 +324,7 @@ SPEC = {
                 },
             ),
         'Leak Detection Linux':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 gclient_config='chromium',
                 chromium_apply_config=[
@@ -339,7 +342,7 @@ SPEC = {
                 },
             ),
         'Network Service Linux':
-            bot_spec.BotSpec.create(
+            _chromium_linux_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',

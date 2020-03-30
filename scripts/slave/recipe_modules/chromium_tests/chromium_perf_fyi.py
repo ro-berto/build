@@ -10,7 +10,6 @@ from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
 SPEC = {
     'builders': {},
-    'settings': chromium_perf.SPEC['settings'],
 }
 
 

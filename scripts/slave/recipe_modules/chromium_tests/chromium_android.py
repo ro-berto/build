@@ -6,13 +6,16 @@ from . import bot_spec
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
+
+def _chromium_android_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-android-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-android-archive',
-    },
     'builders': {
         'Android arm Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -31,7 +34,7 @@ SPEC = {
                 },
             ),
         'Android arm64 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -50,7 +53,7 @@ SPEC = {
                 },
             ),
         'Android ASAN (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android_clang',
                 chromium_apply_config=[
                     'errorprone',
@@ -69,7 +72,7 @@ SPEC = {
                 },
             ),
         'Android x64 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -85,7 +88,7 @@ SPEC = {
                 },
             ),
         'Android x86 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 gclient_config='chromium',
                 gclient_apply_config=['android'],
@@ -101,7 +104,7 @@ SPEC = {
                 },
             ),
         'Cast Android (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'mb',
@@ -120,7 +123,7 @@ SPEC = {
                 },
             ),
         'KitKat Phone Tester (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -140,7 +143,7 @@ SPEC = {
                 },
             ),
         'KitKat Phone Tester (rel)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks', 'mb', 'mb_luci_auth'
@@ -159,7 +162,7 @@ SPEC = {
                 },
             ),
         'KitKat Tablet Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -180,7 +183,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Marshmallow 64 bit Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -200,7 +203,7 @@ SPEC = {
                 },
             ),
         'Lollipop Phone Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -220,7 +223,7 @@ SPEC = {
                 },
             ),
         'Lollipop Tablet Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -241,7 +244,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Marshmallow Phone Tester (rel)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -265,7 +268,7 @@ SPEC = {
                 },
             ),
         'Marshmallow Tablet Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -286,7 +289,7 @@ SPEC = {
                 serialize_tests=True,
             ),
         'Nougat Phone Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -306,7 +309,7 @@ SPEC = {
                 },
             ),
         'Oreo Phone Tester':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -326,7 +329,7 @@ SPEC = {
                 },
             ),
         'android-pie-arm64-dbg':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -346,7 +349,7 @@ SPEC = {
                 },
             ),
         'Android WebView L (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -366,7 +369,7 @@ SPEC = {
                 },
             ),
         'Android WebView M (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -387,7 +390,7 @@ SPEC = {
                 },
             ),
         'Android WebView N (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -408,7 +411,7 @@ SPEC = {
                 },
             ),
         'Android WebView O (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -431,7 +434,7 @@ SPEC = {
                 },
             ),
         'Android WebView P (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_android_spec(
                 chromium_config='android',
                 chromium_apply_config=[
                     'download_vr_test_apks',
@@ -485,7 +488,7 @@ def stock_config(name,
   if chromium_config_kwargs:
     bot_config['chromium_config_kwargs'].update(chromium_config_kwargs)
   bot_config.update(**kwargs)
-  return name, bot_spec.BotSpec.create(**bot_config)
+  return name, _chromium_android_spec(**bot_config)
 
 
 def stock_cronet_config(name, config='Release', **kwargs):

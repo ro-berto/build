@@ -19,13 +19,15 @@ COMPILE_TARGETS = [
   'components/openscreen_platform',
 ]
 
+
+def _client_openscreen_chromium_spec(**kwargs):
+  return bot_spec.BotSpec.create(luci_project='openscreen', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'luci_project': 'openscreen',
-    },
     'builders': {
         'chromium_linux64_debug':
-            bot_spec.BotSpec.create(
+            _client_openscreen_chromium_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',
@@ -41,7 +43,7 @@ SPEC = {
                 },
             ),
         'chromium_mac_debug':
-            bot_spec.BotSpec.create(
+            _client_openscreen_chromium_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',

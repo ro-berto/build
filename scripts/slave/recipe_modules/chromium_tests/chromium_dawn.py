@@ -5,8 +5,13 @@
 from . import bot_spec
 
 
-def CreateBuilderConfig(os, bits, top_of_tree):
+def _chromium_dawn_spec(**kwargs):
   return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-dawn-archive', **kwargs)
+
+
+def CreateBuilderConfig(os, bits, top_of_tree):
+  return _chromium_dawn_spec(
       chromium_config='chromium',
       chromium_apply_config=['mb', 'mb_luci_auth'],
       gclient_config='chromium',
@@ -23,7 +28,7 @@ def CreateBuilderConfig(os, bits, top_of_tree):
 
 
 def CreateTesterConfig(os, bits, builder):
-  return bot_spec.BotSpec.create(
+  return _chromium_dawn_spec(
       chromium_config='chromium',
       chromium_apply_config=['mb', 'mb_luci_auth'],
       gclient_config='chromium',
@@ -41,9 +46,6 @@ def CreateTesterConfig(os, bits, builder):
 
 
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-dawn-archive',
-    },
     'builders': {
         'Dawn Linux x64 Builder':
             CreateBuilderConfig('linux', 64, top_of_tree=True),

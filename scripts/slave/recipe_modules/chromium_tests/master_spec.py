@@ -6,46 +6,7 @@ import sys
 
 from . import bot_spec as bot_spec_module
 
-from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
-                                             mapping_attrib, sequence_attrib)
-
-
-@attrs()
-class MasterSettings(object):
-  """An immutable object containing the per-master settings."""
-
-  luci_project = attrib(str, default='chromium')
-  build_gs_bucket = attrib(str, default=None)
-
-  bisect_builders = sequence_attrib(str, default=())
-  bisect_build_gs_bucket = attrib(str, default=None)
-  bisect_build_gs_extra = attrib(str, default=None)
-
-  @classmethod
-  def create(cls, **kwargs):
-    """Create a MasterSettings.
-
-    Arguments:
-      kwargs - Values to initialize the MasterSettings.
-
-    Returns:
-      A new MasterSettings instance with fields set to the values in
-      kwargs and all other fields set to their defaults.
-    """
-    return cls(**kwargs)
-
-  @classmethod
-  def normalize(cls, settings):
-    """Converts representations of master settings to MasterSettings.
-
-    The incoming representation can have one of the following forms:
-    * MasterSettings - The input is returned.
-    * A mapping containing keys matching the fields to initialize - The
-      input is expanded as keyword arguments to MasterSettings.create.
-    """
-    if isinstance(settings, MasterSettings):
-      return settings
-    return cls.create(**settings)
+from RECIPE_MODULES.build.attr_utils import attrs, mapping_attrib
 
 
 @attrs()
@@ -56,16 +17,13 @@ class MasterSpec(object):
   associated builders.
   """
 
-  settings = attrib(MasterSettings, default=MasterSettings.create())
   builders = mapping_attrib(str, bot_spec_module.BotSpec, default={})
 
   @classmethod
-  def create(cls, settings=None, builders=None):
+  def create(cls, builders=None):
     """Create a MasterSpec.
 
     Arguments:
-      settings - The optional settings for the master. If provided, must
-        be in a form that can be passed to MasterSettings.normalize.
       builders - The builders associated with the master. It must be a
         mapping that maps builder names to their spec. The specs for
         each builder must be in a form that can be passed to BotSpec.normalize.
@@ -76,8 +34,6 @@ class MasterSpec(object):
       normalized BotSpec instances for values.
     """
     kwargs = {}
-    if settings is not None:
-      kwargs['settings'] = MasterSettings.normalize(settings)
     if builders is not None:
 
       def get_bot_spec(name, spec):

@@ -4,14 +4,18 @@
 
 from . import bot_spec
 
+
+def _client_devtools_frontend_integration_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='devtools-frontend',
+      luci_project='devtools-frontend',
+      **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'devtools-frontend',
-        'luci_project': 'devtools-frontend',
-    },
     'builders': {
         'DevTools Linux':
-            bot_spec.BotSpec.create(
+            _client_devtools_frontend_integration_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb'],
                 gclient_config='chromium',

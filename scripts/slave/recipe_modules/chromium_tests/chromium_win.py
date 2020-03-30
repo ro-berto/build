@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_win_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-win-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-win-archive',
-    },
     'builders': {
         'WebKit Win10':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'goma_high_parallel',
@@ -31,7 +34,7 @@ SPEC = {
                 },
             ),
         'Win Builder':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'goma_high_parallel',
@@ -50,7 +53,7 @@ SPEC = {
                 },
             ),
         'Win10 Tests x64':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -66,7 +69,7 @@ SPEC = {
                 },
             ),
         'Win10 Tests x64 Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -83,7 +86,7 @@ SPEC = {
                 },
             ),
         'Win7 (32) Tests':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'goma_high_parallel',
@@ -103,7 +106,7 @@ SPEC = {
                 },
             ),
         'Win7 Tests (1)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'goma_high_parallel',
@@ -124,7 +127,7 @@ SPEC = {
                 },
             ),
         'Win x64 Builder':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -138,7 +141,7 @@ SPEC = {
                 },
             ),
         'Win x64 Builder Code Coverage':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -153,7 +156,7 @@ SPEC = {
                 },
             ),
         'Win 7 Tests x64 (1)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -169,7 +172,7 @@ SPEC = {
                 },
             ),
         'Win x64 Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -183,7 +186,7 @@ SPEC = {
                 },
             ),
         'Win Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -197,7 +200,7 @@ SPEC = {
                 },
             ),
         'Win7 Tests (dbg)(1)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -212,7 +215,7 @@ SPEC = {
                 },
             ),
         'Win10 Tests x64 (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_win_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',

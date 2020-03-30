@@ -12,55 +12,49 @@ DEPS = [
 ]
 
 CUSTOM_BUILDERS = {
-  'chromium.example': {
-    'settings': {
-      'build_gs_bucket': 'chromium-example-archive',
-    },
-    'builders': {
-      'Fake Builder': {
-        'chromium_config': 'android',
-        'chromium_apply_config': [
-          'download_vr_test_apks',
-        ],
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['android'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_PLATFORM': 'android',
+    'chromium.example': {
+        'builders': {
+            'Fake Builder': {
+                'build_gs_bucket': 'chromium-example-archive',
+                'chromium_config': 'android',
+                'chromium_apply_config': ['download_vr_test_apks',],
+                'gclient_config': 'chromium',
+                'gclient_apply_config': ['android'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                },
+                'android_config': 'main_builder_mb',
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'linux',
+                },
+            },
         },
-        'android_config': 'main_builder_mb',
-        'bot_type': 'builder',
-        'testing': {
-          'platform': 'linux',
-        },
-      },
     },
-  },
-  'chromium.example2': {
-    'settings': {
-      'build_gs_bucket': 'chromium-example-archive',
-    },
-    'builders': {
-      'Fake Tester': {
-        'chromium_config': 'android',
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['android'],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
+    'chromium.example2': {
+        'builders': {
+            'Fake Tester': {
+                'build_gs_bucket': 'chromium-example-archive',
+                'chromium_config': 'android',
+                'gclient_config': 'chromium',
+                'gclient_apply_config': ['android'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'android',
+                },
+                'parent_buildername': 'Fake Builder',
+                'parent_mastername': 'chromium.example',
+                'bot_type': 'tester',
+                'android_config': 'main_builder_mb',
+                'android_apply_config': ['use_devil_provision'],
+                'testing': {
+                    'platform': 'linux',
+                },
+            },
         },
-        'parent_buildername': 'Fake Builder',
-        'parent_mastername': 'chromium.example',
-        'bot_type': 'tester',
-        'android_config': 'main_builder_mb',
-        'android_apply_config': ['use_devil_provision'],
-        'testing': {
-          'platform': 'linux',
-        },
-      },
     },
-  },
 }
 
 def RunSteps(api):

@@ -128,9 +128,7 @@ class BotSpec(object):
                                      "'bisect_archive_build' is True")
 
   # The LUCI project that the builder belongs to
-  # TODO(https://crbug.com/914522) When removing MasterSettings, change default
-  # to 'chromium'
-  luci_project = attrib(str, default=None)
+  luci_project = attrib(str, default='chromium')
 
   # The type of the bot
   bot_type = enum_attrib([BUILDER, TESTER, BUILDER_TESTER, DUMMY_TESTER],

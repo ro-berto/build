@@ -62,36 +62,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'luci-project-overridden-for-master',
-      api.chromium.ci_build(
-          mastername='fake-master',
-          builder='fake-builder',
-      ),
-      api.chromium_tests.builders(
-          bot_db.BotDatabase.create({
-              'fake-master':
-                  master_spec.MasterSpec.create(
-                      settings=master_spec.MasterSettings.create(
-                          luci_project='fake-project'),
-                      builders={
-                          'fake-builder':
-                              bot_spec.BotSpec.create(),
-                          'fake-tester':
-                              bot_spec.BotSpec.create(
-                                  bot_type=bot_spec.TESTER,
-                                  parent_buildername='fake-builder',
-                              ),
-                      },
-                  ),
-          })),
-      api.properties(expected={
-          'fake-project': ['fake-tester'],
-      }),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'luci-project-overridden-for-tester',
       api.chromium.ci_build(
           mastername='fake-master',
@@ -101,8 +71,6 @@ def GenTests(api):
           bot_db.BotDatabase.create({
               'fake-master':
                   master_spec.MasterSpec.create(
-                      settings=master_spec.MasterSettings.create(
-                          luci_project='incorrect-fake-project'),
                       builders={
                           'fake-builder':
                               bot_spec.BotSpec.create(),

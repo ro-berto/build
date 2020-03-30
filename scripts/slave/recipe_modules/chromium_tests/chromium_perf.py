@@ -12,13 +12,6 @@ from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
 SPEC = {
     'builders': {},
-    'settings': {
-        # Bucket for storing builds for manual bisect
-        'bisect_build_gs_bucket': 'chrome-test-builds',
-        'bisect_build_gs_extra': 'official-by-commit',
-        'bisect_builders': [],
-        'luci_project': 'chrome',
-    },
 }
 
 
@@ -70,6 +63,7 @@ def _common_kwargs(bot_type, config_name, platform, target_bits, tests):
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
+  spec['luci_project'] = 'chrome'
   return spec
 
 
@@ -78,6 +72,7 @@ def BuildSpec(config_name,
               target_bits,
               compile_targets=None,
               extra_compile_targets=None,
+              bisect_archive_build=False,
               run_sizes=True,
               cros_board=None,
               target_arch=None,
@@ -113,6 +108,12 @@ def BuildSpec(config_name,
 
   if extra_gclient_apply_config:
     kwargs['gclient_apply_config'] += list(extra_gclient_apply_config)
+
+  kwargs['bisect_archive_build'] = bisect_archive_build
+  if bisect_archive_build:
+    # Bucket for storing builds for manual bisect
+    kwargs['bisect_gs_bucket'] = 'chrome-test-builds'
+    kwargs['bisect_gs_extra'] = 'official-by-commit'
 
   return bot_spec.BotSpec.create(**kwargs)
 
@@ -156,17 +157,15 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
 def _AddBuildSpec(name,
                   platform,
                   target_bits=64,
-                  add_to_bisect=False,
+                  bisect_archive_build=False,
                   extra_compile_targets=None):
 
   SPEC['builders'][name] = BuildSpec(
       'chromium_perf',
       platform,
       target_bits,
+      bisect_archive_build=bisect_archive_build,
       extra_compile_targets=extra_compile_targets)
-
-  if add_to_bisect:
-    SPEC['settings']['bisect_builders'].append(name)
 
 
 # LUCI builder
@@ -174,7 +173,7 @@ _AddBuildSpec(
     'android-builder-perf',
     'android',
     target_bits=32,
-    add_to_bisect=True,
+    bisect_archive_build=True,
     extra_compile_targets=[
         'android_tools',
         'cc_perftests',
@@ -192,7 +191,7 @@ _AddBuildSpec(
     'android_arm64-builder-perf',
     'android',
     target_bits=64,
-    add_to_bisect=True,
+    bisect_archive_build=True,
     extra_compile_targets=[
         'android_tools',
         'cc_perftests',
@@ -205,10 +204,10 @@ _AddBuildSpec(
     ])
 
 _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
-_AddBuildSpec('win64-builder-perf', 'win', add_to_bisect=True)
-_AddBuildSpec('mac-builder-perf', 'mac', add_to_bisect=True)
+_AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
+_AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
 
-_AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True)
+_AddBuildSpec('linux-builder-perf', 'linux', bisect_archive_build=True)
 
 # Android: Clank, Webview, WebLayer
 _AddIsolatedTestSpec(

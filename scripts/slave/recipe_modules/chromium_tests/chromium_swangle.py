@@ -12,6 +12,7 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
   if swiftshader_tot:
     configs.append('swiftshader_top_of_tree')
   return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-swangle-archive',
       chromium_config='chromium',
       chromium_apply_config=[
           'mb',
@@ -32,9 +33,6 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
 
 
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-swangle-archive',
-    },
     'builders': {
         'linux-swangle-tot-angle-x64':
             CreateBuilderConfig(

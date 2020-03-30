@@ -4,13 +4,16 @@
 
 from . import bot_spec
 
+
+def _chromium_chromiumos_spec(**kwargs):
+  return bot_spec.BotSpec.create(
+      build_gs_bucket='chromium-chromiumos-archive', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-chromiumos-archive',
-    },
     'builders': {
         'Linux ChromiumOS Full':
-            bot_spec.BotSpec.create(
+            _chromium_chromiumos_spec(
                 chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
@@ -95,7 +98,7 @@ def _config(name,
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
-  return name, bot_spec.BotSpec.create(**cfg)
+  return name, _chromium_chromiumos_spec(**cfg)
 
 
 SPEC['builders'].update([

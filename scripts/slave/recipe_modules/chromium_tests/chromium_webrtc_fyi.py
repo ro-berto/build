@@ -4,13 +4,15 @@
 
 from . import bot_spec
 
+
+def _chromium_webrtc_fyi_spec(**kwargs):
+  return bot_spec.BotSpec.create(build_gs_bucket='chromium-webrtc', **kwargs)
+
+
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-webrtc'
-    },
     'builders': {
         'WebRTC Chromium FYI Android Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER_TESTER,
                 chromium_apply_config=[
@@ -31,7 +33,7 @@ SPEC = {
                 },
                 testing={'platform': 'linux'}),
         'WebRTC Chromium FYI Android Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=[
@@ -52,7 +54,7 @@ SPEC = {
                 },
                 testing={'platform': 'linux'}),
         'WebRTC Chromium FYI Android Builder ARM64 (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 android_config='base_config',
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=[
@@ -73,7 +75,7 @@ SPEC = {
                 },
                 testing={'platform': 'linux'}),
         'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=[
@@ -97,7 +99,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 android_config='base_config',
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=[
@@ -122,7 +124,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium FYI ios-device':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -143,7 +145,7 @@ SPEC = {
                 },
             ),
         'WebRTC Chromium FYI ios-simulator':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
@@ -163,7 +165,7 @@ SPEC = {
                 },
             ),
         'WebRTC Chromium FYI Linux Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -179,7 +181,7 @@ SPEC = {
                 },
                 testing={'platform': 'linux'}),
         'WebRTC Chromium FYI Linux Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER_TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -195,7 +197,7 @@ SPEC = {
                 },
                 testing={'platform': 'linux'}),
         'WebRTC Chromium FYI Linux Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -214,7 +216,7 @@ SPEC = {
                 testing={'platform': 'linux'},
             ),
         'WebRTC Chromium FYI Mac Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=[
                     'dcheck',
@@ -235,7 +237,7 @@ SPEC = {
                 },
                 testing={'platform': 'mac'}),
         'WebRTC Chromium FYI Mac Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER_TESTER,
                 chromium_apply_config=[
                     'dcheck',
@@ -256,7 +258,7 @@ SPEC = {
                 },
                 testing={'platform': 'mac'}),
         'WebRTC Chromium FYI Mac Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=[
                     'dcheck',
@@ -280,7 +282,7 @@ SPEC = {
                 testing={'platform': 'mac'},
             ),
         'WebRTC Chromium FYI Win Builder':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -296,7 +298,7 @@ SPEC = {
                 },
                 testing={'platform': 'win'}),
         'WebRTC Chromium FYI Win Builder (dbg)':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.BUILDER_TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -312,7 +314,7 @@ SPEC = {
                 },
                 testing={'platform': 'win'}),
         'WebRTC Chromium FYI Win10 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -331,7 +333,7 @@ SPEC = {
                 testing={'platform': 'win'},
             ),
         'WebRTC Chromium FYI Win7 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',
@@ -350,7 +352,7 @@ SPEC = {
                 testing={'platform': 'win'},
             ),
         'WebRTC Chromium FYI Win8 Tester':
-            bot_spec.BotSpec.create(
+            _chromium_webrtc_fyi_spec(
                 bot_type=bot_spec.TESTER,
                 chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
                 chromium_config='chromium',

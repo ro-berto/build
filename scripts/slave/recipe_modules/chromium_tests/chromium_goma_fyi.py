@@ -12,23 +12,6 @@ from . import steps
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-KITCHEN_TEST_SPEC = {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': [
-        'mb',
-        'mb_luci_auth',
-    ],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-    },
-    'compile_targets': ['all',],
-    'testing': {
-        'platform': 'linux',
-    },
-}
-
 
 def chromium_apply_configs(base_config, config_names):
   """chromium_apply_configs returns new config from base config with config.
@@ -69,9 +52,6 @@ def override_compile_targets(base_config, compile_targets):
 
 
 SPEC = {
-    'settings': {
-        'build_gs_bucket': 'chromium-fyi-archive',
-    },
     'builders': {
         'Win Builder Goma Canary':
             chromium_apply_configs(chromium_win.SPEC['builders']['Win Builder'],
@@ -314,3 +294,9 @@ SPEC['builders']['android-archive-dbg-goma-rbe-ats-canary'] = (
 SPEC['builders']['android-archive-dbg-goma-rbe-ats-latest'] = (
     chromium_apply_configs(SPEC['builders']['Android Builder (dbg)'],
                            ['goma_latest_client']))
+
+# Many of the FYI specs are made by transforming specs from other files, so
+# rather than have to do 2 different things for specs based on other specs and
+# specs created within this file, just evolve all of the specs afterwards
+for name, spec in SPEC['builders'].iteritems():
+  SPEC['builders'][name] = spec.evolve(build_gs_bucket='chromium-fyi-archive')
