@@ -302,12 +302,19 @@ class WebRTCApi(recipe_api.RecipeApi):
         'default'
     ] + self._isolated_targets + self._non_isolated_targets
 
+    patch_root = self.m.gclient.get_gerrit_patch_root()
+    affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+        relative_to=patch_root, cwd=self.m.path['checkout'])
+
+    # If the main DEPS file has been changed by the current CL, skip the
+    # analyze step and build/test everything. This is needed in order to
+    # have safe Chromium Rolls since from the GN point of view, a DEPS
+    # change doesn't affect anything.
+    is_deps_changed = 'DEPS' in affected_files
+
     # Run gn analyze only on trybots. The CI bots can rebuild everything;
     # they're less time sensitive than trybots.
-    if self.m.tryserver.is_tryserver:
-      patch_root = self.m.gclient.get_gerrit_patch_root()
-      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-          relative_to=patch_root, cwd=self.m.path['checkout'])
+    if self.m.tryserver.is_tryserver and not is_deps_changed:
       analyze_input = {
           'files': affected_files,
           'test_targets': list(test_targets) + list(non_isolated_test_targets),
