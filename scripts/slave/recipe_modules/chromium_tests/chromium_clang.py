@@ -429,7 +429,7 @@ SPEC = {
                 swarming_default_priority=210,
                 swarming_dimensions={
                     'gpu': None,
-                    'pool': 'chrome.tests',
+                    'pool': 'chrome.tests.template',
                 },
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
@@ -518,7 +518,7 @@ SPEC = {
                 swarming_server='https://chrome-swarming.appspot.com',
                 isolate_server='https://chrome-isolated.appspot.com',
                 swarming_dimensions={
-                    'pool': 'chrome.tests',
+                    'pool': 'chrome.tests.template',
                     'os': 'Windows-10',
                 },
                 # Workaround so that recipes doesn't add random build targets to
