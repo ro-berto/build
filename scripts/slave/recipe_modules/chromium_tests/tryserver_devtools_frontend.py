@@ -6,7 +6,7 @@ from . import bot_spec
 
 COMMON_BOT_CONFIG = bot_spec.BotSpec.create(
     chromium_config='chromium',
-    chromium_apply_config=['mb'],
+    chromium_apply_config=['mb', 'mb_luci_auth'],
     gclient_config='chromium',
     chromium_config_kwargs={
         'BUILD_CONFIG': 'Release',
