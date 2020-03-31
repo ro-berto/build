@@ -116,9 +116,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                                              recipe_configs, bucketname,
                                              buildername, phase, phase_suffix)
         else:
-          test += self.override_gn_analyze(gn_analyze_output, builders,
-                                           recipe_configs, bucketname,
-                                           buildername, None, '')
+          if 'ios' not in buildername:
+            test += self.override_gn_analyze(gn_analyze_output, builders,
+                                             recipe_configs, bucketname,
+                                             buildername, None, '')
 
       test += self.m.buildbucket.try_build(
           project=project,
