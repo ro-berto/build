@@ -1632,8 +1632,10 @@
     },
     "name": "archive results for blink_web_tests (retry shards with patch)",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Step is marked red because the test itself failed. This is done so the step shows up in the \"Non-Green\" step filter in the UI.@@@",
       "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux-rel/0/blink_web_tests (retry shards with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux-rel/0/blink_web_tests (retry shards with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux-rel/0/blink_web_tests (retry shards with patch)/layout-test-results.zip@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
