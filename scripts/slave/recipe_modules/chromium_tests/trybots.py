@@ -128,10 +128,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                     'mastername': 'chromium.android',
                     'buildername': 'android-pie-arm64-rel',
                 }),
-            'android-pie-x86-fyi-rel':
+            'android-pie-x86-rel':
                 simple_bot({
-                    'mastername': 'chromium.android.fyi',
-                    'buildername': 'android-pie-x86-fyi-rel',
+                    'mastername': 'chromium.android',
+                    'buildername': 'android-pie-x86-rel',
                 }),
             'android_archive_rel_ng':
                 simple_bot({
