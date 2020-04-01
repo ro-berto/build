@@ -48,7 +48,7 @@ class BotConfig(object):
 
   def __attrs_post_init__(self):
     for mirror in self.bot_mirrors:
-      if not mirror.builder_id.master in self.bot_db.master_specs:
+      if not mirror.builder_id.master in self.bot_db.builders_by_master:
         raise BotConfigException(
             'No configuration present for master {!r}'.format(
                 mirror.builder_id.master))
@@ -130,8 +130,8 @@ class BotConfig(object):
     tests = {}
 
     for master_name, source_side_spec in source_side_specs.iteritems():
-      master_spec = self.bot_db.master_specs[master_name]
-      for builder_name, builder_spec in master_spec.builders.iteritems():
+      builders_for_master = self.bot_db.builders_by_master[master_name]
+      for builder_name, builder_spec in builders_for_master.iteritems():
         builder_id = chromium.BuilderId.create_for_master(
             master_name, builder_name)
         builder_tests = chromium_tests_api.generate_tests_from_source_side_spec(

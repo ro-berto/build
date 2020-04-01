@@ -191,7 +191,7 @@ class TryMasterSpec(object):
     """
     if isinstance(spec, TryMasterSpec):
       return spec
-    return cls.create(**spec)
+    return cls.create(**spec)  # pragma: no cover
 
 
 @attrs()
@@ -222,19 +222,24 @@ class TryDatabase(collections.Mapping):
     """
     db = {}
 
-    for master_name, try_master_spec in trybots_dict.iteritems():
-      try:
-        try_master_spec = TryMasterSpec.normalize(try_master_spec)
-      except Exception as e:
-        # Re-raise the exception with information that identifies the master
-        # that is problematic
-        message = '{} while creating try spec for master {!r}'.format(
-            e.message, master_name)
-        raise type(e)(message), None, sys.exc_info()[2]
+    for master_name, trybots_for_master in trybots_dict.iteritems():
+      if isinstance(trybots_for_master, TryMasterSpec):
+        trybots_for_master = trybots_for_master.builders
+      elif trybots_for_master.keys() == ['builders']:
+        trybots_for_master = trybots_for_master['builders']
 
-      for builder_name, try_spec in try_master_spec.builders.iteritems():
+      for builder_name, try_spec in trybots_for_master.iteritems():
         builder_id = chromium.BuilderId.create_for_master(
             master_name, builder_name)
+        try:
+          try_spec = TrySpec.normalize(try_spec)
+        except Exception as e:
+          # Re-raise the exception with information that identifies the master
+          # that is problematic
+          message = '{} while creating try spec for builder {!r}'.format(
+              e.message, builder_id)
+          raise type(e)(message), None, sys.exc_info()[2]
+
         db[builder_id] = try_spec
 
     return cls(db)

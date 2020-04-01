@@ -29,7 +29,7 @@ def _bot_db_to_json(bot_db):
       return attr.asdict(obj, dict_factory=collections.OrderedDict)
     return None
 
-  return json.dumps(bot_db.master_specs, default=encode)
+  return json.dumps(bot_db.builders_by_master, default=encode)
 
 
 def RunSteps(api):

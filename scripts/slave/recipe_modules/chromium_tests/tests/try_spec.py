@@ -181,15 +181,19 @@ def RunSteps(api):
   # TryDatabase validation *****************************************************
   d = {
       'fake-try-master': {
-          'fake-try-builder': {},
+          'fake-try-builder': {
+              'foo': 'bar'
+          },
       },
   }
+  builder_id = chromium.BuilderId.create_for_master('fake-try-master',
+                                                    'fake-try-builder')
   with api.assertions.assertRaises(TypeError) as caught:
     try_spec_module.TryDatabase.create(d)
   api.assertions.assertEqual(
       caught.exception.message,
-      "create() got an unexpected keyword argument 'fake-try-builder'"
-      " while creating try spec for master 'fake-try-master'")
+      "__init__() got an unexpected keyword argument 'foo'"
+      ' while creating try spec for builder {!r}'.format(builder_id))
 
   # TryDatabase mapping interface **********************************************
   db = try_spec_module.TryDatabase.create({

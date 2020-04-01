@@ -39,7 +39,7 @@ class MasterSpec(object):
       def get_bot_spec(name, spec):
         try:
           return bot_spec_module.BotSpec.normalize(spec)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
           # Re-raise the exception with information that identifies the builder
           # dict that is problematic
           message = '{} while creating spec for builder {!r}: {}'.format(

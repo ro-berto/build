@@ -8,6 +8,8 @@ import sys
 
 from . import bot_spec as bot_spec_module, master_spec as master_spec_module
 
+from recipe_engine.types import FrozenDict
+
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              mapping_attrib, sequence_attrib)
 from RECIPE_MODULES.build.chromium.types import BuilderId
@@ -25,7 +27,7 @@ class BotDatabase(collections.Mapping):
   """
 
   _db = mapping_attrib(BuilderId, bot_spec_module.BotSpec)
-  master_specs = mapping_attrib(str, master_spec_module.MasterSpec)
+  builders_by_master = mapping_attrib(str, FrozenDict)
 
   @classmethod
   def create(cls, bots_dict):
@@ -43,25 +45,32 @@ class BotDatabase(collections.Mapping):
     bots_dict.
     """
     db = {}
-    master_specs = {}
+    builders_by_master = {}
 
-    for master_name, master_spec in bots_dict.iteritems():
-      try:
-        master_spec = master_spec_module.MasterSpec.normalize(master_spec)
-      except Exception as e:
-        # Re-raise the exception with information that identifies the master
-        # that is problematic
-        message = '{} while creating spec for master {!r}'.format(
-            e.message, master_name)
-        raise type(e)(message), None, sys.exc_info()[2]
+    for master_name, builders_for_master in bots_dict.iteritems():
+      if isinstance(builders_for_master, master_spec_module.MasterSpec):
+        builders_for_master = builders_for_master.builders
+      elif builders_for_master.keys() == ['builders']:
+        builders_for_master = builders_for_master['builders']
 
-      master_specs[master_name] = master_spec
-
-      for builder_name, builder_spec in master_spec.builders.iteritems():
+      builders_for_master = dict(builders_for_master)
+      for builder_name, builder_spec in builders_for_master.iteritems():
         builder_id = BuilderId.create_for_master(master_name, builder_name)
+        try:
+          builder_spec = bot_spec_module.BotSpec.normalize(builder_spec)
+        except Exception as e:
+          # Re-raise the exception with information that identifies the master
+          # that is problematic
+          message = '{} while creating spec for builder {!r}'.format(
+              e.message, builder_id)
+          raise type(e)(message), None, sys.exc_info()[2]
+
+        builders_for_master[builder_name] = builder_spec
         db[builder_id] = builder_spec
 
-    return cls(db, master_specs)
+      builders_by_master[master_name] = builders_for_master
+
+    return cls(db, builders_by_master)
 
   @classmethod
   def normalize(cls, bot_db):
