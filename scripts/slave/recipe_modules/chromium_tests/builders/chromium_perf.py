@@ -14,13 +14,8 @@ SPEC = {
 }
 
 
-@CHROMIUM_CONFIG_CTX(includes=[
-    'chromium',
-    'official',
-    'mb',
-    'goma_hermetic_fallback',
-    'mb_luci_auth',
-])
+@CHROMIUM_CONFIG_CTX(
+    includes=['chromium', 'official', 'mb', 'goma_hermetic_fallback'])
 def chromium_perf(c):
   # Bisects may build using old toolchains, so goma_hermetic_fallback is
   # required. See https://codereview.chromium.org/1015633002
