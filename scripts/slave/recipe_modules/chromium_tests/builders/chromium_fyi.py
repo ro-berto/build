@@ -179,8 +179,7 @@ SPEC = {
                     'TARGET_PLATFORM': 'fuchsia',
                 },
                 bot_type=bot_spec.BUILDER_TESTER,
-                # Serialize the tests to limit capacity usage.
-                serialize_tests=True,
+                # TODO(crbug.com/1042512): serialize FYI tests after CI tests are enabled.
                 test_results_config='staging_server',
                 testing={
                     'platform': 'linux',
