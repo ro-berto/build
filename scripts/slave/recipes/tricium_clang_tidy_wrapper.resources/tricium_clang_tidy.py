@@ -1187,8 +1187,7 @@ def main():
 
   out_dir = os.path.abspath(args.out_dir)
   findings_file = os.path.abspath(args.findings_file)
-
-  clang_tidy_binary = args.clang_tidy_binary
+  clang_tidy_binary = os.path.abspath(args.clang_tidy_binary)
 
   if args.all:
     only_src_files = None
