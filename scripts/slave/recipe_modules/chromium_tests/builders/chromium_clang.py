@@ -598,7 +598,7 @@ SPEC = {
                 swarming_server='https://chrome-swarming.appspot.com',
                 isolate_server='https://chrome-isolated.appspot.com',
                 swarming_dimensions={
-                    'pool': 'chrome.tests',
+                    'pool': 'chrome.tests.template',
                     'os': 'Windows-10',
                 },
                 # Workaround so that recipes doesn't add random build targets to
