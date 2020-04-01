@@ -795,7 +795,8 @@ class V8Api(recipe_api.RecipeApi):
 
   def collect_post_compile_metrics(self):
     with self.ensure_osx_sdk_if_needed():
-      if self.bot_config.get('track_build_dependencies', False):
+      if self.bot_config.get('track_build_dependencies',
+                             False) and not self._is_muted_branch():
         with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
           deps = self.m.python(
               name='track build dependencies (fyi)',
@@ -814,11 +815,14 @@ class V8Api(recipe_api.RecipeApi):
 
       # Track binary size if specified.
       tracking_config = self.bot_config.get('binary_size_tracking', {})
-      if tracking_config:
+      if tracking_config and not self._is_muted_branch():
         self._track_binary_size(
           tracking_config['binary'],
           tracking_config['category'],
         )
+
+  def _is_muted_branch(self):
+    return self.m.buildbucket.build.builder.bucket in ['luci.v8.ci.br']
 
   @property
   def depot_tools_path(self):

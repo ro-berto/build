@@ -1110,6 +1110,29 @@ def GenTests(api):
         'measurements.perf dashboard post (2)',
     ))
   )
+  yield (api.v8.test(
+      'client.v8',
+      'V8 Foobar',
+      'no measurements',
+      binary_size_tracking={
+          'binary': 'd8',
+          'category': 'foo64',
+      },
+      track_build_dependencies=True,
+  ) + api.buildbucket.ci_build(
+      project='v8',
+      git_repo='https://chromium.googlesource.com/v8/v8',
+      bucket='luci.v8.ci.br',
+      builder='V8 Foobar',
+      git_ref='refs/heads/br',
+      build_number=571,
+      revision='deadbeef' * 5,
+      tags=api.buildbucket.tags(
+          user_agent='luci-scheduler',
+          buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
+          'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef')
+    ) + api.post_process(DoesNotRun, 'measuremens'
+    ) + api.post_process(DropExpectation))
 
   # Test overall failure on upload failures.
   yield (
