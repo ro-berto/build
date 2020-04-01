@@ -6,26 +6,6 @@
 set noparent
 file://scripts/slave/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS
 
-per-file chromium_android*=bpastene@chromium.org
-per-file chromium_clang.py=hans@chromium.org
-per-file chromium_clang.py=thakis@chromium.org
-per-file chromium_dawn.py=kbr@chromium.org
-per-file chromium_dawn.py=ynovikov@chromium.org
-per-file chromium_fyi.py=thakis@chromium.org
-per-file chromium_gpu*=kbr@chromium.org
-per-file chromium_gpu*=ynovikov@chromium.org
-per-file chromium_perf*=wenbinzhang@google.com
-per-file chromium_swangle.py=kbr@chromium.org
-per-file chromium_swangle.py=ynovikov@chromium.org
-per-file chromium_webrtc*.py=mbonadei@chromium.org
-per-file client_devtools_*=machenbach@chromium.org
-per-file client_openscreen*.py=file://scripts/slave/recipes/openscreen.expected/OWNERS
-per-file client_v8_*=machenbach@chromium.org
-per-file tryserver_chromium_perf.py=simonhatch@chromium.org
-per-file tryserver_webrtc.py=mbonadei@chromium.org
-per-file tryserver_devtools_frontend.py=machenbach@chromium.org
-per-file tryserver_devtools_frontend.py=liviurau@chromium.org
-
 # Waterfall owners should be able to update trybots.py.
 per-file trybots.py=kbr@chromium.org
 per-file trybots.py=hans@chromium.org
@@ -34,9 +14,3 @@ per-file trybots.py=mbonadei@chromium.org
 per-file trybots.py=simonhatch@chromium.org
 per-file trybots.py=thakis@chromium.org
 per-file trybots.py=ynovikov@chromium.org
-
-# For goma canary bots config.
-per-file chromium_fyi.py=file://scripts/slave/goma/GOMA_OWNERS
-
-# for goma staging bots config.
-per-file chromium_goma.py=file://scripts/slave/goma/GOMA_OWNERS
