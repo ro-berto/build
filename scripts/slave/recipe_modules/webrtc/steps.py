@@ -496,9 +496,6 @@ class IosTest(object):
     if xctest:
       self.config['xctest'] = True
 
-  # TODO(bugs.webrtc.org/11262): Re-enable after fixing the interaction with
-  # api.ios.isolate(), see:
-  # https://bugs.chromium.org/p/webrtc/issues/detail?id=11262#c30.
-  # @property
-  # def name(self):
-  #   return self._name
+  @property
+  def name(self):
+    return self._name

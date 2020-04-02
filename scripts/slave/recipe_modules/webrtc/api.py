@@ -326,18 +326,15 @@ class WebRTCApi(recipe_api.RecipeApi):
             analyze_input,
             mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
             phase=phase)
-      # TODO(bugs.webrtc.org/11262): Re-enable after fixing the interaction with
-      # api.ios.isolate(), see:
-      # https://bugs.chromium.org/p/webrtc/issues/detail?id=11262#c30.
-      # else:
-      #   # Match the out path that ios recipe module uses.
-      #   self.m.chromium.c.build_config_fs = os.path.basename(
-      #       self.m.ios.most_recent_app_dir)
-      #   with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
-      #     step_result = self.m.chromium.mb_analyze(
-      #         self.builder_id,
-      #         analyze_input,
-      #         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'))
+      else:
+        # Match the out path that ios recipe module uses.
+        self.m.chromium.c.build_config_fs = os.path.basename(
+            self.m.ios.most_recent_app_dir)
+        with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
+          step_result = self.m.chromium.mb_analyze(
+              self.builder_id,
+              analyze_input,
+              mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'))
 
       if 'error' in step_result.json.output:
         step_result.presentation.step_text = (
