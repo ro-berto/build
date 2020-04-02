@@ -996,12 +996,23 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
 
 class LocalGTestTest(Test):
-  def __init__(self, name, args=None, target_name=None, full_test_target=None,
-               revision=None, webkit_revision=None, android_shard_timeout=None,
-               android_tool=None, override_compile_targets=None,
-               commit_position_property='got_revision_cp', use_xvfb=True,
-               waterfall_mastername=None, waterfall_buildername=None,
-               set_up=None, tear_down=None, **runtest_kwargs):
+
+  def __init__(self,
+               name,
+               args=None,
+               target_name=None,
+               full_test_target=None,
+               revision=None,
+               webkit_revision=None,
+               android_shard_timeout=None,
+               override_compile_targets=None,
+               commit_position_property='got_revision_cp',
+               use_xvfb=True,
+               waterfall_mastername=None,
+               waterfall_buildername=None,
+               set_up=None,
+               tear_down=None,
+               **runtest_kwargs):
     """Constructs an instance of LocalGTestTest.
 
     Args:
@@ -1036,7 +1047,6 @@ class LocalGTestTest(Test):
     self._revision = revision
     self._webkit_revision = webkit_revision
     self._android_shard_timeout = android_shard_timeout
-    self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
     self._commit_position_property = commit_position_property
     self._use_xvfb = use_xvfb
@@ -1098,7 +1108,6 @@ class LocalGTestTest(Test):
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
       kwargs['shard_timeout'] = self._android_shard_timeout
-      kwargs['tool'] = self._android_tool
     else:
       kwargs['xvfb'] = self._use_xvfb
       kwargs['test_type'] = self.name

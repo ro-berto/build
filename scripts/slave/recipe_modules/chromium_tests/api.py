@@ -737,16 +737,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
           require_device_steps):
-
-        def is_perf(mastername):
-          return any(
-              mastername.startswith(m)
-              for m in ('chromium.perf', 'tryserver.chromium.perf'))
-
-        #TODO(prasadv): Remove this hack and implement specific functions
-        # at the point of call.
-        perf_setup = any(is_perf(b.master) for b in bot_config.builder_ids)
-        self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
+        self.m.chromium_android.common_tests_setup_steps()
 
       for test in (tests or []):
         for set_up_step in (test.set_up or []):

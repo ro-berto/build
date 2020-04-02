@@ -144,9 +144,3 @@ def GenTests(api):
           android_apply_config=['cast_builder']),
       api.post_process(post_process.DropExpectation),
   )
-
-  yield api.test(
-      'restart_usb',
-      api.properties(android_apply_config=['restart_usb']),
-      api.post_process(post_process.DropExpectation),
-  )

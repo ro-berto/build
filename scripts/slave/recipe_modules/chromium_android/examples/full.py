@@ -82,9 +82,6 @@ BUILDERS = freeze({
     'stackwalker': {
       'run_stackwalker': True,
     },
-    'asan': {
-      'chromium_apply_config': ['chromium_asan'],
-    }
 })
 
 from recipe_engine.recipe_api import Property
@@ -105,11 +102,7 @@ def RunSteps(api, buildername):
 
   api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.coverage = config.get('coverage', False)
-  api.chromium_android.c.asan_symbolize = True
   api.chromium_android.c.logcat_bucket = None
-
-  for c in config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
 
   for c in config.get('android_apply_config', []):
     api.chromium_android.apply_config(c)
@@ -172,8 +165,7 @@ def RunSteps(api, buildername):
   api.chromium_android.run_test_suite(
       'unittests',
       result_details=config.get('result_details'),
-      store_tombstones=config.get('store_tombstones'),
-      tool='asan')
+      store_tombstones=config.get('store_tombstones'))
   if not failure:
     api.chromium_android.run_bisect_script(
         extra_src='test.py', path_to_config='test.py')
@@ -327,13 +319,6 @@ def GenTests(api):
       'upload_result_details_failures',
       properties_for('result_details'),
       api.override_step_data('unittests: generate result details', retcode=1),
-  )
-
-  yield api.test(
-      'asan_setup_failure',
-      properties_for('asan'),
-      api.override_step_data(
-          'Set up ASAN on devices.wait_for_devices', retcode=87),
   )
 
   yield api.test(

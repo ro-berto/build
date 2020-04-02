@@ -44,10 +44,9 @@ def BaseConfig(CHECKOUT_PATH, INTERNAL=False, REPO_NAME=None, REPO_URL=None,
       incremental_coverage=Single(bool, required=False, empty_val=False),
       env=ConfigGroup(
           LLVM_FORCE_HEAD_REVISION=Single(basestring, required=False),),
-      restart_usb=Single(bool, required=False, empty_val=False),
       use_devil_adb=Single(bool, required=False, empty_val=False),
-      # TODO(jbudorick): Remove this once everything has switched to devil
-      # provisioning.
+      # TODO(crbug.com/708171): Remove this once everything has switched to
+      # devil provisioning.
       use_devil_provision=Single(bool, required=False, empty_val=False),
       remove_system_packages=List(inner_type=basestring),
       logcat_bucket=Single((basestring, types.NoneType),
@@ -233,10 +232,6 @@ def chromium_perf(_):
 @config_ctx()
 def cast_builder(_):
   pass
-
-@config_ctx()
-def restart_usb(c):
-  c.restart_usb = True
 
 @config_ctx()
 def use_devil_adb(c):

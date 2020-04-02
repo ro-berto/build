@@ -942,7 +942,6 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],

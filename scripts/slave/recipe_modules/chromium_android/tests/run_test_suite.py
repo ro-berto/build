@@ -12,8 +12,7 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.chromium_android.set_config('main_builder')
-  with api.chromium_android.android_test_wrapper()(api):
-    api.chromium_android.run_test_suite('test_suite', shard_timeout=1200)
+  api.chromium_android.run_test_suite('test_suite', shard_timeout=1200)
 
 
 def GenTests(api):

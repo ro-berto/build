@@ -946,7 +946,6 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--verbose",
-      "--tool=asan",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"
     ],
@@ -1016,19 +1015,6 @@
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/build/android/asan_symbolize.py",
-      "-l",
-      "[START_DIR]/src/out/Release/full_log"
-    ],
-    "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
-      "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "infra_step": true,
-    "name": "stack_tool_for_asan"
   },
   {
     "name": "$result"

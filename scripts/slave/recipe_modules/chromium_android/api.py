@@ -107,9 +107,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def init_and_sync(self, gclient_config='android_bare',
                     with_branch_heads=False, use_bot_update=True,
                     use_git_cache=True, manifest_name=None):
-    # TODO(jbudorick): Rewrite this to use chromium_checkout.
-    # TODO(sivachandra): Move the setting of the gclient spec below to an
-    # internal config extension when they are supported by the recipe system.
+    # TODO(crbug.com/726431): Remove this once downstream bots stop using it.
     if use_git_cache:
       spec = self.m.gclient.make_config(gclient_config)
     else:
@@ -319,8 +317,7 @@ class AndroidApi(recipe_api.RecipeApi):
         exclude_files='lib.target,gen,android_webview,jingle_unittests')
 
   def use_devil_adb(self):
-    # TODO(jbudorick): Remove this after resolving
-    # https://github.com/catapult-project/catapult/issues/2901
+    # TODO(crbug.com/1067294): Remove this after resolving.
     devil_path = self.m.path['checkout'].join(
         'third_party', 'catapult', 'devil')
     self.m.python.inline(
@@ -458,8 +455,7 @@ class AndroidApi(recipe_api.RecipeApi):
         f.result.presentation.logs[failure] = [failure]
       f.result.presentation.status = self.m.step.EXCEPTION
 
-  # TODO(jbudorick): Remove restart_usb once it's unused.
-  def device_recovery(self, restart_usb=False, **kwargs):
+  def device_recovery(self, **kwargs):
     script = self.m.path['checkout'].join(
         'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
         'device_recovery.py')
@@ -469,8 +465,6 @@ class AndroidApi(recipe_api.RecipeApi):
         '--adb-path', self.m.adb.adb_path(),
         '-v'
     ]
-    if self.c.restart_usb or restart_usb:
-      args += ['--enable-usb-reset']
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.python('device_recovery', script, args,
                     infra_step=True, venv=True, **kwargs)
@@ -577,8 +571,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
 
   def provision_devices(self, skip_wipe=False, disable_location=False,
-                        min_battery_level=None, disable_network=False,
-                        disable_java_debug=False, max_battery_temp=None,
                         reboot_timeout=None, emulators=False, **kwargs):
     args = [
         '--adb-path', self.m.adb.adb_path(),
@@ -595,20 +587,6 @@ class AndroidApi(recipe_api.RecipeApi):
       assert isinstance(reboot_timeout, int)
       assert reboot_timeout > 0
       args.extend(['--reboot-timeout', reboot_timeout])
-    if min_battery_level is not None:
-      assert isinstance(min_battery_level, int)
-      assert min_battery_level >= 0
-      assert min_battery_level <= 100
-      args.extend(['--min-battery-level', min_battery_level])
-    if disable_network:
-      args.append('--disable-network')
-    if disable_java_debug:
-      args.append('--disable-java-debug')
-    if max_battery_temp:
-      assert isinstance(max_battery_temp, int)
-      assert max_battery_temp >= 0
-      assert max_battery_temp <= 500
-      args.extend(['--max-battery-temp', max_battery_temp])
     if self.c and self.c.remove_system_packages:
       args.append('--remove-system-packages')
       args.extend(self.c.remove_system_packages)
@@ -657,64 +635,6 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=self.m.chromium.get_env()):
       return self.m.step('install ' + self.m.path.basename(apk), install_cmd,
                          infra_step=True)
-
-  def _asan_device_setup(self, args):
-    script = self.m.path['checkout'].join(
-        'tools', 'android', 'asan', 'third_party', 'asan_device_setup.sh')
-    cmd = [script] + args
-    env = dict(self.m.chromium.get_env())
-    env['ADB'] = self.m.adb.adb_path()
-    with self.m.context(env=env):
-      for d in self.devices:
-        self.m.step(d,
-                    cmd + ['--device', d],
-                    infra_step=True)
-    self.wait_for_devices(self.devices, timeout=150)
-
-  def wait_for_devices(self, devices, timeout=None):
-    script = self.m.path['checkout'].join(
-        'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
-        'wait_for_devices.py')
-    args = [
-        '--adb-path', self.m.adb.adb_path(),
-        '-v'
-    ]
-    if timeout:
-      args.extend([
-          '--timeout', timeout
-      ])
-    args += devices
-    self.m.python('wait_for_devices', script, args, infra_step=True)
-
-  def asan_device_setup(self):
-    clang_version_cmd = [
-        self.m.path['checkout'].join('tools', 'clang', 'scripts', 'update.py'),
-        '--print-clang-version'
-    ]
-    clang_version_step = self.m.step('get_clang_version',
-        clang_version_cmd,
-        stdout=self.m.raw_io.output_text(),
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output('1.1.1')))
-    clang_version = clang_version_step.stdout.strip()
-    with self.m.step.nest('Set up ASAN on devices'):
-      self.m.adb.root_devices()
-      args = [
-          '--lib',
-          self.m.path['checkout'].join(
-              'third_party', 'llvm-build', 'Release+Asserts', 'lib', 'clang',
-              clang_version, 'lib', 'linux', 'libclang_rt.asan-arm-android.so')
-      ]
-      try:
-        self._asan_device_setup(args)
-      except self.m.step.StepFailure:
-        # Attempt to restore the devices to a non-ASAN state.
-        self._asan_device_setup(['--revert'])
-        raise
-
-  def asan_device_teardown(self):
-    with self.m.step.nest('Tear down ASAN on devices'):
-      self._asan_device_setup(['--revert'])
 
   def monkey_test(self, **kwargs):
     args = [
@@ -787,10 +707,9 @@ class AndroidApi(recipe_api.RecipeApi):
           [ '--output-path', log_path,
             self.m.path['checkout'].join('out', 'logcat') ],
           infra_step=True)
+      args = []
       if self.m.tryserver.is_tryserver and not self.c.INTERNAL:
-        args = ['-a', 'public-read']
-      else:
-        args = []
+        args += ['-a', 'public-read']
       self.m.gsutil.upload(
           log_path,
           self.c.logcat_bucket,
@@ -917,14 +836,6 @@ class AndroidApi(recipe_api.RecipeApi):
           'stack_tool_for_tombstones',
           tombstones_cmd,
           infra_step=True)
-      if self.c.asan_symbolize:
-        self.m.step(
-            'stack_tool_for_asan',
-            [self.m.path['checkout'].join('build',
-                                          'android',
-                                          'asan_symbolize.py'),
-             '-l', log_file],
-            infra_step=True)
 
   def test_report(self):
     self.m.python.inline(
@@ -943,40 +854,23 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, perf_setup=False, **provision_kwargs):
+  def common_tests_setup_steps(self, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
     self.spawn_logcat_monitor()
     self.spawn_device_monitor()
     self.authorize_adb_devices()
-    # TODO(jbudorick): Restart USB only on perf bots while we
-    # figure out the fate of the usb reset in general.
-    self.device_recovery(restart_usb=perf_setup)
-    if perf_setup:
-      kwargs = {
-          'min_battery_level': 95,
-          'disable_network': True,
-          'disable_java_debug': True,
-          'max_battery_temp': 350}
-    else:
-      kwargs = {}
-    kwargs.update(provision_kwargs)
-    self.provision_devices(**kwargs)
+    self.device_recovery()
+    self.provision_devices(**provision_kwargs)
     self.device_status()
-    if self.m.chromium.c.runtests.enable_asan:
-      self.asan_device_setup()
 
   def common_tests_final_steps(self,
                                force_latest_version=False,
                                checkout_dir=None):
-    try:
-      self.shutdown_device_monitor()
-      self.logcat_dump()
-      self.stack_tool_steps(force_latest_version)
-    finally:
-      if self.m.chromium.c.runtests.enable_asan:
-        self.asan_device_teardown()
+    self.shutdown_device_monitor()
+    self.logcat_dump()
+    self.stack_tool_steps(force_latest_version)
     self.test_report()
 
     if checkout_dir:
@@ -988,33 +882,6 @@ class AndroidApi(recipe_api.RecipeApi):
       self.stackwalker(
           root_chromium_dir=checkout_dir,
           binary_paths=breakpad_binaries)
-
-  def android_build_wrapper(self):
-
-    @contextlib.contextmanager
-    def wrapper(api):
-      """A context manager for use as auto_bisect's build_context_mgr.
-
-      This wraps every overall bisect run.
-      """
-      try:
-        self.common_tests_setup_steps(perf_setup=True)
-        with api.context(cwd=api.path['checkout']):
-          api.chromium.runhooks()
-
-        yield
-      finally:
-        self.common_tests_final_steps()
-
-    return wrapper
-
-  def android_test_wrapper(self):
-
-    @contextlib.contextmanager
-    def wrapper(_api):
-      """A context manager for running android test steps."""
-      yield
-    return wrapper
 
   def run_bisect_script(self, extra_src='', path_to_config='', **kwargs):
     self.m.step('prepare bisect perf regression',
@@ -1032,16 +899,20 @@ class AndroidApi(recipe_api.RecipeApi):
                                       'run-bisect-perf-regression.py'),
          '-w', self.m.path['start_dir']] + args, **kwargs)
 
-  def run_test_suite(self, suite, verbose=True, tool=None,
-                     result_details=False, store_tombstones=False, name=None,
-                     json_results_file=None, shard_timeout=None, args=None,
+  def run_test_suite(self,
+                     suite,
+                     verbose=True,
+                     result_details=False,
+                     store_tombstones=False,
+                     name=None,
+                     json_results_file=None,
+                     shard_timeout=None,
+                     args=None,
                      **kwargs):
     args = args or []
     args.extend(['--blacklist-file', self.blacklist_file])
     if verbose:
       args.append('--verbose')
-    if tool:
-      args.append('--tool=%s' % tool)
     if result_details and not json_results_file:
       json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
     if json_results_file:
