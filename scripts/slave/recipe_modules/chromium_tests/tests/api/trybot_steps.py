@@ -6,8 +6,7 @@ from recipe_engine import post_process
 from recipe_engine.recipe_api import Property
 import textwrap
 
-from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, master_spec,
-                                                 try_spec)
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, try_spec
 
 DEPS = [
     'chromium',
@@ -27,66 +26,60 @@ DEPS = [
 ]
 
 _TEST_BUILDERS = bot_db.BotDatabase.create({
-    'chromium.test':
-        master_spec.MasterSpec.create(
-            builders={
-                'staging-chromium-rel':
-                    bot_spec.BotSpec.create(
-                        chromium_config='chromium',
-                        gclient_config='chromium',
-                        chromium_tests_apply_config=['staging'],
-                    ),
-                'staging-chromium-test-rel':
-                    bot_spec.BotSpec.create(
-                        gclient_config='chromium',
-                        chromium_tests_apply_config=['staging'],
-                    ),
-                'retry-shards':
-                    bot_spec.BotSpec.create(
-                        chromium_config='chromium',
-                        gclient_config='chromium',
-                    ),
-                'retry-shards-test':
-                    bot_spec.BotSpec.create(
-                        bot_type='tester',
-                        parent_buildername='retry-shards',
-                    ),
-            }),
-    'tryserver.chromium.unmirrored':
-        master_spec.MasterSpec.create(
-            builders={
-                'unmirrored-chromium-rel':
-                    bot_spec.BotSpec.create(
-                        chromium_config='chromium',
-                        gclient_config='chromium',
-                    ),
-            }),
+    'chromium.test': {
+        'staging-chromium-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                gclient_config='chromium',
+                chromium_tests_apply_config=['staging'],
+            ),
+        'staging-chromium-test-rel':
+            bot_spec.BotSpec.create(
+                gclient_config='chromium',
+                chromium_tests_apply_config=['staging'],
+            ),
+        'retry-shards':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                gclient_config='chromium',
+            ),
+        'retry-shards-test':
+            bot_spec.BotSpec.create(
+                bot_type='tester',
+                parent_buildername='retry-shards',
+            ),
+    },
+    'tryserver.chromium.unmirrored': {
+        'unmirrored-chromium-rel':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                gclient_config='chromium',
+            ),
+    },
 })
 
 _TEST_TRYBOTS = try_spec.TryDatabase.create({
-    'tryserver.chromium.test':
-        try_spec.TryMasterSpec.create(
-            builders={
-                'retry-shards':
-                    try_spec.TrySpec.create(
-                        retry_failed_shards=True,
-                        mirrors=[
-                            try_spec.TryMirror.create(
-                                mastername='chromium.test',
-                                buildername='retry-shards',
-                                tester='retry-shards-test',
-                            ),
-                        ],
+    'tryserver.chromium.test': {
+        'retry-shards':
+            try_spec.TrySpec.create(
+                retry_failed_shards=True,
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        mastername='chromium.test',
+                        buildername='retry-shards',
+                        tester='retry-shards-test',
                     ),
-                'staging-chromium-rel':
-                    try_spec.TrySpec.create(bot_ids=[
-                        try_spec.TryMirror.create(
-                            mastername='chromium.test',
-                            buildername='staging-chromium-rel',
-                            tester='staging-chromium-test-rel',
-                        ),
-                    ]),
-            }),
+                ],
+            ),
+        'staging-chromium-rel':
+            try_spec.TrySpec.create(bot_ids=[
+                try_spec.TryMirror.create(
+                    mastername='chromium.test',
+                    buildername='staging-chromium-rel',
+                    tester='staging-chromium-test-rel',
+                ),
+            ]),
+    }
 })
 
 
@@ -204,24 +197,20 @@ def GenTests(api):
           mastername='fake-master', builder='fake-try-builder'),
       api.chromium_tests.trybots(
           try_spec.TryDatabase.create({
-              'fake-master':
-                  try_spec.TryMasterSpec.create(
-                      builders={
-                          'fake-try-builder':
-                              try_spec.TrySpec.create(mirrors=[
-                                  try_spec.TryMirror.create(
-                                      mastername='fake-master',
-                                      buildername='fake-builder',
-                                      tester='fake-dummy-tester',
-                                  )
-                              ]),
-                      }),
+              'fake-master': {
+                  'fake-try-builder':
+                  try_spec.TrySpec.create(mirrors=[
+                      try_spec.TryMirror.create(
+                          mastername='fake-master',
+                          buildername='fake-builder',
+                          tester='fake-dummy-tester',
+                      )
+                  ]),
+              },
           })),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master':
-                  master_spec.MasterSpec.create(
-                      builders={
+              'fake-master': {
                           'fake-builder':
                               bot_spec.BotSpec.create(
                                   chromium_config='chromium',
@@ -230,7 +219,7 @@ def GenTests(api):
                           'fake-dummy-tester':
                               bot_spec.BotSpec.create(
                                   bot_type=bot_spec.DUMMY_TESTER),
-                      }),
+                      },
           })),
       api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec(

@@ -11,7 +11,7 @@ from recipe_engine.recipe_api import Property
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, master_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
     'chromium',
@@ -35,199 +35,196 @@ def _builder_spec(**kwargs):
 
 
 CUSTOM_BUILDERS = bot_db.BotDatabase.create({
-    'chromium.example':
-        master_spec.MasterSpec.create(
-            builders={
-                'Isolated Transfer Builder':
-                    _builder_spec(
-                        bot_type='builder',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Isolated Transfer Tester':
-                    _builder_spec(
-                        bot_type='tester',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        parent_buildername='Isolated Transfer Builder',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Isolated Transfer: mixed builder, isolated tester (builder)':
-                    _builder_spec(
-                        bot_type='builder',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Isolated Transfer: mixed builder, isolated tester (tester)':
-                    _builder_spec(
-                        bot_type='tester',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        parent_buildername=(
-                            'Isolated Transfer: '
-                            'mixed builder, isolated tester (builder)'),
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Isolated Transfer: mixed BT, isolated tester (BT)':
-                    _builder_spec(
-                        android_config='main_builder_mb',
-                        bot_type='builder_tester',
-                        chromium_config='android',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                            'TARGET_PLATFORM': 'android',
-                        },
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Isolated Transfer: mixed BT, isolated tester (tester)':
-                    _builder_spec(
-                        android_config='main_builder_mb',
-                        bot_type='tester',
-                        chromium_config='android',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                            'TARGET_PLATFORM': 'android',
-                        },
-                        gclient_config='chromium',
-                        parent_buildername=
-                        'Isolated Transfer: mixed BT, isolated tester (BT)',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Packaged Transfer Builder':
-                    _builder_spec(
-                        bot_type='builder',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Packaged Transfer Enabled Builder':
-                    _builder_spec(
-                        bot_type='builder',
-                        enable_package_transfer=True,
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Packaged Transfer Tester':
-                    _builder_spec(
-                        bot_type='tester',
-                        chromium_apply_config=['mb'],
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 64,
-                        },
-                        gclient_config='chromium',
-                        parent_buildername='Packaged Transfer Builder',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Multiple Triggers: Builder':
-                    _builder_spec(
-                        android_config='main_builder',
-                        bot_type='builder',
-                        chromium_apply_config=['mb'],
-                        chromium_config='android',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 32,
-                            'TARGET_PLATFORM': 'android',
-                        },
-                        gclient_apply_config=['android'],
-                        gclient_config='chromium',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Multiple Triggers: Mixed':
-                    _builder_spec(
-                        android_config='main_builder',
-                        bot_type='tester',
-                        chromium_apply_config=['mb'],
-                        chromium_config='android',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 32,
-                            'TARGET_PLATFORM': 'android',
-                        },
-                        gclient_apply_config=['android'],
-                        gclient_config='chromium',
-                        parent_buildername='Multiple Triggers: Builder',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-                'Multiple Triggers: Isolated':
-                    _builder_spec(
-                        android_config='main_builder',
-                        bot_type='tester',
-                        chromium_apply_config=['mb'],
-                        chromium_config='android',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                            'TARGET_BITS': 32,
-                            'TARGET_PLATFORM': 'android',
-                        },
-                        gclient_apply_config=['android'],
-                        gclient_config='chromium',
-                        parent_buildername='Multiple Triggers: Builder',
-                        testing={
-                            'platform': 'linux',
-                        },
-                    ),
-            },),
+    'chromium.example': {
+        'Isolated Transfer Builder':
+            _builder_spec(
+                bot_type='builder',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Isolated Transfer Tester':
+            _builder_spec(
+                bot_type='tester',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                parent_buildername='Isolated Transfer Builder',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Isolated Transfer: mixed builder, isolated tester (builder)':
+            _builder_spec(
+                bot_type='builder',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Isolated Transfer: mixed builder, isolated tester (tester)':
+            _builder_spec(
+                bot_type='tester',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                parent_buildername=('Isolated Transfer: '
+                                    'mixed builder, isolated tester (builder)'),
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Isolated Transfer: mixed BT, isolated tester (BT)':
+            _builder_spec(
+                android_config='main_builder_mb',
+                bot_type='builder_tester',
+                chromium_config='android',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'android',
+                },
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Isolated Transfer: mixed BT, isolated tester (tester)':
+            _builder_spec(
+                android_config='main_builder_mb',
+                bot_type='tester',
+                chromium_config='android',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_PLATFORM': 'android',
+                },
+                gclient_config='chromium',
+                parent_buildername=
+                'Isolated Transfer: mixed BT, isolated tester (BT)',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Packaged Transfer Builder':
+            _builder_spec(
+                bot_type='builder',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Packaged Transfer Enabled Builder':
+            _builder_spec(
+                bot_type='builder',
+                enable_package_transfer=True,
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Packaged Transfer Tester':
+            _builder_spec(
+                bot_type='tester',
+                chromium_apply_config=['mb'],
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                },
+                gclient_config='chromium',
+                parent_buildername='Packaged Transfer Builder',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Multiple Triggers: Builder':
+            _builder_spec(
+                android_config='main_builder',
+                bot_type='builder',
+                chromium_apply_config=['mb'],
+                chromium_config='android',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                },
+                gclient_apply_config=['android'],
+                gclient_config='chromium',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Multiple Triggers: Mixed':
+            _builder_spec(
+                android_config='main_builder',
+                bot_type='tester',
+                chromium_apply_config=['mb'],
+                chromium_config='android',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                },
+                gclient_apply_config=['android'],
+                gclient_config='chromium',
+                parent_buildername='Multiple Triggers: Builder',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+        'Multiple Triggers: Isolated':
+            _builder_spec(
+                android_config='main_builder',
+                bot_type='tester',
+                chromium_apply_config=['mb'],
+                chromium_config='android',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                },
+                gclient_apply_config=['android'],
+                gclient_config='chromium',
+                parent_buildername='Multiple Triggers: Builder',
+                testing={
+                    'platform': 'linux',
+                },
+            ),
+    },
 })
 
 

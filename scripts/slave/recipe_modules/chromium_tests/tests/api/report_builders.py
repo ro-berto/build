@@ -11,22 +11,18 @@ DEPS = [
 
 BUILDERS = {
     'fake-master': {
-        'builders': {
             'fake-builder': {}
-        },
     },
 }
 
 TRYBOTS = {
     'fake-try-master': {
-        'builders': {
             'fake-try-builder': {
                 'bot_ids': [{
                     'mastername': 'fake-master',
                     'buildername': 'fake-builder',
                 }],
             },
-        },
     },
 }
 

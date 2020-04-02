@@ -23,11 +23,9 @@ BASIC_CONFIG = {
 
 BUILDERS = {
   'fake.master': {
-    'builders': {
       'Test Version': dict(BASIC_CONFIG, **{
         'android_version': 'chrome/Version',
       }),
-    },
   },
 }
 

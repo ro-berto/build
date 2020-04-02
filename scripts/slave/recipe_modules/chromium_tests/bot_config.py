@@ -6,7 +6,6 @@ from recipe_engine.types import FrozenDict, freeze
 
 from . import bot_db as bot_db_module
 from . import bot_spec as bot_spec_module
-from . import master_spec as master_spec_module
 from . import try_spec as try_spec_module
 
 from RECIPE_MODULES.build import chromium

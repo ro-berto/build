@@ -103,81 +103,6 @@ def RunSteps(api):
           'buildername': 'fake-builder',
       }]))
 
-  # TryMasterSpec creation *****************************************************
-
-  # Creation of a TryMasterSpec with input TrySpecs
-  try_master_spec = try_spec_module.TryMasterSpec.create(
-      builders={
-          'fake-try-builder-1':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-1',
-                                                   'fake-builder-1')
-              ]),
-          'fake-try-builder-2':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-2',
-                                                   'fake-builder-2')
-              ]),
-      })
-  api.assertions.assertEqual(
-      try_master_spec.builders, {
-          'fake-try-builder-1':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-1',
-                                                   'fake-builder-1')
-              ]),
-          'fake-try-builder-2':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-2',
-                                                   'fake-builder-2')
-              ]),
-      })
-
-  # Creation of a TryMasterSpec with input dictionaries
-  try_master_spec = try_spec_module.TryMasterSpec.create(
-      builders={
-          'fake-try-builder-1': {
-              'bot_ids': [{
-                  'mastername': 'fake-master-1',
-                  'buildername': 'fake-builder-1',
-              }],
-          },
-          'fake-try-builder-2': {
-              'bot_ids': [{
-                  'mastername': 'fake-master-2',
-                  'buildername': 'fake-builder-2',
-              }],
-          },
-      })
-  api.assertions.assertEqual(
-      try_master_spec.builders, {
-          'fake-try-builder-1':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-1',
-                                                   'fake-builder-1')
-              ]),
-          'fake-try-builder-2':
-              try_spec_module.TrySpec.create(bot_ids=[
-                  try_spec_module.TryMirror.create('fake-master-2',
-                                                   'fake-builder-2')
-              ]),
-      })
-
-  # TryMasterSpec normalization ************************************************
-
-  # Normalization of a TryMasterSpec
-  try_master_spec = try_spec_module.TryMasterSpec.create(
-      builders={
-          'fake-try-builder': {
-              'bot_ids': [{
-                  'mastername': 'fake-master',
-                  'buildername': 'fake-builder',
-              }],
-          },
-      })
-  try_master_spec_2 = try_spec_module.TryMasterSpec.normalize(try_master_spec)
-  api.assertions.assertIs(try_master_spec_2, try_master_spec)
-
   # TryDatabase validation *****************************************************
   d = {
       'fake-try-master': {
@@ -198,23 +123,19 @@ def RunSteps(api):
   # TryDatabase mapping interface **********************************************
   db = try_spec_module.TryDatabase.create({
       'fake-try-master-1': {
-          'builders': {
-              'fake-try-builder-1': {
-                  'bot_ids': [{
-                      'mastername': 'master-1',
-                      'buildername': 'builder-1',
-                  }],
-              },
+          'fake-try-builder-1': {
+              'bot_ids': [{
+                  'mastername': 'master-1',
+                  'buildername': 'builder-1',
+              }],
           },
       },
       'fake-try-master-2': {
-          'builders': {
-              'fake-try-builder-2': {
-                  'bot_ids': [{
-                      'mastername': 'master-2',
-                      'buildername': 'builder-2',
-                  }],
-              },
+          'fake-try-builder-2': {
+              'bot_ids': [{
+                  'mastername': 'master-2',
+                  'buildername': 'builder-2',
+              }],
           },
       },
   })
@@ -243,13 +164,11 @@ def RunSteps(api):
   # Normalization of a TryDatabase
   try_db = try_spec_module.TryDatabase.create({
       'fake-try-master': {
-          'builders': {
-              'fake-try-builder': {
-                  'bot_ids': [{
-                      'mastername': 'master',
-                      'buildername': 'builder',
-                  }],
-              },
+          'fake-try-builder': {
+              'bot_ids': [{
+                  'mastername': 'master',
+                  'buildername': 'builder',
+              }],
           },
       },
   })
@@ -259,13 +178,11 @@ def RunSteps(api):
   # Normalization of a dictionary
   d = {
       'fake-try-master': {
-          'builders': {
-              'fake-try-builder': {
-                  'bot_ids': [{
-                      'mastername': 'master',
-                      'buildername': 'builder',
-                  }],
-              },
+          'fake-try-builder': {
+              'bot_ids': [{
+                  'mastername': 'master',
+                  'buildername': 'builder',
+              }],
           },
       },
   }

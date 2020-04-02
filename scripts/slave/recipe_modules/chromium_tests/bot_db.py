@@ -6,7 +6,7 @@ import attr
 import collections
 import sys
 
-from . import bot_spec as bot_spec_module, master_spec as master_spec_module
+from . import bot_spec as bot_spec_module
 
 from recipe_engine.types import FrozenDict
 
@@ -48,10 +48,9 @@ class BotDatabase(collections.Mapping):
     builders_by_master = {}
 
     for master_name, builders_for_master in bots_dict.iteritems():
-      if isinstance(builders_for_master, master_spec_module.MasterSpec):
-        builders_for_master = builders_for_master.builders
-      elif builders_for_master.keys() == ['builders']:
-        builders_for_master = builders_for_master['builders']
+      assert builders_for_master.keys() != [
+          'builders'
+      ], "Remove unnecessary 'builders' level"
 
       builders_for_master = dict(builders_for_master)
       for builder_name, builder_spec in builders_for_master.iteritems():

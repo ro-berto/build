@@ -4,7 +4,7 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, master_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DEPS = [
     'chromium',
@@ -69,19 +69,16 @@ def GenTests(api):
       ),
       api.chromium_tests.builders(
           bot_db.BotDatabase.create({
-              'fake-master':
-                  master_spec.MasterSpec.create(
-                      builders={
-                          'fake-builder':
-                              bot_spec.BotSpec.create(),
-                          'fake-tester':
-                              bot_spec.BotSpec.create(
-                                  luci_project='fake-project',
-                                  bot_type=bot_spec.TESTER,
-                                  parent_buildername='fake-builder',
-                              ),
-                      },
-                  ),
+              'fake-master': {
+                  'fake-builder':
+                      bot_spec.BotSpec.create(),
+                  'fake-tester':
+                      bot_spec.BotSpec.create(
+                          luci_project='fake-project',
+                          bot_type=bot_spec.TESTER,
+                          parent_buildername='fake-builder',
+                      ),
+              },
           })),
       api.properties(expected={
           'fake-project': ['fake-tester'],

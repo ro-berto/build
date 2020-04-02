@@ -13,7 +13,6 @@ DEPS = [
 
 CUSTOM_BUILDERS = {
     'chromium.example': {
-        'builders': {
             'Fake Builder': {
                 'build_gs_bucket': 'chromium-example-archive',
                 'chromium_config': 'android',
@@ -31,10 +30,8 @@ CUSTOM_BUILDERS = {
                     'platform': 'linux',
                 },
             },
-        },
     },
     'chromium.example2': {
-        'builders': {
             'Fake Tester': {
                 'build_gs_bucket': 'chromium-example-archive',
                 'chromium_config': 'android',
@@ -53,7 +50,6 @@ CUSTOM_BUILDERS = {
                     'platform': 'linux',
                 },
             },
-        },
     },
 }
 

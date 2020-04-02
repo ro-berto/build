@@ -34,7 +34,6 @@ def GenTests(api):
       api.properties(
           builders={
               'chromium.fake': {
-                  'builders': {
                       'fake-builder': {
                           'build_gs_bucket': 'sample-bucket',
                           'bot_type': 'builder',
@@ -43,7 +42,6 @@ def GenTests(api):
                           'gclient_config': 'chromium',
                       },
                   },
-              }
           }),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
@@ -61,7 +59,6 @@ def GenTests(api):
       api.properties(
           builders={
               'chromium.perf': {
-                  'builders': {
                       'fake-perf-builder': {
                           'build_gs_bucket': 'sample-bucket',
                           'bot_type': 'builder',
@@ -70,7 +67,6 @@ def GenTests(api):
                           'gclient_config': 'chromium',
                       },
                   },
-              }
           }),
       api.post_process(post_process.DoesNotRun, 'package build for bisect'),
       api.post_process(post_process.MustRun, 'package build'),
@@ -87,7 +83,6 @@ def GenTests(api):
       api.properties(
           builders={
               'chromium.perf': {
-                  'builders': {
                       'fake-bisect-builder': {
                           'bisect_archive_build': True,
                           'bisect_gs_bucket': 'sample-bisect-bucket',
@@ -97,7 +92,6 @@ def GenTests(api):
                           'gclient_config': 'chromium',
                       },
                   },
-              }
           }),
       api.post_process(post_process.MustRun, 'package build for bisect'),
       api.post_process(post_process.DoesNotRun, 'package build'),

@@ -23,7 +23,6 @@ def RunSteps(api):
       [BuilderId.create_for_master('test_mastername', 'test_buildername')],
       builders={
           'test_mastername': {
-              'builders': {
                   'test_buildername': {
                       'isolate_server': 'https://example/isolate',
                       'swarming_server': 'https://example/swarming',
@@ -31,7 +30,6 @@ def RunSteps(api):
                           'os': 'Ubuntu-14.04'
                       },
                   },
-              },
           },
       })
 

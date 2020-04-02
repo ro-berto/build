@@ -150,51 +150,6 @@ class TrySpec(object):
 
 
 @attrs()
-class TryMasterSpec(object):
-  """An immutable specification for a try master.
-
-  The spec includes the try specs for the associated try builders.
-  """
-
-  builders = mapping_attrib(str, TrySpec, {})
-
-  @classmethod
-  def create(cls, builders=None):
-    """Create a TryMasterSpec.
-
-    Arguments:
-      builders - The try builders associated with the try master. It must be a
-        mapping that maps builder names to their try spec. The try specs for
-        each try builder must be in a form that can be passed to
-        TrySpec.normalize.
-
-    Returns:
-      A new TryMasterSpec instance with builders set to a mapping with
-      normalized TrySpec instances for values.
-    """
-    kwargs = {}
-    if builders is not None:
-      kwargs['builders'] = {
-          k: TrySpec.normalize(v) for k, v in builders.iteritems()
-      }
-    return cls(**kwargs)
-
-  @classmethod
-  def normalize(cls, spec):
-    """Converts various representations of a try master spec to TryMasterSpec.
-
-    The incoming representation can have one of the following forms:
-    * TryMasterSpec - The input is returned.
-    * A mapping containing the key builders with the value being a mapping that
-      maps try builder names to try specs - The input is expanded as keyword
-      arguments to TryMasterSpec.create.
-    """
-    if isinstance(spec, TryMasterSpec):
-      return spec
-    return cls.create(**spec)  # pragma: no cover
-
-
-@attrs()
 class TryDatabase(collections.Mapping):
   """A database that provides information for multiple try masters.
 
@@ -223,10 +178,9 @@ class TryDatabase(collections.Mapping):
     db = {}
 
     for master_name, trybots_for_master in trybots_dict.iteritems():
-      if isinstance(trybots_for_master, TryMasterSpec):
-        trybots_for_master = trybots_for_master.builders
-      elif trybots_for_master.keys() == ['builders']:
-        trybots_for_master = trybots_for_master['builders']
+      assert trybots_for_master.keys() != [
+          'builders'
+      ], "Remove unnecessary 'builders' level"
 
       for builder_name, try_spec in trybots_for_master.iteritems():
         builder_id = chromium.BuilderId.create_for_master(

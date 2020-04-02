@@ -19,28 +19,22 @@ def RunSteps(api):
 
   db = bot_db.BotDatabase.create({
       'master-1': {
-          'builders': {
               'builder-1-a': {},
               'builder-1-b': {
                   'parent_buildername': 'builder-1-a',
               },
-          },
       },
       'master-2': {
-          'builders': {
               'builder-2': {
                   'parent_mastername': 'master-1',
                   'parent_buildername': 'builder-1-a',
               },
-          },
       },
       'master-3': {
-          'builders': {
               'builder-3-a':
                   bot_spec.BotSpec.create(parent_buildername='builder-3-c'),
               'builder-3-b': {},
               'builder-3-c': {},
-          },
       },
   })
 

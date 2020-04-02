@@ -10,7 +10,7 @@ import json
 from recipe_engine import post_process, types
 
 from RECIPE_MODULES.build.chromium_tests import (bot_db as bot_db_module,
-                                                 bot_spec, master_spec, steps)
+                                                 bot_spec, steps)
 
 DEPS = [
     'chromium_tests',
@@ -45,18 +45,15 @@ def GenTests(api):
       api.properties(gs_bucket='bucket', gs_object='data.json'),
       api.chromium_tests.builders(
           bot_db_module.BotDatabase.create({
-              'mockmaster':
-                  master_spec.MasterSpec.create(
-                      builders={
-                          'mockbuilder':
-                              bot_spec.BotSpec.create(
-                                  compile_targets=['foo', 'bar'],
-                                  tests=[
-                                      steps.SizesStep('fake-url',
-                                                      'fake-config-name')
-                                  ],
-                              ),
-                      })
+              'mockmaster': {
+                  'mockbuilder':
+                      bot_spec.BotSpec.create(
+                          compile_targets=['foo', 'bar'],
+                          tests=[
+                              steps.SizesStep('fake-url', 'fake-config-name')
+                          ],
+                      ),
+              }
           })),
   )
   yield api.test(

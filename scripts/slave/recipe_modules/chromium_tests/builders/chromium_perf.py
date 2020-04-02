@@ -9,9 +9,7 @@ from .. import bot_spec, steps
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
-SPEC = {
-    'builders': {},
-}
+SPEC = {}
 
 
 @CHROMIUM_CONFIG_CTX(
@@ -150,7 +148,7 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
       platform,
       target_bits,
       parent_buildername=parent_buildername)
-  SPEC['builders'][name] = spec
+  SPEC[name] = spec
 
 
 def _AddBuildSpec(name,
@@ -159,7 +157,7 @@ def _AddBuildSpec(name,
                   bisect_archive_build=False,
                   extra_compile_targets=None):
 
-  SPEC['builders'][name] = BuildSpec(
+  SPEC[name] = BuildSpec(
       'chromium_perf',
       platform,
       target_bits,

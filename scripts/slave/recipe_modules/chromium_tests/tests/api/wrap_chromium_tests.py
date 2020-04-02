@@ -4,8 +4,7 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, master_spec,
-                                                 steps)
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
 
 DEPS = [
     'chromium',
@@ -71,29 +70,27 @@ def RunSteps(api):
 
 def GenTests(api):
   test_builders = bot_db.BotDatabase.create({
-      'chromium.example':
-          master_spec.MasterSpec.create(
-              builders={
-                  'android-basic':
-                      bot_spec.BotSpec.create(
-                          android_config='main_builder',
-                          chromium_apply_config=[
-                              'mb',
-                          ],
-                          chromium_config='android',
-                          chromium_config_kwargs={
-                              'BUILD_CONFIG': 'Release',
-                              'TARGET_BITS': 32,
-                              'TARGET_PLATFORM': 'android',
-                          },
-                          gclient_config='chromium',
-                          gclient_apply_config=['android'],
-                          bot_type='builder_tester',
-                          testing={
-                              'platform': 'linux',
-                          },
-                      ),
-              }),
+      'chromium.example': {
+          'android-basic':
+              bot_spec.BotSpec.create(
+                  android_config='main_builder',
+                  chromium_apply_config=[
+                      'mb',
+                  ],
+                  chromium_config='android',
+                  chromium_config_kwargs={
+                      'BUILD_CONFIG': 'Release',
+                      'TARGET_BITS': 32,
+                      'TARGET_PLATFORM': 'android',
+                  },
+                  gclient_config='chromium',
+                  gclient_apply_config=['android'],
+                  bot_type='builder_tester',
+                  testing={
+                      'platform': 'linux',
+                  },
+              ),
+      },
   })
 
   yield api.test(

@@ -10,32 +10,28 @@ DEPS = [
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, master_spec
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec
 
 DUMMY_BUILDERS = bot_db.BotDatabase.create({
-    'chromium.fake':
-        master_spec.MasterSpec.create(
-            builders={
-                'cross-master-trigger-builder':
-                    bot_spec.BotSpec.create(
-                        bot_type='builder',
-                        chromium_config='chromium',
-                        chromium_config_kwargs={
-                            'BUILD_CONFIG': 'Release',
-                        },
-                        gclient_config='chromium',
-                    ),
-            }),
-    'chromium.fake.fyi':
-        master_spec.MasterSpec.create(
-            builders={
-                'cross-master-trigger-tester':
-                    bot_spec.BotSpec.create(
-                        bot_type='tester',
-                        parent_buildername='cross-master-trigger-builder',
-                        parent_mastername='chromium.fake',
-                    ),
-            }),
+    'chromium.fake': {
+        'cross-master-trigger-builder':
+            bot_spec.BotSpec.create(
+                bot_type='builder',
+                chromium_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                },
+                gclient_config='chromium',
+            ),
+    },
+    'chromium.fake.fyi': {
+        'cross-master-trigger-tester':
+            bot_spec.BotSpec.create(
+                bot_type='tester',
+                parent_buildername='cross-master-trigger-builder',
+                parent_mastername='chromium.fake',
+            ),
+    },
 })
 
 
@@ -76,32 +72,26 @@ def GenTests(api):
       ),
       api.chromium_tests.builders({
           'fake-master': {
-              'builders': {
-                  'fake-builder': {
-                      'chromium_config': 'chromium',
-                      'gclient_config': 'chromium',
-                  }
+              'fake-builder': {
+                  'chromium_config': 'chromium',
+                  'gclient_config': 'chromium',
               },
           },
           'fake-tester-master': {
-              'builders': {
-                  'fake-tester': {
-                      'bot_type': bot_spec.DUMMY_TESTER,
-                  },
+              'fake-tester': {
+                  'bot_type': bot_spec.DUMMY_TESTER,
               },
           },
       }),
       api.chromium_tests.trybots({
           'fake-try-master': {
-              'builders': {
-                  'fake-try-builder': {
-                      'bot_ids': [{
-                          'mastername': 'fake-master',
-                          'buildername': 'fake-builder',
-                          'tester_mastername': 'fake-tester-master',
-                          'tester': 'fake-tester',
-                      }],
-                  },
+              'fake-try-builder': {
+                  'bot_ids': [{
+                      'mastername': 'fake-master',
+                      'buildername': 'fake-builder',
+                      'tester_mastername': 'fake-tester-master',
+                      'tester': 'fake-tester',
+                  }],
               },
           },
       }),

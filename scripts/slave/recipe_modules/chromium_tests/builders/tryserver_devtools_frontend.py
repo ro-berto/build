@@ -20,8 +20,6 @@ COMMON_BOT_CONFIG = bot_spec.BotSpec.create(
 )
 
 SPEC = {
-    'builders': {
-        'devtools_frontend_linux_blink_light_rel': COMMON_BOT_CONFIG,
-        'devtools_frontend_linux_blink_rel': COMMON_BOT_CONFIG,
-    },
+    'devtools_frontend_linux_blink_light_rel': COMMON_BOT_CONFIG,
+    'devtools_frontend_linux_blink_rel': COMMON_BOT_CONFIG,
 }

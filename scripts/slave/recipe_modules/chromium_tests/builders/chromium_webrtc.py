@@ -42,168 +42,162 @@ def _chromium_webrtc_spec(**kwargs):
 
 
 SPEC = {
-    'builders': {
-        'WebRTC Chromium Android Builder':
-            _chromium_webrtc_spec(
-                android_config='base_config',
-                bot_type=bot_spec.BUILDER,
-                chromium_apply_config=[
-                    'dcheck', 'mb', 'mb_luci_auth', 'android'
-                ],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                    'TARGET_PLATFORM': 'android'
-                },
-                gclient_apply_config=['android'],
-                gclient_config='chromium_webrtc',
-                testing={'platform': 'linux'},
-            ),
-        'WebRTC Chromium Android Tester':
-            _chromium_webrtc_spec(
-                android_config='base_config',
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=[
-                    'dcheck', 'mb', 'mb_luci_auth', 'android'
-                ],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                    'TARGET_PLATFORM': 'android'
-                },
-                gclient_apply_config=['android'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Android Builder',
-                swarming_dimensions={
-                    'device_os': 'MMB29Q',
-                    'device_type': 'bullhead',
-                    'os': 'Android'
-                },
-                test_results_config='public_server',
-                testing={'platform': 'linux'},
-            ),
-        'WebRTC Chromium Linux Builder':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                testing={'platform': 'linux'},
-            ),
-        'WebRTC Chromium Linux Tester':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Linux Builder',
-                test_results_config='public_server',
-                testing={'platform': 'linux'},
-                tests=[browser_perf_test('chromium-webrtc-rel-linux')],
-            ),
-        'WebRTC Chromium Mac Builder':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                testing={'platform': 'mac'},
-            ),
-        'WebRTC Chromium Mac Tester':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Mac Builder',
-                test_results_config='public_server',
-                testing={'platform': 'mac'},
-                tests=[browser_perf_test('chromium-webrtc-rel-mac')],
-            ),
-        'WebRTC Chromium Win Builder':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.BUILDER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                testing={'platform': 'win'},
-            ),
-        'WebRTC Chromium Win10 Tester':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Win Builder',
-                test_results_config='public_server',
-                testing={'platform': 'win'},
-                tests=[browser_perf_test('chromium-webrtc-rel-win10')],
-            ),
-        'WebRTC Chromium Win7 Tester':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Win Builder',
-                test_results_config='public_server',
-                testing={'platform': 'win'},
-                tests=[browser_perf_test('chromium-webrtc-rel-7')],
-            ),
-        'WebRTC Chromium Win8 Tester':
-            _chromium_webrtc_spec(
-                bot_type=bot_spec.TESTER,
-                chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
-                chromium_config='chromium',
-                chromium_config_kwargs={
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32
-                },
-                gclient_apply_config=['webrtc_test_resources'],
-                gclient_config='chromium_webrtc',
-                parent_buildername='WebRTC Chromium Win Builder',
-                test_results_config='public_server',
-                testing={'platform': 'win'},
-                tests=[browser_perf_test('chromium-webrtc-rel-win8')],
-            ),
-    },
+    'WebRTC Chromium Android Builder':
+        _chromium_webrtc_spec(
+            android_config='base_config',
+            bot_type=bot_spec.BUILDER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android'
+            },
+            gclient_apply_config=['android'],
+            gclient_config='chromium_webrtc',
+            testing={'platform': 'linux'},
+        ),
+    'WebRTC Chromium Android Tester':
+        _chromium_webrtc_spec(
+            android_config='base_config',
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth', 'android'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android'
+            },
+            gclient_apply_config=['android'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Android Builder',
+            swarming_dimensions={
+                'device_os': 'MMB29Q',
+                'device_type': 'bullhead',
+                'os': 'Android'
+            },
+            test_results_config='public_server',
+            testing={'platform': 'linux'},
+        ),
+    'WebRTC Chromium Linux Builder':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.BUILDER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            testing={'platform': 'linux'},
+        ),
+    'WebRTC Chromium Linux Tester':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Linux Builder',
+            test_results_config='public_server',
+            testing={'platform': 'linux'},
+            tests=[browser_perf_test('chromium-webrtc-rel-linux')],
+        ),
+    'WebRTC Chromium Mac Builder':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.BUILDER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            testing={'platform': 'mac'},
+        ),
+    'WebRTC Chromium Mac Tester':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Mac Builder',
+            test_results_config='public_server',
+            testing={'platform': 'mac'},
+            tests=[browser_perf_test('chromium-webrtc-rel-mac')],
+        ),
+    'WebRTC Chromium Win Builder':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.BUILDER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            testing={'platform': 'win'},
+        ),
+    'WebRTC Chromium Win10 Tester':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Win Builder',
+            test_results_config='public_server',
+            testing={'platform': 'win'},
+            tests=[browser_perf_test('chromium-webrtc-rel-win10')],
+        ),
+    'WebRTC Chromium Win7 Tester':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Win Builder',
+            test_results_config='public_server',
+            testing={'platform': 'win'},
+            tests=[browser_perf_test('chromium-webrtc-rel-7')],
+        ),
+    'WebRTC Chromium Win8 Tester':
+        _chromium_webrtc_spec(
+            bot_type=bot_spec.TESTER,
+            chromium_apply_config=['dcheck', 'mb', 'mb_luci_auth'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32
+            },
+            gclient_apply_config=['webrtc_test_resources'],
+            gclient_config='chromium_webrtc',
+            parent_buildername='WebRTC Chromium Win Builder',
+            test_results_config='public_server',
+            testing={'platform': 'win'},
+            tests=[browser_perf_test('chromium-webrtc-rel-win8')],
+        ),
 }

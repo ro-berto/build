@@ -18,9 +18,7 @@ def RunSteps(api):
   spec = {'bot_type': bot_spec.TESTER}
   builders = {
       'fake-master': {
-          'builders': {
               'fake-builder': spec,
-          },
       },
   }
   builder_id = chromium.BuilderId.create_for_master('fake-master',
@@ -34,7 +32,6 @@ def RunSteps(api):
   # Set up data for testing bot_config methods
   builders = {
       'fake-master': {
-          'builders': {
               'fake-builder':
                   bot_spec.BotSpec.create(),
               'fake-tester':
@@ -42,10 +39,8 @@ def RunSteps(api):
                       bot_type=bot_spec.TESTER,
                       parent_buildername='fake-builder',
                   ),
-          },
       },
       'fake-master2': {
-          'builders': {
               'fake-builder2':
                   bot_spec.BotSpec.create(),
               'fake-tester2':
@@ -53,7 +48,6 @@ def RunSteps(api):
                       bot_type=bot_spec.TESTER,
                       parent_buildername='fake-builder',
                   ),
-          },
       },
   }
 

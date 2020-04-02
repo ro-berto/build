@@ -21,7 +21,6 @@ BASIC_CONFIG = {
 
 BUILDERS = {
   'fake.master': {
-    'builders': {
       'Android Apply Config Builder': dict(BASIC_CONFIG, **{
         'android_apply_config': [
           'use_devil_provision',
@@ -35,7 +34,6 @@ BUILDERS = {
       'Component Rev Builder': dict(BASIC_CONFIG, **{
         'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       }),
-    },
   },
 }
 

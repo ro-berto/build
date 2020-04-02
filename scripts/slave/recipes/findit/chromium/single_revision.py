@@ -17,8 +17,7 @@ from PB.recipes.build.findit.chromium.single_revision import InputProperties
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import (bot_db, bot_spec, master_spec,
-                                                 steps)
+from RECIPE_MODULES.build.chromium_tests import bot_db, bot_spec, steps
 
 DEPS = [
     'chromium',
@@ -224,37 +223,35 @@ def GenTests(api):
         }
     }
     _default_builders = bot_db.BotDatabase.create({
-        'chromium.linux':
-            master_spec.MasterSpec.create(
-                builders={
-                    'Linux Tests':
-                        bot_spec.BotSpec.create(
-                            parent_buildername='Linux Builder',
-                            swarming_dimensions={'pool': 'luci.dummy.pool'},
-                            chromium_config='chromium',
-                            chromium_apply_config=['mb'],
-                            gclient_config='chromium',
-                            chromium_config_kwargs={
-                                'BUILD_CONFIG': 'Release',
-                                'TARGET_BITS': 64,
-                            },
-                            bot_type='tester',
-                            testing={'platform': 'linux'},
-                        ),
-                    'Linux Builder':
-                        bot_spec.BotSpec.create(
-                            swarming_dimensions={'pool': 'luci.dummy.pool'},
-                            chromium_config='chromium',
-                            chromium_apply_config=['mb'],
-                            gclient_config='chromium',
-                            chromium_config_kwargs={
-                                'BUILD_CONFIG': 'Release',
-                                'TARGET_BITS': 64,
-                            },
-                            bot_type='builder',
-                            testing={'platform': 'linux'},
-                        ),
-                }),
+        'chromium.linux': {
+            'Linux Tests':
+                bot_spec.BotSpec.create(
+                    parent_buildername='Linux Builder',
+                    swarming_dimensions={'pool': 'luci.dummy.pool'},
+                    chromium_config='chromium',
+                    chromium_apply_config=['mb'],
+                    gclient_config='chromium',
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_BITS': 64,
+                    },
+                    bot_type='tester',
+                    testing={'platform': 'linux'},
+                ),
+            'Linux Builder':
+                bot_spec.BotSpec.create(
+                    swarming_dimensions={'pool': 'luci.dummy.pool'},
+                    chromium_config='chromium',
+                    chromium_apply_config=['mb'],
+                    gclient_config='chromium',
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Release',
+                        'TARGET_BITS': 64,
+                    },
+                    bot_type='builder',
+                    testing={'platform': 'linux'},
+                ),
+        },
     })
 
     props_proto = InputProperties()

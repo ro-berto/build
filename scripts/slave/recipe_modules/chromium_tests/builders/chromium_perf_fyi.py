@@ -8,9 +8,7 @@ from . import chromium_perf
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
-SPEC = {
-    'builders': {},
-}
+SPEC = {}
 
 
 @CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official', 'mb'])
@@ -28,8 +26,8 @@ def _AddBuildSpec(name,
                   config_name='chromium_perf',
                   target_bits=64,
                   **kwargs):
-  SPEC['builders'][name] = chromium_perf.BuildSpec(config_name, platform,
-                                                   target_bits, **kwargs)
+  SPEC[name] = chromium_perf.BuildSpec(config_name, platform, target_bits,
+                                       **kwargs)
 
 
 def _AddIsolatedTestSpec(name,
@@ -47,7 +45,7 @@ def _AddIsolatedTestSpec(name,
   if parent_mastername:
     spec = spec.evolve(parent_mastername=parent_mastername)
 
-  SPEC['builders'][name] = spec
+  SPEC[name] = spec
 
 
 _AddIsolatedTestSpec(

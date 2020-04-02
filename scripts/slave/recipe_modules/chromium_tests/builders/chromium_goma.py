@@ -105,7 +105,7 @@ _WIN_CLOBBER_CONFIG = CreateStandardConfig('win', ['clobber'])
 
 _ANDROID32_CONFIG = CreateAndroidConfig(32)
 
-_SPEC_BUILDERS = {
+SPEC = {
     # clients5
     'Chromium Linux Goma Staging':
         CreateStandardConfig('linux', ['goma_staging', 'clobber']),
@@ -161,8 +161,4 @@ _SPEC_BUILDERS = {
     # iOS RBE
     'Chromium iOS Goma RBE ToT':
         CreateIosConfig()
-}
-
-SPEC = {
-    'builders': _SPEC_BUILDERS,
 }

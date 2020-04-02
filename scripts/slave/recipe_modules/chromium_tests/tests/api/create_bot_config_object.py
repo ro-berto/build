@@ -15,9 +15,7 @@ def RunSteps(api):
   api.chromium_tests.create_bot_config_object(
       [api.chromium.get_builder_id()],
       builders={'chromium.foo': {
-          'builders': {
               'Foo Builder': {}
-          }
       }})
 
 

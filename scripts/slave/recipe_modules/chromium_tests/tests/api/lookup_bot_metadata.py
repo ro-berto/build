@@ -16,19 +16,14 @@ def RunSteps(api):
   api.chromium_tests.lookup_bot_metadata(
       builders={
           'chromium.foo': {
-              'builders': {
                   'foo-rel': {}
-              }
           },
           'tryserver.chromium.foo': {
-              'builders': {
                   'foo-dbg': {}
-              }
           },
       },
       mirrored_bots={
           'tryserver.chromium.foo': {
-              'builders': {
                   'foo-rel': {
                       'bot_ids': [{
                           'mastername': 'chromium.foo',
@@ -37,7 +32,6 @@ def RunSteps(api):
                       'analyze_mode':
                           None,
                   }
-              }
           }
       })
 
