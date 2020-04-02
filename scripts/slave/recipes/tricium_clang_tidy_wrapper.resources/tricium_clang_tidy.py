@@ -290,9 +290,20 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
       replacements = []
       for replacement in message.get('Replacements', ()):
         replacement_file_path = replacement['FilePath']
-        assert replacement_file_path == file_path, (
-            'Replacement at %r wasn\'t in diag file (%r)' %
-            (replacement_file_path, file_path))
+
+        # Some checkers like modernize-use-default-member-init like to emit
+        # fixits at a distance. This is also possible with files meant to be
+        # `#include`d at strange places, like:
+        # ```
+        # #define FOO(a) case keys(a): return values(a)
+        # #include "all_items.inc"
+        # #undef FOO
+        # ```
+        if replacement_file_path != file_path:
+          logging.warning(
+              'Dropping replacement at %r, since it wasn\'t in the file with '
+              'the original diagnostic (%r)', replacement_file_path, file_path)
+          continue
 
         start_offset = replacement['Offset']
         end_offset = start_offset + replacement['Length']
