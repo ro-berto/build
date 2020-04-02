@@ -65,7 +65,7 @@ SPEC = {
     'builders': {
         'CFI Linux ToT':
             _chromium_clang_spec(
-                chromium_config='chromium',
+                chromium_config='clang_tot_linux',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 gclient_apply_config=['clang_tot'],
@@ -81,7 +81,7 @@ SPEC = {
             ),
         'CFI Linux CF':
             _chromium_clang_spec(
-                chromium_config='clang_tot_linux',
+                chromium_config='chromium',
                 chromium_apply_config=['mb', 'mb_luci_auth'],
                 gclient_config='chromium',
                 # Not a ToT bot so no clang_tot gclient_apply_config.
@@ -139,10 +139,11 @@ SPEC = {
             ),
         'ToTiOS':
             _chromium_clang_spec(
-                chromium_config='clang_tot_mac',
+                chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
                     'mb_luci_auth',
+                    'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
                 gclient_config='ios',
@@ -158,10 +159,11 @@ SPEC = {
             ),
         'ToTiOSDevice':
             _chromium_clang_spec(
-                chromium_config='clang_tot_mac',
+                chromium_config='chromium',
                 chromium_apply_config=[
                     'mb',
                     'mb_luci_auth',
+                    'mac_toolchain',
                 ],
                 chromium_tests_apply_config=[],
                 gclient_config='ios',
