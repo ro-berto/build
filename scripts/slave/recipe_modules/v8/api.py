@@ -822,7 +822,7 @@ class V8Api(recipe_api.RecipeApi):
         )
 
   def _is_muted_branch(self):
-    return self.m.buildbucket.build.builder.bucket in ['luci.v8.ci.br']
+    return self.m.buildbucket.build.builder.bucket in ['ci.br']
 
   @property
   def depot_tools_path(self):

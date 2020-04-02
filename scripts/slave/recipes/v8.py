@@ -4,7 +4,7 @@
 
 from recipe_engine import recipe_test_api
 from recipe_engine.post_process import (
-    Filter, DoesNotRun, DropExpectation, MustRun,
+    Filter, DoesNotRun, DoesNotRunRE, DropExpectation, MustRun,
     ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
@@ -1122,7 +1122,7 @@ def GenTests(api):
   ) + api.buildbucket.ci_build(
       project='v8',
       git_repo='https://chromium.googlesource.com/v8/v8',
-      bucket='luci.v8.ci.br',
+      bucket='ci.br',
       builder='V8 Foobar',
       git_ref='refs/heads/br',
       build_number=571,
@@ -1131,7 +1131,7 @@ def GenTests(api):
           user_agent='luci-scheduler',
           buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
           'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef')
-    ) + api.post_process(DoesNotRun, 'measuremens'
+    ) + api.post_process(DoesNotRunRE, 'measurements.perf.*'
     ) + api.post_process(DropExpectation))
 
   # Test overall failure on upload failures.
