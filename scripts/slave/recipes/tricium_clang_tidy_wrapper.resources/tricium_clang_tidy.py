@@ -870,7 +870,11 @@ def _generate_tidy_actions(out_dir,
   actions = collections.defaultdict(list)
   for src_file in only_src_files:
     dependent_cc_files = {
-        target_to_cc_map[x] for x in src_file_to_target_map[src_file]
+        target_to_cc_map[x]
+        for x in src_file_to_target_map[src_file]
+        # Since we filter out some build actions (e.g., pnacl), things that we
+        # don't know about may get built.
+        if x in target_to_cc_map
     }
     if not dependent_cc_files:
       logging.error('No targets found for %r', src_file)

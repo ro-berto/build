@@ -1117,6 +1117,35 @@ class Tests(unittest.TestCase):
         '/foo.h': {'foo.o'},
     })
 
+  def test_generate_tidy_actions_copes_with_unknown_objects(self):
+    self._silence_logs()
+
+    def parse_ninja_deps(_):
+      # foo_pnacl.o not being present in `compile_commands` broke us before;
+      # crbug.com/1067271
+      return [
+          ('foo_pnacl.o', ['/foo.h', '/foo.cc']),
+      ]
+
+    actions, _ = tidy._generate_tidy_actions(
+        out_dir='/out',
+        only_src_files=['/foo.h'],
+        run_ninja=lambda out_dir, phony_targets, object_targets: (),
+        gn_desc=tidy._GnDesc({
+            '//rule': ['/foo.h', '/foo.cc'],
+        }),
+        parse_ninja_deps=parse_ninja_deps,
+        compile_commands=[
+            tidy._CompileCommand(
+                target_name='foo.o',
+                file_abspath='/foo.cc',
+                file='foo.cc',
+                directory='/in',
+                command='whee',
+            ),
+        ])
+    self.assertEqual(actions, {})
+
   def test_perform_build_doesnt_build_all_for_candidates_with_no_potential(
       self):
     self._silence_logs()
