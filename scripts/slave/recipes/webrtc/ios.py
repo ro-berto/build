@@ -492,7 +492,6 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   webrtc.check_swarming_version()
-  webrtc.configure_isolate()
 
   with api.step.nest('apply build config'):
     webrtc.apply_ios_config()
@@ -502,6 +501,7 @@ def RunSteps(api):
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS
       return
+    webrtc.configure_isolate()
     webrtc.run_mb_ios()
     raw_result = webrtc.compile()
     if raw_result.status != common_pb.SUCCESS:
@@ -557,6 +557,16 @@ def GenTests(api):
     api.post_process(post_process.DropExpectation)
   )
 
+  gn_analyze_no_deps_output = {'status': ['No dependency']}
+  yield (generate_builder(
+      'luci.webrtc.try',
+      'ios_sim_x64_dbg_ios10',
+      revision='a' * 40,
+      suffix='_gn_analyze_no_dependency',
+      gn_analyze_output=gn_analyze_no_deps_output) +
+         api.properties(**{'$depot_tools/osx_sdk': {
+             'sdk_version': '10l232m'
+         }}))
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield (generate_builder(
       'luci.webrtc.try',

@@ -292,6 +292,14 @@ class WebRTCApi(recipe_api.RecipeApi):
           if isinstance(test, (steps.AndroidJunitTest, steps.PythonTest)):
             non_isolated_test_targets.add(test.name)
 
+    if is_ios:
+      # TODO(bugs.webrtc.org/11262): On iOS, the list of isolated targets
+      # to run is created in a different way (see webrtc.apply_ios_config()
+      # in this file) so we need to keep a copy of test_targets to add
+      # back to the list of targets to compile even if "gn analyze" considers
+      # them not needed.
+      ios_mandatory_test_targets = sorted(test_targets)
+
     # The default behavior is to always build the :default target and
     # the tests that need to be run.
     # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
@@ -384,6 +392,14 @@ class WebRTCApi(recipe_api.RecipeApi):
               ['libjingle_peerconnection_so', 'AppRTCMobile']))
     elif self.buildername == 'linux_compile_rel':
       self._compile_targets = sorted(set(self._compile_targets + ['webrtc']))
+
+    if is_ios:
+      # TODO(bugs.webrtc.org/11262): On iOS, the list of isolated targets
+      # to run is created in a different way (see webrtc.apply_ios_config()
+      # in this file) so we have to re-add these targets back even if
+      # "gn analyze" considers them not affected by this CL.
+      self._compile_targets = sorted(
+          set(self._compile_targets + ios_mandatory_test_targets))
 
     return len(self._compile_targets) > 0
 
