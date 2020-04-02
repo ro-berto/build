@@ -97,6 +97,23 @@ SPEC = {
                 'platform': 'linux',
             },
         ),
+    'android-pie-arm64-fyi-rel':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            chromium_apply_config=['mb', 'mb_luci_auth'],
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='main_builder',
+            bot_type=bot_spec.BUILDER_TESTER,
+            testing={
+                'platform': 'linux',
+            },
+        ),
     'android-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',

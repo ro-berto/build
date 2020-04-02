@@ -330,6 +330,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'buildername': 'Android arm64 Builder (dbg)',
                 'tester': 'android-pie-arm64-dbg',
             }),
+        'android-pie-arm64-fyi-rel':
+            simple_bot({
+                'mastername': 'chromium.android.fyi',
+                'buildername': 'android-pie-arm64-fyi-rel',
+            }),
         'android-weblayer-pie-arm64-fyi-rel':
             simple_bot({
                 'mastername': 'chromium.android.fyi',
