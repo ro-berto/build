@@ -202,7 +202,7 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"isac_fix_test\", \"common_audio_unittests\", \"system_wrappers_unittests\", \"rtc_unittests\", \"webrtc_perf_tests\", \"low_bandwidth_audio_test\", \"test_support_unittests\", \"tools_unittests\", \"slow_tests\", \"rtc_pc_unittests\", \"modules_tests\", \"common_video_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"video_capture_tests\", \"audio_decoder_unittests\", \"modules_unittests\", \"rtc_media_unittests\"]}",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"isac_fix_test\", \"common_audio_unittests\", \"system_wrappers_unittests\", \"rtc_unittests\", \"webrtc_perf_tests\", \"low_bandwidth_audio_test\", \"voip_unittests\", \"test_support_unittests\", \"tools_unittests\", \"slow_tests\", \"rtc_pc_unittests\", \"modules_tests\", \"common_video_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"video_capture_tests\", \"audio_decoder_unittests\", \"modules_unittests\", \"rtc_media_unittests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -232,6 +232,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"voip_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_capture_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"isac_fix_test\", @@@",
@@ -255,6 +256,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"voip_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_capture_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"isac_fix_test\", @@@",
@@ -321,7 +323,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nisac_fix_test\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nslow_tests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_capture_tests\nvideo_engine_tests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
+      "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nisac_fix_test\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nslow_tests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_capture_tests\nvideo_engine_tests\nvoip_unittests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
       "//out/linux_rel"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -351,6 +353,7 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@tools_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_capture_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@voip_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_nonparallel_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
@@ -474,6 +477,7 @@
       "tools_unittests",
       "video_capture_tests",
       "video_engine_tests",
+      "voip_unittests",
       "webrtc_nonparallel_tests",
       "webrtc_perf_tests"
     ],
@@ -512,6 +516,7 @@
       "tools_unittests",
       "video_capture_tests",
       "video_engine_tests",
+      "voip_unittests",
       "webrtc_nonparallel_tests",
       "webrtc_perf_tests",
       "-d",
@@ -629,7 +634,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/linux_rel",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/linux_rel\", \"-j\", 80, \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"default\", \"isac_fix_test\", \"low_bandwidth_audio_test\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"slow_tests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_capture_tests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/linux_rel\", \"-j\", 80, \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"default\", \"isac_fix_test\", \"low_bandwidth_audio_test\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"slow_tests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_capture_tests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -728,6 +733,7 @@
       "[CACHE]/builder/src/out/linux_rel/test_support_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_rel/tools_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_rel/video_engine_tests.isolated.gen.json",
+      "[CACHE]/builder/src/out/linux_rel/voip_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_rel/webrtc_nonparallel_tests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_rel/video_capture_tests.isolated.gen.json",
       "[CACHE]/builder/src/out/linux_rel/isac_fix_test.isolated.gen.json",
@@ -754,12 +760,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tools_unittests\": \"[dummy hash for tools_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"video_capture_tests\": \"[dummy hash for video_capture_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"voip_unittests\": \"[dummy hash for voip_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_test\": \"[dummy hash for low_bandwidth_audio_test]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"slow_tests\": \"[dummy hash for slow_tests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_capture_tests\": \"[dummy hash for video_capture_tests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_test\": \"[dummy hash for low_bandwidth_audio_test]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"slow_tests\": \"[dummy hash for slow_tests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_capture_tests\": \"[dummy hash for video_capture_tests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"voip_unittests\": \"[dummy hash for voip_unittests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
     ]
   },
   {
@@ -3681,6 +3688,90 @@
       "--priority",
       "30",
       "--task-name",
+      "voip_unittests/Ubuntu-16.04/[dummy has/linux_rel/-1",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "os",
+      "Ubuntu-16.04",
+      "--dimension",
+      "pool",
+      "chromium.tests.template",
+      "--tag",
+      "bucket:try",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "buildername:linux_rel",
+      "--tag",
+      "data:[dummy hash for voip_unittests]",
+      "--tag",
+      "gerrit:https://webrtc-review.googlesource.com/c/123456/7",
+      "--tag",
+      "master:tryserver.webrtc",
+      "--tag",
+      "name:voip_unittests",
+      "--tag",
+      "patch_project:src",
+      "--tag",
+      "project:webrtc",
+      "--tag",
+      "purpose:ManualTS",
+      "--tag",
+      "purpose:pre-commit",
+      "--tag",
+      "slavename:bot_id",
+      "--tag",
+      "spec_name:webrtc.try:linux_rel",
+      "--tag",
+      "stepname:voip_unittests",
+      "--idempotent",
+      "--isolated",
+      "[dummy hash for voip_unittests]"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "[trigger] voip_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"voip_unittests/Ubuntu-16.04/[dummy has/linux_rel/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"voip_unittests/Ubuntu-16.04/[dummy has/linux_rel/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1330000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1330000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1330000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--namespace",
+      "default-gzip",
+      "--priority",
+      "30",
+      "--task-name",
       "webrtc_nonparallel_tests/Ubuntu-16.04/[dummy has/linux_rel/-1",
       "--dump-json",
       "/path/to/tmp/json",
@@ -3741,13 +3832,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_nonparallel_tests/Ubuntu-16.04/[dummy has/linux_rel/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1330000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1330000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1340000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1340000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1330000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1340000@@@"
     ]
   },
   {
@@ -3850,13 +3941,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_capture_tests/Linux/[dummy has/linux_rel/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1340000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1340000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1350000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1350000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1340000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1350000@@@"
     ]
   },
   {
@@ -3959,13 +4050,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isac_fix_test/Linux/[dummy has/linux_rel/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1350000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1350000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1360000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1360000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1350000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1360000@@@"
     ]
   },
   {
@@ -4071,13 +4162,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_perf_tests/Linux/[dummy has/linux_rel/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1360000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1360000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1370000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1370000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1360000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1370000@@@"
     ]
   },
   {
@@ -5794,7 +5885,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "webrtc_nonparallel_tests",
+    "name": "voip_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -5873,9 +5964,9 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "video_capture_tests",
+    "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -5952,7 +6043,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "isac_fix_test",
+    "name": "video_capture_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -6031,7 +6122,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "webrtc_perf_tests",
+    "name": "isac_fix_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -6065,6 +6156,85 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1360000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "/path/to/tmp/",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--allow-missing-json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"1370000\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
+    "name": "webrtc_perf_tests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/user/task/1370000@@@"
     ]
   },
   {

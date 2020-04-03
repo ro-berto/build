@@ -65,6 +65,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
         SwarmingDesktopTest('test_support_unittests'),
         SwarmingDesktopTest('tools_unittests'),
         SwarmingDesktopTest('video_engine_tests', shards=4),
+        SwarmingDesktopTest('voip_unittests'),
         SwarmingDesktopTest('webrtc_nonparallel_tests'),
     ]
 
@@ -138,6 +139,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
         SwarmingAndroidTest('test_support_unittests'),
         SwarmingAndroidTest('tools_unittests'),
         SwarmingAndroidTest('video_engine_tests', shards=4),
+        SwarmingAndroidTest('voip_unittests'),
         SwarmingAndroidTest('webrtc_nonparallel_tests'),
         AndroidJunitTest('android_examples_junit_tests'),
         AndroidJunitTest('android_sdk_junit_tests'),
@@ -180,6 +182,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
         IosTest('tools_unittests'),
         IosTest('video_capture_tests'),
         IosTest('video_engine_tests'),
+        IosTest('voip_unittests'),
         IosTest('webrtc_nonparallel_tests'),
     ]
 
