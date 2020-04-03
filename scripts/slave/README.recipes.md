@@ -21,7 +21,6 @@
   * [crrev](#recipe_modules-crrev)
   * [disk](#recipe_modules-disk)
   * [docker](#recipe_modules-docker)
-  * [emulator](#recipe_modules-emulator)
   * [filter](#recipe_modules-filter)
   * [findit](#recipe_modules-findit)
   * [gae_sdk](#recipe_modules-gae_sdk)
@@ -207,7 +206,6 @@
   * [docker:examples/full](#recipes-docker_examples_full)
   * [docker_run](#recipes-docker_run) &mdash; A generic recipe that runs a given docker container and exits.
   * [emscripten_releases](#recipes-emscripten_releases)
-  * [emulator:examples/full](#recipes-emulator_examples_full)
   * [filter:examples/full](#recipes-filter_examples_full)
   * [filter:tests/analyze](#recipes-filter_tests_analyze)
   * [filter:tests/suppress_analyze](#recipes-filter_tests_suppress_analyze)
@@ -1948,19 +1946,6 @@ Args:
   inherit_luci_context: Inherit current LUCI Context (including auth).
       CAUTION: removes network isolation between the container and the
       docker host. Read more https://docs.docker.com/network/host/.
-### *recipe_modules* / [emulator](/scripts/slave/recipe_modules/emulator)
-
-[DEPS](/scripts/slave/recipe_modules/emulator/__init__.py#5): [build](#recipe_modules-build), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [EmulatorApi](/scripts/slave/recipe_modules/emulator/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/emulator/api.py#11)(self):**
-
-&mdash; **def [install\_emulator\_deps](/scripts/slave/recipe_modules/emulator/api.py#16)(self, api_level, \*\*kwargs):**
-
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [launch\_emulator](/scripts/slave/recipe_modules/emulator/api.py#31)(self, abi, api_level, amount=1, partition_size=None, sdcard_size=None, \*\*kwargs):**
-
-&mdash; **def [wait\_for\_emulator](/scripts/slave/recipe_modules/emulator/api.py#23)(self, num, \*\*kwargs):**
 ### *recipe_modules* / [filter](/scripts/slave/recipe_modules/filter)
 
 [DEPS](/scripts/slave/recipe_modules/filter/__init__.py#5): [chromite](#recipe_modules-chromite), [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4735,11 +4720,6 @@ A generic recipe that runs a given docker container and exits.
 [DEPS](/scripts/slave/recipes/emscripten_releases.py#8): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/emscripten_releases.py#50)(api, archive):**
-### *recipes* / [emulator:examples/full](/scripts/slave/recipe_modules/emulator/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/emulator/examples/full.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/emulator/examples/full.py#44)(api, mastername):**
 ### *recipes* / [filter:examples/full](/scripts/slave/recipe_modules/filter/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/examples/full.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
