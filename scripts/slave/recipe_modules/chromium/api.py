@@ -1152,7 +1152,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     gn_args.extend(self.c.project_generator.args)
 
-    # TODO(jbudorick): Change this s.t. no clients use gn.py.
     step_args = [
         '--root=%s' % str(self.m.path['checkout']),
         'gen',
