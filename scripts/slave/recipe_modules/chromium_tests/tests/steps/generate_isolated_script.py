@@ -398,6 +398,8 @@ def GenTests(api):
               'Upload to test-results [blink_web_tests on Intel GPU on Mac]',
               'archive results for blink_web_tests',
               '$result')),
+      api.post_process(post_process.StepSuccess,
+                       'archive results for blink_web_tests'),
   )
 
   yield api.test(

@@ -1162,7 +1162,8 @@ class LocalGTestTest(Test):
 
 
 class ResultsHandler(object):
-  def upload_results(self, api, results, step_name,
+
+  def upload_results(self, api, results, step_name, passed,
                      step_suffix=None):  # pragma: no cover
     """Uploads test results to the Test Results Server.
 
@@ -1170,6 +1171,7 @@ class ResultsHandler(object):
       api: Recipe API object.
       results: Results returned by the step.
       step_name: Name of the step that produced results.
+      passed: If the test being uploaded passed during execution.
       step_suffix: Suffix appended to the step name.
     """
     raise NotImplementedError()
@@ -1254,7 +1256,7 @@ class JSONResultsHandler(ResultsHandler):
             expected=expected, unexpected=unexpected,
             hi_left=hi_left, hi_right=hi_right)
 
-  def upload_results(self, api, results, step_name, step_suffix=None):
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
     if hasattr(results, 'as_jsonish'):
       results = results.as_jsonish()
 
@@ -1446,7 +1448,7 @@ class FakeCustomResultsHandler(ResultsHandler):
     ])
     presentation.links['uploaded'] = 'fake://'
 
-  def upload_results(self, api, results, step_name, step_suffix=None):
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
     api.test_utils.create_results_from_json(results)
 
 
@@ -1470,10 +1472,11 @@ def _clean_step_name(step_name, suffix):
 
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
-  def upload_results(self, api, results, step_name, step_suffix=None):
+
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
     # Also upload to standard JSON results handler
-    JSONResultsHandler.upload_results(
-        self, api, results, step_name, step_suffix)
+    JSONResultsHandler.upload_results(self, api, results, step_name, passed,
+                                      step_suffix)
 
     # LayoutTest's special archive and upload results
     results_dir = api.path['start_dir'].join('layout-test-results')
@@ -1522,6 +1525,13 @@ class LayoutTestResultsHandler(JSONResultsHandler):
         base + '/layout-test-results/results.html')
     archive_result.presentation.links['(zip)'] = (
         base + '/layout-test-results.zip')
+    if not passed:
+      # This makes sure that the step shows up when people select 'non-green'
+      # on the Milo UI.
+      archive_result.presentation.status = api.step.FAILURE
+      archive_result.presentation.step_text = (
+          "Step is marked red because the test itself failed. This is done so"
+          " the step shows up in the \"Non-Green\" step filter in the UI.")
 
 
 class SwarmingTest(Test):
@@ -2291,7 +2301,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # Noted when uploading to test-results, the step_name is expected to be an
       # exact match to the step name on the build.
       self.results_handler.upload_results(
-          api, results, step_result.step['name'], suffix)
+          api, results, step_result.step['name'],
+          not bool(self.deterministic_failures(suffix)), suffix)
     return step_result
 
 
@@ -2529,7 +2540,8 @@ class BlinkTest(Test):
             api, results, step_result.presentation)
 
         self.results_handler.upload_results(
-            api, results, step_result.step['name'], suffix)
+            api, results, step_result.step['name'],
+            not bool(self.deterministic_failures(suffix)), suffix)
 
     return step_result
 
