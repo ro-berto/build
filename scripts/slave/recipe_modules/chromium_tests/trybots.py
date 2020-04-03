@@ -615,13 +615,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'mastername': 'chromium.linux',
                 'buildername': 'linux-gcc-rel',
             }),
-        'linux-ozone-rel':
-            simple_bot({
-                'mastername': 'chromium.linux',
-                'buildername': 'linux-ozone-rel',
-                'tester': 'Linux Ozone Tester (Headless)',
-            }),
-        'linux-ozone-x11-and-wayland-rel': {
+        'linux-ozone-rel': {
             'bot_ids': [
                 {
                     'mastername': 'chromium.linux',
