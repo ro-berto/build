@@ -1560,6 +1560,11 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # SWANGLE bots
     'tryserver.chromium.swangle': {
+        'linux-swangle-chromium-try-x64':
+            simple_bot({
+                'mastername': 'chromium.swangle',
+                'buildername': 'linux-swangle-chromium-x64',
+            }),
         'linux-swangle-try-tot-angle-x64':
             simple_bot({
                 'mastername': 'chromium.swangle',
@@ -1589,6 +1594,16 @@ TRYBOTS = try_spec.TryDatabase.create({
             simple_bot({
                 'mastername': 'chromium.swangle',
                 'buildername': 'linux-swangle-x86',
+            }),
+        'mac-swangle-chromium-try-x64':
+            simple_bot({
+                'mastername': 'chromium.swangle',
+                'buildername': 'mac-swangle-chromium-x64',
+            }),
+        'win-swangle-chromium-try-x86':
+            simple_bot({
+                'mastername': 'chromium.swangle',
+                'buildername': 'win-swangle-chromium-x86',
             }),
         'win-swangle-try-tot-angle-x64':
             simple_bot({
