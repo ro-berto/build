@@ -322,8 +322,9 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(True), internal_failure=True)),
       api.post_process(post_process.MustRun, 'base_unittests (retry shards)'),
       api.post_process(
-          post_process.MustRun, 'process clang code coverage data.'
-          'generate metadata for 2 tests'),
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.'
+          'generate metadata for overall test coverage in 2 tests'),
       api.post_process(
           NotIdempotent,
           'test_pre_run (retry shards).[trigger] base_unittests (retry shards)'
