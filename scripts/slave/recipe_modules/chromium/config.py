@@ -73,6 +73,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
           LLVM_FORCE_HEAD_REVISION=Single(basestring, required=False),
           GOMA_SERVER_HOST=Single(basestring, required=False),
           GOMA_RPC_EXTRA_PARAMS=Single(basestring, required=False),
+          GOMA_ARBITRARY_TOOLCHAIN_SUPPORT=Single(basestring, required=False),
           GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB=Single(
               int, required=False),
           GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB=Single(
@@ -295,6 +296,17 @@ def goma_latest_client(c):
 def goma_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_SERVER_HOST = 'sandbox.google.com'
+
+
+@config_ctx()
+def goma_rbe_prod(c):
+  c.env.GOMA_SERVER_HOST = 'goma.chromium.org'
+  c.env.GOMA_RPC_EXTRA_PARAMS = 'true'
+
+
+@config_ctx()
+def goma_ats(c):
+  c.env.GOMA_ARBITRARY_TOOLCHAIN_SUPPORT = 'true'
 
 
 @config_ctx()

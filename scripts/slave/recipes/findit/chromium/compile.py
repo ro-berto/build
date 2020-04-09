@@ -133,6 +133,12 @@ def RunSteps(api, target_mastername, target_buildername,
 
   api.chromium.apply_config('goma_failfast')
 
+  # Since these builders run on different platforms, and require different Goma
+  # settings depending on the platform, set the Goma flags using recipe configs.
+  api.chromium.apply_config('goma_rbe_prod')
+  if api.platform.is_linux or api.platform.is_win:
+    api.chromium.apply_config('goma_ats')
+
   checked_out_revision, cached_revision = api.findit.record_previous_revision(
       bot_config)
   # Sync to bad revision, and retrieve revisions in the regression range.

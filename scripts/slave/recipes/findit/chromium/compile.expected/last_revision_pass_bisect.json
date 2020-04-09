@@ -231,6 +231,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -527,6 +528,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -621,6 +623,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.lookup GN args",
@@ -650,6 +653,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.generate_build_files",
@@ -745,6 +749,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.lookup GN args (2)",
@@ -774,6 +779,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.generate_build_files (2)",
@@ -830,6 +836,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -890,6 +897,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.compile",
@@ -914,6 +922,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r6.compile confirm no-op",
@@ -1337,6 +1346,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -1406,6 +1416,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.lookup GN args",
@@ -1435,6 +1446,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.generate_build_files",
@@ -1530,6 +1542,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.lookup GN args (2)",
@@ -1559,6 +1572,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.generate_build_files (2)",
@@ -1615,6 +1629,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -1675,6 +1690,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.compile",
@@ -1699,6 +1715,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r7.compile confirm no-op",
@@ -2122,6 +2139,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -2191,6 +2209,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.lookup GN args",
@@ -2220,6 +2239,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.generate_build_files",
@@ -2315,6 +2335,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.lookup GN args (2)",
@@ -2344,6 +2365,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.generate_build_files (2)",
@@ -2400,6 +2422,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -2460,6 +2483,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.compile",
@@ -2484,6 +2508,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r9.compile confirm no-op",
@@ -2907,6 +2932,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -2976,6 +3002,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.lookup GN args",
@@ -3005,6 +3032,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.generate_build_files",
@@ -3100,6 +3128,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.lookup GN args (2)",
@@ -3129,6 +3158,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.generate_build_files (2)",
@@ -3185,6 +3215,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
@@ -3245,6 +3276,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.compile",
@@ -3269,6 +3301,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r10.compile confirm no-op",

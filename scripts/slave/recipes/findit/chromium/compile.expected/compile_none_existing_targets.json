@@ -231,6 +231,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -519,6 +520,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
@@ -613,6 +615,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.lookup GN args",
@@ -642,6 +645,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "test r1.generate_build_files",
