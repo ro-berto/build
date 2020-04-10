@@ -216,8 +216,6 @@ class IsolateApi(recipe_api.RecipeApi):
           self._isolate_server,
           '--namespace',
           self._namespace,
-          '--eventlog-endpoint',
-          'prod',
       ] + (['--verbose'] if verbose else [])
       args.extend(self._blacklist_args_for_isolate())
 

@@ -127,8 +127,6 @@
       "https://isolateserver-dev.appspot.com",
       "--namespace",
       "default-gzip",
-      "--eventlog-endpoint",
-      "prod",
       "--blacklist",
       "*.pyc",
       "--blacklist",

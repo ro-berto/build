@@ -1774,8 +1774,6 @@
       "https://chrome-isolated.appspot.com",
       "--namespace",
       "default-gzip",
-      "--eventlog-endpoint",
-      "prod",
       "--verbose",
       "--blacklist",
       "*.pyc",

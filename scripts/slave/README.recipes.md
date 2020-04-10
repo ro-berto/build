@@ -2643,7 +2643,7 @@ Args:
 
 APIs for interacting with isolates.
 
-&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#316)(self, first_dir, second_dir, values):**
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#314)(self, first_dir, second_dir, values):**
 
 Archive different files of 2 builds.
 
@@ -2665,11 +2665,11 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#363)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#361)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#392)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#390)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2725,7 +2725,7 @@ Args:
     suffix: suffix of isolate_tests step.
         e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#279)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#277)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
@@ -2736,7 +2736,7 @@ or from calling find_isolated_tests, above, at some point during the run.
 
 The namespace determines the algorithms used.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#301)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#299)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
