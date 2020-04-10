@@ -301,7 +301,7 @@ def goma_staging(c):
 @config_ctx()
 def goma_rbe_prod(c):
   c.env.GOMA_SERVER_HOST = 'goma.chromium.org'
-  c.env.GOMA_RPC_EXTRA_PARAMS = 'true'
+  c.env.GOMA_RPC_EXTRA_PARAMS = '?prod'
 
 
 @config_ctx()
