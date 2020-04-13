@@ -80,6 +80,7 @@
       "[START_DIR]/buildtools/mac/gn",
       "gen",
       "[START_DIR]/crashpad/out/Debug",
+      "--check",
       "--args=target_os=\"mac\" target_cpu=\"x64\" is_debug=true"
     ],
     "cwd": "[START_DIR]/crashpad",

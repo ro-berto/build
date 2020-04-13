@@ -68,6 +68,7 @@
       "[CACHE]/builder/buildtools/mac/gn",
       "gen",
       "[CACHE]/builder/crashpad/out/Debug-iphonesimulator",
+      "--check",
       "--args=target_os=\"ios\" target_cpu=\"x64\" is_debug=true"
     ],
     "cwd": "[CACHE]/builder/crashpad",

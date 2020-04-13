@@ -158,7 +158,8 @@ def RunSteps(api, config, target_os, target_cpu):
       args += ' link_libstdcpp_statically = true'
     with api.context(cwd=api.path['checkout']):
       with sdk(target_os):
-        api.step('generate build files', [gn, 'gen', path, '--args=' + args])
+        api.step('generate build files',
+                 [gn, 'gen', path, '--check', '--args=' + args])
   elif is_win:
     gn = api.path['start_dir'].join('buildtools', 'win', 'gn.exe')
     # On Windows, we ought to test:
@@ -180,11 +181,15 @@ def RunSteps(api, config, target_os, target_cpu):
     args = 'target_os="win" is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
       with sdk(target_os, 'x86'):
-        api.step('generate build files x86',
-                 [gn, 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
+        api.step('generate build files x86', [
+            gn, 'gen', x86_path, '--check',
+            '--args=' + args + ' target_cpu="x86"'
+        ])
       with sdk(target_os, 'x64'):
-        api.step('generate build files x64',
-                 [gn, 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
+        api.step('generate build files x64', [
+            gn, 'gen', x64_path, '--check',
+            '--args=' + args + ' target_cpu="x64"'
+        ])
 
   def run_tests(build_dir, env=None):
     if is_fuchsia:
