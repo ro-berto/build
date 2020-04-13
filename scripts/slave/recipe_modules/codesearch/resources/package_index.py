@@ -163,6 +163,13 @@ class ProtoTarget():
         if self.args[i] == '--proto-in-dir'
     ]
 
+    # Additional Kythe metadata files need to be included as required_file.
+    self.meta_dirs = [
+        construct_normpath(self.args[i + 1])
+        for i in range(len(self.args) - 1)
+        if self.args[i] == '--cc-out-dir'
+    ]
+
     import_dir_prefix = '--import-dir='
     self.proto_paths += [
         construct_normpath(arg[len(import_dir_prefix):])
@@ -257,6 +264,12 @@ class ProtoTarget():
       all_files.add(path)
       for imp in FindImports(PROTO_IMPORT_RE, path, self.proto_paths):
         paths.append(imp)
+
+    # Include metadata files
+    for meta_dir in self.meta_dirs:
+      for f in os.listdir(meta_dir):
+        if f.endswith('.meta'):
+          all_files.add(os.path.join(meta_dir, f))
     return all_files
 
 
