@@ -287,6 +287,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       affected_files (list of str): paths to the files we want to instrument,
           relative to the checkout path.
     """
+    if len(affected_files) > 200:
+      # Skip instrumentation if there are too many files because:
+      # 1. They cause problems such as crash due to too many cmd line arguments.
+      # 2. These CLs typically does mechanial refactorings, and coverage
+      #    information is useless.
+      # 3. Has non-trivial performance implications in terms of CQ cycle time.
+      affected_files = []
+      self.m.python.succeeding_step(
+          'skip instrumenting code coverage because >200 files are modified',
+          '')
+
     self._is_per_cl_coverage = True
 
     if self.use_clang_coverage:

@@ -200,6 +200,20 @@ def GenTests(api):
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
+  yield api.test(
+      'tryserver skip instrumenting if there are too many files',
+      api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file%d.cc' % i for i in range(500)
+      ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test('tryserver unsupported repo',
        api.properties.generic(
           mastername='tryserver.chromium.linux',
