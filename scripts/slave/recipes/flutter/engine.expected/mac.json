@@ -6547,7 +6547,7 @@
   },
   {
     "cmd": [
-      "./run_tests.sh",
+      "./build_and_run_tests.sh",
       "ios_debug_sim"
     ],
     "cwd": "[CACHE]/builder/src/flutter/testing/ios/IosUnitTests",

@@ -1108,7 +1108,7 @@ def RunIOSTests(api):
   scenario_app_tests = test_dir.join('scenario_app')
 
   with api.context(cwd=ios_unit_tests):
-    api.step('iOS Unit Tests', ['./run_tests.sh', 'ios_debug_sim'])
+    api.step('iOS Unit Tests', ['./build_and_run_tests.sh', 'ios_debug_sim'])
 
   with api.context(cwd=scenario_app_tests):
     api.step('Scenario App Unit Tests', ['./run_ios_tests.sh', 'ios_debug_sim'])
