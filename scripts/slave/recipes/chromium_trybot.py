@@ -35,14 +35,6 @@ DEPS = [
 
 
 def RunSteps(api):
-  # build/tests/masters_recipes_tests.py needs to manipulate the BUILDERS
-  # dict, so we provide an API to dump it here.
-  if api.properties.get('dump_builders'):  # pragma: no cover
-    api.file.copy('Dump BUILDERS dict',
-        api.json.input(api.chromium_tests.trybots),
-        api.properties['dump_builders'])
-    return
-
   with api.chromium.chromium_layout():
     return api.chromium_tests.trybot_steps()
 
