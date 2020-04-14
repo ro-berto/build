@@ -22,6 +22,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
       mastername
       patch_issue
       patch_set
+      xcode_build_version
 
   so, for example, a test can declare the argument:
 
@@ -53,19 +54,27 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   build = chromium_tests_api.m.buildbucket.build
   cl = (build.input.gerrit_changes or [None])[0]
   substitutions = {
-      'buildbucket_build_id': build.id,
-      'buildername': build.builder.builder,
-      'buildnumber': build.number,
+      'buildbucket_build_id':
+          build.id,
+      'buildername':
+          build.builder.builder,
+      'buildnumber':
+          build.number,
       # This is only ever set on builders where the primary repo is not
       # Chromium, such as V8 or WebRTC.
       'got_cr_revision':
           bot_update_step.presentation.properties.get('got_cr_revision'),
-      'got_revision': (
-          bot_update_step.presentation.properties.get('got_revision',
+      'got_revision': (bot_update_step.presentation.properties.get(
+          'got_revision',
           bot_update_step.presentation.properties.get('got_src_revision'))),
-      'mastername': api.properties.get('mastername'),
-      'patch_issue': cl.change if cl else None,
-      'patch_set': cl.patchset if cl else None,
+      'mastername':
+          api.properties.get('mastername'),
+      'patch_issue':
+          cl.change if cl else None,
+      'patch_set':
+          cl.patchset if cl else None,
+      'xcode_build_version':
+          api.chromium.xcode_build_version
   }
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
@@ -196,11 +205,12 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
         else:
           api.python.failing_step(
               'test spec format error',
-              textwrap.wrap(textwrap.dedent("""\
+              textwrap.wrap(
+                  textwrap.dedent("""\
                   The test target "%s" contains a custom trigger_script "%s"
-                  that doesn't match the expected format. Custom trigger_script entries
-                  should be a path relative to the top-level chromium src directory and
-                  should start with "//".
+                  that doesn't match the expected format. Custom trigger_script
+                  entries should be a path relative to the top-level chromium
+                  src directory and should start with "//".
                   """ % (name, trigger_script_path))),
               as_log='details')
     kwargs['trigger_script'] = trigger_script

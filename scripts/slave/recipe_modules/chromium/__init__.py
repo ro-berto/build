@@ -1,4 +1,10 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 from . import types
+
+from PB.recipe_modules.build.chromium import properties
 
 DEPS = [
   'depot_tools/bot_update',
@@ -32,3 +38,5 @@ DEPS = [
 # Forward symbols for other modules to import
 BuilderId = types.BuilderId
 BuilderSpec = types.BuilderSpec
+
+PROPERTIES = properties.InputProperties

@@ -1,0 +1,14 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+syntax = "proto3";
+
+package recipe_modules.build.chromium;
+
+message InputProperties {
+  // Bots that require Xcode can set a version to be present for the given job.
+  // The Chromium recipe will ensure that the specified version is installed.
+  // This only applies when the host platform is Mac and when the configuration
+  // mac_toolchain.enabled is set to true.
+  string xcode_build_version = 1;
+}

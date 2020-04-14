@@ -47,12 +47,17 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   Layout = collections.namedtuple('Layout', ('env',))
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, input_properties, *args, **kwargs):
     super(ChromiumApi, self).__init__(*args, **kwargs)
     self._build_properties = None
     self._layout = None
     self._version = None
     self._clang_version = None
+    self._xcode_build_version = input_properties.xcode_build_version
+
+  @property
+  def xcode_build_version(self):
+    return self._xcode_build_version
 
   def ensure_chromium_layout(self):
     """Ensures that Chromium build layout is installed.
@@ -1017,11 +1022,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     if (not self.c.mac_toolchain.enabled or self.c.HOST_PLATFORM is not 'mac'):
       return
 
-    if 'xcode_build_version' not in self.m.properties:
+    # TODO(jeffyoon@)- Remove reading from self.m.properties after xcode
+    # build version has been migrated to set xcode version as a chromium
+    # recipe module property
+    xcode_build_version = (
+        self.xcode_build_version or
+        self.m.properties.get('xcode_build_version', None))
+
+    if not xcode_build_version:
       raise self.m.step.StepFailure(
           'No Xcode version was provided as a recipe property.')
-
-    xcode_build_version = self.m.properties['xcode_build_version']
 
     kind = self.c.mac_toolchain.kind or self.c.TARGET_PLATFORM
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named
