@@ -267,6 +267,9 @@ class ProtoTarget():
 
     # Include metadata files
     for meta_dir in self.meta_dirs:
+      if not os.path.isdir(meta_dir):
+        print('WARNING: Protobuf meta directory not found: %s' % meta_dir)
+        continue
       for f in os.listdir(meta_dir):
         if f.endswith('.meta'):
           all_files.add(os.path.join(meta_dir, f))

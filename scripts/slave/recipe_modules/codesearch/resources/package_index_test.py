@@ -241,6 +241,30 @@ class ProtoTargetTest(unittest.TestCase):
     self.assertIsNone(unit_proto)
     self.assertEqual(1, findImportsMock.call_count)
 
+  @mock.patch('package_index.FindImports')
+  def testMissingMetaDir(self, findImportsMock):
+    findImportsMock.side_effect = self.ImportMockGen(
+        package_index.PROTO_IMPORT_RE,
+        [os.path.join(self.root, 'src', 'out', 'debug')], {
+            os.path.join(self.root, 'src', 'orig.proto'): set(),
+        })
+
+    # Last proto-in-dir should be discarded
+    args = [
+        '--cc-out-dir',
+        'does-not-exist',
+    ]
+    pt = package_index.ProtoTarget({
+        'sources': ['//orig.proto'],
+        'args': args
+    }, self.root, os.path.join('src', 'out', 'debug'))
+
+    expected_result = set([os.path.join(self.root, 'src', 'orig.proto')])
+    self.assertEqual(expected_result, pt.GetFiles())
+    unit_proto = pt.GetUnit('corpusname', {}, 'build_config')
+    self.assertIsNone(unit_proto)
+    self.assertEqual(1, findImportsMock.call_count)
+
 
 class IndexPackBootstrap(unittest.TestCase):
   """IndexPackBootstrap is "abstract" class used by other test cases classes"""
