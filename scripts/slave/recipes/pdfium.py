@@ -669,7 +669,6 @@ def GenTests(api):
       api.properties(
           component=True,
           xfa=True,
-          skip_test=True,
           mastername='client.pdfium',
           bot_id='test_slave'),
       _gen_ci_build(api, 'win_component'),
@@ -751,7 +750,6 @@ def GenTests(api):
       api.properties(
           component=True,
           xfa=True,
-          skip_test=True,
           mastername='client.pdfium',
           bot_id='test_slave'),
       _gen_ci_build(api, 'linux_component'),
@@ -802,7 +800,6 @@ def GenTests(api):
       api.properties(
           component=True,
           xfa=True,
-          skip_test=True,
           mastername='client.pdfium',
           bot_id='test_slave'),
       _gen_ci_build(api, 'mac_component'),
