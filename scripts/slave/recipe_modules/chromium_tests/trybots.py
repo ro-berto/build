@@ -340,6 +340,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'mastername': 'chromium.android.fyi',
                 'buildername': 'Android WebLayer P FYI (rel)',
             }),
+        'android-weblayer-pie-x86-fyi-rel':
+            simple_bot({
+                'mastername': 'chromium.android.fyi',
+                'buildername': 'android-weblayer-pie-x86-fyi-rel',
+            }),
         'android-webview-pie-arm64-fyi-rel':
             simple_bot({
                 'mastername': 'chromium.android.fyi',
