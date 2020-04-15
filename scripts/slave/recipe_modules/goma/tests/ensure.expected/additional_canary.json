@@ -15,6 +15,8 @@
       "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} candidate",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -43,6 +45,8 @@
       "[CACHE]/goma/extra/chromeos-amd64",
       "-ensure-file",
       "infra_internal/goma/client/chromeos-amd64 candidate",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

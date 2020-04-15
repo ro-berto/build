@@ -131,6 +131,8 @@
       "[CACHE]\\windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -190,6 +192,8 @@
       "[CACHE]\\java",
       "-ensure-file",
       "flutter_internal/java/openjdk/${platform} version:1.8.0u202-b08",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

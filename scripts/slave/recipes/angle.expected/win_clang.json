@@ -37,7 +37,9 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
       "PATH": [
@@ -114,6 +116,8 @@
       "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

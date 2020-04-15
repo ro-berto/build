@@ -89,7 +89,9 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
       "PATH": [
@@ -261,6 +263,8 @@
       "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -307,6 +311,8 @@
       "[START_DIR]",
       "-ensure-file",
       "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

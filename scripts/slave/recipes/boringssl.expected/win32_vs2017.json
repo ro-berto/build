@@ -20,6 +20,8 @@
       "refs/heads/master"
     ],
     "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GYP_MSVS_VERSION": "2017"
     },
     "env_suffixes": {

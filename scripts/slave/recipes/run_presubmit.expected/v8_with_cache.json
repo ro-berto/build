@@ -77,6 +77,10 @@
       "v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

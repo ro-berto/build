@@ -44,7 +44,9 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
       "PATH": [
@@ -216,6 +218,8 @@
       "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -543,6 +547,8 @@
       "[CACHE]/swarming_client",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} git_revision:386eb9fd6a1e21d174824c786a0eee9d883dad56",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

@@ -133,6 +133,10 @@
       "--revision",
       "depot_tools@19d4809e112652f918494840bab819603b0a2816"
     ],
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -174,6 +178,8 @@
       "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

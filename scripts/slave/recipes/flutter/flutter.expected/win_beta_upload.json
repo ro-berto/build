@@ -99,6 +99,8 @@
       "[CACHE]\\gold",
       "-ensure-file",
       "skia/tools/goldctl/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -429,6 +431,8 @@
       "[CACHE]\\builder\\7za",
       "-ensure-file",
       "flutter_internal/tools/7za/${platform} version:19.00",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

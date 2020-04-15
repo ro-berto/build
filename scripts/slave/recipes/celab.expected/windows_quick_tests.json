@@ -35,6 +35,10 @@
       "refs/heads/master"
     ],
     "cwd": "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -103,6 +107,8 @@
       "[START_DIR]\\packages",
       "-ensure-file",
       "infra/go/${platform} version:1.11.2\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1\ninfra/third_party/cacert date:2017-01-18",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -244,6 +250,8 @@
       "[START_DIR]\\packages_tests",
       "-ensure-file",
       "infra/gcloud/${platform} version:251.0.0.chromium0",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

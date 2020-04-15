@@ -37,6 +37,10 @@
       "infra/recipes-py@origin/master"
     ],
     "cwd": "[CACHE]/recipe_engine",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -162,6 +166,10 @@
       "build@HEAD"
     ],
     "cwd": "[CACHE]/build",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -299,6 +307,8 @@
       "[CACHE]/led",
       "-ensure-file",
       "infra/tools/luci/led/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -962,6 +972,10 @@
       "client-py@HEAD"
     ],
     "cwd": "[CACHE]/client_py",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"

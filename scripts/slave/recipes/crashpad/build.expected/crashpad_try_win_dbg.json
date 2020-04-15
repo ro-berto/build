@@ -19,6 +19,10 @@
       "--refs",
       "refs/heads/master"
     ],
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -70,6 +74,8 @@
       "[CACHE]/windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -161,6 +167,8 @@
       "[CACHE]/windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -252,6 +260,8 @@
       "[CACHE]/windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -337,6 +347,8 @@
       "[CACHE]/windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

@@ -39,6 +39,8 @@
       "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -84,6 +86,8 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -12723,6 +12727,8 @@
       "[CACHE]/isolated_client",
       "-ensure-file",
       "infra/tools/luci/isolated/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -12833,6 +12839,8 @@
       "[CACHE]/swarming_client",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

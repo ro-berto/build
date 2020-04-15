@@ -82,7 +82,9 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300"
     },
     "env_suffixes": {
       "PATH": [
@@ -315,6 +317,8 @@
       "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

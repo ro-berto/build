@@ -99,6 +99,8 @@
       "[CACHE]/gold",
       "-ensure-file",
       "skia/tools/goldctl/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -453,6 +455,8 @@
       "[CACHE]/isolated_client",
       "-ensure-file",
       "infra/tools/luci/isolated/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -561,6 +565,8 @@
       "[CACHE]/swarming_client",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -729,6 +735,8 @@
       "[CACHE]/java",
       "-ensure-file",
       "flutter_internal/java/openjdk/${platform} version:1.8.0u202-b08",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

@@ -99,6 +99,8 @@
       "[CACHE]/gold",
       "-ensure-file",
       "skia/tools/goldctl/${platform} latest",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],

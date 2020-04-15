@@ -39,6 +39,8 @@
       "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
+      "-max-threads",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -81,6 +83,8 @@
     "env": {
       "ANDROID_HOME": "[CACHE]\\builder\\src\\third_party\\android_tools\\sdk",
       "CHROME_NO_SANDBOX": "true",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "300",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
