@@ -125,6 +125,14 @@ class RelatedBuilder(object):
 
 
 def _get_recipe(led_builder):
+  buildbucket = led_builder.result.get('buildbucket')
+  if buildbucket: # pragma: no cover
+    # new path
+    build_proto = buildbucket['bbagent_args']['build']
+    return build_proto['input']['properties']['recipe']
+
+  # TODO(iannucci): delete this once new led has settled
+  # see if this is old led or new led
   # Recipe we run probably doesn't change between slices.
   job_slice = led_builder.result['job_slices'][0]
   # TODO(martiniss): Use recipe_cipd_source to determine which repo this recipe
