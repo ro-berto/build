@@ -312,9 +312,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
           variants_with_unexpected_results=True,
       )
       # Include the derived invocations in the build's invocation.
+      include_step_name = (
+          'include derived test results (%s)' % suffix
+          if suffix else 'include derived test results'
+      )
       self.m.resultdb.include_invocations(
-          invocations.keys(),
-          step_name='include derived test results (%s)' % suffix)
+          invocations.keys(), step_name=include_step_name)
     except (self.m.step.InfraFailure,
             self.m.step.StepFailure):  # pragma: no cover
       pass
