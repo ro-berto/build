@@ -11,8 +11,9 @@ from recipe_engine.types import FrozenDict, freeze
 
 from . import steps
 
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum_attrib,
-                                             mapping_attrib, sequence_attrib)
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
+                                             enum_attrib, mapping_attrib,
+                                             sequence_attrib)
 from RECIPE_MODULES.build import chromium
 
 BUILDER = 'builder'
@@ -51,7 +52,7 @@ class BotSpec(object):
     return cls.create(**spec)
 
   @classmethod
-  def create(cls, perf_isolate_lookup=None, **kwargs):
+  def create(cls, perf_isolate_lookup=None, testing=None, **kwargs):
     """Create a BotSpec.
 
     Arguments:
@@ -70,6 +71,20 @@ class BotSpec(object):
           "'perf_isolate_lookup' should not be set"
           " when 'perf_isolate_upload' is set")
       kwargs['perf_isolate_upload'] = perf_isolate_lookup
+
+    # TODO(https://crbug.com/1071225) Update callers to use
+    # source_side_spec_file and/or simulation_platform and remove the testing
+    # argument
+    if testing is not None:
+      invalid_attrs = get_filtered_attrs('source_side_spec_file',
+                                         'simulation_platform')
+      assert not invalid_attrs, (
+          "'testing' should not be set when the following fields are set: {}"
+          .format(invalid_attrs))
+      kwargs['source_side_spec_file'] = testing.pop('source_side_spec_file',
+                                                    None)
+      kwargs['simulation_platform'] = testing.pop('platform', None)
+      assert not testing, "Unknown keys in 'testing': {}".format(testing.keys())
 
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type == DUMMY_TESTER:
@@ -236,6 +251,9 @@ class BotSpec(object):
   # Running tests in serial can be useful if you have limited hardware capacity
   serialize_tests = attrib(bool, default=False)
 
+  # A path relative to chromium.c.source_side_spec_dir containing the
+  # information describing the tests to be run for this builder
+  source_side_spec_file = attrib(str, default=None)
   # A dictionary describing the tests to be run for this builder - has the same
   # format as the value of a single builder's entry in one of the *.json files
   # under //testing/buildbot of chromium/src
@@ -244,17 +262,6 @@ class BotSpec(object):
   # the same format as one of the *.json files under //testing/buildbot of
   # chromium/src
   downstream_spec = mapping_attrib(str, default=None)
-
-  # TODO(gbeaty) This dictionary has keys used both for testing and by
-  # production code, source_side_spec_file should be raised up as its own field
-  # A dictionary describing testing aspects of the builder
-  # The following keys are supported:
-  #  platform - The name of the platform to set for the test when running
-  #    simulation tests
-  #  source_side_spec_file - A path relative to chromium.c.source_side_spec_dir
-  #    containing the information describing the tests to be run for this
-  #    builder
-  testing = mapping_attrib(str, str, default={})
 
   # A bool controlling whether an isolate is uploaded to the perf dashboard
   perf_isolate_upload = attrib(bool, default=False)
@@ -300,6 +307,24 @@ class BotSpec(object):
   # archiving
   # Cannot be provided when bisect_archive_build is not True
   bisect_gs_extra = attrib(str, default=None)
+
+  # The platform of the builder (e.g. 'linux'), used when running simulation
+  # tests
+  # Normally the platform is provided by the platform recipe module, but during
+  # simulation tests we need to tell the platform recipe module what platform
+  # the builder would be run on
+  # For acceptable values, see
+  # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
+  simulation_platform = attrib(str, default=None)
+
+  @cached_property
+  def testing(self):
+    d = {}
+    if self.source_side_spec_file:
+      d['source_side_spec_file'] = self.source_side_spec_file
+    if self.simulation_platform:
+      d['platform'] = self.simulation_platform
+    return freeze(d)
 
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.
