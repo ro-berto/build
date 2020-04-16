@@ -37,6 +37,17 @@ _EXCLUDE_SOURCES = {
 _SUPPORTED_PATCH_PROJECTS = [('chromium-review.googlesource.com',
                               'chromium/src')]
 
+# A list of test types supported by code coverage api. The test types are
+# defined as str literals and used across multiple places.
+_SUPPORTED_TEST_TYPES = ['overall', 'unit']
+
+# A mapping of test type str literal to regex of test target names.
+# TODO(crbug.com/1071251): This map is correct for iOS tests only currently.
+_TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP = {
+    'unit': '.+_unittests',
+    'overall': '.+'
+}
+
 
 class CodeCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to generate code coverage data."""
@@ -59,8 +70,19 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The location of the scripts used to merge code coverage data (as opposed
     # to test results).
     self._merge_scripts_location = None
+    # The list of profdata gs paths to be uploaded.
+    self._merged_profdata_gs_paths = []
+    # The list of coverage metadata gs paths to be uploaded.
+    self._coverage_metadata_gs_paths = []
+    # The list of mimic builder names to be uploaded.
+    self._mimic_builder_names = []
     # The bucket to which code coverage data should be uploaded.
     self._gs_bucket = properties.gs_bucket or _DEFAULT_BUCKET_NAME
+    # List of test types to run in a builder. By default, it runs overall
+    # coverage. This is only used in Clang coverage at present.
+    self._test_types = properties.coverage_test_types or ['overall']
+    # Current test type that's being processed.
+    self._current_processing_test_type = 'overall'
     # When set True, Clang coverage is enabled.
     self._use_clang_coverage = properties.use_clang_coverage
     # When set True, Java coverage is enabled.
@@ -134,10 +156,30 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   @property
   def metadata_dir(self):
-    """A temporary directory for the metadata. Created on first access."""
+    """A temporary directory for the metadata.
+    
+    It's a temporary directory with a sub directory named in current test type.
+    Temp dir is created on first access to this property. Subdirs are created
+    on first access when processing each test type.
+    """
     if not self._metadata_dir:
       self._metadata_dir = self.m.path.mkdtemp()
-    return self._metadata_dir
+    metadata_test_type_dir = self._metadata_dir.join(
+        self._current_processing_test_type)
+    self.m.file.ensure_directory(
+        'ensure metadata dir for %s tests' % self._current_processing_test_type,
+        metadata_test_type_dir)
+    return metadata_test_type_dir
+
+  def _compose_current_mimic_builder_name(self):
+    """Current mimic builder name composed from the test type being processed.
+
+    If currently processing overall coverage data, return real builder name.
+    Otherwise, return {real_builder_name}_{current_test_type}.
+    """
+    suffix = '' if self._current_processing_test_type == 'overall' else (
+        '_' + self._current_processing_test_type)
+    return self.m.buildbucket.build.builder.builder + suffix
 
   def _get_source_exclusion_pattern(self):
     if 'exclude_sources' in self.m.properties:
@@ -206,6 +248,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         continue
 
       target = t.isolate_target
+
+      if not re.search(
+          _TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[
+              self._current_processing_test_type], target):
+        continue
+
       patterns = [
           # Following are scripts based tests that don't build any binaries.
           ['blink_python_tests', None],
@@ -280,6 +328,34 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     return source_files
 
+  def _validate_test_types(self):
+    """Validates that test type to process in build is supported."""
+    # TODO(crbug.com/1071461): Move current iOS builder property to code
+    # coverage module property.
+    if 'coverage_test_types' in self.m.properties:
+      self._test_types = self.m.properties['coverage_test_types']
+
+    for test_type in self._test_types:
+      if test_type not in _SUPPORTED_TEST_TYPES:
+        raise Exception('Unsupported test type %s.' % test_type)
+
+    if self._is_per_cl_coverage and len(self._test_types) > 1:
+      raise Exception('Only one test type is supported for per-cl coverage '
+          'but %d found in builder properties.' % len(self._test_types))
+
+  def _set_builder_output_properties_for_uploads(self):
+    """Sets the output property of the builder."""
+    result = self.m.python.succeeding_step('Set builder output properties', '')
+    result.presentation.properties['coverage_metadata_gs_paths'] = (
+        self._coverage_metadata_gs_paths)
+    result.presentation.properties['mimic_builder_names'] = (
+        self._mimic_builder_names)
+    result.presentation.properties['merged_profdata_gs_paths'] = (
+        self._merged_profdata_gs_paths)
+    result.presentation.properties['coverage_gs_bucket'] = (self._gs_bucket)
+    result.presentation.properties['coverage_is_presubmit'] = (
+        self._is_per_cl_coverage)
+
   def instrument(self, affected_files):
     """Saves source paths to generate coverage instrumentation for to a file.
 
@@ -330,6 +406,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       tests (list of steps.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
+    try:
+      self._validate_test_types()
+    except Exception as e:
+      if self._is_per_cl_coverage:
+        self.m.python.succeeding_step('skip processing because of an exception '
+            'when validating test types to process: %s' % e.message, '')
+      else:
+        self.m.python.failing_step('Exception when validating test types to '
+            'process: %s' % e.message, '')
+      return
+
     if self._is_per_cl_coverage:
       unsupported_projects = self._get_unsupported_projects()
       if unsupported_projects:
@@ -339,7 +426,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         return
 
     if self.use_clang_coverage:
-      self.process_clang_coverage_data(tests)
+      for test_type in self._test_types:
+        self._current_processing_test_type = test_type
+        self.process_clang_coverage_data(tests)
 
     if self.use_java_coverage:
       try:
@@ -354,6 +443,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                 '--java-coverage-dir',
                 self.m.chromium.output_dir.join('coverage'),
             ])
+
+    self._set_builder_output_properties_for_uploads()
 
   def _get_unsupported_projects(self):
     """If the build input has changes in unsupported projects, return them."""
@@ -379,7 +470,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     with self.m.step.nest(
-        'process clang code coverage data') as processing_step:
+        'process clang code coverage data for %s test coverage' %
+        self._current_processing_test_type) as processing_step:
       try:
         merged_profdata = self._merge_and_upload_profdata()
         if not merged_profdata:
@@ -469,19 +561,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           return
 
         gs_path = self._compose_gs_path_for_coverage_data('java_metadata')
-        upload_step = self.m.gsutil.upload(
+        self.m.gsutil.upload(
             source=metadata_path,
             bucket=self._gs_bucket,
             dest='%s/all.json.gz' % gs_path,
             name='Upload JSON metadata',
             link_name='Coverage metadata',
             **kwargs)
-        upload_step.presentation.properties[
-            'coverage_metadata_gs_path'] = gs_path
-        upload_step.presentation.properties['coverage_gs_bucket'] = (
-            self._gs_bucket)
-        upload_step.presentation.properties['coverage_is_presubmit'] = (
-            self._is_per_cl_coverage)
+        self._coverage_metadata_gs_paths.append(gs_path)
+        self._mimic_builder_names.append(
+            self._compose_current_mimic_builder_name())
 
         jacoco_html_report_dir = coverage_dir.join('coverage_html')
         self.m.python(
@@ -519,13 +608,20 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """Merges the profdata generated by each step to a single profdata.
 
     Returns:
-      A path to the merged.profdata file if it exists, otherwise, None. One
-      possible reason that merged.profdata doesn't exist is that there might be
-      no .profraw files to merge at all.
+      A path to the {test_type}-merged.profdata file if it exists, otherwise,
+      None. One possible reason that profdata doesn't exist is that there might
+      be no .profraw files to merge at all.
     """
-    merged_profdata = self.profdata_dir().join('merged.profdata')
+    test_type = self._current_processing_test_type
+    merged_profdata = self.profdata_dir().join('%s-merged.profdata' % test_type)
+
+    # Input profdata in this step was named as {target_name}.profdata. This is
+    # used for filtering profdata file of current test type.
+    input_profdata_pattern = (
+        "%s\.profdata" % _TEST_TYPE_TO_TARGET_NAME_PATTERN_MAP[test_type])
     self.m.python(
-        'merge profile data for %d tests' % len(self._profdata_dirs),
+        'merge profile data for %s test coverage in %d tests' %
+        (test_type, len(self._profdata_dirs)),
         self.step_merge_script,
         args=[
             '--input-dir',
@@ -534,11 +630,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             merged_profdata,
             '--llvm-profdata',
             self.profdata_executable,
+            '--profdata-filename-pattern',
+            input_profdata_pattern,
         ])
 
     if not self.m.path.exists(merged_profdata):
       return None
 
+    # The uploaded profdata file is named "merged.profdata" regardless of test
+    # type, since test types are already distinguished in builder part of gs
+    # path.
     gs_path = self._compose_gs_path_for_coverage_data('merged.profdata')
     upload_step = self.m.gsutil.upload(
         merged_profdata,
@@ -548,8 +649,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         name='upload merged.profdata')
     upload_step.presentation.links['merged.profdata'] = (
         'https://storage.cloud.google.com/%s/%s' % (self._gs_bucket, gs_path))
-    upload_step.presentation.properties['merged_profdata_gs_path'] = gs_path
-
+    self._merged_profdata_gs_paths.append(gs_path)
     return merged_profdata
 
   # TODO(crbug.com/929769): Remove this method when the fix is landed upstream.
@@ -624,7 +724,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args.extend(['--arch', 'x86_64'])
 
     self.m.python(
-        'generate html report for %d tests' % len(self._profdata_dirs),
+        'generate html report for %s test coverage in %d tests' %
+        (self._current_processing_test_type, len(self._profdata_dirs)),
         self.resource('make_report.py'),
         args=args)
 
@@ -641,7 +742,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'https://storage.cloud.google.com/%s/%s/index.html' %
         (self._gs_bucket, html_report_gs_path))
 
-  def shard_merge(self, step_name, additional_merge=None):
+  def shard_merge(self, step_name, target_name, additional_merge=None):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.chromium_swarming.task.
@@ -657,6 +758,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             self.profdata_dir(step_name),
             '--llvm-profdata',
             self.profdata_executable,
+            '--test-target-name',
+            target_name,
         ],
     }
     if self.use_java_coverage:
@@ -696,6 +799,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _compose_gs_path_for_coverage_data(self, data_type):
     build = self.m.buildbucket.build
+    mimic_builder_name = self._compose_current_mimic_builder_name()
     if build.input.gerrit_changes:
       # Assume that there is only one gerrit patchset which is true for
       # Chromium CQ in practice.
@@ -705,7 +809,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           gerrit_change.change,  # Change id is unique in a Gerrit host.
           gerrit_change.patchset,
           build.builder.bucket,
-          build.builder.builder,
+          mimic_builder_name,
           build.id,
           data_type,
       )
@@ -717,7 +821,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           commit.project,
           commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
           build.builder.bucket,
-          build.builder.builder,
+          mimic_builder_name,
           build.id,
           data_type,
       )
@@ -776,7 +880,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     try:
       self.m.python(
-          'generate metadata for %d tests' % len(self._profdata_dirs),
+          'generate metadata for %s test coverage in %d tests' %
+          (self._current_processing_test_type, len(self._profdata_dirs)),
           self.resource('generate_coverage_metadata.py'),
           args=args,
           venv=True)
@@ -793,11 +898,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       upload_step.presentation.links['metadata report'] = (
           'https://storage.cloud.google.com/%s/%s/index.html' %
           (self._gs_bucket, gs_path))
-      upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
-      upload_step.presentation.properties['coverage_gs_bucket'] = (
-          self._gs_bucket)
-      upload_step.presentation.properties['coverage_is_presubmit'] = (
-          self._is_per_cl_coverage)
+      self._coverage_metadata_gs_paths.append(gs_path)
+      self._mimic_builder_names.append(
+          self._compose_current_mimic_builder_name())
 
   def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files,
                                                        output_dir):

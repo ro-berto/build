@@ -235,7 +235,7 @@ def NotIdempotent(check, step_odict, step):
 
 def RunSteps(api, fail_compile):
   api.path.mock_add_paths(
-      api.code_coverage.profdata_dir().join('merged.profdata'))
+      api.code_coverage.profdata_dir().join('overall-merged.profdata'))
 
   # override compile_specific_targets to control compile step failure state
   def compile_override(*args, **kwargs):
@@ -322,8 +322,9 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(True), internal_failure=True)),
       api.post_process(post_process.MustRun, 'base_unittests (retry shards)'),
       api.post_process(
-          post_process.MustRun, 'process clang code coverage data.'
-          'generate metadata for 2 tests'),
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.'
+          'generate metadata for overall test coverage in 2 tests'),
       api.post_process(
           NotIdempotent,
           'test_pre_run (retry shards).[trigger] base_unittests (retry shards)'

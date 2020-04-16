@@ -1787,7 +1787,9 @@ class SwarmingTest(Test):
       # swarming task in the chromium_swarm module. (The default behavior for
       # non-coverage tests).
       self._merge = api.chromium_tests.m.code_coverage.shard_merge(
-          self.step_name(suffix), additional_merge=self._merge or task.merge)
+          self.step_name(suffix),
+          self.target_name,
+          additional_merge=self._merge or task.merge)
 
     if suffix.startswith('retry shards'):
       task_slice = task_slice.with_idempotent(False)

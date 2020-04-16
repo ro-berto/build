@@ -47,7 +47,9 @@ def RunSteps(api):
     api.code_coverage.instrument(api.properties['files_to_instrument'])
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
-        api.code_coverage.profdata_dir().join('merged.profdata'))
+        api.code_coverage.profdata_dir().join('unit-merged.profdata'))
+    api.path.mock_add_paths(
+        api.code_coverage.profdata_dir().join('overall-merged.profdata'))
   if api.properties.get('mock_java_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
@@ -78,7 +80,7 @@ def RunSteps(api):
     # Protected access ok here, as this is normally done by the test object
     # itself.
     api.code_coverage.shard_merge(
-        step, additional_merge=getattr(test, '_merge', None))
+        step, test.target_name, additional_merge=getattr(test, '_merge', None))
 
   api.code_coverage.process_coverage_data(tests)
 
@@ -99,41 +101,43 @@ def GenTests(api):
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.merge profile data for %s tests' %
-           _NUM_TESTS)),
+          ('process clang code coverage data for overall test coverage.merge '
+           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload merged.profdata'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload merged.profdata'),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.generate line number mapping from '
-          'bot to Gerrit'),
+          'process clang code coverage data for overall test coverage.generate '
+          'line number mapping from bot to Gerrit'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.Run component extraction script to '
-          'generate mapping'),
+          'process clang code coverage data for overall test coverage.Run '
+          'component extraction script to generate mapping'),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS)),
-      api.post_process(
-          post_process.MustRun,
-          'process clang code coverage data.gsutil upload coverage metadata'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.generate html report for %s '
-          'tests' % _NUM_TESTS),
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.gsutil upload html report'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
       api.post_process(
           post_process.StepCommandContains,
-          'process clang code coverage data.Finding merging errors',
-          ['--root-dir']),
-      api.post_process(
-          post_process.StepCommandContains,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS), ['None/out/Release/content_shell']),
+          'process clang code coverage data for overall test coverage.Finding '
+          'merging errors', ['--root-dir']),
+      api.post_process(post_process.StepCommandContains, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS),
+                       ['None/out/Release/content_shell']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -148,57 +152,57 @@ def GenTests(api):
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
-  yield api.test('tryserver',
-       api.properties.generic(
+  yield api.test(
+      'tryserver',
+      api.properties.generic(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/file.cc',
-            'some/other/path/to/file.cc',
-          ]),
-       api.buildbucket.try_build(
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.buildbucket.try_build(
           project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
-       api.post_process(
-          post_process.MustRun, 'save paths of affected files'),
-       api.post_process(
-          post_process.MustRunRE,
-          'ensure profdata dir for .*', _NUM_TESTS, _NUM_TESTS),
-       api.post_process(
+      api.post_process(post_process.MustRun, 'save paths of affected files'),
+      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+                       _NUM_TESTS, _NUM_TESTS),
+      api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.merge profile data for %s tests' %
-           _NUM_TESTS)),
-       api.post_process(
+          ('process clang code coverage data for overall test coverage.merge '
+           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload merged.profdata'),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload merged.profdata'),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate html report for %s tests'
-           % _NUM_TESTS)),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload html report'),
-       api.post_process(
-          post_process.MustRun,
-          'process clang code coverage data.generate line number mapping from '
-          'bot to Gerrit'),
+          'process clang code coverage data for overall test coverage.generate '
+          'line number mapping from bot to Gerrit'),
       # Tests that local isolated scripts are skipped for collecting code
       # coverage data.
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.filter binaries with valid data '
-          'for %s binaries' % (_NUM_TESTS - 2)),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.filter '
+          'binaries with valid data for %s binaries' % (_NUM_TESTS - 2)),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS)),
-       api.post_process(
-          post_process.MustRun,
-          'process clang code coverage data.gsutil upload coverage metadata'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'tryserver skip instrumenting if there are too many files',
@@ -236,20 +240,24 @@ def GenTests(api):
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
-  yield api.test('merge errors',
-       api.properties.generic(
+  yield api.test(
+      'merge errors',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.override_step_data(
-          'process clang code coverage data.Finding merging errors',
+      api.code_coverage(use_clang_coverage=True),
+      api.override_step_data(
+          'process clang code coverage data for overall test coverage.Finding '
+          'merging errors',
           stdout=api.json.output(['some_step'])),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.Finding merging errors'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+          'process clang code coverage data for overall test coverage.Finding '
+          'merging errors'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test('skip collecting coverage data',
        api.properties.generic(
@@ -268,85 +276,97 @@ def GenTests(api):
           'skip processing coverage data because no source file changed'),
        api.post_process(post_process.DropExpectation),)
 
-  yield api.test('skip processing coverage data if not data is found',
-     api.properties.generic(
-        mastername='tryserver.chromium.linux',
-        buildername='linux-rel',
-        buildnumber=54),
-     api.code_coverage(use_clang_coverage=True),
-     api.properties(
-        files_to_instrument=[
-          'some/path/to/file.cc',
-          'some/other/path/to/file.cc',
-        ]),
-     api.buildbucket.try_build(
-        project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
-     api.override_step_data(
-      'process clang code coverage data.filter binaries with valid data for %s '
-      'binaries' % (_NUM_TESTS - 2),
-      step_test_data=lambda: self.m.json.test_api.output([])),
-     api.post_process(
-        post_process.MustRun,
-        'process clang code coverage data.skip processing because no data is '
-        'found'),
-     api.post_process(
-        post_process.DoesNotRunRE,
-        'process clang code coverage data.generate metadata .*'),
-     api.post_process(post_process.DropExpectation),)
-
-  yield api.test('raise failure for full-codebase coverage',
-       api.properties.generic(
-          mastername='chromium.fyi',
-          buildername='linux-code-coverage',
-          buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.step_data(
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS),
-          retcode=1),
-       api.post_check(lambda check, steps: check(steps[
-              'process clang code coverage data.gsutil upload coverage metadata'
-          ].output_properties['process_coverage_data_failure'] == True)),
-       api.post_process(post_process.StatusFailure),
-       api.post_process(post_process.DropExpectation),)
-
-  yield api.test('do not raise failure for per-cl coverage',
-       api.properties.generic(
+  yield api.test(
+      'skip processing coverage data if not data is found',
+      api.properties.generic(
           mastername='tryserver.chromium.linux',
           buildername='linux-rel',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.properties(
-          files_to_instrument=[
-            'some/path/to/file.cc',
-            'some/other/path/to/file.cc',
-          ]),
-       api.buildbucket.try_build(
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.buildbucket.try_build(
           project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
-       api.step_data(
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS),
-          retcode=1),
-       api.post_check(lambda check, steps: check(steps[
-              'process clang code coverage data.gsutil upload coverage metadata'
-          ].output_properties['process_coverage_data_failure'] == True)),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+      api.override_step_data(
+          'process clang code coverage data for overall test coverage.filter '
+          'binaries with valid data for %s binaries' % (_NUM_TESTS - 2),
+          step_test_data=lambda: self.m.json.test_api.output([])),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.skip '
+          'processing because no data is found'),
+      api.post_process(
+          post_process.DoesNotRunRE,
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata .*'),
+      api.post_process(post_process.DropExpectation),
+  )
 
-  yield api.test('merged profdata does not exist',
-       api.properties.generic(
+  yield api.test(
+      'raise failure for full-codebase coverage',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.properties(
-          mock_merged_profdata = False),
-       api.post_process(
+      api.code_coverage(use_clang_coverage=True),
+      api.step_data((
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS),
+                    retcode=1),
+      api.post_check(
+          lambda check, steps: check(steps['process clang code coverage data '
+              'for overall test coverage.gsutil '
+              'upload coverage metadata'
+              ''].output_properties['process_coverage_data_failure'] == True)
+      ),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'do not raise failure for per-cl coverage',
+      api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.buildbucket.try_build(
+          project='chromium', builder='linux-rel', git_repo=_DEFAULT_GIT_REPO),
+      api.step_data((
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS),
+                    retcode=1),
+      api.post_check(
+          lambda check, steps: check(steps['process clang code coverage data '
+              'for overall test coverage.gsutil '
+              'upload coverage metadata'
+              ''].output_properties['process_coverage_data_failure'] == True)
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'merged profdata does not exist',
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(mock_merged_profdata=False),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.skip processing because no '
-          'profdata was generated'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+          'process clang code coverage data for overall test coverage.skip '
+          'processing because no profdata was generated'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test('process java coverage for full-codebase',
        api.properties.generic(
@@ -504,53 +524,60 @@ def GenTests(api):
        api.post_process(post_process.StatusSuccess),
        api.post_process(post_process.DropExpectation),)
 
-  yield api.test('android native code coverage CI',
-       api.properties.generic(
+  yield api.test(
+      'android native code coverage CI',
+      api.properties.generic(
           mastername='chromium.fyi',
           buildername='android-code-coverage-native',
           buildnumber=54),
-       api.code_coverage(use_clang_coverage=True),
-       api.step_data(
-          'process clang code coverage data.'
+      api.code_coverage(use_clang_coverage=True),
+      api.step_data(
+          'process clang code coverage data for overall test coverage.'
           'Get all Android unstripped artifacts paths',
-          api.json.output(['/chromium/output_dir/'
-            'lib.unstrippedlibbase_unittests__library.so'])),
-       api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
+          api.json.output([
+              '/chromium/output_dir/'
+              'lib.unstrippedlibbase_unittests__library.so'
+          ])),
+      api.post_process(post_process.MustRunRE, 'ensure profdata dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.merge profile data for %s tests' %
-           _NUM_TESTS)),
-       api.post_process(
+          ('process clang code coverage data for overall test coverage.merge '
+           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload merged.profdata'),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload merged.profdata'),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.Finding merging errors'),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.Finding '
+          'merging errors'),
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.'
+          'process clang code coverage data for overall test coverage.'
           'Get all Android unstripped artifacts paths'),
-       api.post_process(
+      api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.Run component extraction script to '
-          'generate mapping'),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.Run '
+          'component extraction script to generate mapping'),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS)),
-       api.post_process(
-          post_process.MustRun,
-          'process clang code coverage data.gsutil upload coverage metadata'),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
+      api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.generate html report for %s '
-          'tests' % _NUM_TESTS),
-       api.post_process(
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS),
+      api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.gsutil upload html report'),
-       api.post_process(post_process.StatusSuccess),
-       api.post_process(post_process.DropExpectation),)
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'iOS code coverage CI',
@@ -563,46 +590,48 @@ def GenTests(api):
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.merge profile data for %s tests' %
-           _NUM_TESTS)),
+          ('process clang code coverage data for overall test coverage.merge '
+           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload merged.profdata'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload merged.profdata'),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.generate line number mapping from '
-          'bot to Gerrit'),
+          'process clang code coverage data for overall test coverage.generate '
+          'line number mapping from bot to Gerrit'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.Run component extraction script to '
-          'generate mapping'),
+          'process clang code coverage data for overall test coverage.Run '
+          'component extraction script to generate mapping'),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS)),
-      api.post_process(
-          post_process.MustRun,
-          'process clang code coverage data.gsutil upload coverage metadata'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.generate html report for %s '
-          'tests' % _NUM_TESTS),
+          'process clang code coverage data for overall test coverage.generate '
+          'html report for overall test coverage in %s tests' % _NUM_TESTS),
       api.post_process(
           post_process.DoesNotRun,
-          'process clang code coverage data.gsutil upload html report'),
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload html report'),
       api.post_process(
           post_process.StepCommandContains,
-          'process clang code coverage data.Finding merging errors',
-          ['--root-dir']),
-      api.post_process(
-          post_process.StepCommandContains,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS), ['None/out/Debug/content_shell.app/content_shell']),
-      api.post_process(
-          post_process.StepCommandContains,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS),
-          ['None/out/Debug/ios_chrome_eg2tests.app/ios_chrome_eg2tests']),
+          'process clang code coverage data for overall test coverage.Finding '
+          'merging errors', ['--root-dir']),
+      api.post_process(post_process.StepCommandContains, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS),
+                       ['None/out/Debug/content_shell.app/content_shell']),
+      api.post_process(post_process.StepCommandContains, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS), [
+              'None/out/Debug/ios_chrome_eg2tests.app/ios_chrome_eg2tests'
+          ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -619,6 +648,7 @@ def GenTests(api):
           'some/other/path/to/file.cc',
       ]),
       api.properties(xcode_build_version='11c29'),
+      api.properties(coverage_test_types=['unit']),
       api.buildbucket.try_build(
           project='chromium',
           builder='ios-simulator-code-coverage',
@@ -628,35 +658,84 @@ def GenTests(api):
                        _NUM_TESTS, _NUM_TESTS),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.merge profile data for %s tests' %
-           _NUM_TESTS)),
+          ('process clang code coverage data for unit test coverage.merge '
+           'profile data for unit test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
+          post_process.DoesNotRun,
+          ('process clang code coverage data for overall test coverage.merge '
+           'profile data for overall test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload merged.profdata'),
+          'process clang code coverage data for unit test coverage.gsutil '
+          'upload merged.profdata'),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate html report for %s tests'
-           % _NUM_TESTS)),
+          ('process clang code coverage data for unit test coverage.generate '
+           'html report for unit test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload html report'),
+          'process clang code coverage data for unit test coverage.gsutil '
+          'upload html report'),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.generate line number mapping from '
-          'bot to Gerrit'),
+          'process clang code coverage data for unit test coverage.generate '
+          'line number mapping from bot to Gerrit'),
       # Tests that local isolated scripts are skipped for collecting code
-      # coverage data.
+      # coverage data. For iOS try build, only 1 unit test target binary is
+      # valid.
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.filter binaries with valid data '
-          'for %s binaries' % (_NUM_TESTS - 2)),
+          'process clang code coverage data for unit test coverage.filter '
+          'binaries with valid data for 1 binaries'),
       api.post_process(
           post_process.MustRun,
-          ('process clang code coverage data.generate metadata for %s tests' %
-           _NUM_TESTS)),
+          ('process clang code coverage data for unit test coverage.generate '
+           'metadata for unit test coverage in %s tests' % _NUM_TESTS)),
       api.post_process(
           post_process.MustRun,
-          'process clang code coverage data.gsutil upload coverage metadata'),
+          'process clang code coverage data for unit test coverage.gsutil '
+          'upload coverage metadata'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'raise failure for unsupported test type',
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(coverage_test_types=['unsupportedtest', 'overall']),
+      api.post_process(
+          post_process.MustRun,
+          'Exception when validating test types to process: Unsupported test '
+          'type unsupportedtest.'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'skip processing when more than one test type in per-cl coverage',
+      api.properties.generic(
+          mastername='tryserver.chromium.mac',
+          buildername='ios-simulator-code-coverage',
+          buildnumber=54),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(files_to_instrument=[
+          'some/path/to/file.cc',
+          'some/other/path/to/file.cc',
+      ]),
+      api.properties(coverage_test_types=['unit', 'overall']),
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='ios-simulator-code-coverage',
+          git_repo=_DEFAULT_GIT_REPO),
+      api.post_process(
+          post_process.MustRun,
+          'skip processing because of an exception when validating test types '
+          'to process: Only one test type is supported for per-cl coverage but '
+          '2 found in builder properties.'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

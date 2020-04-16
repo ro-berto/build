@@ -14,4 +14,6 @@ message InputProperties {
   bool use_clang_coverage = 2;
   // Whether Java coverage is enabled.
   bool use_java_coverage = 3;
+  // List of test types to process in builder.
+  repeated string coverage_test_types = 4;
 }
