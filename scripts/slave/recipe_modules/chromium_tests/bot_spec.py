@@ -51,7 +51,7 @@ class BotSpec(object):
     return cls.create(**spec)
 
   @classmethod
-  def create(cls, **kwargs):
+  def create(cls, perf_isolate_lookup=None, **kwargs):
     """Create a BotSpec.
 
     Arguments:
@@ -63,6 +63,13 @@ class BotSpec(object):
     """
     def get_filtered_attrs(*attributes):
       return [a for a in attributes if a in kwargs]
+
+    # perf_isolate_lookup is the old misnomer for perf_isolate_upload
+    if perf_isolate_lookup is not None:
+      assert 'perf_isolate_upload' not in kwargs, (
+          "'perf_isolate_lookup' should not be set"
+          " when 'perf_isolate_upload' is set")
+      kwargs['perf_isolate_upload'] = perf_isolate_lookup
 
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type == DUMMY_TESTER:
@@ -250,8 +257,7 @@ class BotSpec(object):
   testing = mapping_attrib(str, str, default={})
 
   # A bool controlling whether an isolate is uploaded to the perf dashboard
-  # TODO(gbeaty) Seems like this should be perf_isolate_upload
-  perf_isolate_lookup = attrib(bool, default=False)
+  perf_isolate_upload = attrib(bool, default=False)
 
   # A bool controlling whether to archive the build outputs
   archive_build = attrib(bool, default=None)

@@ -452,7 +452,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
 
-        if bot_config.perf_isolate_lookup:
+        if bot_config.perf_isolate_upload:
           self.m.perf_dashboard.upload_isolate(
               self.m.buildbucket.builder_name,
               self.m.perf_dashboard.get_change_info([{
