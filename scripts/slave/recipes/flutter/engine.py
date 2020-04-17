@@ -424,6 +424,15 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
           (BUCKET_NAME, remote_name))
 
 
+def LintAndroidHost(api):
+  android_lint_path = GetCheckoutPath(api).join(
+      'flutter', 'tools', 'android_lint')
+  with api.step.nest('android lint'):
+    with api.context(cwd=android_lint_path):
+      api.step('pub get', ['pub', 'get'])
+      api.step('dart bin/main.dart', ['dart', 'bin/main.dart'])
+
+
 def BuildLinuxAndroid(api, swarming_task_id):
   if api.properties.get('build_android_jit_release', True):
     jit_release_variants = [
@@ -447,6 +456,11 @@ def BuildLinuxAndroid(api, swarming_task_id):
         ('x86', 'android_debug_x86', 'android-x86', False, 'x86'),
         ('x64', 'android_debug_x64', 'android-x64', False, 'x86_64'),
     ]
+    # Build Android Unopt and run tests
+    RunGN(api, '--android', '--unoptimized')
+    Build(api, 'android_debug_unopt')
+    RunTests(api, 'android_debug_unopt',
+             android_out_dir='android_debug_unopt', types='java')
     for android_cpu, out_dir, artifact_dir, run_tests, abi in debug_variants:
       RunGN(api, '--android', '--android-cpu=%s' % android_cpu, '--no-lto')
       Build(api, out_dir)
@@ -1431,11 +1445,12 @@ def RunSteps(api, properties, env_properties):
         AnalyzeDartUI(api)
         BuildLinux(api)
         TestObservatory(api)
+      LintAndroidHost(api)
       BuildLinuxAndroid(api, env_properties.SWARMING_TASK_ID)
+
       if api.properties.get('build_fuchsia', True):
         BuildFuchsia(api)
       VerifyExportedSymbols(api)
-
     if api.platform.is_mac:
       with SetupXcode(api):
         BuildMac(api)
