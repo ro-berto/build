@@ -150,14 +150,14 @@ class MakeReportTest(unittest.TestCase):
       sources = ['base/file1.cc', 'base/file2.cc']
       arch = 'x86_64'
 
-      with mock.patch('platform.system', return_value='Linux'):
+      with mock.patch('platform.system', return_value='Darwin'):
         reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
                                  sources, arch)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
               '-output-dir=out-dir', '-arch=x86_64', '-arch=x86_64',
-              '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
+              '-num-threads=1', '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
               '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
               'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)

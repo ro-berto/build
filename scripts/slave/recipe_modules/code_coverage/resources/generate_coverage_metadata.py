@@ -305,7 +305,12 @@ def _compute_llvm_args(profdata_path,
                        arch=None):
   # Use as many cpu cores as possible for parallel processing of huge data.
   # Leave 5 cpu cores out for other processes in the bot.
-  cpu_count = num_threads or max(10, psutil.cpu_count() - 5)
+  num_threads_arg = num_threads or max(10, psutil.cpu_count() - 5)
+
+  # TODO(crbug.com/1068345): llvm-cov fails with a thread resource
+  # unavailable exception if using more than one thread in iOS builder.
+  if IS_MAC and arch == 'x86_64':
+    num_threads_arg = 1
 
   args = [
       llvm_cov_path,
@@ -313,7 +318,7 @@ def _compute_llvm_args(profdata_path,
       '-skip-expansions',
       '-skip-functions',
       '-num-threads',
-      str(cpu_count),
+      str(num_threads_arg),
   ]
 
   if exclusions:

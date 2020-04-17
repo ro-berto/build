@@ -715,13 +715,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     cpu_count.return_value = 100
 
     summaries = generator._get_per_target_coverage_summary(
-        '/foo/bar/baz.profdata',
-        '/path/to/llvm-cov', ['binary1'],
-        arch='x86_64')
+        '/foo/bar/baz.profdata', '/path/to/llvm-cov', ['binary1'], arch=None)
 
     call.assert_called_with([
         '/path/to/llvm-cov', 'export', '-skip-expansions', '-skip-functions',
-        '-num-threads', '95', '-summary-only', '-arch=x86_64', '-instr-profile',
+        '-num-threads', '95', '-summary-only', '-instr-profile',
         '/foo/bar/baz.profdata', 'binary1'
     ])
     self.assertIn('binary1', summaries)

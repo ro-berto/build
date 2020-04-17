@@ -42,6 +42,11 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
       # list corresponds to the Nth specified binary.
       subprocess_cmd.extend(['-arch=%s' % arch] * len(binaries))
 
+      # TODO(crbug.com/1068345): llvm-cov fails with a thread resource
+      # unavailable exception if using more than one thread in iOS builder.
+      if platform.system() == 'Darwin' and arch == 'x86_64':
+        subprocess_cmd.append('-num-threads=1')
+
     if platform.system() == 'Windows':
       subprocess_cmd.extend(['-Xdemangler', 'llvm-undname.exe'])
     else:

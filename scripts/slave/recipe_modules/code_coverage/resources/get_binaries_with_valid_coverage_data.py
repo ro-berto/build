@@ -8,6 +8,7 @@ import argparse
 import json
 import logging
 import os
+import platform
 import subprocess
 import sys
 
@@ -35,6 +36,11 @@ def _get_binaries_with_coverage_data(profdata_path, llvm_cov_path, binaries,
     ]
     if arch:
       cmd.append('-arch=%s' % arch)
+      # TODO(crbug.com/1068345): llvm-cov fails with a thread resource
+      # unavailable exception if using more than one thread in iOS builder.
+      if platform.system() == 'Darwin' and arch == 'x86_64':
+        cmd.append('-num-threads=1')
+
     cmd.extend(['-instr-profile=%s' % profdata_path, binary])
     try:
       _ = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
