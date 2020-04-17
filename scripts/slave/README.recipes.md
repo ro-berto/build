@@ -4241,9 +4241,9 @@ linked by commit hash.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_trybot.py#54)(api):**
 ### *recipes* / [chromium\_speed\_processor](/scripts/slave/recipes/chromium_speed_processor.py)
 
-[DEPS](/scripts/slave/recipes/chromium_speed_processor.py#5): [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_speed_processor.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_speed_processor.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_speed_processor.py#16)(api):**
 ### *recipes* / [chromium\_speed\_tester](/scripts/slave/recipes/chromium_speed_tester.py)
 
 [DEPS](/scripts/slave/recipes/chromium_speed_tester.py#5): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/python][recipe_engine/recipe_modules/python]
