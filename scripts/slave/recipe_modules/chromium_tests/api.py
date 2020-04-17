@@ -141,19 +141,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return chromium_config
 
   def configure_build(self, bot_config, override_bot_type=None):
-    # Get the buildspec version. It can be supplied as a build property or as
-    # a recipe config value.
-    buildspec_version = (
-        self.m.properties.get('buildspec_version') or
-        bot_config.buildspec_version)
-
     self.m.chromium.set_config(bot_config.chromium_config,
                                **bot_config.chromium_config_kwargs)
     self.set_config(bot_config.chromium_tests_config)
 
     self.m.gclient.set_config(
         bot_config.gclient_config,
-        BUILDSPEC_VERSION=buildspec_version,
+        BUILDSPEC_VERSION=bot_config.buildspec_version,
         **bot_config.gclient_config_kwargs)
 
     default_test_results_config = (
