@@ -1124,6 +1124,21 @@ Args:
   partial_name: Partial name of the archive file to download.
   destination: Destination file/directory where the file will be downloaded.
   name: The name of the step.
+
+&mdash; **def [upload](/scripts/slave/recipe_modules/chromium_gsutil/api.py#27)(self, src_path, dest_uri, jobs=None, retries=None, acl=None):**
+
+Upload the provided src to the destination uri.
+Supports both file and dir upload
+
+Args:
+  src_path: Path to upload to GS
+  dest_uri: URI for destination
+  jobs: (int) maximum copies to run in parallel
+  retries: (int) number of times to retry
+  acl: value to pass to for argument -a of gsutil cp
+
+gsutil [options] cp <src> gs://<dest_uri>
+will copy <src>/xyz... to gs://<dest_uri>/xyz...
 ### *recipe_modules* / [chromium\_swarming](/scripts/slave/recipe_modules/chromium_swarming)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/__init__.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [code\_coverage](#recipe_modules-code_coverage), [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]

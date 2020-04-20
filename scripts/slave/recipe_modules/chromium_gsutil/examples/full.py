@@ -13,6 +13,9 @@ def RunSteps(api):
       'https://example/url',
       'example_name',
       api.path['checkout'].join('destination'))
+  api.chromium_gsutil.upload('out/data/basic.json', 'bucket_name/path/')
+  api.chromium_gsutil.upload(
+      'out/data/basic.json', 'bucket_name/path/', jobs=1, retries=1, acl='test')
 
 
 def GenTests(api):

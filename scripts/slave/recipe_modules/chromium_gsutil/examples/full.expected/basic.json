@@ -19,6 +19,42 @@
     "name": "Download latest file from GS"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/gsutil_cp_dir.py",
+      "out/data/basic.json",
+      "bucket_name/path/"
+    ],
+    "name": "gsutil upload"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_REPO[build]/scripts/slave/gsutil_cp_dir.py",
+      "out/data/basic.json",
+      "bucket_name/path/",
+      "-j",
+      "1",
+      "-r",
+      "1",
+      "-a",
+      "test"
+    ],
+    "name": "gsutil upload (2)"
+  },
+  {
     "name": "$result"
   }
 ]
