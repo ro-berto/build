@@ -1300,23 +1300,19 @@ class SwarmingApi(recipe_api.RecipeApi):
     # This builds an instance of StepTestData that covers all of them.
     if not gen_step_test_data:
       def gen_default_step_test_data():
-        dispatched_task_placeholder = (self.m.json.test_api.output({}) +
+        dispatched_task_placeholder = (
+            self.m.json.test_api.output({}) +
             self.m.raw_io.test_api.output('Successfully merged all data'))
         return self.test_api.canned_summary_output(
             dispatched_task_placeholder, task.shards, task.shard_indices)
+
       gen_step_test_data = gen_default_step_test_data
-    with self.m.swarming.on_path():
-      with self.m.context(cwd=self.m.path['start_dir']):
-        # TODO(erikchen): Once we switch over to the go implementation of
-        # swarming, we should stop accepting all return codes.
-        # https://crbug.com/944179.
-        step_result = self.m.build.python(
-            name=name or self.get_step_name('', task),
-            script=self.resource('collect_task.py'),
-            args=task_args,
-            ok_ret='any',
-            step_test_data=gen_step_test_data,
-            **kwargs)
+
+    step_result = self.run_collect_task_script(
+        name=name or self.get_step_name('', task),
+        task_args=task_args,
+        gen_step_test_data=gen_step_test_data,
+        **kwargs)
     step_result.presentation.step_text = text_for_task(task)
 
     step_result.presentation.logs['Merge script log'] = [
@@ -1344,6 +1340,22 @@ class SwarmingApi(recipe_api.RecipeApi):
     if exception and failure_as_exception:
       raise exception
     return step_result, has_valid_results
+
+  def run_collect_task_script(self, name, task_args, gen_step_test_data,
+                              **kwargs):
+    with self.m.swarming.on_path():
+      with self.m.context(cwd=self.m.path['start_dir']):
+        # TODO(erikchen): Once we switch over to the go implementation of
+        # swarming, we should stop accepting all return codes.
+        # https://crbug.com/944179.
+        step_result = self.m.build.python(
+            name=name,
+            script=self.resource('collect_task.py'),
+            args=task_args,
+            ok_ret='any',
+            step_test_data=gen_step_test_data,
+            **kwargs)
+    return step_result
 
   def _check_for_missing_shard(self, merged_results_json, active_step, task):
     if merged_results_json:
