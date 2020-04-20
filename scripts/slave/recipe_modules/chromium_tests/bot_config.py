@@ -104,8 +104,7 @@ class BotConfig(object):
     if self.disable_tests:
       return {}
 
-    source_side_spec_file = self.testing.get('source_side_spec_file',
-                                             '%s.json' % mastername)
+    source_side_spec_file = self.source_side_spec_file or '%s.json' % mastername
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 

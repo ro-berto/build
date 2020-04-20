@@ -14,9 +14,7 @@ COMMON_BOT_CONFIG = bot_spec.BotSpec.create(
     },
     tests=[],
     test_results_config='public_server',
-    testing={
-        'platform': 'linux',
-    },
+    simulation_platform='linux',
 )
 
 SPEC = {

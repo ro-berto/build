@@ -236,7 +236,7 @@ def GenTests(api):
                         'TARGET_BITS': 64,
                     },
                     bot_type='tester',
-                    testing={'platform': 'linux'},
+                    simulation_platform='linux',
                 ),
             'Linux Builder':
                 bot_spec.BotSpec.create(
@@ -249,7 +249,7 @@ def GenTests(api):
                         'TARGET_BITS': 64,
                     },
                     bot_type='builder',
-                    testing={'platform': 'linux'},
+                    simulation_platform='linux',
                 ),
         },
     })

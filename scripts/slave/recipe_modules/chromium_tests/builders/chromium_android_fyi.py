@@ -26,9 +26,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebLayer P FYI (rel)':
         _chromium_android_fyi_spec(
@@ -43,9 +41,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView P FYI (rel)':
         _chromium_android_fyi_spec(
@@ -60,9 +56,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Memory Infra Tester':
         _chromium_android_fyi_spec(
@@ -76,9 +70,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-marshmallow-x86-fyi-rel':
         _chromium_android_fyi_spec(
@@ -93,9 +85,7 @@ SPEC = {
             },
             android_config='x86_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-pie-arm64-fyi-rel':
         _chromium_android_fyi_spec(
@@ -110,9 +100,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
@@ -127,9 +115,7 @@ SPEC = {
             },
             android_config='x86_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-weblayer-pie-x86-fyi-rel':
         _chromium_android_fyi_spec(
@@ -144,9 +130,7 @@ SPEC = {
             },
             android_config='x86_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-bfcache-rel':
         _chromium_android_fyi_spec(
@@ -160,8 +144,6 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

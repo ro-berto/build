@@ -21,9 +21,7 @@ def CreateBuilderConfig(os, bits, top_of_tree):
           'TARGET_BITS': bits,
       },
       bot_type=bot_spec.BUILDER,
-      testing={
-          'platform': os,
-      },
+      simulation_platform=os,
   )
 
 
@@ -38,9 +36,7 @@ def CreateTesterConfig(os, bits, builder):
       },
       bot_type=bot_spec.TESTER,
       parent_buildername=builder,
-      testing={
-          'platform': os,
-      },
+      simulation_platform=os,
       serialize_tests=True,
   )
 

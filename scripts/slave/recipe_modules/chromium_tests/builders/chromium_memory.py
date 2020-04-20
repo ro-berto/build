@@ -26,7 +26,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux ASan LSan Builder':
         _chromium_memory_spec(
@@ -42,7 +42,7 @@ SPEC = {
                 'lsan', 'mb', 'mb_luci_auth', 'goma_high_parallel'
             ],
             bot_type=bot_spec.BUILDER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux ASan LSan Tests (1)':
         _chromium_memory_spec(
@@ -59,7 +59,7 @@ SPEC = {
             ],
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux ASan LSan Builder',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux ASan Tests (sandboxed)':
         _chromium_memory_spec(
@@ -74,7 +74,7 @@ SPEC = {
             # again, this time with LSan disabled.
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux ASan LSan Builder',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux CFI':
         _chromium_memory_spec(
@@ -86,7 +86,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux MSan Builder':
         _chromium_memory_spec(
@@ -98,7 +98,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux MSan Tests':
         _chromium_memory_spec(
@@ -111,7 +111,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux MSan Builder',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux ChromiumOS MSan Builder':
         _chromium_memory_spec(
@@ -124,7 +124,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux ChromiumOS MSan Tests':
         _chromium_memory_spec(
@@ -138,7 +138,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux ChromiumOS MSan Builder',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux TSan Builder':
         _chromium_memory_spec(
@@ -150,9 +150,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux TSan Tests':
         _chromium_memory_spec(
@@ -165,9 +163,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux TSan Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Mac ASan 64 Builder':
         _chromium_memory_spec(
@@ -182,7 +178,7 @@ SPEC = {
                 'mb_luci_auth',
             ],
             bot_type=bot_spec.BUILDER,
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'Mac ASan 64 Tests (1)':
         _chromium_memory_spec(
@@ -198,7 +194,7 @@ SPEC = {
             ],
             bot_type=bot_spec.TESTER,
             parent_buildername='Mac ASan 64 Builder',
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'Linux Chromium OS ASan LSan Builder':
         _chromium_memory_spec(
@@ -211,7 +207,7 @@ SPEC = {
             },
             chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
             bot_type=bot_spec.BUILDER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'Linux Chromium OS ASan LSan Tests (1)':
         _chromium_memory_spec(
@@ -225,7 +221,7 @@ SPEC = {
             chromium_apply_config=['lsan', 'mb', 'mb_luci_auth'],
             parent_buildername='Linux Chromium OS ASan LSan Builder',
             bot_type=bot_spec.TESTER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebKit Linux ASAN':
         _chromium_memory_spec(
@@ -237,7 +233,7 @@ SPEC = {
             },
             chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
             tests=[],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebKit Linux MSAN':
         _chromium_memory_spec(
@@ -249,7 +245,7 @@ SPEC = {
             },
             chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
             tests=[],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebKit Linux Leak':
         _chromium_memory_spec(
@@ -264,7 +260,7 @@ SPEC = {
                 'blink_tests',
             ],
             tests=[],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'android-asan':
         _chromium_memory_spec(
@@ -279,7 +275,7 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['android'],
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'win-asan':
         _chromium_memory_spec(
@@ -291,6 +287,6 @@ SPEC = {
             },
             chromium_apply_config=['mb', 'mb_luci_auth'],
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
 }

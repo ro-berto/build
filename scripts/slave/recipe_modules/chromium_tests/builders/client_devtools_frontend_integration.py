@@ -26,8 +26,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

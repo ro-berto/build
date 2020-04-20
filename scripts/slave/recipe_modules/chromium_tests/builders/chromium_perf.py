@@ -30,20 +30,23 @@ def chromium_perf(c):
 
 def _common_kwargs(bot_type, config_name, platform, target_bits, tests):
   spec = {
-      'bot_type': bot_type,
-      'chromium_config': config_name,
+      'bot_type':
+          bot_type,
+      'chromium_config':
+          config_name,
       'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
       },
-      'enable_package_transfer': True,
-      'gclient_config': config_name,
+      'enable_package_transfer':
+          True,
+      'gclient_config':
+          config_name,
       'gclient_apply_config': [],
-      'testing': {
-          'platform':
-              'linux' if platform in ('android', 'chromeos') else platform,
-      },
-      'tests': tests,
+      'tests':
+          tests,
+      'simulation_platform':
+          'linux' if platform in ('android', 'chromeos') else platform,
   }
 
   if platform == 'android':

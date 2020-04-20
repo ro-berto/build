@@ -24,9 +24,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU Win x64 Builder Code Coverage':
         _chromium_gpu_spec(
@@ -42,9 +40,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU Win x64 Builder (dbg)':
         _chromium_gpu_spec(
@@ -59,9 +55,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 x64 Release (NVIDIA)':
         _chromium_gpu_spec(
@@ -77,9 +71,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 x64 Release (NVIDIA) Code Coverage':
         _chromium_gpu_spec(
@@ -96,9 +88,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Win x64 Builder Code Coverage',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 x64 Debug (NVIDIA)':
         _chromium_gpu_spec(
@@ -114,9 +104,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Win x64 Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU Linux Builder':
         _chromium_gpu_spec(
@@ -133,9 +121,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU Linux Builder (dbg)':
         _chromium_gpu_spec(
@@ -150,9 +136,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Release (NVIDIA)':
         _chromium_gpu_spec(
@@ -170,9 +154,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Debug (NVIDIA)':
         _chromium_gpu_spec(
@@ -188,9 +170,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Linux Builder (dbg)',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU Mac Builder':
         _chromium_gpu_spec(
@@ -205,9 +185,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'GPU Mac Builder (dbg)':
         _chromium_gpu_spec(
@@ -222,9 +200,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'GPU Mac Builder Code Coverage':
         _chromium_gpu_spec(
@@ -240,9 +216,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Release (Intel)':
         _chromium_gpu_spec(
@@ -258,9 +232,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Release (Intel) Code Coverage':
         _chromium_gpu_spec(
@@ -277,9 +249,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder Code Coverage',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Debug (Intel)':
         _chromium_gpu_spec(
@@ -295,9 +265,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder (dbg)',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Retina Release (AMD)':
         _chromium_gpu_spec(
@@ -313,9 +281,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Retina Release (AMD) Code Coverage':
         _chromium_gpu_spec(
@@ -332,9 +298,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder Code Coverage',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac Retina Debug (AMD)':
         _chromium_gpu_spec(
@@ -350,9 +314,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Mac Builder (dbg)',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Android Release (Nexus 5X)':
         _chromium_gpu_spec(
@@ -375,8 +337,6 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

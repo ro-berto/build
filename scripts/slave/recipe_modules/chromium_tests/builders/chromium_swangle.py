@@ -25,9 +25,7 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
           'TARGET_BITS': bits,
       },
       bot_type=bot_spec.BUILDER_TESTER,
-      testing={
-          'platform': os,
-      },
+      simulation_platform=os,
       serialize_tests=True,
   )
 

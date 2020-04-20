@@ -29,9 +29,7 @@ def CreateStandardConfig(platform, apply_configs=None):
       chromium_config_kwargs={
           'TARGET_BITS': 64,
       },
-      testing={
-          'platform': platform,
-      },
+      simulation_platform=platform,
   )
 
 
@@ -59,9 +57,7 @@ def CreateAndroidConfig(bits, apply_configs=None):
           'TARGET_PLATFORM': 'android',
       },
       android_config='main_builder_mb',
-      testing={
-          'platform': 'linux',  # Android builder always uses Linux.
-      },
+      simulation_platform='linux',  # Android builder always uses Linux.
   )
 
 
@@ -87,9 +83,7 @@ def CreateIosConfig():
           'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'ios',
       },
-      testing={
-          'platform': 'mac',
-      },
+      simulation_platform='mac',
   )
 
 

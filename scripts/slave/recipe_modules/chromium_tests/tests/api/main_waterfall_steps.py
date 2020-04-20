@@ -46,9 +46,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_BITS': 64,
                 },
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Isolated Transfer Tester':
             _builder_spec(
@@ -61,9 +59,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 },
                 gclient_config='chromium',
                 parent_buildername='Isolated Transfer Builder',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Isolated Transfer: mixed builder, isolated tester (builder)':
             _builder_spec(
@@ -75,9 +71,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_BITS': 64,
                 },
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Isolated Transfer: mixed builder, isolated tester (tester)':
             _builder_spec(
@@ -91,9 +85,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 gclient_config='chromium',
                 parent_buildername=('Isolated Transfer: '
                                     'mixed builder, isolated tester (builder)'),
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Isolated Transfer: mixed BT, isolated tester (BT)':
             _builder_spec(
@@ -106,9 +98,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_PLATFORM': 'android',
                 },
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Isolated Transfer: mixed BT, isolated tester (tester)':
             _builder_spec(
@@ -123,9 +113,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 gclient_config='chromium',
                 parent_buildername=
                 'Isolated Transfer: mixed BT, isolated tester (BT)',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Packaged Transfer Builder':
             _builder_spec(
@@ -137,9 +125,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_BITS': 64,
                 },
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Packaged Transfer Enabled Builder':
             _builder_spec(
@@ -152,9 +138,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                     'TARGET_BITS': 64,
                 },
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Packaged Transfer Tester':
             _builder_spec(
@@ -167,9 +151,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 },
                 gclient_config='chromium',
                 parent_buildername='Packaged Transfer Builder',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Multiple Triggers: Builder':
             _builder_spec(
@@ -184,9 +166,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 },
                 gclient_apply_config=['android'],
                 gclient_config='chromium',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Multiple Triggers: Mixed':
             _builder_spec(
@@ -202,9 +182,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 gclient_apply_config=['android'],
                 gclient_config='chromium',
                 parent_buildername='Multiple Triggers: Builder',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
         'Multiple Triggers: Isolated':
             _builder_spec(
@@ -220,9 +198,7 @@ CUSTOM_BUILDERS = bot_db.BotDatabase.create({
                 gclient_apply_config=['android'],
                 gclient_config='chromium',
                 parent_buildername='Multiple Triggers: Builder',
-                testing={
-                    'platform': 'linux',
-                },
+                simulation_platform='linux',
             ),
     },
 })

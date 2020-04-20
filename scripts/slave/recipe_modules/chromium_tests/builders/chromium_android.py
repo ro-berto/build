@@ -28,9 +28,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android arm64 Builder (dbg)':
         _chromium_android_spec(
@@ -47,9 +45,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android ASAN (dbg)':
         _chromium_android_spec(
@@ -66,9 +62,7 @@ SPEC = {
             },
             android_config='clang_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android x64 Builder (dbg)':
         _chromium_android_spec(
@@ -82,9 +76,7 @@ SPEC = {
             },
             android_config='x64_builder_mb',
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android x86 Builder (dbg)':
         _chromium_android_spec(
@@ -98,9 +90,7 @@ SPEC = {
             },
             android_config='x86_builder_mb',
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Cast Android (dbg)':
         _chromium_android_spec(
@@ -117,9 +107,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='cast_builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'KitKat Phone Tester (dbg)':
         _chromium_android_spec(
@@ -137,9 +125,7 @@ SPEC = {
             android_config='main_builder_mb',
             bot_type=bot_spec.TESTER,
             parent_buildername='Android arm Builder (dbg)',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'KitKat Phone Tester (rel)':
         _chromium_android_spec(
@@ -156,9 +142,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'KitKat Tablet Tester':
         _chromium_android_spec(
@@ -176,9 +160,7 @@ SPEC = {
             parent_buildername='Android arm Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Marshmallow 64 bit Tester':
@@ -197,9 +179,7 @@ SPEC = {
             parent_buildername='Android arm64 Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Lollipop Phone Tester':
         _chromium_android_spec(
@@ -217,9 +197,7 @@ SPEC = {
             parent_buildername='Android arm Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Lollipop Tablet Tester':
         _chromium_android_spec(
@@ -237,9 +215,7 @@ SPEC = {
             parent_buildername='Android arm Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Marshmallow Phone Tester (rel)':
@@ -262,9 +238,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Marshmallow Tablet Tester':
         _chromium_android_spec(
@@ -282,9 +256,7 @@ SPEC = {
             parent_buildername='Android arm Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Nougat Phone Tester':
@@ -303,9 +275,7 @@ SPEC = {
             parent_buildername='Android arm64 Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Oreo Phone Tester':
         _chromium_android_spec(
@@ -323,9 +293,7 @@ SPEC = {
             parent_buildername='Android arm64 Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-pie-arm64-dbg':
         _chromium_android_spec(
@@ -343,9 +311,7 @@ SPEC = {
             parent_buildername='Android arm64 Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView L (dbg)':
         _chromium_android_spec(
@@ -363,9 +329,7 @@ SPEC = {
             parent_buildername='Android arm Builder (dbg)',
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView M (dbg)':
         _chromium_android_spec(
@@ -384,9 +348,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
             android_apply_config=['remove_all_system_webviews'],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView N (dbg)':
         _chromium_android_spec(
@@ -405,9 +367,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
             android_apply_config=['remove_all_system_webviews'],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView O (dbg)':
         _chromium_android_spec(
@@ -426,9 +386,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
             android_apply_config=['remove_all_system_webviews'],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android WebView P (dbg)':
         _chromium_android_spec(
@@ -447,9 +405,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             android_config='main_builder_mb',
             android_apply_config=['remove_all_system_webviews'],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }
 
@@ -471,9 +427,7 @@ def stock_config(name,
       },
       'android_config': 'main_builder',
       'bot_type': bot_spec.BUILDER_TESTER,
-      'testing': {
-          'platform': 'linux',
-      },
+      'simulation_platform': 'linux',
   }
 
   if chromium_apply_config:

@@ -28,9 +28,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             tests=[],
             parent_buildername='Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win Builder':
         _chromium_win_spec(
@@ -47,9 +45,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 Tests x64':
         _chromium_win_spec(
@@ -63,9 +59,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             tests=[],
             parent_buildername='Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 Tests x64 Code Coverage':
         _chromium_win_spec(
@@ -80,9 +74,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             tests=[],
             parent_buildername='Win x64 Builder Code Coverage',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win7 (32) Tests':
         _chromium_win_spec(
@@ -100,9 +92,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win7 Tests (1)':
         _chromium_win_spec(
@@ -121,9 +111,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             tests=[],
             parent_buildername='Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win x64 Builder':
         _chromium_win_spec(
@@ -135,9 +123,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win x64 Builder Code Coverage':
         _chromium_win_spec(
@@ -150,9 +136,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win 7 Tests x64 (1)':
         _chromium_win_spec(
@@ -166,9 +150,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             tests=[],
             parent_buildername='Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win x64 Builder (dbg)':
         _chromium_win_spec(
@@ -180,9 +162,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win Builder (dbg)':
         _chromium_win_spec(
@@ -194,9 +174,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win7 Tests (dbg)(1)':
         _chromium_win_spec(
@@ -209,9 +187,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Win Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 Tests x64 (dbg)':
         _chromium_win_spec(
@@ -224,8 +200,6 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Win x64 Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
 }

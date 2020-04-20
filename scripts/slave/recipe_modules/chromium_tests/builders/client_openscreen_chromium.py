@@ -37,9 +37,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=COMPILE_TARGETS,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'chromium_mac_debug':
         _client_openscreen_chromium_spec(
@@ -53,8 +51,6 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=COMPILE_TARGETS,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
 }

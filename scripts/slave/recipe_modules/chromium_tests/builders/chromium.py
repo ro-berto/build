@@ -17,9 +17,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'win32-archive-rel':
         bot_spec.BotSpec.create(
@@ -37,9 +35,7 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Win',
             gs_acl='public-read',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'win-archive-dbg':
         bot_spec.BotSpec.create(
@@ -53,9 +49,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'win-archive-rel':
         bot_spec.BotSpec.create(
@@ -73,9 +67,7 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Win_x64',
             gs_acl='public-read',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'mac-archive-dbg':
         bot_spec.BotSpec.create(
@@ -89,9 +81,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'mac-archive-rel':
         bot_spec.BotSpec.create(
@@ -109,9 +99,7 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Mac',
             gs_acl='public-read',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'linux-archive-dbg':
         bot_spec.BotSpec.create(
@@ -125,9 +113,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-archive-rel':
         bot_spec.BotSpec.create(
@@ -145,9 +131,7 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Linux_x64',
             gs_acl='public-read',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-archive-dbg':
         bot_spec.BotSpec.create(
@@ -164,9 +148,7 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
             },
             android_config='main_builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-archive-rel':
         bot_spec.BotSpec.create(
@@ -187,8 +169,6 @@ SPEC = {
             gs_bucket='chromium-browser-snapshots',
             gs_build_name='Android',
             gs_acl='public-read',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

@@ -16,9 +16,7 @@ SPEC = {
             },
             tests=[],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-layout-tests-edit-ng':
         bot_spec.BotSpec.create(
@@ -31,9 +29,7 @@ SPEC = {
             },
             tests=[],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-layout-tests-fragment-item':
         bot_spec.BotSpec.create(
@@ -46,8 +42,6 @@ SPEC = {
             },
             tests=[],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

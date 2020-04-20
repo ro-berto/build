@@ -27,9 +27,7 @@ SPEC = {
             compile_targets=[
                 'all',
             ],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux - Future (dbg)':
         _client_v8_chromium_spec(
@@ -41,9 +39,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux V8 API Stability':
         _client_v8_chromium_spec(
@@ -60,8 +56,6 @@ SPEC = {
                 'all',
             ],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

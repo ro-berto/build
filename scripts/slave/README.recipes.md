@@ -4350,9 +4350,9 @@ linked by commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#16): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [NotIdempotent](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#231)(check, step_odict, step):**
+&mdash; **def [NotIdempotent](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#207)(check, step_odict, step):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#236)(api, fail_compile):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/main_waterfall_steps.py#212)(api, fail_compile):**
 ### *recipes* / [chromium\_tests:tests/api/package\_build](/scripts/slave/recipe_modules/chromium_tests/tests/api/package_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/package_build.py#8): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4384,7 +4384,7 @@ linked by commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#56)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#52)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#11): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [code\_coverage](#recipe_modules-code_coverage), [filter](#recipe_modules-filter), [test\_utils](#recipe_modules-test_utils), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]

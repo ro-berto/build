@@ -110,16 +110,14 @@ BUILDERS = bot_db.BotDatabase.create({
     # Note that this master is not real, and consequently
     # this build configuration will never be used in production.
     'bot_update.always_on': {
-            'coverage_clobber':
-                bot_spec.BotSpec.create(
-                    chromium_config='chromium',
-                    gclient_config='chromium',
-                    clobber=True,
-                    archive_build=True,
-                    testing={
-                        'platform': 'linux',
-                    },
-                    gs_bucket='invalid',
-                ),
+        'coverage_clobber':
+            bot_spec.BotSpec.create(
+                chromium_config='chromium',
+                gclient_config='chromium',
+                clobber=True,
+                archive_build=True,
+                simulation_platform='linux',
+                gs_bucket='invalid',
+            ),
     },
 })

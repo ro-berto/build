@@ -129,9 +129,7 @@ def GenTests(api):
                         'TARGET_BITS': 64,
                     },
                     bot_type='builder',
-                    testing={
-                        'platform': 'linux',
-                    },
+                    simulation_platform='linux',
                 ),
             'findit_tester':
                 bot_spec.BotSpec.create(
@@ -144,9 +142,7 @@ def GenTests(api):
                     },
                     bot_type='tester',
                     parent_buildername='findit_builder',
-                    testing={
-                        'platform': 'linux',
-                    },
+                    simulation_platform='linux',
                     swarming_dimensions={
                         'os': 'Linux',
                     },
@@ -161,9 +157,7 @@ def GenTests(api):
                         'TARGET_BITS': 64,
                     },
                     bot_type='builder_tester',
-                    testing={
-                        'platform': 'linux',
-                    },
+                    simulation_platform='linux',
                     swarming_dimensions={
                         'os': 'Linux',
                     },

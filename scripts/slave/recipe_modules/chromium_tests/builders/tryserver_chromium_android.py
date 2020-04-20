@@ -18,9 +18,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android_blink_rel':
         bot_spec.BotSpec.create(
@@ -38,8 +36,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['android'],
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

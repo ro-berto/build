@@ -23,7 +23,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
     'Win ASan Release Media':
         bot_spec.BotSpec.create(
@@ -45,7 +45,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
     'Mac ASAN Release':
         bot_spec.BotSpec.create(
@@ -63,7 +63,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'Mac ASAN Release Media':
         bot_spec.BotSpec.create(
@@ -85,7 +85,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'Mac ASAN Debug':
         bot_spec.BotSpec.create(
@@ -103,7 +103,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'ASAN Release':
         bot_spec.BotSpec.create(
@@ -119,7 +119,7 @@ SPEC = {
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
             cf_archive_name='asan',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'ASAN Release Media':
         bot_spec.BotSpec.create(
@@ -137,7 +137,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'ASAN Debug':
         bot_spec.BotSpec.create(
@@ -157,7 +157,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='asan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'ChromiumOS ASAN Release':
         bot_spec.BotSpec.create(
@@ -179,7 +179,7 @@ SPEC = {
             cf_archive_name='asan',
             cf_archive_subdir_suffix='chromeos',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     # The build process is described at
     # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
@@ -202,7 +202,7 @@ SPEC = {
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'ASan Release (32-bit x86 with V8-ARM)':
         bot_spec.BotSpec.create(
@@ -221,7 +221,7 @@ SPEC = {
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'ASan Release Media (32-bit x86 with V8-ARM)':
         bot_spec.BotSpec.create(
@@ -240,7 +240,7 @@ SPEC = {
             cf_archive_name='asan-v8-arm',
             cf_archive_subdir_suffix='v8-arm',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     # The build process for TSan is described at
     # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
@@ -260,7 +260,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='tsan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'TSAN Debug':
         bot_spec.BotSpec.create(
@@ -278,7 +278,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='tsan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     # The build process for MSan is described at
     # http://dev.chromium.org/developers/testing/memorysanitizer
@@ -298,7 +298,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='msan-no-origins',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'MSAN Release (chained origins)':
         bot_spec.BotSpec.create(
@@ -316,7 +316,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='msan-chained-origins',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'UBSan Release':
         bot_spec.BotSpec.create(
@@ -334,7 +334,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='ubsan',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     # The build process for UBSan vptr is described at
     # http://dev.chromium.org/developers/testing/undefinedbehaviorsanitizer
@@ -355,6 +355,6 @@ SPEC = {
             cf_archive_name='ubsan-vptr',
             cf_archive_subdir_suffix='vptr',
             compile_targets=['chromium_builder_asan'],
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
 }

@@ -59,9 +59,7 @@ SPEC = {
             archive_build=True,
             gs_bucket='chromium-browser-snapshots',
             gs_acl='public-read',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }
 
@@ -88,10 +86,8 @@ def _config(name,
           'TARGET_BITS': target_bits,
       },
       'bot_type': bot_spec.BUILDER_TESTER,
-      'testing': {
-          'platform': 'linux',
-      },
       'tests': {},
+      'simulation_platform': 'linux',
   }
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board

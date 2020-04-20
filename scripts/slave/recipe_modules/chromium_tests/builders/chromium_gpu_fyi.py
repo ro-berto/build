@@ -31,9 +31,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win Builder (dbg)':
         _chromium_gpu_fyi_spec(
@@ -54,9 +52,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win dEQP Builder':
         _chromium_gpu_fyi_spec(
@@ -77,9 +73,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             # When trybots are set up which mirror this configuration,
             # compiling might induce a clobber build if the pinned
             # buildtools version is different from Chromium's default. This
@@ -101,9 +95,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win7 FYI Release (AMD)':
@@ -120,9 +112,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win7 FYI Release (NVIDIA)':
@@ -139,9 +129,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win7 FYI dEQP Release (AMD)':
@@ -158,9 +146,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win dEQP Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'GPU FYI Win x64 Builder':
@@ -182,9 +168,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win x64 Builder (dbg)':
         _chromium_gpu_fyi_spec(
@@ -205,9 +189,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win x64 Builder DEPS ANGLE':
         _chromium_gpu_fyi_spec(
@@ -227,9 +209,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win x64 dEQP Builder':
         _chromium_gpu_fyi_spec(
@@ -250,9 +230,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             # When trybots are set up which mirror this configuration,
             # compiling might induce a clobber build if the pinned
             # buildtools version is different from Chromium's default. This
@@ -279,9 +257,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'GPU FYI Win x64 DX12 Vulkan Builder (dbg)':
         _chromium_gpu_fyi_spec(
@@ -302,9 +278,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win10 FYI x64 Debug (NVIDIA)':
         _chromium_gpu_fyi_spec(
@@ -320,9 +294,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)':
@@ -339,9 +311,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 DX12 Vulkan Builder (dbg)',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 DX12 Vulkan Release (NVIDIA)':
@@ -358,9 +328,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 DX12 Vulkan Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Exp Release (Intel HD 630)':
@@ -377,9 +345,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Exp Release (NVIDIA)':
@@ -396,9 +362,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Release (AMD RX 550)':
@@ -415,9 +379,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Release (Intel HD 630)':
@@ -434,9 +396,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Release (Intel UHD 630)':
@@ -453,9 +413,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)':
@@ -472,9 +430,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x86 Release (NVIDIA)':
@@ -491,9 +447,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 Release (NVIDIA)':
@@ -510,9 +464,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)':
@@ -525,9 +477,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 SkiaRenderer GL (NVIDIA)':
@@ -544,9 +494,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 dEQP Release (Intel HD 630)':
@@ -563,9 +511,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 dEQP Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win10 FYI x64 dEQP Release (NVIDIA)':
@@ -582,9 +528,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 dEQP Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win7 FYI x64 Release (NVIDIA)':
@@ -601,9 +545,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'Win7 FYI x64 dEQP Release (NVIDIA)':
@@ -620,9 +562,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Win x64 dEQP Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'GPU FYI XR Win x64 Builder':
@@ -644,9 +584,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             # This causes the builder to upload isolates to a location where
             # Pinpoint can access them in addition to the usual isolate
             # server. This is necessary because "Win10 FYI x64 Release XR
@@ -669,9 +607,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI XR Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             serialize_tests=True,
         ),
     'GPU FYI Linux Builder':
@@ -693,9 +629,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU FYI Linux Builder DEPS ANGLE':
         _chromium_gpu_fyi_spec(
@@ -715,9 +649,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU FYI Linux Ozone Builder':
         _chromium_gpu_fyi_spec(
@@ -738,9 +670,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU FYI Linux Builder (dbg)':
         _chromium_gpu_fyi_spec(
@@ -761,9 +691,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU FYI Linux dEQP Builder':
         _chromium_gpu_fyi_spec(
@@ -784,9 +712,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             # When trybots are set up which mirror this configuration,
             # compiling might induce a clobber build if the pinned
             # buildtools version is different from Chromium's default. This
@@ -808,9 +734,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Experimental Release (NVIDIA)':
@@ -827,9 +751,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Debug (NVIDIA)':
@@ -843,9 +765,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder (dbg)',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI dEQP Release (NVIDIA)':
@@ -862,9 +782,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux dEQP Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI SkiaRenderer Vulkan (NVIDIA)':
@@ -881,9 +799,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI SkiaRenderer Vulkan (Intel HD 630)':
@@ -900,9 +816,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Release (Intel HD 630)':
@@ -919,9 +833,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Release (Intel UHD 630)':
@@ -938,9 +850,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Experimental Release (Intel HD 630)':
@@ -957,9 +867,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI dEQP Release (Intel HD 630)':
@@ -976,9 +884,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux dEQP Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI GPU TSAN Release':
@@ -997,9 +903,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI Release (AMD R7 240)':
@@ -1016,9 +920,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)':
@@ -1031,9 +933,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'GPU FYI Fuchsia Builder':
@@ -1057,9 +957,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'GPU FYI Mac Builder':
         _chromium_gpu_fyi_spec(
@@ -1080,9 +978,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'GPU FYI Mac Builder DEPS ANGLE':
         _chromium_gpu_fyi_spec(
@@ -1102,9 +998,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'GPU FYI Mac Builder (dbg)':
         _chromium_gpu_fyi_spec(
@@ -1125,9 +1019,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'GPU FYI Mac dEQP Builder':
         _chromium_gpu_fyi_spec(
@@ -1145,9 +1037,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             # When trybots are set up which mirror this configuration,
             # compiling might induce a clobber build if the pinned
             # buildtools version is different from Chromium's default. This
@@ -1169,9 +1059,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Debug (Intel)':
@@ -1188,9 +1076,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder (dbg)',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac Pro FYI Release (AMD)':
@@ -1207,9 +1093,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Retina Release (NVIDIA)':
@@ -1226,9 +1110,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Retina Debug (NVIDIA)':
@@ -1245,9 +1127,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder (dbg)',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Retina Release (AMD)':
@@ -1264,9 +1144,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Retina Debug (AMD)':
@@ -1283,9 +1161,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder (dbg)',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Experimental Release (Intel)':
@@ -1302,9 +1178,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Experimental Retina Release (AMD)':
@@ -1321,9 +1195,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI Experimental Retina Release (NVIDIA)':
@@ -1340,9 +1212,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI GPU ASAN Release':
@@ -1361,9 +1231,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac FYI dEQP Release AMD':
         _chromium_gpu_fyi_spec(
@@ -1382,9 +1250,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac dEQP Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'Mac FYI dEQP Release Intel':
@@ -1404,9 +1270,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Mac dEQP Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             serialize_tests=True,
         ),
     'GPU FYI Perf Android 64 Builder':
@@ -1423,9 +1287,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             # This causes the builder to upload isolates to a location where
             # Pinpoint can access them in addition to the usual isolate
             # server. This is necessary because "Android FYI 64 Perf (Pixel
@@ -1451,9 +1313,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 5X)':
         _chromium_gpu_fyi_spec(
@@ -1472,9 +1332,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 6)':
         _chromium_gpu_fyi_spec(
@@ -1493,9 +1351,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 6P)':
         _chromium_gpu_fyi_spec(
@@ -1511,9 +1367,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 9)':
         _chromium_gpu_fyi_spec(
@@ -1529,9 +1383,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (NVIDIA Shield TV)':
         _chromium_gpu_fyi_spec(
@@ -1547,9 +1399,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1565,9 +1415,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI dEQP Release (Nexus 5X)':
         _chromium_gpu_fyi_spec(
@@ -1583,9 +1431,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI 32 Vk Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1603,9 +1449,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI 64 Vk Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1623,9 +1467,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI 32 dEQP Vk Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1643,9 +1485,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI 64 dEQP Vk Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1663,9 +1503,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI SkiaRenderer GL (Nexus 5X)':
         _chromium_gpu_fyi_spec(
@@ -1679,9 +1517,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI SkiaRenderer Vulkan (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1695,9 +1531,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Android FYI 64 Perf (Pixel 2)':
         _chromium_gpu_fyi_spec(
@@ -1714,9 +1548,7 @@ SPEC = {
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Perf Android 64 Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
     'GPU Fake Linux Builder':
@@ -1732,9 +1564,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Fake Linux Release (NVIDIA)':
         _chromium_gpu_fyi_spec(
@@ -1747,9 +1577,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU Fake Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux FYI Ozone (Intel)':
         _chromium_gpu_fyi_spec(
@@ -1765,9 +1593,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='GPU FYI Linux Ozone Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             serialize_tests=True,
         ),
 
@@ -1807,9 +1633,7 @@ SPEC = {
             },
             android_config='main_builder_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 
     # This following machines don't exist either; they are separate
@@ -1830,9 +1654,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'ANGLE GPU Linux Release (NVIDIA)':
         _chromium_gpu_fyi_spec(bot_type=bot_spec.DUMMY_TESTER),

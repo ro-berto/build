@@ -59,7 +59,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
                                                     bot_mirrors)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.
     return self.m.platform(
-        bot_config.testing.get('platform'),
+        bot_config.simulation_platform,
         bot_config.chromium_config_kwargs.get('TARGET_BITS', 64))
 
   def read_source_side_spec(self, mastername, contents, step_prefix=None,

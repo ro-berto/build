@@ -34,9 +34,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
           'TARGET_BITS': target_bits,
       },
       'chromium_tests_apply_config': [],
-      'testing': {
-          'platform': platform,
-      },
+      'simulation_platform': platform,
   }
   bot_config.update(**kwargs)
   if staging:
@@ -85,9 +83,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mac10.15 Tests':
         bot_spec.BotSpec.create(
@@ -103,9 +99,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Mac Builder Next',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'mac-osxbeta-rel':
         bot_spec.BotSpec.create(
@@ -123,9 +117,7 @@ SPEC = {
             test_results_config='staging_server',
             parent_mastername='chromium.mac',
             parent_buildername='Mac Builder',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
@@ -144,9 +136,7 @@ SPEC = {
             ],
             tests=[],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'WebKit Linux layout_ng_disabled Builder':
         bot_spec.BotSpec.create(
@@ -162,9 +152,7 @@ SPEC = {
             ],
             tests=[],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'fuchsia-fyi-arm64-rel':
         bot_spec.BotSpec.create(
@@ -180,9 +168,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             # TODO(crbug.com/1042512): serialize FYI tests after CI tests are enabled.
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'fuchsia-fyi-x64-dbg':
         bot_spec.BotSpec.create(
@@ -199,9 +185,7 @@ SPEC = {
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'fuchsia-fyi-x64-rel':
         bot_spec.BotSpec.create(
@@ -218,9 +202,7 @@ SPEC = {
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Mac OpenSSL':
         bot_spec.BotSpec.create(
@@ -231,9 +213,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Site Isolation Android':
         bot_spec.BotSpec.create(
@@ -252,9 +232,7 @@ SPEC = {
             ],
             android_config='arm64_builder_mb',
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Win Builder Localoutputcache':
         chromium_apply_configs(
@@ -276,9 +254,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'mac-code-coverage':
         bot_spec.BotSpec.create(
@@ -291,9 +267,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Win Builder (ANGLE)':
         bot_spec.BotSpec.create(
@@ -306,9 +280,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             patch_root='src/third_party/angle',
         ),
     'Win7 Tests (ANGLE)':
@@ -323,9 +295,7 @@ SPEC = {
             bot_type=bot_spec.TESTER,
             parent_buildername='Win Builder (ANGLE)',
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'win32-arm64-rel':
         bot_spec.BotSpec.create(
@@ -338,9 +308,7 @@ SPEC = {
                 'TARGET_ARCH': 'arm'
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Win 10 Fast Ring':
         bot_spec.BotSpec.create(
@@ -352,9 +320,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'Linux remote_run Builder':
         bot_spec.BotSpec.create(
@@ -370,9 +336,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux remote_run Tester':
         bot_spec.BotSpec.create(
@@ -392,9 +356,7 @@ SPEC = {
                 steps.LocalGTestTest('base_unittests'),
             ],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Mojo Android':
         bot_spec.BotSpec.create(
@@ -415,9 +377,7 @@ SPEC = {
             # master to have different priorities, it makes reasoning about
             # builders harder for sheriffs and troopers.
             swarming_default_priority=25,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-mojo-webview-rel':
         bot_spec.BotSpec.create(
@@ -433,9 +393,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             android_config='arm64_builder_mb',
             swarming_default_priority=25,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Mojo ChromiumOS':
         bot_spec.BotSpec.create(
@@ -450,9 +408,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             swarming_default_priority=25,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Mojo Linux':
         bot_spec.BotSpec.create(
@@ -465,9 +421,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'mac-mojo-rel':
         bot_spec.BotSpec.create(
@@ -480,9 +434,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'Mojo Windows':
         bot_spec.BotSpec.create(
@@ -496,9 +448,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'chromeos-amd64-generic-rel-vm-tests':
         bot_spec.BotSpec.create(
@@ -517,9 +467,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'chromeos',
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             tests={},
         ),
     'chromeos-kevin-rel-hw-tests':
@@ -539,9 +487,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'chromeos',
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             tests={},
         ),
     'linux-autofill-captured-sites-rel':
@@ -556,9 +502,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-chromeos-code-coverage':
         bot_spec.BotSpec.create(
@@ -576,9 +520,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             tests={},
         ),
     'mac-autofill-captured-sites-rel':
@@ -596,9 +538,7 @@ SPEC = {
                 'captured_sites_interactive_tests',
             ],
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'win-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
@@ -615,9 +555,7 @@ SPEC = {
                 'captured_sites_interactive_tests',
             ],
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'ios-simulator-cronet':
         bot_spec.BotSpec.create(
@@ -636,9 +574,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios-webkit-tot':
         bot_spec.BotSpec.create(
@@ -656,9 +592,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios13-beta-simulator':
         bot_spec.BotSpec.create(
@@ -677,9 +611,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios13-sdk-device':
         bot_spec.BotSpec.create(
@@ -697,9 +629,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios13-sdk-simulator':
         bot_spec.BotSpec.create(
@@ -718,9 +648,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios-simulator-cr-recipe':
         bot_spec.BotSpec.create(
@@ -738,9 +666,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ios-simulator-code-coverage':
         bot_spec.BotSpec.create(
@@ -759,9 +685,7 @@ SPEC = {
                 'HOST_PLATFORM': 'mac',
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'android-code-coverage':
         bot_spec.BotSpec.create(
@@ -778,9 +702,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'android-code-coverage-native':
         bot_spec.BotSpec.create(
@@ -797,9 +719,7 @@ SPEC = {
             },
             android_config='main_builder',
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Win10 Tests x64 1803':
         bot_spec.BotSpec.create(
@@ -814,9 +734,7 @@ SPEC = {
             tests=[],
             parent_mastername='chromium.win',
             parent_buildername='Win x64 Builder',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'win10-code-coverage':
         bot_spec.BotSpec.create(
@@ -833,9 +751,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'linux-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -847,9 +763,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'mac-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -861,9 +775,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'win-upload-perfetto':
         bot_spec.BotSpec.create(
@@ -875,9 +787,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
 }
 

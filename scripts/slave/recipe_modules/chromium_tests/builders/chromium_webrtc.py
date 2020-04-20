@@ -56,7 +56,7 @@ SPEC = {
             },
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium Android Tester':
         _chromium_webrtc_spec(
@@ -79,7 +79,7 @@ SPEC = {
                 'os': 'Android'
             },
             test_results_config='public_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium Linux Builder':
         _chromium_webrtc_spec(
@@ -92,7 +92,7 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium Linux Tester':
         _chromium_webrtc_spec(
@@ -107,7 +107,7 @@ SPEC = {
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Linux Builder',
             test_results_config='public_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
             tests=[browser_perf_test('chromium-webrtc-rel-linux')],
         ),
     'WebRTC Chromium Mac Builder':
@@ -121,7 +121,7 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc',
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'WebRTC Chromium Mac Tester':
         _chromium_webrtc_spec(
@@ -136,7 +136,7 @@ SPEC = {
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Mac Builder',
             test_results_config='public_server',
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
             tests=[browser_perf_test('chromium-webrtc-rel-mac')],
         ),
     'WebRTC Chromium Win Builder':
@@ -150,7 +150,7 @@ SPEC = {
             },
             gclient_apply_config=['webrtc_test_resources'],
             gclient_config='chromium_webrtc',
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
     'WebRTC Chromium Win10 Tester':
         _chromium_webrtc_spec(
@@ -165,7 +165,7 @@ SPEC = {
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
             tests=[browser_perf_test('chromium-webrtc-rel-win10')],
         ),
     'WebRTC Chromium Win7 Tester':
@@ -181,7 +181,7 @@ SPEC = {
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
             tests=[browser_perf_test('chromium-webrtc-rel-7')],
         ),
     'WebRTC Chromium Win8 Tester':
@@ -197,7 +197,7 @@ SPEC = {
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
             tests=[browser_perf_test('chromium-webrtc-rel-win8')],
         ),
 }

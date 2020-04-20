@@ -31,10 +31,8 @@ def config(name,
       },
       'bot_type': bot_spec.BUILDER_TESTER,
       'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
       'tests': {steps.SizesStep(RESULTS_URL, name)},
+      'simulation_platform': 'linux',
 
       # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
       # added to allow the bots to run `ninja` instead of `ninja all`
@@ -74,9 +72,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'CFI Linux CF':
         _chromium_clang_spec(
@@ -95,7 +91,7 @@ SPEC = {
             cf_gs_acl='public-read',
             cf_archive_name='cfi',
             test_results_config='staging_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'UBSanVptr Linux':
         _chromium_clang_spec(
@@ -109,9 +105,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-win_cross-rel':
         _chromium_clang_spec(
@@ -129,9 +123,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -151,9 +143,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ToTiOSDevice':
         _chromium_clang_spec(
@@ -170,9 +160,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'ToTWinCFI':
         _chromium_clang_spec(
@@ -189,9 +177,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -212,9 +198,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -235,9 +219,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[steps.SizesStep(RESULTS_URL, 'ToTWinOfficial')],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -264,9 +246,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -290,9 +270,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
             # add_tests_as_compile_targets not needed for the asan bot, it
             # doesn't build everything.
@@ -309,9 +287,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             compile_targets=['chromium_builder_asan'],
             # add_tests_as_compile_targets not needed for the asan bot, it
             # doesn't build everything.
@@ -334,9 +310,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_asan_tot_release_builder',
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -359,9 +333,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_tot_debug_builder',
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -383,9 +355,7 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             android_config='clang_builder_mb_x64',
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -405,9 +375,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             tests={steps.SizesStep(RESULTS_URL, 'ToTMac')},
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -436,9 +404,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             tests={steps.SizesStep(RESULTS_URL, 'ToTMacOfficial')},
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -459,9 +425,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             tests={steps.SizesStep(RESULTS_URL, 'ToTMac (dbg)')},
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -482,9 +446,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -505,9 +467,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin'),
             ],
@@ -536,9 +496,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)'),
             ],
@@ -561,9 +519,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin(dll)'),
             ],
@@ -586,9 +542,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin64'),
             ],
@@ -617,9 +571,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -639,9 +591,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)'),
             ],
@@ -664,9 +614,7 @@ SPEC = {
             ],
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             tests=[
                 steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)'),
             ],

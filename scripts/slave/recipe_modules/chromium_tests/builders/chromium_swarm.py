@@ -17,9 +17,7 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
             },
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             bot_type=bot_spec.BUILDER_TESTER,
         ),
     'android-marshmallow-arm64-rel-swarming':
@@ -34,9 +32,7 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
             },
             android_config='main_builder_mb',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             bot_type=bot_spec.BUILDER_TESTER,
         ),
     'linux-rel-swarming':
@@ -47,9 +43,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             bot_type=bot_spec.BUILDER_TESTER,
         ),
     'mac-rel-swarming':
@@ -60,9 +54,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             bot_type=bot_spec.BUILDER_TESTER,
         ),
     'win-rel-swarming':
@@ -73,9 +65,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
             },
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             bot_type=bot_spec.BUILDER_TESTER,
         ),
 }

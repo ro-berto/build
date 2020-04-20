@@ -23,9 +23,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'fuchsia-x64-cast':
         _chromium_linux_spec(
@@ -39,9 +37,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'fuchsia-x64-dbg':
         _chromium_linux_spec(
@@ -55,9 +51,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-gcc-rel':
         _chromium_linux_spec(
@@ -72,9 +66,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-ozone-rel':
         _chromium_linux_spec(
@@ -87,9 +79,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER,
             compile_targets=[],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Ozone Tester (Headless)':
         bot_spec.BotSpec.create(
@@ -102,9 +92,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='linux-ozone-rel',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Ozone Tester (X11)':
         _chromium_linux_spec(
@@ -117,9 +105,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='linux-ozone-rel',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Ozone Tester (Wayland)':
         _chromium_linux_spec(
@@ -132,9 +118,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='linux-ozone-rel',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Builder':
         _chromium_linux_spec(
@@ -154,9 +138,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'linux-trusty-rel':
         _chromium_linux_spec(
@@ -170,9 +152,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Tests':
         _chromium_linux_spec(
@@ -190,9 +170,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux Builder',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Builder (dbg)(32)':
         _chromium_linux_spec(
@@ -207,9 +185,7 @@ SPEC = {
                 'TARGET_BITS': 32,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Builder (dbg)':
         _chromium_linux_spec(
@@ -224,9 +200,7 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Linux Tests (dbg)(1)':
         _chromium_linux_spec(
@@ -239,9 +213,7 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux Builder (dbg)',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Cast Audio Linux':
         _chromium_linux_spec(
@@ -252,9 +224,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Cast Linux':
         _chromium_linux_spec(
@@ -265,9 +235,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Fuchsia ARM64 Cast Audio':
         _chromium_linux_spec(
@@ -281,9 +249,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Fuchsia ARM64':
         _chromium_linux_spec(
@@ -301,9 +267,7 @@ SPEC = {
             # Swarming bots will be added to the arm64 servers after the
             # SSD upgrades.
             serialize_tests=True,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Fuchsia x64 Cast Audio':
         _chromium_linux_spec(
@@ -317,9 +281,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Fuchsia x64':
         _chromium_linux_spec(
@@ -333,9 +295,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'fuchsia',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Leak Detection Linux':
         _chromium_linux_spec(
@@ -351,9 +311,7 @@ SPEC = {
             },
             chromium_tests_apply_config=['staging'],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'Network Service Linux':
         _chromium_linux_spec(
@@ -365,8 +323,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.BUILDER_TESTER,
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
 }

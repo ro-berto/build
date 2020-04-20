@@ -24,7 +24,8 @@ SPEC = {
             },
             gclient_apply_config=['android'],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'linux_chromium_compile':
         _tryserver_webrtc_spec(
             bot_type=bot_spec.BUILDER,
@@ -36,7 +37,8 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'linux_chromium_compile_dbg':
         _tryserver_webrtc_spec(
             bot_type=bot_spec.BUILDER,
@@ -48,7 +50,8 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'mac_chromium_compile':
         _tryserver_webrtc_spec(
             bot_type=bot_spec.BUILDER,
@@ -60,7 +63,8 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'mac'}),
+            simulation_platform='mac',
+        ),
     'win_chromium_compile':
         _tryserver_webrtc_spec(
             bot_type=bot_spec.BUILDER,
@@ -72,7 +76,8 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'win'}),
+            simulation_platform='win',
+        ),
     'win_chromium_compile_dbg':
         _tryserver_webrtc_spec(
             bot_type=bot_spec.BUILDER,
@@ -84,5 +89,6 @@ SPEC = {
             },
             gclient_apply_config=[],
             gclient_config='chromium_no_telemetry_dependencies',
-            testing={'platform': 'win'}),
+            simulation_platform='win',
+        ),
 }

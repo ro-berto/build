@@ -28,7 +28,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI Android Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
@@ -47,7 +48,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI Android Builder ARM64 (dbg)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
@@ -66,7 +68,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)':
         _chromium_webrtc_fyi_spec(
             android_config='base_config',
@@ -87,7 +90,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)':
         _chromium_webrtc_fyi_spec(
@@ -109,7 +112,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium FYI ios-device':
         _chromium_webrtc_fyi_spec(
@@ -128,9 +131,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
             },
             bot_type=bot_spec.BUILDER,
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'WebRTC Chromium FYI ios-simulator':
         _chromium_webrtc_fyi_spec(
@@ -148,9 +149,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'WebRTC Chromium FYI Linux Builder':
         _chromium_webrtc_fyi_spec(
@@ -167,7 +166,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI Linux Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.BUILDER_TESTER,
@@ -183,7 +183,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'linux'}),
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI Linux Tester':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.TESTER,
@@ -201,7 +202,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'linux'},
+            simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Mac Builder':
         _chromium_webrtc_fyi_spec(
@@ -223,7 +224,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'mac'}),
+            simulation_platform='mac',
+        ),
     'WebRTC Chromium FYI Mac Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.BUILDER_TESTER,
@@ -244,7 +246,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'mac'}),
+            simulation_platform='mac',
+        ),
     'WebRTC Chromium FYI Mac Tester':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.TESTER,
@@ -267,7 +270,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'mac'},
+            simulation_platform='mac',
         ),
     'WebRTC Chromium FYI Win Builder':
         _chromium_webrtc_fyi_spec(
@@ -284,7 +287,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'win'}),
+            simulation_platform='win',
+        ),
     'WebRTC Chromium FYI Win Builder (dbg)':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.BUILDER_TESTER,
@@ -300,7 +304,8 @@ SPEC = {
                 'name': 'src/third_party/webrtc',
                 'rev_str': '%s'
             },
-            testing={'platform': 'win'}),
+            simulation_platform='win',
+        ),
     'WebRTC Chromium FYI Win10 Tester':
         _chromium_webrtc_fyi_spec(
             bot_type=bot_spec.TESTER,
@@ -318,7 +323,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
     'WebRTC Chromium FYI Win7 Tester':
         _chromium_webrtc_fyi_spec(
@@ -337,7 +342,7 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
     'WebRTC Chromium FYI Win8 Tester':
         _chromium_webrtc_fyi_spec(
@@ -356,6 +361,6 @@ SPEC = {
                 'rev_str': '%s'
             },
             test_results_config='public_server',
-            testing={'platform': 'win'},
+            simulation_platform='win',
         ),
 }

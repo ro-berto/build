@@ -52,7 +52,7 @@ class BotSpec(object):
     return cls.create(**spec)
 
   @classmethod
-  def create(cls, perf_isolate_lookup=None, testing=None, **kwargs):
+  def create(cls, perf_isolate_lookup=None, **kwargs):
     """Create a BotSpec.
 
     Arguments:
@@ -71,20 +71,6 @@ class BotSpec(object):
           "'perf_isolate_lookup' should not be set"
           " when 'perf_isolate_upload' is set")
       kwargs['perf_isolate_upload'] = perf_isolate_lookup
-
-    # TODO(https://crbug.com/1071225) Update callers to use
-    # source_side_spec_file and/or simulation_platform and remove the testing
-    # argument
-    if testing is not None:
-      invalid_attrs = get_filtered_attrs('source_side_spec_file',
-                                         'simulation_platform')
-      assert not invalid_attrs, (
-          "'testing' should not be set when the following fields are set: {}"
-          .format(invalid_attrs))
-      kwargs['source_side_spec_file'] = testing.pop('source_side_spec_file',
-                                                    None)
-      kwargs['simulation_platform'] = testing.pop('platform', None)
-      assert not testing, "Unknown keys in 'testing': {}".format(testing.keys())
 
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type == DUMMY_TESTER:
@@ -316,15 +302,6 @@ class BotSpec(object):
   # For acceptable values, see
   # https://source.chromium.org/chromium/infra/infra/+/master:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
   simulation_platform = attrib(str, default=None)
-
-  @cached_property
-  def testing(self):
-    d = {}
-    if self.source_side_spec_file:
-      d['source_side_spec_file'] = self.source_side_spec_file
-    if self.simulation_platform:
-      d['platform'] = self.simulation_platform
-    return freeze(d)
 
   def evolve(self, **kwargs):
     """Create a new BotSpec with updated values.

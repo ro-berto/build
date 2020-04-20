@@ -30,10 +30,8 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-                'source_side_spec_file': 'chromium.linux.json',
-            },
+            source_side_spec_file='chromium.linux.json',
+            simulation_platform='linux',
         ),
     'V8 Linux GN':
         _client_v8_fyi_spec(
@@ -63,10 +61,8 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-                'source_side_spec_file': 'chromium.linux.json',
-            },
+            source_side_spec_file='chromium.linux.json',
+            simulation_platform='linux',
         ),
     'V8 Android GN (dbg)':
         _client_v8_fyi_spec(
@@ -95,10 +91,8 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-                'source_side_spec_file': 'chromium.linux.json',
-            },
+            source_side_spec_file='chromium.linux.json',
+            simulation_platform='linux',
         ),
     'V8 Blink Linux':
         _client_v8_fyi_spec(
@@ -120,9 +114,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'V8 Blink Linux Debug':
         _client_v8_fyi_spec(
@@ -144,9 +136,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'V8 Blink Mac':
         _client_v8_fyi_spec(
@@ -168,9 +158,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
         ),
     'V8 Blink Win':
         _client_v8_fyi_spec(
@@ -192,9 +180,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
         ),
     'V8 Blink Linux Future':
         _client_v8_fyi_spec(
@@ -216,9 +202,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'V8 Blink Linux Layout NG':
         _client_v8_fyi_spec(
@@ -240,9 +224,7 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     # Bot names should be in sync with chromium.linux's names to retrieve
     # the same test configuration files.
@@ -266,10 +248,8 @@ SPEC = {
                 'rev_str': '%s'
             },
             parent_buildername='Linux Debug Builder',
-            testing={
-                'platform': 'linux',
-                'source_side_spec_file': 'chromium.linux.json',
-            },
+            source_side_spec_file='chromium.linux.json',
+            simulation_platform='linux',
         ),
     'Linux ASAN Builder':
         _client_v8_fyi_spec(
@@ -295,10 +275,8 @@ SPEC = {
                 'name': 'src/v8',
                 'rev_str': '%s'
             },
-            testing={
-                'platform': 'linux',
-                'source_side_spec_file': 'chromium.memory.json',
-            },
+            source_side_spec_file='chromium.memory.json',
+            simulation_platform='linux',
         ),
     # GPU bots.
     'Win V8 FYI Release (NVIDIA)':
@@ -320,9 +298,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
-            testing={
-                'platform': 'win',
-            },
+            simulation_platform='win',
             set_component_rev={
                 'name': 'src/v8',
                 'rev_str': '%s'
@@ -348,9 +324,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
-            testing={
-                'platform': 'mac',
-            },
+            simulation_platform='mac',
             set_component_rev={
                 'name': 'src/v8',
                 'rev_str': '%s'
@@ -376,9 +350,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             set_component_rev={
                 'name': 'src/v8',
                 'rev_str': '%s'
@@ -404,9 +376,7 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             set_component_rev={
                 'name': 'src/v8',
                 'rev_str': '%s'
@@ -430,9 +400,7 @@ SPEC = {
             android_config='arm64_builder_rel_mb',
             bot_type=bot_spec.BUILDER_TESTER,
             compile_targets=[],
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
             set_component_rev={
                 'name': 'src/v8',
                 'rev_str': '%s'

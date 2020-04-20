@@ -232,9 +232,7 @@ SPEC = {
                 'chromedriver_webview_shell_apk',
             ],
             test_results_config='staging_server',
-            testing={
-                'platform': 'linux',
-            },
+            simulation_platform='linux',
         ),
     'ios-device-goma-canary-clobber':
         chromium_apply_configs(chromium_mac.SPEC['ios-device'],
