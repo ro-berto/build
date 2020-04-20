@@ -55,6 +55,26 @@ unit {
       digest: "5b7b820f13b680cfa034895bcdb46cbe95ad19b9c099a080fc6d23d3e606438c"
     }
   }
+  required_input {
+    v_name {
+      corpus: "chromium-test"
+      path: "src/out/Debug/gen/main.pb.h"
+    }
+    info {
+      path: "gen/main.pb.h"
+      digest: "838c0b320e163c239a7b2235e9203c2c35ad5af193015f36d6c0236e6342233b"
+    }
+  }
+  required_input {
+    v_name {
+      corpus: "chromium-test"
+      path: "src/out/Debug/gen/main.pb.h.meta"
+    }
+    info {
+      path: "gen/main.pb.h.meta"
+      digest: "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"
+    }
+  }
   argument: "path\\to\\clang-cl.exe"
   argument: "--driver-mode=cl"
   argument: "-imsvcfoo/bar/baz"

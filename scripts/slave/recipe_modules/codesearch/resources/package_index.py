@@ -305,7 +305,7 @@ class IndexPack(object):
       raise Exception('ERROR: --corpus required')
 
     if not os.path.isdir(existing_java_kzips):
-      raise Exception('ERROR: --existing_java_kzips is not a directory')
+      raise Exception('ERROR: --path-to-java-kzips is not a directory')
 
     self.root_dir = root_dir
     self.corpus = corpus
@@ -638,6 +638,9 @@ class IndexPack(object):
             continue
 
           self._AddDataFile(fname)
+          # .pb.h.meta file is required for CC/PB cross references
+          if fname.endswith('.pb.h') and os.path.isfile(fname + '.meta'):
+            self._AddDataFile(fname + '.meta')
 
     for target in self.mojom_targets:
       for source in target['sources']:
@@ -801,6 +804,31 @@ class IndexPack(object):
     # insert into mojom generated files.
     command_list.append('-DKYTHE_IS_RUNNING=1')
 
+    # add_file adds required input to unit_proto and returns full path to file
+    # that was added.
+    def add_file(fname):
+      fname_fullpath = os.path.normpath(os.path.join(directory, fname))
+
+      if fname_fullpath not in self.filehashes:
+        print('No information about required input file %s' % fname_fullpath)
+        return
+
+      # Handle absolute paths - when normalizing we assume paths are
+      # relative to the output directory (e.g. src/out/Debug).
+      if os.path.isabs(fname):
+        fname = os.path.relpath(fname, directory)
+
+      normalized_fname = self._NormalizePath(fname)
+      normalized_fname = ConvertPathToForwardSlashes(normalized_fname)
+
+      required_input = unit_proto.required_input.add()
+      _SetVNameForFile(required_input.v_name, normalized_fname, corpus)
+
+      required_input.info.path = ConvertPathToForwardSlashes(fname)
+      required_input.info.digest = self.filehashes[fname_fullpath]
+
+      return fname_fullpath
+
     with open(filepaths_fn, 'r') as filepaths_file:
       for line in filepaths_file:
         fname = line.strip()
@@ -814,25 +842,12 @@ class IndexPack(object):
         if '//' in fname:
           path = fname.split('//')
           fname = '/'.join(path)
-        fname_fullpath = os.path.normpath(
-            os.path.join(directory, fname))
-        if fname_fullpath not in self.filehashes:
-          print('No information about required input file %s' % fname_fullpath)
-          continue
+        fname_fullpath = add_file(fname)
 
-        # Handle absolute paths - when normalizing we assume paths are
-        # relative to the output directory (e.g. src/out/Debug).
-        if os.path.isabs(fname):
-          fname = os.path.relpath(fname, directory)
+        # .pb.h.meta file is required for CC/PB cross references
+        if fname.endswith('.pb.h') and os.path.isfile(fname_fullpath + '.meta'):
+          add_file(fname + '.meta')
 
-        normalized_fname = self._NormalizePath(fname)
-        normalized_fname = ConvertPathToForwardSlashes(normalized_fname)
-
-        required_input = unit_proto.required_input.add()
-        _SetVNameForFile(required_input.v_name, normalized_fname, corpus)
-
-        required_input.info.path = ConvertPathToForwardSlashes(fname)
-        required_input.info.digest = self.filehashes[fname_fullpath]
 
     unit_proto.source_file.append(filename)
     unit_proto.working_directory = ConvertPathToForwardSlashes(directory)
