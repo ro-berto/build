@@ -521,7 +521,9 @@ SPEC.update([
         'android-pie-arm64-rel', chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config('android-pie-x86-rel', android_config='x86_builder'),
     stock_config(
-        'android-10-arm64-rel', chromium_config_kwargs={'TARGET_BITS': 64}),
+        'android-10-arm64-rel',
+        chromium_apply_config=['download_vr_test_apks'],
+        chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
