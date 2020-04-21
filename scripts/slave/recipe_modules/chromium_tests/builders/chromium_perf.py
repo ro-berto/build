@@ -97,7 +97,7 @@ def BuildSpec(config_name,
       test_specs=test_specs,
   )
 
-  kwargs['perf_isolate_lookup'] = True
+  kwargs['perf_isolate_upload'] = True
 
   kwargs['compile_targets'] = compile_targets
   if extra_compile_targets:

@@ -591,7 +591,7 @@ SPEC = {
             # perf (NVIDIA)", which is a child of this builder, uploads perf
             # results, and Pinpoint may trigger additional builds on this
             # builder during a bisect.
-            perf_isolate_lookup=True,
+            perf_isolate_upload=True,
         ),
     'Win10 FYI x64 Release XR Perf (NVIDIA)':
         _chromium_gpu_fyi_spec(
@@ -1294,7 +1294,7 @@ SPEC = {
             # 2)", which is a child of this builder, uploads perf results,
             # and Pinpoint may trigger additional builds on this builder
             # during a bisect.
-            perf_isolate_lookup=True,
+            perf_isolate_upload=True,
         ),
     'Android FYI Release (Nexus 5)':
         _chromium_gpu_fyi_spec(

@@ -67,7 +67,7 @@ class BotSpec(object):
     return cls.create(**spec)
 
   @classmethod
-  def create(cls, perf_isolate_lookup=None, **kwargs):
+  def create(cls, **kwargs):
     """Create a BotSpec.
 
     Arguments:
@@ -79,13 +79,6 @@ class BotSpec(object):
     """
     def get_filtered_attrs(*attributes):
       return [a for a in attributes if a in kwargs]
-
-    # perf_isolate_lookup is the old misnomer for perf_isolate_upload
-    if perf_isolate_lookup is not None:
-      assert 'perf_isolate_upload' not in kwargs, (
-          "'perf_isolate_lookup' should not be set"
-          " when 'perf_isolate_upload' is set")
-      kwargs['perf_isolate_upload'] = perf_isolate_lookup
 
     bot_type = kwargs.get('bot_type', BUILDER_TESTER)
     if bot_type == DUMMY_TESTER:
