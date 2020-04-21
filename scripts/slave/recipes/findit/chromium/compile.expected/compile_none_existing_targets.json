@@ -237,6 +237,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
       "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
@@ -532,6 +534,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
       "GOMA_SERVER_HOST": "goma.chromium.org",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
@@ -627,6 +631,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
       "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
@@ -657,6 +663,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
+      "GOMA_RPC_EXTRA_PARAMS": "?prod",
       "GOMA_SERVER_HOST": "goma.chromium.org",
       "GOMA_USE_LOCAL": "false"
     },
