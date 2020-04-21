@@ -6091,7 +6091,7 @@ The changes are:
 [depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/062833f387619531ec7d2364513b937130dd390b/recipes/README.recipes.md#recipe_modules-presubmit
 [depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/062833f387619531ec7d2364513b937130dd390b/recipes/README.recipes.md#recipe_modules-tryserver
 [depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/062833f387619531ec7d2364513b937130dd390b/recipes/README.recipes.md#recipe_modules-windows_sdk
-[fuchsia/recipe_modules/buildbucket_util]: /+/024991239aec880373f1c20142d482d72519bece/README.recipes.md#recipe_modules-buildbucket_util
+[fuchsia/recipe_modules/buildbucket_util]: /+/2c2f080b7c77d9177fa98155943d82d0a129b250/README.recipes.md#recipe_modules-buildbucket_util
 [recipe_engine/recipe_modules/assertions]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/05e3d21945daf81423e55c5eb908d1782c133873/README.recipes.md#recipe_modules-assertions
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/05e3d21945daf81423e55c5eb908d1782c133873/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/cipd]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/05e3d21945daf81423e55c5eb908d1782c133873/README.recipes.md#recipe_modules-cipd
