@@ -16199,6 +16199,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Result for flutter_fuchsia_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LINK@task UI@https://example.swarmingserver.appspot.com/task?id=0@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "[CACHE]/builder/src/flutter/tools/gn",
@@ -16720,6 +16727,22 @@
       "@@@STEP_LOG_LINE@request@}@@@",
       "@@@STEP_LOG_END@request@@@",
       "@@@STEP_LINK@8945511751514863184@https://cr-buildbucket.appspot.com/build/8945511751514863184@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "display builds",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "display builds.Linux Drone",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@8945511751514863184@https://cr-buildbucket.appspot.com/build/8945511751514863184@@@",
+      "@@@STEP_WARNINGS@@@"
     ]
   },
   {

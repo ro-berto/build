@@ -19,20 +19,21 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'depot_tools/osx_sdk',
+    'fuchsia/buildbucket_util',
     'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',
-    'recipe_engine/isolated',
     'recipe_engine/file',
+    'recipe_engine/isolated',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/python',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/swarming',
-    'recipe_engine/python',
     'zip',
 ]
 
@@ -119,7 +120,8 @@ def CancelBuilds(api, builds):
 
 def CollectBuilds(api, builds):
   return api.buildbucket.collect_builds([build.id for build in builds],
-                                        timeout=DRONE_TIMEOUT_SECS)
+                                        timeout=DRONE_TIMEOUT_SECS,
+                                        mirror_status=True)
 
 
 def GetFlutterFuchsiaBuildTargets(product, include_test_targets=False):
@@ -728,14 +730,25 @@ def TestFuchsia(api):
 
   # Trigger the task request.
   metadata = api.swarming.trigger('Trigger Fuchsia Tests', requests=[request])
+  links = {m.id: m.task_ui_link for m in metadata}
   # Collect the result of the task by metadata.
   fuchsia_output = api.path['cleanup'].join('fuchsia_test_output')
   api.file.ensure_directory('swarming output', fuchsia_output)
   results = api.swarming.collect(
       'collect', metadata, output_dir=fuchsia_output, timeout='30m')
-  for result in results:
-    result.analyze()
+  ProcessResults(api, results, links)
 
+
+def ProcessResults(api, results, links):
+  with api.step.defer_results():
+    for result in results:
+      with api.step.nest('Result for %s' % result.name) as presentation:
+        if (result.state is None or
+            result.state != api.swarming.TaskState.COMPLETED):
+          presentation.status = api.step.EXCEPTION
+        elif not result.success:
+          presentation.status = api.step.FAILURE
+        presentation.links['task UI'] = links[result.id]
 
 def GetRemoteFileName(exec_path):
   # An example of exec_path is:
@@ -852,6 +865,11 @@ def BuildFuchsia(api):
     raise e
 
   builds = CollectBuilds(api, builds)
+  api.buildbucket_util.display_builds(
+      step_name='display builds',
+      builds=builds.values(),
+      raise_on_failure=True,
+  )
   for build_id in builds:
     api.isolated.download(
         'Download for build %s' % build_id,
@@ -1597,6 +1615,40 @@ def GenTests(api):
       api.step_data(
           'gn --fuchsia --fuchsia-cpu x64 --runtime-mode debug --no-lto',
           retcode=1),
+      api.properties(
+          InputProperties(
+              clobber=False,
+              goma_jobs='1024',
+              fuchsia_ctl_version='version:0.0.2',
+              build_host=False,
+              build_fuchsia=True,
+              test_fuchsia=True,
+              build_android_aot=False,
+              build_android_debug=False,
+              build_android_vulkan=False,
+              no_maven=False,
+              upload_packages=True,
+              android_sdk_license='android_sdk_hash',
+              android_sdk_preview_license='android_sdk_preview_hash')),
+      api.properties.environ(EnvProperties(SWARMING_TASK_ID='deadbeef')),
+  )
+  yield api.test(
+      'Linux Fuchsia Infra Failure',
+      api.platform('linux', 64),
+      api.buildbucket.ci_build(
+          builder='Linux Engine', git_repo=GIT_REPO, project='flutter'),
+      api.step_data('Trigger Fuchsia Tests',
+                    api.swarming.trigger(['task1', 'task2'])),
+      api.step_data('collect',
+                    api.swarming.collect(
+                        [api.swarming.task_result(0, 'task1', state=None),
+                         api.swarming.task_result(1, 'task1', failure=True)
+                        ])
+                    ),
+      api.buildbucket.simulated_collect_output([
+        api.buildbucket.try_build_message(
+            build_id=9016911228971028737, status='FAILURE'),
+      ]),
       api.properties(
           InputProperties(
               clobber=False,
