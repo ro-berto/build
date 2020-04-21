@@ -648,15 +648,18 @@ def GetFuchsiaBuildId(api):
   return manifest_data['id']
 
 
-def DownloadFuchsiaSystemImage(api, target_dir, bucket_name, build_id,
-                               image_name):
+def DownloadFuchsiaSystemDeps(api, target_dir, bucket_name, build_id,
+                               image_name, packages_name):
   api.gsutil.download(bucket_name,
                       'development/%s/images/%s' % (build_id, image_name),
+                      target_dir)
+  api.gsutil.download(bucket_name,
+                      'development/%s/packages/%s' % (build_id, packages_name),
                       target_dir)
 
 
 def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name,
-                                fuchsia_test_script):
+                                packages_name, fuchsia_test_script):
   """
   Gets the system image for the current Fuchsia SDK from cloud storage, adds it
   to an isolated along with the `pm` and `dev_finder` utilities, as well as the
@@ -685,8 +688,8 @@ def IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools, image_name,
                         checkout.join('out', 'fuchsia_debug_x64', far),
                         isolated_dir)
 
-    DownloadFuchsiaSystemImage(api, isolated_dir, 'fuchsia',
-                               GetFuchsiaBuildId(api), image_name)
+    DownloadFuchsiaSystemDeps(api, isolated_dir, 'fuchsia',
+                              GetFuchsiaBuildId(api), image_name, packages_name)
     isolated = api.isolated.isolated(isolated_dir)
     isolated.add_dir(isolated_dir)
     return isolated.archive('Archive Fuchsia Test Isolate')
@@ -704,12 +707,14 @@ def TestFuchsia(api):
   checkout = GetCheckoutPath(api)
   fuchsia_tools = checkout.join('fuchsia', 'sdk', 'linux', 'tools')
   image_name = 'generic-x64.tgz'
+  packages_name = 'generic-x64.tar.gz'
 
   fuchsia_test_script = checkout.join('flutter', 'testing', 'fuchsia',
                                       'run_tests.sh')
 
-  isolated_hash = IsolateFuchsiaTestArtifacts(api, checkout, fuchsia_tools,
-                                              image_name, fuchsia_test_script)
+  isolated_hash = IsolateFuchsiaTestArtifacts(
+      api, checkout, fuchsia_tools, image_name, packages_name,
+      fuchsia_test_script)
 
   ensure_file = api.cipd.EnsureFile()
   ensure_file.add_package('flutter/fuchsia_ctl/${platform}',
@@ -723,7 +728,8 @@ def TestFuchsia(api):
       request.with_slice(
           0, request[0].with_cipd_ensure_file(ensure_file).with_command(
               ['./run_tests.sh',
-               image_name]).with_dimensions(pool='luci.flutter.tests')
+               image_name, packages_name]
+          ).with_dimensions(pool='luci.flutter.tests')
           .with_isolated(isolated_hash).with_expiration_secs(
               3600).with_io_timeout_secs(3600).with_execution_timeout_secs(
                   3600).with_idempotent(True).with_containment_type('AUTO')))
@@ -1465,10 +1471,10 @@ def RunSteps(api, properties, env_properties):
         TestObservatory(api)
       LintAndroidHost(api)
       BuildLinuxAndroid(api, env_properties.SWARMING_TASK_ID)
-
       if api.properties.get('build_fuchsia', True):
         BuildFuchsia(api)
       VerifyExportedSymbols(api)
+
     if api.platform.is_mac:
       with SetupXcode(api):
         BuildMac(api)

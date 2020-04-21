@@ -13588,6 +13588,36 @@
     "name": "gsutil download"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://fuchsia/development/123/packages/generic-x64.tar.gz",
+      "[CLEANUP]/tmp_tmp_42"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "ANDROID_HOME": "[CACHE]/builder/src/third_party/android_tools/sdk",
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download (2)"
+  },
+  {
     "cmd": [],
     "name": "ensure isolated"
   },
@@ -13755,7 +13785,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"flutter_fuchsia_unittests\", \"priority\": \"100\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"flutter/fuchsia_ctl/${platform}\", \"path\": \".\", \"version\": \"version:0.0.2\"}]}, \"command\": [\"./run_tests.sh\", \"generic-x64.tgz\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"pool\", \"value\": \"luci.flutter.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"3600\", \"outputs\": []}}]}]}",
+      "{\"requests\": [{\"name\": \"flutter_fuchsia_unittests\", \"priority\": \"100\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cipd_input\": {\"packages\": [{\"package_name\": \"flutter/fuchsia_ctl/${platform}\", \"path\": \".\", \"version\": \"version:0.0.2\"}]}, \"command\": [\"./run_tests.sh\", \"generic-x64.tgz\", \"generic-x64.tar.gz\"], \"containment\": {\"containment_type\": \"AUTO\", \"limit_processes\": \"0\", \"limit_total_committed_memory\": \"0\", \"lower_priority\": false}, \"dimensions\": [{\"key\": \"pool\", \"value\": \"luci.flutter.tests\"}], \"env\": [], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"inputs_ref\": {\"isolated\": \"[dummy hash]\", \"isolatedserver\": \"https://example.isolateserver.appspot.com\", \"namespace\": \"default-gzip\"}, \"io_timeout_secs\": \"3600\", \"outputs\": []}}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
