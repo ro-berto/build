@@ -147,7 +147,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.m.gclient.set_config(
         bot_config.gclient_config,
-        BUILDSPEC_VERSION=bot_config.buildspec_version,
         **bot_config.gclient_config_kwargs)
 
     default_test_results_config = (

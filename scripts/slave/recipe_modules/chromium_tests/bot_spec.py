@@ -167,13 +167,6 @@ class BotSpec(object):
   # The keyword arguments used when setting the config for the gclient recipe
   # module
   gclient_config_kwargs = mapping_attrib(str, default={})
-  # Used in branch official continuous specs to control where a buildspec is
-  # retrieved from
-  # TODO(gbeaty) Clean this up if possible, the use of this field is circuitous:
-  # it appears to only be set by branch official specs, which sets a field on
-  # the gclient config object that is only read by a gclient config that is only
-  # used by the branch official specs
-  buildspec_version = attrib(str, default=None)
   # The name of the config to use for the android recipe module
   android_config = attrib(str, default=None)
   # The names of additional configs to apply for the android recipe module
