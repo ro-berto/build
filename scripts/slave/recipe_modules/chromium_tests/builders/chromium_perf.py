@@ -28,7 +28,7 @@ def chromium_perf(c):
   c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
-def _common_kwargs(bot_type, config_name, platform, target_bits, tests):
+def _common_kwargs(bot_type, config_name, platform, target_bits, test_specs):
   spec = {
       'bot_type':
           bot_type,
@@ -43,10 +43,10 @@ def _common_kwargs(bot_type, config_name, platform, target_bits, tests):
       'gclient_config':
           config_name,
       'gclient_apply_config': [],
-      'tests':
-          tests,
       'simulation_platform':
           'linux' if platform in ('android', 'chromeos') else platform,
+      'test_specs':
+          test_specs,
   }
 
   if platform == 'android':
@@ -80,18 +80,21 @@ def BuildSpec(config_name,
   if not compile_targets:
     compile_targets = ['chromium_builder_perf']
 
-  tests = []
+  test_specs = []
   # TODO: Run sizes on Android.
   # TODO (crbug.com/953108): do not run test for chromeos for now
   if run_sizes and not platform in ('android', 'chromeos'):
-    tests = [steps.SizesStep('https://chromeperf.appspot.com', config_name)]
+    test_specs = [
+        bot_spec.TestSpec.create(steps.SizesStep,
+                                 'https://chromeperf.appspot.com', config_name)
+    ]
 
   kwargs = _common_kwargs(
       bot_type=bot_spec.BUILDER,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      tests=tests,
+      test_specs=test_specs,
   )
 
   kwargs['perf_isolate_lookup'] = True
@@ -122,7 +125,7 @@ def TestSpec(config_name,
              platform,
              target_bits,
              parent_buildername,
-             tests=None,
+             test_specs=None,
              cros_board=None,
              target_arch=None):
   kwargs = _common_kwargs(
@@ -130,7 +133,7 @@ def TestSpec(config_name,
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      tests=tests or [],
+      test_specs=test_specs or [],
   )
 
   kwargs['parent_buildername'] = parent_buildername

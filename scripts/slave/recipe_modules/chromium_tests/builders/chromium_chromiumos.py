@@ -86,7 +86,6 @@ def _config(name,
           'TARGET_BITS': target_bits,
       },
       'bot_type': bot_spec.BUILDER_TESTER,
-      'tests': {},
       'simulation_platform': 'linux',
   }
   if cros_board:

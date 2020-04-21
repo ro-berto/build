@@ -29,6 +29,21 @@ TESTER_TYPES = (TESTER, BUILDER_TESTER)
 
 
 @attrs()
+class TestSpec(object):
+
+  test_type = attrib(type)
+  args = sequence_attrib(default=())
+  kwargs = mapping_attrib(default={})
+
+  @classmethod
+  def create(cls, test_type, *args, **kwargs):
+    return cls(test_type, args=args, kwargs=kwargs)
+
+  def get_test(self):
+    return self.test_type(*self.args, **self.kwargs)
+
+
+@attrs()
 class BotSpec(object):
   """An immutable specification for a bot.
 
@@ -223,6 +238,8 @@ class BotSpec(object):
 
   # A bool controlling whether tests should be disabled
   disable_tests = attrib(bool, default=False)
+  # Specs for tests to be run for this builder
+  test_specs = sequence_attrib(TestSpec, default=())
   # Tests to be run for this builder
   tests = sequence_attrib(steps.Test, default=())
   # A bool controlling whether swarming tests should be run serially

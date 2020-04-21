@@ -31,7 +31,9 @@ def config(name,
       },
       'bot_type': bot_spec.BUILDER_TESTER,
       'test_results_config': 'staging_server',
-      'tests': {steps.SizesStep(RESULTS_URL, name)},
+      'test_specs': {
+          bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, name)
+      },
       'simulation_platform': 'linux',
 
       # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
@@ -178,7 +180,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -199,7 +200,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -220,7 +220,10 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[steps.SizesStep(RESULTS_URL, 'ToTWinOfficial')],
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWinOfficial')
+            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -247,7 +250,10 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')],
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWinThinLTO64')
+            ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
             swarming_dimensions={
@@ -376,7 +382,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
-            tests={steps.SizesStep(RESULTS_URL, 'ToTMac')},
+            test_specs={
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL, 'ToTMac')
+            },
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -405,7 +413,10 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
-            tests={steps.SizesStep(RESULTS_URL, 'ToTMacOfficial')},
+            test_specs={
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTMacOfficial')
+            },
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -426,7 +437,10 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
-            tests={steps.SizesStep(RESULTS_URL, 'ToTMac (dbg)')},
+            test_specs={
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTMac (dbg)')
+            },
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -447,7 +461,6 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='mac',
-            tests=[],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
             add_tests_as_compile_targets=False,
@@ -468,8 +481,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin'),
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -497,8 +511,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin(dbg)'),
             ],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -520,8 +535,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin(dll)'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin(dll)'),
             ],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -543,8 +559,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin64'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64'),
             ],
             swarming_server='https://chrome-swarming.appspot.com',
             isolate_server='https://chrome-isolated.appspot.com',
@@ -592,8 +609,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64(dbg)'),
             ],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.
@@ -615,8 +633,9 @@ SPEC = {
             bot_type=bot_spec.BUILDER_TESTER,
             test_results_config='staging_server',
             simulation_platform='win',
-            tests=[
-                steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.SizesStep, RESULTS_URL,
+                                         'ToTWin64(dll)'),
             ],
             # Workaround so that recipes doesn't add random build targets to
             # our compile line. We want to build everything.

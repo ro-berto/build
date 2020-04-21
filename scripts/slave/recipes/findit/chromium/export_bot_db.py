@@ -49,8 +49,10 @@ def GenTests(api):
                   'mockbuilder':
                       bot_spec.BotSpec.create(
                           compile_targets=['foo', 'bar'],
-                          tests=[
-                              steps.SizesStep('fake-url', 'fake-config-name')
+                          test_specs=[
+                              bot_spec.TestSpec.create(steps.SizesStep,
+                                                       'fake-url',
+                                                       'fake-config-name')
                           ],
                       ),
               }

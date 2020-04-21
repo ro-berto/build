@@ -134,7 +134,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            tests=[],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -150,7 +149,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            tests=[],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
@@ -352,8 +350,9 @@ SPEC = {
             },
             bot_type=bot_spec.TESTER,
             parent_buildername='Linux remote_run Builder',
-            tests=[
-                steps.LocalGTestTest('base_unittests'),
+            test_specs=[
+                bot_spec.TestSpec.create(steps.LocalGTestTest,
+                                         'base_unittests'),
             ],
             test_results_config='staging_server',
             simulation_platform='linux',
@@ -468,7 +467,6 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
-            tests={},
         ),
     'chromeos-kevin-rel-hw-tests':
         bot_spec.BotSpec.create(
@@ -488,7 +486,6 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
-            tests={},
         ),
     'linux-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
@@ -521,7 +518,6 @@ SPEC = {
             },
             bot_type=bot_spec.BUILDER_TESTER,
             simulation_platform='linux',
-            tests={},
         ),
     'mac-autofill-captured-sites-rel':
         bot_spec.BotSpec.create(
@@ -731,7 +727,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             bot_type=bot_spec.TESTER,
-            tests=[],
             parent_mastername='chromium.win',
             parent_buildername='Win x64 Builder',
             simulation_platform='win',

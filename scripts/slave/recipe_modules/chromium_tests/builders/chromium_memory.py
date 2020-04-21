@@ -232,7 +232,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
-            tests=[],
             simulation_platform='linux',
         ),
     'WebKit Linux MSAN':
@@ -244,7 +243,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             chromium_apply_config=['asan', 'mb', 'mb_luci_auth'],
-            tests=[],
             simulation_platform='linux',
         ),
     'WebKit Linux Leak':
@@ -259,7 +257,6 @@ SPEC = {
             compile_targets=[
                 'blink_tests',
             ],
-            tests=[],
             simulation_platform='linux',
         ),
     'android-asan':

@@ -21,7 +21,8 @@ PERF_BROWSER_TESTS_FILTER = [
 
 
 def browser_perf_test(perf_id):
-  return steps.WebRTCPerfTest(
+  return bot_spec.TestSpec.create(
+      steps.WebRTCPerfTest,
       name='browser_tests',
       # These tests needs --test-launcher-jobs=1 since some of them are
       # not able to run in parallel (they record system audio, etc).
@@ -108,7 +109,7 @@ SPEC = {
             parent_buildername='WebRTC Chromium Linux Builder',
             test_results_config='public_server',
             simulation_platform='linux',
-            tests=[browser_perf_test('chromium-webrtc-rel-linux')],
+            test_specs=[browser_perf_test('chromium-webrtc-rel-linux')],
         ),
     'WebRTC Chromium Mac Builder':
         _chromium_webrtc_spec(
@@ -137,7 +138,7 @@ SPEC = {
             parent_buildername='WebRTC Chromium Mac Builder',
             test_results_config='public_server',
             simulation_platform='mac',
-            tests=[browser_perf_test('chromium-webrtc-rel-mac')],
+            test_specs=[browser_perf_test('chromium-webrtc-rel-mac')],
         ),
     'WebRTC Chromium Win Builder':
         _chromium_webrtc_spec(
@@ -166,7 +167,7 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            tests=[browser_perf_test('chromium-webrtc-rel-win10')],
+            test_specs=[browser_perf_test('chromium-webrtc-rel-win10')],
         ),
     'WebRTC Chromium Win7 Tester':
         _chromium_webrtc_spec(
@@ -182,7 +183,7 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            tests=[browser_perf_test('chromium-webrtc-rel-7')],
+            test_specs=[browser_perf_test('chromium-webrtc-rel-7')],
         ),
     'WebRTC Chromium Win8 Tester':
         _chromium_webrtc_spec(
@@ -198,6 +199,6 @@ SPEC = {
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
             simulation_platform='win',
-            tests=[browser_perf_test('chromium-webrtc-rel-win8')],
+            test_specs=[browser_perf_test('chromium-webrtc-rel-win8')],
         ),
 }
