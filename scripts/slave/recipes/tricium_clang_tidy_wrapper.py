@@ -60,6 +60,7 @@ class _SourceFileComments(object):
     # to group these, since a single CL might have multiple diagnostics that
     # ultimately point to this same macro.
     self._macro_comments = collections.defaultdict(set)
+    self._build_failed = False
     self._tidy_failed = False
     self._tidy_timed_out = False
 
@@ -74,6 +75,9 @@ class _SourceFileComments(object):
 
   def note_tidy_timed_out(self):
     self._tidy_timed_out = True
+
+  def note_build_failed(self):
+    self._build_failed = True
 
   def note_tidy_failed(self):
     self._tidy_failed = True
@@ -107,10 +111,13 @@ class _SourceFileComments(object):
       suffix = 'https://clang.llvm.org/extra/clang-tidy/checks/%s.html' % name
       return message + ' (' + suffix + ')'
 
-    if self._tidy_failed:
+    if self._build_failed:
       failure_suffix = ('\n\n(Note: building this file or its dependencies '
                         'failed; this diagnostic might be incorrect as a '
                         'result.)')
+    elif self._tidy_failed:
+      failure_suffix = ('\n\n(Note: running clang-tidy on this file failed; '
+                        'this diagnostic might be incorrect as a result.)')
     else:
       failure_suffix = ''
 
@@ -181,10 +188,13 @@ def _generate_clang_tidy_comments(api, file_paths):
   clang_tidy_output = api.file.read_json('read tidy output', warnings_file)
 
   if clang_tidy_output.get('failed_src_files') or clang_tidy_output.get(
-      'timed_out_src_files'):
+      'failed_tidy_files') or clang_tidy_output.get('timed_out_src_files'):
     api.step.active_result.presentation.status = 'WARNING'
 
   for file_path in clang_tidy_output.get('failed_src_files', []):
+    per_file_comments[file_path].note_build_failed()
+
+  for file_path in clang_tidy_output.get('failed_tidy_files', []):
     per_file_comments[file_path].note_tidy_failed()
 
   for file_path in clang_tidy_output.get('timed_out_src_files', []):
@@ -441,6 +451,18 @@ def GenTests(api):
          api.post_process(post_process.StatusSuccess) + api.post_process(
              post_process.DropExpectation))
 
+
+  yield (test_with_patch(
+      'analyze_cpp_failed_tidy_files',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'failed_tidy_files': ['path/to/some/cc/file.cpp']
+          })) + api.post_process(post_process.StepWarning,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             post_process.DropExpectation))
+
   yield (test_with_patch(
       'analyze_cpp',
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
@@ -521,6 +543,53 @@ def GenTests(api):
              tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: building this file or its dependencies failed; this '
+             'diagnostic might be incorrect as a result.)') + api.post_process(
+                 post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'prefer_complaints_about_build_failures_over_tidy_ones',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'failed_tidy_files': ['path/to/some/cc/file.cpp'],
+              'failed_src_files': ['path/to/some/cc/file.cpp'],
+              'diagnostics': [{
+                  'file_path': 'path/to/some/cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'b',
+                  'message': 'a',
+                  'replacements': [],
+                  'expansion_locs': [],
+              },],
+          })) + api.post_process(post_process.StepWarning,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             tricium_has_message,
+             'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
+             '(Note: building this file or its dependencies failed; this '
+             'diagnostic might be incorrect as a result.)') + api.post_process(
+                 post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'append_complaint_on_tidy_failure',
+      affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'failed_tidy_files': ['path/to/some/cc/file.cpp'],
+              'diagnostics': [{
+                  'file_path': 'path/to/some/cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'b',
+                  'message': 'a',
+                  'replacements': [],
+                  'expansion_locs': [],
+              },],
+          })) + api.post_process(post_process.StepWarning,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             tricium_has_message,
+             'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
+             '(Note: running clang-tidy on this file failed; this '
              'diagnostic might be incorrect as a result.)') + api.post_process(
                  post_process.DropExpectation))
 

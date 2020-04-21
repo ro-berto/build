@@ -695,11 +695,13 @@ class Tests(unittest.TestCase):
         only_src_files=None,
     )
 
-    self.assertEqual(result, {
-        'diagnostics': [],
-        'failed_src_files': [],
-        'timed_out_src_files': [],
-    })
+    self.assertEqual(
+        result, {
+            'diagnostics': [],
+            'failed_src_files': [],
+            'failed_tidy_files': [],
+            'timed_out_src_files': [],
+        })
 
   def test_output_conversion_converts_non_diagnostic_paths_to_src_files(self):
     self._silence_logs()
@@ -711,14 +713,17 @@ class Tests(unittest.TestCase):
         target='baz.o',
         in_dir='in/',
         flags='')
+    tertiary_action = tidy._TidyAction(
+        cc_file='/foo/tertiary_file.cc', target='qux.o', in_dir='in/', flags='')
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
             main_action: ['/foo/src_file.cc', '/foo/src_file.h'],
             secondary_action: ['/foo/secondary_file.cc', '/foo/src_file.h'],
+            tertiary_action: ['/foo/tertiary_file.cc', '/foo/src_file.h'],
         },
         failed_actions=[main_action],
-        failed_tidy_actions=[],
+        failed_tidy_actions=[tertiary_action],
         timed_out_actions=[secondary_action],
         findings=[
             tidy._TidyDiagnostic(
@@ -758,6 +763,7 @@ class Tests(unittest.TestCase):
                     expansion_locs=()).to_dict(),
             ],
             'failed_src_files': ['src_file.cc', 'src_file.h'],
+            'failed_tidy_files': ['src_file.h', 'tertiary_file.cc'],
             'timed_out_src_files': ['secondary_file.cc', 'src_file.h'],
         })
 
@@ -788,6 +794,7 @@ class Tests(unittest.TestCase):
         result, {
             'diagnostics': [],
             'failed_src_files': ['src_file.cc'],
+            'failed_tidy_files': [],
             'timed_out_src_files': ['src_file.cc'],
         })
 
@@ -835,6 +842,7 @@ class Tests(unittest.TestCase):
                     expansion_locs=()).to_dict(),
             ],
             'failed_src_files': [],
+            'failed_tidy_files': [],
             'timed_out_src_files': [],
         })
 
@@ -882,6 +890,7 @@ class Tests(unittest.TestCase):
                     )).to_dict(),
             ],
             'failed_src_files': [],
+            'failed_tidy_files': [],
             'timed_out_src_files': [],
         })
 

@@ -1077,6 +1077,15 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
     else:
       failed_src_files.append(normalized_path)
 
+  failed_tidy_files = []
+  for src_file, normalized_path in normalized_src_files_for_actions(
+      failed_tidy_actions):
+    if normalized_path is None:
+      logging.info('Dropping failed src (tidy) file %s in normalization',
+                   src_file)
+    else:
+      failed_tidy_files.append(normalized_path)
+
   timed_out_src_files = []
   for src_file, normalized_path in normalized_src_files_for_actions(
       timed_out_actions):
@@ -1139,6 +1148,12 @@ def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
   # Since the recipe is expected to normalize stuff for us, all paths returned
   # here should be absolute.
   return {
+      # A list of .cc files that clang-tidy exited with an error on for any
+      # reason. There may be substantial overlap between this and
+      # 'failed_src_files', since generally a build failure implies a
+      # clang-tidy failure.
+      'failed_tidy_files': sorted(set(failed_tidy_files)),
+
       # A list of .cc files that we failed to build one or more targets for.
       # This could indicate that we're going to provide incomplete or incorrect
       # diagnostics, since e.g. generated headers may be missing.
