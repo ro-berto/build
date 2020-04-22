@@ -2650,23 +2650,21 @@ class WebRTCPerfTest(LocalGTestTest):
   WebRTC is the only project that runs correctness tests with perf reporting
   enabled at the same time, which differs from the chromium.perf bots.
   """
-  def __init__(self, name, args, perf_id, perf_config_mappings,
-               commit_position_property, **runtest_kwargs):
+
+  def __init__(self, name, args, perf_id, commit_position_property,
+               **runtest_kwargs):
     """Construct a WebRTC Perf test.
 
     Args:
       name: Name of the test.
       args: Command line argument list.
       perf_id: String identifier (preferably unique per machine).
-      perf_config_mappings: A dict that maps revision keys to be put in the perf
-        config to revision properties coming from the bot_update step.
       commit_position_property: Commit position property for the Chromium
         checkout. It's needed because for chromium.webrtc.fyi 'got_revision_cp'
         refers to WebRTC's commit position instead of Chromium's, so we have to
         use 'got_cr_revision_cp' instead.
     """
     assert perf_id
-    self._perf_config_mappings = perf_config_mappings or {}
     # TODO(kjellander): See if it's possible to rely on the build spec
     # properties 'perf-id' and 'results-url' as set in the
     # chromium_tests/chromium_perf.py. For now, set these to get an exact
@@ -2698,9 +2696,6 @@ class WebRTCPerfTest(LocalGTestTest):
   def _wire_up_perf_config(self, api):
     props = api.bot_update.last_returned_properties
     perf_config = { 'a_default_rev': 'r_webrtc_git' }
-
-    for revision_key, revision_prop in self._perf_config_mappings.iteritems():
-      perf_config[revision_key] = props[revision_prop]
 
     # 'got_webrtc_revision' property is present for bots in both chromium.webrtc
     # and chromium.webrtc.fyi in reality, but due to crbug.com/713356, the

@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build.chromium_tests import steps
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -15,31 +19,14 @@ DEPS = [
 ]
 
 
-PERF_CONFIG_MAPPINGS = {
-  'r_chromium': 'got_cr_revision',
-  'r_chromium_commit_pos': 'got_cr_revision_cp',
-}
-
-from recipe_engine import post_process
-
-from RECIPE_MODULES.build.chromium_tests import steps
-
-
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
 
-  mastername = api.properties.get('mastername')
-
-  if 'fyi' in mastername:
-    perf_config_mappings = PERF_CONFIG_MAPPINGS
-    commit_position_property = 'got_cr_revision_cp'
-  else:
-    perf_config_mappings = {}
-    commit_position_property = 'got_revision_cp'
-
-  test = steps.WebRTCPerfTest('test_name', ['some', 'args'], 'test-perf-id',
-                              perf_config_mappings, commit_position_property)
+  test = steps.WebRTCPerfTest(
+      'test_name', ['some', 'args'],
+      'test-perf-id',
+      commit_position_property='got_revision_cp')
 
   bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium.get_builder_id()])
@@ -77,16 +64,4 @@ def GenTests(api):
       api.post_process(post_process.StepFailure, 'test_name'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'webrtc_fyi_tester',
-      api.chromium.ci_build(
-          mastername='chromium.webrtc.fyi',
-          builder='WebRTC Chromium FYI Linux Tester',
-      ),
-      api.properties(
-          parent_got_revision='a' * 40,
-          parent_got_cr_revision='builder-chromium-tot',
-      ),
   )

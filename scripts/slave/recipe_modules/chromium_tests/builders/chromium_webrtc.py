@@ -34,7 +34,6 @@ def browser_perf_test(perf_id):
           '--test-launcher-bot-mode', '--test-launcher-print-test-stdio=always'
       ],
       perf_id=perf_id,
-      perf_config_mappings=None,
       commit_position_property='got_revision_cp')
 
 

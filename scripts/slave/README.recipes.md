@@ -4557,9 +4557,9 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#29)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/webrtc\_perf\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#9): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#28)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#22)(api):**
 ### *recipes* / [chromium\_tests:tests/try\_spec](/scripts/slave/recipe_modules/chromium_tests/tests/try_spec.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/try_spec.py#10): [recipe\_engine/assertions][recipe_engine/recipe_modules/assertions]
