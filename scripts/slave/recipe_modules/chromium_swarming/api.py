@@ -1530,6 +1530,11 @@ class SwarmingApi(recipe_api.RecipeApi):
             if the swarming summary is formatted incorrectly.
     """
     summary = step_result.chromium_swarming.summary
+    if summary is None:
+      step_result.presentation.status = self.m.step.EXCEPTION
+      step_result.presentation.step_text = 'Missing or invalid summary'
+      raise recipe_api.InfraFailure(step_result.name, result=step_result)
+
     # We store this now, and add links to all shards first, before failing the
     # build. Format is tuple of (error message, shard that failed)
     unexpected_errors = []

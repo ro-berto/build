@@ -8,7 +8,7 @@ DEPS = [
   'recipe_engine/properties',
 ]
 
-from recipe_engine import post_process
+from recipe_engine import recipe_test_api, post_process
 
 
 def RunSteps(api):
@@ -96,5 +96,22 @@ def GenTests(api):
       api.properties(pool='chromium.tests.template', task_name='template-task'),
       api.post_process(_StepCommandNotContains, '[trigger] template-task',
                        ['--cipd-package', '--env-prefix']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def bad_summary_json():
+    step_test_data = recipe_test_api.StepTestData()
+    key = ('chromium_swarming', 'summary', None)
+    placeholder = recipe_test_api.PlaceholderTestData('bad JSON')
+    step_test_data.placeholder_data[key] = placeholder
+    return step_test_data
+
+  yield api.test(
+      'bad-summary',
+      api.properties(task_name='task'),
+      api.step_data('task', bad_summary_json()),
+      api.post_check(post_process.StepException, 'task'),
+      api.post_check(post_process.StepTextContains, 'task',
+                     ['Missing or invalid summary']),
       api.post_process(post_process.DropExpectation),
   )
