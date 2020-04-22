@@ -767,6 +767,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 'mastername': 'chromium.fyi',
                 'buildername': 'Mojo ChromiumOS',
             }),
+        'linux-perfetto-rel':
+            simple_bot({
+                'mastername': 'chromium.fyi',
+                'buildername': 'linux-perfetto-rel',
+            }),
         'linux-viz-rel':
             simple_bot({
                 'mastername': 'chromium.fyi',
