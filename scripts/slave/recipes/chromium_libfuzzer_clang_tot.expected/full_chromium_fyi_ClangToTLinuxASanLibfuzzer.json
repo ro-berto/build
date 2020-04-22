@@ -245,6 +245,8 @@
       "ClangToTLinuxASanLibfuzzer",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
       "--quiet"
     ],
     "cwd": "[START_DIR]/src",
@@ -268,6 +270,8 @@
       "ClangToTLinuxASanLibfuzzer",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"

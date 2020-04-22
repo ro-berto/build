@@ -535,6 +535,8 @@
       "ios-simulator-gn",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",

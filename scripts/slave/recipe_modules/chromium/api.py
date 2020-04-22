@@ -1221,6 +1221,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         will be used.
       chromium_config: The chromium config object to use. If not provided,
         self.c will be used.
+      use_goma: Whether goma is needed or not. If use_goma=True but not yet
+        installed, it will run ensure_goma to install goma client.
       additional_args: Any args to the mb script besodes those for setting the
         master, builder and the path to the config file.
       **kwargs: Additional arguments to be forwarded onto the python API.
@@ -1245,19 +1247,18 @@ class ChromiumApi(recipe_api.RecipeApi):
     if phase is not None:
       args += [ '--phase', str(phase) ]
 
-    if use_goma:
-      # self.c instead of chromium_config is not a mistake here, if we have
-      # already ensured goma, we don't need to do it for this config object
+    # self.c instead of chromium_config is not a mistake here, if we have
+    # already ensured goma, we don't need to do it for this config object
+    goma_dir = self.c.compile_py.goma_dir
+    # TODO(gbeaty): remove this weird goma fallback or cover it
+    if use_goma and not goma_dir:  # pragma: no cover
+      # This method defaults to use_goma=True, which doesn't necessarily
+      # match build-side configuration. However, MB is configured
+      # src-side, and so it might be actually using goma.
+      self.ensure_goma()
       goma_dir = self.c.compile_py.goma_dir
-      # TODO(gbeaty): remove this weird goma fallback or cover it
-      if not goma_dir:  # pragma: no cover
-        # This method defaults to use_goma=True, which doesn't necessarily
-        # match build-side configuration. However, MB is configured
-        # src-side, and so it might be actually using goma.
-        self.ensure_goma()
-        goma_dir = self.c.compile_py.goma_dir
-      if goma_dir:
-        args += ['--goma-dir', goma_dir]
+    if goma_dir:
+      args += ['--goma-dir', goma_dir]
 
     if android_version_code:
       args += ['--android-version-code=%s' % android_version_code]

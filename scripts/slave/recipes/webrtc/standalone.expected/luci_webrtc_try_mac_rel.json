@@ -239,6 +239,8 @@
       "mac_rel",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"common_audio_unittests\", \"system_wrappers_unittests\", \"rtc_unittests\", \"low_bandwidth_audio_test\", \"voip_unittests\", \"test_support_unittests\", \"tools_unittests\", \"slow_tests\", \"rtc_pc_unittests\", \"modules_tests\", \"common_video_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"video_capture_tests\", \"audio_decoder_unittests\", \"modules_unittests\", \"rtc_media_unittests\"]}",
